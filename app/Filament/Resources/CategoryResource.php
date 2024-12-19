@@ -9,14 +9,16 @@ use App\Models\Category;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Filters\SelectFilter;
 
 class CategoryResource extends Resource
 {
@@ -29,7 +31,15 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->required(),
-                TextInput::make('slug')->required(),
+                
+                Select::make('type')
+                ->label('Type')
+                ->options([
+                    '1' => 'Blog',
+                    '2' => 'Product',
+                ])
+                ->required()
+                ->default('1'), // Set a default value if needed
             ]);
     }
 
@@ -37,11 +47,27 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->searchable(),
                 TextColumn::make('slug'),
+                TextColumn::make('type')
+                ->label('Type') // Optional, adds a label for the column
+                ->formatStateUsing(function (string $state): string {
+                    return match ($state) {
+                        '1' => 'Blog',  // If type is '1', display 'Blog'
+                        '2' => 'Product',  // If type is '2', display 'Product'
+                        default => ucfirst($state),  // Otherwise, capitalize the type value
+                    };
+                })->searchable(),
+
+                
             ])
             ->filters([
-                //
+                SelectFilter::make('type')  // Create a custom filter for 'type'
+                ->options([
+                    '1' => 'Blog',
+                    '2' => 'Product',
+                ])
+                ->label('Filter by Type'),  // Add a label for the filter
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
