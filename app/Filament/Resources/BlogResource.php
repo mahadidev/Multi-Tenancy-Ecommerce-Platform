@@ -25,6 +25,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 
 class BlogResource extends Resource
 {
@@ -42,7 +43,9 @@ class BlogResource extends Resource
             ->schema([
               
                 RichEditor::make('content')->required(),
-                FileUpload::make('image')->disk('public')->directory('blogs'),
+                FileUpload::make('image')
+                    ->disk('public')
+                    ->directory('blogs'),
                 TextInput::make('title')->required(),
 
                 Select::make('status')
@@ -79,14 +82,14 @@ class BlogResource extends Resource
                         default => ucfirst($state),
                     };
                 }),
-
-                // TextColumn::make('actions')
-                // ->label('Actions')
-                // ->sortable(false)
-                // ->searchable(false),
+               
             ])
             ->filters([
-                //
+                SelectFilter::make('category')
+                ->relationship('category', 'name')
+                ->searchable()
+                ->multiple()
+                ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
