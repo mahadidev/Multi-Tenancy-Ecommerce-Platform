@@ -19,8 +19,17 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('image');
             $table->text('content');
-            $table->enum('status',['active','inactive'])->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+        
+            // Adding foreign key constraints with cascading behavior
+            $table->foreign('user_id')
+                  ->references('id')->on('users')
+                  ->onDelete('cascade'); // Cascade on delete
+        
+            $table->foreign('category_id')
+                  ->references('id')->on('categories')
+                  ->onDelete('cascade'); // Cascade on delete
         });
     }
 
