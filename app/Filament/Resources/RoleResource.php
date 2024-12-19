@@ -18,9 +18,15 @@ class RoleResource extends Resource
     protected static ?string $model = Role::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+   
     protected static ?string $navigationGroup = 'User Management';
+    
     protected static ?int $navigationSort = 2;
-
+   
+    public static function getNavigationSort(): ?int
+    {
+        return 1; // Assign a sort order for User Management
+    }
 
     public static function form(Form $form): Form
     {

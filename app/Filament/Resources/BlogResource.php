@@ -25,6 +25,8 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\IconColumn;
 
 class BlogResource extends Resource
 {
@@ -36,29 +38,36 @@ class BlogResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    public static function getNavigationSort(): ?int
+    {
+        return 3; // Assign a sort order for Blog Section
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-              
+
                 RichEditor::make('content')->required(),
-                FileUpload::make('image')->disk('public')->directory('blogs'),
+                FileUpload::make('image')
+                    ->disk('public')
+                    ->directory('blogs'),
                 TextInput::make('title')->required(),
 
                 Select::make('status')
-                ->label('Status')
-                ->options([
-                    'active' => 'Active',
-                    'inactive' => 'Inactive',
-                ])
-                ->default('active') 
-                ->required(), 
+                    ->label('Status')
+                    ->options([
+                        'active' => 'Active',
+                        'inactive' => 'Inactive',
+                    ])
+                    ->default('active')
+                    ->required(),
 
                 Select::make('category_id')
-                ->label('Category')
-                ->options(Category::all()->pluck('name','id'))
-                ->required(),
-              
+                    ->label('Category')
+                    ->options(Category::all()->pluck('name', 'id'))
+                    ->required(),
+
             ]);
     }
 
@@ -70,23 +79,25 @@ class BlogResource extends Resource
                 TextColumn::make('category.name'),
                 ImageColumn::make('image'),
 
-                TextColumn::make('status')
-                ->label('Status')
-                ->formatStateUsing(function (string $state): string {
-                    return match ($state) {
-                        'active' => 'Active',
-                        'inactive' => 'Inactive',
-                        default => ucfirst($state),
-                    };
-                }),
 
-                // TextColumn::make('actions')
-                // ->label('Actions')
-                // ->sortable(false)
-                // ->searchable(false),
+                IconColumn::make('status')
+                ->icon(fn (string $state): string => match ($state) {
+                    'active' => 'heroicon-o-check-circle',
+                    'inactive' => 'heroicon-o-clock',
+                })
+                ->color(fn (string $state): string => match ($state) {
+                    'inactive' => 'warning',
+                    'active' => 'success',
+                    default => 'success',
+                })
+
             ])
             ->filters([
-                //
+                SelectFilter::make('category')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->multiple()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -98,7 +109,6 @@ class BlogResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-           
     }
 
     public static function getRelations(): array
