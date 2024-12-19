@@ -29,7 +29,12 @@ class WidgetResource extends Resource
     protected static ?string $pluralLabel = 'Widgets';
 
     protected static ?string $navigationGroup = 'Settings';
-
+   
+    public static function getNavigationSort(): ?int
+    {
+        return 4; // Assign a sort order for User Management
+    }
+   
     public static function form(Form $form): Form
     {
         return $form

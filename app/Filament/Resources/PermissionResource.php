@@ -18,9 +18,15 @@ class PermissionResource extends Resource
     protected static ?string $model = Permission::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
+   
     protected static ?string $navigationGroup = 'User Management';
+   
     protected static ?int $navigationSort = 3;
-
+   
+    public static function getNavigationSort(): ?int
+    {
+        return 1; // Assign a sort order for User Management
+    }
 
     public static function form(Form $form): Form
     {
