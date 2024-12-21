@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationItem;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -36,6 +37,13 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->navigationItems([
+                NavigationItem::make('Category')
+                    ->icon('heroicon-o-rectangle-stack')
+                    ->url('/admin/categories', shouldOpenInNewTab: false)
+                    ->group('Store Management')
+                    ->sort(1),
+            ])
             ->pages([
                 Pages\Dashboard::class,
             ])
