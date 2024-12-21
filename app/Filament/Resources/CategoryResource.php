@@ -44,11 +44,11 @@ class CategoryResource extends Resource
                 Select::make('type')
                 ->label('Type')
                 ->options([
-                    '1' => 'Blog',
-                    '2' => 'Product',
+                    'blog' => 'Blog',
+                    'product' => 'Product',
                 ])
                 ->required()
-                ->default('1'), // Set a default value if needed
+                ->default('product'), // Set a default value if needed
             ]);
     }
 
