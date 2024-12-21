@@ -29,6 +29,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         'image',
         'address',
         'password',
+        'email_verified_at'
     ];
 
     /**
@@ -65,12 +66,12 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     
     public function canAccessPanel(Panel $panel): bool
     {
-        if (auth()->check() && auth()->user()->hasRole('super-admin') && $panel->getId() === 'admin') {
+        if (auth()->check() && (auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('admin')) && $panel->getId() === 'admin') {
             return true;
         }
-        // if (auth()->check() && auth()->user()->hasRole('seller') && $panel->getId() === 'seller') {
-        //     return true;
-        // }
+        if (auth()->check() && auth()->user()->hasRole('seller') && $panel->getId() === 'seller') {
+            return true;
+        }
         return false;
     }
 
