@@ -66,6 +66,20 @@ class RolePermissionSeeder extends Seeder
                 'view_product',
                 'create_product',
             ],
+
+            'store-owner' => [
+                // Dashboard and general permissions
+                'view_dashboard',
+
+                // Product-related permissions
+                'view_product',
+                'create_product',
+                'edit_product',
+
+                // Company management permissions
+                'view_company',
+                'edit_company',
+            ],
         ];
 
         // Loop through each role
