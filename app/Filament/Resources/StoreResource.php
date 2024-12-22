@@ -2,18 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\StoreResource\Pages;
-use App\Filament\Resources\StoreResource\RelationManagers;
-use App\Models\Store;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use App\Models\Store;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\StoreResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\StoreResource\RelationManagers;
 
 class StoreResource extends Resource
 {
@@ -39,15 +44,15 @@ class StoreResource extends Resource
         return $form
             ->schema([
 
-                Forms\Components\TextInput::make('name')
+               TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('owner_id')
+                Select::make('owner_id')
                     ->label('Store Owner')
                     ->options(User::all()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
-                Forms\Components\TextInput::make('domain')
+               TextInput::make('domain')
                     ->prefix('https://')
                     ->rules([
                         'required',
@@ -55,12 +60,12 @@ class StoreResource extends Resource
                         'unique:stores,domain' // Ensure the domain is unique in the 'stores' table
                     ])
                     ->suffix('.'.parse_url(env('APP_URL'), PHP_URL_HOST).'.com'),
-                Forms\Components\TextInput::make('email')
+               TextInput::make('email')
                     ->required()
                     ->email(),
-                Forms\Components\TextInput::make('phone')
+                TextInput::make('phone')
                     ->nullable(),
-                Forms\Components\Select::make('status')
+                Select::make('status')
                     ->options([
                         '1' => 'Active',
                         '0' => 'Deactive',
@@ -68,7 +73,7 @@ class StoreResource extends Resource
                     ->native(false)
                     ->default('1')
                     ->required(),
-                Forms\Components\Textarea::make('location')
+                Textarea::make('location')
                     ->nullable()
                     ->maxLength(65535),
             ]);
@@ -86,23 +91,23 @@ class StoreResource extends Resource
         return $table
             ->columns([
 
-                Tables\Columns\TextColumn::make('name')
+               TextColumn::make('name')
                     ->label('Store')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('owner.name')
+                TextColumn::make('owner.name')
                     ->label('Owner')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('domain')
+               TextColumn::make('domain')
                     ->prefix('https://')
                     ->suffix('.'.parse_url(env('APP_URL'), PHP_URL_HOST).'.com')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+               TextColumn::make('email')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime(),
             ])
