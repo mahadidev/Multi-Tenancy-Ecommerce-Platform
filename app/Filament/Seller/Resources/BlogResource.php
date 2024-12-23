@@ -43,6 +43,11 @@ class BlogResource extends Resource
         return 3; // Assign a sort order for Blog Section
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
