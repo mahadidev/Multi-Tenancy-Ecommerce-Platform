@@ -28,7 +28,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            // ->registration()
             ->passwordReset()
             ->profile()
             ->colors([
@@ -37,13 +36,13 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->navigationItems([
-                NavigationItem::make('Category')
-                    ->icon('heroicon-o-rectangle-stack')
-                    ->url('/admin/categories', shouldOpenInNewTab: false)
-                    ->group('Store Management')
-                    ->sort(1),
-            ])
+            // ->navigationItems([
+            //     NavigationItem::make('Category')
+            //         ->icon('heroicon-o-rectangle-stack')
+            //         ->url('/admin/categories', shouldOpenInNewTab: false)
+            //         ->group('Store Management')
+            //         ->sort(1),
+            // ])
             ->pages([
                 Pages\Dashboard::class,
             ])
