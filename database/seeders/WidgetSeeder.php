@@ -18,11 +18,11 @@ class WidgetSeeder extends Seeder
             [
                 'group_name' => 'footer',
                 'group_label' => 'Footer Widgets',
-                'location' => 'left',
+                'location' => 'botton',
                 'widgets' => [
                     [
-                        'meta_name' => 'categories',
-                        'meta_title' => 'Categories',
+                        'meta_name' => 'site_details',
+                        'meta_title' => 'Site Details',
                         'meta_value' => 'Your eCommerce site description goes here.',
                         'field_type' => 'textarea',
                         'sorting' => 1,
@@ -36,9 +36,9 @@ class WidgetSeeder extends Seeder
                         'sorting' => 2,
                         'settings' => [
                             'email' => 'example@gmail.com',
-                            'phone' => '01768002727',
+                            'phone' => '017********',
                             'address' => 'Dhaka, Bangladesh',
-                            'address-2' => 'Rajshahi, Bangladesh',
+                            'address-2' => 'Dhaka, Bangladesh',
                         ],
                     ],
                     [
@@ -69,7 +69,7 @@ class WidgetSeeder extends Seeder
             ],
             [
                 'group_name' => 'header',
-                'group_label' => 'Header Menu',
+                'group_label' => 'Header Widgets',
                 'location' => 'top',
                 'widgets' =>  [
                     [
@@ -79,9 +79,43 @@ class WidgetSeeder extends Seeder
                         'field_type' => 'text',
                         'sorting' => 1,
                         'settings' => [
-                            'Home' => route('home'),
-                            'Cart' => route('cart'),
-                            'Shop' => route('shop'),
+                            'Home' => env('APP_URL'),
+                            'Shop' => env('APP_URL').'/shop',
+                            'Store' => env('APP_URL').'/store',
+                        ],
+                    ],
+                    [
+                        'meta_name' => 'canvas_navbar',
+                        'meta_title' => 'Canvas Navbar Menu',
+                        'meta_value' => 'content',
+                        'field_type' => 'text',
+                        'sorting' => 1,
+                        'settings' => [
+                            'Home' => env('APP_URL'),
+                            'Shop' => env('APP_URL').'/shop',
+                            'Store' => env('APP_URL').'/store',
+                        ],
+                    ],
+                   
+                ],
+            ],
+            [
+                'group_name' => 'most_trending_product',
+                'group_label' => 'Most Trending Product',
+                'location' => 'left',
+                'widgets' =>  [
+                    [
+                        'meta_name' => 'most_trending_product',
+                        'meta_title' => 'Most Trending Product',
+                        'meta_value' => '01JAYSXE095V0YTPB8YY2WJ50C.jpg',
+                        'field_type' => 'image',
+                        'sorting' => 1,
+                        'settings' => [
+                            'title' => '100% Organic Coffee Beans.',
+                            'description' => 'Get the best deal before close.',
+                            'button-status' => 'on',
+                            'button-label' => 'Shop now',
+                            'button-url' => '#',
                         ],
                     ],
                    

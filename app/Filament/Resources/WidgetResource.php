@@ -28,11 +28,11 @@ class WidgetResource extends Resource
     protected static ?string $navigationLabel = 'Widgets';
     protected static ?string $pluralLabel = 'Widgets';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Theme Management';
    
     public static function getNavigationSort(): ?int
     {
-        return 4; // Assign a sort order for User Management
+        return 4; 
     }
    
     public static function form(Form $form): Form
@@ -159,14 +159,15 @@ class WidgetResource extends Resource
     {
         return $table
         ->columns([
-            TextColumn::make('group_name')
-                ->label('Group Name')
-                ->sortable()
-                ->searchable(),
             TextColumn::make('group_label')
-                ->label('Group Label')
+                ->label('Groups Name')
                 ->sortable()
                 ->searchable(),
+            TextColumn::make('group_name')
+                ->label('code')
+                ->sortable()
+                ->searchable(),
+            
             TextColumn::make('location'),
             TextColumn::make('widgets_count')->counts('widgets'),
             TextColumn::make('created_at')

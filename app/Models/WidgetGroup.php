@@ -29,4 +29,10 @@ class WidgetGroup extends Model
         return $this->widgets()
             ->where('is_active', true);
     }
+
+    public function themes()
+    {
+        return $this->belongsToMany(Theme::class, 'theme_widget_group')
+                    ->withTimestamps(); // Includes timestamps from the pivot table
+    }
 }
