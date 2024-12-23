@@ -38,7 +38,7 @@ class StoreResource extends Resource
     {
         return 2; // Assign a sort order for User Management
     }
-
+    
     public static function form(Form $form): Form
     {
         return $form
