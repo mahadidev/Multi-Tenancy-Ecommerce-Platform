@@ -33,6 +33,11 @@ class StoreResource extends Resource
 {
     protected static ?string $model = Store::class;
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('owner_id', auth()->id());
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
