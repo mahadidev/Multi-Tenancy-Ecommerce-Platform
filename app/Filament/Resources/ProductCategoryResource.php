@@ -2,57 +2,43 @@
 
 namespace App\Filament\Resources;
 
-use Str;
-use Filament\Forms;
-use Filament\Tables;
+use App\Filament\Resources\ProductCategoryResource\Pages;
+use App\Filament\Resources\ProductCategoryResource\RelationManagers;
 use App\Models\Category;
+use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\DeleteBulkAction;
-use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\TextColumn;
 
-class CategoryResource extends Resource
+class ProductCategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationGroup = 'Blog Section';
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Store Management';
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('type', 'blog');
-    }
-
-    public static function getNavigationSort(): ?int
-    {
-        return 3; // Assign a sort order for Blog Section
+        return parent::getEloquentQuery()->where('type', 'product');
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
-                
-                Select::make('type')
+                Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\Select::make('type')
                 ->label('Type')
                 ->options([
-                    'blog' => 'Blog',
+                    'product' => 'Product',
                 ])
                 ->required()
-                ->default('blog'), // Set a default value if needed
+                ->default('product'), 
             ]);
     }
 
@@ -63,11 +49,11 @@ class CategoryResource extends Resource
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('slug'),
                 TextColumn::make('created_at')
-                ->label('Created At')
-                ->dateTime('d M, Y'),
+                    ->label('Created At')
+                    ->dateTime('d M, Y'),
             ])
             ->filters([
-               
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -90,9 +76,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListProductCategories::route('/'),
+            'create' => Pages\CreateProductCategory::route('/create'),
+            'edit' => Pages\EditProductCategory::route('/{record}/edit'),
         ];
     }
 }

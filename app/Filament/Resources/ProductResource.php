@@ -26,7 +26,7 @@ class ProductResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        return 3; 
+        return 3;
     }
 
     public static function form(Form $form): Form
@@ -35,7 +35,7 @@ class ProductResource extends Resource
             ->schema([
                 Forms\Components\Card::make()
                     ->schema([
-                        Forms\Components\Grid::make(2) // Two-column layout
+                        Forms\Components\Grid::make(2)
                             ->schema([
                                 // Left Column
                                 Forms\Components\Select::make('store_id')
@@ -78,53 +78,51 @@ class ProductResource extends Resource
 
 
                             ]),
-
-                          
                         Forms\Components\Textarea::make('description')
                             ->label('Description')
                             ->rows(5),
 
-                            Forms\Components\Grid::make(2) // Two-column layout
+                        Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\FileUpload::make('thumbnail')
-                                ->label('Thumbnail')
-                                ->disk('public')
-                                ->directory('products')
-                                ->image()
-                                ->imageEditor()
-                                ->reorderable()
-                                ->appendFiles()
-                                ->openable()
-                                ->downloadable()
-                                ->imageEditorAspectRatios([
-                                    '16:9',
-                                    '4:3',
-                                    '1:1',
-                                ])
-                                ->required(),
-    
-                            Forms\Components\FileUpload::make('attachments')
-                                ->label('Gallery')
-                                ->disk('public')
-                                ->directory('products')
-                                ->image()
-                                ->multiple()
-                                ->imageEditor()
-                                ->reorderable()
-                                ->appendFiles()
-                                ->openable()
-                                ->downloadable()
-                                ->imageEditorAspectRatios([
-                                    '16:9',
-                                    '4:3',
-                                    '1:1',
-                                ])
-                                ->required(),
-                                ]),
-                       
+                                    ->label('Thumbnail')
+                                    ->disk('public')
+                                    ->directory('products')
+                                    ->image()
+                                    ->imageEditor()
+                                    ->reorderable()
+                                    ->appendFiles()
+                                    ->openable()
+                                    ->downloadable()
+                                    ->imageEditorAspectRatios([
+                                        '16:9',
+                                        '4:3',
+                                        '1:1',
+                                    ])
+                                    ->required(),
 
-                        // Right Column
-                        Forms\Components\Grid::make(2) // Separate Grid for right column items
+                                Forms\Components\FileUpload::make('attachments')
+                                    ->label('Gallery')
+                                    ->disk('public')
+                                    ->directory('products')
+                                    ->image()
+                                    ->multiple()
+                                    ->imageEditor()
+                                    ->reorderable()
+                                    ->appendFiles()
+                                    ->openable()
+                                    ->downloadable()
+                                    ->imageEditorAspectRatios([
+                                        '16:9',
+                                        '4:3',
+                                        '1:1',
+                                    ])
+                                    ->required(),
+                            ]),
+
+
+
+                        Forms\Components\Grid::make(2)
                             ->schema([
 
                                 Forms\Components\Toggle::make('status')
@@ -145,22 +143,34 @@ class ProductResource extends Resource
                             ->label('Variants')
                             ->relationship('variants')
                             ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->label('Variant Name'),
-                                Forms\Components\TextInput::make('sku')
-                                    ->label('SKU')
-                                    ->maxLength(50),
-                                Forms\Components\TextInput::make('cost_price')
-                                    ->label('Cost Price')
-                                    ->numeric()
-                                    ->required(),
-                                Forms\Components\TextInput::make('price')
-                                    ->label('Price')
-                                    ->numeric()
-                                    ->required(),
+                                Forms\Components\Grid::make(2)
+                                    ->schema([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required()
+                                            ->label('Variant Name'),
+                                        Forms\Components\TextInput::make('stock')
+                                            ->label('Stock')
+                                            ->numeric()
+                                            ->nullable(),
+
+                                        Forms\Components\ColorPicker::make('color')
+                                            ->label('Color')
+                                            ->nullable(),
+                                        Forms\Components\TextInput::make('size')
+                                            ->label('Size')
+                                            ->numeric()
+                                            ->nullable(),
+                                        Forms\Components\TextInput::make('cost_price')
+                                            ->label('Cost Price')
+                                            ->numeric()
+                                            ->required(),
+                                        Forms\Components\TextInput::make('price')
+                                            ->label('Price')
+                                            ->numeric()
+                                            ->required(),
+                                    ]),
                             ])
-                            ->hidden(fn(Forms\Get $get) => !$get('has_variants')), // Show only if has_variants is true
+                            ->hidden(fn(Forms\Get $get) => !$get('has_variants')),
                     ]),
             ]);
     }
@@ -195,16 +205,16 @@ class ProductResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('store')
-                ->relationship('store', 'name')
-                ->searchable()
-                ->multiple()
-                ->preload(),
+                    ->relationship('store', 'name')
+                    ->searchable()
+                    ->multiple()
+                    ->preload(),
 
                 SelectFilter::make('category')
-                ->relationship('category', 'name')
-                ->searchable()
-                ->multiple()
-                ->preload()
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->multiple()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
