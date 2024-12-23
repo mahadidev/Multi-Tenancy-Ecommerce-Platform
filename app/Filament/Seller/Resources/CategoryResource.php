@@ -37,7 +37,7 @@ class CategoryResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('type', 'product');
+        return parent::getEloquentQuery()->where('type', 'blog');
     }
 
     public static function form(Form $form): Form
@@ -49,11 +49,10 @@ class CategoryResource extends Resource
                 Select::make('type')
                 ->label('Type')
                 ->options([
-                    '1' => 'Blog',
-                    '2' => 'Product',
+                    'blog' => 'Blog',
                 ])
                 ->required()
-                ->default('product'), // Set a default value if needed
+                ->default('blog'), // Set a default value if needed
             ]);
     }
 
@@ -63,25 +62,9 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('slug'),
-                TextColumn::make('type')
-                ->label('Type') // Optional, adds a label for the column
-                ->formatStateUsing(function (string $state): string {
-                    return match ($state) {
-                        '1' => 'Blog',  // If type is '1', display 'Blog'
-                        '2' => 'Product',  // If type is '2', display 'Product'
-                        default => ucfirst($state),  // Otherwise, capitalize the type value
-                    };
-                })->searchable(),
-
-                
             ])
             ->filters([
-                SelectFilter::make('type')  // Create a custom filter for 'type'
-                ->options([
-                    '1' => 'Blog',
-                    '2' => 'Product',
-                ])
-                ->label('Filter by Type'),  // Add a label for the filter
+                
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

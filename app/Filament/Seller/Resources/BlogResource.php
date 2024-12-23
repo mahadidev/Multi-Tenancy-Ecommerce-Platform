@@ -84,7 +84,6 @@ class BlogResource extends Resource
                 TextColumn::make('category.name'),
                 ImageColumn::make('image'),
 
-
                 IconColumn::make('status')
                 ->icon(fn (string $state): string => match ($state) {
                     'active' => 'heroicon-o-check-circle',
