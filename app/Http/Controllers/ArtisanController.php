@@ -12,6 +12,7 @@ class ArtisanController extends Controller
         try {
             Artisan::call('db:seed');
             // Artisan::call('filament:optimize-clear');
+            // Artisan::call('filament:clear-cached-components');
             // Artisan::call('filament:optimize');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
