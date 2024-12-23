@@ -188,6 +188,8 @@ class ProductResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('store.name'),
+                
+                Tables\Columns\TextColumn::make('category.name'),
 
                 Tables\Columns\TextColumn::make('price')
                     ->label('Price')
