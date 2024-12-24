@@ -30,28 +30,28 @@ class ThemeSeeder extends Seeder
            
         ];
 
-        $themesExistingCount = Theme::get()->count();
+        // $themesExistingCount = Theme::get()->count();
 
-        if ($themesExistingCount == 0) {
-            foreach($themes as $key => $group){
-                $theme = Theme::firstOrCreate(
-                    ['slug' => $group['slug']],
-                    [
-                        'name' => $group['name'],
-                        'is_active' => $group['is_active'],
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]
-                );
+        // if ($themesExistingCount == 0) {
+        //     foreach($themes as $key => $group){
+        //         $theme = Theme::firstOrCreate(
+        //             ['slug' => $group['slug']],
+        //             [
+        //                 'name' => $group['name'],
+        //                 'is_active' => $group['is_active'],
+        //                 'created_at' => now(),
+        //                 'updated_at' => now(),
+        //             ]
+        //         );
     
-                // add widget groups to the theme in pivot table theme_widget_group
-                $widgets = WidgetGroup::get()->pluck('id');
+        //         // add widget groups to the theme in pivot table theme_widget_group
+        //         $widgets = WidgetGroup::get()->pluck('id');
     
-                if($widgets){
-                    $theme->widgetGroups()->sync($widgets);
-                }
-            }
-        }
+        //         if($widgets){
+        //             $theme->widgetGroups()->sync($widgets);
+        //         }
+        //     }
+        // }
        
     }
 }
