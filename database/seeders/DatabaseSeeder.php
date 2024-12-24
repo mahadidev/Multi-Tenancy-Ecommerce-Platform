@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UserSeeder::class,
             SellerAccountSeeder::class,
-            WidgetSeeder::class,
-            ThemeSeeder::class,
+            // WidgetSeeder::class,
+            // ThemeSeeder::class,
         ]);
     }
 }
