@@ -17,21 +17,10 @@ return new class extends Migration
             $table->string('slug')->unique(); 
             $table->string('thumbnail')->nullable(); 
             $table->boolean('is_active')->default(true); 
+            $table->boolean('has_widgets')->default(false); 
             $table->timestamps();
         });
 
-
-         // Create the pivot table for themes and widget_groups
-         Schema::create('theme_widget_group', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('theme_id')
-                ->constrained('themes')
-                ->onDelete('cascade'); // Ensure cleanup on deletion
-            $table->foreignId('widget_group_id')
-                ->constrained('widget_groups')
-                ->onDelete('cascade'); // Ensure cleanup on deletion
-            $table->timestamps(); // Optional: Keep track of the relationship creation
-        });
     }
 
     /**
@@ -39,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('theme_widget_group');
         Schema::dropIfExists('themes');
     }
 };

@@ -28,7 +28,7 @@ class WidgetResource extends Resource
     protected static ?string $navigationLabel = 'Widgets';
     protected static ?string $pluralLabel = 'Widgets';
 
-    protected static ?string $navigationGroup = 'Theme Management';
+    protected static ?string $navigationGroup = 'Settings';
    
     public static function getNavigationSort(): ?int
     {
