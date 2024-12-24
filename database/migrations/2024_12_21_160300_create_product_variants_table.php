@@ -14,13 +14,9 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->string('name'); 
-            $table->string('sku')->nullable(); 
-            $table->string('color')->nullable();
-            $table->string('size')->nullable();
-            $table->decimal('cost_price', 10, 2); 
-            $table->decimal('price', 10, 2); 
-            $table->integer('stock')->nullable(); // Stock specific to the variant
+            $table->string('label'); // Variant label, e.g., "Color", "Size"
+            $table->string('slug')->nullable(); // Variant label, e.g., "Color", "Size"
+            $table->json('options'); // JSON data for variant options (nested structure)
             $table->timestamps();
 
             // Foreign key constraint

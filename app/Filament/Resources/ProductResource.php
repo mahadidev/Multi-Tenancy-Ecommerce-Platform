@@ -53,7 +53,7 @@ class ProductResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->label('Product Name')
-                                    ->maxLength(255)->columnSpanFull(),
+                                    ->maxLength(255),
 
                                 Forms\Components\TextInput::make('sku')
                                     ->label('SKU')
@@ -64,11 +64,6 @@ class ProductResource extends Resource
                                     ->label('Stock Quantity')
                                     ->numeric()
                                     ->nullable(),
-
-                                Forms\Components\TextInput::make('cost_price')
-                                    ->label('Cost Price')
-                                    ->numeric()
-                                    ->helperText('Leave empty if the product has variants.'),
 
                                 Forms\Components\TextInput::make('price')
                                     ->label('Base Price')
@@ -139,38 +134,46 @@ class ProductResource extends Resource
 
                             ]),
 
+                      
                         Forms\Components\Repeater::make('variants')
                             ->label('Variants')
                             ->relationship('variants')
                             ->schema([
-                                Forms\Components\Grid::make(2)
-                                    ->schema([
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->label('Variant Name'),
-                                        Forms\Components\TextInput::make('stock')
-                                            ->label('Stock')
-                                            ->numeric()
-                                            ->nullable(),
+                                Forms\Components\TextInput::make('label')
+                                    ->label('Variant Label')
+                                    ->required()
+                                    ->hint('e.g., Color, Size, Wholesale Package'),
 
-                                        Forms\Components\ColorPicker::make('color')
-                                            ->label('Color')
-                                            ->nullable(),
-                                        Forms\Components\TextInput::make('size')
-                                            ->label('Size')
-                                            ->numeric()
-                                            ->nullable(),
-                                        Forms\Components\TextInput::make('cost_price')
-                                            ->label('Cost Price')
-                                            ->numeric()
-                                            ->required(),
-                                        Forms\Components\TextInput::make('price')
-                                            ->label('Price')
-                                            ->numeric()
-                                            ->required(),
-                                    ]),
+                                Forms\Components\Repeater::make('options')
+                                    ->label('Options')
+                                    ->schema([
+                                            Forms\Components\TextInput::make('label')
+                                                ->label('Variant Label')
+                                                ->required(),
+                                            Forms\Components\TextInput::make('code')
+                                                ->label('Variant Code')
+                                                ->nullable()
+                                                ->hint('Only applicable for color variants'),
+                                            Forms\Components\TextInput::make('price')
+                                                ->label('Price')
+                                                ->numeric()
+                                                ->required()
+                                                ->hint('Specify the price for this option'),
+                                            Forms\Components\TextInput::make('qty_stock')
+                                                ->label('Stock Quantity')
+                                                ->numeric()
+                                                ->required()
+                                                ->hint('Specify the stock quantity for this option'),
+                                    ])
+                                    ->columns(2)
+                                    ->required()
+                                    ->minItems(1)
                             ])
+                            ->columns(1)
+                            ->label('More Variant')
                             ->hidden(fn(Forms\Get $get) => !$get('has_variants')),
+
+
                     ]),
             ]);
     }
@@ -188,7 +191,7 @@ class ProductResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('store.name'),
-                
+
                 Tables\Columns\TextColumn::make('category.name'),
 
                 Tables\Columns\TextColumn::make('price')
