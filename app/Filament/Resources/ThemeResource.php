@@ -11,10 +11,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 
 class ThemeResource extends Resource
 {
@@ -61,37 +59,12 @@ class ThemeResource extends Resource
                         Forms\Components\TextInput::make('label')
                             ->label('Label')
                             ->required(),
-                        Forms\Components\Select::make('type')
-                            ->label('Field Type')
-                            ->options([
-                                'html' => 'HTML Content',
-                                'text' => 'Text Field',
-                                'textarea' => 'Textarea Field',
-                                'image' => 'Image Upload',
-                                'links' => 'Links',
-                            ])
-                            ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                $set('value', null);
-                                $set('link_url', null);  // Reset link URL when field type changes
-                            }),
-
-                        // Dynamic Meta Value field based on field_type
-                        Forms\Components\Group::make()
-                            ->schema(function ($get) {
-                                $fieldType = $get('type');
-
-                                return match ($fieldType) {
-                                    'html' => self::html(),
-                                    'text' => self::text(),
-                                    'textarea' => self::textarea(),
-                                    'image' => self::files(),
-                                    'links' => self::links(),
-                                    default => [],
-                                };
-                            }),
-                        
+                        Forms\Components\KeyValue::make("inputs")
+                            ->keyLabel("Input Name")
+                            ->keyPlaceholder("ex. Title")
+                            ->valueLabel("Input arg.")
+                            ->valuePlaceholder('ex. { "label": "Title", "value": "Welcome to Cholo Gori", "placeholder": "Enter your title", "required": "true" }')
+                            ->reorderable()
                     ])
                     ->columnSpanFull()
                     ->label('Widget')
@@ -101,16 +74,18 @@ class ThemeResource extends Resource
 
 
 
-    public static function text(){
+    public static function text()
+    {
         return [
             Forms\Components\TextInput::make('value')
                 ->label('Text Value')
                 ->required(),
-           
+
         ];
     }
 
-    public static function html(){
+    public static function html()
+    {
         return [
             Forms\Components\RichEditor::make('value')
                 ->required(),
@@ -119,25 +94,27 @@ class ThemeResource extends Resource
 
     public static function textarea()
     {
-       return  [
+        return [
             Forms\Components\Textarea::make('value')
                 ->label('Content')
                 ->required(),
-           
+
         ];
     }
 
-    public static function files(){
+    public static function files()
+    {
         return [
             Forms\Components\FileUpload::make('value')
                 ->label('Image')
                 ->image()
                 ->required(),
-            
+
         ];
     }
 
-    public static function links(){
+    public static function links()
+    {
         return [
             Forms\Components\Grid::make(1)
                 ->schema([

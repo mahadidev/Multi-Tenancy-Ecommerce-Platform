@@ -12,10 +12,11 @@ class ThemeWidget extends Model
         'label',
         'type',
         'value',
+        'inputs'
     ];
 
     protected $casts = [
         'value' => 'json', // Use 'json' instead of 'array'
+        'inputs' => 'array',
     ];
-    
 }
