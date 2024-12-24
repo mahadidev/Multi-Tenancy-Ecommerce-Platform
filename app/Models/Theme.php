@@ -33,10 +33,11 @@ class Theme extends Model
         'slug',
         'thumbnail',
         'is_active',
+        'has_widgets'
     ];
     
-    public function widgetGroups()
+    public function widgets()
     {
-        return $this->belongsToMany(WidgetGroup::class, 'theme_widget_group');
+        return $this->hasMany(ThemeWidget::class);
     }
 }
