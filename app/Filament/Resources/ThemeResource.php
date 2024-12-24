@@ -93,8 +93,6 @@ class ThemeResource extends Resource
                             }),
                         
                     ])
-                    ->collapsible() // Enables collapsing of individual repeater items
-                    ->collapsed() // Makes the items collapsed by default
                     ->columnSpanFull()
                     ->label('Widget')
                     ->hidden(fn(Forms\Get $get) => !$get('has_widgets')),
