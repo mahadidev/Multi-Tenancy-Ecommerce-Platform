@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ThemeWidget extends Model
+class ThemePageWidget extends Model
 {
     protected $fillable = [
         'theme_id',

@@ -10,13 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('theme_widgets', function (Blueprint $table) {
+        Schema::create('theme_pages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('theme_id');
-            $table->string('name');
-            $table->string('label')->nullable();
-            $table->longText("inputs")->nullable();
+            $table->string("name");
+            $table->string("slug")->unique();
+            $table->string("title");
             $table->timestamps();
+
 
             // Foreign key constraint
             $table->foreign('theme_id')
@@ -30,6 +31,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('theme_widgets');
+        Schema::dropIfExists('theme_pages');
     }
 };
