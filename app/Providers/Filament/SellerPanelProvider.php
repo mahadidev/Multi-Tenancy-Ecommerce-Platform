@@ -18,7 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Auth\CustomRegister;
-
+use Filament\Navigation\MenuItem;
 class SellerPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -37,7 +37,13 @@ class SellerPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Seller/Resources'), for: 'App\\Filament\\Seller\\Resources')
             ->discoverPages(in: app_path('Filament/Seller/Pages'), for: 'App\\Filament\\Seller\\Pages')
             ->discoverClusters(in: app_path('Filament/Seller/Clusters'), for: 'App\\Filament\\Seller\\Clusters')
-
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Stores')
+                    ->url('/select-store')
+                    ->icon('heroicon-o-cog-6-tooth'),
+                // ...
+            ])
             ->pages([
                 Pages\Dashboard::class,
             ])
@@ -61,4 +67,16 @@ class SellerPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
+
+    // public function boot(): void
+    // {
+
+    //     Panel::make('seller') // Create the panel instance
+    //     ->id('seller')
+    //     ->pages([ // Register pages to the seller panel
+    //         SellerRegistration::class,
+    //     ]);
+
+
+    // }
 }
