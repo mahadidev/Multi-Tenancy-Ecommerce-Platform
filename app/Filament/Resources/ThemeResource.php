@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ThemeResource\Pages;
 use App\Filament\Resources\ThemeResource\RelationManagers;
+use App\Filament\Resources\ThemeResource\RelationManagers\PagesRelationManager;
 use App\Models\Theme;
 use App\Models\WidgetGroup;
 use Filament\Forms;
@@ -152,7 +153,7 @@ class ThemeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PagesRelationManager::class
         ];
     }
 

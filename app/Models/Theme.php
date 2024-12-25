@@ -17,7 +17,7 @@ class Theme extends Model
             if (empty($data->slug)) {
                 $data->slug = Str::slug($data->name);  // Generate slug from name
             }
-            
+
         });
 
         // Automatically update the slug when updating
@@ -35,9 +35,14 @@ class Theme extends Model
         'is_active',
         'has_widgets'
     ];
-    
+
     public function widgets()
     {
         return $this->hasMany(ThemeWidget::class);
+    }
+
+    public function pages()
+    {
+        return $this->hasMany(ThemePage::class);
     }
 }

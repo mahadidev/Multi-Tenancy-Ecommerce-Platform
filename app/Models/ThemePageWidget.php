@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ThemePageWidget extends Model
+{
+    protected $fillable = [
+        'theme_id',
+        'name',
+        'label',
+        'type',
+        'value',
+        'inputs'
+    ];
+
+    protected $casts = [
+        'value' => 'json', // Use 'json' instead of 'array'
+        'inputs' => 'array',
+    ];
+}
