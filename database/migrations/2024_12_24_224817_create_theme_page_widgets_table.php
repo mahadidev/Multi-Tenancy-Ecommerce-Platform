@@ -10,17 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('theme_widgets', function (Blueprint $table) {
+        Schema::create('theme_page_widgets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('theme_id');
+            $table->unsignedBigInteger('theme_page_id');
             $table->string('name');
             $table->string('label')->nullable();
             $table->longText("inputs")->nullable();
             $table->timestamps();
 
             // Foreign key constraint
-            $table->foreign('theme_id')
-                ->references('id')->on('themes')
+            $table->foreign('theme_page_id')
+                ->references('id')->on('theme_pages')
                 ->onDelete('cascade');
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('theme_widgets');
+        Schema::dropIfExists('theme_page_widgets');
     }
 };
