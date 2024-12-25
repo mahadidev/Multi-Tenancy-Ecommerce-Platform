@@ -21,8 +21,4 @@ class ArtisanController extends Controller
         // Return a response to the user
         return response()->json(['message' => 'Deployment commands executed successfully!']);
     }
-
-    public function store(){
-        return view('filament.seller.pages.seller-registration');
-    }
 }

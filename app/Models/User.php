@@ -75,7 +75,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return false;
     }
 
-    public function store(){
+    public function stores(){
         return $this->hasMany(Store::class, 'owner_id');
     }
 }
