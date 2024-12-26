@@ -1,0 +1,508 @@
+{
+	"info": {
+		"_postman_id": "043ad678-a58b-4b8f-8946-ee824bba7920",
+		"name": "Cholo Gori",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21736896",
+		"_collection_link": "https://www.postman.com/dark-station-897238/workspace/techstring-it/collection/21736896-043ad678-a58b-4b8f-8946-ee824bba7920?action=share&source=collection_link&creator=21736896"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{site}}/login",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Module",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "abir2",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "a2abir.dit@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "01768000000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{site}}/user?role=seller",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "seller",
+									"description": "user, seller, admin, super-admin"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "aaa",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "asdasd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{site}}/user/4",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"user",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "index",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/user",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "super-admin",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "view",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/user/8",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"user",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/user/36",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"user",
+								"36"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product Module",
+			"item": [
+				{
+					"name": "product-list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/product",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single-product-view",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/product/2",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"product",
+								"2"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "7",
+									"disabled": true
+								},
+								{
+									"key": "shop",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "patient_type",
+									"value": "kafha",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category Module",
+			"item": [
+				{
+					"name": "category-list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/category?type=product",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "product",
+									"description": "product, post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single-category-view",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/category/2",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"category",
+								"2"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "7",
+									"disabled": true
+								},
+								{
+									"key": "shop",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "patient_type",
+									"value": "kafha",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Store Module",
+			"item": [
+				{
+					"name": "store-list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/store",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single-store-view",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site}}/store/4",
+							"host": [
+								"{{site}}"
+							],
+							"path": [
+								"store",
+								"4"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "7",
+									"disabled": true
+								},
+								{
+									"key": "shop",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "patient_type",
+									"value": "kafha",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -45,7 +45,7 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->required(),
-                
+
                 Select::make('type')
                 ->label('Type')
                 ->options([
