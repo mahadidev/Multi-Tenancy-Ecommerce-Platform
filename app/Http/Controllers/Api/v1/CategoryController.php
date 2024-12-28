@@ -11,11 +11,12 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Category::latest();
+        $query = Category::authorized()->latest();
 
         if ($request->has('type')) {
             $query->where('type', $request->input('type'));
         }
+
         $categories = $query->get();
 
         return response()->json([
@@ -26,7 +27,7 @@ class CategoryController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $category = Category::findOrFail($id);
+            $category = Category::authorized()->findOrFail($id);
 
             return response()->json(
                 [
@@ -43,4 +44,57 @@ class CategoryController extends Controller
             );
         }
     }
+
+    public function store(Request $request){
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z0-9\-]+$/', // Allows letters, numbers, and hyphens, but no spaces
+            ],
+            'type' => 'nullable|string|max:50|in:post,product', // Correct format for 'in' rule
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        // Automatically assign the authenticated user's ID
+        $validated['user_id'] = auth()->user()->id;
+
+
+        $category = Category::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'data' => $category,
+        ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $category = Category::authorized()->findorfail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                // 'unique:categories,slug,' . $category->id, // Ignore the current category's slug
+                'regex:/^[a-zA-Z0-9\-]+$/', // Allows letters, numbers, and hyphens, but no spaces
+            ],
+            'type' => 'nullable|string|max:50|in:post,product', // Correct format for 'in' rule
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        // Update the category
+        $category->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'data' => $category,
+        ], 200);
+    }
+
 }

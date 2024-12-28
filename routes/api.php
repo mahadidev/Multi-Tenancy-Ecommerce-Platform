@@ -12,7 +12,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('/store', StoreController::class);
 
         // Category Routes
-        // Route::resource('/category', CategoryController::class);
+        Route::resource('/category', CategoryController::class);
 
         
         

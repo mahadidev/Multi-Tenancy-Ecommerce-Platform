@@ -12,7 +12,8 @@ class Category extends Model
         'name',
         'slug',
         'type',
-        'parent_id'
+        'parent_id',
+        'user_id',
     ];
 
 
@@ -40,6 +41,20 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+
+    public function parent(){
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function author(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function scopeAuthorized($query){
+        return $query->where('user_id', auth()->user()->id);
+    }
+
+    
 }
 
 
