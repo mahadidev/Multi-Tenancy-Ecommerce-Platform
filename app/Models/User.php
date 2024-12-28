@@ -11,11 +11,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
-
+use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -75,7 +75,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return false;
     }
 
-    public function store(){
+    public function stores(){
         return $this->hasMany(Store::class, 'owner_id');
     }
 }

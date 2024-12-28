@@ -32,6 +32,17 @@ class ProductCategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')->required(),
+               
+                Forms\Components\Select::make('parent_id')
+                ->label('Parent Category')
+                ->options(
+                    Category::whereNull('parent_id') // Fetch only root categories or any condition
+                        ->pluck('name', 'id') // Get 'name' as the label and 'id' as the value
+                        ->toArray()
+                )
+                ->nullable()
+                ->searchable(),
+
                 Forms\Components\Select::make('type')
                 ->label('Type')
                 ->options([
