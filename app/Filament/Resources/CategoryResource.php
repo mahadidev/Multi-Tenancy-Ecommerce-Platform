@@ -18,6 +18,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use App\Models\User;
 use Filament\Tables\Filters\SelectFilter;
 
 class CategoryResource extends Resource
@@ -45,6 +46,11 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->required(),
+
+                Select::make('user_id')
+                ->label('User')
+                ->options(User::all()->pluck('name', 'id'))
+                ->required(),
 
                 Select::make('type')
                 ->label('Type')

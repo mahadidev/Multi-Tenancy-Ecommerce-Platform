@@ -10,15 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function sellerLogin(Request $request)
     {   
         $request->validate([
             'email' => 'string|required',
             'password' => 'string|required',
         ]);
-
-
-        // return $request->all();
 
         // Find the user by email
         $user = User::where('email', $request->email)->first();
@@ -28,6 +25,13 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Invalid email or password.',
             ], 401);
+        }
+
+        // Check if the user has the role of 'seller'
+        if (!$user->hasRole('seller')) {
+            return response()->json([
+                'message' => 'Unauthorized. Only sellers can log in.',
+            ], 403);
         }
 
         // Generate a Sanctum token
@@ -40,4 +44,5 @@ class AuthController extends Controller
             'user' => new UserResource($user),
         ], 200);
     }
+
 }
