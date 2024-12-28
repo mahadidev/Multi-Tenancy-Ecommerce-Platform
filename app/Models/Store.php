@@ -52,4 +52,10 @@ class Store extends Model
 
         return $domain;
     }
+
+    // Scope to check ownership
+    public function scopeStoreOwner($query, $userId)
+    {
+        return $query->where('owner_id', $userId);
+    }
 }
