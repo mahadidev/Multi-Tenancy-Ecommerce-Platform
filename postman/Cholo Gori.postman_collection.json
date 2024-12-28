@@ -284,19 +284,19 @@
 									"formdata": [
 										{
 											"key": "name",
-											"value": "mystore",
+											"value": "jelly-store",
 											"description": "required",
 											"type": "text"
 										},
 										{
 											"key": "email",
-											"value": "mystore@gmail.com",
+											"value": "jellyfish.store@gmail.com",
 											"description": "required",
 											"type": "text"
 										},
 										{
 											"key": "domain",
-											"value": "mystore-1",
+											"value": "jellyfish-store",
 											"description": "regex:/^[a-zA-Z0-9]+$/ | required | unique",
 											"type": "text"
 										},
@@ -357,19 +357,19 @@
 									"urlencoded": [
 										{
 											"key": "name",
-											"value": "kanak",
+											"value": "jelly-store",
 											"description": "required",
 											"type": "text"
 										},
 										{
 											"key": "email",
-											"value": "kanak@gmail.com",
+											"value": "jellyfish.store@gmail.com",
 											"description": "required",
 											"type": "text"
 										},
 										{
 											"key": "domain",
-											"value": "kanak-store",
+											"value": "jellyfish-store-new",
 											"description": "regex:/^[a-zA-Z0-9]+$/ | nullable | unique",
 											"type": "text",
 											"disabled": true
@@ -389,13 +389,13 @@
 									]
 								},
 								"url": {
-									"raw": "{{site_seller}}/store/10",
+									"raw": "{{site_seller}}/store/3",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
 										"store",
-										"10"
+										"3"
 									]
 								}
 							},
@@ -519,8 +519,21 @@
 					"name": "Category Module",
 					"item": [
 						{
-							"name": "category-list",
+							"name": "index",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [
 									{
@@ -534,8 +547,12 @@
 										"type": "text"
 									}
 								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
 								"url": {
-									"raw": "{{site_seller}}/category?type=product",
+									"raw": "{{site_seller}}/category",
 									"host": [
 										"{{site_seller}}"
 									],
@@ -546,7 +563,8 @@
 										{
 											"key": "type",
 											"value": "product",
-											"description": "product, post"
+											"description": "product, post",
+											"disabled": true
 										}
 									]
 								}
@@ -554,8 +572,18 @@
 							"response": []
 						},
 						{
-							"name": "single-category-view",
+							"name": "view",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [
 									{
@@ -570,13 +598,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{site_seller}}/category/2",
+									"raw": "{{site_seller}}/category/3",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
 										"category",
-										"2"
+										"3"
 									],
 									"query": [
 										{
@@ -598,16 +626,21 @@
 								}
 							},
 							"response": []
-						}
-					]
-				},
-				{
-					"name": "Product Module",
-					"item": [
+						},
 						{
-							"name": "product-list",
+							"name": "store",
 							"request": {
-								"method": "GET",
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
 								"header": [
 									{
 										"key": "Accept",
@@ -620,22 +653,79 @@
 										"type": "text"
 									}
 								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "type",
+											"value": "product",
+											"description": "post, product | required",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Food & Beverage",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "slug",
+											"value": "food-beverage",
+											"description": "required | unique | 'regex:/^[a-zA-Z0-9\\-]+$/', // Allows letters, numbers, and hyphens, but no spaces",
+											"type": "text"
+										},
+										{
+											"key": "parent_id",
+											"value": "6",
+											"description": "nullable | integer",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
 								"url": {
-									"raw": "{{site_seller}}/product",
+									"raw": "{{site_seller}}/category",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
-										"product"
+										"category"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "single-product-view",
+							"name": "update",
 							"request": {
-								"method": "GET",
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
 								"header": [
 									{
 										"key": "Accept",
@@ -648,14 +738,44 @@
 										"type": "text"
 									}
 								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "type",
+											"value": "product",
+											"description": "post, product | required",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Electronics",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "slug",
+											"value": "electronics",
+											"description": "required | unique | 'regex:/^[a-zA-Z0-9\\-]+$/', // Allows letters, numbers, and hyphens, but no spaces",
+											"type": "text"
+										},
+										{
+											"key": "parent_id",
+											"value": "",
+											"description": "nullable | integer",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
 								"url": {
-									"raw": "{{site_seller}}/product/2",
+									"raw": "{{site_seller}}/category/3",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
-										"product",
-										"2"
+										"category",
+										"3"
 									],
 									"query": [
 										{
@@ -707,7 +827,7 @@
 									"formdata": [
 										{
 											"key": "email",
-											"value": "admin@gmail.com",
+											"value": "jellyfish@gmail.com",
 											"type": "text"
 										},
 										{
