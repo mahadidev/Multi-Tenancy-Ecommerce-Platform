@@ -11,7 +11,7 @@ use App\Models\User;
 class StoreController extends Controller
 {
     public function index(Request $request){
-        $stores = Store::latest()->get();
+        $stores = Store::storeOwner()->latest()->get();
 
         return response()->json([
             'stores' => StoreResource::collection($stores),
@@ -21,7 +21,7 @@ class StoreController extends Controller
     public function show(Request $request, $id){
         
         try {
-            $store = Store::findorfail($id);
+            $store = Store::storeOwner()->findorfail($id);
             return response()->json([
                 'store' => new StoreResource($store),
             ], 200);
@@ -46,7 +46,7 @@ class StoreController extends Controller
 
         // Create a new store record
         $store = Store::create([
-            'owner_id' => auth()->user()->id ?? User::first()->id,
+            'owner_id' => auth()->user()->id,
             'name'     => $request->name,
             'slug'     => $request->slug,
             'domain'   => $request->domain,
@@ -67,12 +67,12 @@ class StoreController extends Controller
     public function update(Request $request, $id)
     {
         // Find the store by ID
-        $store = Store::findOrFail($id);
+        $store = Store::storeOwner()->findOrFail($id);
 
         // Validate the incoming request data
         $request->validate([
             'name'     => 'required|string|max:255',
-            'domain'   => 'required|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:stores,domain,' . $store->id, // Ignore the current store's domain
+            'domain'   => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:stores,domain,' . $store->id, // Ignore the current store's domain
             'email'    => 'required|email|max:255',
             'phone'    => 'required|string|max:20',
             'location' => 'required|string|max:255',
@@ -81,7 +81,7 @@ class StoreController extends Controller
         // Update the store record
         $store->update([
             'name'     => $request->name,
-            'domain'   => $request->domain,
+            'domain'   => $request->domain ?? $store->domain,
             'email'    => $request->email,
             'phone'    => $request->phone,
             'location' => $request->location,
@@ -99,7 +99,7 @@ class StoreController extends Controller
     public function destroy($id)
     {
         // Find the store owned by the authenticated user
-        $store = Store::storeOwner(auth()->id())->find($id);
+        $store = Store::storeOwner()->findorfail($id);
 
         // If the store doesn't exist or is not owned by the user, return an error
         if (!$store) {
