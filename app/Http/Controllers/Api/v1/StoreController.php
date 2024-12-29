@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use Illuminate\Http\Request;
 use App\Models\Store;
-use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+
 
 class StoreController extends Controller
 {
     public function index(Request $request){
-        $stores = Store::storeOwner()->latest()->get();
+        $stores = Store::storeOwner()->active()->latest()->get();
 
         return response()->json([
             'stores' => StoreResource::collection($stores),
@@ -21,7 +23,7 @@ class StoreController extends Controller
     public function show(Request $request, $id){
         
         try {
-            $store = Store::storeOwner()->findorfail($id);
+            $store = Store::storeOwner()->active()->findorfail($id);
             return response()->json([
                 'store' => new StoreResource($store),
             ], 200);
@@ -67,7 +69,7 @@ class StoreController extends Controller
     public function update(Request $request, $id)
     {
         // Find the store by ID
-        $store = Store::storeOwner()->findOrFail($id);
+        $store = Store::storeOwner()->active()->findOrFail($id);
 
         // Validate the incoming request data
         $request->validate([
@@ -99,7 +101,7 @@ class StoreController extends Controller
     public function destroy($id)
     {
         // Find the store owned by the authenticated user
-        $store = Store::storeOwner()->findorfail($id);
+        $store = Store::storeOwner()->active()->findorfail($id);
 
         // If the store doesn't exist or is not owned by the user, return an error
         if (!$store) {
@@ -119,6 +121,45 @@ class StoreController extends Controller
         ], 200);
     }
 
+    public function switchStore(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'store_id' => 'required|int|exists:stores,id',
+        ]);
 
+        // Retrieve the store and ensure it belongs to the authenticated user and is active
+        $store = Store::storeOwner()->active()->findOrFail($request->store_id);
+
+        // Check if a store_id exists in the session and remove it
+        if ($store && session()->has('store_id')) {
+            session()->forget('store_id');
+        }
+
+        // Store the new `store_id` in the session
+        session(['store_id' => $store->id]);
+
+        // Also set it in the request attributes
+        $request->attributes->set('store_id', $store->id);
+
+        // Return a success response with the selected store
+        return response()->json([
+            'message' => 'Store switched successfully.',
+            'store' => new StoreResource($store),
+        ], 200);
+    }
+
+    public function currentStore(Request $request){
+        
+        // Retrieve store_id from session or request attributes
+        $storeId = $request->attributes->get('store_id') ?? session('store_id');
+        
+        // Debugging: log the current store ID to verify it's being set correctly
+        Log::info('Current store ID: ' . $storeId);
+
+        return response()->json([
+            'store_id' => $storeId
+        ]);
+    }
 
 }
