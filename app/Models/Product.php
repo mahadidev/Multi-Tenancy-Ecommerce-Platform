@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -61,5 +62,32 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
     
-   
+    public function scopeAuthorized($query)
+    {
+        return $query->whereHas('store', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        });
+    }
+
+    public function scopeActive($query){
+        return $query->where('status', 1);
+    }
+
+    // Accessor for the thumbnail
+    public function getThumbnailImageAttribute()
+    {
+        return $this->thumbnail ? url(Storage::url($this->thumbnail)) : null;
+    }
+
+    // Accessor for the attachments
+    public function getAttachmentsImageAttribute()
+    {
+        $attachments = $this->attachments; // Assuming attachments is already cast to an array
+
+        if (is_array($attachments)) {
+            return array_map(fn($path) => url(Storage::url($path)), $attachments);
+        }
+
+        return [];
+    }
 }
