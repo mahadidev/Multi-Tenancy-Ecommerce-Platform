@@ -17,11 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(Cors::class);
         $middleware->append(LogRequests::class);
-        $middleware->append(\Illuminate\Session\Middleware\StartSession::class);
         $middleware->alias([
             'store' => StoreMiddleware::class
         ]);
-        
+        $middleware->api(prepend: [
+            \Illuminate\Session\Middleware\StartSession::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

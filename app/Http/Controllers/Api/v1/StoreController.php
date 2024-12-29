@@ -154,11 +154,10 @@ class StoreController extends Controller
         // Retrieve store_id from session or request attributes
         $storeId = $request->attributes->get('store_id') ?? session('store_id');
         
-        // Debugging: log the current store ID to verify it's being set correctly
-        Log::info('Current store ID: ' . $storeId);
+        $store = Store::findorfail($storeId);
 
         return response()->json([
-            'store_id' => $storeId
+            'store' => new StoreResource($store)
         ]);
     }
 
