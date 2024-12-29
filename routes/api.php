@@ -14,7 +14,8 @@ Route::group(['prefix' => 'v1'], function () {
         // Category Routes
         Route::resource('/category', CategoryController::class);
 
-        
+        // Product Route
+        Route::resource('/product', ProductController::class);
         
          
     });
