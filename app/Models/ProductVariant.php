@@ -33,6 +33,11 @@ class ProductVariant extends Model
         'options',    // JSON data for variant options (nested structure)
     ];
 
+    protected $hidden = [
+        'created_at', 
+        'updated_at'
+    ];
+
     protected $casts = [
         'options' => 'array',
     ];

@@ -61,12 +61,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
-    
-    public function scopeAuthorized($query)
-    {
-        return $query->whereHas('store', function ($query) {
-            $query->where('store_id', authStore());
-        });
+
+    public function scopeAuthorized($query){
+        return $query->where('store_id', authStore());
     }
 
     public function scopeActive($query){

@@ -28,7 +28,7 @@ class ProductResource extends JsonResource
             'stock' => $this->stock,
             'status' => $this->status,
             'store' => $this->store ? ['id' => $this->store->id , 'name' => $this->store->name , 'slug' => $this->store->slug  ] : null,
-            'variants' => $this->variants,
+            'variants' => $this->variants->isNotEmpty() ? $this->variants : null,
         ];
     }
 }
