@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+// use App\Services\StoreService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -60,7 +61,7 @@ class CategoryController extends Controller
 
         // Automatically assign the authenticated user's ID
         $validated['user_id'] = auth()->user()->id;
-
+        $validated['store_id'] = authStore();
 
         $category = Category::create($validated);
 
@@ -97,4 +98,26 @@ class CategoryController extends Controller
         ], 200);
     }
 
+    public function destroy($id)
+    {
+        // Find the store owned by the authenticated user
+        $store = Category::authorized()->findorfail($id);
+
+        // If the store doesn't exist or is not owned by the user, return an error
+        if (!$store) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to delete this store or it does not exist.',
+            ], 403); // Forbidden
+        }
+
+        // Delete the store record
+        $store->delete();
+
+        // Return success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Store deleted successfully.',
+        ], 200);
+    }
 }

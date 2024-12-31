@@ -14,6 +14,7 @@ class Category extends Model
         'type',
         'parent_id',
         'user_id',
+        'store_id',
     ];
 
 
@@ -51,7 +52,7 @@ class Category extends Model
     }
 
     public function scopeAuthorized($query){
-        return $query->where('user_id', auth()->user()->id);
+        return $query->where('user_id', auth()->user()->id)->where('store_id', authStore());
     }
 
     
