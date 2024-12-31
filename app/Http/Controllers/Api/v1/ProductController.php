@@ -12,27 +12,47 @@ class ProductController extends Controller
 {
     public function index(Request $request){
 
-        $products = ProductService::index($request);
-
-        return response()->json([
-            'products' => ProductResource::collection($products),
-        ]);
+        return apiResponse(function () use ($request) {
+            return response()->json([
+                'products' => ProductService::index($request)
+            ]);
+        });
     }
 
     public function show(Request $request, $id){
 
-        try {
-            
-            $product = Product::findorfail($id);
+        return apiResponse(function () use ($request, $id) {
+            return response()->json([
+                'product' => ProductService::show($request, $id)
+            ]);
+        });
 
-            return response()->json([
-                'store' => new ProductResource($product),
-            ], 200);
-    
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'data not found',
-            ], 404);
-        }
     }
+
+    public function store(Request $request){
+        return apiResponse(function () use ($request) {
+            return response()->json([
+                'product' => ProductService::store($request)
+            ]);
+        });
+    }
+   
+    public function update(Request $request, $id){
+        return apiResponse(function () use ($request, $id) {
+            return response()->json([
+                'product' => ProductService::update($request, $id)
+            ]);
+        });
+    }
+
+    public function destroy(Request $request, $id){
+
+        return apiResponse(function () use ($request, $id) {
+            return response()->json([
+                'message' => ProductService::destroy($request, $id)
+            ]);
+        });
+    }
+
+   
 }

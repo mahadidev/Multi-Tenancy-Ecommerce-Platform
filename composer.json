@@ -29,10 +29,14 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helper/Store.php",
+            "app/Helper/ApiResponse.php"
+        ]
     },
     "autoload-dev": {
-        "psr-4": {
+        "psr-4":    {
             "Tests\\": "tests/"
         }
     },
