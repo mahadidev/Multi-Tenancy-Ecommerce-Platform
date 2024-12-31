@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductCategoryResource\Pages;
 use App\Filament\Resources\ProductCategoryResource\RelationManagers;
 use App\Models\Category;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+
 
 class ProductCategoryResource extends Resource
 {
@@ -32,7 +35,7 @@ class ProductCategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')->required(),
-               
+
                 Forms\Components\Select::make('parent_id')
                 ->label('Parent Category')
                 ->options(
@@ -42,6 +45,11 @@ class ProductCategoryResource extends Resource
                 )
                 ->nullable()
                 ->searchable(),
+
+                Forms\Components\Select::make('user_id')
+                ->label('User')
+                ->options(User::all()->pluck('name', 'id'))
+                ->required(),
 
                 Forms\Components\Select::make('type')
                 ->label('Type')
@@ -64,7 +72,11 @@ class ProductCategoryResource extends Resource
                     ->dateTime('d M, Y'),
             ])
             ->filters([
-                //
+                SelectFilter::make('author')
+                ->relationship('author', 'name')
+                ->searchable()
+                ->multiple()
+                ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -1,12 +1,142 @@
 {
 	"info": {
-		"_postman_id": "043ad678-a58b-4b8f-8946-ee824bba7920",
+		"_postman_id": "2038e366-4970-4462-8e9e-7f141784b50a",
 		"name": "Cholo Gori",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21736896",
-		"_collection_link": "https://www.postman.com/dark-station-897238/workspace/techstring-it/collection/21736896-043ad678-a58b-4b8f-8946-ee824bba7920?action=share&source=collection_link&creator=21736896"
+		"_exporter_id": "40695752",
+		"_collection_link": "https://cholo-gori.postman.co/workspace/Team-Workspace~0dc73082-fa97-42e1-8b18-83528c0540a8/collection/40695752-2038e366-4970-4462-8e9e-7f141784b50a?action=share&source=collection_link&creator=40695752"
 	},
 	"item": [
+		{
+			"name": "Store Authorization",
+			"item": [
+				{
+					"name": "get-stores",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site_seller}}/get-stores",
+							"host": [
+								"{{site_seller}}"
+							],
+							"path": [
+								"get-stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "current-store",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{site_seller}}/current-store",
+							"host": [
+								"{{site_seller}}"
+							],
+							"path": [
+								"current-store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "switch-store",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "store_id",
+									"value": "3",
+									"description": "required | authorized store id",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{site_seller}}/switch-store",
+							"host": [
+								"{{site_seller}}"
+							],
+							"path": [
+								"switch-store"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Auth",
 			"item": [
@@ -34,20 +164,20 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "admin@gmail.com",
+									"value": "yeaminrabbi308@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "123",
+									"value": "12345678",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{site}}/login",
+							"raw": "{{site_seller}}/login",
 							"host": [
-								"{{site}}"
+								"{{site_seller}}"
 							],
 							"path": [
 								"login"
@@ -261,246 +391,921 @@
 			]
 		},
 		{
-			"name": "Product Module",
+			"name": "Seller Routes",
 			"item": [
 				{
-					"name": "product-list",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
+					"name": "Store Module",
+					"item": [
+						{
+							"name": "index",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/store",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"store"
+									]
+								}
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{site}}/product",
-							"host": [
-								"{{site}}"
-							],
-							"path": [
-								"product"
-							]
+							"response": []
+						},
+						{
+							"name": "create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jelly-store",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jellyfish.store@gmail.com",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "domain",
+											"value": "jellyfish-store",
+											"description": "regex:/^[a-zA-Z0-9]+$/ | required | unique",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "01768000000",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "location",
+											"value": "dhaka uddan, mohammadpur, Dhaka",
+											"description": "required",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{site_seller}}/store",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"store"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "jelly-store",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jellyfish.store@gmail.com",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "domain",
+											"value": "jellyfish-store",
+											"description": "regex:/^[a-zA-Z0-9]+$/ | nullable | unique",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "01768002401",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "location",
+											"value": "Mohammadpur, Dhaka, Bangladesh",
+											"description": "required",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{site_seller}}/store/3",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"store",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/store/10",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"store",
+										"10"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/store/8",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"store",
+										"8"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "single-product-view",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
+					"name": "Category Module",
+					"item": [
+						{
+							"name": "index",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{site}}/product/2",
-							"host": [
-								"{{site}}"
-							],
-							"path": [
-								"product",
-								"2"
-							],
-							"query": [
-								{
-									"key": "category",
-									"value": "7",
-									"disabled": true
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "shop",
-									"value": "1",
-									"disabled": true
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
 								},
-								{
-									"key": "patient_type",
-									"value": "kafha",
-									"disabled": true
+								"url": {
+									"raw": "{{site_seller}}/category",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"category"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "product",
+											"description": "product, post",
+											"disabled": true
+										}
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Category Module",
-			"item": [
-				{
-					"name": "category-list",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{site}}/category?type=product",
-							"host": [
-								"{{site}}"
-							],
-							"path": [
-								"category"
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "product",
-									"description": "product, post"
+							"response": []
+						},
+						{
+							"name": "view",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/category/3",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"category",
+										"3"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/category/9",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"category",
+										"9"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "store",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "type",
+											"value": "product",
+											"description": "post, product | required",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "T-shirt",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "slug",
+											"value": "t-shirt",
+											"description": "required | 'regex:/^[a-zA-Z0-9\\-]+$/', // Allows letters, numbers, and hyphens, but no spaces",
+											"type": "text"
+										},
+										{
+											"key": "parent_id",
+											"value": "11",
+											"description": "nullable | integer",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{site_seller}}/category",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"category"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "type",
+											"value": "product",
+											"description": "post, product | required",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Electronics",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "slug",
+											"value": "electronics",
+											"description": "required | 'regex:/^[a-zA-Z0-9\\-]+$/', // Allows letters, numbers, and hyphens, but no spaces",
+											"type": "text"
+										},
+										{
+											"key": "parent_id",
+											"value": "9",
+											"description": "nullable | integer",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{site_seller}}/category/10",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"category",
+										"10"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "single-category-view",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
+					"name": "Product Module",
+					"item": [
+						{
+							"name": "index",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{site}}/category/2",
-							"host": [
-								"{{site}}"
-							],
-							"path": [
-								"category",
-								"2"
-							],
-							"query": [
-								{
-									"key": "category",
-									"value": "7",
-									"disabled": true
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "shop",
-									"value": "1",
-									"disabled": true
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
 								},
-								{
-									"key": "patient_type",
-									"value": "kafha",
-									"disabled": true
+								"url": {
+									"raw": "{{site_seller}}/product",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"product"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "product",
+											"description": "product, post",
+											"disabled": true
+										}
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Store Module",
-			"item": [
-				{
-					"name": "store-list",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
 							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{site}}/store",
-							"host": [
-								"{{site}}"
-							],
-							"path": [
-								"store"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "single-store-view",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{site}}/store/4",
-							"host": [
-								"{{site}}"
-							],
-							"path": [
-								"store",
-								"4"
-							],
-							"query": [
-								{
-									"key": "category",
-									"value": "7",
-									"disabled": true
+							"response": []
+						},
+						{
+							"name": "view",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "shop",
-									"value": "1",
-									"disabled": true
-								},
-								{
-									"key": "patient_type",
-									"value": "kafha",
-									"disabled": true
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/product/36",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"product",
+										"36"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/product/31",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"product",
+										"31"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "store",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n{\r\n    \"name\": \"Google Pixel 8\",\r\n    \"slug\": \"google-pixel-8\",\r\n    \"sku\": \"google-pixel-8-smart-phone\",\r\n    \"description\": \"The new Google Pixel 8 with exceptional camera and performance.\",\r\n    \"price\": 50000,\r\n    \"category_id\": 11,\r\n    \"has_in_stocks\": 1,\r\n    \"stock\": 60,\r\n    \"status\": 1,\r\n    \"thumbnail\": null,\r\n    \"attachments\": null,\r\n    \"has_variants\": 1,\r\n    \"variants\": [\r\n        {\r\n            \"label\": \"Obsidian\",\r\n            \"slug\": \"obsidian\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"30\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"15\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Snow\",\r\n            \"slug\": \"snow\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"15\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"10\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{site_seller}}/product",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"product"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Iphone\",\r\n    \"slug\": \"iphone-smart-phone\",\r\n    \"sku\": \"i-phone-smart-phone\",\r\n    \"description\": \"i-phone Ab eveniet aut vel \",\r\n    \"price\": 16000,\r\n    \"category_id\": 11,\r\n    \"has_in_stocks\": 1,\r\n    \"stock\": 40,\r\n    \"status\": 1,\r\n    \"thumbnail\" : null,\r\n    \"attachments\" : null,\r\n    \"has_variants\": 1,\r\n    \"variants\": [\r\n        {\r\n            \"label\": \"Ocean Blue\",\r\n            \"slug\": \"ocean-blue\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"4/64\",\r\n                    \"price\": \"16000\",\r\n                    \"qty_stock\": \"10\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/64\",\r\n                    \"price\": \"20000\",\r\n                    \"qty_stock\": \"5\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Red Moon\",\r\n            \"slug\": \"red-moon\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/64\",\r\n                    \"price\": \"25000\",\r\n                    \"qty_stock\": \"5\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"16/128\",\r\n                    \"price\": \"35000\",\r\n                    \"qty_stock\": \"3\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Ice Blue\",\r\n            \"slug\": \"ice-blue-variant\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": \"#ice1\",\r\n                    \"label\": \"8/64\",\r\n                    \"price\": \"16000\",\r\n                    \"qty_stock\": \"5\"\r\n                },\r\n                {\r\n                    \"code\": \"#ice2\",\r\n                    \"label\": \"16/128\",\r\n                    \"price\": \"39000\",\r\n                    \"qty_stock\": \"3\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}"
+								},
+								"url": {
+									"raw": "{{site_seller}}/product/2",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"product",
+										"2"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "7",
+											"disabled": true
+										},
+										{
+											"key": "shop",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "patient_type",
+											"value": "kafha",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}

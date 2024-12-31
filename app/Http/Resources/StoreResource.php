@@ -26,9 +26,9 @@ class StoreResource extends JsonResource
             'cover_image' => $this->cover_image != null ? asset($this->cover_image) : null, 
             'description' => $this->description,
             'owner' => [
-                'id' => $this->user?->id,
-                'name' => $this->user?->name,
-                'phone' => $this->user?->phone
+                'id' => $this->owner?->id,
+                'name' => $this->owner?->name,
+                'phone' => $this->owner?->phone
             ]
         ];
     }
