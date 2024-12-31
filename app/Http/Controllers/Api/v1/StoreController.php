@@ -152,7 +152,7 @@ class StoreController extends Controller
     public function currentStore(Request $request){
         
         // Retrieve store_id from session or request attributes
-        $storeId = $request->attributes->get('store_id') ?? session('store_id');
+        $storeId = authStore();
 
         if (!$storeId) {
             return response()->json([

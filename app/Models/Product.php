@@ -65,7 +65,7 @@ class Product extends Model
     public function scopeAuthorized($query)
     {
         return $query->whereHas('store', function ($query) {
-            $query->where('user_id', auth()->user()->id);
+            $query->where('store_id', authStore());
         });
     }
 

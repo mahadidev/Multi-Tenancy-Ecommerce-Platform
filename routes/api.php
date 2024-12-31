@@ -21,6 +21,6 @@ Route::group(['prefix' => 'v1'], function () {
 
 
 // User Module Routes
-    // Route::resource('/user', UserController::class);
+// Route::resource('/user', UserController::class);
 
 
