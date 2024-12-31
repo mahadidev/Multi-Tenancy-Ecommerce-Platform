@@ -12,6 +12,8 @@ use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Laravel\Sanctum\HasApiTokens;
+use PDO;
+
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -74,5 +76,14 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
 
     public function stores(){
         return $this->hasMany(Store::class, 'owner_id');
+    }
+
+    public function isAdmin(){
+
+        if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin')){
+            return true;
+        }
+
+        return false;
     }
 }
