@@ -58,4 +58,10 @@ class Store extends Model
     {
         return $query->where('owner_id', auth()->user()->id);
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+    
 }
