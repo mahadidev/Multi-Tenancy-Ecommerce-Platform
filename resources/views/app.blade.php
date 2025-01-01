@@ -10,7 +10,7 @@
     <title>{{ env('APP_NAME') }}</title>
 
     @viteReactRefresh
-    @vite(['resources/js/frontend/index.tsx'])
+    @vite(['resources/js/app/index.tsx'])
 </head>
 
 <body>

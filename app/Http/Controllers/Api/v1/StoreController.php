@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use Illuminate\Http\Request;
 use App\Models\Store;
+use App\Services\StoreService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 
 class StoreController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $stores = Store::storeOwner()->active()->latest()->get();
 
         return response()->json([
@@ -20,14 +22,14 @@ class StoreController extends Controller
         ]);
     }
 
-    public function show(Request $request, $id){
-        
+    public function show(Request $request, $id)
+    {
+
         try {
             $store = Store::storeOwner()->active()->findorfail($id);
             return response()->json([
                 'store' => new StoreResource($store),
             ], 200);
-    
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'data not found',
@@ -40,11 +42,20 @@ class StoreController extends Controller
         // Validate the incoming request data
         $request->validate([
             'name'     => 'required|string|max:255',
-            'domain'   => 'required|string|max:25|unique:stores|regex:/^[a-zA-Z0-9\-]+$/', 
+            'domain'   => 'required|string|max:25|unique:stores|regex:/^[a-zA-Z0-9\-]+$/',
             'email'    => 'required|email|max:255',
             'phone'    => 'required|string|max:20',
             'location' => 'required|string|max:255',
+            'currency' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
         ]);
+
+
+        // Handle the logo file upload if present
+        $logoPath = null;
+        if ($request->hasFile('logo') && isset($request->logo)) {
+            $logoPath = $request->file('logo')->store('stores', 'public');
+        }
 
         // Create a new store record
         $store = Store::create([
@@ -54,7 +65,9 @@ class StoreController extends Controller
             'domain'   => $request->domain,
             'email'    => $request->email,
             'phone'    => $request->phone,
-            'location' => $request->location, 
+            'location' => $request->location,
+            'currency' => $request->currency,
+            'logo' =>  $logoPath,
             'status'   => $request->status ?? 1,
         ]);
 
@@ -62,7 +75,7 @@ class StoreController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Store created successfully.',
-            'data'    => $store,
+            'data'    => new StoreResource($store),
         ], 201);
     }
 
@@ -78,7 +91,15 @@ class StoreController extends Controller
             'email'    => 'required|email|max:255',
             'phone'    => 'required|string|max:20',
             'location' => 'required|string|max:255',
+            'currency' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
         ]);
+
+         // Handle the logo file upload if present
+         $logoPath = null;
+         if ($request->hasFile('logo') && isset($request->logo)) {
+             $logoPath = $request->file('logo')->store('stores', 'public');
+         }
 
         // Update the store record
         $store->update([
@@ -87,6 +108,8 @@ class StoreController extends Controller
             'email'    => $request->email,
             'phone'    => $request->phone,
             'location' => $request->location,
+            'currency' => $request->currency,
+            'logo' => $logoPath,
             'status'   => $request->status ?? $store->status, // Retain the existing status if not provided
         ]);
 
@@ -94,7 +117,7 @@ class StoreController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Store updated successfully.',
-            'data'    => $store,
+            'data'    => new StoreResource($store),
         ], 200);
     }
 
@@ -149,8 +172,9 @@ class StoreController extends Controller
         ], 200);
     }
 
-    public function currentStore(Request $request){
-        
+    public function currentStore(Request $request)
+    {
+
         // Retrieve store_id from session or request attributes
         $storeId = authStore();
 
@@ -166,5 +190,4 @@ class StoreController extends Controller
             'store' => new StoreResource($store)
         ]);
     }
-
 }
