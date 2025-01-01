@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->string('label'); // Variant label, e.g., "Color", "Size"
-            $table->string('slug')->nullable(); // Variant label, e.g., "Color", "Size"
+            $table->string('slug')->nullable();
             $table->json('options'); // JSON data for variant options (nested structure)
             $table->timestamps();
 
