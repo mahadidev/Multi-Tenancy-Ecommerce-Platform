@@ -41,9 +41,16 @@ class Product extends Model
             }
 
             if (empty($data->status)) {
-                $data->status = 'active';
+                $data->status = 1;
             }
             
+        });
+
+      
+        static::updating(function ($data) {
+            if ($data->isDirty('name')) {  // Check if the 'name' attribute has changed
+                $data->slug = Str::slug($data->name);  // Update slug based on new name
+            }
         });
     }
 
@@ -61,12 +68,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
-    
-    public function scopeAuthorized($query)
-    {
-        return $query->whereHas('store', function ($query) {
-            $query->where('store_id', authStore());
-        });
+
+    public function scopeAuthorized($query){
+        return $query->where('store_id', authStore());
     }
 
     public function scopeActive($query){

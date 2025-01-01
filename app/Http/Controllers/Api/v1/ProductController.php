@@ -36,6 +36,23 @@ class ProductController extends Controller
             ]);
         });
     }
+   
+    public function update(Request $request, $id){
+        return apiResponse(function () use ($request, $id) {
+            return response()->json([
+                'product' => ProductService::update($request, $id)
+            ]);
+        });
+    }
+
+    public function destroy(Request $request, $id){
+
+        return apiResponse(function () use ($request, $id) {
+            return response()->json([
+                'message' => ProductService::destroy($request, $id)
+            ]);
+        });
+    }
 
    
 }
