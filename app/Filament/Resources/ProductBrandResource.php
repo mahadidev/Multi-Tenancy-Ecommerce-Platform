@@ -14,6 +14,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 
 
 class ProductBrandResource extends Resource
@@ -65,10 +67,11 @@ class ProductBrandResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->searchable()->sortable(),
-                Tables\Columns\ImageColumn::make('image')->label('Brand Image'),
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->label('Created At')->dateTime('d M, Y'),
+                TextColumn::make('id')->searchable()->sortable(),
+                ImageColumn::make('image')->label('Brand Image'),
+                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('store.name')->label('Store')->searchable()->sortable(),
+                TextColumn::make('created_at')->label('Created At')->dateTime('d M, Y'),
             ])
             ->filters([
                 SelectFilter::make('store')
