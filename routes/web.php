@@ -5,7 +5,10 @@ use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
 
 Route::get('/', function () {
-    return redirect()->to(url('/admin'));
+    return view("welcome");
+});
+Route::get('/login', function () {
+    return view("app");
 });
 
 Route::get('/deploy', [ArtisanController::class, 'run'])->name('deploy');
