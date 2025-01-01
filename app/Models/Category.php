@@ -30,6 +30,13 @@ class Category extends Model
                 $category->slug = Str::slug($category->name);  // Corrected to use $category->name
             }
         });
+
+        // Automatically update the slug when updating
+        static::updating(function ($category) {
+            if ($category->isDirty('name')) {  // Check if the 'name' attribute has changed
+                $category->slug = Str::slug($category->name);  // Update slug based on new name
+            }
+        });
     }
 
 
@@ -52,7 +59,7 @@ class Category extends Model
     }
 
     public function scopeAuthorized($query){
-        return $query->where('user_id', auth()->user()->id)->where('store_id', authStore());
+        return $query->where('store_id', authStore());
     }
 
     

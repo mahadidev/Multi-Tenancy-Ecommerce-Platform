@@ -41,9 +41,16 @@ class Product extends Model
             }
 
             if (empty($data->status)) {
-                $data->status = 'active';
+                $data->status = 1;
             }
             
+        });
+
+      
+        static::updating(function ($data) {
+            if ($data->isDirty('name')) {  // Check if the 'name' attribute has changed
+                $data->slug = Str::slug($data->name);  // Update slug based on new name
+            }
         });
     }
 
