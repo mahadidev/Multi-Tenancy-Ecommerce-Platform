@@ -24,10 +24,12 @@ class ProductResource extends Resource
 
     protected static ?string $navigationGroup = 'Store Management';
 
-    public static function getNavigationSort(): ?int
-    {
-        return 3;
-    }
+    protected static ?int $navigationSort = 4;
+
+    // public static function getNavigationSort(): ?int
+    // {
+    //     return 3;
+    // }
 
     public static function form(Form $form): Form
     {
