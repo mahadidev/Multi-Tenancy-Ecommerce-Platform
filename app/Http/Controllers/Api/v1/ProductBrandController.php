@@ -15,7 +15,7 @@ class ProductBrandController extends Controller
     public function index(Request $request)
     {
         return apiResponse(function () use ($request) {
-            $brands = ProductBrand::authorized()->latest();
+            $brands = ProductBrand::authorized()->latest()->get();
 
             return response()->json([
                 'brands' => $brands,
@@ -64,6 +64,16 @@ class ProductBrandController extends Controller
     {
         return apiResponse(function () use ($request, $id) {
             $brand = ProductBrand::authorized()->findOrFail($id);
+            
+            if(!$brand) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'You are not authorized to view this brand or it does not exist.',
+                    ]
+                );
+            }
+
             return response()->json(
                 [
                     'success' => true,
@@ -80,6 +90,15 @@ class ProductBrandController extends Controller
     {
         return apiResponse(function () use ($request, $id) {
             $brand = ProductBrand::authorized()->findOrFail($id);
+
+            if(!$brand) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'You are not authorized to edit this brand or it does not exist.',
+                    ]
+                );
+            }
 
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -116,6 +135,15 @@ class ProductBrandController extends Controller
     {
         return apiResponse(function () use ($id) {
             $brand = ProductBrand::authorized()->findOrFail($id);
+
+            if(!$brand) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'You are not authorized to delete this brand or it does not exist.',
+                    ]
+                );
+            }
 
             if($brand->image) {
                 Storage::disk('public')->delete($brand->image);

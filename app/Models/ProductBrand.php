@@ -40,4 +40,8 @@ class ProductBrand extends Model
     {
         return $this->hasMany(Product::class, 'brand_id');
     }
+
+    public function scopeAuthorized($query){
+        return $query->where('store_id', authStore());
+    }
 }
