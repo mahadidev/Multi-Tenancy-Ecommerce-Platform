@@ -22,9 +22,9 @@ class StoreResource extends JsonResource
             'phone' => $this->phone,
             'location' => $this->location,
             'status' => $this->status,
-            'logo' => $this->logo != null ? asset($this->logo) : null,
-            'cover_image' => $this->cover_image != null ? asset($this->cover_image) : null, 
+            'logo' => $this->logo_image,
             'description' => $this->description,
+            'currency' => $this->currency ?? 'BDT',
             'owner' => [
                 'id' => $this->owner?->id,
                 'name' => $this->owner?->name,

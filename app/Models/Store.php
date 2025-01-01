@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 class Store extends Model
 {
@@ -20,6 +22,8 @@ class Store extends Model
         'phone',
         'location',
         'status',
+        'currency',
+        'logo'
     ];
 
     protected static function boot()
@@ -42,6 +46,11 @@ class Store extends Model
         });
     }
 
+     // Accessor for the logo
+     public function getLogoImageAttribute()
+     {
+         return $this->logo ? url(Storage::url($this->logo)) : null;
+     }
 
     public function owner(){
         return $this->belongsTo(User::class, 'owner_id');

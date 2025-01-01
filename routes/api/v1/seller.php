@@ -27,6 +27,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Product Route
     Route::resource('/product', ProductController::class);
     
+    // Store Settings
+    Route::get('/settings', [StoreController::class, 'settings']);
+
      
 });
 

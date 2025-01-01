@@ -6,15 +6,8 @@ use App\Models\WidgetGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use League\CommonMark\CommonMarkConverter;
 
-class WidgetService {
-
-    public static function authCheckoutProcess()
-    {
-        return true;
-    }
-
+class StoreService {
 
     public static function getWidgetByGroupName($name, $widgetName = null){
 
@@ -32,24 +25,6 @@ class WidgetService {
 
         // If no specific widget name is provided, return all widgets in the group
         return $widgetGroup;
-    }
-
-
-    public static function parseShortcodes($content)
-    {
-        // Define your shortcodes and their replacements
-        $shortcodes = [
-            '/\[button class="([^"]+)" link="([^"]+)" label="([^"]+)"\]/' => '<a class="$1" href="$2">$3</a>', // Shortcode for a button
-            '/\[hello\]/' => '<a href="#">Hello</a>', // Shortcode for a link
-            // Add more shortcodes as needed
-        ];
-
-        // Replace the shortcodes in the content
-        foreach ($shortcodes as $pattern => $replacement) {
-            $content = preg_replace($pattern, $replacement, $content);
-        }
-
-        return $content;
     }
 
     
