@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductBrandResource\Pages;
-use App\Filament\Resources\ProductBrandResource\RelationManagers;
-use App\Models\ProductBrand;
+use App\Filament\Resources\BrandResource\Pages;
+use App\Filament\Resources\BrandResource\RelationManagers;
+use App\Models\Brand;
 use App\Models\Store;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -18,13 +18,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 
 
-class ProductBrandResource extends Resource
+class BrandResource extends Resource
 {
-    protected static ?string $model = ProductBrand::class;
+    protected static ?string $model = Brand::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Store Management';
     protected static ?string $navigationLabel = 'Brands';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -102,9 +103,9 @@ class ProductBrandResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProductBrands::route('/'),
-            'create' => Pages\CreateProductBrand::route('/create'),
-            'edit' => Pages\EditProductBrand::route('/{record}/edit'),
+            'index' => Pages\ListBrands::route('/'),
+            'create' => Pages\CreateBrand::route('/create'),
+            'edit' => Pages\EditBrand::route('/{record}/edit'),
         ];
     }
 }

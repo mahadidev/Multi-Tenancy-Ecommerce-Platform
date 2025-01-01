@@ -32,12 +32,14 @@ class StoreResource extends Resource
 
     protected static ?string $navigationGroup = 'Store Management';
 
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $slug = 'stores';
 
-    public static function getNavigationSort(): ?int
-    {
-        return 2; // Assign a sort order for User Management
-    }
+    // public static function getNavigationSort(): ?int
+    // {
+    //     return 2; // Assign a sort order for User Management
+    // }
     
     public static function form(Form $form): Form
     {

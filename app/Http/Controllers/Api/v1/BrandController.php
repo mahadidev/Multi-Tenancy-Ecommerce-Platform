@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ProductBrand;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
 
-class ProductBrandController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class ProductBrandController extends Controller
     public function index(Request $request)
     {
         return apiResponse(function () use ($request) {
-            $brands = ProductBrand::authorized()->latest()->get();
+            $brands = Brand::authorized()->latest()->get();
 
             return response()->json([
                 'brands' => $brands,
@@ -41,7 +41,7 @@ class ProductBrandController extends Controller
                 $imagePath = $request->file('image')->store('brand-images', 'public');
             }
 
-            $brand = ProductBrand::create([
+            $brand = Brand::create([
                 'name' => $validated['name'],
                 'store_id' => $validated['store_id'],
                 'image' => $imagePath ? $imagePath : null,
@@ -63,7 +63,7 @@ class ProductBrandController extends Controller
     public function show(Request $request, $id)
     {
         return apiResponse(function () use ($request, $id) {
-            $brand = ProductBrand::authorized()->findOrFail($id);
+            $brand = Brand::authorized()->findOrFail($id);
             
             if(!$brand) {
                 return response()->json(
@@ -89,7 +89,7 @@ class ProductBrandController extends Controller
     public function update(Request $request, $id)
     {
         return apiResponse(function () use ($request, $id) {
-            $brand = ProductBrand::authorized()->findOrFail($id);
+            $brand = Brand::authorized()->findOrFail($id);
 
             if(!$brand) {
                 return response()->json(
@@ -134,7 +134,7 @@ class ProductBrandController extends Controller
     public function destroy(string $id)
     {
         return apiResponse(function () use ($id) {
-            $brand = ProductBrand::authorized()->findOrFail($id);
+            $brand = Brand::authorized()->findOrFail($id);
 
             if(!$brand) {
                 return response()->json(
