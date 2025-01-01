@@ -6,7 +6,6 @@ use App\Filament\Resources\ProductCategoryResource\Pages;
 use App\Filament\Resources\ProductCategoryResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Store;
-use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -53,6 +52,7 @@ class ProductCategoryResource extends Resource
                         ])
                         ->required()
                         ->default('product'),
+
                     Forms\Components\Select::make('parent_id')
                         ->label('Parent Category')
                         ->options(
@@ -62,8 +62,9 @@ class ProductCategoryResource extends Resource
                         )
                         ->nullable()
                         ->searchable(),
+
                 ])->columnSpan(6),
-            ])->columns(12);    
+            ])->columns(12);
     }
 
     public static function table(Table $table): Table
@@ -79,11 +80,11 @@ class ProductCategoryResource extends Resource
                     ->dateTime('d M, Y'),
             ])
             ->filters([
-                SelectFilter::make('author')
-                    ->relationship('author', 'name')
+                SelectFilter::make('store')
+                    ->relationship('store', 'name')
                     ->searchable()
                     ->multiple()
-                    ->preload()
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
