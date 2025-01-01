@@ -33,6 +33,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // // Blog Category Route
     // Route::resource('/blog-category', BlogCategoryController::class);
     
+    // Store Settings
+    Route::get('/settings', [StoreController::class, 'settings']);
+
      
 });
 

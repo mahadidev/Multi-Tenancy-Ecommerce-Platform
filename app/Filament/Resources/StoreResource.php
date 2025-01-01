@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\StoreResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StoreResource\RelationManagers;
+use Illuminate\Validation\Rule;
 
 class StoreResource extends Resource
 {
@@ -36,17 +37,17 @@ class StoreResource extends Resource
 
     protected static ?string $slug = 'stores';
 
-    // public static function getNavigationSort(): ?int
-    // {
-    //     return 2; // Assign a sort order for User Management
-    // }
-    
+    public static function getNavigationSort(): ?int
+    {
+        return 2; // Assign a sort order for User Management
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
 
-               TextInput::make('name')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Select::make('owner_id')
@@ -54,19 +55,23 @@ class StoreResource extends Resource
                     ->options(User::all()->pluck('name', 'id'))
                     ->required()
                     ->searchable(),
-               TextInput::make('domain')
+                TextInput::make('domain')
                     ->prefix('https://')
-                    ->rules([
-                        'required',
-                        'regex:/^[a-zA-Z0-9]+$/', // Only alphanumeric characters
-                        'unique:stores,domain' // Ensure the domain is unique in the 'stores' table
-                    ])
-                    ->suffix('.'.parse_url(env('APP_URL'), PHP_URL_HOST).'.com'),
-               TextInput::make('email')
+                    ->rules(function ($record) {
+                        return [
+                            'nullable', // Make it nullable
+                            'regex:/^[a-zA-Z0-9\-]+$/', // Only alphanumeric characters and hyphens
+                            Rule::unique('stores', 'domain')->ignore($record->id ?? null), // Allow the current value for edit
+                        ];
+                    })
+                    ->suffix('.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com'),
+                TextInput::make('email')
                     ->required()
                     ->email(),
                 TextInput::make('phone')
                     ->nullable(),
+                TextInput::make('currency')
+                    ->required(),
                 Select::make('status')
                     ->options([
                         '1' => 'Active',
@@ -78,13 +83,29 @@ class StoreResource extends Resource
                 Textarea::make('location')
                     ->nullable()
                     ->maxLength(65535),
+                Forms\Components\FileUpload::make('logo')
+                    ->label('Logo')
+                    ->disk('public')
+                    ->directory('stores')
+                    ->image()
+                    ->imageEditor()
+                    ->reorderable()
+                    ->appendFiles()
+                    ->openable()
+                    ->downloadable()
+                    ->imageEditorAspectRatios([
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ])
+                    ->nullable(),
             ]);
     }
 
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['domain'] = 'https://'.$data['domain'].'.'.parse_url(env('APP_URL'), PHP_URL_HOST).'.com';
+        $data['domain'] = 'https://' . $data['domain'] . '.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com';
         return $data;
     }
 
@@ -93,7 +114,7 @@ class StoreResource extends Resource
         return $table
             ->columns([
 
-               TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Store')
                     ->sortable()
                     ->searchable(),
@@ -101,17 +122,18 @@ class StoreResource extends Resource
                     ->label('Owner')
                     ->sortable()
                     ->searchable(),
-               TextColumn::make('domain')
+                TextColumn::make('domain')
                     ->prefix('https://')
-                    ->suffix('.'.parse_url(env('APP_URL'), PHP_URL_HOST).'.com')
+                    ->suffix('.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com')
                     ->sortable()
                     ->searchable(),
-               TextColumn::make('email')
+                TextColumn::make('email')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('created_at')
-                    ->label('Created At')
-                    ->dateTime(),
+                TextColumn::make('currency')
+                    ->sortable()
+                    ->searchable(),
+
             ])
             ->filters([
                 SelectFilter::make('owner')

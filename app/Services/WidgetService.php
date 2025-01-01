@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use League\CommonMark\CommonMarkConverter;
 
-class Frontend {
+class WidgetService {
 
     public static function authCheckoutProcess()
     {
@@ -34,13 +34,6 @@ class Frontend {
         return $widgetGroup;
     }
 
-    public static function convertMarkdownToHtml(string $markdown): string
-    {
-        $converter = new CommonMarkConverter();
-//        $content = $converter->convertToHtml($markdown);
-        $c = self::parseShortcodes($markdown);
-        return $converter->convertToHtml($c);
-    }
 
     public static function parseShortcodes($content)
     {
