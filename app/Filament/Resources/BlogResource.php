@@ -65,7 +65,7 @@ class BlogResource extends Resource
 
                 Select::make('category_id')
                     ->label('Category')
-                    ->options(Category::all()->pluck('name', 'id'))
+                    ->options(Category::all()->where('type','blog')->pluck('name', 'id'))
                     ->required(),
 
             ]);
