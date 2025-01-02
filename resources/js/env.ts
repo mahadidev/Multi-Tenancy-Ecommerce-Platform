@@ -13,7 +13,7 @@ export const BASE_URL: string = document.head.querySelector(
 export const BASE_IMAGE_URL = `${BASE_URL}/images`;
 export const APP_IMAGE_URL = `${BASE_IMAGE_URL}/seller`;
 
-export const API_URL = BASE_URL + "/api";
+export const API_URL = BASE_URL + "/api/v1";
 
 export const APP_NAME: string = document.head.querySelector(
     'meta[name="app-name"]'

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
+import { storeApi } from "./reducers/storeApi";
+import authSlice from "./slices/authSlice";
 import baseSlice from "./slices/baseSlice";
 
 const authPersistConfig = {
@@ -15,7 +17,9 @@ const persistedReducer = persistReducer(
     authPersistConfig,
     combineReducers({
         base: baseSlice,
+        auth: authSlice,
         [authApi.reducerPath]: authApi.reducer,
+        [storeApi.reducerPath]: storeApi.reducer,
     })
 );
 
@@ -24,7 +28,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({
             serializableCheck: false,
-        }).concat([authApi.middleware]);
+        }).concat([authApi.middleware, storeApi.middleware]);
     },
 });
 

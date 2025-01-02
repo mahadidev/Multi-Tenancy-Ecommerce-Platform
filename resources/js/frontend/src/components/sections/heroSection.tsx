@@ -53,7 +53,7 @@ const HeroSection = () => {
                     </div>
 
                     <div className="flex gap-2.5 sm:gap-4 items-center w-max mx-auto mt-5 sm:mt-10">
-                        <a href="/login">
+                        <a href="/seller">
                             <Button> Get the app</Button>
                         </a>
                         <Button variant={"white"}>Contact US</Button>

@@ -1,4 +1,5 @@
 import { FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { PATH_PREFIX } from "../app";
 import { API_URL } from "./env";
 import { RootState } from "./index";
 import { removeAuth } from "./slices/authSlice";
@@ -17,12 +18,12 @@ const baseQuery = fetchBaseQuery({
         }
     ) => {
         headers.set("accept", "application/json");
-        // const state: RootState = api.getState();
-        // const accessToken = state.auth.accessToken;
+        const state: RootState = api.getState();
+        const accessToken = state.auth.accessToken;
 
-        // if (accessToken) {
-        //     headers.set("authorization", `Bearer ${accessToken}`);
-        // }
+        if (accessToken) {
+            headers.set("authorization", `Bearer ${accessToken}`);
+        }
 
         return headers;
     },
@@ -33,11 +34,7 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 
     if (result.error && result.error.status === 401) {
         api.dispatch(removeAuth());
-        window.location.href = "/login";
-    }
-
-    if (result.error && result.error.status === 406) {
-        window.location.href = "/onboard";
+        window.location.href = `${PATH_PREFIX}/sign-in`;
     }
 
     return result;

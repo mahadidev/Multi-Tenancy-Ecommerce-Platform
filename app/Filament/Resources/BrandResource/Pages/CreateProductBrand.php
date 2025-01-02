@@ -6,7 +6,7 @@ use App\Filament\Resources\BrandResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateBrand extends CreateRecord
+class CreateProductBrand extends CreateRecord
 {
     protected static string $resource = BrandResource::class;
 }

@@ -1,6 +1,8 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
+import { PATH_PREFIX } from "@/seller/app";
 import { useMediaQuery } from "@/seller/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
+import { removeAuth } from "@/seller/store/slices/authSlice";
 import {
     toggleIsOpenMobile,
     toggleSidebar,
@@ -32,10 +34,11 @@ import {
     HiViewGrid,
     HiX,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function DashboardNavbar() {
     const sidebar = useAppSelector((state) => state.base.sidebar);
+    const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -472,6 +475,10 @@ function AppDrawerDropdown() {
 }
 
 function UserDropdown() {
+    const { user } = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     return (
         <Dropdown
             className="rounded"
@@ -491,16 +498,23 @@ function UserDropdown() {
             }
         >
             <Dropdown.Header className="px-4 py-3">
-                <span className="block text-sm">Neil Sims</span>
+                <span className="block text-sm">{user?.name}</span>
                 <span className="block truncate text-sm font-medium">
-                    neil.sims@flowbite.com
+                    {user?.email}
                 </span>
             </Dropdown.Header>
             <Dropdown.Item>Dashboard</Dropdown.Item>
             <Dropdown.Item>Settings</Dropdown.Item>
             <Dropdown.Item>Earnings</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item
+                onClick={() => {
+                    dispatch(removeAuth());
+                    navigate(`${PATH_PREFIX}/sing-in`);
+                }}
+            >
+                Sign out
+            </Dropdown.Item>
         </Dropdown>
     );
 }

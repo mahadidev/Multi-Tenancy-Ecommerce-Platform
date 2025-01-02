@@ -40,7 +40,7 @@ const Navigation = () => {
                         </div>
                         <div className="col-span-1 flex justify-end">
                             <a
-                                href="/login"
+                                href="/seller"
                                 className="bg-primary text-white text-sm sm:text-base px-5 sm:px-6 py-1.5 sm:py-2.5 rounded-full font-medium"
                             >
                                 Get App

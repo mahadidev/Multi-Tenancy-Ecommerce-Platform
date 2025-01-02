@@ -1,20 +1,42 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL, BASE_URL } from "@/env";
+import { PATH_PREFIX } from "@/seller/app";
 import useForm from "@/seller/hooks/useForm";
+import { useAppDispatch } from "@/seller/store";
 import {
     useLoginUserMutation,
     useRegisterUserMutation,
 } from "@/seller/store/reducers/authApi";
+import { setAuth } from "@/seller/store/slices/authSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
-    const [handleRegister, { isLoading, error }] = useRegisterUserMutation();
+    const [handleRegister, { isLoading, error, data: response }] =
+        useRegisterUserMutation();
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
+
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (response) {
+            dispatch(
+                setAuth({
+                    access_token: response.data.access_token,
+                    token_type: response.data.token_type,
+                    user: response.data.user,
+                })
+            );
+
+            navigate(PATH_PREFIX);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [response]);
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
@@ -51,6 +73,23 @@ export default function SignUpPage() {
                     Create a Free Account
                 </h2>
                 <div className="mt-8 space-y-6">
+                    <div className="flex flex-col gap-y-2">
+                        <Label htmlFor="email">Your name</Label>
+                        <TextInput
+                            id="name"
+                            name="name"
+                            placeholder="Doe Json"
+                            type="name"
+                            value={formState["name"]}
+                            color={formErrors["name"] ? "failure" : "gray"}
+                            helperText={
+                                formErrors["name"]
+                                    ? formErrors["name"][0]
+                                    : false
+                            }
+                            onChange={handleChange}
+                        />
+                    </div>
                     <div className="flex flex-col gap-y-2">
                         <Label htmlFor="email">Your email</Label>
                         <TextInput
@@ -113,7 +152,7 @@ export default function SignUpPage() {
                         <Label htmlFor="acceptTerms">
                             I accept the&nbsp;
                             <Link
-                                to="#"
+                                to={`${PATH_PREFIX}/terms-conditions`}
                                 className="text-primary-700 hover:underline dark:text-primary-500"
                             >
                                 Terms and Conditions
@@ -140,7 +179,7 @@ export default function SignUpPage() {
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Already have an account?&nbsp;
                         <Link
-                            to="/login"
+                            to={`${PATH_PREFIX}/sing-in`}
                             className="text-primary-700 hover:underline dark:text-primary-500"
                         >
                             Login here
