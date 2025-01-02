@@ -18,7 +18,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\User;
+use App\Models\Store;
 use Filament\Tables\Filters\SelectFilter;
 
 class CategoryResource extends Resource
@@ -27,7 +27,7 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Blog Section';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?int $navigationSort = 2;
 
@@ -45,21 +45,24 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
-
-                Select::make('user_id')
-                ->label('User')
-                ->options(User::all()->pluck('name', 'id'))
-                ->required(),
-
-                Select::make('type')
-                ->label('Type')
-                ->options([
-                    'blog' => 'Blog',
-                ])
-                ->required()
-                ->default('blog'), // Set a default value if needed
-            ]);
+                Forms\Components\Card::make([
+                    TextInput::make('name')->required(),
+                    Forms\Components\Select::make('store_id')
+                    ->label('Store')
+                    ->options(Store::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->required(),
+                ])->columnSpan(6),
+                Forms\Components\Card::make([
+                    Select::make('type')
+                        ->label('Type')
+                        ->options([
+                            'blog' => 'Blog',
+                        ])
+                        ->required()
+                        ->default('blog'), // Set a default value if needed
+                ])->columnSpan(6),
+            ])->columns(12);
     }
 
     public static function table(Table $table): Table
@@ -68,13 +71,12 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('slug'),
+                TextColumn::make('store.name')->label('Store')->searchable()->sortable(),
                 TextColumn::make('created_at')
-                ->label('Created At')
-                ->dateTime('d M, Y'),
+                    ->label('Created At')
+                    ->dateTime('d M, Y'),
             ])
-            ->filters([
-               
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

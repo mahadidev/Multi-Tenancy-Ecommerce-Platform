@@ -11,6 +11,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     // Auth Routes
     Route::post('seller/login', [AuthController::class, 'sellerLogin']);
+    Route::post('seller/register', [AuthController::class, 'sellerRegister']);
 
 });
 

@@ -14,48 +14,7 @@ class ProductService
 
     public static function index(Request $request)
     {
-        $query = Product::with('category', 'store', 'variants')->authorized();
-
-        // if ($request->has('category') && $request->input('category') != '') {
-        //     $query->whereIn('category_id', $request->input('category'));
-        // }
-
-        // if (($request->has('brands'))) {
-        //     $query->whereIn('category_id', $request->input('brands'));
-        // }
-
-        // Apply filter sorting
-        // if ($request->has('filter')) {
-        //     $filter = $request->input('filter');
-
-        //     if ($filter == 'trending') {
-        //         $query->where('is_trend', 1);
-        //     } elseif ($filter == 'a_z') {
-        //         $query->orderBy('name', 'ASC');
-        //     } elseif ($filter == 'z_a') {
-        //         $query->orderBy('name', 'DESC');
-        //     } elseif ($filter == 'low_high') {
-        //         $query->orderBy('price', 'ASC');
-        //     } elseif ($filter == 'high_low') {
-        //         $query->orderBy('price', 'DESC');
-        //     } else {
-        //         $query->latest(); // Default sorting by latest if no specific filter applied
-        //     }
-        // } else {
-        //     $query->latest(); // Apply latest sorting if no filter is provided
-        // }
-
-        // if ($request->has('range')) {
-        //     $min = $request->input('range')['min'];
-        //     $max = $request->input('range')['max'];
-        //     $query->whereBetween('price', [$min, $max]);
-        // }
-
-
-        // if ($request->has('paginate')) {
-        //     $products = $query->paginate($request->input('perPage'));
-        //     return $products;
-        // }
+        $query = Product::with('category', 'store', 'variants', 'brand')->authorized();
 
         $products = $query->get();
 
@@ -65,7 +24,7 @@ class ProductService
     public static function show(Request $request, $id)
     {
 
-        $product = Product::authorized()->findorfail($id);
+        $product = Product::with('category', 'store', 'variants', 'brand')->authorized()->findorfail($id);
         return new ProductResource($product);
     }
 
@@ -75,6 +34,7 @@ class ProductService
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'sku' => 'nullable|string|max:255',
@@ -119,6 +79,7 @@ class ProductService
         $product = Product::create([
             'store_id' => $validatedData['store_id'],
             'category_id' => $validatedData['category_id'],
+            'brand_id' => $validatedData['brand_id'],
             'name' => $validatedData['name'],
             'slug' => $validatedData['slug'],
             'sku' => $validatedData['sku'],
@@ -162,11 +123,12 @@ class ProductService
     public static function update(Request $request, $id)
     {
 
-        $product = Product::with('category', 'store', 'variants')->findOrFail($id);
+        $product = Product::with('category', 'store', 'variants', 'brand')->findOrFail($id);
 
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'sku' => 'nullable|string|max:255',
@@ -214,6 +176,7 @@ class ProductService
         // Update the product entry
         $product->update([
             'category_id' => $validatedData['category_id'],
+            'brand_id' => $validatedData['brand_id'],
             'name' => $validatedData['name'],
             'slug' => $validatedData['slug'],
             'sku' => $validatedData['sku'],

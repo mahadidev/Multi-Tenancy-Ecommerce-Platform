@@ -13,22 +13,33 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
      
     // get current store information
     Route::get('/current-store', [StoreController::class, 'currentStore']);
+
+    // Store Routes
+    Route::resource('/store', StoreController::class);
 });
 
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
        
-    // Shop or Store Routes
-    Route::resource('/store', StoreController::class);
+    // Brand Routes
+    Route::resource('/brand', BrandController::class);
 
-    // Category Routes
     Route::resource('/category', CategoryController::class);
 
     // Product Route
     Route::resource('/product', ProductController::class);
+
+    // Blog Category Route
+    Route::resource('/blog-category', BlogCategoryController::class);
+
+    // Blog Route
+    Route::resource('/blog', BlogController::class);
     
     // Store Settings
     Route::get('/settings', [StoreController::class, 'settings']);
+
+    // Contact Routes
+    Route::resource('/contact', ContactController::class);
 
      
 });

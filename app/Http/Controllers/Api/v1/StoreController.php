@@ -17,9 +17,17 @@ class StoreController extends Controller
     {
         $stores = Store::storeOwner()->active()->latest()->get();
 
-        return response()->json([
-            'stores' => StoreResource::collection($stores),
+
+        // Return success response
+         return response()->json([
+            'status' => 200,
+            'message' => 'Store created successfully.',
+            'data'    => [
+                'stores' => StoreResource::collection($stores),
+            ]
         ]);
+
+       
     }
 
     public function show(Request $request, $id)
@@ -73,10 +81,10 @@ class StoreController extends Controller
 
         // Return success response
         return response()->json([
-            'success' => true,
+            'status' => 200,
             'message' => 'Store created successfully.',
             'data'    => new StoreResource($store),
-        ], 201);
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -115,7 +123,7 @@ class StoreController extends Controller
 
         // Return success response
         return response()->json([
-            'success' => true,
+            'status' => 200,
             'message' => 'Store updated successfully.',
             'data'    => new StoreResource($store),
         ], 200);
@@ -139,9 +147,9 @@ class StoreController extends Controller
 
         // Return success response
         return response()->json([
-            'success' => true,
+            'status' => 200,
             'message' => 'Store deleted successfully.',
-        ], 200);
+        ]);
     }
 
     public function switchStore(Request $request)
@@ -167,9 +175,12 @@ class StoreController extends Controller
 
         // Return a success response with the selected store
         return response()->json([
+            'status' => 200,
             'message' => 'Store switched successfully.',
-            'store' => new StoreResource($store),
-        ], 200);
+            'data' => [
+                'store' => new StoreResource($store),
+            ]
+        ]);
     }
 
     public function currentStore(Request $request)
@@ -187,7 +198,11 @@ class StoreController extends Controller
         $store = Store::findorfail($storeId);
 
         return response()->json([
-            'store' => new StoreResource($store)
+            'status' => 200,
+            'data' => [
+                'store' => new StoreResource($store)
+            ]
+          
         ]);
     }
 }

@@ -25,6 +25,8 @@ class ThemeResource extends Resource
 
     protected static ?string $navigationGroup = 'Theme Management';
 
+    protected static ?int $navigationSort = 999;
+
     public static function form(Form $form): Form
     {
         return $form
