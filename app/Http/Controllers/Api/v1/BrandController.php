@@ -18,7 +18,10 @@ class BrandController extends Controller
             $brands = Brand::authorized()->latest()->get();
 
             return response()->json([
-                'brands' => $brands,
+                'status' => 200,
+                'data' => [
+                    'brands' => $brands,
+                ],
             ]);
         });
     }
@@ -29,6 +32,7 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         return apiResponse(function () use ($request) {
+           
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'image' => 'nullable|image',
@@ -49,9 +53,11 @@ class BrandController extends Controller
 
             return response()->json(
                 [
-                    'success' => true,
+                    'status' => 200,
                     'message' => 'Brand created successfully',
-                    'brand' => $brand,
+                    'data' => [
+                        'brand' => $brand,
+                    ]
                 ]
             );
         });
@@ -65,19 +71,12 @@ class BrandController extends Controller
         return apiResponse(function () use ($request, $id) {
             $brand = Brand::authorized()->findOrFail($id);
             
-            if(!$brand) {
-                return response()->json(
-                    [
-                        'success' => false,
-                        'message' => 'You are not authorized to view this brand or it does not exist.',
-                    ]
-                );
-            }
-
             return response()->json(
                 [
-                    'success' => true,
-                    'brand' => $brand,
+                    'status' => 200,
+                    'data' => [
+                        'brand' => $brand,
+                    ]
                 ]
             );
         });
@@ -90,15 +89,6 @@ class BrandController extends Controller
     {
         return apiResponse(function () use ($request, $id) {
             $brand = Brand::authorized()->findOrFail($id);
-
-            if(!$brand) {
-                return response()->json(
-                    [
-                        'success' => false,
-                        'message' => 'You are not authorized to edit this brand or it does not exist.',
-                    ]
-                );
-            }
 
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
@@ -120,9 +110,11 @@ class BrandController extends Controller
 
             return response()->json(
                 [
-                    'success' => true,
+                    'status' => 200,
                     'message' => 'Brand updated successfully',
-                    'brand' => $brand,
+                    'data' => [
+                        'brand' => $brand,
+                    ]
                 ]
             );
         });
@@ -135,15 +127,6 @@ class BrandController extends Controller
     {
         return apiResponse(function () use ($id) {
             $brand = Brand::authorized()->findOrFail($id);
-
-            if(!$brand) {
-                return response()->json(
-                    [
-                        'success' => false,
-                        'message' => 'You are not authorized to delete this brand or it does not exist.',
-                    ]
-                );
-            }
 
             if($brand->image) {
                 Storage::disk('public')->delete($brand->image);
