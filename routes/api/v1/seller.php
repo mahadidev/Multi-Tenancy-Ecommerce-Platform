@@ -30,8 +30,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Product Route
     Route::resource('/product', ProductController::class);
 
-    // // Blog Category Route
-    // Route::resource('/blog-category', BlogCategoryController::class);
+    // Blog Category Route
+    Route::resource('/blog-category', BlogCategoryController::class);
     
     // Store Settings
     Route::get('/settings', [StoreController::class, 'settings']);

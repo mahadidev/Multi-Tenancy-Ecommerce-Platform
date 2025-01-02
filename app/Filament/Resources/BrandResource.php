@@ -68,7 +68,7 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->searchable()->sortable(),
+                // TextColumn::make('id')->searchable()->sortable(),
                 ImageColumn::make('image')->label('Brand Image'),
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('store.name')->label('Store')->searchable()->sortable(),
