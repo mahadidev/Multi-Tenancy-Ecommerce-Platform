@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BrandResource;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,7 @@ class BrandController extends Controller
             return response()->json([
                 'status' => 200,
                 'data' => [
-                    'brands' => $brands,
+                    'brands' => BrandResource::collection($brands)
                 ],
             ]);
         });
@@ -56,7 +57,7 @@ class BrandController extends Controller
                     'status' => 200,
                     'message' => 'Brand created successfully',
                     'data' => [
-                        'brand' => $brand,
+                        'brands' => new BrandResource($brand)
                     ]
                 ]
             );
@@ -75,7 +76,7 @@ class BrandController extends Controller
                 [
                     'status' => 200,
                     'data' => [
-                        'brand' => $brand,
+                       'brands' => new BrandResource($brand)
                     ]
                 ]
             );
@@ -113,7 +114,7 @@ class BrandController extends Controller
                     'status' => 200,
                     'message' => 'Brand updated successfully',
                     'data' => [
-                        'brand' => $brand,
+                       'brands' => new BrandResource($brand)
                     ]
                 ]
             );

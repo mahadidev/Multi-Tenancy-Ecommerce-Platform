@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Brand extends Model
 {
@@ -43,5 +44,10 @@ class Brand extends Model
 
     public function scopeAuthorized($query){
         return $query->where('store_id', authStore());
+    }
+
+    public function getBrandImageAttribute()
+    {
+        return $this->image ? url(Storage::url($this->image)) : null;
     }
 }
