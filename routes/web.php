@@ -7,8 +7,14 @@ use App\Http\Controllers\ArtisanController;
 Route::get('/', function () {
     return view("welcome");
 });
-Route::get('/login', function () {
-    return view("app");
+Route::prefix('/seller')->group(function () {
+    Route::get("/", function () {
+        return view("seller");
+    });
+
+    Route::any('/{any}', function () {
+        return view("seller");
+    })->where('any', '.*');
 });
 
 Route::get('/deploy', [ArtisanController::class, 'run'])->name('deploy');

@@ -11,7 +11,7 @@ export default defineConfig({
         react({
             input: [
                 "resources/js/frontend/index.tsx",
-                "resources/js/app/index.tsx",
+                "resources/js/seller/index.tsx",
             ],
         }),
     ],
