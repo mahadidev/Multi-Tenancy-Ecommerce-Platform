@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -39,10 +41,49 @@ class AuthController extends Controller
 
         // Return the token and user details
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => new UserResource($user),
-        ], 200);
+            'status' => 200,
+            'message' => 'login success',
+            'data' => [
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'user' => new UserResource($user),
+                'stores' => StoreResource::collection($user->stores),
+                'membership' => null
+            ]
+        ]);
+
     }
 
+    public function sellerRegister(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string',
+            'confirm_password' => 'required|string|same:password',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' =>  Hash::make($request->password)
+        ]);
+
+        // Assign role to the seller
+        $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
+        $role = Role::firstOrCreate(['name' => $roleName]);
+        $user->assignRole($role->name);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'singup success',
+            'data' => [
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'user' => new UserResource($user)
+            ]
+        ]);
+
+    }
 }

@@ -25,11 +25,6 @@ class StoreResource extends JsonResource
             'logo' => $this->logo_image,
             'description' => $this->description,
             'currency' => $this->currency ?? 'BDT',
-            'owner' => [
-                'id' => $this->owner?->id,
-                'name' => $this->owner?->name,
-                'phone' => $this->owner?->phone
-            ]
         ];
     }
 }

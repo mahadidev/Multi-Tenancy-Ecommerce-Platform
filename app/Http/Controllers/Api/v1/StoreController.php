@@ -17,9 +17,17 @@ class StoreController extends Controller
     {
         $stores = Store::storeOwner()->active()->latest()->get();
 
-        return response()->json([
-            'stores' => StoreResource::collection($stores),
+
+        // Return success response
+         return response()->json([
+            'status' => 200,
+            'message' => 'Store created successfully.',
+            'data'    => [
+                'stores' => StoreResource::collection($stores),
+            ]
         ]);
+
+       
     }
 
     public function show(Request $request, $id)
@@ -73,10 +81,10 @@ class StoreController extends Controller
 
         // Return success response
         return response()->json([
-            'success' => true,
+            'status' => 200,
             'message' => 'Store created successfully.',
             'data'    => new StoreResource($store),
-        ], 201);
+        ]);
     }
 
     public function update(Request $request, $id)
