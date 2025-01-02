@@ -185,6 +185,65 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Register",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "yeamin-rabbi",
+									"description": "required",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "yeaminrabbi308@gmail.com",
+									"description": "required",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"description": "required",
+									"type": "text"
+								},
+								{
+									"key": "confirm_password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{site_seller}}/register",
+							"host": [
+								"{{site_seller}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -489,9 +548,20 @@
 										},
 										{
 											"key": "location",
-											"value": "dhaka uddan, mohammadpur, Dhaka",
+											"value": "mohammadpur, Dhaka",
 											"description": "required",
 											"type": "text"
+										},
+										{
+											"key": "currency",
+											"value": "BDT",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "logo",
+											"type": "file",
+											"src": "postman-cloud:///1efc74fa-fc56-4db0-ae1d-9b05fb614df4"
 										}
 									]
 								},
@@ -551,7 +621,7 @@
 										{
 											"key": "domain",
 											"value": "jellyfish-store",
-											"description": "regex:/^[a-zA-Z0-9]+$/ | nullable | unique",
+											"description": "regex:/^[a-zA-Z0-9\\-]+$/| nullable | unique",
 											"type": "text"
 										},
 										{
@@ -565,6 +635,18 @@
 											"value": "Mohammadpur, Dhaka, Bangladesh",
 											"description": "required",
 											"type": "text"
+										},
+										{
+											"key": "currency",
+											"value": "BDT",
+											"description": "required",
+											"type": "text"
+										},
+										{
+											"key": "logo",
+											"value": "",
+											"type": "text",
+											"disabled": true
 										}
 									]
 								},
@@ -608,13 +690,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{site_seller}}/store/10",
+									"raw": "{{site_seller}}/store/6",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
 										"store",
-										"10"
+										"6"
 									],
 									"query": [
 										{
@@ -688,6 +770,261 @@
 											"value": "kafha",
 											"disabled": true
 										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Brand Module",
+					"item": [
+						{
+							"name": "index",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{site_seller}}/brand",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"brand"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "view",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/brand/2",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"brand",
+										"2"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{site_seller}}/brand/2",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"brand",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "store",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "samsung",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "postman-cloud:///1efc74fa-fc9b-4370-859f-3f1918d140b9"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{site_seller}}/brand",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"brand"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "xiomi3",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/pranto/Downloads/pran.png"
+										},
+										{
+											"key": "_method",
+											"value": "PUT",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{site_seller}}/brand/4",
+									"host": [
+										"{{site_seller}}"
+									],
+									"path": [
+										"brand",
+										"4"
 									]
 								}
 							},
@@ -900,13 +1237,13 @@
 										},
 										{
 											"key": "name",
-											"value": "T-shirt",
+											"value": "Smart Phones",
 											"description": "required",
 											"type": "text"
 										},
 										{
 											"key": "slug",
-											"value": "t-shirt",
+											"value": "smart-phones",
 											"description": "required | 'regex:/^[a-zA-Z0-9\\-]+$/', // Allows letters, numbers, and hyphens, but no spaces",
 											"type": "text"
 										},
@@ -1118,30 +1455,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{site_seller}}/product/36",
+									"raw": "{{site_seller}}/product/3",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
 										"product",
-										"36"
-									],
-									"query": [
-										{
-											"key": "category",
-											"value": "7",
-											"disabled": true
-										},
-										{
-											"key": "shop",
-											"value": "1",
-											"disabled": true
-										},
-										{
-											"key": "patient_type",
-											"value": "kafha",
-											"disabled": true
-										}
+										"3"
 									]
 								}
 							},
@@ -1214,7 +1534,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "\r\n{\r\n    \"name\": \"Google Pixel 8\",\r\n    \"slug\": \"google-pixel-8\",\r\n    \"sku\": \"google-pixel-8-smart-phone\",\r\n    \"description\": \"The new Google Pixel 8 with exceptional camera and performance.\",\r\n    \"price\": 50000,\r\n    \"category_id\": 11,\r\n    \"has_in_stocks\": 1,\r\n    \"stock\": 60,\r\n    \"status\": 1,\r\n    \"thumbnail\": null,\r\n    \"attachments\": null,\r\n    \"has_variants\": 1,\r\n    \"variants\": [\r\n        {\r\n            \"label\": \"Obsidian\",\r\n            \"slug\": \"obsidian\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"30\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"15\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Snow\",\r\n            \"slug\": \"snow\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"15\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"10\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n"
+									"raw": "\r\n{\r\n    \"name\": \"Google Pixel 86\",\r\n    \"slug\": \"google-pixel-8\",\r\n    \"sku\": \"google-pixel-8-smart-phone\",\r\n    \"description\": \"The new Google Pixel 8 with exceptional camera and performance.\",\r\n    \"price\": 50000,\r\n    \"category_id\": 5,\r\n    \"has_in_stocks\": 1,\r\n    \"stock\": 60,\r\n    \"status\": 1,\r\n    \"thumbnail\": null,\r\n    \"attachments\": null,\r\n    \"has_variants\": 1,\r\n    \"variants\": [\r\n        {\r\n            \"label\": \"Obsidian\",\r\n            \"slug\": \"obsidian\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"30\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"15\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Snow\",\r\n            \"slug\": \"snow\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"15\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"10\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n"
 								},
 								"url": {
 									"raw": "{{site_seller}}/product",
@@ -1273,16 +1593,16 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Iphone\",\r\n    \"slug\": \"iphone-smart-phone\",\r\n    \"sku\": \"i-phone-smart-phone\",\r\n    \"description\": \"i-phone Ab eveniet aut vel \",\r\n    \"price\": 16000,\r\n    \"category_id\": 11,\r\n    \"has_in_stocks\": 1,\r\n    \"stock\": 40,\r\n    \"status\": 1,\r\n    \"thumbnail\" : null,\r\n    \"attachments\" : null,\r\n    \"has_variants\": 1,\r\n    \"variants\": [\r\n        {\r\n            \"label\": \"Ocean Blue\",\r\n            \"slug\": \"ocean-blue\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"4/64\",\r\n                    \"price\": \"16000\",\r\n                    \"qty_stock\": \"10\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/64\",\r\n                    \"price\": \"20000\",\r\n                    \"qty_stock\": \"5\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Red Moon\",\r\n            \"slug\": \"red-moon\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/64\",\r\n                    \"price\": \"25000\",\r\n                    \"qty_stock\": \"5\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"16/128\",\r\n                    \"price\": \"35000\",\r\n                    \"qty_stock\": \"3\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"label\": \"Ice Blue\",\r\n            \"slug\": \"ice-blue-variant\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": \"#ice1\",\r\n                    \"label\": \"8/64\",\r\n                    \"price\": \"16000\",\r\n                    \"qty_stock\": \"5\"\r\n                },\r\n                {\r\n                    \"code\": \"#ice2\",\r\n                    \"label\": \"16/128\",\r\n                    \"price\": \"39000\",\r\n                    \"qty_stock\": \"3\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}"
+									"raw": "\r\n{\r\n    \"name\": \"Google Pixel 89\",\r\n    \"slug\": \"google-pixel-8\",\r\n    \"sku\": \"google-pixel-8-smart-phone\",\r\n    \"description\": \"The new Google Pixel 8 with exceptional camera and performance.\",\r\n    \"price\": 50000,\r\n    \"category_id\": 5,\r\n    \"brand_id\": 3,\r\n    \"has_in_stocks\": 1,\r\n    \"stock\": 60,\r\n    \"status\": 1,\r\n    \"thumbnail\": null,\r\n    \"attachments\": null,\r\n    \"has_variants\": 1,\r\n    \"variants\": [\r\n        {\r\n            \"label\": \"Obsidian\",\r\n            \"slug\": \"obsidian\",\r\n            \"options\": [\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"8/128\",\r\n                    \"price\": \"50000\",\r\n                    \"qty_stock\": \"30\"\r\n                },\r\n                {\r\n                    \"code\": null,\r\n                    \"label\": \"12/256\",\r\n                    \"price\": \"60000\",\r\n                    \"qty_stock\": \"15\"\r\n                }\r\n            ]\r\n        }\r\n        \r\n    ]\r\n}\r\n"
 								},
 								"url": {
-									"raw": "{{site_seller}}/product/2",
+									"raw": "{{site_seller}}/product/3",
 									"host": [
 										"{{site_seller}}"
 									],
 									"path": [
 										"product",
-										"2"
+										"3"
 									],
 									"query": [
 										{
