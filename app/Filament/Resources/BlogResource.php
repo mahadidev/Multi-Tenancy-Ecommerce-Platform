@@ -18,6 +18,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -47,49 +48,57 @@ class BlogResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Card::make([
+                    TextInput::make('title')->required(),
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Select::make('category_id')
+                                ->label('Category')
+                                ->options(Category::all()->where('type', 'blog')->pluck('name', 'id'))
+                                ->required(),
+                                Select::make('status')
+                                ->label('Status')
+                                ->options([
+                                    'active' => 'Active',
+                                    'inactive' => 'Inactive',
+                                ])
+                                ->default('active')
+                                ->required(),
+                        ]),
+                   
+                ])->columnSpan(7),
 
-                RichEditor::make('content')->required(),
-                FileUpload::make('image')
-                    ->disk('public')
-                    ->directory('blogs'),
-                TextInput::make('title')->required(),
+                Forms\Components\Card::make([
+                    FileUpload::make('image')
+                        ->disk('public')
+                        ->directory('blogs'),
 
-                Select::make('status')
-                    ->label('Status')
-                    ->options([
-                        'active' => 'Active',
-                        'inactive' => 'Inactive',
-                    ])
-                    ->default('active')
-                    ->required(),
+                ])->columnSpan(5),
 
-                Select::make('category_id')
-                    ->label('Category')
-                    ->options(Category::all()->where('type','blog')->pluck('name', 'id'))
-                    ->required(),
-
-            ]);
+                Forms\Components\Card::make([
+                    RichEditor::make('content')->required(),
+                ])->columnSpan(12),
+            ])->columns(12);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                ImageColumn::make('image'),
                 TextColumn::make('title')->searchable(),
                 TextColumn::make('category.name'),
-                ImageColumn::make('image'),
-
 
                 IconColumn::make('status')
-                ->icon(fn (string $state): string => match ($state) {
-                    'active' => 'heroicon-o-check-circle',
-                    'inactive' => 'heroicon-o-clock',
-                })
-                ->color(fn (string $state): string => match ($state) {
-                    'inactive' => 'warning',
-                    'active' => 'success',
-                    default => 'success',
-                })
+                    ->icon(fn(string $state): string => match ($state) {
+                        'active' => 'heroicon-o-check-circle',
+                        'inactive' => 'heroicon-o-clock',
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'inactive' => 'warning',
+                        'active' => 'success',
+                        default => 'success',
+                    })
 
             ])
             ->filters([
@@ -100,6 +109,7 @@ class BlogResource extends Resource
                     ->preload()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
