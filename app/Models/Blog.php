@@ -42,6 +42,12 @@ class Blog extends Model
             }
             
         });
+
+        static::updating(function ($blog) {
+            if ($blog->isDirty('title')) {
+                $blog->slug = Str::slug($blog->title);
+            }
+        });
     }
     
 }

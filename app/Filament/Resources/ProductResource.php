@@ -7,6 +7,7 @@ use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\Brand;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -37,7 +38,7 @@ class ProductResource extends Resource
             ->schema([
                 Forms\Components\Card::make()
                     ->schema([
-                        Forms\Components\Grid::make(2)
+                        Forms\Components\Grid::make(3)
                             ->schema([
                                 // Left Column
                                 Forms\Components\Select::make('store_id')
@@ -51,6 +52,28 @@ class ProductResource extends Resource
                                     ->options(Category::where('type', 'product')->pluck('name', 'id'))
                                     ->searchable()
                                     ->required(),
+
+                                Forms\Components\Select::make('brand_id')
+                                    ->label('Brand')
+                                    ->options(Brand::all()->pluck('name', 'id'))
+                                    ->searchable()
+                                    ->required(),
+
+                            ]),
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                // Left Column
+                                // Forms\Components\Select::make('store_id')
+                                //     ->label('Store')
+                                //     ->options(Store::all()->pluck('name', 'id'))
+                                //     ->searchable()
+                                //     ->required(),
+
+                                // Forms\Components\Select::make('category_id')
+                                //     ->label('Category')
+                                //     ->options(Category::where('type', 'product')->pluck('name', 'id'))
+                                //     ->searchable()
+                                //     ->required(),
 
                                 Forms\Components\TextInput::make('name')
                                     ->required()

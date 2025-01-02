@@ -18,7 +18,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\User;
+use App\Models\Store;
 use Filament\Tables\Filters\SelectFilter;
 
 class CategoryResource extends Resource
@@ -47,6 +47,11 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\Card::make([
                     TextInput::make('name')->required(),
+                    Forms\Components\Select::make('store_id')
+                    ->label('Store')
+                    ->options(Store::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->required(),
                 ])->columnSpan(6),
                 Forms\Components\Card::make([
                     Select::make('type')
@@ -66,6 +71,7 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('slug'),
+                TextColumn::make('store.name')->label('Store')->searchable()->sortable(),
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime('d M, Y'),

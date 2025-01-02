@@ -14,7 +14,7 @@ class ProductService
 
     public static function index(Request $request)
     {
-        $query = Product::with('category', 'store', 'variants')->authorized();
+        $query = Product::with('category', 'store', 'variants', 'brand')->authorized();
 
         // if ($request->has('category') && $request->input('category') != '') {
         //     $query->whereIn('category_id', $request->input('category'));
@@ -65,7 +65,7 @@ class ProductService
     public static function show(Request $request, $id)
     {
 
-        $product = Product::authorized()->findorfail($id);
+        $product = Product::with('category', 'store', 'variants', 'brand')->authorized()->findorfail($id);
         return new ProductResource($product);
     }
 
@@ -75,6 +75,7 @@ class ProductService
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'sku' => 'nullable|string|max:255',
@@ -119,6 +120,7 @@ class ProductService
         $product = Product::create([
             'store_id' => $validatedData['store_id'],
             'category_id' => $validatedData['category_id'],
+            'brand_id' => $validatedData['brand_id'],
             'name' => $validatedData['name'],
             'slug' => $validatedData['slug'],
             'sku' => $validatedData['sku'],
@@ -162,11 +164,12 @@ class ProductService
     public static function update(Request $request, $id)
     {
 
-        $product = Product::with('category', 'store', 'variants')->findOrFail($id);
+        $product = Product::with('category', 'store', 'variants', 'brand')->findOrFail($id);
 
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'sku' => 'nullable|string|max:255',
@@ -214,6 +217,7 @@ class ProductService
         // Update the product entry
         $product->update([
             'category_id' => $validatedData['category_id'],
+            'brand_id' => $validatedData['brand_id'],
             'name' => $validatedData['name'],
             'slug' => $validatedData['slug'],
             'sku' => $validatedData['sku'],
