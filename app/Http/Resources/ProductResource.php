@@ -23,6 +23,7 @@ class ProductResource extends JsonResource
             'thumbnail' => $this->thumbnail_image,
             'attachments' => $this->attachments_image,
             'price' => $this->price,
+            'brand' => new BrandResource($this->brand),
             'category' => new CategoryResource($this->category),
             'brand' => new BrandResource($this->brand),
             'has_in_stocks' => $this->has_in_stocks,
