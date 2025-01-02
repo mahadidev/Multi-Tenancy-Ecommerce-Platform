@@ -60,7 +60,7 @@ class CategoryController extends Controller
         ]);
 
         // Automatically assign the authenticated user's ID
-        $validated['user_id'] = auth()->user()->id;
+        // $validated['user_id'] = auth()->user()->id;
         $validated['store_id'] = authStore();
 
         $category = Category::create($validated);

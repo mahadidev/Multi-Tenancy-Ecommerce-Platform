@@ -13,7 +13,6 @@ class Category extends Model
         'slug',
         'type',
         'parent_id',
-        'user_id',
         'store_id',
     ];
 
@@ -53,10 +52,15 @@ class Category extends Model
     public function parent(){
         return $this->belongsTo(Category::class, 'parent_id');
     }
-
-    public function author(){
-        return $this->belongsTo(User::class, 'user_id');
+    
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
     }
+
+    // public function author(){
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
 
     public function scopeAuthorized($query){
         return $query->where('store_id', authStore());

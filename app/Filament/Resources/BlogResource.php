@@ -34,7 +34,7 @@ class BlogResource extends Resource
 
     protected static ?string $navigationGroup = 'Blog Section';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?int $navigationSort = 2;
 
@@ -65,7 +65,7 @@ class BlogResource extends Resource
 
                 Select::make('category_id')
                     ->label('Category')
-                    ->options(Category::all()->pluck('name', 'id'))
+                    ->options(Category::all()->where('type','blog')->pluck('name', 'id'))
                     ->required(),
 
             ]);

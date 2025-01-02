@@ -21,11 +21,16 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
        
-    // Category Routes
+    // Brand Routes
+    Route::resource('/brand', BrandController::class);
+
     Route::resource('/category', CategoryController::class);
 
     // Product Route
     Route::resource('/product', ProductController::class);
+
+    // // Blog Category Route
+    // Route::resource('/blog-category', BlogCategoryController::class);
     
     // Store Settings
     Route::get('/settings', [StoreController::class, 'settings']);
