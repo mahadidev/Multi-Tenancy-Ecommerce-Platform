@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-
+use Carbon\Carbon;
 class Product extends Model
 {
 
@@ -29,12 +29,12 @@ class Product extends Model
 
     protected $casts = [
         'attachments' => 'array',
-    ]; 
-    
+    ];
+
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($data) {
             // Auto-generate slug from name if it's not provided
             if (empty($data->slug)) {
@@ -44,10 +44,9 @@ class Product extends Model
             if (empty($data->status)) {
                 $data->status = 1;
             }
-            
         });
 
-      
+
         static::updating(function ($data) {
             if ($data->isDirty('name')) {  // Check if the 'name' attribute has changed
                 $data->slug = Str::slug($data->name);  // Update slug based on new name
@@ -69,35 +68,96 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
-    
+
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
     }
 
-    public function scopeAuthorized($query){
+    public function scopeAuthorized($query)
+    {
         return $query->where('store_id', authStore());
     }
 
-    public function scopeActive($query){
+    public function scopeActive($query)
+    {
         return $query->where('status', 1);
     }
 
-    // Accessor for the thumbnail
     public function getThumbnailImageAttribute()
     {
         return $this->thumbnail ? url(Storage::url($this->thumbnail)) : null;
     }
 
-    // Accessor for the attachments
     public function getAttachmentsImageAttribute()
     {
-        $attachments = $this->attachments; // Assuming attachments is already cast to an array
+        $attachments = $this->attachments; 
 
         if (is_array($attachments)) {
             return array_map(fn($path) => url(Storage::url($path)), $attachments);
         }
 
         return [];
+    }
+
+
+    // The following functions will be used in the frontend sections
+
+    public function getDiscountPriceAttribute()
+    {
+        $price = $this->attributes['price'];
+        $discount = $this->attributes['discount'];
+        $discountTo = $this->attributes['discount_to'];
+        if ($discount && $discountTo) {
+            $currentDate = Carbon::today();
+            $discountEndDate = Carbon::parse($discountTo);
+
+            if ($currentDate->lte($discountEndDate)) {
+                // Calculate the discounted price
+                $discountedPrice = $price - ($price * ($discount / 100));
+                return $discountedPrice;
+            }
+        }
+
+        // If no discount or the discount date is not valid, return the original price
+        return $price;
+    }
+
+    public function priceTag()
+    {
+        $price = number_format(self::getDiscountPriceAttribute(), 2);
+
+        $currency = getStore()->currency;
+
+        $priceTag = $currency . ' ' . $price;
+
+        return $priceTag;
+    }
+
+    public function originalPrice()
+    {
+
+        $price = number_format($this->attributes['price'], 2);
+        $currency = getStore()->currency;
+
+        $productPrice = $currency . ' ' . $price;
+
+        return $productPrice;
+    }
+
+    public function checkDiscountValidity()
+    {
+        $discountTo = $this->attributes['discount_to'];
+
+        if ($discountTo) {
+            $currentDate = Carbon::today();
+            $discountEndDate = Carbon::parse($discountTo);
+
+            if ($currentDate->lte($discountEndDate)) {
+                return 1;
+            }
+        }
+
+        return 0;
     }
 }
