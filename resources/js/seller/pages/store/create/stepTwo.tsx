@@ -1,5 +1,4 @@
-import { Button, Checkbox, Label, Select, TextInput } from "flowbite-react";
-import React from "react";
+import { Button, Label, TextInput } from "flowbite-react";
 
 const StepTwo = ({
     step,
@@ -11,7 +10,7 @@ const StepTwo = ({
     return (
         <>
             <h1 className="mb-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:mb-6">
-                Store Branding
+                Store Branding {step}
             </h1>
             <div>
                 <div className="my-6 grid gap-5">

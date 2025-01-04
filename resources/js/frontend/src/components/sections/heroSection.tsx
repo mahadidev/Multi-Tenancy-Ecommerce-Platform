@@ -1,5 +1,4 @@
 import { Button } from "@/frontend/src/components";
-import React from "react";
 
 const HeroSection = () => {
     return (

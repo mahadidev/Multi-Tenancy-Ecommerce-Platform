@@ -11,7 +11,7 @@ import {
     TextInput,
 } from "flowbite-react";
 import type { FC } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import {
     HiChevronLeft,
@@ -421,39 +421,41 @@ const ProductsTable: FC<ECommerceProductsPageData> = function ({ products }) {
                 <Table.HeadCell>Actions</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {products.map(({ id, name, category, technology, price }) => (
-                    <Table.Row
-                        key={id}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                        <Table.Cell className="w-4 p-4">
-                            <Checkbox />
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                            <div className="text-base font-semibold text-gray-900 dark:text-white">
-                                {name}
-                            </div>
-                            <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                {category}
-                            </div>
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            {technology}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            #{id}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            ${price}
-                        </Table.Cell>
-                        <Table.Cell className="space-x-2 whitespace-nowrap p-4">
-                            <div className="flex items-center gap-x-3">
-                                <EditProductModal />
-                                <DeleteProductModal />
-                            </div>
-                        </Table.Cell>
-                    </Table.Row>
-                ))}
+                {products.map(
+                    ({ id, name, category, technology, price }: any) => (
+                        <Table.Row
+                            key={id}
+                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                            <Table.Cell className="w-4 p-4">
+                                <Checkbox />
+                            </Table.Cell>
+                            <Table.Cell className="whitespace-nowrap p-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                <div className="text-base font-semibold text-gray-900 dark:text-white">
+                                    {name}
+                                </div>
+                                <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {category}
+                                </div>
+                            </Table.Cell>
+                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                                {technology}
+                            </Table.Cell>
+                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                                #{id}
+                            </Table.Cell>
+                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                                ${price}
+                            </Table.Cell>
+                            <Table.Cell className="space-x-2 whitespace-nowrap p-4">
+                                <div className="flex items-center gap-x-3">
+                                    <EditProductModal />
+                                    <DeleteProductModal />
+                                </div>
+                            </Table.Cell>
+                        </Table.Row>
+                    )
+                )}
             </Table.Body>
         </Table>
     );

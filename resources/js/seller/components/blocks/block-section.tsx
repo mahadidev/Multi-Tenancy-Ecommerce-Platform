@@ -1,6 +1,5 @@
 import { Button } from "flowbite-react";
 import type { PropsWithChildren } from "react";
-import React from "react";
 import { FaGithub } from "react-icons/fa";
 
 export interface BlockSectionProps extends PropsWithChildren {

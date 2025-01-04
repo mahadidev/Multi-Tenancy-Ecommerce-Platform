@@ -6,23 +6,15 @@ import {
 } from "@/seller/store/slices/baseSlice";
 import { Dropdown, Sidebar, TextInput, Tooltip } from "flowbite-react";
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from "react";
-import React, { useEffect, useState } from "react";
-import { AiFillSetting } from "react-icons/ai";
-import { FaBookmark, FaPaintBrush } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaPaintBrush } from "react-icons/fa";
 import {
     HiAdjustments,
     HiChartPie,
-    HiClipboardList,
     HiCog,
-    HiCollection,
-    HiDocumentReport,
-    HiInboxIn,
-    HiLockClosed,
     HiSearch,
     HiShoppingBag,
     HiSupport,
-    HiUsers,
-    HiViewGrid,
 } from "react-icons/hi";
 import { MdCollectionsBookmark } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";

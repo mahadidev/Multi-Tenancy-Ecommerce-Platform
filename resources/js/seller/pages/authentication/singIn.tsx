@@ -1,38 +1,38 @@
-import { APP_IMAGE_URL, BASE_IMAGE_URL, BASE_URL } from "@/env";
+import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
 import { useAppDispatch } from "@/seller/store";
 import { useLoginUserMutation } from "@/seller/store/reducers/authApi";
 import { setAuth } from "@/seller/store/slices/authSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SignInPage() {
-    const [handleLogin, { isLoading, error, data: response }] =
+    const [handleLogin, { isLoading, error, data: response, isSuccess }] =
         useLoginUserMutation();
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        if (response) {
-            dispatch(
-                setAuth({
-                    access_token: response.data.access_token,
-                    token_type: response.data.token_type,
-                    user: response.data.user,
-                })
-            );
-            navigate(RoutePath.dashboard);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [response]);
+    // useEffect(() => {
+    //     if (response) {
+    //         dispatch(
+    //             setAuth({
+    //                 access_token: response.data.access_token,
+    //                 token_type: response.data.token_type,
+    //                 user: response.data.user,
+    //             })
+    //         );
+    //         // navigate(RoutePath.dashboard);
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [isSuccess, response]);
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
@@ -147,7 +147,7 @@ export default function SignInPage() {
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Not registered?&nbsp;
                         <Link
-                            to={`/sing-up`}
+                            to={RoutePath.register}
                             className="text-primary-700 hover:underline dark:text-primary-500"
                         >
                             Create account

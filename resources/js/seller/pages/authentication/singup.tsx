@@ -2,13 +2,10 @@ import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
 import { useAppDispatch } from "@/seller/store";
-import {
-    useLoginUserMutation,
-    useRegisterUserMutation,
-} from "@/seller/store/reducers/authApi";
+import { useRegisterUserMutation } from "@/seller/store/reducers/authApi";
 import { setAuth } from "@/seller/store/slices/authSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -179,7 +176,7 @@ export default function SignUpPage() {
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Already have an account?&nbsp;
                         <Link
-                            to={`/sing-in`}
+                            to={RoutePath.login}
                             className="text-primary-700 hover:underline dark:text-primary-500"
                         >
                             Login here

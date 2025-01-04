@@ -1,13 +1,11 @@
 import { UserType } from "@/type/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AuthStateType {
+const initialState: {
     accessToken?: string | null;
     user?: UserType | null;
     tokenType?: string | null;
-}
-
-const initialState: AuthStateType = {
+} = {
     accessToken: null,
     user: null,
     tokenType: null,

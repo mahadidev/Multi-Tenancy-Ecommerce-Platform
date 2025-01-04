@@ -1,6 +1,3 @@
-import { API_URL } from "@/env";
-import { SigninPayloadType, SigninResponseType } from "@/type/sellers/singin";
-import { SingupPayloadType, SingupResponseType } from "@/type/sellers/singup";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";

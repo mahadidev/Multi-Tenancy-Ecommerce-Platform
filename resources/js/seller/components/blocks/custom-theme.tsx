@@ -1,6 +1,5 @@
 import { Flowbite, theme } from "flowbite-react";
 import type { PropsWithChildren } from "react";
-import React from "react";
 import { twMerge } from "tailwind-merge";
 
 export function CustomTheme({ children }: PropsWithChildren) {

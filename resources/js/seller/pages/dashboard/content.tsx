@@ -1,7 +1,7 @@
 import Chart from "@/seller/components/chart";
 import { formatNumber, formatToUSD } from "@/seller/helpers/format-number";
 import { Badge, Dropdown, Table, useThemeMode } from "flowbite-react";
-import React, { useEffect, type FC } from "react";
+import { type FC } from "react";
 import { Link } from "react-router-dom";
 import "svgmap/dist/svgMap.min.css";
 import type { DashboardPageData } from "./page";
@@ -265,7 +265,7 @@ const NewProductsThisWeek: FC<DashboardPageData> = function ({ dashboard }) {
 };
 
 const NewProductsApexChart: FC<DashboardPageData> = function ({ dashboard }) {
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         colors: ["#1A56DB", "#FDBA8C"],
         chart: {
             fontFamily: "Inter, sans-serif",
@@ -522,7 +522,7 @@ const UserSignupsApexChart: FC<DashboardPageData> = function ({ dashboard }) {
               "#E5E7EB",
           ];
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         labels: dashboard.userSignupsThisWeek.labels,
         chart: {
             foreColor: "#4B5563",
@@ -596,7 +596,7 @@ const UserSignupsApexChart: FC<DashboardPageData> = function ({ dashboard }) {
     return <Chart height={305} options={options} series={series} type="bar" />;
 };
 
-const SessionsByCountry: FC<DashboardPageData> = function ({ dashboard }) {
+const SessionsByCountry: FC<DashboardPageData> = function () {
     return (
         <div className="mb-4 rounded-lg bg-white p-4 shadow sm:p-6 xl:mb-0 xl:p-8 2xl:col-span-2 dark:bg-gray-800">
             <div className="mb-4">
@@ -607,7 +607,6 @@ const SessionsByCountry: FC<DashboardPageData> = function ({ dashboard }) {
                     View website visitors by hovering over the map
                 </span>
             </div>
-            <SessionsByCountryMap dashboard={dashboard} />
             <ul className="space-y-6">
                 <li className="w-full items-center sm:flex">
                     <div className="mb-3 flex items-center sm:mb-0">
@@ -1174,48 +1173,6 @@ const SessionsByCountry: FC<DashboardPageData> = function ({ dashboard }) {
     );
 };
 
-const SessionsByCountryMap: FC<DashboardPageData> = function ({ dashboard }) {
-    const { mode } = useThemeMode();
-
-    const isDarkTheme = mode === "dark";
-
-    useEffect(() => {
-        const SVGMap = require("svgmap");
-        const previousMap =
-            document.getElementsByClassName("svgMap-map-wrapper")[0];
-        previousMap?.parentElement?.removeChild(previousMap);
-
-        new SVGMap({
-            targetElementID: "map",
-            colorMin: "#A4CAFE",
-            colorMax: "#1A56DB",
-            colorNoData: isDarkTheme ? "#4B5563" : "#D1D5DB",
-            flagType: "image",
-            flagURL:
-                "https://flowbite.com/application-ui/demo/images/flags/{0}.svg",
-            data: {
-                data: {
-                    visitors: {
-                        name: "Visitors:",
-                        format: "{0}",
-                        thousandSeparator: ",",
-                        thresholdMax: 500000,
-                        thresholdMin: 0,
-                    },
-                    change: {
-                        name: "Change:",
-                        format: "{0} %",
-                    },
-                },
-                applyData: "visitors",
-                values: dashboard.sessionsByCountryMap,
-            },
-        });
-    }, [dashboard.sessionsByCountryMap, isDarkTheme]);
-
-    return <div id="map" className="my-6" />;
-};
-
 const LatestCustomers: FC<DashboardPageData> = function ({ dashboard }) {
     return (
         <div className="mb-4 h-full rounded-lg bg-white p-4 shadow sm:p-6 dark:bg-gray-800">
@@ -1297,9 +1254,6 @@ const AcquisitionOverview: FC<DashboardPageData> = function ({ dashboard }) {
             <h3 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
                 Acquisition Overview
             </h3>
-            <div className="my-6">
-                <AcquisitionApexChart dashboard={dashboard} />
-            </div>
             <div className="flex flex-col">
                 <div className="overflow-x-auto rounded-lg">
                     <div className="inline-block min-w-full align-middle">
@@ -1388,88 +1342,6 @@ const AcquisitionOverview: FC<DashboardPageData> = function ({ dashboard }) {
                 </div>
             </div>
         </div>
-    );
-};
-
-const AcquisitionApexChart: FC<DashboardPageData> = function ({ dashboard }) {
-    const { mode } = useThemeMode();
-    const isDarkTheme = mode === "dark";
-
-    const options: ApexCharts.ApexOptions = {
-        labels: dashboard.acquisitionOverview.labels,
-        colors: [
-            "#16BDCA",
-            "#FDBA8C",
-            "#1A56DB",
-            "#D61F69",
-            "#9061F9",
-            "#6875F5",
-        ],
-        chart: {
-            fontFamily: "Inter, sans-serif",
-            toolbar: {
-                show: false,
-            },
-        },
-        stroke: {
-            colors: [isDarkTheme ? "#111827" : "#fff"],
-        },
-        plotOptions: {
-            pie: {
-                donut: {
-                    size: "5%",
-                },
-            },
-        },
-        states: {
-            hover: {
-                filter: {
-                    type: "darken",
-                    value: 0.9,
-                },
-            },
-        },
-        tooltip: {
-            shared: true,
-            followCursor: false,
-            fillSeriesColor: false,
-            inverseOrder: true,
-            style: {
-                fontSize: "14px",
-                fontFamily: "Inter, sans-serif",
-            },
-            x: {
-                show: true,
-                formatter: function (_, { seriesIndex, w }) {
-                    const label = w.config.labels[seriesIndex];
-                    return label;
-                },
-            },
-            y: {
-                formatter: function (value) {
-                    return value + "%";
-                },
-            },
-        },
-        grid: {
-            show: false,
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: false,
-        },
-    };
-    const series = dashboard.acquisitionOverview.series;
-
-    return (
-        <ApexChart
-            height={305}
-            options={options}
-            series={series}
-            type="donut"
-        />
     );
 };
 

@@ -16,7 +16,6 @@ import {
     TextInput,
     Tooltip,
 } from "flowbite-react";
-import React from "react";
 import {
     HiArchive,
     HiBell,
@@ -38,7 +37,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function DashboardNavbar() {
     const sidebar = useAppSelector((state) => state.base.sidebar);
-    const { user } = useAppSelector((state) => state.auth);
+    // const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
 
