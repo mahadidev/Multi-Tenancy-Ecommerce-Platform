@@ -7,10 +7,16 @@ use App\Http\Controllers\ArtisanController;
 Route::get('/', function () {
     return view("welcome");
 });
-Route::get('/login', function () {
-    return view("app");
+Route::prefix('/seller')->group(function () {
+    Route::get("/", function () {
+        return view("seller");
+    });
+
+    Route::any('/{any}', function () {
+        return view("seller");
+    })->where('any', '.*');
 });
 
-Route::get('/deploy', [ArtisanController::class, 'run'])->name('deploy');
-Route::get('/select-store', [FilamentController::class, 'store'])->name('seller.store')->middleware('auth');
-Route::post('/select-store/switch', [FilamentController::class, 'storeSwitch'])->name('seller.store.switch')->middleware('auth');
+// Route::get('/deploy', [ArtisanController::class, 'run'])->name('deploy');
+// Route::get('/select-store', [FilamentController::class, 'store'])->name('seller.store')->middleware('auth');
+// Route::post('/select-store/switch', [FilamentController::class, 'storeSwitch'])->name('seller.store.switch')->middleware('auth');

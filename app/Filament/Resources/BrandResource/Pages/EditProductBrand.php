@@ -6,7 +6,7 @@ use App\Filament\Resources\BrandResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditBrand extends EditRecord
+class EditProductBrand extends EditRecord
 {
     protected static string $resource = BrandResource::class;
 
