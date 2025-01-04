@@ -19,7 +19,7 @@ const initialState: {
         },
     },
 };
-export const baseSlice = createSlice({
+export const baseSlice: any = createSlice({
     name: "base",
     initialState,
     reducers: {
