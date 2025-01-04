@@ -1,5 +1,5 @@
-import { APP_IMAGE_URL, BASE_IMAGE_URL, BASE_URL } from "@/env";
-import { PATH_PREFIX } from "@/seller/app";
+import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
+import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
 import { useAppDispatch } from "@/seller/store";
 import {
@@ -33,7 +33,7 @@ export default function SignUpPage() {
                 })
             );
 
-            navigate(PATH_PREFIX);
+            navigate(RoutePath.dashboard);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [response]);

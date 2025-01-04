@@ -1,5 +1,5 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
-import { PATH_PREFIX } from "@/seller/app";
+import { RoutePath } from "@/seller/env";
 import { useMediaQuery } from "@/seller/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { removeAuth } from "@/seller/store/slices/authSlice";
@@ -510,7 +510,7 @@ function UserDropdown() {
             <Dropdown.Item
                 onClick={() => {
                     dispatch(removeAuth());
-                    navigate(`/login`);
+                    navigate(RoutePath.login);
                 }}
             >
                 Sign out

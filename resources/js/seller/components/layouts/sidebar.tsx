@@ -1,4 +1,4 @@
-import { PATH_PREFIX } from "@/seller/env";
+import { RoutePath } from "@/seller/env";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
     setIsOpenMobile,
@@ -478,14 +478,14 @@ function LanguageDropdown() {
 }
 
 const pages: SidebarItem[] = [
-    { href: ``, icon: HiChartPie, label: "Dashboard" },
+    { href: "/", icon: HiChartPie, label: "Dashboard" },
     // { href: "/kanban", icon: HiViewGrid, label: "Kanban" },
     // { href: "/mailing/inbox", icon: HiInboxIn, label: "Inbox", badge: "3" },
     {
         icon: HiShoppingBag,
         label: "E-commerce",
         items: [
-            { href: `/e-commerce/products`, label: "Products" },
+            { href: RoutePath.products, label: "Products" },
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],
