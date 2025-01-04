@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\SelectFilter;
 use App\Models\Store;
+use App\Exceptions\ValidationException;
+use Filament\Notifications\Notification;
 
 class SubscriberResource extends Resource
 {
@@ -44,7 +46,6 @@ class SubscriberResource extends Resource
                             ->email()
                             ->required()
                             ->maxLength(255)
-                            ->unique(Subscriber::class, 'email', ignoreRecord: true)
                             ->disabled(fn(?Subscriber $record) => $record !== null), // Disabled only for edit
 
                         Forms\Components\Select::make('store_id')
@@ -59,7 +60,9 @@ class SubscriberResource extends Resource
                             ->options([
                                 1 => 'Active',
                                 0 => 'Inactive',
-                            ]),
+                            ])
+                            ->default(1)
+                            ->required(),
                     ]),
             ]);
     }

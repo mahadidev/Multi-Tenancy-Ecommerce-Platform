@@ -41,6 +41,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Contact Routes
     Route::resource('/contact', ContactController::class);
 
+    // Subscriber Routes
+    Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
+
      
 });
 

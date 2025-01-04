@@ -8,38 +8,39 @@ use App\Models\Subscriber;
 
 class SubscriberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $store_id)
     {
-        return apiResponse(function () use ($request) {
+        return apiResponse(function () use ($request, $store_id) {
            
             $validated = $request->validate([
                 'email' => 'required|email|max:255',
+                // 'store_id' => 'required|integer',
             ]);
 
-            $validated['store_id'] = authStore();
+            // check if the email is already subscribed for the same store
+            $subscriber = Subscriber::where('email', $validated['email'])
+                ->where('store_id', $store_id)
+                ->first();
+
+            if ($subscriber) {
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'message' => 'Already subscribed',
+                        'data' => [
+                            'subscribers' => $subscriber
+                        ]
+                    ]
+                );
+            }
 
             $subscriber = Subscriber::create([
                 'email' => $validated['email'],
-                'store_id' => $validated['store_id'],
+                'store_id' => $store_id,
             ]);
 
             return response()->json(
@@ -54,35 +55,4 @@ class SubscriberController extends Controller
         });
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
