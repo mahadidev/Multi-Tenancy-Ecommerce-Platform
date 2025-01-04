@@ -10,7 +10,7 @@ const initialState: {
     user: null,
     tokenType: null,
 };
-export const authSlice: any = createSlice({
+const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
