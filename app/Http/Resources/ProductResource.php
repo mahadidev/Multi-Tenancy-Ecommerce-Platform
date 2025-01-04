@@ -22,7 +22,6 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'thumbnail' => $this->thumbnail_image,
             'attachments' => $this->attachments_image,
-            'price' => $this->price,
             'brand' => new BrandResource($this->brand),
             'category' => new CategoryResource($this->category),
             'brand' => new BrandResource($this->brand),
@@ -31,6 +30,13 @@ class ProductResource extends JsonResource
             'status' => $this->status,
             'store' => $this->store ? ['id' => $this->store->id , 'name' => $this->store->name , 'slug' => $this->store->slug  ] : null,
             'variants' => $this->variants->isNotEmpty() ? $this->variants : null,
+            'is_trending' => $this->is_trending,
+            'has_discount' => $this->has_discount,
+            'discount_to' => $this->discount_to,
+            'discount_type' => $this->discount_type,
+            'discount_amount' => $this->discount_amount,
+            'price' => $this->price,
+            'discount_price' => $this->discount_price, 
         ];
     }
 }
