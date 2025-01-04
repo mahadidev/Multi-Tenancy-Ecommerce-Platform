@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscribers', function (Blueprint $table) {
-            $table->id();
-            $table->string('email');
-            $table->boolean('status')->default(true);
-            $table->unsignedBigInteger('store_id')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            // Add a foreign key constraint
+            $table->unsignedBigInteger('store_id')->nullable()->after('name');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -26,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscribers');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('store_id');
+        });
     }
 };

@@ -205,4 +205,48 @@ class StoreController extends Controller
           
         ]);
     }
+
+    public function allStores(Request $request)
+    {
+        $stores = Store::where('status', 1)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'stores' => StoreResource::collection($stores)
+            ]
+        ]);
+    }
+
+    // without auth switch store
+    public function switchStore2(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'store_id' => 'required|int|exists:stores,id',
+        ]);
+
+        $store = Store::findOrFail($request->store_id);
+
+        // Check if a store_id exists in the session and remove it
+        if ($store && session()->has('store_id')) {
+            session()->forget('store_id');
+        }
+
+        // Store the new `store_id` in the session
+        session(['store_id' => $store->id]);
+
+        // Also set it in the request attributes
+        $request->attributes->set('store_id', $store->id);
+
+        // Return a success response with the selected store
+        return response()->json([
+            'status' => 200,
+            'message' => 'Store switched successfully.',
+            'data' => [
+                'store' => new StoreResource($store),
+            ]
+        ]);
+    }
+
 }
