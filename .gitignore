@@ -22,5 +22,5 @@ yarn-error.log
 /.vscode
 /.zed
 /trash
-
+tsconfig.tsbuildinfo
 .codegpt
