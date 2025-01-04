@@ -34,7 +34,7 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 
     if (result.error && result.error.status === 401) {
         api.dispatch(removeAuth());
-        window.location.href = `${PATH_PREFIX}/sign-in`;
+        window.location.href = `/login`;
     }
 
     return result;

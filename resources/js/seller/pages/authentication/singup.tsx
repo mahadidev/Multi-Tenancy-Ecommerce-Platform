@@ -152,7 +152,7 @@ export default function SignUpPage() {
                         <Label htmlFor="acceptTerms">
                             I accept the&nbsp;
                             <Link
-                                to={`${PATH_PREFIX}/terms-conditions`}
+                                to={`/terms-conditions`}
                                 className="text-primary-700 hover:underline dark:text-primary-500"
                             >
                                 Terms and Conditions
@@ -179,7 +179,7 @@ export default function SignUpPage() {
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Already have an account?&nbsp;
                         <Link
-                            to={`${PATH_PREFIX}/sing-in`}
+                            to={`/sing-in`}
                             className="text-primary-700 hover:underline dark:text-primary-500"
                         >
                             Login here

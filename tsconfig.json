@@ -9,7 +9,8 @@
         "skipLibCheck": true,
         "paths": {
             "@/*": ["./resources/js/*"]
-        }
+        },
+        "resolveJsonModule": true
     },
     "include": ["./resources/js"]
 }
