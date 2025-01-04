@@ -33,7 +33,7 @@ class CategoryResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('type', 'blog');
+        return parent::getEloquentQuery()->where('type', 'post');
     }
 
     public static function getNavigationSort(): ?int
@@ -47,20 +47,21 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\Card::make([
                     TextInput::make('name')->required(),
-                    Forms\Components\Select::make('store_id')
-                    ->label('Store')
-                    ->options(Store::all()->pluck('name', 'id'))
-                    ->searchable()
-                    ->required(),
+                    // Forms\Components\Select::make('store_id')
+                    // ->label('Store')
+                    // ->options(Store::all()->pluck('name', 'id'))
+                    // ->searchable()
+                    // ->required(),
                 ])->columnSpan(6),
                 Forms\Components\Card::make([
                     Select::make('type')
                         ->label('Type')
                         ->options([
-                            'blog' => 'Blog',
+                            'post' => 'Blog',
+                            // 'product' => 'Product',
                         ])
                         ->required()
-                        ->default('blog'), // Set a default value if needed
+                        ->default('post'), // Set a default value if needed
                 ])->columnSpan(6),
             ])->columns(12);
     }
@@ -71,7 +72,7 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('slug'),
-                TextColumn::make('store.name')->label('Store')->searchable()->sortable(),
+                // TextColumn::make('store.name')->label('Store')->searchable()->sortable(),
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime('d M, Y'),

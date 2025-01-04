@@ -43,7 +43,7 @@ class BrandController extends Controller
 
             $imagePath = null;
             if ($request->hasFile('image') && isset($request->image)) {
-                $imagePath = $request->file('image')->store('brand-images', 'public');
+                $imagePath = $request->file('image')->store('brands', 'public');
             }
 
             $brand = Brand::create([
@@ -101,7 +101,7 @@ class BrandController extends Controller
                 if($brand->image) {
                     Storage::disk('public')->delete($brand->image);
                 }
-                $imagePath = $request->file('image')->store('brand-images', 'public');
+                $imagePath = $request->file('image')->store('brands', 'public');
             }
 
             $brand->update([

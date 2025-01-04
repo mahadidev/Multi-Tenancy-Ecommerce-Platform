@@ -8,6 +8,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\BlogResource;
 
 
 class BlogController extends Controller
@@ -21,7 +22,10 @@ class BlogController extends Controller
             $blogs = Blog::with('category')->where('user_id', Auth::id())->latest()->get();
 
             return response()->json([
-                'blogs' => $blogs,
+                'status' => 200,
+                'data' => [
+                    'blogs' =>  BlogResource::collection($blogs),
+                ],
             ]);
         });
     }
@@ -42,7 +46,7 @@ class BlogController extends Controller
                     'exists:categories,id',
                     function ($attribute, $value, $fail) {
                         $category = Category::find($value);
-                        if ($category && $category->type !== 'blog') {
+                        if ($category && $category->type !== 'post') {
                             $fail('The selected category is not of type blog.');
                         }
                     },
@@ -63,9 +67,11 @@ class BlogController extends Controller
             ]);
 
             return response()->json([
-                'success' => true,
+                'status' => 200,
                 'message' => 'Blog created successfully',
-                'data' => $blog,
+                'data' => [
+                    'blog' => new BlogResource($blog),
+                ],
             ]);
         });
     }
@@ -87,7 +93,10 @@ class BlogController extends Controller
             }
 
             return response()->json([
-                'blog' => $blog,
+                'status' => 200,
+                'data' => [
+                    'blog' => new BlogResource($blog),
+                ],
             ]);
         });
     }
@@ -117,7 +126,7 @@ class BlogController extends Controller
                     'exists:categories,id',
                     function ($attribute, $value, $fail) {
                         $category = Category::find($value);
-                        if ($category && $category->type !== 'blog') {
+                        if ($category && $category->type !== 'post') {
                             $fail('The selected category is not of type blog.');
                         }
                     },
@@ -126,7 +135,7 @@ class BlogController extends Controller
 
             $imagePath = null;
             if ($request->hasFile('image') && isset($request->image)) {
-                if($blog->image) {
+                if ($blog->image) {
                     Storage::disk('public')->delete($blog->image);
                 }
                 $imagePath = $request->file('image')->store('blogs', 'public');
@@ -141,9 +150,11 @@ class BlogController extends Controller
             ]);
 
             return response()->json([
-                'success' => true,
+                'status' => 200,
                 'message' => 'Blog updated successfully',
-                'data' => $blog,
+                'data' => [
+                    'blog' => new BlogResource($blog),
+                ],
             ]);
         });
     }
@@ -156,14 +167,14 @@ class BlogController extends Controller
         return apiResponse(function () use ($request, $id) {
             $blog = Blog::where('user_id', Auth::id())->findOrFail($id);
 
-            if(!$blog){
+            if (!$blog) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You are not authorized to delete this blog or it does not exist.',
                 ]);
             }
 
-            if($blog->image) {
+            if ($blog->image) {
                 Storage::disk('public')->delete($blog->image);
             }
 
