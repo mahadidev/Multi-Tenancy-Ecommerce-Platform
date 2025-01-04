@@ -29,8 +29,7 @@ export default function SignInPage() {
                     user: response.data.user,
                 })
             );
-
-            navigate(PATH_PREFIX);
+            navigate("/");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [response]);
@@ -122,7 +121,7 @@ export default function SignInPage() {
                             <Label htmlFor="rememberMe">Remember me</Label>
                         </div>
                         <Link
-                            to={`${PATH_PREFIX}/forgot-password`}
+                            to={`/forgot-password`}
                             className="text-right text-sm text-primary-700 hover:underline dark:text-primary-500"
                         >
                             Lost Password?
@@ -148,7 +147,7 @@ export default function SignInPage() {
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Not registered?&nbsp;
                         <Link
-                            to={`${PATH_PREFIX}/sing-up`}
+                            to={`/sing-up`}
                             className="text-primary-700 hover:underline dark:text-primary-500"
                         >
                             Create account

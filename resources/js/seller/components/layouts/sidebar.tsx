@@ -478,14 +478,14 @@ function LanguageDropdown() {
 }
 
 const pages: SidebarItem[] = [
-    { href: `${PATH_PREFIX}`, icon: HiChartPie, label: "Dashboard" },
+    { href: ``, icon: HiChartPie, label: "Dashboard" },
     // { href: "/kanban", icon: HiViewGrid, label: "Kanban" },
     // { href: "/mailing/inbox", icon: HiInboxIn, label: "Inbox", badge: "3" },
     {
         icon: HiShoppingBag,
         label: "E-commerce",
         items: [
-            { href: `${PATH_PREFIX}/e-commerce/products`, label: "Products" },
+            { href: `/e-commerce/products`, label: "Products" },
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],
@@ -536,7 +536,7 @@ const externalPages: SidebarItem[] = [
         icon: FaPaintBrush,
         label: "Appearance",
         items: [
-            { href: `${PATH_PREFIX}/appearance/themes`, label: "Themes" },
+            { href: `/appearance/themes`, label: "Themes" },
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],

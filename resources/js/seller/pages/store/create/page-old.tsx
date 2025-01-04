@@ -1,88 +1,48 @@
-import { BASE_IMAGE_URL } from "@/env";
-import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
+"use client";
+
+import { BlockBreadcrumb } from "@/seller/components/blocks/block-breadcrumb";
+import { BlockSection } from "@/seller/components/blocks/block-section";
 import React from "react";
-import { HiLockOpen } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { AccountDetailsUserOnboarding } from "./account-details";
+import { ChooseAccountTypeUserOnboarding } from "./account-type";
+import { EmailVerificationSixDigitCode } from "./email-verification";
+import { SuccessMessageUserOnboarding } from "./success-message";
 
 export default function StoreCreatePage() {
     return (
-        <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
-            <Link
-                to="/"
-                className="mb-8 flex items-center justify-center text-2xl font-semibold lg:mb-10 dark:text-white"
+        <>
+            <BlockBreadcrumb
+                title="User Onboarding"
+                description="Use a collection of user onboarding pages to increase the chances of the adoption of your software by improving the introduction phase of your product."
+            />
+            <BlockSection
+                title="Choose account type"
+                description="Use this example as the first step of the user onboarding process to ask what type of account would your user like to create (ie. business or individual)."
+                githubLink="https://github.com/themesberg/flowbite-react-blocks/blob/main/pages/marketing-ui/headers/default.tsx"
             >
-                <img
-                    alt=""
-                    src={`${BASE_IMAGE_URL}/logos/logo-black.png`}
-                    width={43}
-                    height={44}
-                    className="mr-4 h-11 w-auto dark:hidden"
-                />
-                <img
-                    alt=""
-                    src={`${BASE_IMAGE_URL}/logos/logo-white.png`}
-                    width={43}
-                    height={44}
-                    className="mr-4 h-11 w-auto hidden dark:block"
-                />
-            </Link>
-            <Card
-                className="w-full sm:max-w-screen-sm md:max-w-screen-sm md:flex-row"
-                theme={{ root: { children: "w-full p-6 sm:p-8 md:p-16" } }}
+                <ChooseAccountTypeUserOnboarding />
+            </BlockSection>
+            <BlockSection
+                title="Account details"
+                description="Use this step from the user onboarding process to ask for details such as the email address, full name, password, country and phone number."
+                githubLink="https://github.com/themesberg/flowbite-react-blocks/blob/main/pages/marketing-ui/headers/centered.tsx"
             >
-                <div className="flex space-x-4">
-                    <img
-                        alt=""
-                        width={32}
-                        height={32}
-                        src="/images/users/bonnie-green.png"
-                        className="h-8 w-8 rounded-full"
-                    />
-                    <h2 className="mb-3 text-2xl font-bold text-gray-900 lg:text-3xl dark:text-white">
-                        Bonnie Green
-                    </h2>
-                </div>
-                <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Better to be safe than sorry.
-                </p>
-                <form className="mt-8 space-y-6">
-                    <div className="flex flex-col gap-y-2">
-                        <Label htmlFor="password">Your password</Label>
-                        <TextInput
-                            id="password"
-                            name="password"
-                            placeholder="••••••••"
-                            type="password"
-                        />
-                    </div>
-                    <div className="flex items-center gap-x-3">
-                        <Checkbox id="acceptTerms" name="acceptTerms" />
-                        <Label htmlFor="acceptTerms">
-                            I accept the&nbsp;
-                            <Link
-                                to="#"
-                                className="text-primary-700 hover:underline dark:text-primary-500"
-                            >
-                                Terms and Conditions
-                            </Link>
-                        </Label>
-                    </div>
-                    <div>
-                        <Button
-                            size="lg"
-                            color="blue"
-                            type="submit"
-                            theme={{
-                                inner: { base: "flex items-center px-5 py-3" },
-                            }}
-                            className="w-full px-0 py-px sm:w-auto"
-                        >
-                            <HiLockOpen className="mr-2 text-xl" />
-                            Unlock
-                        </Button>
-                    </div>
-                </form>
-            </Card>
-        </div>
+                <AccountDetailsUserOnboarding />
+            </BlockSection>
+            <BlockSection
+                title="Email verification with 6-digit code"
+                description="Use this page to verify the email address of the user by sending a 6-digit code that has to be applied to this page before the account can be activated."
+                githubLink="https://github.com/themesberg/flowbite-react-blocks/blob/main/pages/marketing-ui/headers/dropdown.tsx"
+            >
+                <EmailVerificationSixDigitCode />
+            </BlockSection>
+            <BlockSection
+                title="Success message"
+                description="Use the success message page as the last step of the onboarding process before the user can access their application dashboard interface and log into their account."
+                githubLink="https://github.com/themesberg/flowbite-react-blocks/blob/main/pages/marketing-ui/headers/sub-navbar.tsx"
+            >
+                <SuccessMessageUserOnboarding />
+            </BlockSection>
+        </>
     );
 }

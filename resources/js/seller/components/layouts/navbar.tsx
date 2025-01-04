@@ -510,7 +510,7 @@ function UserDropdown() {
             <Dropdown.Item
                 onClick={() => {
                     dispatch(removeAuth());
-                    navigate(`${PATH_PREFIX}/sing-in`);
+                    navigate(`/login`);
                 }}
             >
                 Sign out
