@@ -17,22 +17,22 @@ export default function SignInPage() {
         errors: error,
     });
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    // useEffect(() => {
-    //     if (response) {
-    //         dispatch(
-    //             setAuth({
-    //                 access_token: response.data.access_token,
-    //                 token_type: response.data.token_type,
-    //                 user: response.data.user,
-    //             })
-    //         );
-    //         // navigate(RoutePath.dashboard);
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [isSuccess, response]);
+    useEffect(() => {
+        if (response) {
+            dispatch(
+                setAuth({
+                    access_token: response.data.access_token,
+                    token_type: response.data.token_type,
+                    user: response.data.user,
+                })
+            );
+            navigate(RoutePath.dashboard);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSuccess, response]);
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
