@@ -24,3 +24,4 @@ yarn-error.log
 /trash
 tsconfig.tsbuildinfo
 .codegpt
+.npmrc
