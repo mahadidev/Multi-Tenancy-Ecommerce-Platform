@@ -5,7 +5,7 @@ import {
     toggleIsOpenMobile,
 } from "@/seller/store/slices/baseSlice";
 import type { PropsWithChildren } from "react";
-import React, { createContext, useContext, useState } from "react";
+import { createContext } from "react";
 
 interface SidebarContextProps {
     desktop: {
@@ -23,7 +23,6 @@ interface SidebarContextProps {
 const SidebarContext = createContext<SidebarContextProps | null>(null);
 
 export function SidebarProvider({
-    initialCollapsed,
     children,
 }: PropsWithChildren<{ initialCollapsed: boolean }>) {
     const { isOpenMobile } = useAppSelector(

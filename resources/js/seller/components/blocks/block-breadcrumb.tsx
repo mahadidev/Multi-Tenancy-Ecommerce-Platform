@@ -1,5 +1,4 @@
 import { Breadcrumb } from "flowbite-react";
-import React from "react";
 import { HiHome } from "react-icons/hi";
 import type { BlockSectionProps } from "./block-section";
 

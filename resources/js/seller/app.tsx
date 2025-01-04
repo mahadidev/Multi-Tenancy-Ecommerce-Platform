@@ -1,5 +1,4 @@
 import { AuthLayout, DashboardLayout } from "@/seller/components";
-import React from "react";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import SignInPage from "./pages/authentication/singIn";
 import SignUpPage from "./pages/authentication/singup";

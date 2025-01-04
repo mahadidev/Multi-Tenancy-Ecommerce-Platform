@@ -1,6 +1,5 @@
 import SearchBgMobile from "@/frontend/assets/images/search-bg-mobile.jpg";
 import SearchBg from "@/frontend/assets/images/search-bg.jpg";
-import React from "react";
 
 const IntroSection = () => {
     return (

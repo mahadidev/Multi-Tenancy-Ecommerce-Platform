@@ -1,10 +1,7 @@
 import { BASE_IMAGE_URL } from "@/env";
-import { BlockBreadcrumb } from "@/seller/components/blocks/block-breadcrumb";
-import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import React, { useState } from "react";
-import { HiLockOpen } from "react-icons/hi";
+import { Card } from "flowbite-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChooseAccountTypeUserOnboarding } from "./account-type";
 import StepOne from "./stepOne";
 import StepThree from "./stepThree";
 import StepTwo from "./stepTwo";

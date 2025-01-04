@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Define the initial state using that type
-interface BaseStateType {
+const initialState: {
     sidebar: {
         desktop: {
             isCollapsed: boolean;
@@ -10,9 +9,7 @@ interface BaseStateType {
             isOpenMobile: boolean;
         };
     };
-}
-
-const initialState: BaseStateType = {
+} = {
     sidebar: {
         desktop: {
             isCollapsed: false,
