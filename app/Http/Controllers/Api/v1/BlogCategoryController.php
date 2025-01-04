@@ -25,6 +25,7 @@ class BlogCategoryController extends Controller
             $categories = $query->get();
 
             return response()->json([
+                'status' => 200,
                 'categories' => CategoryResource::collection($categories),
             ]);
         });
@@ -38,7 +39,7 @@ class BlogCategoryController extends Controller
         return apiResponse(function () use ($request) {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'type' => 'required|string|max:50|in:post,blog', // Correct format for 'in' rule
+                'type' => 'required|string|max:50|in:post,product', // Correct format for 'in' rule
             ]);
 
             $validated['store_id'] = authStore();
@@ -86,7 +87,7 @@ class BlogCategoryController extends Controller
 
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'type' => 'required|string|max:50|in:post,blog', // Correct format for 'in' rule
+                'type' => 'required|string|max:50|in:post,product', // Correct format for 'in' rule
             ]);
 
             // Update the category

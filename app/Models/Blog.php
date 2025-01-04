@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Blog extends Model
 {
@@ -18,8 +19,9 @@ class Blog extends Model
         'image',
         'content',
         'status',
-
     ];
+
+    // protected $appends = ['blog_image'];
 
     public function category()
     {
@@ -48,6 +50,11 @@ class Blog extends Model
                 $blog->slug = Str::slug($blog->title);
             }
         });
+    }
+
+    public function getBlogImageAttribute()
+    {
+        return $this->image ? url(Storage::url($this->image)) : null;
     }
     
 }

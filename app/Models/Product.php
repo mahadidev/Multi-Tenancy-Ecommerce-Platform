@@ -24,7 +24,12 @@ class Product extends Model
         'has_variants',
         'has_in_stocks',
         'status',
-        'attachments'
+        'attachments',
+        'is_trending',
+        'has_discount',
+        'discount_to',
+        'discount_type',
+        'discount_amount',
     ];
 
     protected $casts = [
@@ -100,22 +105,29 @@ class Product extends Model
         return [];
     }
 
-
     // The following functions will be used in the frontend sections
 
     public function getDiscountPriceAttribute()
     {
-        $price = $this->attributes['price'];
-        $discount = $this->attributes['discount'];
-        $discountTo = $this->attributes['discount_to'];
-        if ($discount && $discountTo) {
+        $price = $this->attributes['price'] ?? 0;
+        $has_discount = $this->attributes['has_discount'] ?? 0;
+        $discount = $this->attributes['discount_amount'] ?? 0;
+        $discountTo = $this->attributes['discount_to'] ?? null;
+        $discountType = $this->attributes['discount_type'] ?? null;
+
+        if ($has_discount) {
             $currentDate = Carbon::today();
             $discountEndDate = Carbon::parse($discountTo);
 
             if ($currentDate->lte($discountEndDate)) {
                 // Calculate the discounted price
-                $discountedPrice = $price - ($price * ($discount / 100));
-                return $discountedPrice;
+                if ($discountType === 'percentage') {
+                    $discountedPrice = $price - ($price * ($discount / 100));
+                    return number_format($discountedPrice, 2, '.', '');
+                } else {
+                    $discountedPrice = $price - $discount;
+                    return number_format($discountedPrice, 2, '.', '');
+                }   
             }
         }
 

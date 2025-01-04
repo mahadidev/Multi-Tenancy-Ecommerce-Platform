@@ -45,7 +45,7 @@ class BrandResource extends Resource
                 Forms\Components\Card::make([
                     Forms\Components\FileUpload::make('image')
                         ->label('Brand Image')
-                        ->directory('brand-images')
+                        ->directory('brands')
                         ->disk('public')
                         ->image()
                         ->imageEditor()

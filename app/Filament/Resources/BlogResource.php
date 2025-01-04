@@ -54,9 +54,9 @@ class BlogResource extends Resource
                         ->schema([
                             Select::make('category_id')
                                 ->label('Category')
-                                ->options(Category::all()->where('type', 'blog')->pluck('name', 'id'))
+                                ->options(Category::all()->where('type', 'post')->pluck('name', 'id'))
                                 ->required(),
-                                Select::make('status')
+                            Select::make('status')
                                 ->label('Status')
                                 ->options([
                                     'active' => 'Active',
@@ -65,7 +65,7 @@ class BlogResource extends Resource
                                 ->default('active')
                                 ->required(),
                         ]),
-                   
+
                 ])->columnSpan(7),
 
                 Forms\Components\Card::make([

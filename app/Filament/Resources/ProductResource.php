@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\SelectFilter;
+use Closure;
 
 class ProductResource extends Resource
 {
@@ -32,175 +33,393 @@ class ProductResource extends Resource
     //     return 3;
     // }
 
+    // public static function form(Form $form): Form
+    // {
+    //     return $form->schema([
+    //         // Paste the entire array here
+    //         Forms\Components\Card::make('General Information')
+    //             ->schema([
+    //                 Forms\Components\Grid::make(3)
+    //                     ->schema([
+    //                         Forms\Components\Select::make('store_id')
+    //                             ->label('Store')
+    //                             ->options(Store::all()->pluck('name', 'id'))
+    //                             ->searchable()
+    //                             ->required(),
+
+    //                         Forms\Components\Select::make('category_id')
+    //                             ->label('Category')
+    //                             ->options(Category::where('type', 'product')->pluck('name', 'id'))
+    //                             ->searchable()
+    //                             ->required(),
+
+    //                         Forms\Components\Select::make('brand_id')
+    //                             ->label('Brand')
+    //                             ->options(Brand::all()->pluck('name', 'id'))
+    //                             ->searchable()
+    //                             ->required(),
+    //                     ]),
+    //             ]),
+
+    //         Forms\Components\Card::make('Product Details')
+    //             ->schema([
+    //                 Forms\Components\Grid::make(2)
+    //                     ->schema([
+    //                         Forms\Components\TextInput::make('name')
+    //                             ->required()
+    //                             ->label('Product Name')
+    //                             ->maxLength(255),
+
+    //                         Forms\Components\TextInput::make('sku')
+    //                             ->label('SKU')
+    //                             ->unique(Product::class, 'sku', ignoreRecord: true)
+    //                             ->required(),
+    //                     ]),
+
+    //                 Forms\Components\Grid::make(2)
+    //                     ->schema([
+    //                         Forms\Components\TextInput::make('stock')
+    //                             ->label('Stock Quantity')
+    //                             ->numeric()
+    //                             ->nullable(),
+
+    //                         Forms\Components\TextInput::make('price')
+    //                             ->label('Base Price')
+    //                             ->numeric()
+    //                             ->required()
+    //                             ->helperText('Leave empty if the product has variants.'),
+    //                     ]),
+
+    //                 Forms\Components\Textarea::make('description')
+    //                     ->label('Description')
+    //                     ->rows(5),
+    //             ]),
+
+    //         Forms\Components\Card::make('Media')
+    //             ->schema([
+    //                 Forms\Components\Grid::make(2)
+    //                     ->schema([
+    //                         Forms\Components\FileUpload::make('thumbnail')
+    //                             ->label('Thumbnail')
+    //                             ->disk('public')
+    //                             ->directory('products')
+    //                             ->image()
+    //                             ->imageEditor()
+    //                             ->reorderable()
+    //                             ->appendFiles()
+    //                             ->openable()
+    //                             ->downloadable()
+    //                             ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
+    //                             ->required(),
+
+    //                         Forms\Components\FileUpload::make('attachments')
+    //                             ->label('Gallery')
+    //                             ->disk('public')
+    //                             ->directory('products')
+    //                             ->image()
+    //                             ->multiple()
+    //                             ->imageEditor()
+    //                             ->reorderable()
+    //                             ->appendFiles()
+    //                             ->openable()
+    //                             ->downloadable()
+    //                             ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
+    //                             ->required(),
+    //                     ]),
+    //             ]),
+
+    //         Forms\Components\Card::make('Status and Features')
+    //             ->schema([
+    //                 Forms\Components\Grid::make(3)
+    //                     ->schema([
+    //                         Forms\Components\Toggle::make('status')
+    //                             ->label('Active Status')
+    //                             ->reactive(),
+
+    //                         Forms\Components\Toggle::make('has_variants')
+    //                             ->label('Has Variants')
+    //                             ->reactive(),
+
+    //                         Forms\Components\Toggle::make('is_trending')
+    //                             ->label('Is Trending')
+    //                             ->default(false),
+    //                     ]),
+    //             ]),
+
+    //         Forms\Components\Card::make('Discounts')
+    //             ->schema([
+    //                 Forms\Components\Grid::make(2)
+    //                     ->schema([
+    //                         Forms\Components\Toggle::make('has_discount')
+    //                             ->label('Has Discount')
+    //                             ->default(false)
+    //                             ->reactive(),
+
+    //                         Forms\Components\DateTimePicker::make('discount_to')
+    //                             ->label('Discount Until')
+    //                             ->required()
+    //                             ->hidden(fn(Forms\Get $get) => !$get('has_discount')),
+
+    //                         Forms\Components\Select::make('discount_type')
+    //                             ->label('Discount Type')
+    //                             ->options([
+    //                                 'flat' => 'Flat Amount',
+    //                                 'percentage' => 'Percentage',
+    //                             ])
+    //                             ->required()
+    //                             ->reactive()
+    //                             ->hidden(fn(Forms\Get $get) => !$get('has_discount')),
+
+    //                         Forms\Components\TextInput::make('discount_amount')
+    //                             ->label(fn(Forms\Get $get) => $get('discount_type') === 'percentage' ? 'Discount Percentage' : 'Discount Amount')
+    //                             ->numeric()
+    //                             ->required()
+    //                             ->rules([
+    //                                 fn(Forms\Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
+    //                                     if ($get('discount_type') === 'percentage' && $value > 100) {
+    //                                         $fail('Percentage discount cannot be more than 100%.');
+    //                                     }
+    //                                 },
+    //                             ])
+    //                             ->hidden(fn(Forms\Get $get) => !$get('has_discount')),
+    //                     ]),
+    //             ]),
+
+    //         Forms\Components\Card::make('Variants')
+    //             ->schema([
+    //                 Forms\Components\Repeater::make('variants')
+    //                     ->label('Variants')
+    //                     ->relationship('variants')
+    //                     ->schema([
+    //                         Forms\Components\TextInput::make('label')
+    //                             ->label('Variant Label')
+    //                             ->required()
+    //                             ->hint('e.g., Color, Size, Wholesale Package'),
+
+    //                         Forms\Components\Repeater::make('options')
+    //                             ->label('Options')
+    //                             ->schema([
+    //                                 Forms\Components\TextInput::make('label')
+    //                                     ->label('Option Label')
+    //                                     ->required(),
+    //                                 Forms\Components\TextInput::make('code')
+    //                                     ->label('Option Code')
+    //                                     ->nullable()
+    //                                     ->hint('Only applicable for color variants'),
+    //                                 Forms\Components\TextInput::make('price')
+    //                                     ->label('Price')
+    //                                     ->numeric()
+    //                                     ->required()
+    //                                     ->hint('Specify the price for this option'),
+    //                                 Forms\Components\TextInput::make('qty_stock')
+    //                                     ->label('Stock Quantity')
+    //                                     ->numeric()
+    //                                     ->required()
+    //                                     ->hint('Specify the stock quantity for this option'),
+    //                             ])
+    //                             ->columns(2)
+    //                             ->required()
+    //                             ->minItems(1)
+    //                     ])
+    //                     ->columns(1)
+    //                     ->label('More Variants')
+    //                     ->hidden(fn(Forms\Get $get) => !$get('has_variants')),
+    //             ]),
+
+    //     ]);
+    // }
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\Card::make()
-                    ->schema([
-                        Forms\Components\Grid::make(3)
-                            ->schema([
-                                // Left Column
-                                Forms\Components\Select::make('store_id')
-                                    ->label('Store')
-                                    ->options(Store::all()->pluck('name', 'id'))
-                                    ->searchable()
-                                    ->required(),
+        return $form->schema([
+            Forms\Components\Grid::make(12)
+                ->schema([
+                    Forms\Components\Card::make('Product Details')
+                        ->schema([
 
-                                Forms\Components\Select::make('category_id')
-                                    ->label('Category')
-                                    ->options(Category::where('type', 'product')->pluck('name', 'id'))
-                                    ->searchable()
-                                    ->required(),
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->label('Product Name')
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('sku')
+                                ->label('SKU')
+                                ->unique(Product::class, 'sku', ignoreRecord: true)
+                                ->required(),
+                            Forms\Components\Grid::make(2)
+                                ->schema([
+                                    Forms\Components\TextInput::make('stock')
+                                        ->label('Stock Quantity')
+                                        ->numeric()
+                                        ->nullable(),
 
-                                Forms\Components\Select::make('brand_id')
-                                    ->label('Brand')
-                                    ->options(Brand::all()->pluck('name', 'id'))
-                                    ->searchable()
-                                    ->required(),
+                                    Forms\Components\TextInput::make('price')
+                                        ->label('Base Price')
+                                        ->numeric()
+                                        ->required()
+                                        ->helperText('Leave empty if the product has variants.'),
+                                ]),
+                        ])->columnSpan(6),
 
-                            ]),
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                // Left Column
-                                // Forms\Components\Select::make('store_id')
-                                //     ->label('Store')
-                                //     ->options(Store::all()->pluck('name', 'id'))
-                                //     ->searchable()
-                                //     ->required(),
-
-                                // Forms\Components\Select::make('category_id')
-                                //     ->label('Category')
-                                //     ->options(Category::where('type', 'product')->pluck('name', 'id'))
-                                //     ->searchable()
-                                //     ->required(),
-
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->label('Product Name')
-                                    ->maxLength(255),
-
-                                Forms\Components\TextInput::make('sku')
-                                    ->label('SKU')
-                                    ->unique(Product::class, 'sku', ignoreRecord: true)
-                                    ->required(),
-
-                                Forms\Components\TextInput::make('stock')
-                                    ->label('Stock Quantity')
-                                    ->numeric()
-                                    ->nullable(),
-
-                                Forms\Components\TextInput::make('price')
-                                    ->label('Base Price')
-                                    ->numeric()
-                                    ->required()
-                                    ->helperText('Leave empty if the product has variants.'),
-
-
-                            ]),
-                        Forms\Components\Textarea::make('description')
-                            ->label('Description')
-                            ->rows(5),
-
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\FileUpload::make('thumbnail')
-                                    ->label('Thumbnail')
-                                    ->disk('public')
-                                    ->directory('products')
-                                    ->image()
-                                    ->imageEditor()
-                                    ->reorderable()
-                                    ->appendFiles()
-                                    ->openable()
-                                    ->downloadable()
-                                    ->imageEditorAspectRatios([
-                                        '16:9',
-                                        '4:3',
-                                        '1:1',
-                                    ])
-                                    ->required(),
-
-                                Forms\Components\FileUpload::make('attachments')
-                                    ->label('Gallery')
-                                    ->disk('public')
-                                    ->directory('products')
-                                    ->image()
-                                    ->multiple()
-                                    ->imageEditor()
-                                    ->reorderable()
-                                    ->appendFiles()
-                                    ->openable()
-                                    ->downloadable()
-                                    ->imageEditorAspectRatios([
-                                        '16:9',
-                                        '4:3',
-                                        '1:1',
-                                    ])
-                                    ->required(),
-                            ]),
-
-
-
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-
-                                Forms\Components\Toggle::make('status')
-                                    ->label('Active Status')
-                                    ->reactive(),
-
-                                Forms\Components\Toggle::make('has_variants')
-                                    ->label('Has Variants')
-                                    ->reactive(),
-                                Forms\Components\Toggle::make('has_in_stocks')
-                                    ->label('Has in Stocks')
-                                    ->reactive(),
-
-
-                            ]),
-
-                      
-                        Forms\Components\Repeater::make('variants')
-                            ->label('Variants')
-                            ->relationship('variants')
-                            ->schema([
-                                Forms\Components\TextInput::make('label')
-                                    ->label('Variant Label')
-                                    ->required()
-                                    ->hint('e.g., Color, Size, Wholesale Package'),
-
-                                Forms\Components\Repeater::make('options')
-                                    ->label('Options')
-                                    ->schema([
-                                            Forms\Components\TextInput::make('label')
-                                                ->label('Variant Label')
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\Card::make('General Information')
+                                ->schema([
+                                    Forms\Components\Select::make('store_id')
+                                        ->label('Store')
+                                        ->options(Store::all()->pluck('name', 'id'))
+                                        ->searchable()
+                                        ->required(),
+                                    Forms\Components\Grid::make(2)
+                                        ->schema([
+                                            Forms\Components\Select::make('category_id')
+                                                ->label('Category')
+                                                ->options(Category::where('type', 'product')->pluck('name', 'id'))
+                                                ->searchable()
                                                 ->required(),
-                                            Forms\Components\TextInput::make('code')
-                                                ->label('Variant Code')
-                                                ->nullable()
-                                                ->hint('Only applicable for color variants'),
-                                            Forms\Components\TextInput::make('price')
-                                                ->label('Price')
-                                                ->numeric()
-                                                ->required()
-                                                ->hint('Specify the price for this option'),
-                                            Forms\Components\TextInput::make('qty_stock')
-                                                ->label('Stock Quantity')
-                                                ->numeric()
-                                                ->required()
-                                                ->hint('Specify the stock quantity for this option'),
-                                    ])
-                                    ->columns(2)
-                                    ->required()
-                                    ->minItems(1)
-                            ])
-                            ->columns(1)
-                            ->label('More Variant')
-                            ->hidden(fn(Forms\Get $get) => !$get('has_variants')),
+
+                                            Forms\Components\Select::make('brand_id')
+                                                ->label('Brand')
+                                                ->options(Brand::all()->pluck('name', 'id'))
+                                                ->searchable()
+                                                ->required(),
+                                        ]),
+                                ]),
+                            Forms\Components\Card::make('Status and Trending')
+                                ->schema([
+                                    Forms\Components\Grid::make(2)
+                                        ->schema([
+                                            Forms\Components\Toggle::make('status')
+                                                ->label('Active Status')
+                                                ->reactive(),
+
+                                            Forms\Components\Toggle::make('is_trending')
+                                                ->label('Is Trending')
+                                                ->default(false),
+                                        ]),
+                                ]),
+                        ])->columnSpan(6),
+                ]),
+
+            // Full-width description
+            Forms\Components\Card::make('Description')
+                ->schema([
+                    Forms\Components\Textarea::make('description')
+                        ->label('Description')
+                        ->rows(5),
+                ]),
 
 
-                    ]),
-            ]);
+            Forms\Components\Card::make('Media')
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\FileUpload::make('thumbnail')
+                                ->label('Thumbnail')
+                                ->disk('public')
+                                ->directory('products')
+                                ->image()
+                                ->imageEditor()
+                                ->reorderable()
+                                ->appendFiles()
+                                ->openable()
+                                ->downloadable()
+                                ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
+                                ->required(),
+
+                            Forms\Components\FileUpload::make('attachments')
+                                ->label('Gallery')
+                                ->disk('public')
+                                ->directory('products')
+                                ->image()
+                                ->multiple()
+                                ->imageEditor()
+                                ->reorderable()
+                                ->appendFiles()
+                                ->openable()
+                                ->downloadable()
+                                ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
+                                ->required(),
+                        ]),
+                ]),
+
+            Forms\Components\Card::make('Variants')
+                ->schema([
+                            Forms\Components\Toggle::make('has_variants')
+                                ->label('Has Variants')
+                                ->reactive(),
+                            Forms\Components\Repeater::make('variants')
+                                ->label('Variants')
+                                ->relationship('variants')
+                                ->schema([
+                                    Forms\Components\TextInput::make('label')
+                                        ->label('Variant Label')
+                                        ->required()
+                                        ->hint('e.g., Color, Size, Wholesale Package'),
+
+                                    Forms\Components\Repeater::make('options')
+                                        ->label('Options')
+                                        ->schema([
+                                                    Forms\Components\TextInput::make('label')
+                                                        ->label('Option Label')
+                                                        ->required(),
+                                                    Forms\Components\TextInput::make('code')
+                                                        ->label('Option Code')
+                                                        ->nullable()
+                                                        ->hint('Only applicable for color variants'),
+                                                    Forms\Components\TextInput::make('price')
+                                                        ->label('Price')
+                                                        ->numeric()
+                                                        ->required()
+                                                        ->hint('Specify the price for this option'),
+                                                    Forms\Components\TextInput::make('qty_stock')
+                                                        ->label('Stock Quantity')
+                                                        ->numeric()
+                                                        ->required()
+                                                        ->hint('Specify the stock quantity for this option'),
+                                        ])
+                                        ->required()
+                                        ->minItems(1)
+                                ])
+                                ->columns(1)
+                                ->hidden(fn(Forms\Get $get) => !$get('has_variants')),
+
+                ])->columnSpan(7),
+            Forms\Components\Card::make('Discounts')
+                ->schema([
+                    Forms\Components\Toggle::make('has_discount')
+                        ->label('Has Discount')
+                        ->default(false)
+                        ->reactive(),
+
+                    Forms\Components\DateTimePicker::make('discount_to')
+                        ->label('Discount Until')
+                        ->required()
+                        ->hidden(fn(Forms\Get $get) => !$get('has_discount')),
+
+                    Forms\Components\Select::make('discount_type')
+                        ->label('Discount Type')
+                        ->options([
+                            'flat' => 'Flat Amount',
+                            'percentage' => 'Percentage(%)',
+                        ])
+                        ->required()
+                        ->reactive()
+                        ->hidden(fn(Forms\Get $get) => !$get('has_discount')),
+
+                    Forms\Components\TextInput::make('discount_amount')
+                        ->label(fn(Forms\Get $get) => $get('discount_type') === 'percentage' ? 'Discount Percentage' : 'Discount Amount')
+                        ->hint(fn(Forms\Get $get) => $get('discount_type') === 'percentage' ? 'Percentage cannot be more than 100%.' : '')
+                        ->numeric()
+                        ->required()
+                        ->rules([
+                            fn(Forms\Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
+                                if ($get('discount_type') === 'percentage' && $value > 100) {
+                                    $fail('Discount Percentage cannot be more than 100%.');
+                                }
+                            },
+                        ])
+                        ->hidden(fn(Forms\Get $get) => !$get('has_discount')),
+                ])->columnSpan(5),
+        ])->columns(12);
     }
 
     public static function table(Table $table): Table
