@@ -21,7 +21,7 @@ class StoreController extends Controller
         // Return success response
          return response()->json([
             'status' => 200,
-            'message' => 'Store created successfully.',
+            // 'message' => 'Store created successfully.',
             'data'    => [
                 'stores' => StoreResource::collection($stores),
             ]
