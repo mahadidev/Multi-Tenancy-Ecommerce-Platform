@@ -6,6 +6,7 @@ import { HiLockOpen } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { ChooseAccountTypeUserOnboarding } from "./account-type";
 import StepOne from "./stepOne";
+import StepThree from "./stepThree";
 import StepTwo from "./stepTwo";
 
 export default function StoreCreatePage() {
@@ -108,6 +109,9 @@ export default function StoreCreatePage() {
                         )}
                         {step === 2 && (
                             <StepTwo step={step} setStep={setStep} />
+                        )}
+                        {step === 3 && (
+                            <StepThree step={step} setStep={setStep} />
                         )}
                     </>
                 </div>
