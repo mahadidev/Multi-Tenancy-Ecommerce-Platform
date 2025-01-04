@@ -7,12 +7,10 @@ import DashboardPage from "./pages/dashboard/page";
 import EcommerceProductsPage from "./pages/e-commerce/products/page";
 import StoreCreatePage from "./pages/store/create/page";
 
-export const PATH_PREFIX = "/seller";
-
 const App = () => {
     return (
         <>
-            <BrowserRouter basename={PATH_PREFIX}>
+            <BrowserRouter basename={"/seller"}>
                 <Routes>
                     <Route path="/" element={<DashboardLayout />}>
                         <Route index element={<DashboardPage />} />
@@ -23,8 +21,8 @@ const App = () => {
                             />
                         </Route>
                     </Route>
-                    <Route path="store-create" element={<AuthLayout />}>
-                        <Route index element={<StoreCreatePage />} />
+                    <Route path="store" element={<AuthLayout />}>
+                        <Route path="create" element={<StoreCreatePage />} />
                     </Route>
                     <Route path="login" element={<AuthLayout />}>
                         <Route index element={<SignInPage />} />

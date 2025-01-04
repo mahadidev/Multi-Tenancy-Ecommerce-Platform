@@ -1,5 +1,5 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL, BASE_URL } from "@/env";
-import { PATH_PREFIX } from "@/seller/app";
+import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
 import { useAppDispatch } from "@/seller/store";
 import { useLoginUserMutation } from "@/seller/store/reducers/authApi";
@@ -29,7 +29,7 @@ export default function SignInPage() {
                     user: response.data.user,
                 })
             );
-            navigate("/");
+            navigate(RoutePath.dashboard);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [response]);
