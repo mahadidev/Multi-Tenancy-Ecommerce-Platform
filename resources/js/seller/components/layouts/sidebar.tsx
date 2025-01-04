@@ -1,3 +1,4 @@
+import { PATH_PREFIX } from "@/seller/env";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
     setIsOpenMobile,
@@ -6,6 +7,8 @@ import {
 import { Dropdown, Sidebar, TextInput, Tooltip } from "flowbite-react";
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from "react";
 import React, { useEffect, useState } from "react";
+import { AiFillSetting } from "react-icons/ai";
+import { FaBookmark, FaPaintBrush } from "react-icons/fa";
 import {
     HiAdjustments,
     HiChartPie,
@@ -21,6 +24,7 @@ import {
     HiUsers,
     HiViewGrid,
 } from "react-icons/hi";
+import { MdCollectionsBookmark } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
@@ -211,7 +215,7 @@ function SidebarItem({
                     <Sidebar.Item
                         key={item.label}
                         as={Link}
-                        href={item.href}
+                        to={item.href}
                         target={item.target}
                         className={twMerge(
                             "justify-center [&>*]:font-normal",
@@ -229,7 +233,7 @@ function SidebarItem({
     return (
         <Sidebar.Item
             as={Link}
-            href={href}
+            to={href}
             target={target}
             icon={icon}
             label={badge}
@@ -474,66 +478,74 @@ function LanguageDropdown() {
 }
 
 const pages: SidebarItem[] = [
-    { href: "/", icon: HiChartPie, label: "Dashboard" },
-    { href: "/kanban", icon: HiViewGrid, label: "Kanban" },
-    { href: "/mailing/inbox", icon: HiInboxIn, label: "Inbox", badge: "3" },
+    { href: `${PATH_PREFIX}`, icon: HiChartPie, label: "Dashboard" },
+    // { href: "/kanban", icon: HiViewGrid, label: "Kanban" },
+    // { href: "/mailing/inbox", icon: HiInboxIn, label: "Inbox", badge: "3" },
     {
         icon: HiShoppingBag,
         label: "E-commerce",
         items: [
-            { href: "/e-commerce/products", label: "Products" },
-            { href: "/e-commerce/billing", label: "Billing" },
-            { href: "/e-commerce/invoice", label: "Invoice" },
+            { href: `${PATH_PREFIX}/e-commerce/products`, label: "Products" },
+            // { href: "/e-commerce/billing", label: "Billing" },
+            // { href: "/e-commerce/invoice", label: "Invoice" },
         ],
     },
-    {
-        icon: HiUsers,
-        label: "Users",
-        items: [
-            { href: "/users/list", label: "Users list" },
-            { href: "/users/profile", label: "Profile" },
-            { href: "/users/feed", label: "Feed" },
-            { href: "/users/settings", label: "Settings" },
-        ],
-    },
-    {
-        icon: HiDocumentReport,
-        label: "Pages",
-        items: [
-            { href: "/pages/pricing", label: "Pricing" },
-            { href: "/pages/maintenance", label: "Maintenace" },
-            { href: "/pages/404", label: "404 not found" },
-            { href: "/pages/500", label: "500 server error" },
-        ],
-    },
-    {
-        icon: HiLockClosed,
-        label: "Authentication",
-        items: [
-            { href: "/authentication/sign-in", label: "Sign in" },
-            { href: "/authentication/sign-up", label: "Sign up" },
-            {
-                href: "/authentication/forgot-password",
-                label: "Forgot password",
-            },
-            { href: "/authentication/reset-password", label: "Reset password" },
-            { href: "/authentication/profile-lock", label: "Profile lock" },
-        ],
-    },
+    // {
+    //     icon: HiUsers,
+    //     label: "Users",
+    //     items: [
+    //         { href: "/users/list", label: "Users list" },
+    //         { href: "/users/profile", label: "Profile" },
+    //         { href: "/users/feed", label: "Feed" },
+    //         { href: "/users/settings", label: "Settings" },
+    //     ],
+    // },
+    // {
+    //     icon: HiDocumentReport,
+    //     label: "Pages",
+    //     items: [
+    //         { href: "/pages/pricing", label: "Pricing" },
+    //         { href: "/pages/maintenance", label: "Maintenace" },
+    //         { href: "/pages/404", label: "404 not found" },
+    //         { href: "/pages/500", label: "500 server error" },
+    //     ],
+    // },
+    // {
+    //     icon: HiLockClosed,
+    //     label: "Authentication",
+    //     items: [
+    //         { href: "/authentication/sign-in", label: "Sign in" },
+    //         { href: "/authentication/sign-up", label: "Sign up" },
+    //         {
+    //             href: "/authentication/forgot-password",
+    //             label: "Forgot password",
+    //         },
+    //         { href: "/authentication/reset-password", label: "Reset password" },
+    //         { href: "/authentication/profile-lock", label: "Profile lock" },
+    //     ],
+    // },
 ];
 
 const externalPages: SidebarItem[] = [
     {
-        href: "https://github.com/themesberg/flowbite-react/",
-        target: "_blank",
-        icon: HiClipboardList,
-        label: "Docs",
+        href: "/pages",
+        icon: MdCollectionsBookmark,
+        label: "Pages",
     },
     {
-        href: "https://flowbite-react.com/",
+        icon: FaPaintBrush,
+        label: "Appearance",
+        items: [
+            { href: `${PATH_PREFIX}/appearance/themes`, label: "Themes" },
+            // { href: "/e-commerce/billing", label: "Billing" },
+            // { href: "/e-commerce/invoice", label: "Invoice" },
+        ],
+    },
+    {
+        href: "https://github.com/themesberg/flowbite-react/",
         target: "_blank",
-        icon: HiCollection,
-        label: "Components",
+        icon: HiCog,
+        label: "Settings",
     },
     {
         href: "https://github.com/themesberg/flowbite-react/issues",
