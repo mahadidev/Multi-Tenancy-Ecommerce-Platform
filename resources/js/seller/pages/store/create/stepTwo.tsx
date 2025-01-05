@@ -1,16 +1,10 @@
 import { Button, Label, TextInput } from "flowbite-react";
 
-const StepTwo = ({
-    step,
-    setStep,
-}: {
-    step: number;
-    setStep: CallableFunction;
-}) => {
+const StepTwo = ({ setStep }: { step: number; setStep: CallableFunction }) => {
     return (
         <>
             <h1 className="mb-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:mb-6">
-                Store Branding {step}
+                Store Branding
             </h1>
             <div>
                 <div className="my-6 grid gap-5">
@@ -103,9 +97,9 @@ const StepTwo = ({
                         type="submit"
                         color="blue"
                         className="md:w-1/2 [&>span]:text-sm"
-                        onClick={() => setStep(2)}
+                        onClick={() => setStep(3)}
                     >
-                        Next: Account Info
+                        Next: Theme Selection
                     </Button>
                 </div>
             </div>

@@ -1,13 +1,14 @@
 import { SigninPayloadType, SigninResponseType } from "@/type/sellers/singin";
 import { SingupPayloadType, SingupResponseType } from "@/type/sellers/singup";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
+import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+import { setAuth } from "../slices/authSlice";
 
 export const authApi = createApi({
     reducerPath: "authApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: [],
+    baseQuery: baseQuery,
+    tagTypes: ["User"],
     endpoints: (builder) => ({
         loginUser: builder.mutation<any, SigninPayloadType>({
             query: (formData) =>
@@ -16,7 +17,22 @@ export const authApi = createApi({
                     method: "post",
                     body: formData,
                 }),
-            transformResponse: (response: { body: SigninResponseType }) =>
+            invalidatesTags: ["User"],
+            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
+                try {
+                    const { data: response } = await queryFulfilled;
+                    dispatch(
+                        setAuth({
+                            access_token: response.data.access_token,
+                            token_type: response.data.token_type,
+                            user: response.data.user,
+                        })
+                    );
+                } catch (err) {
+                    /* empty */
+                }
+            },
+            transformResponse: (response: { data: SigninResponseType }) =>
                 response,
             transformErrorResponse: (error: any) => error.data,
         }),
@@ -27,8 +43,24 @@ export const authApi = createApi({
                     method: "post",
                     body: formData,
                 }),
-            transformResponse: (response: { body: SingupResponseType }) =>
-                response.body,
+            invalidatesTags: ["User"],
+            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
+                try {
+                    const { data: response } = await queryFulfilled;
+
+                    dispatch(
+                        setAuth({
+                            access_token: response.data.access_token,
+                            token_type: response.data.token_type,
+                            user: response.data.user,
+                        })
+                    );
+                } catch (err) {
+                    /* empty */
+                }
+            },
+            transformResponse: (response: { data: SingupResponseType }) =>
+                response,
             transformErrorResponse: (error: any) => error.data,
         }),
     }),

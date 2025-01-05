@@ -1,16 +1,10 @@
 import { Button, Label, Select, TextInput } from "flowbite-react";
 
-const StepOne = ({
-    step,
-    setStep,
-}: {
-    step: number;
-    setStep: CallableFunction;
-}) => {
+const StepOne = ({ setStep }: { step: number; setStep: CallableFunction }) => {
     return (
         <>
             <h1 className="mb-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:mb-6">
-                Store Details {step}
+                Store Details
             </h1>
             <div>
                 <div className="my-6 grid gap-5">
