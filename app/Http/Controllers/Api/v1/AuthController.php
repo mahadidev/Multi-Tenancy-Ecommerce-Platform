@@ -367,68 +367,20 @@ class AuthController extends Controller
         ], $status);
     }
 
-
-    public function profile(Request $request)
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'User is not authenticated',
-            ], 400);
-        }
-        return response()->json([
-            'status' => 200,
-            'message' => 'User profile',
-            'data' => new UserResource($user)
-        ]);
-    }
-
     public function logout(Request $request)
     {
-        $user = Auth::user();
-        if ($user) {
-            // Auth::user()->tokens()->delete();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Logout successful',
-            ]);
-        }
-        return response()->json([
-            'status' => 400,
-            'message' => 'User is not authenticated',
-        ], 400);
-
-
-        // $user = Auth::id();
-        // return response()->json([
-        //     'status' => 200,
-        //     'message' => 'Logout successful',
-        //     'data' => $user
-        // ]);
-        // // Ensure the user is authenticated
-        // if (Auth::user()) {
-        //     // // Delete all personal access tokens for the user
-        //     // $user->tokens()->delete();
-
-        //     // // Log the user out of the application
-        //     // Auth::logout();
-
-        //     // // Invalidate the session
-        //     // $request->session()->invalidate();
-
-        //     // // Regenerate the session token to prevent CSRF attacks
-        //     // $request->session()->regenerateToken();
-
-        //     return response()->json([
-        //         'status' => 200,
-        //         'message' => 'Logout successful',
-        //     ]);
-        // }
-
-        // return response()->json([
-        //     'status' => 400,
-        //     'message' => 'User is not authenticated',
-        // ], 400);
+        return apiResponse(function () use ($request) {
+            $user = auth()->user();
+            if ($user) {
+                $user->tokens()->delete();
+                session()->flush();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Logout successful',
+                ]);
+            }
+            return $this->errorResponse('User is not authenticated', 400);
+        });
     }
+
 }
