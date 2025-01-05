@@ -100,7 +100,7 @@ const SalesChart: FC = function () {
     const opacityFrom = isDarkTheme ? 0 : 0.45;
     const opacityTo = isDarkTheme ? 0.15 : 0;
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         stroke: {
             curve: "smooth",
         },
@@ -186,7 +186,7 @@ const SalesChart: FC = function () {
                     fontSize: "14px",
                     fontWeight: 500,
                 },
-                formatter: function (value) {
+                formatter: function (value: any) {
                     return "$" + value;
                 },
             },
@@ -471,7 +471,7 @@ const VisitorsChart: FC = function () {
     const fillGradientShade = isDarkTheme ? "dark" : "light";
     const fillGradientShadeIntensity = isDarkTheme ? 0.45 : 1;
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         labels: [
             "01 Feb",
             "02 Feb",

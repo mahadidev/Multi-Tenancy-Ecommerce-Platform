@@ -94,7 +94,7 @@ const SalesApexChart: FC<DashboardPageData> = function ({ dashboard }) {
     const opacityFrom = isDarkTheme ? 0 : 0.45;
     const opacityTo = isDarkTheme ? 0.15 : 0;
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         stroke: {
             curve: "smooth",
         },
@@ -172,7 +172,7 @@ const SalesApexChart: FC<DashboardPageData> = function ({ dashboard }) {
                     fontSize: "14px",
                     fontWeight: 500,
                 },
-                formatter: function (value) {
+                formatter: function (value: any) {
                     return "$" + value;
                 },
             },
@@ -399,7 +399,7 @@ const VisitorsApexChart: FC<DashboardPageData> = function ({ dashboard }) {
     const fillGradientShade = isDarkTheme ? "dark" : "light";
     const fillGradientShadeIntensity = isDarkTheme ? 0.45 : 1;
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         labels: dashboard.visitorsThisWeek.labels,
         chart: {
             fontFamily: "Inter, sans-serif",

@@ -48,6 +48,12 @@ class ProductService
             'has_in_stocks' => 'required|boolean',
             'status' => 'required|boolean',
 
+            'is_trending' => 'nullable|boolean',
+            'has_discount' => 'nullable|boolean',
+            'discount_to' => 'nullable|date',
+            'discount_type' => 'nullable|string|in:flat,percentage',
+            'discount_amount' => 'nullable|numeric|min:0',
+
             'variants' => 'nullable|array|required_if:has_variants,1',
             'variants.*.label' => 'required|string|max:255',
             'variants.*.options' => 'required|array|min:1',
@@ -91,6 +97,11 @@ class ProductService
             'has_variants' => $validatedData['has_variants'],
             'has_in_stocks' => $validatedData['has_in_stocks'],
             'status' => $validatedData['status'] ?? 1,
+            'is_trending' => $validatedData['is_trending'],
+            'has_discount' => $validatedData['has_discount'],
+            'discount_to' => $validatedData['discount_to'],
+            'discount_type' => $validatedData['discount_type'],
+            'discount_amount' => $validatedData['discount_amount'],
         ]);
 
 
@@ -141,6 +152,13 @@ class ProductService
             'has_variants' => 'required|boolean',
             'has_in_stocks' => 'required|boolean',
             'status' => 'required|boolean',
+
+            'is_trending' => 'nullable|boolean',
+            'has_discount' => 'nullable|boolean',
+            'discount_to' => 'nullable|date',
+            'discount_type' => 'nullable|string|in:flat,percentage',
+            'discount_amount' => 'nullable|numeric|min:0',
+
             'variants' => 'nullable|array|required_if:has_variants,1',
             'variants.*.label' => 'required|string|max:255',
             'variants.*.options' => 'required|array|min:1',
@@ -188,6 +206,11 @@ class ProductService
             'has_variants' => $validatedData['has_variants'],
             'has_in_stocks' => $validatedData['has_in_stocks'],
             'status' => $validatedData['status'],
+            'is_trending' => $validatedData['is_trending'],
+            'has_discount' => $validatedData['has_discount'],
+            'discount_to' => $validatedData['discount_to'],
+            'discount_type' => $validatedData['discount_type'],
+            'discount_amount' => $validatedData['discount_amount'],
         ]);
 
         // Handle variants if present

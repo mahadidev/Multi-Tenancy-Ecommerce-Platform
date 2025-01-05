@@ -17,6 +17,6 @@ Route::prefix('/seller')->group(function () {
     })->where('any', '.*');
 });
 
-Route::get('/deploy', [ArtisanController::class, 'run'])->name('deploy');
-Route::get('/select-store', [FilamentController::class, 'store'])->name('seller.store')->middleware('auth');
-Route::post('/select-store/switch', [FilamentController::class, 'storeSwitch'])->name('seller.store.switch')->middleware('auth');
+// Route::get('/deploy', [ArtisanController::class, 'run'])->name('deploy');
+// Route::get('/select-store', [FilamentController::class, 'store'])->name('seller.store')->middleware('auth');
+// Route::post('/select-store/switch', [FilamentController::class, 'storeSwitch'])->name('seller.store.switch')->middleware('auth');

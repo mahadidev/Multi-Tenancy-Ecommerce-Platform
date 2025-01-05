@@ -22,9 +22,13 @@ class StoreResource extends JsonResource
             'phone' => $this->phone,
             'location' => $this->location,
             'status' => $this->status,
-            'logo' => $this->logo_image,
             'description' => $this->description,
             'currency' => $this->currency ?? 'BDT',
+            'logos' => [
+                'primary' => $this->logo_image,
+                'dark' =>  $this->dark_logo_image,
+            ],
+            'settings' => $this->settings
         ];
     }
 }
