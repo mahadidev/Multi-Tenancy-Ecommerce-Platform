@@ -4,7 +4,7 @@
     "name": "chunk-K6AXKMTT"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Bxr2Y5x5.css",
+    "file": "assets/app-BTZ4GvHa.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -39,7 +39,7 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-DH8tP2Wh.js",
+    "file": "assets/index-OVikVIht.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
@@ -47,7 +47,7 @@
       "_chunk-K6AXKMTT-9g0Yz8hm.js"
     ],
     "css": [
-      "assets/index-BT4nGT9k.css"
+      "assets/index-DntCwN2f.css"
     ]
   }
 }
