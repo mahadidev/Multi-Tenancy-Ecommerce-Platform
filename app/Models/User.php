@@ -34,7 +34,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         'email_verified_at',
         'store_id',
     ];
-
+    
     /**
      * The attributes that should be hidden for serialization.
      *
