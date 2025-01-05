@@ -1,21 +1,26 @@
 import { SidebarProvider } from "@/seller/contexts/sidebar-context";
+import { RoutePath } from "@/seller/env";
 import { useAppSelector } from "@/seller/store";
 import { useFetchStoresQuery } from "@/seller/store/reducers/storeApi";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { LayoutContent } from "./layout-content";
 import { DashboardNavbar } from "./navbar";
 import { DashboardSidebar } from "./sidebar";
 
 export default function DashboardLayout() {
     const { sidebar } = useAppSelector((state) => state.base);
-    const { data: stores, isLoading } = useFetchStoresQuery();
+    const { data: response, isLoading } = useFetchStoresQuery();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (stores) {
-            console.log(stores);
+        if (response) {
+            if (response.data.stores.length === 0) {
+                navigate(RoutePath.storeCreate);
+            }
         }
-    }, [isLoading, stores]);
+    }, [isLoading, navigate, response]);
 
     return (
         <SidebarProvider initialCollapsed={sidebar.desktop.isCollapsed}>

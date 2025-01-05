@@ -9,7 +9,7 @@ import baseSlice from "./slices/baseSlice";
 
 const authPersistConfig = {
     key: "site",
-    blacklist: ["authApi"],
+    blacklist: ["authApi", "storeApi"],
     storage,
 };
 
