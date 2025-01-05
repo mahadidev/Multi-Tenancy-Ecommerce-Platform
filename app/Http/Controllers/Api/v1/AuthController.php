@@ -7,6 +7,7 @@ use App\Http\Resources\StoreResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Store;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -87,15 +88,41 @@ class AuthController extends Controller
         ]);
     }
 
-    public function customerLogin(Request $request)
+    public function userLogin(Request $request)
     {
+
         $request->validate([
             'email' => 'string|required',
             'password' => 'string|required',
         ]);
 
-        // Find the user by email
+
+        if (!$request->has('store_id')) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Store ID not found',
+            ]);
+        }
+
+        $store = Store::findorfail($request->input('store_id'));
+        $storeId = $store->id;
+
+        if (!$store) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Invalid store id',
+            ]);
+        }
+
+        // Find the user by email and add the store in the user table
         $user = User::where('email', $request->email)->first();
+
+        // Check if 'store_id' is null or if the store ID doesn't exist in the array
+        if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
+            $storeIds = $user->store_id ?? []; // Use an empty array if it's null
+            $storeIds[] = $storeId; // Add the new store ID
+            $user->update(['store_id' => $storeIds]); // Update the user
+        }
 
         // Check if the user exists and the password is correct
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -114,6 +141,10 @@ class AuthController extends Controller
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        //add store_id in the session 
+        session(['store_id' => $store->id]);  // Store the new `store_id` in the session
+        $request->attributes->set('store_id', $store->id);  // Also set it in the request attributes
+
         // Return the token and user details
         return response()->json([
             'status' => 200,
@@ -122,23 +153,23 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
+                'logged_store' => new StoreResource(getStore())
             ]
         ]);
     }
 
-    public function customerRegister(Request $request)
+    public function userRegister(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|email',
             'password' => 'required|string',
             'confirm_password' => 'required|string|same:password',
-            // 'store_id' => 'required|exists:stores,id'
         ]);
 
         // check if the email is already registered for the same store
         $query = User::where('email', $request->email)
-            ->where('store_id', authStore())
+            ->whereIn('store_id', authStore())
             ->first();
 
         if ($query) {
@@ -203,7 +234,7 @@ class AuthController extends Controller
             'message' => 'User is not authenticated',
         ], 400);
 
-        
+
         // $user = Auth::id();
         // return response()->json([
         //     'status' => 200,
