@@ -1,39 +1,27 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
-import { useAppDispatch } from "@/seller/store";
 import { useRegisterUserMutation } from "@/seller/store/reducers/authApi";
-import { setAuth } from "@/seller/store/slices/authSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
-    const [handleRegister, { isLoading, error, data: response }] =
-        useRegisterUserMutation();
+    const [register, { isLoading, error }] = useRegisterUserMutation();
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
 
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        if (response) {
-            dispatch(
-                setAuth({
-                    access_token: response.data.access_token,
-                    token_type: response.data.token_type,
-                    user: response.data.user,
-                })
-            );
-
-            navigate(RoutePath.dashboard);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [response]);
+    const handleRegister = (formState: any) => {
+        register(formState).then((response: any) => {
+            if (response.data.status === 200) {
+                navigate(RoutePath.storeCreate);
+            }
+        });
+    };
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
@@ -46,7 +34,14 @@ export default function SignUpPage() {
                     src={`${BASE_IMAGE_URL}/logos/logo-black.png`}
                     width={43}
                     height={44}
-                    className="mr-4 h-11 w-auto"
+                    className="mr-4 h-11 w-auto dark:hidden"
+                />
+                <img
+                    alt=""
+                    src={`${BASE_IMAGE_URL}/logos/logo-white.png`}
+                    width={43}
+                    height={44}
+                    className="mr-4 h-11 w-auto hidden dark:block"
                 />
             </Link>
             <Card

@@ -1,38 +1,27 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
-import { useAppDispatch } from "@/seller/store";
 import { useLoginUserMutation } from "@/seller/store/reducers/authApi";
-import { setAuth } from "@/seller/store/slices/authSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SignInPage() {
-    const [handleLogin, { isLoading, error, data: response, isSuccess }] =
-        useLoginUserMutation();
+    const [login, { isLoading, error }] = useLoginUserMutation();
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
 
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        if (response) {
-            dispatch(
-                setAuth({
-                    access_token: response.data.access_token,
-                    token_type: response.data.token_type,
-                    user: response.data.user,
-                })
-            );
-            navigate(RoutePath.dashboard);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSuccess, response]);
+    const handleLogin = (formState: any) => {
+        login(formState).then((response: any) => {
+            if (response.data.status === 200) {
+                navigate(RoutePath.dashboard);
+            }
+        });
+    };
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
@@ -101,10 +90,18 @@ export default function SignInPage() {
                             placeholder="••••••••"
                             type="password"
                             value={formState["password"]}
-                            color={formErrors["password"] ? "failure" : "gray"}
+                            color={
+                                formErrors["password"] || error
+                                    ? "failure"
+                                    : "gray"
+                            }
                             helperText={
-                                formErrors["password"]
-                                    ? formErrors["password"][0]
+                                formErrors["password"] || error
+                                    ? formErrors["password"]
+                                        ? formErrors["password"][0]
+                                        : error && "message" in error
+                                        ? error.message
+                                        : false
                                     : false
                             }
                             onChange={handleChange}
@@ -127,6 +124,7 @@ export default function SignInPage() {
                             Lost Password?
                         </Link>
                     </div>
+
                     <div className="mb-6">
                         <Button
                             type="button"
