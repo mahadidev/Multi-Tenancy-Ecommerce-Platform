@@ -55,11 +55,13 @@ class UserResource extends Resource
                     ->preload()
                     ->required(),
 
-                Forms\Components\Select::make('store_id')
-                    ->label('Store')
+                Forms\Components\MultiSelect::make('store_id')
+                    ->label('Stores')
                     ->options(Store::all()->pluck('name', 'id'))
                     ->searchable()
                     ->nullable()
+                    ->dehydrateStateUsing(fn($state) => array_map('intval', $state ?? [])), // Ensure IDs are stored as integers
+            
             ]);
     }
 

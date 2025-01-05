@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,15 +21,16 @@ Route::group(['prefix' => 'v1'], function () {
     // Seller Routes
     Route::post('seller/login', [AuthController::class, 'sellerLogin']);
     Route::post('seller/register', [AuthController::class, 'sellerRegister']);
-    Route::get('seller/logout', [AuthController::class, 'profile']);
 
     // User Routes
     Route::post('user/login', [AuthController::class, 'userLogin']);
     Route::post('user/register', [AuthController::class, 'userRegister']);
-    Route::get('user/logout', [AuthController::class, 'logout']);
 
 
-
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('seller/logout', [AuthController::class, 'logout']);
+        Route::get('user/logout', [AuthController::class, 'logout']);
+    });
 });
 
 
@@ -39,5 +41,3 @@ Route::group(['prefix' => 'v1'], function () {
 
 // User Module Routes
 // Route::resource('/user', UserController::class);
-
-
