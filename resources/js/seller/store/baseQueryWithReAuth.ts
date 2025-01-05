@@ -1,5 +1,5 @@
+import { PATH_PREFIX } from "@/seller/env";
 import { FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { PATH_PREFIX } from "../app";
 import { API_URL } from "./env";
 import { RootState } from "./index";
 import { removeAuth } from "./slices/authSlice";
@@ -34,7 +34,7 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 
     if (result.error && result.error.status === 401) {
         api.dispatch(removeAuth());
-        window.location.href = `/login`;
+        window.location.href = `${PATH_PREFIX}/login`;
     }
 
     return result;

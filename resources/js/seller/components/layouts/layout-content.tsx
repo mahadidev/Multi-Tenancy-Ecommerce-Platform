@@ -1,6 +1,5 @@
 import { useAppSelector } from "@/seller/store";
 import type { PropsWithChildren } from "react";
-import React from "react";
 import { twMerge } from "tailwind-merge";
 
 export function LayoutContent({ children }: PropsWithChildren) {

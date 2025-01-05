@@ -1,0 +1,53 @@
+{
+  "_chunk-K6AXKMTT-9g0Yz8hm.js": {
+    "file": "assets/chunk-K6AXKMTT-9g0Yz8hm.js",
+    "name": "chunk-K6AXKMTT"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Bxr2Y5x5.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Xaw6OIO1.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/frontend/assets/images/search-bg-mobile.jpg": {
+    "file": "assets/search-bg-mobile-uE9uvdUB.jpg",
+    "src": "resources/js/frontend/assets/images/search-bg-mobile.jpg"
+  },
+  "resources/js/frontend/assets/images/search-bg.jpg": {
+    "file": "assets/search-bg-C0rmdiVZ.jpg",
+    "src": "resources/js/frontend/assets/images/search-bg.jpg"
+  },
+  "resources/js/frontend/index.tsx": {
+    "file": "assets/index-CLoZlB3i.js",
+    "name": "index",
+    "src": "resources/js/frontend/index.tsx",
+    "isEntry": true,
+    "imports": [
+      "_chunk-K6AXKMTT-9g0Yz8hm.js"
+    ],
+    "css": [
+      "assets/index-CuHhE1Is.css"
+    ],
+    "assets": [
+      "assets/search-bg-mobile-uE9uvdUB.jpg",
+      "assets/search-bg-C0rmdiVZ.jpg"
+    ]
+  },
+  "resources/js/seller/index.tsx": {
+    "file": "assets/index-DH8tP2Wh.js",
+    "name": "index",
+    "src": "resources/js/seller/index.tsx",
+    "isEntry": true,
+    "imports": [
+      "_chunk-K6AXKMTT-9g0Yz8hm.js"
+    ],
+    "css": [
+      "assets/index-BT4nGT9k.css"
+    ]
+  }
+}

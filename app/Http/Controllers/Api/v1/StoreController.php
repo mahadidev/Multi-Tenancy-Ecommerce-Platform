@@ -56,6 +56,8 @@ class StoreController extends Controller
             'location' => 'required|string|max:255',
             'currency' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'settings' => 'nullable|array',
         ]);
 
 
@@ -63,6 +65,11 @@ class StoreController extends Controller
         $logoPath = null;
         if ($request->hasFile('logo') && isset($request->logo)) {
             $logoPath = $request->file('logo')->store('stores', 'public');
+        }
+
+        $darkLogoPath = null;
+        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
+            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
         }
 
         // Create a new store record
@@ -76,7 +83,9 @@ class StoreController extends Controller
             'location' => $request->location,
             'currency' => $request->currency,
             'logo' =>  $logoPath,
+            'dark_logo' =>  $darkLogoPath,
             'status'   => $request->status ?? 1,
+            'settings' => $request->settings ?? null
         ]);
 
         // Return success response
@@ -101,12 +110,19 @@ class StoreController extends Controller
             'location' => 'required|string|max:255',
             'currency' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'settings' => 'nullable|array',
         ]);
 
          // Handle the logo file upload if present
          $logoPath = null;
          if ($request->hasFile('logo') && isset($request->logo)) {
              $logoPath = $request->file('logo')->store('stores', 'public');
+         }
+
+         $darkLogoPath = null;
+         if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
+             $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
          }
 
         // Update the store record
@@ -117,8 +133,10 @@ class StoreController extends Controller
             'phone'    => $request->phone,
             'location' => $request->location,
             'currency' => $request->currency,
-            'logo' => $logoPath,
             'status'   => $request->status ?? $store->status, // Retain the existing status if not provided
+            'logo' => $logoPath,
+            'dark_logo' =>  $darkLogoPath,
+            'settings' => $request->settings ?? $store->settings
         ]);
 
         // Return success response

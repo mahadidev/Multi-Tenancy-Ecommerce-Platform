@@ -1,5 +1,4 @@
 import { Layout } from "@/frontend/src/components";
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from "./src/pages";
 

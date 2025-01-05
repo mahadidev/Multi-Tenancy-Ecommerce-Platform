@@ -2,7 +2,6 @@
 
 import { BlockBreadcrumb } from "@/seller/components/blocks/block-breadcrumb";
 import { BlockSection } from "@/seller/components/blocks/block-section";
-import React from "react";
 import { AccountDetailsUserOnboarding } from "./account-details";
 import { ChooseAccountTypeUserOnboarding } from "./account-type";
 import { EmailVerificationSixDigitCode } from "./email-verification";

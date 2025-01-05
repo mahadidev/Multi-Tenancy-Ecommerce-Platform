@@ -1,5 +1,4 @@
 import { Button, Label, Radio } from "flowbite-react";
-import React from "react";
 
 export function ChooseAccountTypeUserOnboarding() {
     return (

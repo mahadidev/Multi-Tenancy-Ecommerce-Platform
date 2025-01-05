@@ -1,9 +1,14 @@
+import type { Dashboard } from "@/seller/types/dashboard";
 import { Badge, Dropdown, Table, useThemeMode } from "flowbite-react";
 import type { FC } from "react";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Chart from "react-apexcharts";
 import svgMap from "svgmap";
 import "svgmap/dist/svgMap.min.css";
+
+export interface DashboardPageData {
+    dashboard: Dashboard;
+}
 
 const DashboardPage: FC = function () {
     return (
@@ -95,7 +100,7 @@ const SalesChart: FC = function () {
     const opacityFrom = isDarkTheme ? 0 : 0.45;
     const opacityTo = isDarkTheme ? 0.15 : 0;
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         stroke: {
             curve: "smooth",
         },
@@ -181,7 +186,7 @@ const SalesChart: FC = function () {
                     fontSize: "14px",
                     fontWeight: 500,
                 },
-                formatter: function (value) {
+                formatter: function (value: any) {
                     return "$" + value;
                 },
             },
@@ -305,7 +310,7 @@ const NewProductsThisWeek: FC = function () {
 };
 
 const NewProductsChart: FC = function () {
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         colors: ["#1A56DB", "#FDBA8C"],
         chart: {
             fontFamily: "Inter, sans-serif",
@@ -466,7 +471,7 @@ const VisitorsChart: FC = function () {
     const fillGradientShade = isDarkTheme ? "dark" : "light";
     const fillGradientShadeIntensity = isDarkTheme ? 0.45 : 1;
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         labels: [
             "01 Feb",
             "02 Feb",
@@ -602,7 +607,7 @@ const UserSignupsChart: FC = function () {
               "#E5E7EB",
           ];
 
-    const options: ApexCharts.ApexOptions = {
+    const options: any = {
         labels: [
             "01 Feb",
             "02 Feb",
@@ -1491,9 +1496,6 @@ const AcquisitionOverview: FC = function () {
             <h3 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
                 Acquisition Overview
             </h3>
-            <div className="my-6">
-                <AcquisitionChart />
-            </div>
             <div className="flex flex-col">
                 <div className="overflow-x-auto rounded-lg">
                     <div className="inline-block min-w-full align-middle">
@@ -1693,83 +1695,6 @@ const AcquisitionOverview: FC = function () {
                 </div>
             </div>
         </div>
-    );
-};
-
-const AcquisitionChart: FC = function () {
-    const { mode } = useThemeMode();
-    const isDarkTheme = mode === "dark";
-
-    const options: ApexCharts.ApexOptions = {
-        labels: ["Organic", "Referral", "Direct", "Social", "Other", "Email"],
-        colors: [
-            "#16BDCA",
-            "#FDBA8C",
-            "#1A56DB",
-            "#D61F69",
-            "#9061F9",
-            "#6875F5",
-        ],
-        chart: {
-            fontFamily: "Inter, sans-serif",
-            toolbar: {
-                show: false,
-            },
-        },
-        stroke: {
-            colors: [isDarkTheme ? "#111827" : "#fff"],
-        },
-        plotOptions: {
-            pie: {
-                donut: {
-                    size: "5%",
-                },
-            },
-        },
-        states: {
-            hover: {
-                filter: {
-                    type: "darken",
-                    value: 0.9,
-                },
-            },
-        },
-        tooltip: {
-            shared: true,
-            followCursor: false,
-            fillSeriesColor: false,
-            inverseOrder: true,
-            style: {
-                fontSize: "14px",
-                fontFamily: "Inter, sans-serif",
-            },
-            x: {
-                show: true,
-                formatter: function (_, { seriesIndex, w }) {
-                    const label = w.config.labels[seriesIndex];
-                    return label;
-                },
-            },
-            y: {
-                formatter: function (value) {
-                    return value + "%";
-                },
-            },
-        },
-        grid: {
-            show: false,
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: false,
-        },
-    };
-    const series = [30, 24, 18, 12, 9, 7];
-
-    return (
-        <Chart height={305} options={options} series={series} type="donut" />
     );
 };
 

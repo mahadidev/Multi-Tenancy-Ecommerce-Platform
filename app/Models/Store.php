@@ -8,22 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-
 class Store extends Model
 {
-    use SoftDeletes,HasFactory;
+    use SoftDeletes, HasFactory;
 
-    protected $fillable = [
-        'owner_id',
-        'name',
-        'slug',
-        'domain',
-        'email',
-        'phone',
-        'location',
-        'status',
-        'currency',
-        'logo'
+    protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings'];
+    protected $casts = [
+        'settings' => 'array',
     ];
 
     protected static function boot()
@@ -33,31 +24,37 @@ class Store extends Model
         // Automatically generate a slug when creating
         static::creating(function ($data) {
             if (empty($data->slug)) {
-                $data->slug = Str::slug($data->name);  // Generate slug from name
+                $data->slug = Str::slug($data->name); // Generate slug from name
             }
-            
         });
 
         // Automatically update the slug when updating
         static::updating(function ($data) {
-            if ($data->isDirty('name')) {  // Check if the 'name' attribute has changed
-                $data->slug = Str::slug($data->name);  // Update slug based on new name
+            if ($data->isDirty('name')) {
+                // Check if the 'name' attribute has changed
+                $data->slug = Str::slug($data->name); // Update slug based on new name
             }
         });
     }
 
-     // Accessor for the logo
-     public function getLogoImageAttribute()
-     {
-         return $this->logo ? url(Storage::url($this->logo)) : null;
-     }
+    public function getLogoImageAttribute()
+    {
+        return $this->logo ? url(Storage::url($this->logo)) : null;
+    }
 
-    public function owner(){
+    public function getDarkLogoImageAttribute()
+    {
+        return $this->dark_logo ? url(Storage::url($this->dark_logo)) : null;
+    }
+
+    public function owner()
+    {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function domain(){
-        $domain = 'https://'.$this->domain.'.'.parse_url(env('APP_URL'), PHP_URL_HOST).'.com';
+    public function domain()
+    {
+        $domain = 'https://' . $this->domain . '.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com';
 
         return $domain;
     }
@@ -72,5 +69,4 @@ class Store extends Model
     {
         return $query->where('status', 1);
     }
-    
 }
