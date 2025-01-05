@@ -12,19 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Add a foreign key constraint
-            $table->unsignedBigInteger('store_id')->nullable()->after('name');
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            $table->json('store_id')->nullable()->after('email');
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.  
      */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('store_id');
+            $table->dropColumn('store_id');   
         });
     }
 };

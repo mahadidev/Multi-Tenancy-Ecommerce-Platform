@@ -13,7 +13,7 @@ Route::group(['prefix' => 'v1'], function () {
     require __DIR__ . '/api/v1/site.php';
 
     // Include the customer routes
-    require __DIR__ . '/api/v1/customer.php';
+    require __DIR__ . '/api/v1/user.php';
 
     // Auth Routes
 
@@ -22,10 +22,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('seller/register', [AuthController::class, 'sellerRegister']);
     Route::get('seller/logout', [AuthController::class, 'profile']);
 
-    // Customer Routes
-    Route::post('customer/login', [AuthController::class, 'customerLogin']);
-    Route::post('customer/register', [AuthController::class, 'customerRegister']);
-    Route::get('customer/logout', [AuthController::class, 'logout']);
+    // User Routes
+    Route::post('user/login', [AuthController::class, 'userLogin']);
+    Route::post('user/register', [AuthController::class, 'userRegister']);
+    Route::get('user/logout', [AuthController::class, 'logout']);
 
 
 
