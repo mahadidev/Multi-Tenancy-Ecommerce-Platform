@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1;
+use App\Http\Controllers\Api\v1\OnBoarding\OnBoardingController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,9 @@ Route::group(['prefix' => 'v1'], function () {
     // Include the customer routes
     require __DIR__ . '/api/v1/user.php';
 
+    // Include the onboarding routes
+    require __DIR__ . '/api/v1/onboarding.php';
+
     // Seller Routes
     Route::post('seller/login', [AuthController::class, 'sellerLogin']);
     Route::post('seller/register', [AuthController::class, 'sellerRegister']);
@@ -29,7 +33,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('get-theme/{id}', [ThemeController::class, 'getTheme']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('seller/profile', [AuthController::class, 'profile']);
         Route::get('seller/logout', [AuthController::class, 'logout']);
+        Route::get('user/profile', [AuthController::class, 'profile']);
         Route::get('user/logout', [AuthController::class, 'logout']);
     });
 });

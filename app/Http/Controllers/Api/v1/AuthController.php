@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\StoreSession;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,21 @@ class AuthController extends Controller
             ], 403);
         }
 
+        // update or create store_id in the Store Session table
+        $storeSession = $user->storeSession()->first();
+        $store = null;
+
+        if ($storeSession) {
+            // remove previous store id from session
+            $request->session()->forget('store_id');
+
+            // store the store id in session
+            $request->session()->put('store_id', $storeSession->store_id);
+
+            // find the store
+            $store = Store::find($storeSession->store_id);
+        }
+
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -50,7 +66,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
-                'stores' => StoreResource::collection($user->stores),
+                'store' => new StoreResource($store),
                 'membership' => null
             ]
         ]);
@@ -75,6 +91,7 @@ class AuthController extends Controller
         $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -297,4 +314,20 @@ class AuthController extends Controller
         });
     }
 
+    public function profile(Request $request)
+    {
+        return apiResponse(function () use ($request) {
+            $user = auth()->user();
+            if ($user) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'User profile',
+                    'data' => [
+                        'user' => new UserResource($user),
+                    ]
+                ]);
+            }
+            return $this->errorResponse('User is not authenticated', 400);
+        });
+    }
 }
