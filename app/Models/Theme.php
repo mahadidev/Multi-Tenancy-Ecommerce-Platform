@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Theme extends Model
 {
@@ -28,6 +29,11 @@ class Theme extends Model
         });
     }
 
+    protected $hidden  = [
+        'created_at',
+        'updated_at',
+    ];
+    
     protected $fillable = [
         'name',
         'slug',
@@ -45,4 +51,15 @@ class Theme extends Model
     {
         return $this->hasMany(ThemePage::class);
     }
+
+    public function getThumbnailImageAttribute()
+    {
+        return $this->thumbnail ? url(Storage::url($this->thumbnail)) : null;
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
+
 }

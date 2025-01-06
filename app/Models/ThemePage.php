@@ -13,6 +13,12 @@ class ThemePage extends Model
         "title"
     ];
 
+    protected $hidden  = [
+        'created_at',
+        'updated_at',
+    ];
+    
+
     public function page_widgets()
     {
         return $this->hasMany(ThemePageWidget::class);
