@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\StoreSession;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,9 @@ class AuthController extends Controller
                 'message' => 'Unauthorized. Only sellers can log in.',
             ], 403);
         }
+
+        // update or create store_id in the Store Session table
+        // $previousStoreSession = $user->;
 
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -75,6 +79,7 @@ class AuthController extends Controller
         $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1;
+use App\Http\Controllers\Api\v1\OnBoarding\OnBoardingController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,8 @@ Route::group(['prefix' => 'v1'], function () {
     // Include the customer routes
     require __DIR__ . '/api/v1/user.php';
 
-    // Auth Routes
+    // Include the onboarding routes
+    require __DIR__ . '/api/v1/onboarding.php';
 
     // Seller Routes
     Route::post('seller/login', [AuthController::class, 'sellerLogin']);

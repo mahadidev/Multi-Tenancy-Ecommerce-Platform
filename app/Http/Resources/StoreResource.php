@@ -18,6 +18,7 @@ class StoreResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'domain' => $this->domain(),
             'email' => $this->email,
             'phone' => $this->phone,
             'location' => $this->location,
@@ -28,6 +29,9 @@ class StoreResource extends JsonResource
                 'primary' => $this->logo_image,
                 'dark' =>  $this->dark_logo_image,
             ],
+            'primary_color' => $this->primary_color,
+            'secondary_color' => $this->secondary_color,
+            'theme_id' => $this->theme_id,
             'settings' => $this->settings
         ];
     }

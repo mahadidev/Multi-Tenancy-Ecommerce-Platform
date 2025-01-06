@@ -12,7 +12,7 @@ class Store extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings'];
+    protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color'];
     protected $casts = [
         'settings' => 'array',
     ];
@@ -68,5 +68,10 @@ class Store extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 1);
+    }
+
+    public function storeSessions()
+    {
+        return $this->hasMany(StoreSession::class);
     }
 }
