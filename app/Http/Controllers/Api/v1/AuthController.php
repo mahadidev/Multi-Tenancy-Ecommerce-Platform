@@ -7,6 +7,8 @@ use App\Http\Resources\StoreResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Store;
+use App\Models\StoreSession;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +40,21 @@ class AuthController extends Controller
             ], 403);
         }
 
+        // update or create store_id in the Store Session table
+        $storeSession = $user->storeSession()->first();
+        $store = null;
+
+        if ($storeSession) {
+            // remove previous store id from session
+            $request->session()->forget('store_id');
+
+            // store the store id in session
+            $request->session()->put('store_id', $storeSession->store_id);
+
+            // find the store
+            $store = Store::find($storeSession->store_id);
+        }
+
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -49,7 +66,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
-                'stores' => StoreResource::collection($user->stores),
+                'store' => new StoreResource($store),
                 'membership' => null
             ]
         ]);
@@ -60,8 +77,8 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string',
-            'confirm_password' => 'required|string|same:password',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
         ]);
 
         $user = User::create([
@@ -74,6 +91,7 @@ class AuthController extends Controller
         $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -87,15 +105,42 @@ class AuthController extends Controller
         ]);
     }
 
-    public function customerLogin(Request $request)
+    // User or Customer authentication functions
+
+    public function userLogin(Request $request)
     {
+
         $request->validate([
             'email' => 'string|required',
             'password' => 'string|required',
         ]);
 
-        // Find the user by email
+        if (!$request->has('store_id')) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Store ID not found',
+            ]);
+        }
+
+        $store = Store::findorfail($request->input('store_id'));
+        $storeId = $store->id;
+
+        if (!$store) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Invalid store id',
+            ]);
+        }
+
+        // Find the user by email and add the store in the user table
         $user = User::where('email', $request->email)->first();
+
+        // Check if 'store_id' is null or if the store ID doesn't exist in the array
+        if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
+            $storeIds = $user->store_id ?? []; // Use an empty array if it's null
+            $storeIds[] = $storeId; // Add the new store ID
+            $user->update(['store_id' => $storeIds]); // Update the user
+        }
 
         // Check if the user exists and the password is correct
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -114,6 +159,10 @@ class AuthController extends Controller
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        //add store_id in the session 
+        session(['store_id' => $store->id]);  // Store the new `store_id` in the session
+        $request->attributes->set('store_id', $store->id);  // Also set it in the request attributes
+
         // Return the token and user details
         return response()->json([
             'status' => 200,
@@ -121,118 +170,164 @@ class AuthController extends Controller
             'data' => [
                 'token_type' => 'Bearer',
                 'access_token' => $token,
-                'user' => new UserResource($user),
+                'user' => [
+                    'id'=> $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ],
             ]
         ]);
     }
 
-    public function customerRegister(Request $request)
+    public function userRegister(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
+        return apiResponse(function () use ($request) {
+            $this->validateRegistrationRequest($request);
+
+            $storeId = (int)$request->store_id;
+            $email = $request->email;
+
+            // Check for existing user with same email and store
+            if ($this->userExistsInStore($email, $storeId)) {
+                return $this->errorResponse('Email already registered for this store', 400);
+            }
+
+            // Try to find user with same email in different store
+            $existingUser = $this->findUserInDifferentStore($email, $storeId);
+
+            if ($existingUser) {
+                return $this->handleExistingUserRegistration($existingUser, $storeId, $request);
+            }
+
+            // Create new user
+            $user = $this->createNewUser($request, $storeId);
+
+            return $this->generateSuccessResponse($user, $request, $storeId);
+        });
+    }
+
+    private function validateRegistrationRequest(Request $request)
+    {
+        return $request->validate([
+            'name' => 'required|string',
             'email' => 'required|string|email',
             'password' => 'required|string',
             'confirm_password' => 'required|string|same:password',
-            // 'store_id' => 'required|exists:stores,id'
-        ]);
-
-        // check if the email is already registered for the same store
-        $query = User::where('email', $request->email)
-            ->where('store_id', authStore())
-            ->first();
-
-        if ($query) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Email already registered',
-            ], 400);
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' =>  Hash::make($request->password),
-            'store_id' => authStore(),
-        ]);
-
-        // Assign role to the customer
-        $roleName = $request->input('role', 'customer'); // Default to 'customer' if no role is provided
-        $role = Role::firstOrCreate(['name' => $roleName]);
-        $user->assignRole($role->name);
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'singup success',
-            'data' => [
-                'token_type' => 'Bearer',
-                'access_token' => $token,
-                'user' => new UserResource($user)
-            ]
+            'store_id' => 'required|exists:stores,id,deleted_at,NULL', // Check for non-deleted stores
         ]);
     }
 
-    public function profile(Request $request)
+    private function userExistsInStore(string $email, int $storeId): bool
     {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'User is not authenticated',
-            ], 400);
+        return User::where('email', $email)
+            ->whereJsonContains('store_id', $storeId)
+            ->exists();
+    }
+
+    private function findUserInDifferentStore(string $email, int $storeId)
+    {
+        return User::where('email', $email)
+            // ->whereHas('roles', function ($query) {
+            //     $query->where('name', 'user'); // Check if the user has the role of 'user'
+            // })
+            ->whereJsonDoesntContain('store_id', $storeId)
+            ->first();
+    }
+
+    private function createNewUser(Request $request, int $storeId): User
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'store_id' => [$storeId],
+        ]);
+
+        $roleName = $request->input('role', 'user');
+        $role = Role::firstOrCreate(['name' => $roleName]);
+        $user->assignRole($role->name);
+
+        return $user;
+    }
+
+    private function handleExistingUserRegistration(User $user, int $storeId, Request $request)
+    {
+        $storeIds = $user->store_id ?? [];
+        $storeIds[] = $storeId;
+
+        // check if the user has the role of 'user'
+        if (!$user->hasRole('user')) {
+            $roleName = $request->input('role', 'user');
+            $role = Role::firstOrCreate(['name' => $roleName]);
+            $user->assignRole($role->name);
         }
+        $user->update(['store_id' => $storeIds]);
+
+        return $this->generateSuccessResponse($user, $request, $storeId);
+    }
+
+    private function generateSuccessResponse(User $user, Request $request, int $storeId)
+    {
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->storeSessionData($request, $storeId);
+
         return response()->json([
             'status' => 200,
-            'message' => 'User profile',
-            'data' => new UserResource($user)
+            'message' => 'Signup successful',
+            'data' => [
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'user' => $user,
+            ],
         ]);
+    }
+
+    private function storeSessionData(Request $request, int $storeId): void
+    {
+        session(['store_id' => $storeId]);
+        $request->attributes->set('store_id', $storeId);
+    }
+
+    private function errorResponse(string $message, int $status)
+    {
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'data' => null,
+        ], $status);
     }
 
     public function logout(Request $request)
     {
-        $user = Auth::user();
-        if ($user) {
-            // Auth::user()->tokens()->delete();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Logout successful',
-            ]);
-        }
-        return response()->json([
-            'status' => 400,
-            'message' => 'User is not authenticated',
-        ], 400);
+        return apiResponse(function () use ($request) {
+            $user = auth()->user();
+            if ($user) {
+                $user->tokens()->delete();
+                session()->flush();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Logout successful',
+                ]);
+            }
+            return $this->errorResponse('User is not authenticated', 400);
+        });
+    }
 
-        
-        // $user = Auth::id();
-        // return response()->json([
-        //     'status' => 200,
-        //     'message' => 'Logout successful',
-        //     'data' => $user
-        // ]);
-        // // Ensure the user is authenticated
-        // if (Auth::user()) {
-        //     // // Delete all personal access tokens for the user
-        //     // $user->tokens()->delete();
-
-        //     // // Log the user out of the application
-        //     // Auth::logout();
-
-        //     // // Invalidate the session
-        //     // $request->session()->invalidate();
-
-        //     // // Regenerate the session token to prevent CSRF attacks
-        //     // $request->session()->regenerateToken();
-
-        //     return response()->json([
-        //         'status' => 200,
-        //         'message' => 'Logout successful',
-        //     ]);
-        // }
-
-        // return response()->json([
-        //     'status' => 400,
-        //     'message' => 'User is not authenticated',
-        // ], 400);
+    public function profile(Request $request)
+    {
+        return apiResponse(function () use ($request) {
+            $user = auth()->user();
+            if ($user) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'User profile',
+                    'data' => [
+                        'user' => new UserResource($user),
+                    ]
+                ]);
+            }
+            return $this->errorResponse('User is not authenticated', 400);
+        });
     }
 }

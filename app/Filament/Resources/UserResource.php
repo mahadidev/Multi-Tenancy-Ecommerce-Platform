@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Store;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -30,29 +31,37 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-            Forms\Components\TextInput::make('name')
-                ->required()
-                ->maxLength(255),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
 
-            Forms\Components\TextInput::make('email')
-                ->required()
-                ->email()
-                ->maxLength(255)
-                ->unique(User::class, 'email', ignoreRecord: true),
+                Forms\Components\TextInput::make('email')
+                    ->required()
+                    ->email()
+                    ->maxLength(255)
+                    ->unique(User::class, 'email', ignoreRecord: true),
+
+                Forms\Components\TextInput::make('phone')
+                    ->required(),
+
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->minLength(6)
+                    ->dehydrateStateUsing(fn($state) => bcrypt($state))
+                    ->required(fn(string $context) => $context === 'create'),
+
+                Forms\Components\MultiSelect::make('roles')
+                    ->relationship('roles', 'name')
+                    ->preload()
+                    ->required(),
+
+                Forms\Components\MultiSelect::make('store_id')
+                    ->label('Stores')
+                    ->options(Store::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->nullable()
+                    ->dehydrateStateUsing(fn($state) => array_map('intval', $state ?? [])), // Ensure IDs are stored as integers
             
-            Forms\Components\TextInput::make('phone')
-                ->required(),
-
-            Forms\Components\TextInput::make('password')
-                ->password()
-                ->minLength(6)
-                ->dehydrateStateUsing(fn ($state) => bcrypt($state))
-                ->required(fn (string $context) => $context === 'create'),
-
-            Forms\Components\MultiSelect::make('roles')
-                ->relationship('roles', 'name')
-                ->preload()
-                ->required(),
             ]);
     }
 
@@ -67,18 +76,18 @@ class UserResource extends Resource
             ])
             ->filters([
                 Tables\Filters\Filter::make('role')
-                ->form([
-                    Forms\Components\Select::make('role')
-                        ->label('Role')
-                        ->options(\Spatie\Permission\Models\Role::pluck('name', 'name'))
-                        ->searchable()
-                ])
-                ->query(function (Builder $query, array $data) {
-                    return $query->when(
-                        $data['role'] ?? null,
-                        fn (Builder $query, $role) => $query->whereHas('roles', fn (Builder $query) => $query->where('name', $role))
-                    );
-                }),
+                    ->form([
+                        Forms\Components\Select::make('role')
+                            ->label('Role')
+                            ->options(\Spatie\Permission\Models\Role::pluck('name', 'name'))
+                            ->searchable()
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query->when(
+                            $data['role'] ?? null,
+                            fn(Builder $query, $role) => $query->whereHas('roles', fn(Builder $query) => $query->where('name', $role))
+                        );
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

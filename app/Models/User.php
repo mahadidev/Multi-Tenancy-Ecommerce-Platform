@@ -13,6 +13,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Laravel\Sanctum\HasApiTokens;
 use PDO;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
@@ -55,18 +56,29 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'store_id' => 'array'
         ];
     }
 
-    public function getProfilePhotoUrlAttribute()
+    public function getStoresAttribute()
     {
-
+        return Store::whereIn('id', $this->store_id ?? [])
+            ->whereNull('deleted_at')
+            ->get();
     }
+
+    public function getUserImageAttribute()
+    {
+        return $this->image ? url(Storage::url($this->image)) : null;
+    }
+
+
+    public function getProfilePhotoUrlAttribute() {}
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->image;
     }
-    
+
     public function canAccessPanel(Panel $panel): bool
     {
         if (auth()->check() && (auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('admin')) && $panel->getId() === 'admin') {
@@ -75,16 +87,25 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return false;
     }
 
-    public function stores(){
+
+    public function stores()
+    {
         return $this->hasMany(Store::class, 'owner_id');
     }
 
-    public function isAdmin(){
+    public function isAdmin()
+    {
 
-        if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin')){
+        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin')) {
             return true;
         }
 
         return false;
+    }
+
+
+    public function storeSession()
+    {
+        return $this->hasOne(StoreSession::class, 'user_id');
     }
 }

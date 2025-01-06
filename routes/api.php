@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1;
+use App\Http\Controllers\Api\v1\OnBoarding\OnBoardingController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,22 +15,29 @@ Route::group(['prefix' => 'v1'], function () {
     require __DIR__ . '/api/v1/site.php';
 
     // Include the customer routes
-    require __DIR__ . '/api/v1/customer.php';
+    require __DIR__ . '/api/v1/user.php';
 
-    // Auth Routes
+    // Include the onboarding routes
+    require __DIR__ . '/api/v1/onboarding.php';
 
     // Seller Routes
     Route::post('seller/login', [AuthController::class, 'sellerLogin']);
     Route::post('seller/register', [AuthController::class, 'sellerRegister']);
-    Route::get('seller/logout', [AuthController::class, 'profile']);
 
-    // Customer Routes
-    Route::post('customer/login', [AuthController::class, 'customerLogin']);
-    Route::post('customer/register', [AuthController::class, 'customerRegister']);
-    Route::get('customer/logout', [AuthController::class, 'logout']);
+    // User Routes
+    Route::post('user/login', [AuthController::class, 'userLogin']);
+    Route::post('user/register', [AuthController::class, 'userRegister']);
 
+    // Theme Routes
+    Route::get('get-themes', [ThemeController::class, 'getThemes']);
+    Route::get('get-theme/{id}', [ThemeController::class, 'getTheme']);
 
-
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('seller/profile', [AuthController::class, 'profile']);
+        Route::get('seller/logout', [AuthController::class, 'logout']);
+        Route::get('user/profile', [AuthController::class, 'profile']);
+        Route::get('user/logout', [AuthController::class, 'logout']);
+    });
 });
 
 
@@ -39,5 +48,3 @@ Route::group(['prefix' => 'v1'], function () {
 
 // User Module Routes
 // Route::resource('/user', UserController::class);
-
-

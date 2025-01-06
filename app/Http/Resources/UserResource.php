@@ -19,7 +19,17 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->roles->pluck('name'),
-            'store_id' => $this->store_id,
+            'registered_store_id' => $this->store_id,
+            'phone' => $this->phone,
+            'address' => $this->address,
+            'image' => $this->user_image,
+            'stores' => $this->stores->map(function ($store) { // Changed from store to stores
+                return [
+                    'id' => $store->id,
+                    'name' => $store->name,
+                    'domain' => $store->domain,
+                ];
+            })
         ];
     }
 }
