@@ -74,4 +74,9 @@ class Store extends Model
     {
         return $this->hasMany(StoreSession::class);
     }
+
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
 }

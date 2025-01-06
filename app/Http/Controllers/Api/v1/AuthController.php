@@ -313,4 +313,21 @@ class AuthController extends Controller
             return $this->errorResponse('User is not authenticated', 400);
         });
     }
+
+    public function profile(Request $request)
+    {
+        return apiResponse(function () use ($request) {
+            $user = auth()->user();
+            if ($user) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'User profile',
+                    'data' => [
+                        'user' => new UserResource($user),
+                    ]
+                ]);
+            }
+            return $this->errorResponse('User is not authenticated', 400);
+        });
+    }
 }

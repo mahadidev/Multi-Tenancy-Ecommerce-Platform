@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use Illuminate\Http\Request;
 use App\Models\Store;
+use App\Models\StoreSession;
 use App\Services\StoreService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -179,6 +180,13 @@ class StoreController extends Controller
 
         // Retrieve the store and ensure it belongs to the authenticated user and is active
         $store = Store::storeOwner()->active()->findOrFail($request->store_id);
+
+        // // update store_id in store_session table
+        StoreSession::updateOrCreate([
+            'user_id' => session('user_id'),
+        ], [
+            'store_id' => $store->id,
+        ]);
 
         // Check if a store_id exists in the session and remove it
         if ($store && session()->has('store_id')) {

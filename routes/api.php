@@ -33,7 +33,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('get-theme/{id}', [ThemeController::class, 'getTheme']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('seller/profile', [AuthController::class, 'profile']);
         Route::get('seller/logout', [AuthController::class, 'logout']);
+        Route::get('user/profile', [AuthController::class, 'profile']);
         Route::get('user/logout', [AuthController::class, 'logout']);
     });
 });
