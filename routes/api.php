@@ -16,8 +16,6 @@ Route::group(['prefix' => 'v1'], function () {
     // Include the customer routes
     require __DIR__ . '/api/v1/user.php';
 
-    // Auth Routes
-
     // Seller Routes
     Route::post('seller/login', [AuthController::class, 'sellerLogin']);
     Route::post('seller/register', [AuthController::class, 'sellerRegister']);
