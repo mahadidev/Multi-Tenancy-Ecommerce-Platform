@@ -19,4 +19,10 @@ class ThemePageWidget extends Model
         'value' => 'json', // Use 'json' instead of 'array'
         'inputs' => 'array',
     ];
+
+    protected $hidden  = [
+        'created_at',
+        'updated_at',
+    ];
+    
 }
