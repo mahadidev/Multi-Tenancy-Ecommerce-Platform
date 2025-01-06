@@ -104,8 +104,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     }
 
     // here connect user_id with store_session table
-    public function storeSessions()
+    public function storeSession()
     {
-        return $this->hasMany(StoreSession::class);
+        return $this->hasOne(StoreSession::class, 'user_id');
     }
 }

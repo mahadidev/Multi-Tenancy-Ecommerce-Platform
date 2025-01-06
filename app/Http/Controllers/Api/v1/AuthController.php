@@ -41,7 +41,19 @@ class AuthController extends Controller
         }
 
         // update or create store_id in the Store Session table
-        // $previousStoreSession = $user->;
+        $storeSession = $user->storeSession()->first();
+        $store = null;
+
+        if ($storeSession) {
+            // remove previous store id from session
+            $request->session()->forget('store_id');
+
+            // store the store id in session
+            $request->session()->put('store_id', $storeSession->store_id);
+
+            // find the store
+            $store = Store::find($storeSession->store_id);
+        }
 
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -54,7 +66,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
-                'stores' => StoreResource::collection($user->stores),
+                'store' => new StoreResource($store),
                 'membership' => null
             ]
         ]);
@@ -387,5 +399,4 @@ class AuthController extends Controller
             return $this->errorResponse('User is not authenticated', 400);
         });
     }
-
 }
