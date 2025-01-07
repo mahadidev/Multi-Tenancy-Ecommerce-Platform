@@ -164,11 +164,12 @@ class AuthController extends Controller
         // Check if 'store_id' is null or if the store ID doesn't exist in the array for users table
         $storeId = $store->id;
         if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
-            $storeIds = $user->store_id ?? []; // Use an empty array if it's null
-            $storeIds[] = $storeId; // Add the new store ID
-            $user->update(['store_id' => $storeIds]); // Update the user
+            return response()->json([
+                'status' => 404,
+                'message' => 'This store is not associated with the user, please sign-up'
+            ]);
         }
-
+        
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
