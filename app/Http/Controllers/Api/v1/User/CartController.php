@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\seller;
+namespace App\Http\Controllers\Api\v1\user;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
@@ -14,19 +14,39 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {   
-
-        // return $request->all();
-
         return apiResponse(function () use ($request) {
        
             $validatedData = $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'qty' => 'required|numeric',
+                'note' => 'nullable|string',
+                'options' => 'nullable',
             ]);
 
-            
-            $store_id = 1;
-    
+            // Get user_id
+            $user_id = auth()->user()->id;
+
+            if($user_id){
+                // Check if store_id exists
+                $store_id = session()->get('store_id');
+               
+                if(!$store_id){
+                    // show error message
+                    return response()->json([
+                        'status' => 401,
+                        'message' => 'Store is not authenticated',
+                    ]);
+                }
+            }
+            else{
+                // show error message
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'User is not authenticated',
+                ]);
+            }
+            // Get store_id from session
+
             // Get product details
             $product = Product::find($validatedData['product_id']);
             
@@ -39,14 +59,12 @@ class CartController extends Controller
             
             // Handle session for guests or user_id for logged-in users
             $sessionId = session()->getId();
-            // $userId = Auth::check() ? Auth::id() : null;
-            $userId = 1;
-            
+
             // Check if item already exists in the cart
             $cartItem = Cart::where('product_id', $product->id)->where('store_id', $store_id)
-                ->where(function ($query) use ($sessionId, $userId) {
-                    if($userId){
-                        $query->where('session_id', $sessionId)->orwhere('user_id', $userId);
+                ->where(function ($query) use ($sessionId, $user_id) {
+                    if($user_id){
+                        $query->where('session_id', $sessionId)->orwhere('user_id', $user_id);
                     }
                     else{
                         $query->where('session_id', $sessionId);
@@ -66,7 +84,7 @@ class CartController extends Controller
                 // Add new item to the cart
                 Cart::create([
                     'store_id' => $store_id,
-                    'user_id' => $userId,
+                    'user_id' => $user_id,
                     'product_id' => $product->id,
                     'session_id' => $sessionId,
                     'item' => $product->name, 

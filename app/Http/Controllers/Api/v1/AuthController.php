@@ -28,16 +28,22 @@ class AuthController extends Controller
 
         // Check if the user exists and the password is correct
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Invalid email or password.',
-            ], 401);
+            return response()->json(
+                [
+                    'message' => 'Invalid email or password.',
+                ],
+                401,
+            );
         }
 
         // Check if the user has the role of 'seller'
         if (!$user->hasRole('seller')) {
-            return response()->json([
-                'message' => 'Unauthorized. Only sellers can log in.',
-            ], 403);
+            return response()->json(
+                [
+                    'message' => 'Unauthorized. Only sellers can log in.',
+                ],
+                403,
+            );
         }
 
         // update or create store_id in the Store Session table
@@ -51,13 +57,15 @@ class AuthController extends Controller
             // store the store id in session
             $request->session()->put('store_id', $storeSession->store_id);
 
+            // Also set it in the request attributes
+            $request->attributes->set('store_id', $storeSession->store_id);
+
             // find the store
             $store = Store::find($storeSession->store_id);
         }
 
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
-
 
         $response = [
             'status' => 200,
@@ -66,12 +74,12 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
-                'membership' => null
-            ]
+                'membership' => null,
+            ],
         ];
 
         if ($store) {
-            $response["store"] = new StoreResource($store);
+            $response['data']['logged_store'] = new StoreResource($store);
         }
 
         // Return the token and user details
@@ -90,7 +98,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
 
         // Assign role to the seller
@@ -106,8 +114,8 @@ class AuthController extends Controller
             'data' => [
                 'token_type' => 'Bearer',
                 'access_token' => $token,
-                'user' => new UserResource($user)
-            ]
+                'user' => new UserResource($user),
+            ],
         ]);
     }
 
@@ -115,7 +123,6 @@ class AuthController extends Controller
 
     public function userLogin(Request $request)
     {
-
         $request->validate([
             'email' => 'string|required',
             'password' => 'string|required',
@@ -124,16 +131,15 @@ class AuthController extends Controller
         if (!$request->has('store_id')) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Store ID not found',
+                'message' => 'Store ID is not found',
             ]);
         }
 
-        $store = Store::findorfail($request->input('store_id'));
-        $storeId = $store->id;
+        $store = Store::find($request->input('store_id'));
 
         if (!$store) {
             return response()->json([
-                'status' => 500,
+                'status' => 404,
                 'message' => 'Invalid store id',
             ]);
         }
@@ -141,33 +147,34 @@ class AuthController extends Controller
         // Find the user by email and add the store in the user table
         $user = User::where('email', $request->email)->first();
 
-        // Check if 'store_id' is null or if the store ID doesn't exist in the array
+        // Check if user exists, password matches, and the user has the 'user' role
+        if (!$user || !Hash::check($request->password, $user->password) || !$user->hasRole('user')) {
+            $message = !$user || !Hash::check($request->password, $user->password) ? 'Invalid email or password' : 'Unauthorized. Only customers can log in.';
+
+            $statusCode = !$user || !Hash::check($request->password, $user->password) ? 401 : 403;
+
+            return response()->json(
+                [
+                    'status' => $statusCode,
+                    'message' => $message,
+                ],
+            );
+        }
+
+        // Check if 'store_id' is null or if the store ID doesn't exist in the array for users table
+        $storeId = $store->id;
         if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
             $storeIds = $user->store_id ?? []; // Use an empty array if it's null
             $storeIds[] = $storeId; // Add the new store ID
             $user->update(['store_id' => $storeIds]); // Update the user
         }
 
-        // Check if the user exists and the password is correct
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Invalid email or password.',
-            ], 401);
-        }
-
-        // Check if the user has the role of 'user'
-        if (!$user->hasRole('user')) {
-            return response()->json([
-                'message' => 'Unauthorized. Only customers can log in.',
-            ], 403);
-        }
-
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
         //add store_id in the session
-        session(['store_id' => $store->id]);  // Store the new `store_id` in the session
-        $request->attributes->set('store_id', $store->id);  // Also set it in the request attributes
+        session(['store_id' => $store->id]); // Store the new `store_id` in the session
+        $request->attributes->set('store_id', $store->id); // Also set it in the request attributes
 
         // Return the token and user details
         return response()->json([
@@ -181,7 +188,7 @@ class AuthController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                 ],
-            ]
+            ],
         ]);
     }
 
@@ -225,9 +232,7 @@ class AuthController extends Controller
 
     private function userExistsInStore(string $email, int $storeId): bool
     {
-        return User::where('email', $email)
-            ->whereJsonContains('store_id', $storeId)
-            ->exists();
+        return User::where('email', $email)->whereJsonContains('store_id', $storeId)->exists();
     }
 
     private function findUserInDifferentStore(string $email, int $storeId)
@@ -297,11 +302,14 @@ class AuthController extends Controller
 
     private function errorResponse(string $message, int $status)
     {
-        return response()->json([
-            'status' => $status,
-            'message' => $message,
-            'data' => null,
-        ], $status);
+        return response()->json(
+            [
+                'status' => $status,
+                'message' => $message,
+                'data' => null,
+            ],
+            $status,
+        );
     }
 
     public function logout(Request $request)
@@ -314,23 +322,6 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => 200,
                     'message' => 'Logout successful',
-                ]);
-            }
-            return $this->errorResponse('User is not authenticated', 400);
-        });
-    }
-
-    public function profile(Request $request)
-    {
-        return apiResponse(function () use ($request) {
-            $user = auth()->user();
-            if ($user) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'User profile',
-                    'data' => [
-                        'user' => new UserResource($user),
-                    ]
                 ]);
             }
             return $this->errorResponse('User is not authenticated', 400);

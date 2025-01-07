@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum']], function () {
 
-    Route::get('profile', [ProfileController::class, 'profile']);
+    // Route::get('profile', [ProfileController::class, 'profile']);
 
-    Route::post('updatesa', [ProfileController::class, 'updateProfile']);
+    // Route::post('update', [ProfileController::class, 'updateProfile']);
+    Route::post('/add-to-cart', [CartController::class, 'addToCart']);
     
 });
