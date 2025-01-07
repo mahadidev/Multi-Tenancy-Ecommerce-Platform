@@ -99,16 +99,16 @@ class ProfileController extends Controller
             session()->flush();
 
             // generate new token
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Password Updated',
-                'data' => [
-                    'token_type' => 'Bearer',
-                    'access_token' => $token,
-                    'user' => new UserResource($user),
-                ],
+                'message' => 'Password Updated and Logged Out',
+                // 'data' => [
+                //     // 'token_type' => 'Bearer',
+                //     // 'access_token' => $token,
+                //     'user' => new UserResource($user),
+                // ],
             ]);
         });
     }
