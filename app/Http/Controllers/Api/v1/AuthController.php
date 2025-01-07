@@ -126,19 +126,20 @@ class AuthController extends Controller
         if (!$request->has('store_id')) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Store ID not found',
+                'message' => 'Store ID is not found',
             ]);
         }
 
-        $store = Store::findorfail($request->input('store_id'));
-        $storeId = $store->id;
-
+        $store = Store::find($request->input('store_id'));
+  
         if (!$store) {
             return response()->json([
-                'status' => 500,
+                'status' => 404,
                 'message' => 'Invalid store id',
             ]);
         }
+
+        $storeId = $store->id;
 
         // Find the user by email and add the store in the user table
         $user = User::where('email', $request->email)->first();
@@ -150,14 +151,20 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Check if 'store_id' is null or if the store ID doesn't exist in the array
-        if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
-            $storeIds = $user->store_id ?? []; // Use an empty array if it's null
-            $storeIds[] = $storeId; // Add the new store ID
-            $user->update(['store_id' => $storeIds]); // Update the user
+        // // Check if 'store_id' is null or if the store ID doesn't exist in the array
+        // if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
+        //     $storeIds = $user->store_id ?? []; // Use an empty array if it's null
+        //     $storeIds[] = $storeId; // Add the new store ID
+        //     $user->update(['store_id' => $storeIds]); // Update the user
+        // }
+
+        // check if the user has the store_id in the store_id array
+        if (!in_array($storeId, $user->store_id)) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'store is not associated with the user',
+            ]);
         }
-
-
 
         // Check if the user has the role of 'user'
         if (!$user->hasRole('user')) {
