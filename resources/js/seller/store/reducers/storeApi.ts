@@ -25,7 +25,26 @@ export const storeApi = createApi({
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
         }),
+        createStore: builder.mutation<
+            any,
+            {
+                name: string;
+            }
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `/onboarding/create-store`,
+                    method: "post",
+                    body: formData,
+                }),
+            transformResponse: (response: { data: any }) => response,
+            transformErrorResponse: (error: any) => error.data,
+        }),
     }),
 });
 
-export const { useFetchStoresQuery, useFetchCurrentStoreQuery } = storeApi;
+export const {
+    useFetchStoresQuery,
+    useFetchCurrentStoreQuery,
+    useCreateStoreMutation,
+} = storeApi;
