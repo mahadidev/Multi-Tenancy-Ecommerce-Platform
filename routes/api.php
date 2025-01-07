@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1;
+
 use App\Http\Controllers\Api\v1\OnBoarding\OnBoardingController;
 
 use Illuminate\Http\Request;
@@ -33,9 +34,14 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('get-theme/{id}', [ThemeController::class, 'getTheme']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
-        Route::get('seller/profile', [AuthController::class, 'profile']);
+        Route::get('seller/profile', [ProfileController::class, 'profile']);
+        Route::post('seller/update', [ProfileController::class, 'updateProfile']);
+        Route::post('seller/password-change', [ProfileController::class, 'passwordChange']);
         Route::get('seller/logout', [AuthController::class, 'logout']);
-        Route::get('user/profile', [AuthController::class, 'profile']);
+
+        Route::get('user/profile', [ProfileController::class, 'profile']);
+        Route::post('user/update', [ProfileController::class, 'updateProfile']);
+        Route::post('user/password-change', [ProfileController::class, 'passwordChange']);
         Route::get('user/logout', [AuthController::class, 'logout']);
     });
 });

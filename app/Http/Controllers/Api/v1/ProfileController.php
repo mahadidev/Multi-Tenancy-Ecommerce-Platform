@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\user;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -12,35 +13,23 @@ class ProfileController extends Controller
     public function profile(Request $request)
     {
         return apiResponse(function () use ($request) {
-            $user = auth()->user()->load('roles'); // Changed from store to stores
+            $user = auth()->user(); // Changed from store to stores
 
+            if ($user) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Profile Information',
+                    'data' => [
+                        'user' => new UserResource($user),
+                    ]
+                ]);
+            }
             return response()->json([
-                'status' => 200,
-                'message' => 'Profile Information',
-                'data' => [
-                    'token_type' => 'Bearer',
-                    'user' => new UserResource($user),
-                ],
+                'status' => 401,
+                'message' => 'User is not authenticated',
             ]);
         });
     }
-
-    // public function profile2(Request $request)
-    // {
-    //     return apiResponse(function () use ($request) {
-    //         $user = auth()->user()->load('roles'); // Changed from store to stores
-
-    //         return response()->json([
-    //             'status' => 200,
-    //             'message' => 'Profile Information2',
-    //             'data' => [
-    //                 'token_type' => 'Bearer',
-    //                 'user' => new UserResource($user),
-    //             ],
-    //         ]);
-    //     });
-    // }
-
 
     public function updateProfile(Request $request)
     {
@@ -77,6 +66,47 @@ class ProfileController extends Controller
                 'message' => 'Profile Updated',
                 'data' => [
                     'token_type' => 'Bearer',
+                    'user' => new UserResource($user),
+                ],
+            ]);
+        });
+    }
+
+    public function passwordChange(Request $request)
+    {
+        return apiResponse(function () use ($request) {
+            $user = auth()->user(); // Changed from store to stores
+
+            $validated = $request->validate([
+                'old_password' => 'required|string',
+                'password' => 'required|string',
+                'confirm_password' => 'required|string|same:password',
+            ]);
+
+            if (!Hash::check($validated['old_password'], $user->password)) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Old password is incorrect',
+                ]);
+            }
+
+            $user->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+
+            // Revoke all tokens
+            $user->tokens()->delete();
+            session()->flush();
+
+            // generate new token
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Password Updated',
+                'data' => [
+                    'token_type' => 'Bearer',
+                    'access_token' => $token,
                     'user' => new UserResource($user),
                 ],
             ]);
