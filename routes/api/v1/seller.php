@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Http\Controllers\Api\v1\Seller;
+namespace App\Http\Controllers\Api\v1\seller;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
