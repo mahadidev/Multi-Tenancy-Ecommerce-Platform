@@ -54,7 +54,8 @@ class Store extends Model
 
     public function domain()
     {
-        $domain = 'https://' . $this->domain . '.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com';
+        // $domain = 'https://' . $this->domain . '.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com';
+        $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com' . '/stores/' . $this->domain;
 
         return $domain;
     }
