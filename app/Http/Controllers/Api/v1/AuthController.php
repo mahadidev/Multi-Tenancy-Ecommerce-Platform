@@ -121,26 +121,25 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'string|required',
             'password' => 'string|required',
-            'store_id' => 'required|exists:stores,id',
         ]);
 
         if (!$request->has('store_id')) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Store ID not found',
+                'message' => 'Store ID is not found',
             ]);
         }
 
-        // $store = Store::findorfail($request->input('store_id'));
-        // $storeId = $store->id;
+        $store = Store::find($request->input('store_id'));
+  
+        if (!$store) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid store id',
+            ]);
+        }
 
-        // if (!$store) {
-        //     return response()->json([
-        //         'status' => 404,
-        //         'message' => 'Invalid store id',
-        //     ]);
-        // }
-        $storeId = $request->store_id;
+        $storeId = $store->id;
 
         // Find the user by email and add the store in the user table
         $user = User::where('email', $request->email)->first();

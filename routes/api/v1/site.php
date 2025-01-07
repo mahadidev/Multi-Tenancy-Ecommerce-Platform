@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // cart route
-Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+// Route::post('/add-to-cart', [CartController::class, 'addToCart']);
 
 
 

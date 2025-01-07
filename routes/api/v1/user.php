@@ -10,5 +10,6 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum']], function ()
     // Route::get('profile', [ProfileController::class, 'profile']);
 
     // Route::post('update', [ProfileController::class, 'updateProfile']);
+    Route::post('/add-to-cart', [CartController::class, 'addToCart']);
     
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\seller;
+namespace App\Http\Controllers\Api\v1\user;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
@@ -19,6 +19,8 @@ class CartController extends Controller
             $validatedData = $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'qty' => 'required|numeric',
+                'note' => 'nullable|string',
+                'options' => 'nullable',
             ]);
 
             // Get user_id
@@ -44,7 +46,6 @@ class CartController extends Controller
                 ]);
             }
             // Get store_id from session
-            // $store_id = session()->get('store_id');
 
             // Get product details
             $product = Product::find($validatedData['product_id']);
