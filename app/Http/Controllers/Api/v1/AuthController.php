@@ -51,6 +51,9 @@ class AuthController extends Controller
             // store the store id in session
             $request->session()->put('store_id', $storeSession->store_id);
 
+            // Also set it in the request attributes
+            $request->attributes->set('store_id', $storeSession->store_id);
+
             // find the store
             $store = Store::find($storeSession->store_id);
         }
@@ -71,7 +74,7 @@ class AuthController extends Controller
         ];
 
         if ($store) {
-            $response["store"] = new StoreResource($store);
+            $response["data"]["logged_store"] = new StoreResource($store);
         }
 
         // Return the token and user details
