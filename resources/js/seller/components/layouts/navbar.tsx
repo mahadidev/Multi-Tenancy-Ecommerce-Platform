@@ -488,7 +488,7 @@ function UserDropdown() {
                     <span className="sr-only">User menu</span>
                     <Avatar
                         alt=""
-                        img={`${APP_IMAGE_URL}/users/neil-sims.png`}
+                        placeholderInitials={user?.name.slice(0, 1)}
                         rounded
                         size="sm"
                         className="w-max"
