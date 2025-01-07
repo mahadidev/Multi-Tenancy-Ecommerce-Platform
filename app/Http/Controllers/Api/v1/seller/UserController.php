@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Seller;
+namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
@@ -13,7 +13,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        
         // Start the query
         $query = User::query();
     

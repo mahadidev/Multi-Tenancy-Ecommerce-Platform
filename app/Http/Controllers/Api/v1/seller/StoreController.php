@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Seller;
+namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
