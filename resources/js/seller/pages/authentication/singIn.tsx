@@ -18,7 +18,7 @@ export default function SignInPage() {
     const handleLogin = (formState: any) => {
         login(formState).then((response: any) => {
             if (response.data.status === 200) {
-                if (response.data.data.stores) {
+                if (response.data.data.logged_store) {
                     navigate(RoutePath.dashboard);
                 } else {
                     navigate(RoutePath.storeCreate);

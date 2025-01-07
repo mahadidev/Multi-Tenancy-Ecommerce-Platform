@@ -30,8 +30,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('user/register', [AuthController::class, 'userRegister']);
 
     // Theme Routes
-    Route::get('get-themes', [ThemeController::class, 'getThemes']);
-    Route::get('get-theme/{id}', [ThemeController::class, 'getTheme']);
+    Route::get('themes', [ThemeController::class, 'getThemes']);
+    Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('seller/profile', [ProfileController::class, 'profile']);

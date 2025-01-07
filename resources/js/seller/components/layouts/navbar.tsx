@@ -1,7 +1,11 @@
-import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
+import { APP_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import { useMediaQuery } from "@/seller/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
+import {
+    useFetchStoresQuery,
+    useSwitchStoreMutation,
+} from "@/seller/store/reducers/storeApi";
 import { removeAuth } from "@/seller/store/slices/authSlice";
 import {
     toggleIsOpenMobile,
@@ -16,6 +20,7 @@ import {
     TextInput,
     Tooltip,
 } from "flowbite-react";
+import { useState } from "react";
 import {
     HiArchive,
     HiBell,
@@ -37,7 +42,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function DashboardNavbar() {
     const sidebar = useAppSelector((state) => state.base.sidebar);
-    // const { user } = useAppSelector((state) => state.auth);
+    const { store } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -76,20 +81,33 @@ export function DashboardNavbar() {
                             </div>
                         </button>
                         <Navbar.Brand as={Link} href="/" className="mr-14">
-                            <img
-                                className="mr-3 h-8 w-auto dark:hidden"
-                                alt=""
-                                src={`${BASE_IMAGE_URL}/logos/logo-black.png`}
-                                width={32}
-                                height={32}
-                            />
-                            <img
-                                className="mr-3 h-8 w-auto hidden dark:block"
-                                alt=""
-                                src={`${BASE_IMAGE_URL}/logos/logo-white.png`}
-                                width={32}
-                                height={32}
-                            />
+                            {store.logo ? (
+                                <>
+                                    <img
+                                        className="mr-3 h-8 w-auto dark:hidden"
+                                        alt=""
+                                        src={`${store.logo.primary}`}
+                                        width={32}
+                                        height={32}
+                                    />
+
+                                    {store.logo.dark && (
+                                        <img
+                                            className="mr-3 h-8 w-auto hidden dark:block"
+                                            alt=""
+                                            src={`${store.logo.dark}`}
+                                            width={32}
+                                            height={32}
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <h2 className="text-primary-600 font-semibold">
+                                        {store.name}
+                                    </h2>
+                                </>
+                            )}
                         </Navbar.Brand>
                         <form className="hidden lg:block lg:pl-2">
                             <Label htmlFor="search" className="sr-only">
@@ -477,6 +495,9 @@ function UserDropdown() {
     const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [isStoreList, setStoreList] = useState<boolean>(false);
+    const { data: storesData } = useFetchStoresQuery();
+    const [switchStore] = useSwitchStoreMutation();
 
     return (
         <Dropdown
@@ -502,9 +523,31 @@ function UserDropdown() {
                     {user?.email}
                 </span>
             </Dropdown.Header>
-            <div className="flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white">
-                <p>Switch Store</p>
-            </div>
+            {!isStoreList ? (
+                <>
+                    <button
+                        className="flex w-full cursor-pointer items-center justify-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:bg-gray-600 dark:focus:text-white"
+                        onClick={() => setStoreList(true)}
+                    >
+                        Switch Store
+                    </button>
+                </>
+            ) : (
+                <>
+                    {storesData.data.stores.map((item: any, index: number) => (
+                        <Dropdown.Item
+                            key={index}
+                            onClick={() =>
+                                switchStore({
+                                    storeId: item.id,
+                                })
+                            }
+                        >
+                            {item.name}
+                        </Dropdown.Item>
+                    ))}
+                </>
+            )}
             <Dropdown.Divider />
             <Dropdown.Item
                 onClick={() => {

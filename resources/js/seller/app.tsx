@@ -6,6 +6,7 @@ import DashboardPage from "./pages/dashboard/page";
 import EcommerceProductsPage from "./pages/e-commerce/products/page";
 import StoreCreatePage from "./pages/store/create/page";
 import {
+    GuestMiddleware,
     SellerDashboardMiddleware,
     StoreCreateMiddleware,
 } from "./protectedRoutes";
@@ -34,11 +35,13 @@ const App = () => {
                             />
                         </Route>
                     </Route>
-                    <Route path="login" element={<AuthLayout />}>
-                        <Route index element={<SignInPage />} />
-                    </Route>
-                    <Route path="register" element={<AuthLayout />}>
-                        <Route index element={<SignUpPage />} />
+                    <Route path="/" element={<GuestMiddleware />}>
+                        <Route path="login" element={<AuthLayout />}>
+                            <Route index element={<SignInPage />} />
+                        </Route>
+                        <Route path="register" element={<AuthLayout />}>
+                            <Route index element={<SignUpPage />} />
+                        </Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -1,15 +1,32 @@
 import useForm from "@/seller/hooks/useForm";
+import { useAppSelector } from "@/seller/store";
 import { useCreateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { Button, Label, Select, TextInput } from "flowbite-react";
+import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 
-const StepOne = ({ setStep }: { step: number; setStep: CallableFunction }) => {
-    const [createStore, { isLoading, isSuccess, data, error }] =
-        useCreateStoreMutation();
+const StepOne = ({
+    setStep,
+    setFormData,
+}: {
+    step: number;
+    setStep: CallableFunction;
+    setFormData: CallableFunction;
+}) => {
+    const [createStore, { isLoading, error }] = useCreateStoreMutation();
 
-    const { formState, handleChange, formErrors } = useForm({
+    const { formState, handleChange, formErrors, setFormState } = useForm({
         errors: error,
     });
+
+    const { formData, store } = useAppSelector((state) => state.storeOnboard);
+
+    useEffect(() => {
+        if (formData) {
+            setFormState(formData);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formData]);
 
     return (
         <>
@@ -56,7 +73,11 @@ const StepOne = ({ setStep }: { step: number; setStep: CallableFunction }) => {
                                     ? formErrors["name"][0]
                                     : false
                             }
-                            onChange={handleChange}
+                            onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                handleChange(event, setFormData);
+                            }}
                             required
                         />
                     </div>
@@ -83,7 +104,11 @@ const StepOne = ({ setStep }: { step: number; setStep: CallableFunction }) => {
                                         : false
                                     : false
                             }
-                            onChange={handleChange}
+                            onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                handleChange(event, setFormData);
+                            }}
                             required
                         />
                     </div>
@@ -92,12 +117,30 @@ const StepOne = ({ setStep }: { step: number; setStep: CallableFunction }) => {
                     <Button
                         size="xl"
                         type="submit"
-                        color="blue"
+                        color={
+                            formState["name"] && formState["domain"]
+                                ? "blue"
+                                : "gray"
+                        }
                         className="md:w-1/2 [&>span]:text-sm ml-auto"
-                        onClick={() => createStore(formState)}
+                        onClick={() => {
+                            if (store.id) {
+                                setStep(2);
+                            } else {
+                                createStore(formState).then((response: any) => {
+                                    if (response.data.status === 200) {
+                                        setStep(2);
+                                    }
+                                });
+                            }
+                        }}
                         isProcessing={isLoading}
                         processingLabel="Processing"
-                        disabled={isLoading}
+                        disabled={
+                            !formState["name"] ||
+                            !formState["domain"] ||
+                            isLoading
+                        }
                         processingSpinner={
                             <AiOutlineLoading className="h-6 w-6 animate-spin" />
                         }

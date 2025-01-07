@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Api\v1\seller;
 use Illuminate\Support\Facades\Route;
@@ -7,20 +7,22 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
-    
+
     // Select an authorized store
     Route::post('/switch-store', [StoreController::class, 'switchStore']);
-     
+
     // get current store information
     Route::get('/current-store', [StoreController::class, 'currentStore']);
 
     // Store Routes
+    Route::post('/store/{id}', [StoreController::class, "updateByPost"]);
+
     Route::resource('/store', StoreController::class);
 });
 
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
-       
+
     // Brand Routes
     Route::resource('/brand', BrandController::class);
 
@@ -34,7 +36,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Blog Route
     Route::resource('/blog', BlogController::class);
-    
+
     // Store Settings
     Route::get('/settings', [StoreController::class, 'settings']);
 
@@ -44,7 +46,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Subscriber Routes
     Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
 
-     
+
 });
 
 

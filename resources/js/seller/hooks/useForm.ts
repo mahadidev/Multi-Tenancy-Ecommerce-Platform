@@ -1,32 +1,53 @@
+/* eslint-disable prefer-const */
 import React, { useEffect, useState } from "react";
 
-const useForm = ({ errors }: { errors?: any }) => {
+const useForm = (props: any) => {
     const [formState, setFormState] = useState<any>({});
     const [formErrors, setFormErrors] = useState<any>({});
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // eslint-disable-next-line prefer-const
-        let { name, value }: { name: string; value: any } = e.target;
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        onChange?: CallableFunction
+    ) => {
+        let {
+            name,
+            value,
+            type,
+            files,
+        }: { name: string; value: any; type: string; files: any } = e.target;
 
-        if (/^\d+$/.test(value)) {
-            value = parseInt(value);
+        if (type !== "file") {
+            if (/^\d+$/.test(value)) {
+                value = parseInt(value);
+            }
         }
 
+        if (files) {
+            value = files[0];
+        }
+
+        if (onChange) {
+            onChange({
+                name: name,
+                value: value,
+            });
+        }
         setFormErrors((prev: any) => ({ ...prev, [name]: null }));
         setFormState((prev: any) => ({ ...prev, [name]: value }));
     };
 
     useEffect(() => {
-        if (errors && errors?.errors) {
-            setFormErrors(errors.errors);
+        if (props.errors && props.errors?.errors) {
+            setFormErrors(props.errors.errors);
         }
-    }, [errors]);
+    }, [props.errors]);
 
     return {
         handleChange,
         formState,
         setFormState,
         formErrors,
+        ...props,
     };
 };
 
