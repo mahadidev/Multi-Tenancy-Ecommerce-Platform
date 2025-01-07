@@ -118,7 +118,6 @@ class AuthController extends Controller
 
     public function userLogin(Request $request)
     {
-
         $request->validate([
             'email' => 'string|required',
             'password' => 'string|required',
@@ -144,6 +143,13 @@ class AuthController extends Controller
         // Find the user by email and add the store in the user table
         $user = User::where('email', $request->email)->first();
 
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+            'status' => 404,
+            'message' => 'Invalid email or password',
+            ], 401);
+        }
+
         // Check if 'store_id' is null or if the store ID doesn't exist in the array
         if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
             $storeIds = $user->store_id ?? []; // Use an empty array if it's null
@@ -151,12 +157,7 @@ class AuthController extends Controller
             $user->update(['store_id' => $storeIds]); // Update the user
         }
 
-        // Check if the user exists and the password is correct
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Invalid email or password.',
-            ], 401);
-        }
+
 
         // Check if the user has the role of 'user'
         if (!$user->hasRole('user')) {
@@ -317,23 +318,6 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => 200,
                     'message' => 'Logout successful',
-                ]);
-            }
-            return $this->errorResponse('User is not authenticated', 400);
-        });
-    }
-
-    public function profile(Request $request)
-    {
-        return apiResponse(function () use ($request) {
-            $user = auth()->user();
-            if ($user) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'User profile',
-                    'data' => [
-                        'user' => new UserResource($user),
-                    ]
                 ]);
             }
             return $this->errorResponse('User is not authenticated', 400);
