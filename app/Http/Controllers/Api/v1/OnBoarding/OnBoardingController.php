@@ -145,7 +145,7 @@ class OnBoardingController extends Controller
                 'message' => 'store theme selected successfully',
                 'data'    => new StoreResource($store),
                 'theme'   => $store->theme,
-            ], 200);
+            ]);
         });
     }
 
