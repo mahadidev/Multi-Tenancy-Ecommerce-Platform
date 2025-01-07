@@ -58,18 +58,24 @@ class AuthController extends Controller
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Return the token and user details
-        return response()->json([
+
+        $response = [
             'status' => 200,
             'message' => 'login success',
             'data' => [
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
-                'store' => new StoreResource($store),
                 'membership' => null
             ]
-        ]);
+        ];
+
+        if ($store) {
+            $response["store"] = new StoreResource($store);
+        }
+
+        // Return the token and user details
+        return response()->json($response);
     }
 
     public function sellerRegister(Request $request)
@@ -84,7 +90,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' =>  Hash::make($request->password)
+            'password' => Hash::make($request->password)
         ]);
 
         // Assign role to the seller
@@ -159,7 +165,7 @@ class AuthController extends Controller
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        //add store_id in the session 
+        //add store_id in the session
         session(['store_id' => $store->id]);  // Store the new `store_id` in the session
         $request->attributes->set('store_id', $store->id);  // Also set it in the request attributes
 
@@ -171,7 +177,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => [
-                    'id'=> $user->id,
+                    'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
                 ],
@@ -184,7 +190,7 @@ class AuthController extends Controller
         return apiResponse(function () use ($request) {
             $this->validateRegistrationRequest($request);
 
-            $storeId = (int)$request->store_id;
+            $storeId = (int) $request->store_id;
             $email = $request->email;
 
             // Check for existing user with same email and store

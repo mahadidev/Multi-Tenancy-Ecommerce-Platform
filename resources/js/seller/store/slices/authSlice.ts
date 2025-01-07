@@ -5,10 +5,16 @@ const initialState: {
     accessToken?: string | null;
     user?: UserType | null;
     tokenType?: string | null;
+    stores: null | any;
 } = {
     accessToken: null,
     user: null,
     tokenType: null,
+    stores: [
+        {
+            name: "AM Pata",
+        },
+    ],
 };
 const authSlice = createSlice({
     name: "auth",
@@ -20,11 +26,13 @@ const authSlice = createSlice({
                 access_token?: string | null;
                 user?: UserType | null;
                 token_type?: string | null;
+                stores?: [] | null;
             }>
         ) => {
             state.accessToken = action.payload.access_token;
             state.user = action.payload.user;
             state.tokenType = action.payload.token_type;
+            state.stores = action.payload.stores;
         },
         removeAuth: (state) => {
             state.accessToken = null;
