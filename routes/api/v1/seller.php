@@ -62,6 +62,11 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Subscriber Routes
     Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
 
+    // Store Pages Routes
+    Route::get('stores/{store_id}/pages', [StorePageController::class, 'pages']);
+    Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
+    Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
+    Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
 
 });
 

@@ -80,4 +80,8 @@ class Store extends Model
     {
         return $this->belongsTo(Theme::class);
     }
+
+    public function pages(){
+        return $this->hasMany(StorePage::class, 'store_id');
+    }
 }
