@@ -10,9 +10,10 @@ import baseSlice from "./slices/baseSlice";
 import storeOnboardSlice from "./slices/storeOnboardSlice";
 
 const authPersistConfig = {
-    key: "site",
+    key: "chologori",
     blacklist: ["authApi", "storeApi", "themeApi"],
     storage,
+    version: 0,
 };
 
 const persistedReducer = persistReducer(

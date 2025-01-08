@@ -49,21 +49,6 @@ export default function StoreCreatePage() {
                 theme={{ root: { children: "w-full p-6 sm:p-8 md:p-16" } }}
             >
                 <div className="w-full">
-                    <div className="mb-8 flex items-center justify-center space-x-4 lg:hidden">
-                        <a
-                            href="#"
-                            className="flex items-center text-2xl font-semibold"
-                        >
-                            <img
-                                alt=""
-                                className="mr-2 h-8 w-8"
-                                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                            />
-                            <span className="text-gray-900 dark:text-white">
-                                Flowbite
-                            </span>
-                        </a>
-                    </div>
                     <Steper />
                     <>
                         {step === 1 && (

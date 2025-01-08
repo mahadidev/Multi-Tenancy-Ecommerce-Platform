@@ -3,10 +3,12 @@ import { RoutePath } from "./env";
 import { useAppSelector } from "./store";
 
 export const SellerDashboardMiddleware = () => {
-    const { user, accessToken, store } = useAppSelector((state) => state.auth);
+    const { user, accessToken, currentStore } = useAppSelector(
+        (state) => state.auth
+    );
 
     return user && accessToken ? (
-        store ? (
+        currentStore ? (
             <Outlet />
         ) : (
             <Navigate to={RoutePath.storeCreate} />
@@ -23,11 +25,13 @@ export const StoreCreateMiddleware = () => {
 };
 
 export const GuestMiddleware = () => {
-    const { user, accessToken, store } = useAppSelector((state) => state.auth);
+    const { user, accessToken, currentStore } = useAppSelector(
+        (state) => state.auth
+    );
 
     return !user && !accessToken ? (
         <Outlet />
-    ) : store ? (
+    ) : currentStore ? (
         <Navigate to={RoutePath.dashboard} />
     ) : (
         <Navigate to={RoutePath.storeCreate} />

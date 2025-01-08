@@ -42,7 +42,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function DashboardNavbar() {
     const sidebar = useAppSelector((state) => state.base.sidebar);
-    const { store } = useAppSelector((state) => state.auth);
+    const { currentStore } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -81,21 +81,21 @@ export function DashboardNavbar() {
                             </div>
                         </button>
                         <Navbar.Brand as={Link} href="/" className="mr-14">
-                            {store.logo ? (
+                            {currentStore.logo ? (
                                 <>
                                     <img
                                         className="mr-3 h-8 w-auto dark:hidden"
                                         alt=""
-                                        src={`${store.logo.primary}`}
+                                        src={`${currentStore.logo.primary}`}
                                         width={32}
                                         height={32}
                                     />
 
-                                    {store.logo.dark && (
+                                    {currentStore.logo.dark && (
                                         <img
                                             className="mr-3 h-8 w-auto hidden dark:block"
                                             alt=""
-                                            src={`${store.logo.dark}`}
+                                            src={`${currentStore.logo.dark}`}
                                             width={32}
                                             height={32}
                                         />
@@ -104,7 +104,7 @@ export function DashboardNavbar() {
                             ) : (
                                 <>
                                     <h2 className="text-primary-600 font-semibold">
-                                        {store.name}
+                                        {currentStore.name}
                                     </h2>
                                 </>
                             )}

@@ -1,8 +1,11 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
-import { addStore, setStore } from "../slices/authSlice";
-import { setStore as setOnboardStore } from "../slices/storeOnboardSlice";
+import { addStore, setCurrentStore } from "../slices/authSlice";
+import {
+    setStore as setOnboardStore,
+    setStore,
+} from "../slices/storeOnboardSlice";
 
 export const storeApi = createApi({
     reducerPath: "storeApi",
@@ -15,6 +18,14 @@ export const storeApi = createApi({
                     url: `${SELLER_PREFIX}/get-stores`,
                     method: "get",
                 }),
+            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
+                try {
+                    const { data: response } = await queryFulfilled;
+                    dispatch(setStore(response.data.stores));
+                } catch (err) {
+                    /* empty */
+                }
+            },
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
         }),
@@ -27,7 +38,7 @@ export const storeApi = createApi({
             async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
                 try {
                     const { data: response } = await queryFulfilled;
-                    dispatch(addStore(response.data));
+                    dispatch(setCurrentStore(response.data));
                 } catch (err) {
                     /* empty */
                 }
@@ -51,9 +62,9 @@ export const storeApi = createApi({
             async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
                 try {
                     const { data: response } = await queryFulfilled;
+
+                    dispatch(setCurrentStore(response.data));
                     dispatch(setOnboardStore(response.data));
-                    dispatch(addStore(response.data));
-                    dispatch(setStore(response.data));
                 } catch (err) {
                     /* empty */
                 }
@@ -85,8 +96,8 @@ export const storeApi = createApi({
             async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
                 try {
                     const { data: response } = await queryFulfilled;
+                    dispatch(setCurrentStore(response.data));
                     dispatch(setOnboardStore(response.data));
-                    dispatch(addStore(response.data));
                 } catch (err) {
                     /* empty */
                 }
@@ -112,7 +123,7 @@ export const storeApi = createApi({
             async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
                 try {
                     const { data: response } = await queryFulfilled;
-                    dispatch(setStore(response.data));
+                    dispatch(setCurrentStore(response.data));
                 } catch (err) {
                     /* empty */
                 }
