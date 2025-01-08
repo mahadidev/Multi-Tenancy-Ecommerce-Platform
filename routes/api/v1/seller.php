@@ -1,6 +1,8 @@
 <?php 
 
 namespace App\Http\Controllers\Api\v1\seller;
+use App\Http\Controllers\Api\v1\ProfileController;
+use App\Http\Controllers\Api\v1\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
@@ -16,6 +18,18 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // Store Routes
     Route::resource('/store', StoreController::class);
+
+    // Profile Route
+    Route::get('profile', [ProfileController::class, 'profile']);
+
+    // Update Profile Info Route
+    Route::post('update', [ProfileController::class, 'updateProfile']);
+
+    // Password Change Route
+    Route::post('password-change', [ProfileController::class, 'passwordChange']);
+
+    // Logout Route
+    Route::get('logout', [AuthController::class, 'logout']);
 });
 
 
