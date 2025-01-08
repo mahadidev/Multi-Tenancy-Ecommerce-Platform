@@ -20,8 +20,6 @@ const authSlice = createSlice({
                 access_token?: string | null;
                 user?: UserType | null;
                 token_type?: string | null;
-                stores?: [] | null;
-                currentStore?: any | null;
             }>
         ) => {
             state.accessToken = action.payload.access_token;

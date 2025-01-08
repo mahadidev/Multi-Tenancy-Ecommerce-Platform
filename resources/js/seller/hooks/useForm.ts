@@ -16,7 +16,7 @@ const useForm = (props: any) => {
             files,
         }: { name: string; value: any; type: string; files: any } = e.target;
 
-        if (type !== "file") {
+        if (type !== "file" && type !== "tel") {
             if (/^\d+$/.test(value)) {
                 value = parseInt(value);
             }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
@@ -19,18 +20,17 @@ const StepThree = ({
 }) => {
     const { data: themesData, isFetching } = useFetchThemesQuery();
     const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
-    const { store } = useAppSelector((state) => state.storeOnboard);
+    const { currentStore: store } = useAppSelector((state) => state.store);
     const { formState, handleChange, setFormState } = useForm({
         errors: error,
     });
 
     useEffect(() => {
-        if (themesData && !formState["theme_id"]) {
+        if (themesData && themesData.length > 0 && !formState["theme_id"]) {
             setFormState({
                 theme_id: themesData.data.themes[0].id,
             });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [themesData, isFetching]);
 
     const navigate = useNavigate();
@@ -111,6 +111,8 @@ const StepThree = ({
                                 if (response.data.status === 200) {
                                     dispatch(clearOnboard());
                                     navigate(RoutePath.dashboard);
+                                } else {
+                                    setStep(1);
                                 }
                             });
                         }}

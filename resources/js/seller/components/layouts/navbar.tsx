@@ -1,12 +1,8 @@
 import { APP_IMAGE_URL } from "@/env";
-import { RoutePath } from "@/seller/env";
 import { useMediaQuery } from "@/seller/hooks/use-media-query";
+import useAuth from "@/seller/hooks/useAuth";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
-import {
-    useFetchStoresQuery,
-    useSwitchStoreMutation,
-} from "@/seller/store/reducers/storeApi";
-import { removeAuth } from "@/seller/store/slices/authSlice";
+import { useSwitchStoreMutation } from "@/seller/store/reducers/storeApi";
 import {
     toggleIsOpenMobile,
     toggleSidebar,
@@ -38,11 +34,11 @@ import {
     HiViewGrid,
     HiX,
 } from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function DashboardNavbar() {
     const sidebar = useAppSelector((state) => state.base.sidebar);
-    const { currentStore } = useAppSelector((state) => state.store);
+    const { currentStore: store } = useAppSelector((state) => state.store);
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -81,30 +77,31 @@ export function DashboardNavbar() {
                             </div>
                         </button>
                         <Navbar.Brand as={Link} href="/" className="mr-14">
-                            {currentStore.logo ? (
+                            {store.logos ? (
                                 <>
                                     <img
                                         className="mr-3 h-8 w-auto dark:hidden"
                                         alt=""
-                                        src={`${currentStore.logo.primary}`}
+                                        src={`${store.logos.primary}`}
                                         width={32}
                                         height={32}
                                     />
 
-                                    {currentStore.logo.dark && (
-                                        <img
-                                            className="mr-3 h-8 w-auto hidden dark:block"
-                                            alt=""
-                                            src={`${currentStore.logo.dark}`}
-                                            width={32}
-                                            height={32}
-                                        />
-                                    )}
+                                    <img
+                                        className="mr-3 h-8 w-auto hidden dark:block"
+                                        alt=""
+                                        src={`${
+                                            store.logos.dark ??
+                                            store.logos.primary
+                                        }`}
+                                        width={32}
+                                        height={32}
+                                    />
                                 </>
                             ) : (
                                 <>
                                     <h2 className="text-primary-600 font-semibold">
-                                        {currentStore.name}
+                                        {store.name}
                                     </h2>
                                 </>
                             )}
@@ -493,10 +490,9 @@ function AppDrawerDropdown() {
 
 function UserDropdown() {
     const { user } = useAppSelector((state) => state.auth);
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+    const { loggedOut } = useAuth();
     const [isStoreList, setStoreList] = useState<boolean>(false);
-    const { data: storesData } = useFetchStoresQuery();
+    const { stores } = useAppSelector((state) => state.store);
     const [switchStore] = useSwitchStoreMutation();
 
     return (
@@ -534,7 +530,7 @@ function UserDropdown() {
                 </>
             ) : (
                 <>
-                    {storesData.data.stores.map((item: any, index: number) => (
+                    {stores.map((item: any, index: number) => (
                         <Dropdown.Item
                             key={index}
                             onClick={() =>
@@ -549,14 +545,7 @@ function UserDropdown() {
                 </>
             )}
             <Dropdown.Divider />
-            <Dropdown.Item
-                onClick={() => {
-                    dispatch(removeAuth());
-                    navigate(RoutePath.login);
-                }}
-            >
-                Sign out
-            </Dropdown.Item>
+            <Dropdown.Item onClick={loggedOut}>Sign out</Dropdown.Item>
         </Dropdown>
     );
 }

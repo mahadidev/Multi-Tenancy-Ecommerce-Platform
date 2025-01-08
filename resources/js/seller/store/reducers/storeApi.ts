@@ -18,7 +18,12 @@ export const storeApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Stores"],
         }),
-        fetchCurrentStore: builder.query<any, void>({
+        fetchCurrentStore: builder.query<
+            any,
+            {
+                responseType?: "store";
+            } | void
+        >({
             query: () =>
                 createRequest({
                     url: `${SELLER_PREFIX}/current-store`,
@@ -32,7 +37,13 @@ export const storeApi = createApi({
                     /* empty */
                 }
             },
-            transformResponse: (response) => response,
+            transformResponse: (response: any, _meta, arg) => {
+                if (arg && arg.responseType == "store") {
+                    return response.data.store;
+                } else {
+                    return response;
+                }
+            },
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["CurrentStore"],
         }),
@@ -62,6 +73,7 @@ export const storeApi = createApi({
         >({
             query: (data) => {
                 const formData = new FormData();
+                formData.append("_method", "put");
                 Object.keys(data.formData).map((key: any) => {
                     formData.append(key, data.formData[key]);
                 });
