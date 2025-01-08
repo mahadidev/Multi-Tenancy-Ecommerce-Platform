@@ -152,26 +152,18 @@ class StorePageController extends Controller
         $storePage->update($validatedData);
 
         // Update widgets if provided
-        if (!empty($validatedData['widgets'])) {
+        if ($request->has('widgets')) {
+            $storePage->widgets()->delete();
+
             foreach ($validatedData['widgets'] as $widget) {
-                if (!empty($widget['id'])) {
-                    // Update existing widget
-                    $storePageWidget = StorePageWidget::find($widget['id']);
-                    $storePageWidget->update([
-                        'name' => $widget['name'],
-                        'label' => $widget['label'],
-                        'inputs' => $widget['inputs'] ?? [],
-                    ]);
-                } else {
-                    // Create a new widget
-                    StorePageWidget::create([
-                        'store_page_id' => $storePage->id,
-                        'name' => $widget['name'],
-                        'label' => $widget['label'],
-                        'inputs' => $widget['inputs'] ?? [],
-                    ]);
-                }
+                StorePageWidget::create([
+                    'store_page_id' => $storePage->id,
+                    'name' => $widget['name'],
+                    'label' => $widget['label'],
+                    'inputs' => $widget['inputs'] ?? [],
+                ]);
             }
+           
         }
 
         // Return a success response
