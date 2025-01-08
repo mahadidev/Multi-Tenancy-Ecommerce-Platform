@@ -4,7 +4,8 @@ import SignInPage from "./pages/authentication/singIn";
 import SignUpPage from "./pages/authentication/singup";
 import DashboardPage from "./pages/dashboard/page";
 import EcommerceProductsPage from "./pages/e-commerce/products/page";
-import StoreCreatePage from "./pages/store/create/page";
+import SettingPage from "./pages/settings/page";
+import StoreCreatePage from "./pages/store-onboard/create/page";
 import {
     GuestMiddleware,
     SellerDashboardMiddleware,
@@ -25,6 +26,8 @@ const App = () => {
                                     element={<EcommerceProductsPage />}
                                 />
                             </Route>
+
+                            <Route path="settings" element={<SettingPage />} />
                         </Route>
                     </Route>
                     <Route path="/" element={<StoreCreateMiddleware />}>

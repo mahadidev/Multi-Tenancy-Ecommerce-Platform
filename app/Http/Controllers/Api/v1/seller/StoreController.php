@@ -18,13 +18,15 @@ class StoreController extends Controller
     {
         $stores = Store::storeOwner()->active()->latest()->get();
 
+        $user = auth()->user();
+        $current_store = Store::where('id', $user->storeSession->store_id)->first();
 
         // Return success response
         return response()->json([
             'status' => 200,
-            // 'message' => 'Store created successfully.',
             'data' => [
                 'stores' => StoreResource::collection($stores),
+                'current_store' => new StoreResource($current_store),
             ]
         ]);
 
@@ -36,12 +38,16 @@ class StoreController extends Controller
 
         try {
             $store = Store::storeOwner()->active()->findorfail($id);
+
             return response()->json([
-                'store' => new StoreResource($store),
-            ], 200);
+                'status' => 200,
+                'data' => [
+                    'store' => new StoreResource($store),
+                ]
+            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'data not found',
+                'error' => 'Invalid store id',
             ], 404);
         }
     }
@@ -90,6 +96,10 @@ class StoreController extends Controller
             'settings' => $request->settings ?? null
         ]);
 
+
+        // update store session
+        $this->updateStoreSession($request, $store);
+
         // Return success response
         return response()->json([
             'status' => 200,
@@ -101,7 +111,14 @@ class StoreController extends Controller
     public function updateByPost(Request $request, $id)
     {
         // Find the store by ID
-        $store = Store::storeOwner()->active()->findOrFail($id);
+        $store = Store::storeOwner()->active()->find($id);
+
+        if (!$store) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid store id'
+            ]);
+        }
 
         // Validate the incoming request data
         $request->validate([
@@ -152,7 +169,14 @@ class StoreController extends Controller
     public function update(Request $request, $id)
     {
         // Find the store by ID
-        $store = Store::storeOwner()->active()->findOrFail($id);
+        $store = Store::storeOwner()->active()->find($id);
+
+        if (!$store) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid store id'
+            ]);
+        }
 
         // Validate the incoming request data
         $request->validate([
@@ -203,14 +227,14 @@ class StoreController extends Controller
     public function destroy($id)
     {
         // Find the store owned by the authenticated user
-        $store = Store::storeOwner()->active()->findorfail($id);
+        $store = Store::storeOwner()->active()->find($id);
 
         // If the store doesn't exist or is not owned by the user, return an error
         if (!$store) {
             return response()->json([
-                'success' => false,
+                'status' => 403,
                 'message' => 'You are not authorized to delete this store or it does not exist.',
-            ], 403); // Forbidden
+            ], 403);
         }
 
         // Delete the store record
@@ -231,11 +255,18 @@ class StoreController extends Controller
         ]);
 
         // Retrieve the store and ensure it belongs to the authenticated user and is active
-        $store = Store::storeOwner()->active()->findOrFail($request->store_id);
+        $store = Store::storeOwner()->active()->find($request->store_id);
 
-        // // update store_id in store_session table
+        if (!$store) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid store id'
+            ]);
+        }
+
+        // update store_id in store_session table
         StoreSession::updateOrCreate([
-            'user_id' => session('user_id'),
+            'user_id' => auth()->user()->id,
         ], [
             'store_id' => $store->id,
         ]);
@@ -265,15 +296,8 @@ class StoreController extends Controller
     {
 
         // Retrieve store_id from session or request attributes
-        $storeId = authStore();
-
-        if (!$storeId) {
-            return response()->json([
-                'error' => 'Currently no store is selected!',
-            ], 404);
-        }
-
-        $store = Store::findorfail($storeId);
+        $user = auth()->user();
+        $store = Store::where('id', $user->storeSession->store_id)->first();
 
         return response()->json([
             'status' => 200,
@@ -284,4 +308,25 @@ class StoreController extends Controller
         ]);
     }
 
+    public function updateStoreSession(Request $request, $store): void
+    {
+        // // update store_id in store_session table
+        $storeSession = StoreSession::updateOrCreate([
+            'user_id' => auth()->user()->id,
+        ], [
+            'store_id' => $store->id,
+        ]);
+
+        // Check if a store_id exists in the session and remove it
+        if (session()->has('store_id')) {
+            session()->forget('store_id');
+        }
+
+        // Store the new `store_id` in the session
+        session(['store_id' => $store->id]);
+
+        // Also set it in the request attributes
+        $request->attributes->set('store_id', $store->id);
+
+    }
 }

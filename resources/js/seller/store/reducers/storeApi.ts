@@ -118,16 +118,16 @@ export const storeApi = createApi({
                     },
                 });
             },
-            transformResponse: (response: { data: any }) => response,
-            transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
                 try {
                     const { data: response } = await queryFulfilled;
-                    dispatch(setCurrentStore(response.data));
+                    dispatch(setCurrentStore(response.data.store));
                 } catch (err) {
                     /* empty */
                 }
             },
+            transformResponse: (response: { data: any }) => response,
+            transformErrorResponse: (error: any) => error.data,
         }),
     }),
 });
