@@ -60,12 +60,12 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         ];
     }
 
-    public function getStoresAttribute()
-    {
-        return Store::whereIn('id', $this->store_id ?? [])
-            ->whereNull('deleted_at')
-            ->get();
-    }
+    // public function getStoresAttribute()
+    // {
+    //     return Store::whereIn('id', $this->store_id ?? [])
+    //         ->whereNull('deleted_at')
+    //         ->get();
+    // }
 
     public function getUserImageAttribute()
     {
