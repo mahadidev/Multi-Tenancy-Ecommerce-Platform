@@ -16,10 +16,12 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     // get current store information
     Route::get('/current-store', [StoreController::class, 'currentStore']);
 
+    
     // Store Routes
-    Route::post('/store/{id}', [StoreController::class, "updateByPost"]);
-
     Route::resource('/store', StoreController::class);
+
+    // Store Update Route
+    Route::post('/store/{id}', [StoreController::class, "updateByPost"]);
 
     // Profile Route
     Route::get('profile', [ProfileController::class, 'profile']);
