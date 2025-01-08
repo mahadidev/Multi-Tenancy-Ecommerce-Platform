@@ -64,6 +64,16 @@ class AuthController extends Controller
             $store = Store::find($storeSession->store_id);
         }
 
+        if (!$storeSession) {
+            $store = Store::where(["owner_id" => $user->id])->first();
+
+            // store the store id in session
+            $request->session()->put('store_id', $store->id);
+
+            // Also set it in the request attributes
+            $request->attributes->set('store_id', $store->id);
+        }
+
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 

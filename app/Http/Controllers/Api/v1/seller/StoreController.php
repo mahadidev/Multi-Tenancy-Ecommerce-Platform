@@ -20,15 +20,15 @@ class StoreController extends Controller
 
 
         // Return success response
-         return response()->json([
+        return response()->json([
             'status' => 200,
             // 'message' => 'Store created successfully.',
-            'data'    => [
+            'data' => [
                 'stores' => StoreResource::collection($stores),
             ]
         ]);
 
-       
+
     }
 
     public function show(Request $request, $id)
@@ -50,12 +50,12 @@ class StoreController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'domain'   => 'required|string|max:25|unique:stores|regex:/^[a-zA-Z0-9\-]+$/',
-            'email'    => 'required|email|max:255',
-            'phone'    => 'required|string|max:20',
-            'location' => 'required|string|max:255',
-            'currency' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'domain' => 'required|string|max:25|unique:stores|regex:/^[a-zA-Z0-9\-]+$/',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'location' => 'nullable|string|max:255',
+            'currency' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'settings' => 'nullable|array',
@@ -73,19 +73,20 @@ class StoreController extends Controller
             $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
         }
 
+
         // Create a new store record
         $store = Store::create([
             'owner_id' => auth()->user()->id,
-            'name'     => $request->name,
-            'slug'     => $request->slug,
-            'domain'   => $request->domain,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
-            'location' => $request->location,
-            'currency' => $request->currency,
-            'logo' =>  $logoPath,
-            'dark_logo' =>  $darkLogoPath,
-            'status'   => $request->status ?? 1,
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'domain' => $request->domain ?? null,
+            'email' => $request->email ?? null,
+            'phone' => $request->phone ?? null,
+            'location' => $request->location ?? null,
+            // 'currency' => $request->currency ?? null,
+            'logo' => $logoPath,
+            'dark_logo' => $darkLogoPath,
+            'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null
         ]);
 
@@ -93,8 +94,59 @@ class StoreController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store created successfully.',
-            'data'    => new StoreResource($store),
+            'data' => new StoreResource($store),
         ]);
+    }
+
+    public function updateByPost(Request $request, $id)
+    {
+        // Find the store by ID
+        $store = Store::storeOwner()->active()->findOrFail($id);
+
+        // Validate the incoming request data
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'domain' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:stores,domain,' . $store->id, // Ignore the current store's domain
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'location' => 'nullable|string|max:255',
+            'currency' => 'nullable|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'settings' => 'nullable|array',
+        ]);
+
+        // Handle the logo file upload if present
+        $logoPath = null;
+        if ($request->hasFile('logo') && isset($request->logo)) {
+            $logoPath = $request->file('logo')->store('stores', 'public');
+        }
+
+        $darkLogoPath = null;
+        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
+            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
+        }
+
+        // Update the store record
+        $store->update([
+            'name' => $request->name ?? $store->name,
+            'domain' => $request->domain ?? $store->domain,
+            'email' => $request->email ?? $store->email,
+            'phone' => $request->phone ?? $store->phone,
+            'location' => $request->location ?? $store->location,
+            'currency' => $request->currency ?? $store->currency,
+            'status' => $request->status ?? $store->status, // Retain the existing status if not provided
+            'logo' => $logoPath ?? $store->logo,
+            'dark_logo' => $darkLogoPath ?? $store->dark_logo,
+            'settings' => $request->settings ?? $store->settings
+        ]);
+
+        // Return success response
+        return response()->json([
+            'status' => 200,
+            'message' => 'Store updated successfully.',
+            'data' => new StoreResource($store),
+        ], 200);
     }
 
     public function update(Request $request, $id)
@@ -104,39 +156,39 @@ class StoreController extends Controller
 
         // Validate the incoming request data
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'domain'   => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:stores,domain,' . $store->id, // Ignore the current store's domain
-            'email'    => 'required|email|max:255',
-            'phone'    => 'required|string|max:20',
-            'location' => 'required|string|max:255',
-            'currency' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
+            'domain' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:stores,domain,' . $store->id, // Ignore the current store's domain
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'location' => 'nullable|string|max:255',
+            'currency' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'settings' => 'nullable|array',
         ]);
 
-         // Handle the logo file upload if present
-         $logoPath = null;
-         if ($request->hasFile('logo') && isset($request->logo)) {
-             $logoPath = $request->file('logo')->store('stores', 'public');
-         }
+        // Handle the logo file upload if present
+        $logoPath = null;
+        if ($request->hasFile('logo') && isset($request->logo)) {
+            $logoPath = $request->file('logo')->store('stores', 'public');
+        }
 
-         $darkLogoPath = null;
-         if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-             $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-         }
+        $darkLogoPath = null;
+        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
+            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
+        }
 
         // Update the store record
         $store->update([
-            'name'     => $request->name,
-            'domain'   => $request->domain ?? $store->domain,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
-            'location' => $request->location,
-            'currency' => $request->currency,
-            'status'   => $request->status ?? $store->status, // Retain the existing status if not provided
-            'logo' => $logoPath,
-            'dark_logo' =>  $darkLogoPath,
+            'name' => $request->name ?? $store->name,
+            'domain' => $request->domain ?? $store->domain,
+            'email' => $request->email ?? $store->email,
+            'phone' => $request->phone ?? $store->phone,
+            'location' => $request->location ?? $store->location,
+            'currency' => $request->currency ?? $store->currency,
+            'status' => $request->status ?? $store->status, // Retain the existing status if not provided
+            'logo' => $logoPath ?? $store->logo,
+            'dark_logo' => $darkLogoPath ?? $store->dark_logo,
             'settings' => $request->settings ?? $store->settings
         ]);
 
@@ -144,7 +196,7 @@ class StoreController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store updated successfully.',
-            'data'    => new StoreResource($store),
+            'data' => new StoreResource($store),
         ], 200);
     }
 
@@ -228,7 +280,7 @@ class StoreController extends Controller
             'data' => [
                 'store' => new StoreResource($store)
             ]
-          
+
         ]);
     }
 

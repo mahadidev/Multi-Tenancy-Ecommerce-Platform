@@ -4,12 +4,14 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
 import { storeApi } from "./reducers/storeApi";
+import { themeApi } from "./reducers/themeApi";
 import authSlice from "./slices/authSlice";
 import baseSlice from "./slices/baseSlice";
+import storeOnboardSlice from "./slices/storeOnboardSlice";
 
 const authPersistConfig = {
     key: "site",
-    blacklist: ["authApi", "storeApi"],
+    blacklist: ["authApi", "storeApi", "themeApi"],
     storage,
 };
 
@@ -18,8 +20,10 @@ const persistedReducer = persistReducer(
     combineReducers({
         base: baseSlice,
         auth: authSlice,
+        storeOnboard: storeOnboardSlice,
         [authApi.reducerPath]: authApi.reducer,
         [storeApi.reducerPath]: storeApi.reducer,
+        [themeApi.reducerPath]: themeApi.reducer,
     })
 );
 
@@ -28,7 +32,11 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({
             serializableCheck: false,
-        }).concat([authApi.middleware, storeApi.middleware]);
+        }).concat([
+            authApi.middleware,
+            storeApi.middleware,
+            themeApi.middleware,
+        ]);
     },
 });
 

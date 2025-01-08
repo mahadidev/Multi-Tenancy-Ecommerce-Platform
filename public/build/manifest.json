@@ -1,10 +1,10 @@
 {
-  "_chunk-K6AXKMTT-9g0Yz8hm.js": {
-    "file": "assets/chunk-K6AXKMTT-9g0Yz8hm.js",
+  "_chunk-K6AXKMTT-DFvlodIp.js": {
+    "file": "assets/chunk-K6AXKMTT-DFvlodIp.js",
     "name": "chunk-K6AXKMTT"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BTZ4GvHa.css",
+    "file": "assets/app-CPxsICp4.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -23,12 +23,12 @@
     "src": "resources/js/frontend/assets/images/search-bg.jpg"
   },
   "resources/js/frontend/index.tsx": {
-    "file": "assets/index-CLoZlB3i.js",
+    "file": "assets/index-D0jeB8lT.js",
     "name": "index",
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-9g0Yz8hm.js"
+      "_chunk-K6AXKMTT-DFvlodIp.js"
     ],
     "css": [
       "assets/index-CuHhE1Is.css"
@@ -39,15 +39,15 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-CUVBUbtp.js",
+    "file": "assets/index-BuNfHmFb.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-9g0Yz8hm.js"
+      "_chunk-K6AXKMTT-DFvlodIp.js"
     ],
     "css": [
-      "assets/index-DntCwN2f.css"
+      "assets/index-Dn5HlYpM.css"
     ]
   }
 }

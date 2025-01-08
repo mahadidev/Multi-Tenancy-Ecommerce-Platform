@@ -73,7 +73,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     }
 
 
-    public function getProfilePhotoUrlAttribute() {}
+    public function getProfilePhotoUrlAttribute()
+    {
+    }
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->image;
