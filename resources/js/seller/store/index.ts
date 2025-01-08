@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
+import { settingApi } from "./reducers/settingApi";
 import { storeApi } from "./reducers/storeApi";
 import { themeApi } from "./reducers/themeApi";
 import authSlice from "./slices/authSlice";
 import baseSlice from "./slices/baseSlice";
+import settingSlice from "./slices/settingSlice";
 import storeOnboardSlice from "./slices/storeOnboardSlice";
+import storeSlice from "./slices/storeSlice";
 
 const authPersistConfig = {
     key: "chologori",
@@ -21,10 +24,13 @@ const persistedReducer = persistReducer(
     combineReducers({
         base: baseSlice,
         auth: authSlice,
+        store: storeSlice,
         storeOnboard: storeOnboardSlice,
+        settingSlice: settingSlice,
         [authApi.reducerPath]: authApi.reducer,
         [storeApi.reducerPath]: storeApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,
+        [settingApi.reducerPath]: settingApi.reducer,
     })
 );
 
@@ -37,6 +43,7 @@ export const store = configureStore({
             authApi.middleware,
             storeApi.middleware,
             themeApi.middleware,
+            settingApi.middleware,
         ]);
     },
 });

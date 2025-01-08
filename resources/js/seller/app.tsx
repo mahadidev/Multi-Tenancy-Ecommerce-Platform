@@ -8,8 +8,8 @@ import SettingPage from "./pages/settings/page";
 import StoreCreatePage from "./pages/store-onboard/create/page";
 import {
     GuestMiddleware,
+    LoggedMiddleware,
     SellerDashboardMiddleware,
-    StoreCreateMiddleware,
 } from "./protectedRoutes";
 
 const App = () => {
@@ -17,20 +17,23 @@ const App = () => {
         <>
             <BrowserRouter basename={"/seller"}>
                 <Routes>
-                    <Route path="/" element={<SellerDashboardMiddleware />}>
-                        <Route path="/" element={<DashboardLayout />}>
-                            <Route index element={<DashboardPage />} />
-                            <Route path="e-commerce" element={<Outlet />}>
+                    <Route path="/" element={<LoggedMiddleware />}>
+                        <Route path="/" element={<SellerDashboardMiddleware />}>
+                            <Route path="/" element={<DashboardLayout />}>
+                                <Route index element={<DashboardPage />} />
+                                <Route path="e-commerce" element={<Outlet />}>
+                                    <Route
+                                        path="products"
+                                        element={<EcommerceProductsPage />}
+                                    />
+                                </Route>
+
                                 <Route
-                                    path="products"
-                                    element={<EcommerceProductsPage />}
+                                    path="settings"
+                                    element={<SettingPage />}
                                 />
                             </Route>
-
-                            <Route path="settings" element={<SettingPage />} />
                         </Route>
-                    </Route>
-                    <Route path="/" element={<StoreCreateMiddleware />}>
                         <Route path="store" element={<AuthLayout />}>
                             <Route
                                 path="create"

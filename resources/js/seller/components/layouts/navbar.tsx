@@ -42,7 +42,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export function DashboardNavbar() {
     const sidebar = useAppSelector((state) => state.base.sidebar);
-    const { currentStore } = useAppSelector((state) => state.auth);
+    const { currentStore } = useAppSelector((state) => state.store);
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
 

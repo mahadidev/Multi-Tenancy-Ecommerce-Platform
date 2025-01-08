@@ -1,8 +1,9 @@
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
-import { useAppSelector } from "@/seller/store";
+import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { useFetchThemesQuery } from "@/seller/store/reducers/themeApi";
+import { clearOnboard } from "@/seller/store/slices/storeOnboardSlice";
 import { Button } from "flowbite-react";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -33,6 +34,7 @@ const StepThree = ({
     }, [themesData, isFetching]);
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     return (
         <>
@@ -107,6 +109,7 @@ const StepThree = ({
                                 formData: formState,
                             }).then((response: any) => {
                                 if (response.data.status === 200) {
+                                    dispatch(clearOnboard());
                                     navigate(RoutePath.dashboard);
                                 }
                             });

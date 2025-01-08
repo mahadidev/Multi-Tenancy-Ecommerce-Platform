@@ -4,7 +4,7 @@
     "name": "chunk-K6AXKMTT"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CPxsICp4.css",
+    "file": "assets/app-BJxEgGFw.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -39,7 +39,7 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-BuNfHmFb.js",
+    "file": "assets/index-BDOAvHVu.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
