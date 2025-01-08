@@ -53,7 +53,9 @@ class AuthController extends Controller
         if ($storeSession) {
             // remove previous store id from session
             $request->session()->forget('store_id');
-            session()->forget('store_id');
+            if(session()->has('store_id')){
+                session()->forget('store_id');
+            }
 
             // store the store id in session
             session(['store_id' => $storeSession->id]);
@@ -76,7 +78,9 @@ class AuthController extends Controller
                 ]);
 
                 $request->session()->forget('store_id');
-                session()->forget('store_id');
+                if(session()->has('store_id')){
+                    session()->forget('store_id');
+                }
     
                 // store the store id in session
                 session(['store_id' => $store->id]);

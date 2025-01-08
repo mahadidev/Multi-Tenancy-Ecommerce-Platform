@@ -93,6 +93,10 @@ class StoreController extends Controller
             'settings' => $request->settings ?? null
         ]);
 
+
+        // update store session
+        $this->updateStoreSession($request, $store);
+
         // Return success response
         return response()->json([
             'status' => 200,
@@ -248,9 +252,16 @@ class StoreController extends Controller
         ]);
 
         // Retrieve the store and ensure it belongs to the authenticated user and is active
-        $store = Store::storeOwner()->active()->findOrFail($request->store_id);
+        $store = Store::storeOwner()->active()->find($request->store_id);
 
-        // // update store_id in store_session table
+        if(!$store){
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid store id'
+            ]);
+        }
+
+        // update store_id in store_session table
         StoreSession::updateOrCreate([
             'user_id' => auth()->user()->id,
         ], [
@@ -282,14 +293,8 @@ class StoreController extends Controller
     {
 
         // Retrieve store_id from session or request attributes
-        $storeId = authStore();
-        $store = Store::find($storeId);
-
-        if (!$store) {
-            return response()->json([
-                'error' => 'Currently no store is selected!',
-            ], 404);
-        }
+        $user = auth()->user();
+        $store = Store::where('id', $user->storeSession->store_id)->first();
 
         return response()->json([
             'status' => 200,
@@ -299,5 +304,26 @@ class StoreController extends Controller
 
         ]);
     }
+    
+    public function updateStoreSession(Request $request, $store) : void
+    {
+        // // update store_id in store_session table
+        $storeSession = StoreSession::updateOrCreate([
+            'user_id' => auth()->user()->id,
+        ], [
+            'store_id' => $store->id,
+        ]);
 
+        // Check if a store_id exists in the session and remove it
+        if (session()->has('store_id')) {
+            session()->forget('store_id');
+        }
+
+        // Store the new `store_id` in the session
+        session(['store_id' => $store->id]);
+
+        // Also set it in the request attributes
+        $request->attributes->set('store_id', $store->id);
+
+    }
 }
