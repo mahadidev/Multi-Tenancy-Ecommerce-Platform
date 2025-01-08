@@ -28,7 +28,7 @@ class OnBoardingController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' =>  Hash::make($request->password)
+                'password' => Hash::make($request->password)
             ]);
 
             // Assign role to the seller
@@ -68,7 +68,7 @@ class OnBoardingController extends Controller
         ]);
 
         return apiResponse(function () use ($request) {
-
+           
             $user_id = $request->session()->get('user_id');
 
             $store = Store::create([
@@ -85,13 +85,10 @@ class OnBoardingController extends Controller
             ]);
 
             // remove previous store id from session
-            session()->forget('onboarding_store_id');
+            $request->session()->forget('store_id');
 
-            // Store the new `store_id` in the session
-            session(['onboarding_store_id' => $store->id]);
-
-            // Also set it in the request attributes
-            $request->attributes->set('onboarding_store_id', $store->id);
+            // store the store id in session
+            $request->session()->put('store_id', $store->id);
 
             return response()->json([
                 'status' => 200,
@@ -104,16 +101,16 @@ class OnBoardingController extends Controller
     public function storeBranding(Request $request)
     {
         $request->validate([
-            'logo' => 'required|image|mimes:jpeg,png,jpg|max:10048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'primary_color' => 'nullable|string',
             'secondary_color' => 'nullable|string',
         ]);
 
         return apiResponse(function () use ($request) {
+           
+            $store_id = $request->session()->get('store_id');
 
-            $store_id = $request->attributes->get('onboarding_store_id') ?? session('onboarding_store_id');
-
-            $store = Store::findorfail($store_id);
+            $store = Store::find($store_id);
 
             $logoPath = $request->file('logo')->store('stores', 'public');
 
@@ -126,7 +123,7 @@ class OnBoardingController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'store branding updated successfully',
-                'data'    => new StoreResource($store),
+                'data' => new StoreResource($store),
             ], 200);
         });
     }
@@ -140,10 +137,10 @@ class OnBoardingController extends Controller
         ]);
 
         return apiResponse(function () use ($request) {
+          
+            $store_id = $request->session()->get('store_id');
 
-            $store_id = $request->attributes->get('onboarding_store_id') ?? session('onboarding_store_id');
-
-            $store = Store::findorfail($store_id);
+            $store = Store::find($store_id);
 
             $store->update([
                 'theme_id' => $request->theme_id,
@@ -152,8 +149,10 @@ class OnBoardingController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'store theme selected successfully',
-                'data'    => new StoreResource($store),
+                'data' => new StoreResource($store),
+                'theme' => $store->theme,
             ]);
         });
     }
+
 }

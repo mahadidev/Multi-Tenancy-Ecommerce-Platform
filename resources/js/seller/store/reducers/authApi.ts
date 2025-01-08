@@ -26,6 +26,7 @@ export const authApi = createApi({
                             access_token: response.data.access_token,
                             token_type: response.data.token_type,
                             user: response.data.user,
+                            store: response.data.logged_store,
                         })
                     );
                 } catch (err) {

@@ -18,6 +18,7 @@ export const baseQuery = fetchBaseQuery({
         }
     ) => {
         headers.set("accept", "application/json");
+
         const state: RootState = api.getState();
         const accessToken = state.auth.accessToken;
 
