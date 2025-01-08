@@ -235,7 +235,7 @@ class StoreController extends Controller
 
         // // update store_id in store_session table
         StoreSession::updateOrCreate([
-            'user_id' => session('user_id'),
+            'user_id' => auth()->user()->id,
         ], [
             'store_id' => $store->id,
         ]);
