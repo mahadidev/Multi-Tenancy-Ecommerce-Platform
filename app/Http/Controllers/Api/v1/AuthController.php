@@ -84,6 +84,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
+                'store' => StoreResource::collection($user->stores),
                 'membership' => null,
             ],
         ];
