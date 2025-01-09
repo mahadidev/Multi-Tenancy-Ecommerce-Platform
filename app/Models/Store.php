@@ -12,7 +12,7 @@ class Store extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color'];
+    protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'type', 'description'];
     protected $casts = [
         'settings' => 'array',
     ];
