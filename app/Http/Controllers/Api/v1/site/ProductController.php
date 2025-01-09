@@ -17,17 +17,10 @@ class ProductController extends Controller
         $query = Category::authorized()->latest();
 
         if ($request->has('type')) {
-            $query->where('type', $request->input('type'));
+            $query->where('type', $request->input('type', 'product')); 
         }
 
         $categories = $query->get();
-
-        if (!$categories) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Categories not found',
-            ]);
-        }
 
         return response()->json([
             'status' => 200,
@@ -43,13 +36,6 @@ class ProductController extends Controller
         $this->applyFiltersAndSorting($query, $request);
         $products = $query->get();
 
-        if(!$products){
-            return response()->json([
-                'status' => 404,
-                'message' => 'Products not found',
-            ]);
-        }
-
         return response()->json([
             'status' => 200,
             'data' => [
@@ -60,28 +46,22 @@ class ProductController extends Controller
 
     public function allCategoriesProducts(Request $request)
     {
-        $categories = Category::authorized()->latest()->get();
-        if (!$categories) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Categories not found',
-            ]);
-        }
-
         $categoriesWiseProducts = Category::with(['product' => function ($query) use ($request) {
             $query->active() // Filter active products
                 ->authorized(); // Filter authorized products
-                // ->with('brand'); // Include the brand relationship
             $this->applyFiltersAndSorting($query, $request);
         }])
             ->authorized()
             ->latest()
             ->get();
 
-        if (!$categoriesWiseProducts) {
+        // if not found any category return empty array
+        if ($categoriesWiseProducts->isEmpty()) {
             return response()->json([
-                'status' => 404,
-                'message' => 'Products not found',
+                'status' => 200,
+                'data' => [
+                    'products' => [],
+                ],
             ]);
         }
 
@@ -97,7 +77,9 @@ class ProductController extends Controller
 
     public function singleCategoryProducts(Request $request, $slug)
     {
-        $category = Category::authorized()->where('slug', $request->slug)->first();
+        // $category = Category::authorized()->where('slug', $request->slug)->first();
+        $category = Category::authorized()->where('id', $request->id)->first();
+        
         if (!$category) {
             return response()->json([
                 'status' => 404,
@@ -107,19 +89,11 @@ class ProductController extends Controller
 
         $query = $category->product()
             ->active() // Scope for active products
-            ->authorized() // Scope for authorized products
-            ->get();
+            ->authorized(); // Scope for authorized products
 
         $this->applyFiltersAndSorting($query, $request);
 
         $products = $query->get();
-
-        // if (!$products) {
-        //     return response()->json([
-        //         'status' => 404,
-        //         'message' => 'Products not found',
-        //     ]);
-        // }
 
         return response()->json([
             'status' => 200,
@@ -170,6 +144,11 @@ class ProductController extends Controller
         // 6. Trending Products - Important for showcasing popular products
         if ($request->has('is_trending')) {
             $query->where('is_trending', true);
+        }
+
+        // 7. Category Filter - Essential for category-specific products
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
         }
 
         // Essential Sorting

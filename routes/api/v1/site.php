@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\v1\site;
 
 use Illuminate\Support\Facades\Route;
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    // cart route
+    Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+});
 
-// cart route
-Route::post('/add-to-cart', [CartController::class, 'addToCart']);
-
-Route::get('/test', [StoreController::class, 'test']);
 // store show route
 Route::get('/store', [StoreController::class, 'show']);
 

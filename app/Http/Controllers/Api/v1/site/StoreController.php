@@ -34,11 +34,4 @@ class StoreController extends Controller
         ]);
     }
 
-    public function test(Request $request)
-    {
-        return response()->json([
-            'status' => 200,
-            'message' => 'Test route',
-        ]);
-    }
 }
