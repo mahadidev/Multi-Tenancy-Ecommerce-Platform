@@ -26,10 +26,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('profile', [ProfileController::class, 'profile']);
 
     // Update Profile Info Route
-    Route::post('update', [ProfileController::class, 'updateProfile']);
+    Route::post('profile/update', [ProfileController::class, 'updateProfile']);
 
     // Password Change Route
-    Route::post('password-change', [ProfileController::class, 'passwordChange']);
+    Route::post('profile/password-change', [ProfileController::class, 'passwordChange']);
 
     // Logout Route
     Route::get('logout', [AuthController::class, 'logout']);
@@ -66,7 +66,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
     Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
     Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
-
 });
 
 
