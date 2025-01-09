@@ -4,6 +4,7 @@ import SignInPage from "./pages/authentication/singIn";
 import SignUpPage from "./pages/authentication/singup";
 import DashboardPage from "./pages/dashboard/page";
 import EcommerceProductsPage from "./pages/e-commerce/products/page";
+import PagesPage from "./pages/pages/page";
 import SettingPage from "./pages/settings/page";
 import StoreCreatePage from "./pages/store-onboard/create/page";
 import {
@@ -27,7 +28,7 @@ const App = () => {
                                         element={<EcommerceProductsPage />}
                                     />
                                 </Route>
-
+                                <Route path="pages" element={<PagesPage />} />
                                 <Route
                                     path="settings"
                                     element={<SettingPage />}
