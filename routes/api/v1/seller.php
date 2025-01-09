@@ -18,7 +18,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 });
 
 
-Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
 
     // Brand Routes
     Route::resource('/brand', BrandController::class);
