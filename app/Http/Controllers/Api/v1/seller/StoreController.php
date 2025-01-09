@@ -134,7 +134,7 @@ class StoreController extends Controller
             'email' => $request->email ?? null,
             'phone' => $request->phone ?? null,
             'location' => $request->location ?? null,
-            'currency' => $request->currency ?? null,
+            'currency' => $request->currency ?? 'BDT',
             'logo' => $logoPath,
             'dark_logo' => $darkLogoPath,
             'status' => $request->status ?? 1,
