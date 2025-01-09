@@ -16,7 +16,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     // get current store information
     Route::get('/current-store', [StoreController::class, 'currentStore']);
 
-    
     // Store Routes
     Route::resource('/store', StoreController::class);
 

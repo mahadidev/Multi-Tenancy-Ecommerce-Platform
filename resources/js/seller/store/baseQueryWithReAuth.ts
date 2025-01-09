@@ -3,6 +3,7 @@ import { FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { API_URL } from "./env";
 import { RootState } from "./index";
 import { removeAuth } from "./slices/authSlice";
+import { removeStore } from "./slices/storeSlice";
 
 export const baseQuery = fetchBaseQuery({
     baseUrl: API_URL,
@@ -20,7 +21,14 @@ export const baseQuery = fetchBaseQuery({
         headers.set("accept", "application/json");
 
         const state: RootState = api.getState();
-        const accessToken = state.auth.accessToken;
+        let accessToken = state.auth.accessToken;
+
+        if (!accessToken) {
+            const localStrData = JSON.parse(
+                localStorage.getItem("persist:site") || "{}"
+            );
+            accessToken = localStrData.auth.accessToken;
+        }
 
         if (accessToken) {
             headers.set("authorization", `Bearer ${accessToken}`);
@@ -35,6 +43,7 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 
     if (result.error && result.error.status === 401) {
         api.dispatch(removeAuth());
+        api.dispatch(removeStore());
         window.location.href = `${PATH_PREFIX}${RoutePath.login}`;
     }
 

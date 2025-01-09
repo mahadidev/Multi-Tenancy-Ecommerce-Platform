@@ -1,8 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
+import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { useFetchThemesQuery } from "@/seller/store/reducers/themeApi";
+import { clearOnboard } from "@/seller/store/slices/storeOnboardSlice";
 import { Button } from "flowbite-react";
+import { useEffect } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 const StepThree = ({
@@ -13,19 +18,23 @@ const StepThree = ({
     setStep: CallableFunction;
     setFormData: CallableFunction;
 }) => {
-    const { data: themesData } = useFetchThemesQuery();
-
-    const [, { error }] = useUpdateStoreMutation();
-
-    const { formState, handleChange } = useForm({
+    const { data: themesData, isFetching } = useFetchThemesQuery();
+    const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
+    const { currentStore: store } = useAppSelector((state) => state.store);
+    const { formState, handleChange, setFormState } = useForm({
         errors: error,
     });
 
-    const navigate = useNavigate();
+    useEffect(() => {
+        if (themesData && themesData.length > 0 && !formState["theme_id"]) {
+            setFormState({
+                theme_id: themesData.data.themes[0].id,
+            });
+        }
+    }, [themesData, isFetching]);
 
-    const onNext = () => {
-        navigate(RoutePath.dashboard);
-    };
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     return (
         <>
@@ -40,7 +49,7 @@ const StepThree = ({
                                 <li key={index}>
                                     <input
                                         name="theme_id"
-                                        type="checkbox"
+                                        type="radio"
                                         id={item.slug}
                                         value={item.id}
                                         className="hidden peer"
@@ -93,9 +102,27 @@ const StepThree = ({
                     <Button
                         size="xl"
                         type="submit"
-                        color="blue"
                         className="md:w-1/2 [&>span]:text-sm"
-                        onClick={onNext}
+                        onClick={() => {
+                            updateStore({
+                                storeId: store?.id,
+                                formData: formState,
+                            }).then((response: any) => {
+                                if (response.data.status === 200) {
+                                    dispatch(clearOnboard());
+                                    navigate(RoutePath.dashboard);
+                                } else {
+                                    setStep(1);
+                                }
+                            });
+                        }}
+                        color={formState["theme_id"] ? "blue" : "gray"}
+                        isProcessing={isLoading}
+                        processingLabel="Processing"
+                        disabled={isLoading}
+                        processingSpinner={
+                            <AiOutlineLoading className="h-6 w-6 animate-spin" />
+                        }
                     >
                         Next: Dashboard
                     </Button>

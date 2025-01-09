@@ -1,7 +1,10 @@
 import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
+import { useAppDispatch } from "@/seller/store";
 import { useLoginUserMutation } from "@/seller/store/reducers/authApi";
+import { setAuth } from "@/seller/store/slices/authSlice";
+import { setStoreResponse } from "@/seller/store/slices/storeSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,11 +17,25 @@ export default function SignInPage() {
     });
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleLogin = (formState: any) => {
         login(formState).then((response: any) => {
             if (response.data.status === 200) {
+                dispatch(
+                    setAuth({
+                        access_token: response.data.data.access_token,
+                        token_type: response.data.data.token_type,
+                        user: response.data.data.user,
+                    })
+                );
                 if (response.data.data.logged_store) {
+                    dispatch(
+                        setStoreResponse({
+                            stores: response.data.data.user.stores,
+                            currentStore: response.data.data.logged_store,
+                        })
+                    );
                     navigate(RoutePath.dashboard);
                 } else {
                     navigate(RoutePath.storeCreate);
@@ -52,7 +69,7 @@ export default function SignInPage() {
                 horizontal
                 imgAlt=""
                 imgSrc={`${APP_IMAGE_URL}/authentication/login.jpg`}
-                className="w-full md:max-w-screen-lg"
+                className="w-full md:max-w-screen-lg *:object-cover"
                 theme={{
                     root: {
                         children:
@@ -60,7 +77,7 @@ export default function SignInPage() {
                     },
                     img: {
                         horizontal: {
-                            on: "hidden w-2/3 rounded-l-lg md:w-96 md:p-0 lg:block",
+                            on: "hidden w-2/3 rounded-l-lg md:w-96 md:p-0 lg:block !object-cover",
                         },
                     },
                 }}

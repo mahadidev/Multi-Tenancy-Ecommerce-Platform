@@ -6,4 +6,5 @@ export const RoutePath = {
     storeCreate: "/store/create",
     dashboard: "/",
     products: "/e-commerce/products",
+    settings: "/settings",
 };

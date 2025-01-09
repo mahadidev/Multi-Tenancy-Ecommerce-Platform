@@ -1,6 +1,7 @@
 import useForm from "@/seller/hooks/useForm";
-import { useAppSelector } from "@/seller/store";
+import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { useCreateStoreMutation } from "@/seller/store/reducers/storeApi";
+import { setCurrentStore } from "@/seller/store/slices/storeSlice";
 import { Button, Label, Select, TextInput } from "flowbite-react";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -19,7 +20,8 @@ const StepOne = ({
         errors: error,
     });
 
-    const { formData, store } = useAppSelector((state) => state.storeOnboard);
+    const { formData } = useAppSelector((state) => state.storeOnboard);
+    const { currentStore: store } = useAppSelector((state) => state.store);
 
     useEffect(() => {
         if (formData) {
@@ -27,6 +29,8 @@ const StepOne = ({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData]);
+
+    const dispatch = useAppDispatch();
 
     return (
         <>
@@ -124,11 +128,14 @@ const StepOne = ({
                         }
                         className="md:w-1/2 [&>span]:text-sm ml-auto"
                         onClick={() => {
-                            if (store.id) {
+                            if (store && store.id) {
                                 setStep(2);
                             } else {
                                 createStore(formState).then((response: any) => {
                                     if (response.data.status === 200) {
+                                        dispatch(
+                                            setCurrentStore(response.data.store)
+                                        );
                                         setStep(2);
                                     }
                                 });

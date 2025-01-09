@@ -18,21 +18,6 @@ export const authApi = createApi({
                     body: formData,
                 }),
             invalidatesTags: ["User"],
-            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
-                try {
-                    const { data: response } = await queryFulfilled;
-                    dispatch(
-                        setAuth({
-                            access_token: response.data.access_token,
-                            token_type: response.data.token_type,
-                            user: response.data.user,
-                            store: response.data.logged_store,
-                        })
-                    );
-                } catch (err) {
-                    /* empty */
-                }
-            },
             transformResponse: (response: { data: SigninResponseType }) =>
                 response,
             transformErrorResponse: (error: any) => error.data,
@@ -54,7 +39,6 @@ export const authApi = createApi({
                             access_token: response.data.access_token,
                             token_type: response.data.token_type,
                             user: response.data.user,
-                            stores: response.data.stores,
                         })
                     );
                 } catch (err) {

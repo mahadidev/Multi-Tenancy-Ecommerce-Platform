@@ -1,13 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
-import { addStore, setStore } from "../slices/authSlice";
-import { setStore as setOnboardStore } from "../slices/storeOnboardSlice";
+import { setCurrentStore } from "../slices/storeSlice";
 
 export const storeApi = createApi({
     reducerPath: "storeApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: [],
+    tagTypes: ["Stores", "CurrentStore"],
     endpoints: (builder) => ({
         fetchStores: builder.query<any, void>({
             query: () =>
@@ -17,8 +16,14 @@ export const storeApi = createApi({
                 }),
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
+            providesTags: ["Stores"],
         }),
-        fetchCurrentStore: builder.query<any, void>({
+        fetchCurrentStore: builder.query<
+            any,
+            {
+                responseType?: "store";
+            } | void
+        >({
             query: () =>
                 createRequest({
                     url: `${SELLER_PREFIX}/current-store`,
@@ -27,13 +32,20 @@ export const storeApi = createApi({
             async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
                 try {
                     const { data: response } = await queryFulfilled;
-                    dispatch(addStore(response.data));
+                    dispatch(setCurrentStore(response.data.store));
                 } catch (err) {
                     /* empty */
                 }
             },
-            transformResponse: (response) => response,
+            transformResponse: (response: any, _meta, arg) => {
+                if (arg && arg.responseType == "store") {
+                    return response.data.store;
+                } else {
+                    return response;
+                }
+            },
             transformErrorResponse: (error: any) => error.data,
+            providesTags: ["CurrentStore"],
         }),
         createStore: builder.mutation<
             any,
@@ -48,18 +60,9 @@ export const storeApi = createApi({
                     method: "post",
                     body: formData,
                 }),
-            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
-                try {
-                    const { data: response } = await queryFulfilled;
-                    dispatch(setOnboardStore(response.data));
-                    dispatch(addStore(response.data));
-                    dispatch(setStore(response.data));
-                } catch (err) {
-                    /* empty */
-                }
-            },
             transformResponse: (response: { data: any }) => response,
             transformErrorResponse: (error: any) => error.data,
+            invalidatesTags: ["Stores"],
         }),
         updateStore: builder.mutation<
             any,
@@ -70,6 +73,7 @@ export const storeApi = createApi({
         >({
             query: (data) => {
                 const formData = new FormData();
+                formData.append("_method", "put");
                 Object.keys(data.formData).map((key: any) => {
                     formData.append(key, data.formData[key]);
                 });
@@ -82,15 +86,7 @@ export const storeApi = createApi({
             },
             transformResponse: (response: { data: any }) => response,
             transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
-                try {
-                    const { data: response } = await queryFulfilled;
-                    dispatch(setOnboardStore(response.data));
-                    dispatch(addStore(response.data));
-                } catch (err) {
-                    /* empty */
-                }
-            },
+            invalidatesTags: ["CurrentStore", "Stores"],
         }),
         switchStore: builder.mutation<
             any,
@@ -109,14 +105,7 @@ export const storeApi = createApi({
             },
             transformResponse: (response: { data: any }) => response,
             transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
-                try {
-                    const { data: response } = await queryFulfilled;
-                    dispatch(setStore(response.data));
-                } catch (err) {
-                    /* empty */
-                }
-            },
+            invalidatesTags: ["Stores"],
         }),
     }),
 });
