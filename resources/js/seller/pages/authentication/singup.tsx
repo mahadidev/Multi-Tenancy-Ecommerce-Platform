@@ -48,7 +48,7 @@ export default function SignUpPage() {
                 horizontal
                 imgSrc={`${APP_IMAGE_URL}/authentication/login.jpg`}
                 imgAlt=""
-                className="w-full md:max-w-screen-lg"
+                className="w-full md:max-w-screen-lg *:object-cover"
                 theme={{
                     root: {
                         children:

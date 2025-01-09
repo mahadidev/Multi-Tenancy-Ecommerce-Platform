@@ -9,7 +9,7 @@ const initialState: {
         primaryColor?: string;
         secondaryColor?: string;
         themeId?: string;
-    };
+    } | null;
     store: any | null;
 } = {
     step: 1,
@@ -38,7 +38,13 @@ const storeOnboardSlice = createSlice({
         setStore: (state, action: PayloadAction<any>) => {
             state.store = action.payload;
         },
+        clearOnboard: (state) => {
+            state.formData = null;
+            state.store = null;
+            state.step = 1;
+        },
     },
 });
-export const { setStep, setFormData, setStore } = storeOnboardSlice.actions;
+export const { setStep, setFormData, setStore, clearOnboard } =
+    storeOnboardSlice.actions;
 export default storeOnboardSlice.reducer;

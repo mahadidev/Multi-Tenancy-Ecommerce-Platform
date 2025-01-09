@@ -2,7 +2,6 @@ import useForm from "@/seller/hooks/useForm";
 import { useAppSelector } from "@/seller/store";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { Button, FileInput, Label, TextInput } from "flowbite-react";
-import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const StepTwo = ({
@@ -14,18 +13,11 @@ const StepTwo = ({
     setFormData: CallableFunction;
 }) => {
     const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
-    const { store } = useAppSelector((state) => state.storeOnboard);
+    const { currentStore: store } = useAppSelector((state) => state.store);
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
-
-    useEffect(() => {
-        if (!store || !store.id) {
-            setStep(1);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [store]);
 
     return (
         <>
@@ -129,6 +121,8 @@ const StepTwo = ({
                             }).then((response: any) => {
                                 if (response.data.status === 200) {
                                     setStep(3);
+                                } else {
+                                    setStep(1);
                                 }
                             });
                         }}

@@ -16,7 +16,52 @@ class StoreController extends Controller
 {
     public function index(Request $request)
     {
-        $stores = Store::storeOwner()->active()->latest()->get();
+        $user = auth()->user();
+        $stores = Store::where(["owner_id" => $user->id])->latest()->get();
+        $storeSession = $user->storeSession()->first();
+        $current_store = null;
+
+        if ($storeSession) {
+            // remove previous store id from session
+            $request->session()->forget('store_id');
+            if (session()->has('store_id')) {
+                session()->forget('store_id');
+            }
+
+            // store the store id in session
+            session(['store_id' => $storeSession->id]);
+
+            // Also set it in the request attributes
+            $request->attributes->set('store_id', $storeSession->store_id);
+
+            // find the store
+            $current_store = Store::find($storeSession->store_id);
+        }
+
+        if (!$storeSession) {
+            $current_store = Store::where('owner_id', $user->id)->first();
+
+            if ($current_store) {
+                StoreSession::updateOrCreate([
+                    'user_id' => $user->id,
+                ], [
+                    'store_id' => $current_store->id,
+                ]);
+
+                $request->session()->forget('store_id');
+                if (session()->has('store_id')) {
+                    session()->forget('store_id');
+                }
+
+                // store the store id in session
+                session(['store_id' => $current_store->id]);
+
+                // Also set it in the request attributes
+                $request->attributes->set('store_id', $current_store->id);
+
+            }
+
+        }
 
 
         // Return success response
@@ -24,6 +69,7 @@ class StoreController extends Controller
             'status' => 200,
             'data' => [
                 'stores' => StoreResource::collection($stores),
+                'current_store' => $current_store ? new StoreResource($current_store) : null,
             ]
         ]);
 
@@ -105,70 +151,13 @@ class StoreController extends Controller
         ]);
     }
 
-    public function updateByPost(Request $request, $id)
-    {
-        // Find the store by ID
-        $store = Store::storeOwner()->active()->find($id);
-
-        if(!$store){
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store id'
-            ]);
-        }
-        
-        // Validate the incoming request data
-        $request->validate([
-            'name' => 'nullable|string|max:255',
-            'domain' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:stores,domain,' . $store->id, // Ignore the current store's domain
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'location' => 'nullable|string|max:255',
-            'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'settings' => 'nullable|array',
-        ]);
-
-        // Handle the logo file upload if present
-        $logoPath = null;
-        if ($request->hasFile('logo') && isset($request->logo)) {
-            $logoPath = $request->file('logo')->store('stores', 'public');
-        }
-
-        $darkLogoPath = null;
-        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        }
-
-        // Update the store record
-        $store->update([
-            'name' => $request->name ?? $store->name,
-            'domain' => $request->domain ?? $store->domain,
-            'email' => $request->email ?? $store->email,
-            'phone' => $request->phone ?? $store->phone,
-            'location' => $request->location ?? $store->location,
-            'currency' => $request->currency ?? $store->currency,
-            'status' => $request->status ?? $store->status, // Retain the existing status if not provided
-            'logo' => $logoPath ?? $store->logo,
-            'dark_logo' => $darkLogoPath ?? $store->dark_logo,
-            'settings' => $request->settings ?? $store->settings
-        ]);
-
-        // Return success response
-        return response()->json([
-            'status' => 200,
-            'message' => 'Store updated successfully.',
-            'data' => new StoreResource($store),
-        ], 200);
-    }
-
     public function update(Request $request, $id)
     {
         // Find the store by ID
-        $store = Store::storeOwner()->active()->find($id);
+        // $store = Store::storeOwner()->active()->find($id);
+        $store = Store::storeOwner()->find($id);
 
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store id'
@@ -185,7 +174,9 @@ class StoreController extends Controller
             'currency' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'settings' => 'nullable|array',
+            'primary_color' => 'nullable|string|max:255',
+            'secondary_color' => 'nullable|string|max:255',
+            'settings' => 'nullable|string|max:1000000',
         ]);
 
         // Handle the logo file upload if present
@@ -210,6 +201,8 @@ class StoreController extends Controller
             'status' => $request->status ?? $store->status, // Retain the existing status if not provided
             'logo' => $logoPath ?? $store->logo,
             'dark_logo' => $darkLogoPath ?? $store->dark_logo,
+            'primary_color' => $request->primary_color ?? $store->primary_color,
+            'secondary_color' => $request->secondary_color ?? $store->secondary_color,
             'settings' => $request->settings ?? $store->settings
         ]);
 
@@ -231,7 +224,7 @@ class StoreController extends Controller
             return response()->json([
                 'status' => 403,
                 'message' => 'You are not authorized to delete this store or it does not exist.',
-            ],403); 
+            ], 403);
         }
 
         // Delete the store record
@@ -254,7 +247,7 @@ class StoreController extends Controller
         // Retrieve the store and ensure it belongs to the authenticated user and is active
         $store = Store::storeOwner()->active()->find($request->store_id);
 
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 400,
                 'message' => 'Invalid store id'
@@ -304,8 +297,8 @@ class StoreController extends Controller
 
         ]);
     }
-    
-    public function updateStoreSession(Request $request, $store) : void
+
+    public function updateStoreSession(Request $request, $store): void
     {
         // // update store_id in store_session table
         $storeSession = StoreSession::updateOrCreate([

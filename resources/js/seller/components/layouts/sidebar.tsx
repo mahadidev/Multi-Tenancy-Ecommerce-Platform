@@ -534,8 +534,7 @@ const externalPages: SidebarItem[] = [
         ],
     },
     {
-        href: "https://github.com/themesberg/flowbite-react/",
-        target: "_blank",
+        href: RoutePath.settings,
         icon: HiCog,
         label: "Settings",
     },
