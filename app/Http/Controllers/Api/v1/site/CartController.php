@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\user;
+namespace App\Http\Controllers\Api\v1\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
+
 class CartController extends Controller
 {
-
+    
     // need to work on product discount as well
 
     public function addToCart(Request $request)
