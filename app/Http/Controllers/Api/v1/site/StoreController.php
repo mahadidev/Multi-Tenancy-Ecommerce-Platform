@@ -13,7 +13,14 @@ class StoreController extends Controller
     public function show(Request $request)
     {
         // $store = Store::active()->find($request->store_id);
-        $store = Store::active()->where('domain', $request->domain)->first();
+        $store = Store::active()
+            ->when($request->has('domain'), function ($query) use ($request) {
+                return $query->where('domain', $request->domain);
+            })
+            ->when($request->has('store_id'), function ($query) use ($request) {
+                return $query->where('id', $request->store_id);
+            })
+            ->first();
 
         if (!$store) {
             return response()->json([
@@ -33,5 +40,4 @@ class StoreController extends Controller
             ],
         ]);
     }
-
 }

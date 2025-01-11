@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1\site;
+use App\Http\Controllers\Api\v1\seller\ContactController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,6 @@ Route::get('/category/products', [ProductController::class, 'allCategoriesProduc
 
 // single category wise products route
 Route::get('/category/{slug}/products', [ProductController::class, 'singleCategoryProducts']);
+
+// contact route
+Route::post('/contact', [ContactController::class, 'store']);
