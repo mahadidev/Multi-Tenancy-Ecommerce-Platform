@@ -5,7 +5,7 @@ import { SELLER_PREFIX } from "../env";
 export const pageApi = createApi({
     reducerPath: "pageApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: [],
+    tagTypes: ["Pages"],
     endpoints: (builder) => ({
         fetchPages: builder.query<any, string>({
             query: (string) =>
@@ -15,6 +15,7 @@ export const pageApi = createApi({
                 }),
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
+            providesTags: ["Pages"],
         }),
         createPage: builder.mutation<
             any,
@@ -37,6 +38,7 @@ export const pageApi = createApi({
             },
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
+            invalidatesTags: ["Pages"],
         }),
     }),
 });

@@ -4,9 +4,11 @@ import SignInPage from "./pages/authentication/singIn";
 import SignUpPage from "./pages/authentication/singup";
 import DashboardPage from "./pages/dashboard/page";
 import EcommerceProductsPage from "./pages/e-commerce/products/page";
+import PageEditPage from "./pages/pages/edit/page";
 import PagesPage from "./pages/pages/page";
 import SettingPage from "./pages/settings/page";
 import StoreCreatePage from "./pages/store-onboard/create/page";
+import ThemePage from "./pages/themes/page";
 import {
     GuestMiddleware,
     LoggedMiddleware,
@@ -28,7 +30,14 @@ const App = () => {
                                         element={<EcommerceProductsPage />}
                                     />
                                 </Route>
+
                                 <Route path="pages" element={<PagesPage />} />
+                                <Route
+                                    path="pages/:id"
+                                    element={<PageEditPage />}
+                                />
+
+                                <Route path="themes" element={<ThemePage />} />
                                 <Route
                                     path="settings"
                                     element={<SettingPage />}

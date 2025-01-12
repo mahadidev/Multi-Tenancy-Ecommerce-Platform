@@ -94,15 +94,15 @@ const SocialMediaCard = () => {
             updateStore({
                 storeId: store.id,
                 formData: {
-                    settings: JSON.stringify({
-                        ...store.settings,
+                    settings: {
+                        ...(store.settings === "null" ? null : store.settings),
                         social_media: {
                             ...store.settings?.social_media,
                             [selected.name]: {
                                 username: selected.value,
                             },
                         },
-                    }),
+                    },
                 },
             }).then((response: any) => {
                 if (response.data.status === 200) {
@@ -117,13 +117,13 @@ const SocialMediaCard = () => {
             updateStore({
                 storeId: store.id,
                 formData: {
-                    settings: JSON.stringify({
-                        ...store.settings,
+                    settings: {
+                        ...(store.settings === "null" ? null : store.settings),
                         social_media: {
-                            ...store.settings.social_media,
+                            ...(store.settings.social_media ?? null),
                             [disconnect]: null,
                         },
-                    }),
+                    },
                 },
             }).then((response: any) => {
                 if (response.data.status === 200) {
@@ -152,6 +152,7 @@ const SocialMediaCard = () => {
 
                                         <span
                                             className={`block truncate text-sm font-normal ${
+                                                store.settings?.social_media &&
                                                 store.settings?.social_media[
                                                     item.name
                                                 ]
@@ -159,7 +160,8 @@ const SocialMediaCard = () => {
                                                     : "text-gray-500 dark:text-gray-400"
                                             }`}
                                         >
-                                            {store.settings?.social_media[
+                                            {store.settings?.social_media &&
+                                            store.settings?.social_media[
                                                 item.name
                                             ]
                                                 ? `@${
@@ -172,7 +174,8 @@ const SocialMediaCard = () => {
                                         </span>
                                     </div>
                                     <div className="inline-flex items-center">
-                                        {store.settings?.social_media[
+                                        {store.settings?.social_media &&
+                                        store.settings?.social_media[
                                             item.name
                                         ] ? (
                                             <Button

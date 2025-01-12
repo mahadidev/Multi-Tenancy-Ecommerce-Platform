@@ -46,7 +46,7 @@ class StorePageController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'slug' => 'nullable|string',
+            'slug' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:store_pages,slug',
             'title' => 'nullable|string',
             'is_active' => 'required|boolean',
             'widgets' => 'nullable|array',
@@ -136,7 +136,7 @@ class StorePageController extends Controller
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'slug' => 'nullable|string',
+            'slug' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:store_pages,slug,' . $storePage->id,
             'title' => 'nullable|string',
             'is_active' => 'required|boolean',
             'widgets' => 'nullable|array',

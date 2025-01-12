@@ -1,10 +1,13 @@
+import { RoutePath } from "@/seller/env";
 import { useAppSelector } from "@/seller/store";
 import { SELLER_PREFIX } from "@/seller/store/env";
 import { useFetchPagesQuery } from "@/seller/store/reducers/pageApi";
-import { Breadcrumb, Checkbox, Table } from "flowbite-react";
+import { Breadcrumb, Button, Checkbox, Table } from "flowbite-react";
 import { useEffect } from "react";
-import { HiHome } from "react-icons/hi";
+import { HiHome, HiPencilAlt } from "react-icons/hi";
+import { Link } from "react-router-dom";
 import AddPageModal from "./addModal";
+import TableNavigation from "./tableNavigation";
 
 const PagesPage = () => {
     const { currentStore: store } = useAppSelector((state) => state.store);
@@ -74,6 +77,7 @@ const PagesPage = () => {
                                     <Table.HeadCell>Name</Table.HeadCell>
                                     <Table.HeadCell>Title</Table.HeadCell>
                                     <Table.HeadCell>Status</Table.HeadCell>
+                                    <Table.HeadCell>Last Update</Table.HeadCell>
                                     <Table.HeadCell>Actions</Table.HeadCell>
                                 </Table.Head>
                                 <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
@@ -98,7 +102,21 @@ const PagesPage = () => {
                                                         : "Deactive"}
                                                 </Table.Cell>
                                                 <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                                    w
+                                                    {item.updated_at}
+                                                </Table.Cell>
+                                                <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                                                    <Button
+                                                        className="w-max"
+                                                        size="sm"
+                                                        color="blue"
+                                                        to={RoutePath.pages.edit(
+                                                            item.id
+                                                        )}
+                                                        as={Link}
+                                                    >
+                                                        <HiPencilAlt className="mr-2 h-5 w-5" />
+                                                        Edit Page
+                                                    </Button>
                                                 </Table.Cell>
                                             </Table.Row>
                                         )
@@ -109,6 +127,7 @@ const PagesPage = () => {
                     </div>
                 </div>
             </div>
+            <TableNavigation />
         </>
     );
 };

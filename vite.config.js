@@ -10,6 +10,7 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/frontend/index.tsx",
                 "resources/js/seller/index.tsx",
+                "resources/js/themes/index.tsx",
             ],
             refresh: true,
         }),

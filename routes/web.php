@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
@@ -15,4 +16,9 @@ Route::prefix('/seller')->group(function () {
     Route::any('/{any}', function () {
         return view("seller");
     })->where('any', '.*');
+});
+
+
+Route::prefix("/themes")->group(function () {
+    Route::get("/{slug}", [ThemeController::class, "show"]);
 });
