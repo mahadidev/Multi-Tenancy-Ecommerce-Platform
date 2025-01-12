@@ -1,17 +1,26 @@
 const Hero = ({ props }: { props: any }) => {
-    console.log(props);
+    const inputs = JSON.parse(props.inputs);
     return (
-        <section
-            style={{
-                backgroundColor: `${
-                    JSON.parse(props.inputs.banner_color).value
-                }`,
-            }}
-        >
-            <div className="container">
-                <img src={JSON.parse(props.inputs.banner).value} />
-            </div>
-        </section>
+        <>
+            <section>
+                {inputs.carousel.items.map((item: any, index: number) => (
+                    <div
+                        style={{
+                            backgroundColor: `${item["bg-color"].value}`,
+                        }}
+                        key={index}
+                    >
+                        <div className="container">
+                            <img
+                                className="w-full object-fill"
+                                src={item["image"].value}
+                                alt="Banner"
+                            />
+                        </div>
+                    </div>
+                ))}
+            </section>
+        </>
     );
 };
 

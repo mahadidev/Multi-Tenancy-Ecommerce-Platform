@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { themes } from "../env";
 import { useFetchThemeQuery } from "../store/reducers/themeApi";
-import Other from "./pages/other";
+import Page from "./pages/page";
 
 export default function App() {
     const theme = themes["avasta"];
@@ -17,7 +17,7 @@ export default function App() {
     }, [isLoading, themeResponse]);
 
     return (
-        <>
+        <main className="bg-gray-100 min-h-screen">
             {themeResponse ? (
                 <>
                     <BrowserRouter basename={`/themes/${theme.slug}`}>
@@ -29,7 +29,7 @@ export default function App() {
                                         index
                                         path={page.slug}
                                         element={
-                                            <Other data={page} key={index} />
+                                            <Page data={page} key={index} />
                                         }
                                     />
                                 )
@@ -40,6 +40,6 @@ export default function App() {
             ) : (
                 <>{isLoading && "loading.."}</>
             )}
-        </>
+        </main>
     );
 }

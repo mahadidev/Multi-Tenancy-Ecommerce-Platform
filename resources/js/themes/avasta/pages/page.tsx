@@ -1,6 +1,6 @@
 import Component from "../components";
 
-const Other = ({ data }: { data: any }) => {
+const Page = ({ data }: { data: any }) => {
     return (
         <>
             {data.page_widgets.map((widget: any, index: number) => (
@@ -12,4 +12,4 @@ const Other = ({ data }: { data: any }) => {
     );
 };
 
-export default Other;
+export default Page;

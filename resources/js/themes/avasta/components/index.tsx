@@ -1,10 +1,12 @@
 import Hero from "./hero";
 import Offers from "./offers";
+import PromoGrid from "./promoGrid";
 
 const Component = ({ data }: { data: any }) => {
     const components: any = {
         hero: <Hero props={data} />,
-        offers: <Offers />,
+        offers: <Offers props={data} />,
+        promoGrid: <PromoGrid props={data} />,
     };
 
     return (
