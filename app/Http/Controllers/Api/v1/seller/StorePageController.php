@@ -35,7 +35,7 @@ class StorePageController extends Controller
     public function store(Request $request, $store_id)
     {
 
-        $store = Store::active()->find($store_id);
+        $store = Store::storeOwner()->active()->find($store_id);
 
         if (!$store) {
             return response()->json([
@@ -114,7 +114,7 @@ class StorePageController extends Controller
     public function update(Request $request, $store_id, $store_page_id)
     {
         // Check if the store exists and is active
-        $store = Store::active()->find($store_id);
+        $store = Store::storeOwner()->active()->find($store_id);
 
         if (!$store) {
             return response()->json([

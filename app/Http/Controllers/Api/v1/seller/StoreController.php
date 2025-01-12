@@ -108,6 +108,8 @@ class StoreController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'settings' => 'nullable|array',
+            'type' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
 
@@ -132,11 +134,13 @@ class StoreController extends Controller
             'email' => $request->email ?? null,
             'phone' => $request->phone ?? null,
             'location' => $request->location ?? null,
-            // 'currency' => $request->currency ?? null,
+            'currency' => $request->currency ?? 'BDT',
             'logo' => $logoPath,
             'dark_logo' => $darkLogoPath,
             'status' => $request->status ?? 1,
-            'settings' => $request->settings ?? null
+            'settings' => $request->settings ?? null,
+            'type' => $request->type ?? null,
+            'description' => $request->description ?? null,
         ]);
 
 
@@ -177,6 +181,8 @@ class StoreController extends Controller
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
             'settings' => 'nullable|string|max:1000000',
+            'type' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
         // Handle the logo file upload if present
@@ -203,7 +209,9 @@ class StoreController extends Controller
             'dark_logo' => $darkLogoPath ?? $store->dark_logo,
             'primary_color' => $request->primary_color ?? $store->primary_color,
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
-            'settings' => $request->settings ?? $store->settings
+            'settings' => $request->settings ?? $store->settings,
+            'type' => $request->type ??  $store->type,
+            'description' => $request->description ?? $store->description,
         ]);
 
         // Return success response
