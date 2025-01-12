@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // cart route
     Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+
+    // product reviews route resource
+    Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 // store show route
