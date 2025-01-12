@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
-    public function getThemes(Request $request){
+    public function getThemes(Request $request)
+    {
 
         $themes = Theme::with('widgets', 'pages.page_widgets')->active()->get();
 
@@ -21,10 +22,23 @@ class ThemeController extends Controller
         ]);
     }
 
-    public function getTheme(Request $request, $id){
-        
+    public function getTheme(Request $request, $id)
+    {
+
         return apiResponse(function () use ($request, $id) {
-            $theme = Theme::with('widgets', 'pages.page_widgets')->active()->findorfail($id);
+            $theme = Theme::with('widgets', 'pages.page_widgets')->active()->where(["id" => $id])->orWhere(["slug" => $id])->first();
+
+
+            if (!$theme) {
+                response()->json([
+                    'status' => 404,
+                    'data' => [
+                        'theme' => null,
+
+                    ]
+                ]);
+            }
+
             return response()->json([
                 'status' => 200,
                 'data' => [

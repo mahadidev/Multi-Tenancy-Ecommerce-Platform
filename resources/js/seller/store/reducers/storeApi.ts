@@ -64,7 +64,7 @@ export const storeApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Stores"],
         }),
-        updateStore: builder.mutation<
+        updateStoreWithImage: builder.mutation<
             any,
             {
                 storeId: string;
@@ -74,6 +74,9 @@ export const storeApi = createApi({
             query: (data) => {
                 const formData = new FormData();
                 formData.append("_method", "put");
+                if (data.formData.settings) {
+                    delete data.formData.settings;
+                }
                 Object.keys(data.formData).map((key: any) => {
                     formData.append(key, data.formData[key]);
                 });
@@ -82,6 +85,26 @@ export const storeApi = createApi({
                     url: `${SELLER_PREFIX}/store/${data.storeId}`,
                     method: "POST",
                     body: formData,
+                });
+            },
+            transformResponse: (response: { data: any }) => response,
+            transformErrorResponse: (error: any) => error.data,
+            invalidatesTags: ["CurrentStore", "Stores"],
+        }),
+        updateStore: builder.mutation<
+            any,
+            {
+                storeId: string;
+                formData: any;
+            }
+        >({
+            query: (data) => {
+                data.formData["_method"] = "put";
+
+                return createRequest({
+                    url: `${SELLER_PREFIX}/store/${data.storeId}`,
+                    method: "POST",
+                    body: data.formData,
                 });
             },
             transformResponse: (response: { data: any }) => response,
@@ -116,4 +139,5 @@ export const {
     useCreateStoreMutation,
     useUpdateStoreMutation,
     useSwitchStoreMutation,
+    useUpdateStoreWithImageMutation,
 } = storeApi;

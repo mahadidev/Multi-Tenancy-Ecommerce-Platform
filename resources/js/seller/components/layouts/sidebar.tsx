@@ -520,7 +520,7 @@ const pages: SidebarItem[] = [
 
 const externalPages: SidebarItem[] = [
     {
-        href: "/pages",
+        href: RoutePath.pages.list(),
         icon: MdCollectionsBookmark,
         label: "Pages",
     },
@@ -528,7 +528,7 @@ const externalPages: SidebarItem[] = [
         icon: FaPaintBrush,
         label: "Appearance",
         items: [
-            { href: `/appearance/themes`, label: "Themes" },
+            { href: RoutePath.themes.list(), label: "Themes" },
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],

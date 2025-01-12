@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\StoreSession;
@@ -109,6 +110,7 @@ class StoreController extends Controller
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
+            "theme_id" => "nullable|exists:themes,id",
             'description' => 'nullable|string',
         ]);
 
@@ -180,7 +182,8 @@ class StoreController extends Controller
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
-            'settings' => 'nullable|string|max:1000000',
+            'settings' => 'nullable|max:1000000',
+            "theme_id" => "nullable",
             'type' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
@@ -196,6 +199,17 @@ class StoreController extends Controller
             $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
         }
 
+        $theme_id = $store->theme_id;
+        if ($request->theme_id) {
+            $theme = Theme::where("id", $request->theme_id)->first();
+
+            if ($theme = Theme::where("id", $request->theme_id)->first()) {
+                $theme_id = $theme->id;
+            } else {
+                $theme_id = null;
+            }
+        }
+
         // Update the store record
         $store->update([
             'name' => $request->name ?? $store->name,
@@ -209,8 +223,9 @@ class StoreController extends Controller
             'dark_logo' => $darkLogoPath ?? $store->dark_logo,
             'primary_color' => $request->primary_color ?? $store->primary_color,
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
-            'settings' => $request->settings ?? $store->settings,
-            'type' => $request->type ??  $store->type,
+            'theme_id' => $theme_id,
+            'settings' => $request->settings ? json_encode($request->settings) : $store->settings,
+            'type' => $request->type ?? $store->type,
             'description' => $request->description ?? $store->description,
         ]);
 
