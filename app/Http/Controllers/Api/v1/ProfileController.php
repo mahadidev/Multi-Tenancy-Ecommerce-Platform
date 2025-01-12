@@ -39,7 +39,11 @@ class ProfileController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $user->id,
-                'phone' => 'nullable|string|max:255',
+                'phone' => [
+                    'nullable',
+                    'string',
+                    'regex:/^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8}$/', // BD format
+                ],
                 'address' => 'nullable|string|max:255',
                 'image' => 'nullable',
                 // 'password' => 'nullable|string|min:8|confirmed',
