@@ -14,34 +14,34 @@ class StorePageController extends Controller
     public function pages(Request $request, $store_id)
     {
         $store = Store::active()->find($store_id);
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store id'
-            ],404);
+            ], 404);
         }
 
         $pages = StorePage::with('widgets')->where('store_id', $store->id)->get();
-       
+
         return response()->json([
             'status' => 200,
             'data' => [
                 'pages' => $pages
             ]
-        ],200);
+        ], 200);
 
     }
 
-    public function store(Request $request, $store_id) 
+    public function store(Request $request, $store_id)
     {
 
         $store = Store::active()->find($store_id);
 
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store id'
-            ],404);
+            ], 404);
         }
 
         $validatedData = $request->validate([
@@ -64,8 +64,8 @@ class StorePageController extends Controller
 
         $storePage = StorePage::create($validatedData);
 
-        if($request->has('widgets')){
-            foreach($request->widgets as $widget){
+        if ($request->has('widgets')) {
+            foreach ($request->widgets as $widget) {
                 $storePageWidget = StorePageWidget::create([
                     'store_page_id' => $storePage->id,
                     'name' => $widget['name'],
@@ -74,30 +74,32 @@ class StorePageController extends Controller
                 ]);
             }
         }
-        
+
 
         return response()->json([
             'message' => 'Store page created successfully.',
             'data' => $storePage->load('widgets'),
-        ], 201);
+            'status' => 200
+        ], 200);
     }
 
-    public function view(Request $request, $store_id, $page_id){
-       
+    public function view(Request $request, $store_id, $page_id)
+    {
+
         $store = Store::active()->find($store_id);
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store id'
-            ],404);
+            ], 404);
         }
 
-        $page = StorePage::with('widgets')->where('store_id', $store->id)->where('id',$page_id)->first();
-        if(!$page){
+        $page = StorePage::with('widgets')->where('store_id', $store->id)->where('id', $page_id)->first();
+        if (!$page) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store page id'
-            ],404);
+            ], 404);
         }
 
         return response()->json([
@@ -105,7 +107,7 @@ class StorePageController extends Controller
             'data' => [
                 'page' => $page
             ]
-        ],200);
+        ], 200);
 
     }
 
@@ -163,7 +165,7 @@ class StorePageController extends Controller
                     'inputs' => $widget['inputs'] ?? [],
                 ]);
             }
-           
+
         }
 
         // Return a success response
