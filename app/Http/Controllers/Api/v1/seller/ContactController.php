@@ -31,6 +31,7 @@ class ContactController extends Controller
             'email' => 'required|email',
             'subject' => 'nullable|string|max:255',
             'message' => 'required|string',
+            'phone' => 'nullable|string|max:255',
         ]);
 
         $validatedData['store_id'] = authStore();
