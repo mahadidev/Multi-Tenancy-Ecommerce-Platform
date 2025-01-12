@@ -2,14 +2,18 @@ import { SidebarProvider } from "@/seller/contexts/sidebar-context";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { clearOnboard } from "@/seller/store/slices/storeOnboardSlice";
 import { Flowbite } from "flowbite-react";
-import { Outlet } from "react-router-dom";
-import DashboardFooter from "./DashboardFooter";
-import { LayoutContent } from "./layout-content";
-import { DashboardNavbar } from "./navbar";
-import { DashboardSidebar } from "./sidebar";
-import { customTheme } from "./theme";
+import { LayoutContent } from "../layout-content";
+import { DashboardNavbar } from "../navbar";
+import { customTheme } from "../theme";
+import { EditorSidebar } from "./sidebar";
 
-export default function DashboardLayout() {
+export default function EditorLayout({
+    children,
+    sidebarChildren,
+}: {
+    children: any;
+    sidebarChildren: any;
+}) {
     const { sidebar } = useAppSelector((state) => state.base);
     const dispatch = useAppDispatch();
     dispatch(clearOnboard());
@@ -19,12 +23,8 @@ export default function DashboardLayout() {
             <SidebarProvider initialCollapsed={sidebar.desktop.isCollapsed}>
                 <DashboardNavbar />
                 <div className="mt-16 flex items-start">
-                    <DashboardSidebar />
-                    <LayoutContent>
-                        <Outlet />
-
-                        <DashboardFooter />
-                    </LayoutContent>
+                    <EditorSidebar>{sidebarChildren}</EditorSidebar>
+                    <LayoutContent>{children}</LayoutContent>
                 </div>
             </SidebarProvider>
         </Flowbite>

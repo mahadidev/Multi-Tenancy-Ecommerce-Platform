@@ -14,4 +14,10 @@ export const RoutePath = {
     themes: {
         list: () => "/themes",
     },
+    help: {
+        index: () => "/help",
+    },
+    pricing: {
+        index: () => "/pricing",
+    },
 };

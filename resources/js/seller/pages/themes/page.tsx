@@ -1,10 +1,10 @@
+import { BASE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
 import { useAppSelector } from "@/seller/store";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { useFetchThemesQuery } from "@/seller/store/reducers/themeApi";
 import { Breadcrumb, Button } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { CiViewBoard } from "react-icons/ci";
 import { HiHome } from "react-icons/hi";
 
 export default function ThemePage() {
@@ -116,7 +116,13 @@ export default function ThemePage() {
                                                 Active
                                             </Button>
                                         )}
-                                        <Button color="light">Preview</Button>
+                                        <Button
+                                            href={`${BASE_URL}/themes/${item.slug}`}
+                                            target="_blank"
+                                            color="light"
+                                        >
+                                            Preview
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
