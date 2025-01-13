@@ -33,7 +33,9 @@ class StoreResource extends JsonResource
             'primary_color' => $this->primary_color,
             'secondary_color' => $this->secondary_color,
             'theme_id' => $this->theme_id,
-            'settings' => $this->settings !== "null" ? json_decode($this->settings) : null
+            'settings' => $this->settings !== "null" ? json_decode($this->settings) : null,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
