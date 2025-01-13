@@ -34,6 +34,12 @@ class PagesRelationManager extends RelationManager
                     ->required()
                     ->maxLength(1000)
                     ->columnSpanFull(),
+                Forms\Components\FileUpload::make('thumbnail')
+                    ->disk('public')
+                    ->label('Thumbnail')
+                    ->directory('themes/pages')
+                    ->image()
+                    ->columnSpanFull(),
                 Forms\Components\Repeater::make('widgets')
                     ->relationship('page_widgets')
                     ->schema([
@@ -44,23 +50,29 @@ class PagesRelationManager extends RelationManager
                             ->afterStateUpdated(function (Get $get, Set $set) {
                                 $selectedWidget = ThemeWidget::where(["id" => $get("theme_widgets")])->first();
 
-                            $set('name', $selectedWidget->name);
-                            $set('label', $selectedWidget->label);
-                            $set('inputs', $selectedWidget->inputs);
-                        }),
-                    Forms\Components\TextInput::make('name')->label('Name')->placeholder('e.g. heroSection')->required()->hint('e.g., Header, Navbar, Contact Form'),
-                    Forms\Components\TextInput::make('label')->label('Label')->placeholder('e.g. Hero Section')->required(),
-                    Forms\Components\Textarea::make("inputs")
-                        ->label("Inputs Array")
-                        ->placeholder("ex. []")
-                        ->rows(10)
-                        ->placeholder('enter inputs array in json')
-                ])
-                ->reorderable()
-                ->collapsible()
-                ->collapsed()
-                ->columnSpanFull(),
-        ]);
+                                $set('name', $selectedWidget->name);
+                                $set('label', $selectedWidget->label);
+                                $set('inputs', $selectedWidget->inputs);
+                            }),
+                        Forms\Components\TextInput::make('name')->label('Name')->placeholder('e.g. heroSection')->required()->hint('e.g., Header, Navbar, Contact Form'),
+                        Forms\Components\TextInput::make('label')->label('Label')->placeholder('e.g. Hero Section')->required(),
+                        Forms\Components\Textarea::make("inputs")
+                            ->label("Inputs Array")
+                            ->placeholder("ex. []")
+                            ->rows(10)
+                            ->placeholder('enter inputs array in json'),
+                        Forms\Components\FileUpload::make('thumbnail')
+                            ->disk('public')
+                            ->label('Thumbnail')
+                            ->directory('themes/pages/widgets')
+                            ->image()
+                            ->columnSpanFull()
+                    ])
+                    ->reorderable()
+                    ->collapsible()
+                    ->collapsed()
+                    ->columnSpanFull(),
+            ]);
     }
 
     public function table(Table $table): Table

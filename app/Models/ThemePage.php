@@ -11,7 +11,8 @@ class ThemePage extends Model
         "name",
         "type",
         "slug",
-        "title"
+        "title",
+        "thumbnail",
     ];
 
     protected $hidden  = [
