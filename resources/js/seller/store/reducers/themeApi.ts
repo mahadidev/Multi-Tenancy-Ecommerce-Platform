@@ -15,7 +15,16 @@ export const themeApi = createApi({
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
         }),
+        fetchTheme: builder.query<any, string>({
+            query: (id) =>
+                createRequest({
+                    method: "get",
+                    url: `/themes/${id}`,
+                }),
+            transformResponse: (response) => response,
+            transformErrorResponse: (error: any) => error.data,
+        }),
     }),
 });
 
-export const { useFetchThemesQuery } = themeApi;
+export const { useFetchThemesQuery, useFetchThemeQuery } = themeApi;

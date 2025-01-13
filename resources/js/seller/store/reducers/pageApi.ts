@@ -5,7 +5,7 @@ import { SELLER_PREFIX } from "../env";
 export const pageApi = createApi({
     reducerPath: "pageApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Pages"],
+    tagTypes: ["Pages", "Page"],
     endpoints: (builder) => ({
         fetchPages: builder.query<any, string>({
             query: (string) =>
@@ -16,6 +16,22 @@ export const pageApi = createApi({
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Pages"],
+        }),
+        fetchPage: builder.query<
+            any,
+            {
+                storeId: string;
+                pageId: string;
+            }
+        >({
+            query: (props) =>
+                createRequest({
+                    url: `${SELLER_PREFIX}/stores/${props.storeId}/pages/${props.pageId}`,
+                    method: "get",
+                }),
+            transformResponse: (response) => response,
+            transformErrorResponse: (error: any) => error.data,
+            providesTags: ["Page"],
         }),
         createPage: builder.mutation<
             any,
@@ -40,7 +56,32 @@ export const pageApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Pages"],
         }),
+        updatePage: builder.mutation<
+            any,
+            {
+                storeId: string;
+                pageId: string;
+                formData: any;
+            }
+        >({
+            query: (data) => {
+                data.formData["_method"] = "put";
+                return createRequest({
+                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/update/${data.pageId}`,
+                    method: "POST",
+                    body: data.formData,
+                });
+            },
+            transformResponse: (response) => response,
+            transformErrorResponse: (error: any) => error.data,
+            invalidatesTags: ["Page"],
+        }),
     }),
 });
 
-export const { useFetchPagesQuery, useCreatePageMutation } = pageApi;
+export const {
+    useFetchPagesQuery,
+    useCreatePageMutation,
+    useFetchPageQuery,
+    useUpdatePageMutation,
+} = pageApi;

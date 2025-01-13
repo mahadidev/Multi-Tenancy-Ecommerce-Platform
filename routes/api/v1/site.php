@@ -13,6 +13,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
+
 // store show route
 Route::get('/store', [StoreController::class, 'show']);
 
