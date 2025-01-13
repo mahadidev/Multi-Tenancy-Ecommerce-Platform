@@ -12,7 +12,8 @@ class ThemePageWidget extends Model
         'label',
         'type',
         'value',
-        'inputs'
+        'inputs',
+        'thumbnail',
     ];
 
     protected $casts = [
