@@ -1,17 +1,17 @@
 {
-  "_chunk-K6AXKMTT-DxWSuimp.js": {
-    "file": "assets/chunk-K6AXKMTT-DxWSuimp.js",
+  "_chunk-K6AXKMTT-Bz1bRsMj.js": {
+    "file": "assets/chunk-K6AXKMTT-Bz1bRsMj.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_rtk-query-react.modern-C3u78dVi.js": {
-    "file": "assets/rtk-query-react.modern-C3u78dVi.js",
+  "_rtk-query-react.modern-Dw_u0Yiw.js": {
+    "file": "assets/rtk-query-react.modern-Dw_u0Yiw.js",
     "name": "rtk-query-react.modern",
     "imports": [
-      "_chunk-K6AXKMTT-DxWSuimp.js"
+      "_chunk-K6AXKMTT-Bz1bRsMj.js"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CNcOMB_H.css",
+    "file": "assets/app-DWvyuwhv.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -30,12 +30,12 @@
     "src": "resources/js/frontend/assets/images/search-bg.jpg"
   },
   "resources/js/frontend/index.tsx": {
-    "file": "assets/index-VgfNfOZi.js",
+    "file": "assets/index-B-AH_8uy.js",
     "name": "index",
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DxWSuimp.js"
+      "_chunk-K6AXKMTT-Bz1bRsMj.js"
     ],
     "css": [
       "assets/index-CuHhE1Is.css"
@@ -46,26 +46,26 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-mN9OmdNh.js",
+    "file": "assets/index-DVBeVts7.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DxWSuimp.js",
-      "_rtk-query-react.modern-C3u78dVi.js"
+      "_chunk-K6AXKMTT-Bz1bRsMj.js",
+      "_rtk-query-react.modern-Dw_u0Yiw.js"
     ],
     "css": [
-      "assets/index-DHfgP00s.css"
+      "assets/index-DDuUQZoI.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-D2GJe9Rz.js",
+    "file": "assets/index-VhwvlnuN.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DxWSuimp.js",
-      "_rtk-query-react.modern-C3u78dVi.js"
+      "_chunk-K6AXKMTT-Bz1bRsMj.js",
+      "_rtk-query-react.modern-Dw_u0Yiw.js"
     ],
     "css": [
       "assets/index-CmYDTu_J.css"
