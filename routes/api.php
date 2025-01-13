@@ -33,13 +33,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
 
+    // File storage routes
+    Route::resource('file-storage', FileStorageController::class);
+
+
 });
 
-
-
-
-
-
-
-// User Module Routes
-// Route::resource('/user', UserController::class);
