@@ -20,8 +20,16 @@ class ThemeResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'thumbnail' => $this->thumbnail_image,
-            'widgets' => $this->widgets,
-            // 'pages-old' => $this->pages,
+            'widgets' => $this->widgets->map(function ($widget) {
+                return [
+                    'id' => $widget->id,
+                    'name' => $widget->name,
+                    'label' => $widget->label,
+                    'type' => $widget->type,
+                    'value' => $widget->value,
+                    'inputs' => json_decode($widget->inputs),
+                ];
+            }),
             'pages' => $this->pages->map(function ($page) {
                 return [
                     'id' => $page->id,
