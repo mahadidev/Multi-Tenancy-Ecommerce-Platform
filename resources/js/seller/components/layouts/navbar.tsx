@@ -150,7 +150,7 @@ export function DashboardNavbar() {
     );
 }
 
-function NotificationBellDropdown() {
+export function NotificationBellDropdown() {
     return (
         <Dropdown
             className="rounded"
@@ -384,7 +384,7 @@ function NotificationBellDropdown() {
     );
 }
 
-function AppDrawerDropdown() {
+export function AppDrawerDropdown() {
     return (
         <Dropdown
             className="rounded"
@@ -488,7 +488,7 @@ function AppDrawerDropdown() {
     );
 }
 
-function UserDropdown() {
+export function UserDropdown() {
     const { user } = useAppSelector((state) => state.auth);
     const { loggedOut } = useAuth();
     const [isStoreList, setStoreList] = useState<boolean>(false);

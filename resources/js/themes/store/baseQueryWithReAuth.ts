@@ -1,21 +1,10 @@
-import { PATH_PREFIX, RoutePath } from "@/seller/env";
 import { API_URL } from "@/themes/env";
-import { FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { RootState } from "./index";
+import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 export const baseQuery = fetchBaseQuery({
     baseUrl: API_URL,
 
-    prepareHeaders: (
-        headers: Headers,
-        api: {
-            getState: () => RootState | any;
-            arg: string | FetchArgs;
-            extra: unknown;
-            endpoint: string;
-            type: "query" | "mutation";
-        }
-    ) => {
+    prepareHeaders: (headers: Headers) => {
         headers.set("accept", "application/json");
 
         // const state: RootState = api.getState();

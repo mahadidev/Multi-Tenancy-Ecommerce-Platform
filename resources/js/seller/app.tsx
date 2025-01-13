@@ -4,6 +4,8 @@ import SignInPage from "./pages/authentication/singIn";
 import SignUpPage from "./pages/authentication/singup";
 import DashboardPage from "./pages/dashboard/page";
 import EcommerceProductsPage from "./pages/e-commerce/products/page";
+import NotFoundPage from "./pages/landing/notFound/page";
+import PricingPage from "./pages/landing/pricing/page";
 import PageEditPage from "./pages/pages/edit/page";
 import PagesPage from "./pages/pages/page";
 import SettingPage from "./pages/settings/page";
@@ -32,18 +34,25 @@ const App = () => {
                                 </Route>
 
                                 <Route path="pages" element={<PagesPage />} />
-                                <Route
-                                    path="pages/:id"
-                                    element={<PageEditPage />}
-                                />
 
                                 <Route path="themes" element={<ThemePage />} />
                                 <Route
                                     path="settings"
                                     element={<SettingPage />}
                                 />
+
+                                <Route
+                                    path="pricing"
+                                    element={<PricingPage />}
+                                />
                             </Route>
+
+                            <Route
+                                path="pages/:id"
+                                element={<PageEditPage />}
+                            />
                         </Route>
+
                         <Route path="store" element={<AuthLayout />}>
                             <Route
                                 path="create"
@@ -51,6 +60,7 @@ const App = () => {
                             />
                         </Route>
                     </Route>
+
                     <Route path="/" element={<GuestMiddleware />}>
                         <Route path="login" element={<AuthLayout />}>
                             <Route index element={<SignInPage />} />
@@ -59,6 +69,8 @@ const App = () => {
                             <Route index element={<SignUpPage />} />
                         </Route>
                     </Route>
+
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </BrowserRouter>
         </>
