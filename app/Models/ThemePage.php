@@ -9,8 +9,10 @@ class ThemePage extends Model
     protected $fillable = [
         "theme_id",
         "name",
+        "type",
         "slug",
-        "title"
+        "title",
+        "thumbnail",
     ];
 
     protected $hidden  = [

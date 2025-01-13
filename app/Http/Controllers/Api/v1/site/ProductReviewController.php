@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\site;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProductReview;
+use App\Models\StoreSession;
 
 class ProductReviewController extends Controller
 {
@@ -14,9 +15,9 @@ class ProductReviewController extends Controller
     public function index(Request $request)
     {
         $reviews = ProductReview::where('product_id', $request->product_id)
-                                ->where('user_id', auth()->id())
-                                ->where('store_id', authStore())
-                                ->get();
+            // ->where('user_id', auth()->id())
+            ->where('store_id', authStore())
+            ->get();
 
         return response()->json([
             'status' => 200,
@@ -59,9 +60,11 @@ class ProductReviewController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $review = ProductReview::find($id);
+        $review = ProductReview::find($id)
+            ->where('user_id', auth()->id())
+            ->where('store_id', authStore());
 
-        if(!$review) {
+        if (!$review) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Review not found',
@@ -90,16 +93,45 @@ class ProductReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(string $id)
     {
-        $review = ProductReview::find($id);
-        if(!$review) {
+        $review = ProductReview::where('id', $id)
+            ->where('store_id', authStore())
+            ->first();
+
+        if (!$review) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Review not found',
             ]);
         }
-        $review->delete();
+
+        $user = auth()->user();
+
+        if ($user->hasRole('user') && $review->user_id === $user->id) {
+            // User can delete their own review
+            $review->delete();
+        } elseif ($user->hasRole('seller')) {
+            $storeSession = StoreSession::where('store_id', $review->store_id)
+                ->where('user_id', $user->id)
+                ->exists();
+
+            if ($storeSession) {
+                // Seller can delete review if they belong to the store
+                $review->delete();
+            } else {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Unauthorized to delete this review2',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Unauthorized to delete this review',
+            ]);
+        }
 
         return response()->json([
             'status' => 200,
