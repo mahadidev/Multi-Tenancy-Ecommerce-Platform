@@ -16,13 +16,14 @@ class OnBoardingController extends Controller
 {
     public function sellerRegister(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|string|email|unique:users,email',
+            'password' => 'required|string',
+            'confirm_password' => 'required|string|same:password',
+        ]);
+
         return apiResponse(function () use ($request) {
-            $request->validate([
-                'name' => 'required',
-                'email' => 'required|string|email|unique:users,email',
-                'password' => 'required|string',
-                'confirm_password' => 'required|string|same:password',
-            ]);
 
             $user = User::create([
                 'name' => $request->name,
@@ -58,14 +59,16 @@ class OnBoardingController extends Controller
 
     public function createStore(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $request->validate([
-                'name' => 'required|string',
-                'domain' => 'required|string|unique:stores,domain',
-            ], [
-                'domain.required' => 'Url is required',
-            ]);
 
+        $request->validate([
+            'name' => 'required|string',
+            'domain' => 'required|string|unique:stores,domain',
+        ], [
+            'domain.required' => 'Url is required',
+        ]);
+
+        return apiResponse(function () use ($request) {
+           
             $user_id = $request->session()->get('user_id');
 
             $store = Store::create([
@@ -97,13 +100,14 @@ class OnBoardingController extends Controller
 
     public function storeBranding(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $request->validate([
-                'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-                'primary_color' => 'nullable|string',
-                'secondary_color' => 'nullable|string',
-            ]);
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'primary_color' => 'nullable|string',
+            'secondary_color' => 'nullable|string',
+        ]);
 
+        return apiResponse(function () use ($request) {
+           
             $store_id = $request->session()->get('store_id');
 
             $store = Store::find($store_id);
@@ -127,11 +131,13 @@ class OnBoardingController extends Controller
 
     public function themeSelection(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $request->validate([
-                'theme_id' => 'nullable|exists:themes,id',
-            ]);
 
+        $request->validate([
+            'theme_id' => 'nullable|exists:themes,id',
+        ]);
+
+        return apiResponse(function () use ($request) {
+          
             $store_id = $request->session()->get('store_id');
 
             $store = Store::find($store_id);

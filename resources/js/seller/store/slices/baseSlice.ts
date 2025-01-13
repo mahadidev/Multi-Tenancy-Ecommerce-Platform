@@ -8,6 +8,7 @@ const initialState: {
         mobile: {
             isOpenMobile: boolean;
         };
+        width: number;
     };
 } = {
     sidebar: {
@@ -17,6 +18,7 @@ const initialState: {
         mobile: {
             isOpenMobile: false,
         },
+        width: 0,
     },
 };
 const baseSlice = createSlice({
@@ -37,6 +39,9 @@ const baseSlice = createSlice({
         setIsOpenMobile: (state, action: PayloadAction<boolean>) => {
             state.sidebar.mobile.isOpenMobile = action.payload;
         },
+        setSidebarWidth: (state, action: PayloadAction<number>) => {
+            state.sidebar.width = action.payload;
+        },
     },
 });
 export const {
@@ -44,5 +49,6 @@ export const {
     setSidebarCollapsed,
     toggleIsOpenMobile,
     setIsOpenMobile,
+    setSidebarWidth,
 } = baseSlice.actions;
 export default baseSlice.reducer;

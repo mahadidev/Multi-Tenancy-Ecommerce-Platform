@@ -6,4 +6,18 @@ export const RoutePath = {
     storeCreate: "/store/create",
     dashboard: "/",
     products: "/e-commerce/products",
+    settings: "/settings",
+    pages: {
+        list: () => "/pages",
+        edit: (id: string) => `/pages/${id}`,
+    },
+    themes: {
+        list: () => "/themes",
+    },
+    help: {
+        index: () => "/help",
+    },
+    pricing: {
+        index: () => "/pricing",
+    },
 };

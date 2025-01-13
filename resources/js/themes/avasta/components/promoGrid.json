@@ -1,0 +1,55 @@
+{
+    "name": "promoGrid",
+    "label": "Promo Grid",
+    "inputs": {
+        "gridItems": {
+            "label": "Grid Items",
+            "type": "array",
+            "required": true,
+            "items": [
+                {
+                    "image": {
+                        "label": "Promo Image",
+                        "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fpromo_banner_1.jpg&w=640&q=75",
+                        "placeholder": "Enter your promo image url",
+                        "required": true
+                    },
+                    "href": {
+                        "label": "Promo Href",
+                        "value": "shoes",
+                        "placeholder": "Enter promo href slug",
+                        "required": true
+                    }
+                },
+                {
+                    "image": {
+                        "label": "Promo Image",
+                        "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fpromo_banner_2.jpg&w=640&q=75",
+                        "placeholder": "Enter your promo image url",
+                        "required": true
+                    },
+                    "href": {
+                        "label": "Promo Href",
+                        "value": "t-shirt",
+                        "placeholder": "Enter promo href slug",
+                        "required": true
+                    }
+                },
+                {
+                    "image": {
+                        "label": "Promo Image",
+                        "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fpromo_banner_3.jpg&w=640&q=75",
+                        "placeholder": "Enter your promo image url",
+                        "required": true
+                    },
+                    "href": {
+                        "label": "Promo Href",
+                        "value": "shirt",
+                        "placeholder": "Enter promo href slug",
+                        "required": true
+                    }
+                }
+            ]
+        }
+    }
+}

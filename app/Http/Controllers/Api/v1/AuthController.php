@@ -53,9 +53,12 @@ class AuthController extends Controller
         if ($storeSession) {
             // remove previous store id from session
             $request->session()->forget('store_id');
+            if(session()->has('store_id')){
+                session()->forget('store_id');
+            }
 
             // store the store id in session
-            $request->session()->put('store_id', $storeSession->store_id);
+            session(['store_id' => $storeSession->id]);
 
             // Also set it in the request attributes
             $request->attributes->set('store_id', $storeSession->store_id);
@@ -65,13 +68,28 @@ class AuthController extends Controller
         }
 
         if (!$storeSession) {
-            $store = Store::where(["owner_id" => $user->id])->first();
+            $store = Store::where('owner_id', $user->id)->first();
 
-            // store the store id in session
-            $request->session()->put('store_id', $store->id);
+            if($store){
+                StoreSession::updateOrCreate([
+                    'user_id' => $user->id,
+                ], [
+                    'store_id' => $store->id,
+                ]);
 
-            // Also set it in the request attributes
-            $request->attributes->set('store_id', $store->id);
+                $request->session()->forget('store_id');
+                if(session()->has('store_id')){
+                    session()->forget('store_id');
+                }
+    
+                // store the store id in session
+                session(['store_id' => $store->id]);
+    
+                // Also set it in the request attributes
+                $request->attributes->set('store_id', $store->id);
+
+            }
+            
         }
 
         // Generate a Sanctum token

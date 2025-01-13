@@ -23,16 +23,17 @@ class StoreResource extends JsonResource
             'phone' => $this->phone,
             'location' => $this->location,
             'status' => $this->status,
+            'type' => $this->type,
             'description' => $this->description,
             'currency' => $this->currency ?? 'BDT',
             'logos' => [
                 'primary' => $this->logo_image,
-                'dark' =>  $this->dark_logo_image,
+                'dark' => $this->dark_logo_image,
             ],
             'primary_color' => $this->primary_color,
             'secondary_color' => $this->secondary_color,
             'theme_id' => $this->theme_id,
-            'settings' => $this->settings
+            'settings' => $this->settings !== "null" ? json_decode($this->settings) : null
         ];
     }
 }
