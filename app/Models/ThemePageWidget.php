@@ -17,7 +17,7 @@ class ThemePageWidget extends Model
 
     protected $casts = [
         'value' => 'json', // Use 'json' instead of 'array'
-        'inputs' => 'array',
+        'inputs' => 'json',
     ];
 
     protected $hidden  = [
