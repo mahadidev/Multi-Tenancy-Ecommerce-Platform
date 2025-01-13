@@ -9,8 +9,9 @@ export const imageApi = createApi({
         uploadImage: builder.mutation<
             any,
             {
-                type: string;
+                type?: string;
                 file: any;
+                responseType?: "data";
             }
         >({
             query: (data: any) => {
@@ -27,7 +28,13 @@ export const imageApi = createApi({
                     body: formData,
                 });
             },
-            transformResponse: (response: { data: any }) => response,
+            transformResponse: (response: { data: any }, _meta, arg) => {
+                if (arg.responseType == "data") {
+                    return response;
+                } else {
+                    return response.data.location;
+                }
+            },
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: [],
         }),

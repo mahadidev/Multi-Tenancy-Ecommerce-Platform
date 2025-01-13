@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
+import { imageApi } from "./reducers/imageApi";
 import { pageApi } from "./reducers/pageApi";
 import { storeApi } from "./reducers/storeApi";
 import { themeApi } from "./reducers/themeApi";
@@ -14,7 +15,7 @@ import storeSlice from "./slices/storeSlice";
 
 const authPersistConfig = {
     key: "site",
-    blacklist: ["authApi", "storeApi", "themeApi", "pageApi"],
+    blacklist: ["authApi", "storeApi", "themeApi", "pageApi", "imageApi"],
     storage,
     version: 0,
 };
@@ -31,6 +32,7 @@ const persistedReducer = persistReducer(
         [storeApi.reducerPath]: storeApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,
         [pageApi.reducerPath]: pageApi.reducer,
+        [imageApi.reducerPath]: imageApi.reducer,
     })
 );
 
@@ -44,6 +46,7 @@ export const store = configureStore({
             storeApi.middleware,
             themeApi.middleware,
             pageApi.middleware,
+            imageApi.middleware,
         ]);
     },
 });

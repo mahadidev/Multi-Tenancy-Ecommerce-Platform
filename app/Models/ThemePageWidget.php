@@ -12,12 +12,13 @@ class ThemePageWidget extends Model
         'label',
         'type',
         'value',
-        'inputs'
+        'inputs',
+        'thumbnail',
     ];
 
     protected $casts = [
         'value' => 'json', // Use 'json' instead of 'array'
-        'inputs' => 'array',
+        'inputs' => 'json',
     ];
 
     protected $hidden  = [

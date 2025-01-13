@@ -1,5 +1,6 @@
 import useForm from "@/seller/hooks/useForm";
 import { useAppSelector } from "@/seller/store";
+import { useUploadImageMutation } from "@/seller/store/reducers/imageApi";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { Button, FileInput, Label, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -12,10 +13,11 @@ const StepTwo = ({
     setStep: CallableFunction;
     setFormData: CallableFunction;
 }) => {
+    const [uploadImage] = useUploadImageMutation();
     const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
     const { currentStore: store } = useAppSelector((state) => state.store);
 
-    const { formState, handleChange, formErrors } = useForm({
+    const { formState, handleChange, formErrors, setFormState } = useForm({
         errors: error,
     });
 
@@ -36,7 +38,29 @@ const StepTwo = ({
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => {
-                                handleChange(event, setFormData);
+                                if (
+                                    event.target.files &&
+                                    event.target.files[0]
+                                ) {
+                                    uploadImage({
+                                        file: event.target.files[0],
+                                    }).then((response) => {
+                                        setFormData((prev: any) => ({
+                                            ...prev,
+                                            logo: response.data,
+                                        }));
+
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            ["logo"]: response.data,
+                                        }));
+
+                                        setFormData({
+                                            name: "logo",
+                                            value: response.data,
+                                        });
+                                    });
+                                }
                             }}
                             color={formErrors["logo"] ? "failure" : "gray"}
                         />

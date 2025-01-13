@@ -9,6 +9,7 @@ class StorePage extends Model
 {
     protected $fillable = [
         'name',
+        'type',
         'slug',
         'title',
         'store_id',

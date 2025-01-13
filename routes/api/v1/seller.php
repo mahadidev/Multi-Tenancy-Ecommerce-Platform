@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
-
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
 
@@ -21,7 +21,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::resource('/store', StoreController::class);
 
     // Store Update Route
-    Route::post('/store/{id}', [StoreController::class, "updateByPost"]);
+    Route::post('/store/{id}', [StoreController::class, 'updateByPost']);
 
     // Profile Route
     Route::get('profile', [ProfileController::class, 'profile']);
@@ -37,11 +37,16 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // Logout Route
     Route::get('logout', [AuthController::class, 'logout']);
+
+    // Store Pages Routes
+    Route::get('stores/{store_id}/pages', [StorePageController::class, 'pages']);
+    Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
+    Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
+    Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
+    
 });
 
-
-Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
-
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
     // Brand Routes
     Route::resource('/brand', BrandController::class);
 
@@ -49,6 +54,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // Product Route
     Route::resource('/product', ProductController::class);
+
+    // Product Review Route
+    Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
 
     // Blog Category Route
     Route::resource('/blog-category', BlogCategoryController::class);
@@ -61,10 +69,4 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // Subscriber Routes
     Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
-
-    // Store Pages Routes
-    Route::get('stores/{store_id}/pages', [StorePageController::class, 'pages']);
-    Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
-    Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
-    Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
 });
