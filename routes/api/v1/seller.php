@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
@@ -49,6 +50,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // Product Route
     Route::resource('/product', ProductController::class);
+
+    // Product Review Route
+    Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
 
     // Blog Category Route
     Route::resource('/blog-category', BlogCategoryController::class);
