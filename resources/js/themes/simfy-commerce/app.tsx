@@ -26,7 +26,11 @@ export default function App() {
                                     (page: any, index: number) => (
                                         <Route
                                             key={index}
-                                            path={page.slug}
+                                            path={
+                                                page.slug === "home"
+                                                    ? "/"
+                                                    : page.slug
+                                            }
                                             index
                                             element={
                                                 <Page data={page} key={index} />
