@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StorePagesResource;
 use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use App\Models\StorePage;
@@ -26,7 +27,7 @@ class StorePageController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'pages' => $pages
+                'pages' => StorePagesResource::collection($pages) 
             ]
         ], 200);
 
@@ -79,7 +80,7 @@ class StorePageController extends Controller
 
         return response()->json([
             'message' => 'Store page created successfully.',
-            'data' => $storePage->load('widgets'),
+            'data' => new StorePagesResource($storePage->load('widgets')),
             'status' => 200
         ], 200);
     }
@@ -106,7 +107,7 @@ class StorePageController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'page' => $page
+                'page' => new StorePagesResource($page)
             ]
         ], 200);
 
@@ -181,7 +182,7 @@ class StorePageController extends Controller
         // Return a success response
         return response()->json([
             'message' => 'Store page updated successfully.',
-            'data' => $storePage->load('widgets'),
+            'data' => new StorePagesResource($storePage->load('widgets')),
             'status' => 200
         ], 200);
     }
