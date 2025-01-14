@@ -1,4 +1,4 @@
-import { API_URL } from "@/themes/env";
+import { API_URL } from "@/env";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 export const baseQuery = fetchBaseQuery({

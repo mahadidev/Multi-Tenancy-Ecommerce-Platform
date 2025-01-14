@@ -20,9 +20,9 @@ class FileStorageResource extends JsonResource
             'user_id' => $this->user_id,
             'name' => $this->name,
             'type' => $this->type,
-            'location' => $this->location ? url(Storage::url($this->location)) : null,
+            'location' => $this->response_type == "url" ? url(Storage::url($this->location)) : $this->location,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
-            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)), 
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
     }
 }

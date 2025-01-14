@@ -19,7 +19,7 @@ export default function AddNewWidgetModal() {
         pageId: id ? id : "0",
         storeId: store.id,
     });
-    // const [type, setType] = useState<string>("home");
+    const [type, setType] = useState<string>("home");
     const [selectedWidgets, setSelectedWidgets] = useState<any[]>([]);
 
     const [updatePage] = useUpdatePageMutation();
@@ -45,10 +45,20 @@ export default function AddNewWidgetModal() {
                 formData: {
                     ...pageResponse.data.page,
                     widgets: [
-                        ...pageResponse.data.page.widgets,
-                        ...selectedWidgets,
+                        ...pageResponse.data.page.widgets.map((item: any) => {
+                            return item;
+                        }),
+                        ...selectedWidgets.map((item: any) => {
+                            return item;
+                        }),
                     ],
                 },
+            }).then((response: any) => {
+                console.log("yes", response);
+                if (response.data.status == 200) {
+                    setOpenModal(false);
+                    setSelectedWidgets([]);
+                }
             });
         }
     };
@@ -88,15 +98,22 @@ export default function AddNewWidgetModal() {
                         <div className="mb-2 block">
                             <Label htmlFor="type" value="Page Type" />
                         </div>
-                        <Select id="type" required>
-                            <option>Home</option>
-                            <option>About</option>
-                            <option>Contact</option>
+                        <Select
+                            id="type"
+                            required
+                            onChange={(
+                                event: React.ChangeEvent<HTMLSelectElement>
+                            ) => setType(event.target.value)}
+                        >
+                            <option value={"home"}>Home</option>
+                            <option value={"about"}>About</option>
+                            <option value={"contact"}>Contact</option>
                         </Select>
                     </div>
-                    <ul className="grid w-full gap-6 md:grid-cols-3">
-                        {themeResponse?.data.theme.pages[0].page_widgets.map(
-                            (item: any, index: number) => (
+                    <ul className="grid w-full gap-6 md:grid-cols-4">
+                        {themeResponse?.data.theme.pages
+                            .find((item: any) => item.type == type)
+                            ?.widgets?.map((item: any, index: number) => (
                                 <li key={index}>
                                     <input
                                         name="widget"
@@ -142,15 +159,18 @@ export default function AddNewWidgetModal() {
                                         </div>
                                     </label>
                                 </li>
-                            )
-                        )}
+                            ))}
                     </ul>
                 </Modal.Body>
                 <Modal.Footer className="justify-end">
                     <Button color="gray" onClick={() => setOpenModal(false)}>
                         Cancel
                     </Button>
-                    <Button color="blue" onClick={() => handleOnAddWidget()}>
+                    <Button
+                        color="blue"
+                        onClick={() => handleOnAddWidget()}
+                        disabled={selectedWidgets.length === 0}
+                    >
                         Add Widget
                     </Button>
                 </Modal.Footer>

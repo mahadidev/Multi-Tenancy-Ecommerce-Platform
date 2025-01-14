@@ -22,3 +22,13 @@ Route::prefix('/seller')->group(function () {
 Route::prefix("/themes")->group(function () {
     Route::get("/{slug}", [ThemeController::class, "show"]);
 });
+
+
+Route::prefix('/themes')->group(function () {
+
+    Route::prefix("/{slug}")->group(function () {
+        Route::get("/{any}", [ThemeController::class, "show"])->where('any', '.*');
+        ;
+    });
+
+});

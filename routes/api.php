@@ -33,9 +33,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
 
-    // File storage routes
-    Route::resource('file-storage', FileStorageController::class);
 
-
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        // File storage routes
+        Route::resource('file-storage', FileStorageController::class);
+    });
 });
 

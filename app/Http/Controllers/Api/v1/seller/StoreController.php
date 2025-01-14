@@ -107,7 +107,9 @@ class StoreController extends Controller
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'logo_url' => 'nullable|string|max:255',
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'dark_logo_url' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
             "theme_id" => "nullable|exists:themes,id",
@@ -119,11 +121,15 @@ class StoreController extends Controller
         $logoPath = null;
         if ($request->hasFile('logo') && isset($request->logo)) {
             $logoPath = $request->file('logo')->store('stores', 'public');
+        } else if ($request->logo_url) {
+            $logoPath = $request->logo_url;
         }
 
         $darkLogoPath = null;
         if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
             $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
+        } else if ($request->dark_logo_url) {
+            $darkLogoPath = $request->dark_logo_url;
         }
 
 
@@ -179,7 +185,9 @@ class StoreController extends Controller
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'logo_url' => 'nullable|string|max:255',
             'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'dark_logo_url' => 'nullable|string|max:255',
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
             'settings' => 'nullable|max:1000000',
@@ -192,11 +200,15 @@ class StoreController extends Controller
         $logoPath = null;
         if ($request->hasFile('logo') && isset($request->logo)) {
             $logoPath = $request->file('logo')->store('stores', 'public');
+        } else if ($request->logo_url) {
+            $logoPath = $request->logo_url;
         }
 
         $darkLogoPath = null;
         if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
             $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
+        } else if ($request->dark_logo_url) {
+            $darkLogoPath = $request->dark_logo_url;
         }
 
         $theme_id = $store->theme_id;

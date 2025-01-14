@@ -1,2 +1,1 @@
-import "./avasta/index";
-import "./simfy-com/index";
+import "./simfy-commerce/index";

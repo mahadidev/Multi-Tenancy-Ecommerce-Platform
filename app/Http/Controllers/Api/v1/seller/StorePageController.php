@@ -134,6 +134,7 @@ class StorePageController extends Controller
             ], 404);
         }
 
+
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -142,14 +143,21 @@ class StorePageController extends Controller
             'title' => 'nullable|string',
             'is_active' => 'required|boolean',
             'widgets' => 'nullable|array',
-            'widgets.*.id' => 'nullable|exists:store_page_widgets,id',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',
             'widgets.*.inputs' => 'nullable|array',
-            'widgets.*.inputs.*.name' => 'required|string',
-            'widgets.*.inputs.*.label' => 'required|string',
+            // 'widgets.*.inputs.*.name' => 'required|string',
+            'widgets.*.inputs.*.label' => 'nullable|string',
             'widgets.*.inputs.*.value' => 'nullable|string',
+            'widgets.*.inputs.*.type' => 'nullable|string',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
+            'widgets.*.inputs.*.required' => 'nullable',
+            "widgets.*.inputs.*.items" => "nullable|array",
+            'widgets.*.inputs.*.items.*.*.label' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.*.value' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.*.placeholder' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.*.required' => 'nullable',
+            'widgets.*.inputs.*.items.*.*.type' => 'nullable|string',
         ]);
 
         // Update the store page
@@ -174,6 +182,7 @@ class StorePageController extends Controller
         return response()->json([
             'message' => 'Store page updated successfully.',
             'data' => $storePage->load('widgets'),
+            'status' => 200
         ], 200);
     }
 

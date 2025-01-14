@@ -3,15 +3,15 @@
     "file": "assets/chunk-K6AXKMTT-DxWSuimp.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_rtk-query-react.modern-C3u78dVi.js": {
-    "file": "assets/rtk-query-react.modern-C3u78dVi.js",
-    "name": "rtk-query-react.modern",
+  "_index-CM8gDC9_.js": {
+    "file": "assets/index-CM8gDC9_.js",
+    "name": "index",
     "imports": [
       "_chunk-K6AXKMTT-DxWSuimp.js"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CNcOMB_H.css",
+    "file": "assets/app-C_LK7h9G.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -46,29 +46,29 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-mN9OmdNh.js",
+    "file": "assets/index-xv5yvNqL.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DxWSuimp.js",
-      "_rtk-query-react.modern-C3u78dVi.js"
+      "_index-CM8gDC9_.js"
     ],
     "css": [
-      "assets/index-DHfgP00s.css"
+      "assets/index-F_qfOT-v.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-D2GJe9Rz.js",
+    "file": "assets/index-DD7yn2V7.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DxWSuimp.js",
-      "_rtk-query-react.modern-C3u78dVi.js"
+      "_index-CM8gDC9_.js"
     ],
     "css": [
-      "assets/index-CmYDTu_J.css"
+      "assets/index-Bn5ROGf4.css"
     ]
   }
 }
