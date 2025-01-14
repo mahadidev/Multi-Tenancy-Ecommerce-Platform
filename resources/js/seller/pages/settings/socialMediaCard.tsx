@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/seller/store";
-import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
+import useStore from "@/seller/hooks/useStore";
+import { SocialMediaType, StoreType } from "@/seller/types";
 import { Button, Card, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -73,8 +73,12 @@ const SocialMedias = [
 ];
 
 const SocialMediaCard = () => {
-    const { currentStore: store } = useAppSelector((state) => state.store);
-    const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
+    const {
+        store: currentStore,
+        addSocialMedia,
+        removeSocialMedia,
+    } = useStore();
+    const store: StoreType = currentStore;
 
     const [selected, setSelected] = useState<{
         name: string;
@@ -82,55 +86,11 @@ const SocialMediaCard = () => {
         placeholder: string;
         value: string;
     } | null>();
-    const [disconnect, setDisconnect] = useState<string | null>(null);
+    const [disconnect, setDisconnect] = useState<SocialMediaType | null>(null);
 
     function onCloseModal() {
         setSelected(null);
         setDisconnect(null);
-    }
-
-    function handleUpdate() {
-        if (selected) {
-            updateStore({
-                storeId: store.id,
-                formData: {
-                    settings: {
-                        ...(store.settings === "null" ? null : store.settings),
-                        social_media: {
-                            ...store.settings?.social_media,
-                            [selected.name]: {
-                                username: selected.value,
-                            },
-                        },
-                    },
-                },
-            }).then((response: any) => {
-                if (response.data.status === 200) {
-                    onCloseModal();
-                }
-            });
-        }
-    }
-
-    function handleDisonnect() {
-        if (disconnect) {
-            updateStore({
-                storeId: store.id,
-                formData: {
-                    settings: {
-                        ...(store.settings === "null" ? null : store.settings),
-                        social_media: {
-                            ...(store.settings.social_media ?? null),
-                            [disconnect]: null,
-                        },
-                    },
-                },
-            }).then((response: any) => {
-                if (response.data.status === 200) {
-                    onCloseModal();
-                }
-            });
-        }
     }
 
     return (
@@ -152,38 +112,54 @@ const SocialMediaCard = () => {
 
                                         <span
                                             className={`block truncate text-sm font-normal ${
-                                                store.settings?.social_media &&
-                                                store.settings?.social_media[
-                                                    item.name
-                                                ]
+                                                store.settings?.social_media?.find(
+                                                    (socialMediaItem) =>
+                                                        socialMediaItem.name ===
+                                                        item.name
+                                                )
                                                     ? "text-primary-500 dark:text-primary-400"
                                                     : "text-gray-500 dark:text-gray-400"
                                             }`}
                                         >
-                                            {store.settings?.social_media &&
-                                            store.settings?.social_media[
-                                                item.name
-                                            ]
+                                            {store.settings?.social_media?.find(
+                                                (socialMediaItem) =>
+                                                    socialMediaItem.name ===
+                                                    item.name
+                                            )
                                                 ? `@${
-                                                      store.settings
-                                                          ?.social_media[
-                                                          item.name
-                                                      ]?.username
+                                                      store.settings.social_media.find(
+                                                          (socialMediaItem) =>
+                                                              socialMediaItem.name ===
+                                                              item.name
+                                                      )?.username
                                                   }`
                                                 : "Not connected"}
                                         </span>
                                     </div>
                                     <div className="inline-flex items-center">
-                                        {store.settings?.social_media &&
-                                        store.settings?.social_media[
-                                            item.name
-                                        ] ? (
+                                        {store.settings?.social_media?.find(
+                                            (socialMediaItem) =>
+                                                socialMediaItem.name ===
+                                                item.name
+                                        ) ? (
                                             <Button
                                                 color="gray"
                                                 size="sm"
-                                                onClick={() =>
-                                                    setDisconnect(item.name)
-                                                }
+                                                onClick={() => {
+                                                    const foundItem:
+                                                        | SocialMediaType
+                                                        | undefined =
+                                                        store.settings?.social_media?.find(
+                                                            (socialMediaItem) =>
+                                                                socialMediaItem.name ===
+                                                                item.name
+                                                        );
+                                                    if (foundItem) {
+                                                        setDisconnect(
+                                                            foundItem
+                                                        );
+                                                    }
+                                                }}
                                             >
                                                 Disconnect
                                             </Button>
@@ -233,13 +209,15 @@ const SocialMediaCard = () => {
                                 name={selected?.name}
                                 required
                                 color={
-                                    error && "message" in error
+                                    addSocialMedia.error &&
+                                    "message" in addSocialMedia.error
                                         ? "failure"
                                         : "gray"
                                 }
                                 helperText={
-                                    error && "message" in error
-                                        ? error.message
+                                    addSocialMedia.error &&
+                                    "message" in addSocialMedia.error
+                                        ? addSocialMedia.error.message
                                         : false
                                 }
                                 onChange={(
@@ -263,12 +241,23 @@ const SocialMediaCard = () => {
                                 disabled={
                                     selected && selected?.value ? false : true
                                 }
-                                isProcessing={isLoading}
+                                isProcessing={addSocialMedia.loading}
                                 processingLabel="Connecting"
                                 processingSpinner={
                                     <AiOutlineLoading className="h-6 w-6 animate-spin" />
                                 }
-                                onClick={handleUpdate}
+                                onClick={() => {
+                                    if (selected) {
+                                        addSocialMedia.add({
+                                            socialMedia: {
+                                                name: selected.name,
+                                                label: selected.label,
+                                                username: selected.value,
+                                            },
+                                            onSuccess: () => onCloseModal(),
+                                        });
+                                    }
+                                }}
                                 value={selected?.value}
                             >
                                 Connect
@@ -289,10 +278,20 @@ const SocialMediaCard = () => {
                     <div className="text-center">
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            Are you sure to disconnect {disconnect}?
+                            Are you sure to disconnect {disconnect?.label}?
                         </h3>
                         <div className="flex justify-center gap-4">
-                            <Button color="failure" onClick={handleDisonnect}>
+                            <Button
+                                color="failure"
+                                onClick={() => {
+                                    if (disconnect) {
+                                        removeSocialMedia.remove({
+                                            socialMedia: disconnect,
+                                            onSuccess: () => onCloseModal(),
+                                        });
+                                    }
+                                }}
+                            >
                                 {"Yes, I'm sure"}
                             </Button>
                             <Button color="gray" onClick={onCloseModal}>

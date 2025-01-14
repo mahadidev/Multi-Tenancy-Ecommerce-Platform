@@ -1,28 +1,19 @@
-import { useAppSelector } from "@/seller/store";
-import {
-    useFetchPageQuery,
-    useUpdatePageMutation,
-} from "@/seller/store/reducers/pageApi";
+import usePage from "@/seller/hooks/usePage";
 import { useFetchThemeQuery } from "@/seller/store/reducers/themeApi";
+import { StorePageType } from "@/seller/types";
 import { Button, Label, Modal, Select } from "flowbite-react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 
-export default function AddNewWidgetModal() {
-    const params = useParams();
-    const { id } = params;
-
-    const { currentStore: store } = useAppSelector((state) => state.store);
+export default function WidgetModal({
+    pageData,
+}: {
+    pageData: StorePageType | undefined;
+}) {
+    const { addWidgets, store } = usePage();
     const [openModal, setOpenModal] = useState(false);
     const { data: themeResponse } = useFetchThemeQuery(store.theme_id);
-    const { data: pageResponse } = useFetchPageQuery({
-        pageId: id ? id : "0",
-        storeId: store.id,
-    });
     const [type, setType] = useState<string>("home");
     const [selectedWidgets, setSelectedWidgets] = useState<any[]>([]);
-
-    const [updatePage] = useUpdatePageMutation();
 
     const handleChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -37,55 +28,31 @@ export default function AddNewWidgetModal() {
         });
     };
 
-    const handleOnAddWidget = () => {
-        if (id) {
-            updatePage({
-                storeId: store.id,
-                pageId: id,
-                formData: {
-                    ...pageResponse.data.page,
-                    widgets: [
-                        ...pageResponse.data.page.widgets.map((item: any) => {
-                            return item;
-                        }),
-                        ...selectedWidgets.map((item: any) => {
-                            return item;
-                        }),
-                    ],
-                },
-            }).then((response: any) => {
-                console.log("yes", response);
-                if (response.data.status == 200) {
-                    setOpenModal(false);
-                    setSelectedWidgets([]);
-                }
-            });
-        }
-    };
-
     return (
         <>
-            <div
-                className="h-24 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 md:h-32 flex justify-center items-center hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer"
-                onClick={() => setOpenModal(true)}
-            >
-                <p className="text-2xl text-gray-400 dark:text-gray-500">
-                    <svg
-                        className="w-3.5 h-3.5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 18 18"
-                    >
-                        <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 1v16M1 9h16"
-                        />
-                    </svg>
-                </p>
+            <div className="p-4 sm:p-10">
+                <div
+                    className="h-24 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 md:h-32 flex justify-center items-center hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer"
+                    onClick={() => setOpenModal(true)}
+                >
+                    <p className="text-2xl text-gray-400 dark:text-gray-500">
+                        <svg
+                            className="w-3.5 h-3.5"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 18 18"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 1v16M1 9h16"
+                            />
+                        </svg>
+                    </p>
+                </div>
             </div>{" "}
             <Modal
                 show={openModal}
@@ -168,7 +135,16 @@ export default function AddNewWidgetModal() {
                     </Button>
                     <Button
                         color="blue"
-                        onClick={() => handleOnAddWidget()}
+                        onClick={() =>
+                            addWidgets.add({
+                                pageData: pageData,
+                                widgetsData: selectedWidgets,
+                                onSuccess: () => {
+                                    setOpenModal(false);
+                                    setSelectedWidgets([]);
+                                },
+                            })
+                        }
                         disabled={selectedWidgets.length === 0}
                     >
                         Add Widget

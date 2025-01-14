@@ -9,6 +9,7 @@ Route::get('/', function () {
     return view("welcome");
 });
 Route::prefix('/seller')->group(function () {
+
     Route::get("/", function () {
         return view("seller");
     });

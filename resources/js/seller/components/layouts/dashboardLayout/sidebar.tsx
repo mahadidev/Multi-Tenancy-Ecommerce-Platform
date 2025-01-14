@@ -13,7 +13,6 @@ import {
     HiChartPie,
     HiCog,
     HiSearch,
-    HiShoppingBag,
     HiSupport,
 } from "react-icons/hi";
 import { MdCollectionsBookmark } from "react-icons/md";
@@ -268,15 +267,6 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
 
 const pages: SidebarItem[] = [
     { href: RoutePath.dashboard, icon: HiChartPie, label: "Dashboard" },
-    {
-        icon: HiShoppingBag,
-        label: "E-commerce",
-        items: [
-            { href: RoutePath.products, label: "Products" },
-            // { href: "/e-commerce/billing", label: "Billing" },
-            // { href: "/e-commerce/invoice", label: "Invoice" },
-        ],
-    },
 ];
 
 const externalPages: SidebarItem[] = [

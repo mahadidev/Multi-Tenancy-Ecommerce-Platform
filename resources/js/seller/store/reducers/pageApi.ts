@@ -1,6 +1,27 @@
+import { WidgetInputType } from "@/seller/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+
+export interface CreatePagePayloadType {
+    name: string;
+    slug: string;
+    title: string;
+    is_active: boolean;
+}
+
+export interface UpdatePagePayloadType {
+    name?: string;
+    type?: string | "home" | "about" | "blog" | "contact";
+    slug?: string;
+    title?: string;
+    is_active?: 0 | 1;
+    widgets?: {
+        name: string;
+        label: string;
+        inputs: WidgetInputType[];
+    }[];
+}
 
 export const pageApi = createApi({
     reducerPath: "pageApi",
@@ -20,8 +41,8 @@ export const pageApi = createApi({
         fetchPage: builder.query<
             any,
             {
-                storeId: string;
-                pageId: string;
+                storeId: number | string;
+                pageId: number | string;
             }
         >({
             query: (props) =>
@@ -33,23 +54,33 @@ export const pageApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Page"],
         }),
+        getPage: builder.mutation<
+            any,
+            {
+                storeId: number | string;
+                pageId: number | string;
+            }
+        >({
+            query: (props) =>
+                createRequest({
+                    url: `${SELLER_PREFIX}/stores/${props.storeId}/pages/${props.pageId}`,
+                    method: "get",
+                }),
+            transformResponse: (response) => response,
+            transformErrorResponse: (error: any) => error.data,
+        }),
         createPage: builder.mutation<
             any,
             {
-                storeId: string;
-                formData: any;
+                storeId: number | string;
+                formData: CreatePagePayloadType;
             }
         >({
             query: (data) => {
-                const formData = new FormData();
-                Object.keys(data.formData).map((key: any) => {
-                    formData.append(key, data.formData[key]);
-                });
-
                 return createRequest({
                     url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/store`,
                     method: "POST",
-                    body: formData,
+                    body: data.formData,
                 });
             },
             transformResponse: (response) => response,
@@ -59,17 +90,19 @@ export const pageApi = createApi({
         updatePage: builder.mutation<
             any,
             {
-                storeId: string;
-                pageId: string;
-                formData: any;
+                storeId: number | string;
+                pageId: number | string;
+                formData: UpdatePagePayloadType;
             }
         >({
             query: (data) => {
-                data.formData["_method"] = "put";
                 return createRequest({
                     url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/update/${data.pageId}`,
                     method: "POST",
-                    body: data.formData,
+                    body: {
+                        ...data.formData,
+                        _method: "put",
+                    },
                 });
             },
             transformResponse: (response) => response,
@@ -84,4 +117,5 @@ export const {
     useCreatePageMutation,
     useFetchPageQuery,
     useUpdatePageMutation,
+    useGetPageMutation,
 } = pageApi;

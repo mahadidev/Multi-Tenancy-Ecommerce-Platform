@@ -15,7 +15,7 @@ export const themeApi = createApi({
             transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
         }),
-        fetchTheme: builder.query<any, string>({
+        fetchTheme: builder.query<any, string | number>({
             query: (id) =>
                 createRequest({
                     method: "get",

@@ -1,48 +1,17 @@
-import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
+import { BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
+import useAuth from "@/seller/hooks/useAuth";
 import useForm from "@/seller/hooks/useForm";
-import { useAppDispatch } from "@/seller/store";
-import { useLoginUserMutation } from "@/seller/store/reducers/authApi";
-import { setAuth } from "@/seller/store/slices/authSlice";
-import { setStoreResponse } from "@/seller/store/slices/storeSlice";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SignInPage() {
-    const [login, { isLoading, error }] = useLoginUserMutation();
+    const { login, isLoginError: error, isLoginLoading: isLoading } = useAuth();
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
-
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-
-    const handleLogin = (formState: any) => {
-        login(formState).then((response: any) => {
-            if (response.data.status === 200) {
-                dispatch(
-                    setAuth({
-                        access_token: response.data.data.access_token,
-                        token_type: response.data.data.token_type,
-                        user: response.data.data.user,
-                    })
-                );
-                if (response.data.data.logged_store) {
-                    dispatch(
-                        setStoreResponse({
-                            stores: response.data.data.user.stores,
-                            currentStore: response.data.data.logged_store,
-                        })
-                    );
-                    navigate(RoutePath.dashboard);
-                } else {
-                    navigate(RoutePath.storeCreate);
-                }
-            }
-        });
-    };
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
@@ -67,8 +36,6 @@ export default function SignInPage() {
             </Link>
             <Card
                 horizontal
-                imgAlt=""
-                imgSrc={`${APP_IMAGE_URL}/authentication/login.jpg`}
                 className="w-full md:max-w-screen-lg *:object-cover"
                 theme={{
                     root: {
@@ -153,7 +120,7 @@ export default function SignInPage() {
                             color="primary"
                             theme={{ inner: { base: "px-5 py-3" } }}
                             className="w-full px-0 py-px sm:w-auto"
-                            onClick={() => handleLogin(formState)}
+                            onClick={() => login(formState)}
                             isProcessing={isLoading}
                             disabled={isLoading}
                             processingSpinner={

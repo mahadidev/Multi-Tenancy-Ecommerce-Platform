@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import useForm from "@/seller/hooks/useForm";
-import { useAppSelector } from "@/seller/store";
-import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
+import useStore from "@/seller/hooks/useStore";
+import { StoreType } from "@/seller/types";
 import { Button, Card, Label, Textarea, TextInput } from "flowbite-react";
 import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const GeneralCard = () => {
-    const { currentStore: store } = useAppSelector((state) => state.store);
-    const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
+    const { store: currentStore, updateStore } = useStore();
+    const store: StoreType = currentStore;
     const { handleChange, formState, formErrors, setFormState } = useForm({
-        errors: error,
+        errors: updateStore.error,
     });
 
     useEffect(() => {
-        setFormState((prev: any) => ({
-            ...prev,
+        setFormState({
             name: store.name,
             slug: store.slug,
             phone: store.phone,
+            description: store.description,
             email: store.email,
             location: store.location,
             primary_color: store.primary_color,
             secondary_color: store.secondary_color,
-        }));
+        });
     }, [store]);
 
     return (
@@ -80,7 +80,7 @@ const GeneralCard = () => {
                                 required
                             />
                         </div>
-                        {/* <div className="col-span-full grid grid-cols-1 gap-y-2 ">
+                        <div className="col-span-full grid grid-cols-1 gap-y-2 ">
                             <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
                                 <Label htmlFor="store-description">
                                     Store Name
@@ -109,7 +109,7 @@ const GeneralCard = () => {
                                     required
                                 ></Textarea>
                             </div>
-                        </div> */}
+                        </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
                             <Label htmlFor="store-phone">Phone</Label>
 
@@ -243,16 +243,15 @@ const GeneralCard = () => {
                         <div className="col-span-6">
                             <Button
                                 color="blue"
-                                isProcessing={isLoading}
+                                isProcessing={updateStore.loading}
                                 processingLabel="Saving"
-                                disabled={isLoading}
+                                disabled={updateStore.loading}
                                 processingSpinner={
                                     <AiOutlineLoading className="h-6 w-6 animate-spin" />
                                 }
                                 onClick={() =>
-                                    updateStore({
-                                        storeId: store.id,
-                                        formData: formState,
+                                    updateStore.update({
+                                        storeData: formState,
                                     })
                                 }
                             >

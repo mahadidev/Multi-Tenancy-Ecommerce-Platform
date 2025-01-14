@@ -1,7 +1,6 @@
 import { BASE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
-import { useAppSelector } from "@/seller/store";
-import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
+import useStore from "@/seller/hooks/useStore";
 import { useFetchThemesQuery } from "@/seller/store/reducers/themeApi";
 import { Breadcrumb, Button } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -9,29 +8,7 @@ import { HiHome } from "react-icons/hi";
 
 export default function ThemePage() {
     const { data: themeResponse } = useFetchThemesQuery();
-    const [updateStore, { isLoading: isActiveLoading }] =
-        useUpdateStoreMutation();
-    const [deactieStore, { isLoading: isDeactvateLoading }] =
-        useUpdateStoreMutation();
-    const { currentStore } = useAppSelector((state) => state.store);
-
-    const handleActiveTheme = (id: string) => {
-        updateStore({
-            storeId: currentStore.id,
-            formData: {
-                theme_id: id,
-            },
-        });
-    };
-
-    const handleDeactive = () => {
-        deactieStore({
-            storeId: currentStore.id,
-            formData: {
-                theme_id: "none",
-            },
-        });
-    };
+    const { activeTheme, deActiveTheme, store } = useStore();
 
     return (
         <>
@@ -77,24 +54,23 @@ export default function ThemePage() {
                                             {item.name}
                                         </div>
                                         <div className="flex justify-between gap-2.5">
-                                            {currentStore.theme_id ===
-                                            item.id ? (
+                                            {store.theme_id === item.id ? (
                                                 <Button
                                                     className="w-max"
                                                     size="xs"
                                                     color="gray"
                                                     onClick={() =>
-                                                        handleDeactive()
+                                                        deActiveTheme.deactive()
                                                     }
                                                     disabled={
-                                                        isDeactvateLoading
+                                                        deActiveTheme.loading
                                                     }
                                                     processingLabel="Deactaving"
                                                     processingSpinner={
                                                         <AiOutlineLoading />
                                                     }
                                                     isProcessing={
-                                                        isDeactvateLoading
+                                                        deActiveTheme.loading
                                                     }
                                                 >
                                                     Deactive
@@ -105,17 +81,19 @@ export default function ThemePage() {
                                                     size="xs"
                                                     color="blue"
                                                     onClick={() =>
-                                                        handleActiveTheme(
+                                                        activeTheme.active(
                                                             item.id
                                                         )
                                                     }
-                                                    disabled={isActiveLoading}
+                                                    disabled={
+                                                        activeTheme.loading
+                                                    }
                                                     processingLabel="Actaving"
                                                     processingSpinner={
                                                         <AiOutlineLoading />
                                                     }
                                                     isProcessing={
-                                                        isActiveLoading
+                                                        activeTheme.loading
                                                     }
                                                 >
                                                     Active
