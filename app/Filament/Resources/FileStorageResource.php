@@ -49,7 +49,6 @@ class FileStorageResource extends Resource
                     ->columnSpanFull()
                     ->required()
                     ->imageEditor()
-                    ->reorderable()
                     ->appendFiles()
                     ->openable()
                     ->downloadable()

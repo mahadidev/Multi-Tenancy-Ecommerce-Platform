@@ -24,14 +24,14 @@ class FileStorage extends Model
         parent::boot();
 
         // before the model is saved while editing delete the old file
-        static::updating(function ($fileStorage) {
-            $original = $fileStorage->getOriginal();
-            if ($fileStorage->location !== $original['location']) {
-                Storage::disk('public')->delete($original['location']);
-            }
+        // static::updating(function ($fileStorage) {
+        //     $original = $fileStorage->getOriginal();
+        //     if ($fileStorage->location !== $original['location']) {
+        //         Storage::disk('public')->delete($original['location']);
+        //     }
 
             
-        });
+        // });
 
         // Before the model is deleted
         static::deleting(function ($fileStorage) {
