@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\ThemePageWidget;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -35,6 +35,7 @@ class ThemeResource extends JsonResource
                     'id' => $page->id,
                     'name' => $page->name,
                     'slug' => $page->slug,
+                    'type' => $page->type,
                     'title' => $page->title,
                     'widgets' => $page->page_widgets->map(function ($widget) {
                         return [
@@ -43,6 +44,7 @@ class ThemeResource extends JsonResource
                             'label' => $widget->label,
                             'type' => $widget->type,
                             'value' => $widget->value,
+                            'thumbnail' => url(Storage::url($widget->thumbnail)),
                             'inputs' => json_decode($widget->inputs),
                         ];
                     }),
@@ -50,5 +52,5 @@ class ThemeResource extends JsonResource
             }),
         ];
     }
-   
+
 }

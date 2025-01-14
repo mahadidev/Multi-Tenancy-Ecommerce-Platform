@@ -1,5 +1,5 @@
 const Offers = ({ props }: { props: any }) => {
-    const inputs = JSON.parse(props.inputs);
+    const inputs = props.inputs;
     return (
         <>
             <section className="py-4 mt-4">

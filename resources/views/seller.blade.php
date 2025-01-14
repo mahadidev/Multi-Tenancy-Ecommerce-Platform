@@ -15,7 +15,7 @@
 
 
     @viteReactRefresh
-    @vite(['resources/js/seller/index.tsx'])
+    @vite(['resources/js/seller/index.tsx', 'resources/js/themes/index.tsx'])
 </head>
 
 

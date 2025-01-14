@@ -55,21 +55,16 @@ export default function ThemePage() {
                         </h1>
                     </div>
                 </div>
-                <div className="col-span-full grid grid-cols-5 gap-x-4 gap-y-6">
+                <div className="col-span-full grid grid-cols-4 gap-x-4 gap-y-6">
                     {themeResponse?.data.themes.map(
                         (item: any, index: number) => (
                             <div
                                 key={index}
-                                className="mb-4 w-full rounded-lg bg-white p-5 shadow dark:bg-gray-800"
+                                className="mb-4 w-full rounded-lg bg-white shadow dark:bg-gray-800"
                             >
-                                <div className="flex items-center justify-between pb-4">
-                                    <div className="text-base font-semibold text-gray-900 dark:text-white">
-                                        {item.name}
-                                    </div>
-                                </div>
                                 <div className="flex flex-col">
                                     {item.thumbnail && (
-                                        <div className="relative mb-3 aspect-video w-full">
+                                        <div className="relative aspect-video w-full">
                                             <img
                                                 alt=""
                                                 src={item.thumbnail}
@@ -77,52 +72,64 @@ export default function ThemePage() {
                                             />
                                         </div>
                                     )}
-                                    <div className="pb-4 text-sm font-normal text-gray-700 dark:text-gray-400">
-                                        {item.slug}
-                                    </div>
-                                    <div className="flex justify-between">
-                                        {currentStore.theme_id === item.id ? (
+                                    <div className="px-5 py-2.5 flex justify-between gap-2.5 items-center">
+                                        <div className="text-base font-normal text-gray-700 dark:text-gray-400">
+                                            {item.name}
+                                        </div>
+                                        <div className="flex justify-between gap-2.5">
+                                            {currentStore.theme_id ===
+                                            item.id ? (
+                                                <Button
+                                                    className="w-max"
+                                                    size="xs"
+                                                    color="gray"
+                                                    onClick={() =>
+                                                        handleDeactive()
+                                                    }
+                                                    disabled={
+                                                        isDeactvateLoading
+                                                    }
+                                                    processingLabel="Deactaving"
+                                                    processingSpinner={
+                                                        <AiOutlineLoading />
+                                                    }
+                                                    isProcessing={
+                                                        isDeactvateLoading
+                                                    }
+                                                >
+                                                    Deactive
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    className="w-max"
+                                                    size="xs"
+                                                    color="blue"
+                                                    onClick={() =>
+                                                        handleActiveTheme(
+                                                            item.id
+                                                        )
+                                                    }
+                                                    disabled={isActiveLoading}
+                                                    processingLabel="Actaving"
+                                                    processingSpinner={
+                                                        <AiOutlineLoading />
+                                                    }
+                                                    isProcessing={
+                                                        isActiveLoading
+                                                    }
+                                                >
+                                                    Active
+                                                </Button>
+                                            )}
                                             <Button
-                                                className="w-max"
-                                                size="md"
-                                                color="gray"
-                                                onClick={() => handleDeactive()}
-                                                disabled={isDeactvateLoading}
-                                                processingLabel="Deactaving"
-                                                processingSpinner={
-                                                    <AiOutlineLoading />
-                                                }
-                                                isProcessing={
-                                                    isDeactvateLoading
-                                                }
+                                                href={`${BASE_URL}/themes/${item.slug}`}
+                                                target="_blank"
+                                                color="light"
+                                                size="xs"
                                             >
-                                                Deactive
+                                                Preview
                                             </Button>
-                                        ) : (
-                                            <Button
-                                                className="w-max"
-                                                size="md"
-                                                color="blue"
-                                                onClick={() =>
-                                                    handleActiveTheme(item.id)
-                                                }
-                                                disabled={isActiveLoading}
-                                                processingLabel="Actaving"
-                                                processingSpinner={
-                                                    <AiOutlineLoading />
-                                                }
-                                                isProcessing={isActiveLoading}
-                                            >
-                                                Active
-                                            </Button>
-                                        )}
-                                        <Button
-                                            href={`${BASE_URL}/themes/${item.slug}`}
-                                            target="_blank"
-                                            color="light"
-                                        >
-                                            Preview
-                                        </Button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

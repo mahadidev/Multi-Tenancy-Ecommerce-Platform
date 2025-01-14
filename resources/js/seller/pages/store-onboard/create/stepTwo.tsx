@@ -43,7 +43,10 @@ const StepTwo = ({
                                     event.target.files[0]
                                 ) {
                                     uploadImage({
-                                        file: event.target.files[0],
+                                        formData: {
+                                            file: event.target.files[0],
+                                            response_type: "path",
+                                        },
                                     }).then((response) => {
                                         setFormData((prev: any) => ({
                                             ...prev,
@@ -52,11 +55,11 @@ const StepTwo = ({
 
                                         setFormState((prev: any) => ({
                                             ...prev,
-                                            ["logo"]: response.data,
+                                            ["logo_url"]: response.data,
                                         }));
 
                                         setFormData({
-                                            name: "logo",
+                                            name: "logo_url",
                                             value: response.data,
                                         });
                                     });

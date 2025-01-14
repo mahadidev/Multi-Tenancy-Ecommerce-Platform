@@ -77,6 +77,7 @@ class FileStorageController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10048',
             'user_id' => 'nullable|exists:users,id', // Check if the user_id exists in the users table
+            "response_type" => 'nullable|string|max:255'
         ]);
 
         if (!$request->user_id) {
@@ -95,6 +96,8 @@ class FileStorageController extends Controller
             'type' => $file->extension() === 'pdf' ? 'pdf' : 'image',
             'location' => $filePath,
         ]);
+
+        $fileStorage["response_type"] = $request->response_type ?? "url";
 
         return response()->json([
             'status' => 200,

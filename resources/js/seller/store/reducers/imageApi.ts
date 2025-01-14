@@ -9,17 +9,20 @@ export const imageApi = createApi({
         uploadImage: builder.mutation<
             any,
             {
-                type?: string;
-                file: any;
                 responseType?: "data";
+                formData: {
+                    type?: string;
+                    file: any;
+                    response_type?: string;
+                };
             }
         >({
             query: (data: any) => {
                 const formData = new FormData();
                 // formData.append("_method", "put");
 
-                Object.keys(data).map((key: any) => {
-                    formData.append(key, data[key]);
+                Object.keys(data.formData).map((key: any) => {
+                    formData.append(key, data.formData[key]);
                 });
 
                 return createRequest({
