@@ -16,10 +16,6 @@ class StorePage extends Model
         'is_active'
     ];
 
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
     public function scopeActive($query){
         return $query->where('is_active', 1);
     }
