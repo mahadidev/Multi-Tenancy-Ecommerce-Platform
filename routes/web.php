@@ -33,3 +33,8 @@ Route::prefix('/themes')->group(function () {
     });
 
 });
+
+// Catch any URL with /public/ in the path and return a 404
+Route::any('/public/{any}', function () {
+    abort(404);  // Show 404 error for any request under /public/
+})->where('any', '.*');
