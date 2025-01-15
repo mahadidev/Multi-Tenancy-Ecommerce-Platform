@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1\site;
+
+use App\Http\Controllers\Api\v1\PageTypeController;
 use App\Http\Controllers\Api\v1\seller\ContactController;
 
 use Illuminate\Support\Facades\Route;
@@ -31,3 +33,7 @@ Route::get('/category/{slug}/products', [ProductController::class, 'singleCatego
 
 // contact route
 Route::post('/contact', [ContactController::class, 'store']);
+
+// page types route
+Route::resource('page-types', PageTypeController::class);
+
