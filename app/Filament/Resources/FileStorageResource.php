@@ -18,42 +18,53 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Actions\Action;
+
 use Illuminate\Database\Eloquent\Model;
 
 class FileStorageResource extends Resource
 {
     protected static ?string $model = FileStorage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
     protected static ?string $navigationLabel = 'File Storages';
     protected static ?string $pluralLabel = 'File Storages';
     protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationSort(): ?int
+    {
+        return 4;
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->default(auth()->id())
-                    ->columnSpanFull()
-                    ->required(),
+                Forms\Components\Section::make('File Storage')
+                    ->schema([
+                        Select::make('user_id')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->default(auth()->id())
+                            ->columnSpanFull()
+                            ->required(),
 
-                FileUpload::make('location')
-                    ->label('File')
-                    ->directory('file_storage')
-                    ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/webp', 'image/png', 'application/pdf'])
-                    ->maxSize(10048)
-                    ->columnSpanFull()
-                    ->required()
-                    ->imageEditor()
-                    ->appendFiles()
-                    ->openable()
-                    ->downloadable()
-                    ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
-                    ->storeFileNamesIn('original_name'), // Store original filename if needed
+                        FileUpload::make('location')
+                            ->label('File')
+                            ->directory('file_storage')
+                            ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/webp', 'image/png', 'application/pdf'])
+                            ->maxSize(10048)
+                            ->columnSpanFull()
+                            ->required()
+                            ->imageEditor()
+                            ->appendFiles()
+                            ->openable()
+                            ->downloadable()
+                            ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
+                            ->storeFileNamesIn('original_name'), // Store original filename if needed
+                    ])
             ])
             ->columns(12);
     }
@@ -62,9 +73,14 @@ class FileStorageResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->sortable()
-                    ->searchable(),
+
+                // ImageColumn::make('location')
+                //     ->label('File')
+                //     ->url(fn(Model $record) => $record->location),
+
+                ViewColumn::make('file_preview')
+                    ->label('File')
+                    ->view('components.file-preview'),
 
                 TextColumn::make('name')
                     ->searchable(),
@@ -77,11 +93,10 @@ class FileStorageResource extends Resource
                         default => 'gray',
                     }),
 
-                ImageColumn::make('location')
-                    ->label('Preview')
-                    ->visible(fn($record): bool => $record?->type === 'image')
-                    ->circular()
-                    ->size(40),
+                TextColumn::make('user.name')
+                    ->sortable()
+                    ->searchable(),
+
 
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -98,6 +113,7 @@ class FileStorageResource extends Resource
                     ->relationship('user', 'name'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -119,8 +135,8 @@ class FileStorageResource extends Resource
     {
         return [
             'index' => Pages\ListFileStorages::route('/'),
-            'create' => Pages\CreateFileStorage::route('/create'),
-            'edit' => Pages\EditFileStorage::route('/{record}/edit'),
+            // 'create' => Pages\CreateFileStorage::route('/create'),
+            // 'edit' => Pages\EditFileStorage::route('/{record}/edit'),
         ];
     }
 

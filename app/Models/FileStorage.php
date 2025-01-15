@@ -23,15 +23,40 @@ class FileStorage extends Model
     {
         parent::boot();
 
-        // before the model is saved while editing delete the old file
-        // static::updating(function ($fileStorage) {
-        //     $original = $fileStorage->getOriginal();
-        //     if ($fileStorage->location !== $original['location']) {
-        //         Storage::disk('public')->delete($original['location']);
-        //     }
+        static::saving(function ($model) {
+            // Set user_id if not provided
+            if (empty($model->user_id)) {
+                $model->user_id = auth()->id();
+            }
 
-            
-        // });
+            // Handle file upload for both new and updated files
+            if (!empty($model->location) && 
+                (!$model->exists || $model->isDirty('location'))) {
+                
+                // Delete old file if this is an update
+                if ($model->exists && $model->getOriginal('location')) {
+                    Storage::disk('public')->delete($model->getOriginal('location'));
+                }
+
+                $uniqueName = uniqid() . '_' . time();
+                $extension = pathinfo($model->location, PATHINFO_EXTENSION);
+                $newFileName = $uniqueName . '.' . $extension;
+
+                // Rename the file in storage
+                $storage = Storage::disk('public');
+                $oldPath = $model->location;
+                $newPath = 'file_storage/' . $newFileName;
+
+                if ($storage->exists($oldPath)) {
+                    $storage->move($oldPath, $newPath);
+                }
+
+                // Update model attributes
+                $model->location = $newPath;
+                $model->name = $newFileName;
+                $model->type = strtolower($extension) === 'pdf' ? 'pdf' : 'image';
+            }
+        });
 
         // Before the model is deleted
         static::deleting(function ($fileStorage) {
@@ -40,5 +65,18 @@ class FileStorage extends Model
             }
         });
     }
-    
+
+    // public function getLocationAttribute($value)
+    // {
+    //     if (! $value) {
+    //         return null;
+    //     }
+
+    //     return Storage::url($value);
+    //     // Or if using public disk:
+    //     // return asset('storage/' . $value);
+    // }
+
+
+
 }
