@@ -8,10 +8,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Remove /public/ from the URL
+    # Block access to any URL with /public/
     RewriteCond %{REQUEST_URI} ^/public/
-    RewriteRule ^public/(.*)$ /$1 [L,R=301]
-
-    # If the above condition is not met, route normally
-    RewriteRule ^(.*)$ public/$1 [L]
+    RewriteRule ^.*$ - [F,L]
 </IfModule>
