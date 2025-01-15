@@ -13,23 +13,47 @@ class ThemeResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request)//: array
+    public function toArray(Request $request)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'thumbnail' => $this->thumbnail_image,
-            'widgets' => $this->widgets->map(function ($widget) {
+        // Collecting widgets from $this->widgets
+        $themeWidgets = $this->widgets->map(function ($widget) {
+            return [
+                'id' => $widget->id,
+                'name' => $widget->name,
+                'label' => $widget->label,
+                'type' => $widget->type,
+                'value' => $widget->value,
+                'inputs' => json_decode($widget->inputs),
+            ];
+        });
+
+        // Collecting all widgets from pages
+        $pageWidgets = $this->pages->flatMap(function ($page) {
+            return $page->page_widgets->map(function ($widget) {
                 return [
                     'id' => $widget->id,
                     'name' => $widget->name,
                     'label' => $widget->label,
                     'type' => $widget->type,
                     'value' => $widget->value,
+                    'thumbnail' => url(Storage::url($widget->thumbnail)),
                     'inputs' => json_decode($widget->inputs),
                 ];
-            }),
+            });
+        });
+
+        // Merging both collections and ensuring uniqueness by widget name
+        $allWidgets = $pageWidgets
+            ->concat($themeWidgets)
+            ->unique('name')
+            ->values(); // Resetting keys for a clean array
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'thumbnail' => $this->thumbnail_image,
+            'widgets' => $themeWidgets,
             'pages' => $this->pages->map(function ($page) {
                 return [
                     'id' => $page->id,
@@ -50,7 +74,7 @@ class ThemeResource extends JsonResource
                     }),
                 ];
             }),
+            'all_widgets' => $allWidgets,
         ];
     }
-
 }
