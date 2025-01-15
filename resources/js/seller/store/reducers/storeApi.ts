@@ -1,7 +1,27 @@
+import { LogoType, SettingsType } from "@/seller/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
 import { setCurrentStore } from "../slices/storeSlice";
+
+export interface UpdateStorePayloadType {
+    name?: string;
+    slug?: string;
+    domain?: string;
+    email?: string | null;
+    phone?: string | null;
+    location?: string | null;
+    status?: 1 | 0;
+    type?: string;
+    description?: string | null;
+    currency?: string;
+    logos?: LogoType;
+    logo_url?: string;
+    primary_color?: null | string;
+    secondary_color?: null | string;
+    theme_id?: number | "none";
+    settings?: SettingsType | null;
+}
 
 export const storeApi = createApi({
     reducerPath: "storeApi",
@@ -94,17 +114,18 @@ export const storeApi = createApi({
         updateStore: builder.mutation<
             any,
             {
-                storeId: string;
-                formData: any;
+                storeId: number | string;
+                formData: UpdateStorePayloadType;
             }
         >({
             query: (data) => {
-                data.formData["_method"] = "put";
-
                 return createRequest({
                     url: `${SELLER_PREFIX}/store/${data.storeId}`,
                     method: "POST",
-                    body: data.formData,
+                    body: {
+                        ...data.formData,
+                        _method: "PUT",
+                    },
                 });
             },
             transformResponse: (response: { data: any }) => response,

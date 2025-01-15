@@ -27,7 +27,7 @@ class StorePageController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'pages' => StorePagesResource::collection($pages) 
+                'pages' => StorePagesResource::collection($pages)
             ]
         ], 200);
 
@@ -138,22 +138,24 @@ class StorePageController extends Controller
 
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string',
+            'name' => 'nullable|string',
             'type' => 'nullable|string',
             'slug' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:store_pages,slug,' . $storePage->id,
             'title' => 'nullable|string',
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',
             'widgets.*.inputs' => 'nullable|array',
             // 'widgets.*.inputs.*.name' => 'required|string',
+            'widgets.*.inputs.*.name' => 'nullable|string',
             'widgets.*.inputs.*.label' => 'nullable|string',
             'widgets.*.inputs.*.value' => 'nullable|string',
             'widgets.*.inputs.*.type' => 'nullable|string',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.required' => 'nullable',
             "widgets.*.inputs.*.items" => "nullable|array",
+            'widgets.*.inputs.*.items.*.*.name' => 'nullable|string',
             'widgets.*.inputs.*.items.*.*.label' => 'nullable|string',
             'widgets.*.inputs.*.items.*.*.value' => 'nullable|string',
             'widgets.*.inputs.*.items.*.*.placeholder' => 'nullable|string',

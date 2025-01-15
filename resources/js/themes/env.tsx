@@ -9,7 +9,7 @@ const Themes = {
     },
 };
 
-const ThemeById = (id: string) => {
+const ThemeById = (id: number | string) => {
     const obj: any = Object.keys(Themes);
 
     const theme = obj.map((key: "simfy-commerce") => {

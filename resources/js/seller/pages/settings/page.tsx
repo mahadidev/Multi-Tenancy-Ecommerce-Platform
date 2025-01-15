@@ -1,6 +1,5 @@
 import { RoutePath } from "@/seller/env";
-import { useAppSelector } from "@/seller/store";
-import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
+import useStore from "@/seller/hooks/useStore";
 import { Breadcrumb, ToggleSwitch } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
 import GeneralCard from "./generalCard";
@@ -9,8 +8,7 @@ import ResetCard from "./resetCard";
 import SocialMediaCard from "./socialMediaCard";
 
 const SettingPage = () => {
-    const { currentStore: store } = useAppSelector((state) => state.store);
-    const [updateStore] = useUpdateStoreMutation();
+    const { store, updateStore } = useStore();
 
     return (
         <>
@@ -34,7 +32,7 @@ const SettingPage = () => {
                         <ToggleSwitch
                             color="blue"
                             sizing="md"
-                            checked={store.status}
+                            checked={store.status === 1 ? true : false}
                             id="company-news"
                             label={
                                 store.status === 1
@@ -43,10 +41,9 @@ const SettingPage = () => {
                             }
                             name="company-news"
                             onChange={() =>
-                                updateStore({
-                                    storeId: store.id,
-                                    formData: {
-                                        status: store.status === 1 ? 0 : 1,
+                                updateStore.update({
+                                    storeData: {
+                                        status: store.status === 0 ? 1 : 0,
                                     },
                                 })
                             }

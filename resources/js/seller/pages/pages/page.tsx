@@ -3,7 +3,6 @@ import { useAppSelector } from "@/seller/store";
 import { SELLER_PREFIX } from "@/seller/store/env";
 import { useFetchPagesQuery } from "@/seller/store/reducers/pageApi";
 import { Breadcrumb, Button, Checkbox, Table } from "flowbite-react";
-import { useEffect } from "react";
 import { HiHome, HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import AddPageModal from "./addModal";
@@ -11,13 +10,8 @@ import TableNavigation from "./tableNavigation";
 
 const PagesPage = () => {
     const { currentStore: store } = useAppSelector((state) => state.store);
-    const { data: pagesResponse, isLoading } = useFetchPagesQuery(store.id);
+    const { data: pagesResponse } = useFetchPagesQuery(store.id);
 
-    useEffect(() => {
-        if (pagesResponse) {
-            console.log(pagesResponse.data.pages);
-        }
-    }, [isLoading, pagesResponse]);
     return (
         <>
             <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 sm:flex dark:border-gray-700 dark:bg-gray-800">

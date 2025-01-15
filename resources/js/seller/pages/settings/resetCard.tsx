@@ -1,27 +1,12 @@
-import { useAppSelector } from "@/seller/store";
-import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
+import useStore from "@/seller/hooks/useStore";
 import { Button, Card, Modal } from "flowbite-react";
 import { useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const ResetCard = () => {
-    const { currentStore: store } = useAppSelector((state) => state.store);
-    const [updateStore, { isLoading }] = useUpdateStoreMutation();
+    const { resetSettings } = useStore();
     const [isResetModal, setResetModal] = useState<boolean>(false);
-
-    const handleReset = () => {
-        updateStore({
-            storeId: store.id,
-            formData: {
-                settings: null,
-            },
-        }).then((response) => {
-            if (response.data.status === 200) {
-                setResetModal(false);
-            }
-        });
-    };
 
     return (
         <>
@@ -88,9 +73,13 @@ const ResetCard = () => {
                         <div className="flex justify-center gap-4">
                             <Button
                                 color="failure"
-                                onClick={handleReset}
-                                disabled={isLoading}
-                                isProcessing={isLoading}
+                                onClick={() =>
+                                    resetSettings.reset({
+                                        onSuccess: () => setResetModal(false),
+                                    })
+                                }
+                                disabled={resetSettings.loading}
+                                isProcessing={resetSettings.loading}
                                 processingLabel="Reseting"
                                 processingSpinner={
                                     <AiOutlineLoading className="h-6 w-6 animate-spin" />

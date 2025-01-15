@@ -1,8 +1,9 @@
+import { StoreType } from "@/seller/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: {
-    stores: null | any;
-    currentStore: any | null;
+    stores: StoreType[] | any;
+    currentStore: StoreType | any | null;
 } = {
     stores: [],
     currentStore: null,

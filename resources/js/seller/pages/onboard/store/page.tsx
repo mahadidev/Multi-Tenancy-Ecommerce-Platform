@@ -11,7 +11,7 @@ import StepThree from "./stepThree";
 import StepTwo from "./stepTwo";
 import Steper from "./steper";
 
-export default function StoreCreatePage() {
+export default function StoreOnboardPage() {
     const { step } = useAppSelector((state) => state.storeOnboard);
     const dispatch = useAppDispatch();
 

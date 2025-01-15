@@ -1,21 +1,23 @@
 {
     "name": "hero",
     "label": "Hero Section",
-    "inputs": {
-        "carousel": {
+    "inputs": [
+        {
+            "name": "carousel",
             "label": "Hero Carousel",
             "type": "array",
             "required": true,
             "items": [
-                {
-                    "image": {
+                [
+                    {
+                        "name": "image",
                         "label": "Image",
                         "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fhero_banner_1.jpg&w=1920&q=75",
-                        "type": "string",
+                        "type": "image",
                         "placeholder": "Enter your image url",
                         "required": true
                     },
-                    "bg-color": {
+                    {
                         "name": "bg-color",
                         "label": "Background Color",
                         "value": "#ffc100",
@@ -23,16 +25,17 @@
                         "placeholder": "Enter background Color Code",
                         "required": false
                     }
-                },
-                {
-                    "image": {
+                ],
+                [
+                    {
+                        "name": "image",
                         "label": "Image",
-                        "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fhero_banner_1.jpg&w=1920&q=75",
-                        "type": "string",
+                        "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fhero_banner_2.jpg&w=1920&q=75",
+                        "type": "image",
                         "placeholder": "Enter your image url",
                         "required": true
                     },
-                    "bg-color": {
+                    {
                         "name": "bg-color",
                         "label": "Background Color",
                         "value": "#ffc100",
@@ -40,8 +43,8 @@
                         "placeholder": "Enter background Color Code",
                         "required": false
                     }
-                }
+                ]
             ]
         }
-    }
+    ]
 }
