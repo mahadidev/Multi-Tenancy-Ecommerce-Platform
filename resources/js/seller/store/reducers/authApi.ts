@@ -4,6 +4,17 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
 import { setAuth } from "../slices/authSlice";
+export interface LoginPayloadType {
+    email: string;
+    password: string;
+}
+
+export interface RegisterPayloadType {
+    name: string;
+    email: string;
+    password: string;
+    confirm_password: string;
+}
 
 export const authApi = createApi({
     reducerPath: "authApi",

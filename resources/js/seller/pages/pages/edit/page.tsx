@@ -1,96 +1,75 @@
-import EditorLayout from "@/seller/components/layouts/editorLayout/layout";
-import { useAppSelector } from "@/seller/store";
-import {
-    useFetchPageQuery,
-    useUpdatePageMutation,
-} from "@/seller/store/reducers/pageApi";
-import { ThemeById } from "@/themes/env";
-import { Button } from "flowbite-react";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import AddNewWidgetModal from "./addNewWidgetModal";
+import { InSidebar } from "@/seller/components";
+import { InSidebarProvider } from "@/seller/contexts/insidebar-content";
+import useBase from "@/seller/hooks/useBase";
+import usePage from "@/seller/hooks/usePage";
+import { useFetchPageQuery } from "@/seller/store/reducers/pageApi";
+import { StorePageType, WidgetType } from "@/seller/types";
+import { useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
+import PageContent from "./pageContent";
+import PageEditor from "./pageEditor";
+import WidgetEditor from "./widgetEditor";
+import WidgetModal from "./widgetModal";
 
 const PageEditPage = () => {
-    const params = useParams();
-    const { id } = params;
-    const { currentStore: store } = useAppSelector((state) => state.store);
+    const { pageId, store } = usePage();
     const { data: pageResponse } = useFetchPageQuery({
-        pageId: id ? id : "0",
+        pageId: pageId ?? 0,
         storeId: store.id,
     });
 
+    // coolapsed desktop sidebar on enter this page
+    const { setSidebarCollapsed, setInSidebarCollapsed, inSidebar } = useBase();
+    useEffect(() => {
+        setSidebarCollapsed(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // set page data
+    const [pageData, setPageData] = useState<StorePageType>();
     useEffect(() => {
         if (pageResponse) {
-            console.log("pageResponse", pageResponse);
+            setPageData(pageResponse.data.page);
         }
     }, [pageResponse]);
 
-    const [updatePage] = useUpdatePageMutation();
-
-    const handleOnDeleteWidget = (widgetId: any) => {
-        if (id) {
-            const updatedData = {
-                storeId: store.id,
-                pageId: id,
-                formData: {
-                    ...pageResponse.data.page,
-                    widgets: pageResponse.data.page.widgets.filter(
-                        (item: any) => item.id !== widgetId
-                    ),
-                },
-            };
-
-            updatePage(updatedData);
+    const [selectedWidget, setSelectedWidget] = useState<WidgetType | null>(
+        null
+    );
+    // open mobile sidebar on select widget
+    useEffect(() => {
+        if (selectedWidget) {
+            setInSidebarCollapsed(true);
         }
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedWidget]);
 
     return (
-        <EditorLayout
-            sidebarChildren={
-                <>
-                    <div className="flex flex-col gap-4">
-                        <div></div>
-                    </div>
-                </>
-            }
-        >
-            <>
-                <div className="p-8 flex flex-col gap-8">
-                    <div>
-                        {pageResponse?.data.page.widgets?.map(
-                            (widget: any, index: number) => (
-                                <div className="relative" key={index}>
-                                    <div className="absolute top-0 right-0 flex gap-2.5 items-center pb-4 pl-4 pt-5 pr-5 bg-gray-100  dark:bg-gray-900 text-gray-700 dark:text-white rounded-bl-md shadow-xl">
-                                        <Button
-                                            color="blue"
-                                            onClick={() =>
-                                                handleOnDeleteWidget(widget.id)
-                                            }
-                                            size="xs"
-                                        >
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            color="red"
-                                            onClick={() =>
-                                                handleOnDeleteWidget(widget.id)
-                                            }
-                                            size="xs"
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
-                                    {ThemeById(store.theme_id).component(
-                                        widget
-                                    )}
-                                </div>
-                            )
-                        )}
-                    </div>
-                    <AddNewWidgetModal />
+        <InSidebarProvider initialCollapsed={true}>
+            <div className="w-full flex items-start">
+                <InSidebar>
+                    {selectedWidget && <WidgetEditor widget={selectedWidget} />}
+
+                    {!selectedWidget && pageData && (
+                        <PageEditor pageData={pageData} />
+                    )}
+                </InSidebar>
+                <div
+                    id="main-content"
+                    className={twMerge(
+                        "w-full",
+                        inSidebar.desktop.isCollapsed ? "lg:ml-16" : "lg:ml-64"
+                    )}
+                >
+                    <PageContent
+                        pageData={pageData}
+                        onSelectWidget={setSelectedWidget}
+                    />
+
+                    <WidgetModal pageData={pageData} />
                 </div>
-            </>
-        </EditorLayout>
+            </div>
+        </InSidebarProvider>
     );
 };
 

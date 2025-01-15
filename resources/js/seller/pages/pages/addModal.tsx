@@ -1,6 +1,5 @@
 import useForm from "@/seller/hooks/useForm";
-import { useAppSelector } from "@/seller/store";
-import { useCreatePageMutation } from "@/seller/store/reducers/pageApi";
+import usePage from "@/seller/hooks/usePage";
 import { Button, Label, Modal, TextInput, ToggleSwitch } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -8,11 +7,9 @@ import { FaPlus } from "react-icons/fa";
 
 export default function AddPageModal() {
     const [isOpen, setOpen] = useState(false);
-    const { currentStore: store } = useAppSelector((state) => state.store);
-    const [createPage, { error, isLoading }] = useCreatePageMutation();
-
+    const { createPage } = usePage();
     const { formState, handleChange, formErrors, setFormState } = useForm({
-        errors: error,
+        errors: createPage.error,
     });
 
     useEffect(() => {
@@ -124,8 +121,8 @@ export default function AddPageModal() {
                                     id="company-news"
                                     label={
                                         formState["is_active"] === 1
-                                            ? "Store active"
-                                            : "Store deactive"
+                                            ? "Page active"
+                                            : "Page deactive"
                                     }
                                     name="company-news"
                                     onChange={() =>
@@ -150,25 +147,21 @@ export default function AddPageModal() {
                                 : "gray"
                         }
                         className="md:w-1/2 [&>span]:text-sm ml-auto"
-                        isProcessing={isLoading}
+                        isProcessing={createPage.isLoading}
                         processingLabel="Creating"
                         disabled={
                             !formState["name"] ||
                             !formState["slug"] ||
                             !formState["title"] ||
-                            isLoading
+                            createPage.isLoading
                         }
                         processingSpinner={
                             <AiOutlineLoading className="h-6 w-6 animate-spin" />
                         }
                         onClick={() =>
-                            createPage({
-                                storeId: store.id,
-                                formData: formState,
-                            }).then((response: any) => {
-                                if (response.data.status === 200) {
-                                    setOpen(false);
-                                }
+                            createPage.create({
+                                pageData: formState,
+                                onSuccess: () => setOpen(false),
                             })
                         }
                     >

@@ -139,6 +139,37 @@ export const customTheme: CustomFlowbiteTheme = createTheme({
             label: "ml-3 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary-100 p-1 text-sm font-medium text-primary-800",
         },
     },
+    accordion: {
+        root: {
+            base: "divide-y divide-gray-200 border-gray-200 dark:divide-gray-700 dark:border-gray-700",
+            flush: {
+                off: "rounded-lg border",
+                on: "border-b",
+            },
+        },
+        content: {
+            base: "p-4 first:rounded-t-lg last:rounded-b-lg dark:bg-gray-700",
+        },
+        title: {
+            arrow: {
+                base: "h-6 w-6 shrink-0",
+                open: {
+                    off: "",
+                    on: "rotate-180",
+                },
+            },
+            base: "flex w-full items-center justify-between p-5 text-left font-medium text-gray-500 first:rounded-t-lg last:rounded-b-lg dark:text-gray-400",
+            flush: {
+                off: "hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:hover:bg-gray-800 dark:focus:ring-gray-800",
+                on: "bg-transparent dark:bg-transparent",
+            },
+            heading: "",
+            open: {
+                off: "",
+                on: "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white",
+            },
+        },
+    },
     textarea: {
         base: twMerge(theme.textarea.base, "p-4"),
         colors: {

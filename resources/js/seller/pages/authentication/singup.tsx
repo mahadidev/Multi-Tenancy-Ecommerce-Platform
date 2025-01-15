@@ -1,27 +1,21 @@
-import { APP_IMAGE_URL, BASE_IMAGE_URL } from "@/env";
+import { BASE_IMAGE_URL } from "@/env";
 import { RoutePath } from "@/seller/env";
+import useAuth from "@/seller/hooks/useAuth";
 import useForm from "@/seller/hooks/useForm";
-import { useRegisterUserMutation } from "@/seller/store/reducers/authApi";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SignUpPage() {
-    const [register, { isLoading, error }] = useRegisterUserMutation();
+    const {
+        register,
+        isRegisterError: error,
+        isRegisterLoading: isLoading,
+    } = useAuth();
 
     const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
-
-    const navigate = useNavigate();
-
-    const handleRegister = (formState: any) => {
-        register(formState).then((response: any) => {
-            if (response.data.status === 200) {
-                navigate(RoutePath.storeCreate);
-            }
-        });
-    };
 
     return (
         <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
@@ -46,8 +40,6 @@ export default function SignUpPage() {
             </Link>
             <Card
                 horizontal
-                imgSrc={`${APP_IMAGE_URL}/authentication/login.jpg`}
-                imgAlt=""
                 className="w-full md:max-w-screen-lg *:object-cover"
                 theme={{
                     root: {
@@ -158,7 +150,7 @@ export default function SignUpPage() {
                             type="button"
                             theme={{ inner: { base: "px-5 py-3" } }}
                             className="w-full px-0 py-px sm:w-auto"
-                            onClick={() => handleRegister(formState)}
+                            onClick={() => register(formState)}
                             isProcessing={isLoading}
                             disabled={isLoading}
                             processingSpinner={

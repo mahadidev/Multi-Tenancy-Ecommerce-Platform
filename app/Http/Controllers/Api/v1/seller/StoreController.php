@@ -190,7 +190,7 @@ class StoreController extends Controller
             'dark_logo_url' => 'nullable|string|max:255',
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
-            'settings' => 'nullable|max:1000000',
+            'settings' => 'nullable|array|max:1000000',
             "theme_id" => "nullable",
             'type' => 'nullable|string',
             'description' => 'nullable|string',

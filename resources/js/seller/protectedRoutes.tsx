@@ -8,7 +8,7 @@ import { setStoreResponse } from "./store/slices/storeSlice";
 export const SellerDashboardMiddleware = () => {
     const { currentStore } = useAppSelector((state) => state.store);
 
-    return currentStore ? <Outlet /> : <Navigate to={RoutePath.storeCreate} />;
+    return currentStore ? <Outlet /> : <Navigate to={RoutePath.storeOnboard} />;
 };
 
 export const LoggedMiddleware = () => {
@@ -43,6 +43,6 @@ export const GuestMiddleware = () => {
     ) : currentStore ? (
         <Navigate to={RoutePath.dashboard} />
     ) : (
-        <Navigate to={RoutePath.storeCreate} />
+        <Navigate to={RoutePath.storeOnboard} />
     );
 };
