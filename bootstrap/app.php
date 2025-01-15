@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\LogRequests;
 use App\Http\Middleware\StoreMiddleware;
+use App\Http\Middleware\BlockPublicRoutes; 
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(prepend: [
+            BlockPublicRoutes::class 
+        ]);
         $middleware->append(Cors::class);
         $middleware->append(LogRequests::class);
         $middleware->alias([
