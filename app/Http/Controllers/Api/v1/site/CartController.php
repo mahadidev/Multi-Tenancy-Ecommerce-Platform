@@ -123,4 +123,60 @@ class CartController extends Controller
             ],
         ]);
     }
+
+    public function updateCartItem(Request $request)
+    {
+        $validatedData = $request->validate([
+            'cart_id' => 'required|exists:carts,id',
+            'qty' => 'required|numeric|min:1',
+        ]);
+
+        $cartItem = Cart::find($validatedData['cart_id']);
+
+        if(!$cartItem){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Cart item not found!',
+            ]);
+        }
+
+        $product = $cartItem->product;
+        $product_price = $product->price; // validates the discount_to date and returns the actual price of product
+
+        $cartItem->qty = $validatedData['qty'];
+        $cartItem->total = (($product_price + ($product->vat ?? 0)) * $cartItem->qty);
+        $cartItem->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cart updated successfully',
+            'data' => [
+                'cart_item' => new CartResource($cartItem),
+            ]
+        ]);
+
+    }
+
+    public function deleteCartItem(Request $request)
+    {
+        $validatedData = $request->validate([
+            'cart_id' => 'required|exists:carts,id',
+        ]);
+
+        $cartItem = Cart::find($validatedData['cart_id']);
+
+        if(!$cartItem){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Cart item not found!',
+            ]);
+        }
+
+        $cartItem->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cart item removed successfully',
+        ]);
+    }
 }
