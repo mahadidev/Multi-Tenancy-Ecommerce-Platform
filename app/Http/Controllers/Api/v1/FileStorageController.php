@@ -72,10 +72,11 @@ class FileStorageController extends Controller
             'message' => 'File deleted successfully.',
         ]);
     }
+    
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10048',
+            'file' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10048',
             'user_id' => 'nullable|exists:users,id', // Check if the user_id exists in the users table
             "response_type" => 'nullable|string|max:255'
         ]);
@@ -84,10 +85,11 @@ class FileStorageController extends Controller
             $request->user_id = auth()->user()->id;
         }
 
-
         $file = $request->file('file');
         $uniqueName = uniqid() . '_' . time(); // Generate a unique name
-        $filePath = $file->storeAs('file_storage', $uniqueName, 'public'); // Store file in the 'uploads' folder
+        $extension = $file->extension(); // Get the file extension
+        $fileName = $uniqueName . '.' . $extension; // Concatenate the unique name and the file extension
+        $filePath = $file->storeAs('file_storage', $fileName, 'public'); // Store file in the 'uploads' folder
 
         // Save file details to the database
         $fileStorage = FileStorage::create([

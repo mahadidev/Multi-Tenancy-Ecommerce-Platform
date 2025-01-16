@@ -133,7 +133,7 @@ class StoreResource extends Resource
                 ->suffix('.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com'),
             TextInput::make('email')->required()->email(),
             TextInput::make('phone')->nullable(),
-            TextInput::make('currency')->required(),
+            TextInput::make('currency')->nullable(),
             Select::make('status')
                 ->options([
                     '1' => 'Active',
@@ -189,21 +189,21 @@ class StoreResource extends Resource
                                     Repeater::make('phones')
                                         ->label('Phone')
                                         ->schema([TextInput::make('label')->label('Phone Label')->required(), TextInput::make('number')->label('Phone Number')->required()])
-                                        ->minItems(1)
-                                        ->required(),
+                                        ->minItems(1),
+                                        // ->required(),
 
                                     Repeater::make('emails')
                                         ->label('Email')
                                         ->schema([TextInput::make('label')->label('Email Label')->required(), TextInput::make('email')->label('Email Address')->email()->required()])
-                                        ->minItems(1)
-                                        ->required(),
-                                ])
-                                ->required(),
-                        ])
-                        ->required(),
+                                        ->minItems(1),
+                                        // ->required(),
+                                ]),
+                                // ->required(),
+                            ]),
+                        // ->required(),
                 ])
-                ->columnSpanFull()
-                ->required(),
+                ->columnSpanFull(),
+                // ->required(),
         ]);
     }
 

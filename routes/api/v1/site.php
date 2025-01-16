@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api\v1\site;
+
+use App\Http\Controllers\Api\v1\PageTypeController;
 use App\Http\Controllers\Api\v1\seller\ContactController;
 
 use Illuminate\Support\Facades\Route;
@@ -8,9 +10,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // cart route
     Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+    Route::get('/cart-items', [CartController::class, 'cartItems']);
 
     // product reviews route resource
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
+
 });
 
 
@@ -31,3 +35,6 @@ Route::get('/category/{slug}/products', [ProductController::class, 'singleCatego
 
 // contact route
 Route::post('/contact', [ContactController::class, 'store']);
+
+
+

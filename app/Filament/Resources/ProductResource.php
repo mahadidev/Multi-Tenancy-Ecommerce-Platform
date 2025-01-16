@@ -254,7 +254,7 @@ class ProductResource extends Resource
                                     Forms\Components\TextInput::make('price')
                                         ->label('Base Price')
                                         ->numeric()
-                                        ->required()
+                                        // ->required()
                                         ->helperText('Leave empty if the product has variants.'),
                                 ]),
                         ])->columnSpan(6),
