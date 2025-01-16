@@ -48,6 +48,13 @@ class PageTypeController extends Controller
     {
         $pageType = PageType::find($id);
 
+        if (!$pageType) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Page type not found.',
+            ]);
+        }
+
         return response()->json([
             'status' => 200,
             'data' => new PageTypeResource($pageType),
@@ -65,6 +72,14 @@ class PageTypeController extends Controller
         ]);
 
         $pageType = PageType::find($id);
+
+        if (!$pageType) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Page type not found.',
+            ]);
+        }
+
         $pageType->update($request->all());
 
         return response()->json([
@@ -80,6 +95,14 @@ class PageTypeController extends Controller
     public function destroy(string $id)
     {
         $pageType = PageType::find($id);
+
+        if (!$pageType) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Page type not found.',
+            ]);
+        }
+        
         $pageType->delete();
 
         return response()->json([
