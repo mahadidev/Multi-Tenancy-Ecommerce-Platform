@@ -14,9 +14,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/cart-items/update', [CartController::class, 'updateCartItem']);
     Route::post('/cart-items/delete', [CartController::class, 'deleteCartItem']);
 
-    // checkout process route
-    Route::post('/checkout', [CartController::class, 'checkout']);
-
+    // order route
+    Route::post('/place-order', [OrderController::class, 'placeOrder']);
+    Route::resource('/orders', OrderController::class);
 
     // product reviews route resource
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
