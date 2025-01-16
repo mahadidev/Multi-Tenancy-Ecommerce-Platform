@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PageTypeResource;
 use Illuminate\Http\Request;
 use App\Models\PageType;
 
@@ -17,16 +18,8 @@ class PageTypeController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => $pageTypes,
+            'data' => PageTypeResource::collection($pageTypes),
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -44,7 +37,7 @@ class PageTypeController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Page type created successfully.',
-            'data' => $pageType,
+            'data' => new PageTypeResource($pageType),
         ]);
     }
 
@@ -57,16 +50,8 @@ class PageTypeController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => $pageType,
+            'data' => new PageTypeResource($pageType),
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -85,7 +70,7 @@ class PageTypeController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Page type updated successfully.',
-            'data' => $pageType,
+            'data' => new PageTypeResource($pageType),
         ]);
     }
 
