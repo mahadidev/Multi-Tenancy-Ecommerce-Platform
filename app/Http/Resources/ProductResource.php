@@ -20,7 +20,7 @@ class ProductResource extends JsonResource
             'slug' => $this->slug,
             'sku' => $this->sku,
             'description' => $this->description,
-            'thumbnail' => $this->thumbnail_image,
+            'thumbnail' => $this->thumbnail_image ? $this->thumbnail_image : 'https://placehold.co/600x400',
             'attachments' => $this->attachments_image,
             'brand' => new BrandResource($this->brand),
             'category' => new CategoryResource($this->category),

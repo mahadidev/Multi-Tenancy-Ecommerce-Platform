@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class CartController extends Controller
        
             $validatedData = $request->validate([
                 'product_id' => 'required|exists:products,id',
-                'qty' => 'required|numeric',
+                'qty' => 'required|numeric|min:1',
                 'note' => 'nullable|string',
                 'options' => 'nullable',
             ]);
@@ -29,13 +30,13 @@ class CartController extends Controller
 
             if($user_id){
                 // Check if store_id exists
-                $store_id = session()->get('store_id');
+                $store_id = session()->get('site_store_id');
                
                 if(!$store_id){
                     // show error message
                     return response()->json([
                         'status' => 401,
-                        'message' => 'Store is not authenticated',
+                        'message' => 'Store id is not found',
                     ]);
                 }
             }
@@ -59,7 +60,7 @@ class CartController extends Controller
             $total = ($product_price +  ($product->vat ?? 0)) * $validatedData['qty'];
             
             // Handle session for guests or user_id for logged-in users
-            $sessionId = session()->getId();
+            $sessionId = $request->has('session_id') ? $request->session_id : session()->getId();
 
             // Check if item already exists in the cart
             $cartItem = Cart::where('product_id', $product->id)->where('store_id', $store_id)
@@ -83,7 +84,7 @@ class CartController extends Controller
                 $cartItem->save();
             } else {
                 // Add new item to the cart
-                Cart::create([
+                $addCartItem = Cart::create([
                     'store_id' => $store_id,
                     'user_id' => $user_id,
                     'product_id' => $product->id,
@@ -102,9 +103,24 @@ class CartController extends Controller
             // Return success response
             return response()->json([
                 'status' => 200,
+                'session_id' => $sessionId,
                 'message' => 'Product has been added to cart successfully.',
+                'cart_item' => $cartItem ? new CartResource($cartItem) : new CartResource($addCartItem),
             ]);
         });
 
+    }
+
+    public function cartItems(Request $request){
+
+        $cartItems = auth()->user()->cartItems;
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Cart Items',
+            'data' => [
+                'cart_items' => CartResource::collection($cartItems),
+            ],
+        ]);
     }
 }
