@@ -19,17 +19,27 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->roles->pluck('name'),
-            'registered_store_id' => $this->store_id,
+
+            // Include 'registered_store_id' only if the user has the 'user' role
+            'registered_store_id' => $this->when(
+                $this->roles->pluck('name')->contains('user'),
+                $this->store_id
+            ),
             'phone' => $this->phone,
             'address' => $this->address,
             'image' => $this->user_image,
-            'stores' => $this->stores->map(function ($store) { // Changed from store to stores
-                return [
-                    'id' => $store->id,
-                    'name' => $store->name,
-                    'domain' => $store->domain,
-                ];
-            })
+
+            // Include 'stores' only if the user has the 'seller' role
+            'stores' => $this->when(
+                $this->roles->pluck('name')->contains('seller'),
+                $this->stores->map(function ($store) {
+                    return [
+                        'id' => $store->id,
+                        'name' => $store->name,
+                        'domain' => $store->domain,
+                    ];
+                })
+            ),
         ];
     }
 }

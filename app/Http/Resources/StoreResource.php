@@ -33,7 +33,7 @@ class StoreResource extends JsonResource
             'primary_color' => $this->primary_color,
             'secondary_color' => $this->secondary_color,
             'theme_id' => $this->theme_id,
-            'settings' => $this->settings !== "null" ? json_decode($this->settings) : null,
+            'settings' => $this->settings !== "null" ? $this->settings : null,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

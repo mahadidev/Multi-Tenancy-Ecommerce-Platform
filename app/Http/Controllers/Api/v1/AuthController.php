@@ -202,8 +202,8 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         //add store_id in the session
-        session(['store_id' => $store->id]); // Store the new `store_id` in the session
-        $request->attributes->set('store_id', $store->id); // Also set it in the request attributes
+        session(['site_store_id' => $store->id]); // Store the new `store_id` in the session
+        $request->attributes->set('site_store_id', $store->id); // Also set it in the request attributes
 
         // Return the token and user details
         return response()->json([
@@ -216,6 +216,11 @@ class AuthController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                ],
+                'store' => [
+                    'id' => $store->id,
+                    'name' => $store->name,
+                    'domain' => $store->domain,
                 ],
             ],
         ]);
@@ -325,8 +330,12 @@ class AuthController extends Controller
 
     private function storeSessionData(Request $request, int $storeId): void
     {
-        session(['store_id' => $storeId]);
-        $request->attributes->set('store_id', $storeId);
+        if (session()->has('site_store_id')) {
+            session()->forget('site_store_id');
+        }
+        
+        session(['site_store_id' => $storeId]);
+        $request->attributes->set('site_store_id', $storeId);
     }
 
     private function errorResponse(string $message, int $status)

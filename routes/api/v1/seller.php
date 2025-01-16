@@ -65,7 +65,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::resource('/blog', BlogController::class);
 
     // Store Settings
-    Route::get('/settings', [StoreController::class, 'settings']);
+    // Route::get('/settings', [StoreController::class, 'settings']);
 
     // Subscriber Routes
     Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
