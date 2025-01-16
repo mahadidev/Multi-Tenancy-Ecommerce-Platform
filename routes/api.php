@@ -33,6 +33,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
 
+    // page types route
+    Route::resource('page-types', PageTypeController::class);
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         // File storage routes

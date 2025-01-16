@@ -297,6 +297,7 @@ class StoreController extends Controller
         ]);
 
         // Check if a store_id exists in the session and remove it
+        $request->session()->forget('store_id');
         if ($store && session()->has('store_id')) {
             session()->forget('store_id');
         }

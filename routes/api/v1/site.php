@@ -34,6 +34,5 @@ Route::get('/category/{slug}/products', [ProductController::class, 'singleCatego
 // contact route
 Route::post('/contact', [ContactController::class, 'store']);
 
-// page types route
-Route::resource('page-types', PageTypeController::class);
+
 

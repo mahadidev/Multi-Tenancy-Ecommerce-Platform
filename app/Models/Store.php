@@ -63,7 +63,7 @@ class Store extends Model
     // Scope to check ownership
     public function scopeStoreOwner($query)
     {
-        return $query->where('owner_id', auth()->user()->id);
+        return $query->where('owner_id', auth()->id());
     }
 
     public function scopeActive($query)
