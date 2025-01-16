@@ -50,4 +50,5 @@ class Order extends Model
         return $query->where('store_id', session()->get('site_store_id'));
     }
 
+    
 }
