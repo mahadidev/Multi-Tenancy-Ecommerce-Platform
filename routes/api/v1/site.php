@@ -11,6 +11,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // cart route
     Route::post('/add-to-cart', [CartController::class, 'addToCart']);
     Route::get('/cart-items', [CartController::class, 'cartItems']);
+    Route::post('/cart-items/update', [CartController::class, 'updateCartItem']);
+    Route::post('/cart-items/delete', [CartController::class, 'deleteCartItem']);
+
+    // order route
+    Route::post('/place-order', [OrderController::class, 'placeOrder']);
+    Route::resource('/orders', OrderController::class);
 
     // product reviews route resource
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
