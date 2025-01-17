@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PageType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class StorePagesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'type' => $this->type,
+            'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
             'slug' => $this->slug,
             'title' => $this->title,
             'is_active' => $this->is_active,

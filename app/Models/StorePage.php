@@ -16,15 +16,18 @@ class StorePage extends Model
         'is_active'
     ];
 
-    public function scopeActive($query){
+    public function scopeActive($query)
+    {
         return $query->where('is_active', 1);
     }
 
-    public function store(){
+    public function store()
+    {
         return $this->belongsTo(Store::class, 'store_id');
     }
 
-    public function widgets(){
+    public function widgets()
+    {
         return $this->hasMany(StorePageWidget::class, 'store_page_id');
     }
 }

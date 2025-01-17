@@ -47,35 +47,16 @@ class StorePageController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'type' => 'nullable|string',
-            'slug' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:store_pages,slug',
+            'slug' => 'nullable|string|max:25|unique:store_pages,slug',
+            'type' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
             'is_active' => 'required|boolean',
-            'widgets' => 'nullable|array',
-            'widgets.*.name' => 'required|string',
-            'widgets.*.label' => 'required|string',
-            'widgets.*.inputs' => 'nullable|array',
-            'widgets.*.inputs.*.name' => 'required|string',
-            'widgets.*.inputs.*.label' => 'required|string',
-            'widgets.*.inputs.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.placeholder' => 'nullable|string',
         ]);
 
         // Add the $store_id from the route to the validated data
         $validatedData['store_id'] = $store_id;
 
         $storePage = StorePage::create($validatedData);
-
-        if ($request->has('widgets')) {
-            foreach ($request->widgets as $widget) {
-                $storePageWidget = StorePageWidget::create([
-                    'store_page_id' => $storePage->id,
-                    'name' => $widget['name'],
-                    'label' => $widget['label'],
-                    'inputs' => $widget['inputs'],
-                ]);
-            }
-        }
 
 
         return response()->json([
@@ -139,47 +120,14 @@ class StorePageController extends Controller
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'nullable|string',
-            'type' => 'nullable|string',
-            'slug' => 'nullable|string|max:25|regex:/^[a-zA-Z0-9\-]+$/|unique:store_pages,slug,' . $storePage->id,
+            'type' => 'nullable|exists:page_types,id',
+            'slug' => 'nullable|string|max:25|unique:store_pages,slug,' . $storePage->id,
             'title' => 'nullable|string',
             'is_active' => 'nullable|boolean',
-            'widgets' => 'nullable|array',
-            'widgets.*.name' => 'required|string',
-            'widgets.*.label' => 'required|string',
-            'widgets.*.inputs' => 'nullable|array',
-            // 'widgets.*.inputs.*.name' => 'required|string',
-            'widgets.*.inputs.*.name' => 'nullable|string',
-            'widgets.*.inputs.*.label' => 'nullable|string',
-            'widgets.*.inputs.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.type' => 'nullable|string',
-            'widgets.*.inputs.*.placeholder' => 'nullable|string',
-            'widgets.*.inputs.*.required' => 'nullable',
-            "widgets.*.inputs.*.items" => "nullable|array",
-            'widgets.*.inputs.*.items.*.*.name' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.*.label' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.*.placeholder' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.*.required' => 'nullable',
-            'widgets.*.inputs.*.items.*.*.type' => 'nullable|string',
         ]);
 
         // Update the store page
         $storePage->update($validatedData);
-
-        // Update widgets if provided
-        if ($request->has('widgets')) {
-            $storePage->widgets()->delete();
-
-            foreach ($validatedData['widgets'] as $widget) {
-                StorePageWidget::create([
-                    'store_page_id' => $storePage->id,
-                    'name' => $widget['name'],
-                    'label' => $widget['label'],
-                    'inputs' => $widget['inputs'] ?? [],
-                ]);
-            }
-
-        }
 
         // Return a success response
         return response()->json([

@@ -9,6 +9,7 @@ import { storeApi } from "./reducers/storeApi";
 import { themeApi } from "./reducers/themeApi";
 import authSlice from "./slices/authSlice";
 import baseSlice from "./slices/baseSlice";
+import pageSlice from "./slices/pageSlice";
 import settingSlice from "./slices/settingSlice";
 import storeOnboardSlice from "./slices/storeOnboardSlice";
 import storeSlice from "./slices/storeSlice";
@@ -28,6 +29,7 @@ const persistedReducer = persistReducer(
         store: storeSlice,
         storeOnboard: storeOnboardSlice,
         settingSlice: settingSlice,
+        page: pageSlice,
         [authApi.reducerPath]: authApi.reducer,
         [storeApi.reducerPath]: storeApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,

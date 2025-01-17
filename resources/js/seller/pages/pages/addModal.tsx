@@ -1,6 +1,15 @@
 import useForm from "@/seller/hooks/useForm";
 import usePage from "@/seller/hooks/usePage";
-import { Button, Label, Modal, TextInput, ToggleSwitch } from "flowbite-react";
+import { useFetchPageTypesQuery } from "@/seller/store/reducers/pageApi";
+import { PageTypeType } from "@/seller/types";
+import {
+    Button,
+    Label,
+    Modal,
+    Select,
+    TextInput,
+    ToggleSwitch,
+} from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa";
@@ -11,6 +20,17 @@ export default function AddPageModal() {
     const { formState, handleChange, formErrors, setFormState } = useForm({
         errors: createPage.error,
     });
+    const { data: pageTypeResponse } = useFetchPageTypesQuery();
+    // default page value
+    useEffect(() => {
+        if (pageTypeResponse) {
+            setFormState((prev: any) => ({
+                ...prev,
+                type: pageTypeResponse.data[0].id,
+            }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageTypeResponse]);
 
     useEffect(() => {
         setFormState((prev: any) => ({
@@ -107,6 +127,37 @@ export default function AddPageModal() {
                                     onChange={handleChange}
                                     required
                                 />
+                            </div>
+                            <div className="col-span-full">
+                                <Label
+                                    htmlFor="page-type"
+                                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Page Type
+                                </Label>
+                                <Select
+                                    name="type"
+                                    id="page-type"
+                                    value={formState["type"]}
+                                    color={
+                                        formErrors["type"] ? "failure" : "gray"
+                                    }
+                                    helperText={
+                                        formErrors["type"]
+                                            ? formErrors["type"][0]
+                                            : false
+                                    }
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    {pageTypeResponse?.data.map(
+                                        (type: PageTypeType, index: number) => (
+                                            <option value={type.id} key={index}>
+                                                {type.label}
+                                            </option>
+                                        )
+                                    )}
+                                </Select>
                             </div>
 
                             <div>

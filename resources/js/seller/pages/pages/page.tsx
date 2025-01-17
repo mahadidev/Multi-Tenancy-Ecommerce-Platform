@@ -70,6 +70,7 @@ const PagesPage = () => {
                                     </Table.HeadCell>
                                     <Table.HeadCell>Name</Table.HeadCell>
                                     <Table.HeadCell>Title</Table.HeadCell>
+                                    <Table.HeadCell>Type</Table.HeadCell>
                                     <Table.HeadCell>Status</Table.HeadCell>
                                     <Table.HeadCell>Last Update</Table.HeadCell>
                                     <Table.HeadCell>Actions</Table.HeadCell>
@@ -89,6 +90,9 @@ const PagesPage = () => {
                                                 </Table.Cell>
                                                 <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
                                                     {item.title}
+                                                </Table.Cell>
+                                                <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                                                    {item.type.label}
                                                 </Table.Cell>
                                                 <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
                                                     {item.is_active == 1

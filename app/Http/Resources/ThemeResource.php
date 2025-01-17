@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PageType;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -59,7 +60,7 @@ class ThemeResource extends JsonResource
                     'id' => $page->id,
                     'name' => $page->name,
                     'slug' => $page->slug,
-                    'type' => $page->type,
+                    'type' => new PageTypeResource(PageType::where(["id" => $page->type])->first()),
                     'title' => $page->title,
                     'widgets' => $page->page_widgets->map(function ($widget) {
                         return [

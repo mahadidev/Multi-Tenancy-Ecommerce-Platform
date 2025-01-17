@@ -34,14 +34,24 @@ export interface StoreType {
     updated_at: string;
 }
 
+export interface WidgetInputItemType {
+    id: number;
+    name: string;
+    label: string;
+    placeholder?: string;
+    value: string;
+    required: boolean;
+    type: "text" | "image" | "file" | "textarea" | "email" | "tel";
+}
 export interface WidgetInputType {
+    id: number;
     name: string;
     label: string;
     placeholder?: string;
     value?: string;
-    required: boolean;
-    type: "array" | "text" | "image" | "file" | "textarea" | "email" | "tel";
-    items?: WidgetInputType[] | WidgetInputType[][];
+    required?: boolean;
+    type: "text" | "image" | "file" | "textarea" | "email" | "tel" | "array";
+    items?: WidgetInputItemType[];
 }
 
 export interface WidgetType {
@@ -51,16 +61,22 @@ export interface WidgetType {
     inputs: WidgetInputType[];
 }
 
+export interface PageTypeType {
+    id: number;
+    label: string;
+    type: string;
+}
+
 export interface StorePageType {
     id: number;
     name: string;
-    type: string | "home" | "about" | "blog" | "contact";
     slug: string;
     title: string;
     is_active: 0 | 1;
     created_at: string;
     updated_at: string;
     widgets: WidgetType[];
+    type: PageTypeType;
 }
 
 export interface ThemeType {
