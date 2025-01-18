@@ -1,6 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "../components";
+import BrandsPage from "../pages/brands/page";
+import CategoriesPage from "../pages/categories/page";
 import DashboardPage from "../pages/dashboard/page";
+import ProductsPage from "../pages/ecommerce/products/page";
 import PricingPage from "../pages/landing/pricing/page";
 import PageEditPage from "../pages/pages/edit/page";
 import PagesPage from "../pages/pages/page";
@@ -15,6 +18,9 @@ export default function DashboardRoutes() {
                 <Route path="*" element={<DashboardLayout />}>
                     {/* Dashboard pages start */}
                     <Route index element={<DashboardPage />} />
+                    <Route path="categories" element={<CategoriesPage />} />
+                    <Route path="brands" element={<BrandsPage />} />
+                    <Route path="products" element={<ProductsPage />} />
                     <Route path="themes" element={<ThemePage />} />
                     <Route path="settings" element={<SettingPage />} />
                     <Route path="pricing" element={<PricingPage />} />

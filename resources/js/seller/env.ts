@@ -1,3 +1,5 @@
+import { SELLER_PREFIX } from "./store/env";
+
 export const PATH_PREFIX = "/seller";
 
 export const RoutePath = {
@@ -5,7 +7,18 @@ export const RoutePath = {
     register: "/login/create",
     storeOnboard: "/onboard/store",
     dashboard: "/",
-    products: "/e-commerce/products",
+    categories: {
+        index: () => "/categories",
+    },
+    brands: {
+        index: () => "/brands",
+    },
+    products: {
+        index: () => "/products",
+        href: {
+            index: () => `${SELLER_PREFIX}/products`,
+        },
+    },
     settings: "/settings",
     pages: {
         list: () => "/pages",
