@@ -73,7 +73,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
 
     // Blog Category Route
-    Route::resource('/blog-category', BlogCategoryController::class);
+    Route::resource('/blog-category', CategoryController::class);
 
     // Blog Route
     Route::resource('/blog', BlogController::class);

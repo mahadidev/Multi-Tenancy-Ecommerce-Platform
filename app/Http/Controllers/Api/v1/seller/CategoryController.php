@@ -18,30 +18,51 @@ class CategoryController extends Controller
             $query->where('type', $request->input('type'));
         }
 
-        $categories = $query->get();
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
+            });
+        }
+
+        $categories = $query->paginate(10)->appends($request->only(['type', 'search']));
 
         return apiResponse(function () use ($request, $categories) {
             return response()->json([
                 'status' => 200,
-                'data' => [
-                    'categories' =>  CategoryResource::collection($categories),
+                'data' =>  CategoryResource::collection($categories),
+                'meta' => [
+                    'current_page' => $categories->currentPage(),
+                    'first_page_url' => $categories->url(1),
+                    'last_page' => $categories->lastPage(),
+                    'last_page_url' => $categories->url($categories->lastPage()),
+                    'next_page_url' => $categories->nextPageUrl(),
+                    'prev_page_url' => $categories->previousPageUrl(),
+                    'total' => $categories->total(),
+                    'per_page' => $categories->perPage(),
                 ],
-            ]);
+            ], 200);
         });
     }
 
     public function show(Request $request, $id)
     {
-        
+
         return apiResponse(function () use ($request, $id) {
 
-            $category = Category::authorized()->findOrFail($id);
+            $category = Category::authorized()->find($id);
+            if (!$category) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Category not found'
+                ], 404);
+            }
             return response()->json([
                 'status' => 200,
-                'data' => [
-                    'category' => new CategoryResource($category),
-                ],
-            ]);
+                'data' => new CategoryResource($category),
+            ], 200);
         });
     }
 
@@ -63,17 +84,22 @@ class CategoryController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'data' => [
-                    'category' => new CategoryResource($category),
-                ],
-            ]);
+                'message' => 'Category created successfully',
+                'data' => new CategoryResource($category),
+            ], 200);
         });
     }
 
     public function update(Request $request, $id)
     {
 
-        $category = Category::authorized()->findorfail($id);
+        $category = Category::authorized()->find($id);
+        if (!$category) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Category not found'
+            ], 404);
+        }
         return apiResponse(function () use ($request, $category) {
 
             $validated = $request->validate([
@@ -87,10 +113,9 @@ class CategoryController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'data' => [
-                    'category' => new CategoryResource($category),
-                ],
-            ]);
+                'message' => 'Category updated successfully',
+                'data' => new CategoryResource($category),
+            ], 200);
         });
     }
 
@@ -99,14 +124,19 @@ class CategoryController extends Controller
 
         return apiResponse(function () use ($request, $id) {
 
-            $category = Category::authorized()->findorfail($id);
+            $category = Category::authorized()->find($id);
+            if (!$category) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Category not found'
+                ], 404);
+            }
             $category->delete();
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Category deleted successfully'
-            ]);
+            ], 200);
         });
-      
     }
 }
