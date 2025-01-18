@@ -34,12 +34,19 @@ class PagesRelationManager extends RelationManager
                     ->required()
                     ->maxLength(1000)
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('thumbnail')
-                    ->disk('public')
-                    ->label('Thumbnail')
-                    ->directory('themes/pages')
-                    ->image()
+                // Forms\Components\FileUpload::make('thumbnail')
+                //     ->disk('public')
+                //     ->label('Thumbnail')
+                //     ->directory('themes/pages')
+                //     ->image()
+                //     ->columnSpanFull(),
+
+                Forms\Components\TextInput::make('thumbnail')
+                    ->label('Thumbnail URL')
+                    ->columnSpanFull()
+                    ->nullable()
                     ->columnSpanFull(),
+
                 Forms\Components\Repeater::make('widgets')
                     ->relationship('page_widgets')
                     ->schema([
@@ -61,12 +68,17 @@ class PagesRelationManager extends RelationManager
                             ->placeholder("ex. []")
                             ->rows(10)
                             ->placeholder('enter inputs array in json'),
-                        Forms\Components\FileUpload::make('thumbnail')
-                            ->disk('public')
-                            ->label('Thumbnail')
-                            ->directory('themes/pages/widgets')
-                            ->image()
+                        // Forms\Components\FileUpload::make('thumbnail')
+                        //     ->disk('public')
+                        //     ->label('Thumbnail')
+                        //     ->directory('themes/pages/widgets')
+                        //     ->image()
+                        //     ->columnSpanFull()
+                        Forms\Components\TextInput::make('thumbnail')
+                            ->label('Thumbnail URL')
                             ->columnSpanFull()
+                            ->nullable()
+                            ->columnSpanFull(),
                     ])
                     ->reorderable()
                     ->collapsible()
