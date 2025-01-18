@@ -3,8 +3,7 @@ import { InSidebarProvider } from "@/seller/contexts/insidebar-content";
 import useBase from "@/seller/hooks/useBase";
 import usePage from "@/seller/hooks/usePage";
 import { useFetchPageQuery } from "@/seller/store/reducers/pageApi";
-import { StorePageType, WidgetType } from "@/seller/types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import PageContent from "./pageContent";
 import PageEditor from "./pageEditor";
@@ -12,11 +11,18 @@ import WidgetEditor from "./widgetEditor";
 import WidgetModal from "./widgetModal";
 
 const PageEditPage = () => {
-    const { pageId, store } = usePage();
+    const { pageId, store, setPage, widget } = usePage();
     const { data: pageResponse } = useFetchPageQuery({
         pageId: pageId ?? 0,
         storeId: store.id,
     });
+    // set page
+    useEffect(() => {
+        if (pageResponse) {
+            setPage(pageResponse.data.page);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageResponse]);
 
     // coolapsed desktop sidebar on enter this page
     const { setSidebarCollapsed, setInSidebarCollapsed, inSidebar } = useBase();
@@ -25,34 +31,20 @@ const PageEditPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // set page data
-    const [pageData, setPageData] = useState<StorePageType>();
-    useEffect(() => {
-        if (pageResponse) {
-            setPageData(pageResponse.data.page);
-        }
-    }, [pageResponse]);
-
-    const [selectedWidget, setSelectedWidget] = useState<WidgetType | null>(
-        null
-    );
     // open mobile sidebar on select widget
     useEffect(() => {
-        if (selectedWidget) {
+        if (widget) {
             setInSidebarCollapsed(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedWidget]);
+    }, [widget]);
 
     return (
         <InSidebarProvider initialCollapsed={true}>
             <div className="w-full flex items-start">
                 <InSidebar>
-                    {selectedWidget && <WidgetEditor widget={selectedWidget} />}
-
-                    {!selectedWidget && pageData && (
-                        <PageEditor pageData={pageData} />
-                    )}
+                    <WidgetEditor />
+                    <PageEditor />
                 </InSidebar>
                 <div
                     id="main-content"
@@ -61,12 +53,8 @@ const PageEditPage = () => {
                         inSidebar.desktop.isCollapsed ? "lg:ml-16" : "lg:ml-64"
                     )}
                 >
-                    <PageContent
-                        pageData={pageData}
-                        onSelectWidget={setSelectedWidget}
-                    />
-
-                    <WidgetModal pageData={pageData} />
+                    <PageContent />
+                    <WidgetModal />
                 </div>
             </div>
         </InSidebarProvider>

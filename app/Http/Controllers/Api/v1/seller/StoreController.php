@@ -144,6 +144,7 @@ class StoreController extends Controller
             'location' => $request->location ?? null,
             'currency' => $request->currency ?? 'BDT',
             'logo' => $logoPath,
+            "theme_id" => $theme_id ?? Theme::first()->id,
             'dark_logo' => $darkLogoPath,
             'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null,

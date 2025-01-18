@@ -15,11 +15,11 @@ class ThemePage extends Model
         "thumbnail",
     ];
 
-    protected $hidden  = [
+    protected $hidden = [
         'created_at',
         'updated_at',
     ];
-    
+
 
     public function page_widgets()
     {
@@ -29,5 +29,10 @@ class ThemePage extends Model
     public function theme_widgets()
     {
         return $this->belongsToMany(ThemeWidget::class, "theme_id");
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(PageType::class, 'type');
     }
 }

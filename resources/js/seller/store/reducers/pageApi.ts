@@ -26,7 +26,7 @@ export interface UpdatePagePayloadType {
 export const pageApi = createApi({
     reducerPath: "pageApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Pages", "Page"],
+    tagTypes: ["Pages", "Page", "PageTypes"],
     endpoints: (builder) => ({
         fetchPages: builder.query<any, string>({
             query: (string) =>
@@ -109,6 +109,16 @@ export const pageApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Page"],
         }),
+        fetchPageTypes: builder.query<any, void>({
+            query: () =>
+                createRequest({
+                    url: `/page-types`,
+                    method: "get",
+                }),
+            transformResponse: (response) => response,
+            transformErrorResponse: (error: any) => error.data,
+            providesTags: ["PageTypes"],
+        }),
     }),
 });
 
@@ -118,4 +128,5 @@ export const {
     useFetchPageQuery,
     useUpdatePageMutation,
     useGetPageMutation,
+    useFetchPageTypesQuery,
 } = pageApi;
