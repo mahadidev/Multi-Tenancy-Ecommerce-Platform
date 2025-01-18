@@ -25,6 +25,7 @@ class StorePageWidgetInputsResource extends JsonResource
             'widget_id' => $this->widget_id,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+            'items' => $this->items ? StorePageWidgetInputItemsResource::collection($this->items) : []
         ];
     }
 }

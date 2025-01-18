@@ -19,9 +19,9 @@ class StorePageWidgetsResource extends JsonResource
             'store_page_id' => $this->store_page_id,
             'name' => $this->name,
             'label' => $this->label,
-            'inputs' => $this->inputs,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+            'inputs' => $this->widgetInputs ? StorePageWidgetInputsResource::collection($this->widgetInputs) : [],
         ];
     }
 }
