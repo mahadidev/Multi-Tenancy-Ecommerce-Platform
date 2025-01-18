@@ -12,6 +12,11 @@ class FileStorage extends Model
         'name',
         'type',
         'location',
+        'response_type',
+        'width',
+        'height',
+        'alternate_text',
+        'tags',
     ];
 
     public function user()

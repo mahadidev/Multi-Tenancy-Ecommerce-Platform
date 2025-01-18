@@ -25,4 +25,8 @@ class StorePageWidget extends Model
     public function page(){
         return $this->belongsTo(StorePage::class, 'store_page_id');
     }
+
+    public function widgetInputs(){
+        return $this->hasMany(StorePageWidgetInput::class, 'widget_id');
+    }
 }

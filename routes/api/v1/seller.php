@@ -43,7 +43,21 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
     Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
     Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
+
+    // Store Page Widget Input Routes
+    Route::get('stores/pages/widgets/{pageWidgetId}/inputs', [StorePageWidgetInputController::class, 'index']);
+    Route::get('stores/pages/widgets/{pageWidgetId}/inputs/{id}', [StorePageWidgetInputController::class, 'show']);
+    Route::post('stores/pages/widgets/{pageWidgetId}/inputs/store', [StorePageWidgetInputController::class, 'store']);
+    Route::post('stores/pages/widgets/{pageWidgetId}/inputs/update/{id}', [StorePageWidgetInputController::class, 'update']);
+    Route::delete('stores/pages/widgets/{pageWidgetId}/inputs/delete/{id}', [StorePageWidgetInputController::class, 'destroy']);
     
+    // Store Page Widget Input Items Routes
+    Route::get('stores/pages/widgets/inputs/{inputId}/items', [StorePageWidgetInputItemController::class, 'index']);
+    Route::get('stores/pages/widgets/inputs/{inputId}/items/{id}', [StorePageWidgetInputItemController::class, 'show']);
+    Route::post('stores/pages/widgets/inputs/{inputId}/items/store', [StorePageWidgetInputItemController::class, 'store']);
+    Route::post('stores/pages/widgets/inputs/{inputId}/items/update/{id}', [StorePageWidgetInputItemController::class, 'update']);
+    Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
+
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
@@ -59,13 +73,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
 
     // Blog Category Route
-    Route::resource('/blog-category', BlogCategoryController::class);
+    Route::resource('/blog-category', CategoryController::class);
 
     // Blog Route
     Route::resource('/blog', BlogController::class);
-
-    // Store Settings
-    // Route::get('/settings', [StoreController::class, 'settings']);
 
     // Subscriber Routes
     Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
