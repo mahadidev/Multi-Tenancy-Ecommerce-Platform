@@ -1,5 +1,4 @@
 import { ResponseType } from "@/seller/types/api";
-import { CategoryType } from "@/seller/types/store";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";

@@ -1,4 +1,3 @@
-import products from "@/seller/data/e-commerce/product.json";
 import type { ECommerceProduct } from "@/seller/types/e-commerce/product";
 import ECommerceProductsPageContent from "./content";
 
@@ -7,5 +6,5 @@ export interface ECommerceProductsPageData {
 }
 
 export default function ProductsPage() {
-    return <ECommerceProductsPageContent products={products} />;
+    return <ECommerceProductsPageContent />;
 }

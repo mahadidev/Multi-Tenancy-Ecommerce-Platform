@@ -2,10 +2,8 @@ import {
     Breadcrumb,
     Button,
     Checkbox,
-    FileInput,
     Label,
     Modal,
-    Select,
     Table,
     TextInput,
 } from "flowbite-react";
@@ -18,7 +16,6 @@ import {
     HiHome,
     HiOutlineExclamationCircle,
     HiPencilAlt,
-    HiPlus,
     HiTrash,
 } from "react-icons/hi";
 

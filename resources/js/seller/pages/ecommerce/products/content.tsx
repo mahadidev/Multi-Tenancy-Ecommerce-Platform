@@ -18,7 +18,6 @@ import {
     Modal,
     Select,
     Table,
-    Textarea,
     TextInput,
 } from "flowbite-react";
 import type { FC } from "react";
@@ -28,21 +27,12 @@ import { FaPlus } from "react-icons/fa";
 import {
     HiChevronLeft,
     HiChevronRight,
-    HiCog,
-    HiDotsVertical,
-    HiExclamationCircle,
     HiHome,
     HiOutlineExclamationCircle,
-    HiOutlineUpload,
-    HiPencilAlt,
     HiTrash,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
-import type { ECommerceProductsPageData } from "./page";
 
-const ECommerceProductsPageContent: FC<ECommerceProductsPageData> = function ({
-    products,
-}) {
+const ECommerceProductsPageContent: FC = function () {
     return (
         <>
             <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 sm:flex dark:border-gray-700 dark:bg-gray-800">
