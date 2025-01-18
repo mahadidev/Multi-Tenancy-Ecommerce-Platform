@@ -1,0 +1,131 @@
+<?php
+
+namespace App\Http\Controllers\Api\v1\seller;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\StorePageWidget;
+use App\Models\StorePageWidgetInput;
+
+class StorePageWidgetInputItemController extends Controller
+{
+    public function index(Request $request, $inputId)
+    {
+        $pageWidgetInput = StorePageWidgetInput::with('items')->find($inputId);
+
+        if (!$pageWidgetInput) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input not found']);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'widget_input_items' => $pageWidgetInput->items,
+            ],
+        ]);
+    }
+
+    public function store(Request $request, $inputId)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'label' => 'required|string',
+            'placeholder' => 'nullable|string',
+            'value' => 'nullable|string',
+            'required' => 'required|boolean',
+            'type' => 'required|string',
+        ]);
+
+        $pageWidgetInput = StorePageWidgetInput::find($inputId);
+
+        if (!$pageWidgetInput) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input not found']);
+        }
+
+        $pageWidgetInputItem = $pageWidgetInput->items()->create($validatedData);
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'widget_input_item' => $pageWidgetInputItem,
+            ],
+        ]);
+    }
+
+    public function update(Request $request, $inputId, $itemId)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'label' => 'required|string',
+            'placeholder' => 'nullable|string',
+            'value' => 'nullable|string',
+            'required' => 'required|boolean',
+            'type' => 'required|string',
+        ]);
+
+        $pageWidgetInput = StorePageWidgetInput::find($inputId);
+
+        if (!$pageWidgetInput) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input not found']);
+        }
+
+        $pageWidgetInputItem = $pageWidgetInput->items()->find($itemId);
+
+        if (!$pageWidgetInputItem) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input Item not found']);
+        }
+
+        $pageWidgetInputItem->update($validatedData);
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'widget_input_item' => $pageWidgetInputItem,
+            ],
+        ]);
+    }
+
+    public function destroy(Request $request, $inputId, $itemId)
+    {
+        $pageWidgetInput = StorePageWidgetInput::find($inputId);
+
+        if (!$pageWidgetInput) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input not found']);
+        }
+
+        $pageWidgetInputItem = $pageWidgetInput->items()->find($itemId);
+
+        if (!$pageWidgetInputItem) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input Item not found']);
+        }
+
+        $pageWidgetInputItem->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Widget Input Item deleted successfully',
+        ]);
+    }
+
+    public function show(Request $request, $inputId, $itemId)
+    {
+        $pageWidgetInput = StorePageWidgetInput::with('items')->find($inputId);
+
+        if (!$pageWidgetInput) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input not found']);
+        }
+
+        $pageWidgetInputItem = $pageWidgetInput->items()->find($itemId);
+
+        if (!$pageWidgetInputItem) {
+            return response()->json(['status' => 404, 'message' => 'Widget Input Item not found']);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'widget_input_item' => $pageWidgetInputItem,
+            ],
+        ]);
+    }
+}
