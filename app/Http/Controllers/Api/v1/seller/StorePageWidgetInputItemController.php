@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\StorePageWidget;
 use App\Models\StorePageWidgetInput;
+use App\Http\Resources\StorePageWidgetInputItemsResource;
 
 class StorePageWidgetInputItemController extends Controller
 {
@@ -20,7 +21,7 @@ class StorePageWidgetInputItemController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input_items' => $pageWidgetInput->items,
+                'widget_input_items' => StorePageWidgetInputItemsResource::collection($pageWidgetInput->items),
             ],
         ]);
     }
@@ -47,7 +48,7 @@ class StorePageWidgetInputItemController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input_item' => $pageWidgetInputItem,
+                'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem),
             ],
         ]);
     }
@@ -80,7 +81,7 @@ class StorePageWidgetInputItemController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input_item' => $pageWidgetInputItem,
+                'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem),
             ],
         ]);
     }
@@ -124,7 +125,7 @@ class StorePageWidgetInputItemController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input_item' => $pageWidgetInputItem,
+                'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem), 
             ],
         ]);
     }

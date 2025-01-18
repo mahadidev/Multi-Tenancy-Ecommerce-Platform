@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StorePagesResource;
-use App\Http\Resources\StoreResource;
-use App\Models\Store;
-use App\Models\StorePage;
+use App\Http\Resources\StorePageWidgetInputsResource;
 use App\Models\StorePageWidget;
 use Illuminate\Http\Request;
 
@@ -24,7 +21,7 @@ class StorePageWidgetInputController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_inputs' => $pageWidget->widgetInputs
+                'widget_inputs' => StorePageWidgetInputsResource::collection($pageWidget->widgetInputs)
             ]
         ]);
     }
@@ -52,7 +49,7 @@ class StorePageWidgetInputController extends Controller
             'status' => 200,
             'message' => 'Page Widget Input created successfully',
             'data' => [
-                'widget_input' => $pageWidgetInput     
+                'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput)      
             ]
         ]);
     }
@@ -74,7 +71,7 @@ class StorePageWidgetInputController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input' => $pageWidgetInput
+                'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput) 
             ]
         ]);
     }
@@ -108,7 +105,7 @@ class StorePageWidgetInputController extends Controller
             'status' => 200,
             'message' => 'Page Widget Input updated successfully',
             'data' => [
-                'widget_input' => $pageWidgetInput
+                'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput) 
             ]
         ]);
     }
