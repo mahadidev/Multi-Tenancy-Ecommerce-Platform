@@ -11,7 +11,6 @@ import {
 
 import { RoutePath } from "@/seller/env";
 import {
-    CategoryFetchResponseType,
     useDeleteCategoryMutation,
     useFetchCategoriesQuery,
     useStoreCategoryMutation,
@@ -20,8 +19,6 @@ import {
 import type { FC } from "react";
 import { useState } from "react";
 import {
-    HiChevronLeft,
-    HiChevronRight,
     HiDocumentDownload,
     HiHome,
     HiOutlineExclamationCircle,
@@ -29,12 +26,10 @@ import {
     HiPlus,
     HiTrash,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
 
 import useForm from "@/seller/hooks/useForm";
 import { CategoryType } from "@/seller/types/store";
 import { AiOutlineLoading } from "react-icons/ai";
-import type { UsersListPageData } from "./page";
 
 const CategoriesListPageContent: FC = function () {
     return (
@@ -104,8 +99,7 @@ const CategoriesListPageContent: FC = function () {
 const AddCategoryModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const [storeCategory, { isLoading, error }] = useStoreCategoryMutation();
-    const { data } = useFetchCategoriesQuery();
-    const categoryResponse: CategoryFetchResponseType = data;
+    const { data: categoryResponse } = useFetchCategoriesQuery();
     const { handleChange, formState, formErrors } = useForm({
         errors: error,
         defaultState: {
@@ -201,7 +195,7 @@ const AddCategoryModal: FC = function () {
                                     required
                                 >
                                     <option selected>Parent category</option>
-                                    {categoryResponse?.data?.categories.map(
+                                    {categoryResponse?.data?.map(
                                         (item: any) => (
                                             <option
                                                 value={item.id}
@@ -242,8 +236,7 @@ const AddCategoryModal: FC = function () {
 };
 
 const AllCategoriesTable: FC = function () {
-    const { data, isLoading } = useFetchCategoriesQuery();
-    const categoryResponse: CategoryFetchResponseType = data;
+    const { data: categoryResponse } = useFetchCategoriesQuery();
 
     return (
         <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
@@ -267,38 +260,34 @@ const AllCategoriesTable: FC = function () {
                 <Table.HeadCell />
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {categoryResponse?.data?.categories.map(
-                    (category: CategoryType) => (
-                        <Table.Row
-                            key={category.id}
-                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                            <Table.Cell className="w-4 p-4">
-                                <Checkbox
-                                    aria-describedby="checkbox-1"
-                                    id="checkbox-1"
-                                />
-                            </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {category.name}
-                            </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {category.slug}
-                            </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {category.has_parent === null
-                                    ? ""
-                                    : category.name}
-                            </Table.Cell>
-                            <Table.Cell>
-                                <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                    <EditCategoryModal category={category} />
-                                    <DeleteCategoryModal category={category} />
-                                </div>
-                            </Table.Cell>
-                        </Table.Row>
-                    )
-                )}
+                {categoryResponse?.data?.map((category: CategoryType) => (
+                    <Table.Row
+                        key={category.id}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                        <Table.Cell className="w-4 p-4">
+                            <Checkbox
+                                aria-describedby="checkbox-1"
+                                id="checkbox-1"
+                            />
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                            {category.name}
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                            {category.slug}
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                            {category.has_parent === null ? "" : category.name}
+                        </Table.Cell>
+                        <Table.Cell>
+                            <div className="flex items-center gap-x-3 whitespace-nowrap">
+                                <EditCategoryModal category={category} />
+                                <DeleteCategoryModal category={category} />
+                            </div>
+                        </Table.Cell>
+                    </Table.Row>
+                ))}
             </Table.Body>
         </Table>
     );
@@ -307,8 +296,7 @@ const AllCategoriesTable: FC = function () {
 const EditCategoryModal: FC<{ category: CategoryType }> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const [updateCategory, { isLoading, error }] = useUpdateCategoryMutation();
-    const { data } = useFetchCategoriesQuery();
-    const categoryResponse: CategoryFetchResponseType = data;
+    const { data: categoryResponse } = useFetchCategoriesQuery();
     const { handleChange, formState, formErrors } = useForm({
         errors: error,
         defaultState: {
@@ -409,7 +397,7 @@ const EditCategoryModal: FC<{ category: CategoryType }> = function (props) {
                                     required
                                 >
                                     <option>Parent category</option>
-                                    {categoryResponse?.data.categories.map(
+                                    {categoryResponse?.data.map(
                                         (item: CategoryType) => (
                                             <option
                                                 value={item.id}
@@ -523,66 +511,66 @@ const DeleteCategoryModal: FC<{ category: CategoryType }> = function (props) {
     );
 };
 
-const Pagination: FC<UsersListPageData> = function ({ usersList }) {
-    const [page, setPage] = useState(0);
-    const numEntriesPerPage = Math.min(20, usersList.length);
-    const numPages = Math.floor(usersList.length / numEntriesPerPage);
+// const Pagination: FC<UsersListPageData> = function ({ usersList }) {
+//     const [page, setPage] = useState(0);
+//     const numEntriesPerPage = Math.min(20, usersList.length);
+//     const numPages = Math.floor(usersList.length / numEntriesPerPage);
 
-    const previousPage = () => {
-        setPage(page > 0 ? page - 1 : page);
-    };
+//     const previousPage = () => {
+//         setPage(page > 0 ? page - 1 : page);
+//     };
 
-    const nextPage = () => {
-        setPage(page < numPages - 1 ? page + 1 : page);
-    };
+//     const nextPage = () => {
+//         setPage(page < numPages - 1 ? page + 1 : page);
+//     };
 
-    return (
-        <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
-            <div className="mb-4 flex items-center sm:mb-0">
-                <button
-                    onClick={previousPage}
-                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                    <span className="sr-only">Previous page</span>
-                    <HiChevronLeft className="h-7 w-7" />
-                </button>
-                <button
-                    onClick={nextPage}
-                    className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                    <span className="sr-only">Next page</span>
-                    <HiChevronRight className="h-7 w-7" />
-                </button>
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Showing&nbsp;
-                    <span className="font-semibold text-gray-900 dark:text-white">
-                        {page * usersList.length + 1}-
-                        {numEntriesPerPage * page + numEntriesPerPage}
-                    </span>
-                    &nbsp;of&nbsp;
-                    <span className="font-semibold text-gray-900 dark:text-white">
-                        {usersList.length}
-                    </span>
-                </span>
-            </div>
-            <div className="flex items-center space-x-3">
-                <Link
-                    to="#"
-                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                    <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
-                    Previous
-                </Link>
-                <Link
-                    to="#"
-                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                    Next
-                    <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
-                </Link>
-            </div>
-        </div>
-    );
-};
+//     return (
+//         <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
+//             <div className="mb-4 flex items-center sm:mb-0">
+//                 <button
+//                     onClick={previousPage}
+//                     className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+//                 >
+//                     <span className="sr-only">Previous page</span>
+//                     <HiChevronLeft className="h-7 w-7" />
+//                 </button>
+//                 <button
+//                     onClick={nextPage}
+//                     className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+//                 >
+//                     <span className="sr-only">Next page</span>
+//                     <HiChevronRight className="h-7 w-7" />
+//                 </button>
+//                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+//                     Showing&nbsp;
+//                     <span className="font-semibold text-gray-900 dark:text-white">
+//                         {page * usersList.length + 1}-
+//                         {numEntriesPerPage * page + numEntriesPerPage}
+//                     </span>
+//                     &nbsp;of&nbsp;
+//                     <span className="font-semibold text-gray-900 dark:text-white">
+//                         {usersList.length}
+//                     </span>
+//                 </span>
+//             </div>
+//             <div className="flex items-center space-x-3">
+//                 <Link
+//                     to="#"
+//                     className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+//                 >
+//                     <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
+//                     Previous
+//                 </Link>
+//                 <Link
+//                     to="#"
+//                     className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+//                 >
+//                     Next
+//                     <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
+//                 </Link>
+//             </div>
+//         </div>
+//     );
+// };
 
 export default CategoriesListPageContent;

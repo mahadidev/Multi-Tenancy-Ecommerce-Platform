@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: {
     isModalOpen: boolean;
+    onSuccess?: CallableFunction;
 } = {
     isModalOpen: true,
 };
@@ -12,7 +13,10 @@ const imageUploaderSlice = createSlice({
         setModalOpen: (state, action: PayloadAction<boolean>) => {
             state.isModalOpen = action.payload;
         },
+        setOnSuccesss: (state, action: PayloadAction<CallableFunction>) => {
+            state.onSuccess = action.payload;
+        },
     },
 });
-export const { setModalOpen } = imageUploaderSlice.actions;
+export const { setModalOpen, setOnSuccesss } = imageUploaderSlice.actions;
 export default imageUploaderSlice.reducer;

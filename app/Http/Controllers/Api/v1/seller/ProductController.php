@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         return apiResponse(function () use ($request) {
             return response()->json([
@@ -19,7 +20,8 @@ class ProductController extends Controller
         });
     }
 
-    public function show(Request $request, $id){
+    public function show(Request $request, $id)
+    {
 
         return apiResponse(function () use ($request, $id) {
             return response()->json([
@@ -29,30 +31,38 @@ class ProductController extends Controller
 
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         return apiResponse(function () use ($request) {
             return response()->json([
+                "status" => 200,
+                "message" => "product created successfully",
                 'product' => ProductService::store($request)
             ]);
         });
     }
-   
-    public function update(Request $request, $id){
+
+    public function update(Request $request, $id)
+    {
         return apiResponse(function () use ($request, $id) {
             return response()->json([
+                "status" => 200,
+                "message" => "product update successfully",
                 'product' => ProductService::update($request, $id)
             ]);
         });
     }
 
-    public function destroy(Request $request, $id){
+    public function destroy(Request $request, $id)
+    {
 
         return apiResponse(function () use ($request, $id) {
             return response()->json([
+                "status" => 200,
                 'message' => ProductService::destroy($request, $id)
             ]);
         });
     }
 
-   
+
 }

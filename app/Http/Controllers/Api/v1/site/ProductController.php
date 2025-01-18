@@ -17,7 +17,7 @@ class ProductController extends Controller
         $query = Category::authorized()->latest();
 
         if ($request->has('type')) {
-            $query->where('type', $request->input('type', 'product')); 
+            $query->where('type', $request->input('type', 'product'));
         }
 
         $categories = $query->get();
@@ -25,7 +25,7 @@ class ProductController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'categories' =>  CategoryResource::collection($categories),
+                'categories' => CategoryResource::collection($categories),
             ],
         ]);
     }
@@ -46,11 +46,13 @@ class ProductController extends Controller
 
     public function allCategoriesProducts(Request $request)
     {
-        $categoriesWiseProducts = Category::with(['product' => function ($query) use ($request) {
-            $query->active() // Filter active products
-                ->authorized(); // Filter authorized products
-            $this->applyFiltersAndSorting($query, $request);
-        }])
+        $categoriesWiseProducts = Category::with([
+            'product' => function ($query) use ($request) {
+                $query->active() // Filter active products
+                    ->authorized(); // Filter authorized products
+                $this->applyFiltersAndSorting($query, $request);
+            }
+        ])
             ->authorized()
             ->latest()
             ->get();
@@ -79,7 +81,7 @@ class ProductController extends Controller
     {
         // $category = Category::authorized()->where('slug', $request->slug)->first();
         $category = Category::authorized()->where('id', $request->id)->first();
-        
+
         if (!$category) {
             return response()->json([
                 'status' => 404,

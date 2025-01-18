@@ -11,18 +11,9 @@ import {
 } from "flowbite-react";
 
 import { RoutePath } from "@/seller/env";
-import {
-    CategoryFetchResponseType,
-    useDeleteCategoryMutation,
-    useFetchCategoriesQuery,
-    useStoreCategoryMutation,
-    useUpdateCategoryMutation,
-} from "@/seller/store/reducers/categoryApi";
 import type { FC } from "react";
 import { useState } from "react";
 import {
-    HiChevronLeft,
-    HiChevronRight,
     HiDocumentDownload,
     HiHome,
     HiOutlineExclamationCircle,
@@ -30,16 +21,17 @@ import {
     HiPlus,
     HiTrash,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
 
+import { ImageInput } from "@/seller/components/";
 import useForm from "@/seller/hooks/useForm";
 import {
+    useDeleteBrandMutation,
     useFetchBrandsQuery,
     useStoreBrandMutation,
     useUpdateBrandMutation,
 } from "@/seller/store/reducers/brandApi";
 import { ResponseType } from "@/seller/types/api";
-import { BrandType, CategoryType } from "@/seller/types/store";
+import { BrandType } from "@/seller/types/store";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const BrandsListPageContent: FC = function () {
@@ -109,21 +101,26 @@ const BrandsListPageContent: FC = function () {
 
 const AddBrandModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
-    const [storeBrand, { isLoading, error }] = useStoreBrandMutation();
+    const [createBrand, { isLoading, error }] = useStoreBrandMutation();
     const { handleChange, formState, formErrors } = useForm({
         errors: error,
     });
 
     return (
         <>
-            <Button color="blue" className="p-0" onClick={() => setOpen(true)}>
-                <div className="flex items-center gap-x-3">
-                    <HiPlus className="text-xl" />
+            <Button
+                size="sm"
+                color="blue"
+                className="p-0"
+                onClick={() => setOpen(true)}
+            >
+                <div className="flex items-center gap-x-2">
+                    <HiPencilAlt className="h-5 w-5" />
                     Create brand
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen}>
-                <Modal.Header>Create new brand</Modal.Header>
+                <Modal.Header>Create a new brand</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="flex flex-col gap-2">
@@ -179,10 +176,10 @@ const AddBrandModal: FC = function () {
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="image">Image</Label>
                             <div>
-                                <FileInput
+                                <ImageInput
                                     id="image"
                                     name="image"
-                                    placeholder="Brand Slug"
+                                    placeholder="click to upload image"
                                     color={
                                         formErrors["image"] ? "failure" : "gray"
                                     }
@@ -191,6 +188,7 @@ const AddBrandModal: FC = function () {
                                             ? formErrors["image"][0]
                                             : false
                                     }
+                                    value={formState["image"]}
                                     onChange={(
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
@@ -206,12 +204,10 @@ const AddBrandModal: FC = function () {
                     <Button
                         color="blue"
                         onClick={() => {
-                            storeBrand({
+                            createBrand({
                                 formData: formState,
-                            }).then((response) => {
-                                const data: ResponseType = response.data;
-
-                                if (data.status === 200) {
+                            }).then((response: any) => {
+                                if (response.data.status === 200) {
                                     setOpen(false);
                                 }
                             });
@@ -221,7 +217,7 @@ const AddBrandModal: FC = function () {
                         processingSpinner={<AiOutlineLoading />}
                         disabled={isLoading}
                     >
-                        Create Brand
+                        Create
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -286,7 +282,7 @@ const AllBrandsTable: FC = function () {
                         <Table.Cell>
                             <div className="flex items-center gap-x-3 whitespace-nowrap">
                                 <EditBrandModal brand={brand} />
-                                {/* <DeleteBrandModal brand={brand} /> */}
+                                <DeleteBrandModal brand={brand} />
                             </div>
                         </Table.Cell>
                     </Table.Row>
@@ -376,10 +372,10 @@ const EditBrandModal: FC<{ brand: BrandType }> = function (props) {
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="image">Image</Label>
                             <div>
-                                <FileInput
+                                <ImageInput
                                     id="image"
                                     name="image"
-                                    placeholder="Brand Slug"
+                                    placeholder="click to upload image"
                                     color={
                                         formErrors["image"] ? "failure" : "gray"
                                     }
@@ -388,6 +384,7 @@ const EditBrandModal: FC<{ brand: BrandType }> = function (props) {
                                             ? formErrors["image"][0]
                                             : false
                                     }
+                                    value={formState["image"]}
                                     onChange={(
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
@@ -427,7 +424,7 @@ const EditBrandModal: FC<{ brand: BrandType }> = function (props) {
 
 const DeleteBrandModal: FC<{ brand: BrandType }> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
+    const [deleteBrand, { isLoading }] = useDeleteBrandMutation();
     return (
         <>
             <Button
@@ -438,27 +435,27 @@ const DeleteBrandModal: FC<{ brand: BrandType }> = function (props) {
             >
                 <div className="flex items-center gap-x-2">
                     <HiTrash className="h-5 w-5" />
-                    Delete category
+                    Delete brand
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen} size="md">
                 <Modal.Header className="border-none p-2">
-                    <span className="sr-only">Delete category</span>
+                    <span className="sr-only">Delete brnad</span>
                 </Modal.Header>
                 <Modal.Body className="px-6 pb-6 pt-0">
                     <div className="flex flex-col items-center gap-y-6 text-center">
                         <HiOutlineExclamationCircle className="mx-auto h-20 w-20 text-red-600" />
                         <p className="text-xl font-normal text-gray-500 dark:text-gray-400">
                             Are you sure you want to delete this{" "}
-                            {props.category.name}?
+                            {props.brand.name}?
                         </p>
                         <div className="flex items-center gap-x-3">
                             <Button
                                 color="failure"
                                 theme={{ base: "px-0" }}
                                 onClick={() => {
-                                    deleteCategory({
-                                        categoryId: props.category.id,
+                                    deleteBrand({
+                                        brandId: props.brand.id,
                                     }).then((response: any) => {
                                         if (response.data.status === 200) {
                                             setOpen(false);
@@ -491,66 +488,66 @@ const DeleteBrandModal: FC<{ brand: BrandType }> = function (props) {
     );
 };
 
-const Pagination: FC<UsersListPageData> = function ({ usersList }) {
-    const [page, setPage] = useState(0);
-    const numEntriesPerPage = Math.min(20, usersList.length);
-    const numPages = Math.floor(usersList.length / numEntriesPerPage);
+// const Pagination: FC<UsersListPageData> = function ({ usersList }) {
+//     const [page, setPage] = useState(0);
+//     const numEntriesPerPage = Math.min(20, usersList.length);
+//     const numPages = Math.floor(usersList.length / numEntriesPerPage);
 
-    const previousPage = () => {
-        setPage(page > 0 ? page - 1 : page);
-    };
+//     const previousPage = () => {
+//         setPage(page > 0 ? page - 1 : page);
+//     };
 
-    const nextPage = () => {
-        setPage(page < numPages - 1 ? page + 1 : page);
-    };
+//     const nextPage = () => {
+//         setPage(page < numPages - 1 ? page + 1 : page);
+//     };
 
-    return (
-        <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
-            <div className="mb-4 flex items-center sm:mb-0">
-                <button
-                    onClick={previousPage}
-                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                    <span className="sr-only">Previous page</span>
-                    <HiChevronLeft className="h-7 w-7" />
-                </button>
-                <button
-                    onClick={nextPage}
-                    className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                    <span className="sr-only">Next page</span>
-                    <HiChevronRight className="h-7 w-7" />
-                </button>
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Showing&nbsp;
-                    <span className="font-semibold text-gray-900 dark:text-white">
-                        {page * usersList.length + 1}-
-                        {numEntriesPerPage * page + numEntriesPerPage}
-                    </span>
-                    &nbsp;of&nbsp;
-                    <span className="font-semibold text-gray-900 dark:text-white">
-                        {usersList.length}
-                    </span>
-                </span>
-            </div>
-            <div className="flex items-center space-x-3">
-                <Link
-                    to="#"
-                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                    <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
-                    Previous
-                </Link>
-                <Link
-                    to="#"
-                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                    Next
-                    <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
-                </Link>
-            </div>
-        </div>
-    );
-};
+//     return (
+//         <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
+//             <div className="mb-4 flex items-center sm:mb-0">
+//                 <button
+//                     onClick={previousPage}
+//                     className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+//                 >
+//                     <span className="sr-only">Previous page</span>
+//                     <HiChevronLeft className="h-7 w-7" />
+//                 </button>
+//                 <button
+//                     onClick={nextPage}
+//                     className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+//                 >
+//                     <span className="sr-only">Next page</span>
+//                     <HiChevronRight className="h-7 w-7" />
+//                 </button>
+//                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+//                     Showing&nbsp;
+//                     <span className="font-semibold text-gray-900 dark:text-white">
+//                         {page * usersList.length + 1}-
+//                         {numEntriesPerPage * page + numEntriesPerPage}
+//                     </span>
+//                     &nbsp;of&nbsp;
+//                     <span className="font-semibold text-gray-900 dark:text-white">
+//                         {usersList.length}
+//                     </span>
+//                 </span>
+//             </div>
+//             <div className="flex items-center space-x-3">
+//                 <Link
+//                     to="#"
+//                     className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+//                 >
+//                     <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
+//                     Previous
+//                 </Link>
+//                 <Link
+//                     to="#"
+//                     className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+//                 >
+//                     Next
+//                     <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
+//                 </Link>
+//             </div>
+//         </div>
+//     );
+// };
 
 export default BrandsListPageContent;

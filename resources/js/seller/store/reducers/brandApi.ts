@@ -1,5 +1,4 @@
 import { ResponseType } from "@/seller/types/api";
-import { CategoryType } from "@/seller/types/store";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
@@ -19,7 +18,7 @@ export interface UpdateCategoryPayloadType {
 export const brandApi = createApi({
     reducerPath: "brandApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Categories", "Brands"],
+    tagTypes: ["Brands"],
     endpoints: (builder) => ({
         fetchBrands: builder.query<any, void>({
             query: () => {
@@ -54,7 +53,7 @@ export const brandApi = createApi({
             },
             transformResponse: (response: any) => response,
             transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
+            invalidatesTags: ["Brands"],
         }),
         updateBrand: builder.mutation<
             any,
@@ -64,31 +63,28 @@ export const brandApi = createApi({
             }
         >({
             query: (data) => {
-                const formData = new FormData();
-                Object.keys(data.formData).map((key: string) => {
-                    formData.append(key, data.formData[key]);
-                });
-                formData.append("_method", "PUT");
-
                 return createRequest({
-                    url: `${SELLER_PREFIX}/brand`,
+                    url: `${SELLER_PREFIX}/brand/${data.brandId}`,
                     method: "POST",
-                    body: formData,
+                    body: {
+                        ...data.formData,
+                        _method: "PUT",
+                    },
                 });
             },
             transformResponse: (response: any) => response,
             transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
+            invalidatesTags: ["Brands"],
         }),
-        deleteCategory: builder.mutation<
+        deleteBrand: builder.mutation<
             any,
             {
-                categoryId: number;
+                brandId: number;
             }
         >({
             query: (data) => {
                 return createRequest({
-                    url: `${SELLER_PREFIX}/category/${data.categoryId}`,
+                    url: `${SELLER_PREFIX}/brand/${data.brandId}`,
                     method: "POST",
                     body: {
                         _method: "DELETE",
@@ -97,7 +93,7 @@ export const brandApi = createApi({
             },
             transformResponse: (response: any) => response,
             transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
+            invalidatesTags: ["Brands"],
         }),
     }),
 });
@@ -106,5 +102,5 @@ export const {
     useFetchBrandsQuery,
     useStoreBrandMutation,
     useUpdateBrandMutation,
-    useDeleteCategoryMutation,
+    useDeleteBrandMutation,
 } = brandApi;

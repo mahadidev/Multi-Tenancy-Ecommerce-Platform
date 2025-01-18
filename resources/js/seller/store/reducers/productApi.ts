@@ -1,5 +1,4 @@
 import { ResponseType } from "@/seller/types/api";
-import { CategoryType } from "@/seller/types/store";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
@@ -9,25 +8,26 @@ export interface StoreProductPayloadType {
     slug: string;
     category_id: number;
     price: number;
+    thumbnail: string;
 }
 
-export interface UpdateCategoryPayloadType {
+export interface UpdateProductPayloadType {
     name: string;
     slug: string;
-    category_id: number;
+    category_id?: number;
     price: number;
-    description: string;
+    thumbnail: string;
 }
 
 export const productApi = createApi({
     reducerPath: "productApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Categories", "Products"],
+    tagTypes: ["Products"],
     endpoints: (builder) => ({
-        fetchCategories: builder.query<any, void>({
+        fetchProducts: builder.query<any, void>({
             query: () => {
                 return createRequest({
-                    url: `${SELLER_PREFIX}/category`,
+                    url: `${SELLER_PREFIX}/product`,
                     method: "GET",
                 });
             },
@@ -35,7 +35,7 @@ export const productApi = createApi({
                 return response;
             },
             transformErrorResponse: (error: any) => error.data,
-            providesTags: ["Categories"],
+            providesTags: ["Products"],
         }),
         storeProduct: builder.mutation<
             any,
@@ -45,25 +45,25 @@ export const productApi = createApi({
         >({
             query: (data) => {
                 return createRequest({
-                    url: `${SELLER_PREFIX}/category`,
+                    url: `${SELLER_PREFIX}/product`,
                     method: "POST",
                     body: data.formData,
                 });
             },
             transformResponse: (response: ResponseType) => response,
             transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
+            invalidatesTags: ["Products"],
         }),
-        UpdateCategory: builder.mutation<
+        UpdateProduct: builder.mutation<
             any,
             {
-                formData: UpdateCategoryPayloadType;
-                categoryId: number;
+                formData: UpdateProductPayloadType;
+                productId: number;
             }
         >({
             query: (data) => {
                 return createRequest({
-                    url: `${SELLER_PREFIX}/category/${data.categoryId}`,
+                    url: `${SELLER_PREFIX}/category/${data.productId}`,
                     method: "POST",
                     body: {
                         _method: "PUT",
@@ -73,17 +73,17 @@ export const productApi = createApi({
             },
             transformResponse: (response: any) => response,
             transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
+            invalidatesTags: ["Products"],
         }),
-        deleteCategory: builder.mutation<
+        deleteProduct: builder.mutation<
             any,
             {
-                categoryId: number;
+                productId: number;
             }
         >({
             query: (data) => {
                 return createRequest({
-                    url: `${SELLER_PREFIX}/category/${data.categoryId}`,
+                    url: `${SELLER_PREFIX}/product/${data.productId}`,
                     method: "POST",
                     body: {
                         _method: "DELETE",
@@ -92,9 +92,14 @@ export const productApi = createApi({
             },
             transformResponse: (response: any) => response,
             transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
+            invalidatesTags: ["Products"],
         }),
     }),
 });
 
-export const { useStoreProductMutation } = productApi;
+export const {
+    useFetchProductsQuery,
+    useStoreProductMutation,
+    useUpdateProductMutation,
+    useDeleteProductMutation,
+} = productApi;
