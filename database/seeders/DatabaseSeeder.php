@@ -16,9 +16,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             UserSeeder::class,
+            PageTypeSeeder::class,
+            ThemeSeeder::class,
             // SellerAccountSeeder::class,
             // WidgetSeeder::class,
-            // ThemeSeeder::class,
         ]);
     }
 }

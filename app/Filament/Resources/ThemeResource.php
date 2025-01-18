@@ -36,11 +36,15 @@ class ThemeResource extends Resource
                     ->unique(Theme::class, 'name', ignoreRecord: true)
                     ->maxLength(255)
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('thumbnail')
-                    ->disk('public')
-                    ->label('Thumbnail')
-                    ->directory('themes')
-                    ->image()
+                // Forms\Components\FileUpload::make('thumbnail')
+                //     ->disk('public')
+                //     ->label('Thumbnail')
+                //     ->directory('themes')
+                //     ->image()
+                //     ->columnSpanFull()
+                //     ->required(),
+                Forms\Components\TextInput::make('thumbnail')
+                    ->label('Thumbnail URL')
                     ->columnSpanFull()
                     ->required(),
 
@@ -139,7 +143,7 @@ class ThemeResource extends Resource
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('slug')->sortable()->searchable(),
                 Tables\Columns\BooleanColumn::make('is_active')->label('Active'),
-                Tables\Columns\ImageColumn::make('thumbnail')->label('Thumbnail'),
+                // Tables\Columns\ImageColumn::make('thumbnail')->label('Thumbnail'),
                 Tables\Columns\TextColumn::make('created_at')->label('Created')->dateTime(),
             ])
             ->filters([])
