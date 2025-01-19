@@ -44,6 +44,11 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
     Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
 
+    // Store Page Widget Routes
+    Route::get('stores/pages/{pageId}/widgets', [StorePageWidgetController::class, 'index']);
+    Route::get('stores/pages/{pageId}/widgets/{widgetId}', [StorePageWidgetController::class, 'view']);
+
+
     // Store Page Widget Input Routes
     Route::get('stores/pages/widgets/{pageWidgetId}/inputs', [StorePageWidgetInputController::class, 'index']);
     Route::get('stores/pages/widgets/{pageWidgetId}/inputs/{id}', [StorePageWidgetInputController::class, 'show']);
