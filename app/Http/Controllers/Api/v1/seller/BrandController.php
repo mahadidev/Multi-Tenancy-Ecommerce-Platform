@@ -35,7 +35,9 @@ class BrandController extends Controller
         return response()->json(
             [
                 'status' => 200,
-                'data' => BrandResource::collection($brands),
+                'data' => [
+                    'brands' => BrandResource::collection($brands),
+                ],
                 'meta' => [
                     'current_page' => $brands->currentPage(),
                     'first_page_url' => $brands->url(1),
@@ -73,7 +75,9 @@ class BrandController extends Controller
             [
                 'status' => 200,
                 'message' => 'Brand created successfully',
-                'data' => new BrandResource($brand),
+                'data' => [
+                    'brand' => new BrandResource($brand),
+                ],
             ],
             200,
         );

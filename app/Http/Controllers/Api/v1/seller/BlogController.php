@@ -22,7 +22,9 @@ class BlogController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => BlogResource::collection($blogs),
+            'data' => [
+                'blogs' => BlogResource::collection($blogs),
+            ],
         ]);
     }
 
@@ -33,8 +35,18 @@ class BlogController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (Blog::where('title', $value)->where('user_id', Auth::id())->exists()) {
+                        $fail('The title has already been taken.');
+                    }
+                },
+            ],
             'content' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|url',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
@@ -60,7 +72,9 @@ class BlogController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Blog created successfully',
-            'data' =>  new BlogResource($blog),
+            'data' =>  [
+                'blog' => new BlogResource($blog),
+            ],
         ]);
     }
 
@@ -81,7 +95,9 @@ class BlogController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' =>  new BlogResource($blog),
+            'data' =>  [
+                'blog' => new BlogResource($blog),
+            ],
         ]);
     }
 
@@ -102,7 +118,7 @@ class BlogController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|url',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
