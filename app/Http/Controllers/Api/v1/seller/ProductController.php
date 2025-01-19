@@ -15,18 +15,38 @@ class ProductController extends Controller
 
         return apiResponse(function () use ($request) {
             return response()->json([
-                'products' => ProductService::index($request)
+                'status' => 200,
+                'data' => ProductService::index($request),
+                'meta' => [
+                    'current_page' => ProductService::index($request)->currentPage(),
+                    'first_page_url' => ProductService::index($request)->url(1),
+                    'last_page' => ProductService::index($request)->lastPage(),
+                    'last_page_url' => ProductService::index($request)->url(ProductService::index($request)->lastPage()),
+                    'next_page_url' => ProductService::index($request)->nextPageUrl(),
+                    'prev_page_url' => ProductService::index($request)->previousPageUrl(),
+                    'total' => ProductService::index($request)->total(),
+                    'per_page' => ProductService::index($request)->perPage(),
+                ]
             ]);
         });
     }
 
     public function show(Request $request, $id)
     {
-
         return apiResponse(function () use ($request, $id) {
-            return response()->json([
-                'product' => ProductService::show($request, $id)
-            ]);
+            $product = ProductService::show($request, $id);
+            if ($product == null) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "product not found",
+                    'data' => $product,
+                ], 404);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $product,
+                ]);
+            }
         });
 
     }
@@ -35,8 +55,8 @@ class ProductController extends Controller
     {
         return apiResponse(function () use ($request) {
             return response()->json([
-                "status" => 200,
-                "message" => "product created successfully",
+                'status' => 200,
+                'message' => "product created successfully",
                 'product' => ProductService::store($request)
             ]);
         });
@@ -45,11 +65,20 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         return apiResponse(function () use ($request, $id) {
-            return response()->json([
-                "status" => 200,
-                "message" => "product update successfully",
-                'product' => ProductService::update($request, $id)
-            ]);
+            $product = ProductService::update($request, $id);
+            if ($product == null) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "product not found",
+                    'data' => $product,
+                ], 404);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "product updated successfully",
+                    'data' => $product,
+                ]);
+            }
         });
     }
 
@@ -57,10 +86,20 @@ class ProductController extends Controller
     {
 
         return apiResponse(function () use ($request, $id) {
-            return response()->json([
-                "status" => 200,
-                'message' => ProductService::destroy($request, $id)
-            ]);
+            $product = ProductService::destroy($request, $id);
+            if ($product == null) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "product not found",
+                    'data' => $product,
+                ], 404);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "product deleted successfully",
+                    'data' => $product,
+                ]);
+            }
         });
     }
 

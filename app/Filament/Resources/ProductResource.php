@@ -299,6 +299,14 @@ class ProductResource extends Resource
                         ])->columnSpan(6),
                 ]),
 
+            // Full-width short description
+            Forms\Components\Card::make('Short Description')
+                ->schema([
+                    Forms\Components\Textarea::make('short_description')
+                        ->label('Short Description')
+                        ->rows(3),
+                ]),
+
             // Full-width description
             Forms\Components\Card::make('Description')
                 ->schema([
@@ -336,8 +344,8 @@ class ProductResource extends Resource
                                 ->appendFiles()
                                 ->openable()
                                 ->downloadable()
-                                ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
-                                ->required(),
+                                ->imageEditorAspectRatios(['16:9', '4:3', '1:1']),
+                                // ->required(),
                         ]),
                 ]),
 
