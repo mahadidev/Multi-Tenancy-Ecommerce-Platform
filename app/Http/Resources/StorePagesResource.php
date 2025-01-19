@@ -18,10 +18,10 @@ class StorePagesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
             'slug' => $this->slug,
             'title' => $this->title,
             'is_active' => $this->is_active,
+            'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
             'widgets' => $this->widgets ? StorePageWidgetsResource::collection($this->widgets) : []
