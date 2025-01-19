@@ -1,3 +1,5 @@
+import { RoutePath } from "@/seller/env";
+import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
     authApi,
     LoginPayloadType,
@@ -5,16 +7,15 @@ import {
     useLoginUserMutation,
     useRegisterUserMutation,
 } from "@/seller/store/reducers/authApi";
+import { storeApi } from "@/seller/store/reducers/storeApi";
 import { useNavigate } from "react-router-dom";
-import { RoutePath } from "../env";
-import { useAppDispatch } from "../store";
-import { storeApi } from "../store/reducers/storeApi";
 import { removeAuth, setAuth } from "../store/slices/authSlice";
 import { removeStore, setStoreResponse } from "../store/slices/storeSlice";
 
 const useAuth = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
 
     const [onLogin, { isLoading: isLoginLoading, error: isLoginError }] =
         useLoginUserMutation();
@@ -72,6 +73,7 @@ const useAuth = () => {
         register,
         isRegisterLoading,
         isRegisterError,
+        user,
     };
 };
 

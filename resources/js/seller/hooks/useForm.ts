@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from "react";
 
 const useForm = (props: any) => {
-    const [formState, setFormState] = useState<any>({});
+    const [formState, setFormState] = useState<any>(
+        props.defaultState ? props.defaultState : {}
+    );
     const [formErrors, setFormErrors] = useState<any>({});
 
     const handleChange = (
