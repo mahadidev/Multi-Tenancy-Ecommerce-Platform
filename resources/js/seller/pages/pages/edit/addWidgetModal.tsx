@@ -1,35 +1,26 @@
 import usePage from "@/seller/hooks/usePage";
 import { useFetchPageTypesQuery } from "@/seller/store/reducers/pageApi";
 import { useFetchThemeQuery } from "@/seller/store/reducers/themeApi";
-import { PageTypeType, StorePageType } from "@/seller/types";
+import { PageTypeType, StorePageType, WidgetType } from "@/seller/types";
 import { Button, Label, Modal, Select } from "flowbite-react";
 import { useState } from "react";
 
-export default function WidgetModal() {
+export default function AddWidgetModal() {
     const { addWidgets, store, page } = usePage();
-    const pageData: StorePageType | null = page;
     const [openModal, setOpenModal] = useState(false);
     const { data: themeResponse } = useFetchThemeQuery(store.theme_id);
     const [type, setType] = useState<number | null>(null);
-    const [selectedWidgets, setSelectedWidgets] = useState<any[]>([]);
+    const [selectedWidgets] = useState<WidgetType[]>([]);
+    const [selectedWidget, setSelectedWidget] = useState<WidgetType | null>();
     const { data: pageTypeResponse } = useFetchPageTypesQuery();
 
-    const handleChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        item: any
-    ) => {
-        setSelectedWidgets((prev) => {
-            if (event.target.checked) {
-                return [...prev, item];
-            } else {
-                return [...prev.filter((prevItem) => prevItem.id !== item.id)];
-            }
-        });
+    const handleChange = (item: any) => {
+        setSelectedWidget(item);
     };
 
     return (
         <>
-            {pageData && (
+            {page && (
                 <>
                     <div className="p-4 sm:p-10">
                         <div
@@ -79,8 +70,7 @@ export default function WidgetModal() {
                                                 key={index}
                                                 value={type.id}
                                                 selected={
-                                                    pageData?.type.id ===
-                                                    type.id
+                                                    page.type?.id === type.id
                                                 }
                                             >
                                                 {type.label}
@@ -94,11 +84,11 @@ export default function WidgetModal() {
                                     (type &&
                                     themeResponse.data.theme.pages.find(
                                         (page: StorePageType) =>
-                                            page.type.id == type
+                                            page.type?.id == type
                                     )
                                         ? themeResponse.data.theme.pages.find(
                                               (page: StorePageType) =>
-                                                  page.type.id == type
+                                                  page.type?.id == type
                                           ).widgets
                                         : themeResponse.data.theme.all_widgets
                                     ).map((item: any, index: number) => (
@@ -119,10 +109,8 @@ export default function WidgetModal() {
                                                         ? true
                                                         : false
                                                 }
-                                                onChange={(
-                                                    event: React.ChangeEvent<HTMLInputElement>
-                                                ) => {
-                                                    handleChange(event, item);
+                                                onChange={() => {
+                                                    handleChange(item);
                                                 }}
                                             />
                                             <label
@@ -160,17 +148,18 @@ export default function WidgetModal() {
                             </Button>
                             <Button
                                 color="blue"
-                                onClick={() =>
-                                    addWidgets.add({
-                                        pageData: pageData,
-                                        widgetsData: selectedWidgets,
-                                        onSuccess: () => {
-                                            setOpenModal(false);
-                                            setSelectedWidgets([]);
-                                        },
-                                    })
-                                }
-                                disabled={selectedWidgets.length === 0}
+                                onClick={() => {
+                                    if (selectedWidget) {
+                                        addWidgets.add({
+                                            formData: selectedWidget,
+                                            onSuccess: () => {
+                                                setOpenModal(false);
+                                                setSelectedWidget(null);
+                                            },
+                                        });
+                                    }
+                                }}
+                                disabled={!selectedWidget}
                             >
                                 Add Widget
                             </Button>

@@ -1,7 +1,9 @@
 import { WidgetInputType } from "@/seller/types";
+import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+import { setPage } from "../slices/pageSlice";
 
 export interface CreatePagePayloadType {
     name: string;
@@ -28,18 +30,17 @@ export const pageApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Pages", "Page", "PageTypes"],
     endpoints: (builder) => ({
-        fetchPages: builder.query<any, string>({
+        fetchPages: builder.query<ResponseType, string>({
             query: (string) =>
                 createRequest({
                     url: `${SELLER_PREFIX}/stores/${string}/pages`,
                     method: "get",
                 }),
-            transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Pages"],
         }),
         fetchPage: builder.query<
-            any,
+            ResponseType,
             {
                 storeId: number | string;
                 pageId: number | string;
@@ -50,9 +51,13 @@ export const pageApi = createApi({
                     url: `${SELLER_PREFIX}/stores/${props.storeId}/pages/${props.pageId}`,
                     method: "get",
                 }),
-            transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Page"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setPage(response.data.data.page));
+                });
+            },
         }),
         getPage: builder.mutation<
             any,

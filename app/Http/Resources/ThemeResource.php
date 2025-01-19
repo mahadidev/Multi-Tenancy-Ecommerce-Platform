@@ -47,8 +47,6 @@ class ThemeResource extends JsonResource
                                 'id' => $widget->id,
                                 'name' => $widget->name,
                                 'label' => $widget->label,
-                                'type' => $widget->type,
-                                'value' => $widget->value,
                                 'thumbnail' => $widget->thumbnail ? url(Storage::url($widget->thumbnail)) : null,
                                 'inputs' => json_decode($widget->inputs),
                             ];

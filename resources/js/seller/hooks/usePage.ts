@@ -1,66 +1,60 @@
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
-    CreatePagePayloadType,
     UpdatePagePayloadType,
-    useCreatePageMutation,
+    useFetchPageQuery,
     useUpdatePageMutation,
 } from "@/seller/store/reducers/pageApi";
 import {
-    StorePageType,
     StoreType,
+    WidgetInputItemType,
     WidgetInputType,
     WidgetType,
 } from "@/seller/types";
 import { useParams } from "react-router-dom";
-import { useDeleteWidgetMutation } from "../store/reducers/widgetApi";
+import {
+    CreateWidgetPayloadType,
+    useCreateWidgetMutation,
+    useDeleteWidgetMutation,
+    useFetchWidgetsQuery,
+    widgetApi,
+} from "../store/reducers/widgetApi";
 import {
     setSelected as setPageSelected,
-    setPage as setPageState,
     SetSelectedPayloadType,
     setWidget as setSelectedWidget,
+    setWidgets,
 } from "../store/slices/pageSlice";
 
 const usePage = () => {
     const { currentStore } = useAppSelector((state) => state.store);
-    const { page, selected, widget } = useAppSelector((state) => state.page);
+    const { page, selected, widget, widgets } = useAppSelector(
+        (state) => state.page
+    );
     const store: StoreType = currentStore;
     const dispatch = useAppDispatch();
+    const params = useParams();
+    const { id: pageId } = params;
+    // call fetch page api
+    useFetchPageQuery({
+        storeId: store.id,
+        pageId: pageId ?? 0,
+    });
+    // call fetch page widget api
+    useFetchWidgetsQuery({
+        pageId: pageId ?? 0,
+    });
 
-    const [onCreatePage, { error: createError, isLoading: isCreateLoading }] =
-        useCreatePageMutation();
     const [onUpdatePage, { isLoading: isUpdateLoading, error: updateError }] =
         useUpdatePageMutation();
     const [
         onAddWidgets,
         { isLoading: isAddWidgetsLoading, error: addWidgetsError },
-    ] = useUpdatePageMutation();
+    ] = useCreateWidgetMutation();
     const [
         onDeleteWidget,
         { isLoading: isDeleteWidgetLoading, error: deleteWidgetError },
     ] = useDeleteWidgetMutation();
-
-    const createPage = ({
-        pageData,
-        onSuccess,
-    }: {
-        pageData: CreatePagePayloadType;
-        onSuccess?: CallableFunction;
-    }) => {
-        onCreatePage({
-            storeId: store.id,
-            formData: pageData,
-        }).then((response) => {
-            if (response.data.status === 200) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
-
-    // if inside any page
-    const params = useParams();
-    const { id: pageId } = params;
+    const [reFetchWidget] = widgetApi.endpoints.fetchWidgets.useLazyQuery();
 
     const updatePage = ({
         pageData,
@@ -82,38 +76,22 @@ const usePage = () => {
         });
     };
 
-    const setPage = (pageData: StorePageType) => {
-        dispatch(setPageState(pageData));
-    };
-
     const setWidget = (widgetData: WidgetType) => {
         dispatch(setSelectedWidget(widgetData));
     };
 
     const addWidgets = ({
-        widgetsData,
+        formData,
         onSuccess,
-        pageData,
     }: {
-        widgetsData: {
-            name: string;
-            label: string;
-            inputs: WidgetInputType[];
-        }[];
+        formData: CreateWidgetPayloadType;
         onSuccess?: CallableFunction;
-        pageData: StorePageType | undefined;
     }) => {
         onAddWidgets({
-            storeId: store.id,
             pageId: pageId ? pageId : 0,
-            formData: {
-                widgets: [
-                    ...(pageData && pageData.widgets ? pageData.widgets : []),
-                    ...widgetsData,
-                ],
-            },
+            formData: formData,
         }).then((response) => {
-            if (response.data.status === 200) {
+            if (response?.data?.status === 200) {
                 if (onSuccess) {
                     onSuccess();
                 }
@@ -144,78 +122,103 @@ const usePage = () => {
         dispatch(setPageSelected(payload));
     };
 
-    const onChangePageInput = ({
-        type,
-        target,
-        selected,
+    const onChangeWidgetInput = ({
+        event,
+        input,
     }: {
-        type: "item" | "input";
-        target: {
-            name: string;
-            value: string;
-        };
-        selected: SetSelectedPayloadType;
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+        input: WidgetInputType;
     }) => {
-        if (page && widget && selected) {
-            const updatedPage: StorePageType = {
-                ...page,
-                widgets: [
-                    ...page.widgets.filter(
-                        (widgetItem) => widgetItem.id !== widget.id
+        const { value } = event.target;
+        const findWidget = widgets.find(
+            (findWidget) => findWidget.id === (widget?.id ?? 1)
+        );
+
+        if (findWidget) {
+            dispatch(
+                setWidgets([
+                    ...widgets.filter(
+                        (filterWidget) => filterWidget.id !== findWidget.id
                     ),
                     {
-                        ...widget,
+                        ...findWidget,
                         inputs: [
-                            ...widget.inputs.filter(
-                                (inputItem) =>
-                                    inputItem.name !== selected.input.name
+                            ...findWidget.inputs.filter(
+                                (filterInput) => filterInput.id !== input.id
                             ),
                             {
-                                ...(type === "input"
-                                    ? {
-                                          ...selected.input,
-                                          value: target.value,
-                                      }
-                                    : selected.input),
+                                ...input,
+                                value: value,
+                            },
+                        ],
+                    },
+                ])
+            );
+        }
+    };
+
+    const onChangeWidgetInputItem = ({
+        event,
+        input,
+        item,
+    }: {
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+        input: WidgetInputType;
+        item: WidgetInputItemType;
+    }) => {
+        const { value } = event.target;
+        const findWidget = widgets.find(
+            (findWidget) => findWidget.id === (widget?.id ?? 1)
+        );
+
+        if (findWidget && widgets) {
+            dispatch(
+                setWidgets([
+                    ...widgets.filter(
+                        (filterWidget) => filterWidget.id !== findWidget.id
+                    ),
+                    {
+                        ...findWidget,
+                        inputs: [
+                            ...findWidget.inputs.filter(
+                                (filterInput) => filterInput.id !== input.id
+                            ),
+                            {
+                                ...input,
                                 items: [
-                                    ...(selected.items
-                                        ? selected.items.filter(
-                                              (itemsItem) =>
-                                                  itemsItem.id !==
-                                                  selected.item?.id
+                                    ...(input.items
+                                        ? input.items.filter(
+                                              (filterItem) =>
+                                                  filterItem.id !== item.id
                                           )
                                         : []),
-                                    ...(selected.item
-                                        ? [
-                                              {
-                                                  ...selected.item,
-                                                  value: target.value,
-                                              },
-                                          ]
-                                        : []),
+                                    {
+                                        ...item,
+                                        value: value,
+                                    },
                                 ],
                             },
                         ],
                     },
-                ],
-            };
-
-            setPage(updatedPage);
+                ])
+            );
         }
     };
 
+    const onWidgetReset = () => {
+        reFetchWidget({ pageId: page?.id ?? 0 }).then((response) =>
+            setWidget(response.data?.data.widgets)
+        );
+    };
+
+    const onSaveWidgets = () => {};
+
     return {
-        createPage: {
-            create: createPage,
-            isLoading: isCreateLoading,
-            error: createError,
-        },
         updatePage: {
             update: updatePage,
             isLoading: isUpdateLoading,
             error: updateError,
         },
-        setPage,
         setWidget,
         addWidgets: {
             add: addWidgets,
@@ -227,13 +230,21 @@ const usePage = () => {
             isLoading: isDeleteWidgetLoading,
             error: deleteWidgetError,
         },
+        saveWidgets: {
+            save: onSaveWidgets,
+            isLoading: false,
+            error: null,
+        },
+        onWidgetReset,
         page,
+        widgets,
         widget,
         pageId: pageId,
         store,
         setSelected,
         selected,
-        onChangePageInput,
+        onChangeWidgetInput,
+        onChangeWidgetInputItem,
     };
 };
 

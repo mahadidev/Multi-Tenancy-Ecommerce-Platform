@@ -14,10 +14,12 @@ export interface SetSelectedPayloadType {
 
 const initialState: {
     page: StorePageType | null;
+    widgets: WidgetType[];
     widget: WidgetType | null;
     selected: SetSelectedPayloadType | null;
 } = {
     page: null,
+    widgets: [],
     widget: null,
     selected: null,
 };
@@ -27,6 +29,9 @@ const pageSlice = createSlice({
     reducers: {
         setPage: (state, action: PayloadAction<StorePageType>) => {
             state.page = action.payload;
+        },
+        setWidgets: (state, action: PayloadAction<WidgetType[]>) => {
+            state.widgets = action.payload;
         },
         setWidget: (state, action: PayloadAction<WidgetType>) => {
             state.widget = action.payload;
@@ -39,5 +44,6 @@ const pageSlice = createSlice({
         },
     },
 });
-export const { setPage, setSelected, setWidget } = pageSlice.actions;
+export const { setPage, setWidgets, setSelected, setWidget } =
+    pageSlice.actions;
 export default pageSlice.reducer;

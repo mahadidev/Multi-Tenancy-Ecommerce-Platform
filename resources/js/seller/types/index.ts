@@ -37,7 +37,15 @@ export interface WidgetInputItemType {
     placeholder?: string;
     value: string;
     required: boolean;
-    type: "text" | "image" | "file" | "textarea" | "email" | "tel";
+    type:
+        | "text"
+        | "image"
+        | "file"
+        | "textarea"
+        | "email"
+        | "tel"
+        | "array"
+        | "color";
 }
 export interface WidgetInputType {
     id: number;
@@ -46,7 +54,15 @@ export interface WidgetInputType {
     placeholder?: string;
     value?: string;
     required?: boolean;
-    type: "text" | "image" | "file" | "textarea" | "email" | "tel" | "array";
+    type:
+        | "text"
+        | "image"
+        | "file"
+        | "textarea"
+        | "email"
+        | "tel"
+        | "array"
+        | "color";
     items?: WidgetInputItemType[];
 }
 

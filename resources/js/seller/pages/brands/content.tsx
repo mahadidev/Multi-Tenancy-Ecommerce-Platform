@@ -247,7 +247,7 @@ const AllBrandsTable: FC = function () {
                 <Table.HeadCell />
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {brandsResponse?.data?.brands.map((brand: BrandType) => (
+                {brandsResponse?.data?.map((brand: BrandType) => (
                     <Table.Row
                         key={brand.id}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
