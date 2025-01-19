@@ -106,32 +106,13 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'logo_url' => 'nullable|string|max:255',
-            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'dark_logo_url' => 'nullable|string|max:255',
+            'logo' => 'nullable|string|max:255',
+            'dark_logo' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
             "theme_id" => "nullable|exists:themes,id",
             'description' => 'nullable|string',
         ]);
-
-
-        // Handle the logo file upload if present
-        $logoPath = null;
-        if ($request->hasFile('logo') && isset($request->logo)) {
-            $logoPath = $request->file('logo')->store('stores', 'public');
-        } else if ($request->logo_url) {
-            $logoPath = $request->logo_url;
-        }
-
-        $darkLogoPath = null;
-        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        } else if ($request->dark_logo_url) {
-            $darkLogoPath = $request->dark_logo_url;
-        }
-
 
         // Create a new store record
         $store = Store::create([
@@ -143,9 +124,9 @@ class StoreController extends Controller
             'phone' => $request->phone ?? null,
             'location' => $request->location ?? null,
             'currency' => $request->currency ?? 'BDT',
-            'logo' => $logoPath,
+            'logo' => $request->logo ?? null,
             "theme_id" => $theme_id ?? Theme::first()->id,
-            'dark_logo' => $darkLogoPath,
+            'dark_logo' => $request->logo ?? null,
             'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null,
             'type' => $request->type ?? null,
@@ -185,10 +166,8 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'logo_url' => 'nullable|string|max:255',
-            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'dark_logo_url' => 'nullable|string|max:255',
+            'logo' => 'nullable|string|max:255',
+            'dark_logo' => 'nullable|string|max:255',
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
             'settings' => 'nullable|array|max:1000000',
@@ -196,21 +175,6 @@ class StoreController extends Controller
             'type' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
-
-        // Handle the logo file upload if present
-        $logoPath = null;
-        if ($request->hasFile('logo') && isset($request->logo)) {
-            $logoPath = $request->file('logo')->store('stores', 'public');
-        } else if ($request->logo_url) {
-            $logoPath = $request->logo_url;
-        }
-
-        $darkLogoPath = null;
-        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        } else if ($request->dark_logo_url) {
-            $darkLogoPath = $request->dark_logo_url;
-        }
 
         $theme_id = $store->theme_id;
         if ($request->theme_id) {
@@ -232,8 +196,8 @@ class StoreController extends Controller
             'location' => $request->location ?? $store->location,
             'currency' => $request->currency ?? $store->currency,
             'status' => $request->status ?? $store->status, // Retain the existing status if not provided
-            'logo' => $logoPath ?? $store->logo,
-            'dark_logo' => $darkLogoPath ?? $store->dark_logo,
+            'logo' => $request->logo ?? $store->logo,
+            'dark_logo' => $request->dark_logo ?? $store->dark_logo,
             'primary_color' => $request->primary_color ?? $store->primary_color,
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
             'theme_id' => $theme_id,
