@@ -1,0 +1,40 @@
+{
+	"index": {
+		"status": 200,
+		"data": [],
+		"meta": []
+	},
+	"show": {
+		"status": 200,
+		"data": {}
+	},
+	"store": {
+		"status": 200,
+		"message": "successmessage",
+		"data": {}
+	},
+	"update": {
+		"status": 200,
+		"message": "successmessage",
+		"data": {}
+	},
+	"notfound": {
+		"status": 404,
+		"message": "not found message"
+	},
+	"fieldMissingError": {
+		"status": 422,
+		"message": "The email field is required. (and 1 more error)",
+		"errors": {
+			"email": ["The email field is required."],
+			"password": ["The password field is required."]
+		}
+	},
+	"notinexist": {
+		"status": 422,
+		"message": "The category id not found",
+		"errors": {
+			"category_id": ["The cateogry id is wrong."]
+		}
+	}
+}

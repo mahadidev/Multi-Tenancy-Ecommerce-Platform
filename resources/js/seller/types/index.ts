@@ -1,8 +1,3 @@
-export interface LogoType {
-    primary: string | null;
-    dark: string | null;
-}
-
 export interface SocialMediaType {
     name: string;
     label: string;
@@ -25,7 +20,8 @@ export interface StoreType {
     type: string;
     description: string | null;
     currency: string;
-    logos: LogoType;
+    logo: string;
+    dark_logo?: string;
     primary_color: null | string;
     secondary_color: null | string;
     theme_id: number;
