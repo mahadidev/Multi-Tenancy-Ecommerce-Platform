@@ -9,40 +9,51 @@ use App\Models\Store;
 use App\Models\StorePage;
 use App\Models\StorePageWidget;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StorePageController extends Controller
 {
-    public function pages(Request $request, $store_id)
+    public function index(Request $request, $store_id)
     {
-        $store = Store::active()->find($store_id);
+        $store = Store::storeOwner()->find($store_id);
+
         if (!$store) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store id'
-            ], 404);
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store id',
+                ],
+                404,
+            );
         }
 
-        $pages = StorePage::with('widgets')->where('store_id', $store->id)->get();
+        $pages = StorePage::with('widgets')
+            ->where('store_id', $store->id)
+            ->get();
 
-        return response()->json([
-            'status' => 200,
-            'data' => [
-                'pages' => StorePagesResource::collection($pages)
-            ]
-        ], 200);
-
+        return response()->json(
+            [
+                'status' => 200,
+                'data' => [
+                    'pages' => StorePagesResource::collection($pages),
+                ],
+            ],
+            200,
+        );
     }
 
     public function store(Request $request, $store_id)
     {
-
-        $store = Store::storeOwner()->active()->find($store_id);
+        $store = Store::storeOwner()->find($store_id);
 
         if (!$store) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store id'
-            ], 404);
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store id',
+                ],
+                404,
+            );
         }
 
         $validatedData = $request->validate([
@@ -51,6 +62,23 @@ class StorePageController extends Controller
             'type' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
             'is_active' => 'required|boolean',
+            'widgets' => 'nullable|array',
+            'widgets.*.name' => 'required|string',
+            'widgets.*.label' => 'required|string',
+            'widgets.*.inputs' => 'nullable|array',
+            'widgets.*.inputs.*.name' => 'required|string',
+            'widgets.*.inputs.*.label' => 'required|string',
+            'widgets.*.inputs.*.placeholder' => 'nullable|string',
+            'widgets.*.inputs.*.value' => 'nullable|string',
+            'widgets.*.inputs.*.required' => 'required|boolean',
+            'widgets.*.inputs.*.type' => 'required|string',
+            'widgets.*.inputs.*.items' => 'nullable|array',
+            'widgets.*.inputs.*.items.*.name' => 'required|string',
+            'widgets.*.inputs.*.items.*.label' => 'required|string',
+            'widgets.*.inputs.*.items.*.placeholder' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.value' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.required' => 'required|boolean',
+            'widgets.*.inputs.*.items.*.type' => 'nullable|string',
         ]);
 
         // Add the $store_id from the route to the validated data
@@ -58,40 +86,95 @@ class StorePageController extends Controller
 
         $storePage = StorePage::create($validatedData);
 
+        // Create the widgets for the store page if they exist
+        if ($request->has('widgets')) {
+            foreach ($request->widgets as $widget) {
+                $storePageWidgetData = [
+                    'name' => $widget['name'],
+                    'label' => $widget['label'],
+                ];
 
-        return response()->json([
-            'message' => 'Store page created successfully.',
-            'data' => new StorePagesResource($storePage->load('widgets')),
-            'status' => 200
-        ], 200);
+                $storePageWidget = $storePage->widgets()->create($storePageWidgetData);
+
+                // Create the inputs for the widget
+                if (isset($widget['inputs'])) {
+                    foreach ($widget['inputs'] as $input) {
+                        $inputData = [
+                            'name' => $input['name'],
+                            'label' => $input['label'],
+                            'placeholder' => $input['placeholder'],
+                            'value' => $input['value'],
+                            'required' => $input['required'],
+                            'type' => $input['type'],
+                        ];
+
+                        $storePageWidgetInput = $storePageWidget->widgetInputs()->create($inputData);
+
+                        // Create the items for the input
+                        if (isset($input['items'])) {
+                            foreach ($input['items'] as $item) {
+                                $itemData = [
+                                    'name' => $item['name'],
+                                    'label' => $item['label'],
+                                    'placeholder' => $item['placeholder'],
+                                    'value' => $item['value'],
+                                    'required' => $item['required'],
+                                    'type' => $item['type'],
+                                ];
+
+                                $storePageWidgetInput->items()->create($itemData);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Store page created successfully.',
+                'data' => new StorePagesResource($storePage->load('widgets')),
+            ]
+        );
     }
 
     public function view(Request $request, $store_id, $page_id)
     {
-
         $store = Store::active()->find($store_id);
         if (!$store) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store id'
-            ], 404);
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store id',
+                ],
+                404,
+            );
         }
 
-        $page = StorePage::with('widgets')->where('store_id', $store->id)->where('id', $page_id)->first();
+        $page = StorePage::with('widgets')
+            ->where('store_id', $store->id)
+            ->where('id', $page_id)
+            ->first();
         if (!$page) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store page id'
-            ], 404);
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store page id',
+                ],
+                404,
+            );
         }
 
-        return response()->json([
-            'status' => 200,
-            'data' => [
-                'page' => new StorePagesResource($page)
-            ]
-        ], 200);
-
+        return response()->json(
+            [
+                'status' => 200,
+                'data' => [
+                    'page' => new StorePagesResource($page),
+                ],
+            ],
+            200,
+        );
     }
 
     public function update(Request $request, $store_id, $store_page_id)
@@ -100,41 +183,162 @@ class StorePageController extends Controller
         $store = Store::storeOwner()->active()->find($store_id);
 
         if (!$store) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store id',
-            ], 404);
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store id',
+                ],
+                404,
+            );
         }
 
         // Find the store page to update
         $storePage = StorePage::where('store_id', $store_id)->find($store_page_id);
 
         if (!$storePage) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store page id',
-            ], 404);
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store page id',
+                ],
+                404,
+            );
         }
-
 
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'nullable|string',
-            'type' => 'nullable|exists:page_types,id',
-            'slug' => 'nullable|string|max:25|unique:store_pages,slug,' . $storePage->id,
+            'name' => 'required|string',
+            'slug' => [
+                'nullable',
+                'string',
+                'max:25',
+                Rule::unique('store_pages', 'slug')->ignore($store_page_id), // Unique rule for update
+            ],
+            'type' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
+            'is_active' => 'required|boolean',
+            'widgets' => 'nullable|array',
+            'widgets.*.name' => 'required|string',
+            'widgets.*.label' => 'required|string',
+            'widgets.*.inputs' => 'nullable|array',
+            'widgets.*.inputs.*.name' => 'required|string',
+            'widgets.*.inputs.*.label' => 'required|string',
+            'widgets.*.inputs.*.placeholder' => 'nullable|string',
+            'widgets.*.inputs.*.value' => 'nullable|string',
+            'widgets.*.inputs.*.required' => 'required|boolean',
+            'widgets.*.inputs.*.type' => 'required|string',
+            'widgets.*.inputs.*.items' => 'nullable|array',
+            'widgets.*.inputs.*.items.*.name' => 'required|string',
+            'widgets.*.inputs.*.items.*.label' => 'required|string',
+            'widgets.*.inputs.*.items.*.placeholder' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.value' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.required' => 'required|boolean',
+            'widgets.*.inputs.*.items.*.type' => 'nullable|string',
         ]);
 
-        // Update the store page
+        // Update the store page's basic details
         $storePage->update($validatedData);
 
-        // Return a success response
-        return response()->json([
-            'message' => 'Store page updated successfully.',
-            'data' => new StorePagesResource($storePage->load('widgets')),
-            'status' => 200
-        ], 200);
+        // Process widgets if provided
+        if ($request->has('widgets')) {
+
+            $storePage->widgets()->delete();
+
+            foreach ($request->widgets as $widget) {
+                $widgetData = [
+                    'name' => $widget['name'],
+                    'label' => $widget['label'],
+                ];
+
+                $storePageWidget = $storePage->widgets()->create($widgetData);
+
+                // Process inputs if provided
+                if (isset($widget['inputs'])) {
+
+                    $storePageWidget->widgetInputs()->delete();
+
+                    foreach ($widget['inputs'] as $input) {
+                        $inputData = [
+                            'name' => $input['name'] ?? null,
+                            'label' => $input['label'] ?? null,
+                            'placeholder' => $input['placeholder'] ?? null,
+                            'value' => $input['value'] ?? null,
+                            'required' => $input['required'] ?? null,
+                            'type' => $input['type'] ?? null,
+                        ];
+
+                        $storePageWidgetInput = $storePageWidget->widgetInputs()->create($inputData);
+
+                        // Process items if provided
+                        if (isset($input['items'])) {
+
+                            $storePageWidgetInput->items()->delete();
+
+                            foreach ($input['items'] as $item) {
+                                $itemData = [
+                                    'name' => $item['name'] ?? null,
+                                    'label' => $item['label'] ?? null,
+                                    'placeholder' => $item['placeholder'] ?? null,
+                                    'value' => $item['value'] ?? null,
+                                    'required' => $item['required'] ?? null,
+                                    'type' => $item['type'] ?? null,
+                                ];
+
+                                $storePageWidgetInput->items()->create($itemData);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Store page updated successfully.',
+                'data' => new StorePagesResource($storePage->load('widgets.widgetInputs.items')),
+            ]
+        );
     }
 
+    public function destroy(Request $request, $store_id, $store_page_id)
+    {
+        // Check if the store exists and is active
+        $store = Store::storeOwner()->active()->find($store_id);
+
+        if (!$store) {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store id',
+                ],
+                404,
+            );
+        }
+
+        // Find the store page to delete
+        $storePage = StorePage::where('store_id', $store_id)->find($store_page_id);
+
+        if (!$storePage) {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store page id',
+                ],
+                404,
+            );
+        }
+
+        // Delete the store page
+        $storePage->delete();
+
+        // Return a success response
+        return response()->json(
+            [
+                'message' => 'Store page deleted successfully.',
+                'status' => 200,
+            ],
+            200,
+        );
+    }
 }

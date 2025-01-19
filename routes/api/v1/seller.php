@@ -39,10 +39,18 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('logout', [AuthController::class, 'logout']);
 
     // Store Pages Routes
-    Route::get('stores/{store_id}/pages', [StorePageController::class, 'pages']);
+    Route::get('stores/{store_id}/pages', [StorePageController::class, 'index']);
     Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
     Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
-    Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
+    Route::post('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
+    Route::delete('stores/{store_id}/pages/delete/{page_id}', [StorePageController::class, 'destroy']);
+
+    // Store Page Widget Routes
+    Route::get('stores/pages/{pageId}/widgets', [StorePageWidgetController::class, 'index']);
+    Route::get('stores/pages/{pageId}/widgets/{widgetId}', [StorePageWidgetController::class, 'view']);
+    Route::post('stores/pages/{pageId}/widgets/store', [StorePageWidgetController::class, 'store']);
+    Route::post('stores/pages/{pageId}/widgets/update/{widgetId}', [StorePageWidgetController::class, 'update']);
+    Route::delete('stores/pages/{pageId}/widgets/delete/{widgetId}', [StorePageWidgetController::class, 'destroy']);
 
     // Store Page Widget Input Routes
     Route::get('stores/pages/widgets/{pageWidgetId}/inputs', [StorePageWidgetInputController::class, 'index']);
