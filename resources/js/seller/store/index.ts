@@ -3,12 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
+import { brandApi } from "./reducers/brandApi";
+import { categoryApi } from "./reducers/categoryApi";
 import { imageApi } from "./reducers/imageApi";
 import { pageApi } from "./reducers/pageApi";
+import { productApi } from "./reducers/productApi";
 import { storeApi } from "./reducers/storeApi";
 import { themeApi } from "./reducers/themeApi";
 import authSlice from "./slices/authSlice";
 import baseSlice from "./slices/baseSlice";
+import imageUploaderSlice from "./slices/imageUploaderSlice";
 import pageSlice from "./slices/pageSlice";
 import settingSlice from "./slices/settingSlice";
 import storeOnboardSlice from "./slices/storeOnboardSlice";
@@ -16,7 +20,16 @@ import storeSlice from "./slices/storeSlice";
 
 const authPersistConfig = {
     key: "site",
-    blacklist: ["authApi", "storeApi", "themeApi", "pageApi", "imageApi"],
+    blacklist: [
+        "authApi",
+        "storeApi",
+        "themeApi",
+        "pageApi",
+        "imageApi",
+        "categoryApi",
+        "productApi",
+        "brandApi",
+    ],
     storage,
     version: 0,
 };
@@ -30,11 +43,15 @@ const persistedReducer = persistReducer(
         storeOnboard: storeOnboardSlice,
         settingSlice: settingSlice,
         page: pageSlice,
+        imageUploader: imageUploaderSlice,
         [authApi.reducerPath]: authApi.reducer,
         [storeApi.reducerPath]: storeApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,
         [pageApi.reducerPath]: pageApi.reducer,
         [imageApi.reducerPath]: imageApi.reducer,
+        [categoryApi.reducerPath]: categoryApi.reducer,
+        [brandApi.reducerPath]: brandApi.reducer,
+        [productApi.reducerPath]: productApi.reducer,
     })
 );
 
@@ -49,6 +66,9 @@ export const store = configureStore({
             themeApi.middleware,
             pageApi.middleware,
             imageApi.middleware,
+            categoryApi.middleware,
+            brandApi.middleware,
+            productApi.middleware,
         ]);
     },
 });

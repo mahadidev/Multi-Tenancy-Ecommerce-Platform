@@ -34,19 +34,19 @@ class ProductService
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'required|exists:brands,id',
+            'brand_id' => 'nullable|exists:brands,id',
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'sku' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'thumbnail' => 'required|string|max:255',
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|mimes:jpeg,png,jpg|max:10048',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'has_variants' => 'required|boolean',
-            'has_in_stocks' => 'required|boolean',
-            'status' => 'required|boolean',
+            'stock' => 'nullable|integer',
+            'has_variants' => 'nullable|boolean',
+            'has_in_stocks' => 'nullable|boolean',
+            'status' => 'nullable|boolean',
 
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
@@ -67,11 +67,6 @@ class ProductService
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
 
-        // Handle the thumbnail file upload if present
-        $thumbnailPath = null;
-        if ($request->hasFile('thumbnail') && isset($request->thumbnail)) {
-            $thumbnailPath = $request->file('thumbnail')->store('products', 'public');
-        }
 
         // Handle the attachments (if any)
         $attachments = [];
@@ -85,23 +80,23 @@ class ProductService
         $product = Product::create([
             'store_id' => $validatedData['store_id'],
             'category_id' => $validatedData['category_id'],
-            'brand_id' => $validatedData['brand_id'],
+            'brand_id' => $validatedData['brand_id'] ?? null,
             'name' => $validatedData['name'],
             'slug' => $validatedData['slug'],
             'sku' => $validatedData['sku'],
-            'description' => $validatedData['description'],
-            'thumbnail' => $thumbnailPath,  // Save the thumbnail path
+            'description' => $validatedData['description'] ?? null,
+            'thumbnail' => $validatedData["thumbnail"],  // Save the thumbnail path
             'attachments' => $attachments ? $attachments : null,  // Save the attachments as JSON
             'price' => $validatedData['price'],
-            'stock' => $validatedData['stock'],
-            'has_variants' => $validatedData['has_variants'],
-            'has_in_stocks' => $validatedData['has_in_stocks'],
+            'stock' => $validatedData['stock'] ?? null,
+            'has_variants' => $validatedData['has_variants'] ?? false,
+            'has_in_stocks' => $validatedData['has_in_stocks'] ?? false,
             'status' => $validatedData['status'] ?? 1,
-            'is_trending' => $validatedData['is_trending'],
-            'has_discount' => $validatedData['has_discount'],
-            'discount_to' => $validatedData['discount_to'],
-            'discount_type' => $validatedData['discount_type'],
-            'discount_amount' => $validatedData['discount_amount'],
+            'is_trending' => $validatedData['is_trending'] ?? false,
+            'has_discount' => $validatedData['has_discount'] ?? false,
+            'discount_to' => $validatedData['discount_to'] ?? null,
+            'discount_type' => $validatedData['discount_type'] ?? null,
+            'discount_amount' => $validatedData['discount_amount'] ?? null,
         ]);
 
 
@@ -138,20 +133,20 @@ class ProductService
 
         // Validate the incoming data
         $validatedData = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'required|exists:brands,id',
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:categories,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'name' => 'nullable|string|max:255',
+            'slug' => 'nullable|string|max:255',
             'sku' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'thumbnail' => 'nullable|string|max:255',
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|mimes:jpeg,png,jpg|max:10048',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'has_variants' => 'required|boolean',
-            'has_in_stocks' => 'required|boolean',
-            'status' => 'required|boolean',
+            'price' => 'nullable|numeric',
+            'stock' => 'nullable|integer',
+            'has_variants' => 'nullable|boolean',
+            'has_in_stocks' => 'nullable|boolean',
+            'status' => 'nullable|boolean',
 
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
@@ -168,15 +163,6 @@ class ProductService
             'variants.*.options.*.code' => 'nullable|string',
         ]);
 
-        // Handle the thumbnail file upload if present
-        if ($request->hasFile('thumbnail')) {
-            // Delete the old thumbnail if it exists
-            if ($product->thumbnail) {
-                Storage::disk('public')->delete($product->thumbnail);
-            }
-
-            $validatedData['thumbnail'] = $request->file('thumbnail')->store('products', 'public');
-        }
 
         // Handle the attachments (if any)
         if ($request->hasFile('attachments')) {
@@ -193,24 +179,24 @@ class ProductService
 
         // Update the product entry
         $product->update([
-            'category_id' => $validatedData['category_id'],
-            'brand_id' => $validatedData['brand_id'],
-            'name' => $validatedData['name'],
-            'slug' => $validatedData['slug'],
-            'sku' => $validatedData['sku'],
-            'description' => $validatedData['description'],
+            'category_id' => $validatedData['category_id'] ?? $product->category_id,
+            'brand_id' => $validatedData['brand_id'] ?? $product->brand_id,
+            'name' => $validatedData['name'] ?? $product->name,
+            'slug' => $validatedData['slug'] ?? $product->slug,
+            'sku' => $validatedData['sku'] ?? $product->sku,
+            'description' => $validatedData['description'] ?? $product->description,
             'thumbnail' => $validatedData['thumbnail'] ?? $product->thumbnail, // Keep the old thumbnail if not updated
             'attachments' => isset($validatedData['attachments']) ? $validatedData['attachments'] : $product->attachments, // Keep the old attachments if not updated
-            'price' => $validatedData['price'],
-            'stock' => $validatedData['stock'],
-            'has_variants' => $validatedData['has_variants'],
-            'has_in_stocks' => $validatedData['has_in_stocks'],
-            'status' => $validatedData['status'],
-            'is_trending' => $validatedData['is_trending'],
-            'has_discount' => $validatedData['has_discount'],
-            'discount_to' => $validatedData['discount_to'],
-            'discount_type' => $validatedData['discount_type'],
-            'discount_amount' => $validatedData['discount_amount'],
+            'price' => $validatedData['price'] ?? $product->price,
+            'stock' => $validatedData['stock'] ?? $product->stock,
+            'has_variants' => $validatedData['has_variants'] ?? $product->has_variants,
+            'has_in_stocks' => $validatedData['has_in_stocks'] ?? $product->has_in_stocks,
+            'status' => $validatedData['status'] ?? $product->status,
+            'is_trending' => $validatedData['is_trending'] ?? $product->is_trending,
+            'has_discount' => $validatedData['has_discount'] ?? $product->has_discount,
+            'discount_to' => $validatedData['discount_to'] ?? $product->discount_to,
+            'discount_type' => $validatedData['discount_type'] ?? $product->discount_type,
+            'discount_amount' => $validatedData['discount_amount'] ?? $product->discount_amount,
         ]);
 
         // Handle variants if present

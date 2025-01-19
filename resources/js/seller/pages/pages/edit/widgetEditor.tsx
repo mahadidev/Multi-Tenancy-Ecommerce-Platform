@@ -32,7 +32,7 @@ const Input = ({ input }: { input: WidgetInputType }) => {
 };
 
 const InputArray = ({ inputs }: { inputs: WidgetInputType[] }) => {
-    const { setSelected, onChangePageInput } = usePage();
+    const { onChangePageInput } = usePage();
     return (
         <div>
             <Accordion>
@@ -118,7 +118,7 @@ const InputArray = ({ inputs }: { inputs: WidgetInputType[] }) => {
 };
 
 export default function WidgetEditor() {
-    const { onChangePageInput, setSelected, widget, page } = usePage();
+    const { widget, page } = usePage();
     const [arrayGroup, setArrayGroup] = useState<{
         [key: string]: WidgetInputType[];
     }>();

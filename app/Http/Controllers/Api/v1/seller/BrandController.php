@@ -33,23 +33,20 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         return apiResponse(function () use ($request) {
-           
+
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'image' => 'nullable|image',
+                'slug' => 'required|string|max:255',
+                'image' => 'nullable|string|max:255',
             ]);
 
             $validated['store_id'] = authStore();
 
-            $imagePath = null;
-            if ($request->hasFile('image') && isset($request->image)) {
-                $imagePath = $request->file('image')->store('brands', 'public');
-            }
 
             $brand = Brand::create([
                 'name' => $validated['name'],
                 'store_id' => $validated['store_id'],
-                'image' => $imagePath ? $imagePath : null,
+                'image' => $validated["image"] ?? null,
             ]);
 
             return response()->json(
@@ -71,12 +68,12 @@ class BrandController extends Controller
     {
         return apiResponse(function () use ($request, $id) {
             $brand = Brand::authorized()->findOrFail($id);
-            
+
             return response()->json(
                 [
                     'status' => 200,
                     'data' => [
-                       'brands' => new BrandResource($brand)
+                        'brands' => new BrandResource($brand)
                     ]
                 ]
             );
@@ -92,21 +89,14 @@ class BrandController extends Controller
             $brand = Brand::authorized()->findOrFail($id);
 
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'image' => 'nullable|image',
+                'name' => 'nullable|string|max:255',
+                'image' => 'nullable|string|max:255',
+                'slug' => 'nullable|string|max:255',
             ]);
 
-            $imagePath = null;
-            if ($request->hasFile('image') && isset($request->image)) {
-                if($brand->image) {
-                    Storage::disk('public')->delete($brand->image);
-                }
-                $imagePath = $request->file('image')->store('brands', 'public');
-            }
-
             $brand->update([
-                'name' => $validated['name'],
-                'image' => $imagePath ? $imagePath : $brand->image,
+                'name' => $validated['name'] ?? $brand->name,
+                'image' => $validated["image"] ?? $brand->image,
             ]);
 
             return response()->json(
@@ -114,7 +104,7 @@ class BrandController extends Controller
                     'status' => 200,
                     'message' => 'Brand updated successfully',
                     'data' => [
-                       'brands' => new BrandResource($brand)
+                        'brands' => new BrandResource($brand)
                     ]
                 ]
             );
@@ -129,7 +119,7 @@ class BrandController extends Controller
         return apiResponse(function () use ($id) {
             $brand = Brand::authorized()->findOrFail($id);
 
-            if($brand->image) {
+            if ($brand->image) {
                 Storage::disk('public')->delete($brand->image);
             }
 

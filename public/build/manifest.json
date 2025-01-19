@@ -3,15 +3,15 @@
     "file": "assets/chunk-K6AXKMTT-DiTgBi4-.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_index-Bs0AxerQ.js": {
-    "file": "assets/index-Bs0AxerQ.js",
+  "_index-BxOfurqo.js": {
+    "file": "assets/index-BxOfurqo.js",
     "name": "index",
     "imports": [
       "_chunk-K6AXKMTT-DiTgBi4-.js"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CNcOMB_H.css",
+    "file": "assets/app-gWZup8k8.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -46,29 +46,29 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-a3VAzv_E.js",
+    "file": "assets/index-LXvNYNg2.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DiTgBi4-.js",
-      "_index-Bs0AxerQ.js"
+      "_index-BxOfurqo.js"
     ],
     "css": [
-      "assets/index-DywHd69X.css"
+      "assets/index-CON9GFPJ.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-s1hINPL9.js",
+    "file": "assets/index-BDBYeT1A.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DiTgBi4-.js",
-      "_index-Bs0AxerQ.js"
+      "_index-BxOfurqo.js"
     ],
     "css": [
-      "assets/index-Bvo8JB8-.css"
+      "assets/index-Cue_Kd0V.css"
     ]
   }
 }
