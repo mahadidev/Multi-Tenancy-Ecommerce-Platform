@@ -12,15 +12,13 @@ class ContactController extends Controller
     public function index(Request $request){
 
         $contacts = Contact::authorized()->get();
-
-        return apiResponse(function () use ($request, $contacts) {
-            return response()->json([
-                'status' => 200,
-                'data' => [
-                    'contacts' => $contacts
-                ],
-            ]);
-        });
+        
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'contacts' => $contacts
+            ],
+        ]);
 
     }
 
@@ -38,15 +36,13 @@ class ContactController extends Controller
 
         $contact = Contact::create($validatedData);
 
-        return apiResponse(function () use ($request, $contact) {
-            return response()->json([
-                'status' => 200,
-                'message' => 'contact has been sumbitted',
-                'data' => [
-                    'contact' => $contact
-                ],
-            ]);
-        });
+        return response()->json([
+            'status' => 200,
+            'message' => 'contact has been sumbitted',
+            'data' => [
+                'contact' => $contact
+            ],
+        ]);
 
     }
 
@@ -55,17 +51,21 @@ class ContactController extends Controller
      */
     public function show(Request $request, $id)
     {
-        return apiResponse(function () use ($request, $id) {
-            
-            $contact = Contact::authorized()->findorfail($id);
+        $contact = Contact::authorized()->find($id);
 
+        if(!$contact){
             return response()->json([
-                'status' => 200,
-                'data' => [
-                    'contact' => $contact
-                ],
-            ]);
-        });
+                'status' => 404,
+                'message' => 'Contact not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'contact' => $contact
+            ],
+        ]);
     }
 
     /**
@@ -73,15 +73,21 @@ class ContactController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        return apiResponse(function () use ($request, $id) {
-            $contact = Contact::authorized()->findorfail($id);
-            $contact->delete();
+        $contact = Contact::authorized()->find($id);
 
+        if(!$contact){
             return response()->json([
-                'status' => 200,
-                'message' => 'Contact deleted successfully',
-            ]);
-        });
+                'status' => 404,
+                'message' => 'Contact not found'
+            ], 404);
+        }
+        
+        $contact->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Contact deleted successfully',
+        ]);
 
     }
 }

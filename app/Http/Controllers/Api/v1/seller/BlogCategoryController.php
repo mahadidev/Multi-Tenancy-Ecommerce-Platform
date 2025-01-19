@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
 
-
 class BlogCategoryController extends Controller
 {
     /**
@@ -15,20 +14,18 @@ class BlogCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $query = Category::authorized()->latest();
+        $query = Category::authorized()->latest();
 
-            if ($request->has('type')) {
-                $query->where('type', $request->input('type'));
-            }
+        if ($request->has('type')) {
+            $query->where('type', $request->input('type'));
+        }
 
-            $categories = $query->get();
+        $categories = $query->get();
 
-            return response()->json([
-                'status' => 200,
-                'categories' => CategoryResource::collection($categories),
-            ]);
-        });
+        return response()->json([
+            'status' => 200,
+            'categories' => CategoryResource::collection($categories),
+        ]);
     }
 
     /**
@@ -36,22 +33,20 @@ class BlogCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'type' => 'required|string|max:50|in:post,product', // Correct format for 'in' rule
-            ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:50|in:post,product', // Correct format for 'in' rule
+        ]);
 
-            $validated['store_id'] = authStore();
+        $validated['store_id'] = authStore();
 
-            $category = Category::create($validated);
+        $category = Category::create($validated);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Blog Category created successfully',
-                'data' => $category,
-            ]);
-        });
+        return response()->json([
+            'success' => 200,
+            'message' => 'Blog Category created successfully',
+            'data' => $category,
+        ]);
     }
 
     /**
@@ -59,22 +54,18 @@ class BlogCategoryController extends Controller
      */
     public function show(Request $request, $id)
     {
-        return apiResponse(function () use ($request, $id) {
-            $query = Category::authorized();
+        $query = Category::authorized();
 
-            if ($request->has('type')) {
-                $query->where('type', $request->input('type'));
-            }
+        if ($request->has('type')) {
+            $query->where('type', $request->input('type'));
+        }
 
-            $category = $query->findorfail($id);
+        $category = $query->findorfail($id);
 
-            return response()->json(
-                [
-                    'success' => true,
-                    'category' => new CategoryResource($category),
-                ]
-            );
-        });
+        return response()->json([
+            'success' => true,
+            'category' => new CategoryResource($category),
+        ]);
     }
 
     /**
@@ -82,23 +73,28 @@ class BlogCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return apiResponse(function () use ($request, $id) {
-            $category = Category::authorized()->findorfail($id);
+        $category = Category::authorized()->find($id);
 
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'type' => 'required|string|max:50|in:post,product', // Correct format for 'in' rule
-            ]);
-
-            // Update the category
-            $category->update($validated);
-
+        if (!$category) {
             return response()->json([
-                'success' => true,
-                'message' => 'Category updated successfully',
-                'data' => $category,
-            ]);
-        });
+                'success' => 200,
+                'message' => 'Category not found',
+            ], 200);
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:50|in:post,product', // Correct format for 'in' rule
+        ]);
+
+        // Update the category
+        $category->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category updated successfully',
+            'data' => $category,
+        ]);
     }
 
     /**
@@ -106,22 +102,20 @@ class BlogCategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        return apiResponse(function () use ($request, $id) {
-            $category = Category::authorized()->findorfail($id);
+        $category = Category::authorized()->findorfail($id);
 
-            if(!$category){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'You are not authorized to delete this store or it does not exist.',
-                ]);
-            }
-
-            $category->delete();
-
+        if (!$category) {
             return response()->json([
-                'success' => true,
-                'message' => 'Category deleted successfully',
-            ]);
-        });
+                'success' => false,
+                'message' => 'You are not authorized to delete this store or it does not exist.',
+            ],404);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Category deleted successfully',
+        ]);
     }
 }
