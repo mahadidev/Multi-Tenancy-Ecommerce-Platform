@@ -16,21 +16,22 @@ class ProductService
     {
         $query = Product::with('category', 'store', 'variants', 'brand')->authorized();
 
-        $products = $query->get();
+        $products = $query->paginate($request->per_page ?? 10);
 
         return ProductResource::collection($products);
     }
 
     public static function show(Request $request, $id)
     {
-
-        $product = Product::with('category', 'store', 'variants', 'brand')->authorized()->findorfail($id);
+        $product = Product::with('category', 'store', 'variants', 'brand')->authorized()->find($id);
+        if (!$product) {
+            return null;
+        }
         return new ProductResource($product);
     }
 
     public static function store(Request $request)
     {
-
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
@@ -38,8 +39,9 @@ class ProductService
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'sku' => 'nullable|string|max:255',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'thumbnail' => 'required|string|max:255',
+            'thumbnail' => 'nullable|string|max:255',
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|mimes:jpeg,png,jpg|max:10048',
             'price' => 'required|numeric',
@@ -84,6 +86,7 @@ class ProductService
             'name' => $validatedData['name'],
             'slug' => $validatedData['slug'],
             'sku' => $validatedData['sku'],
+            'short_description' => $validatedData['short_description'] ?? null,
             'description' => $validatedData['description'] ?? null,
             'thumbnail' => $validatedData["thumbnail"],  // Save the thumbnail path
             'attachments' => $attachments ? $attachments : null,  // Save the attachments as JSON
@@ -129,8 +132,10 @@ class ProductService
     public static function update(Request $request, $id)
     {
 
-        $product = Product::with('category', 'store', 'variants', 'brand')->findOrFail($id);
-
+        $product = Product::with('category', 'store', 'variants', 'brand')->authorized()->find($id);
+        if (!$product) {
+            return null;
+        }
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
@@ -138,6 +143,7 @@ class ProductService
             'name' => 'nullable|string|max:255',
             'slug' => 'nullable|string|max:255',
             'sku' => 'nullable|string|max:255',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'thumbnail' => 'nullable|string|max:255',
             'attachments' => 'nullable|array',
@@ -184,6 +190,7 @@ class ProductService
             'name' => $validatedData['name'] ?? $product->name,
             'slug' => $validatedData['slug'] ?? $product->slug,
             'sku' => $validatedData['sku'] ?? $product->sku,
+            'short_description' => $validatedData['short_description'] ?? $product->short_description,
             'description' => $validatedData['description'] ?? $product->description,
             'thumbnail' => $validatedData['thumbnail'] ?? $product->thumbnail, // Keep the old thumbnail if not updated
             'attachments' => isset($validatedData['attachments']) ? $validatedData['attachments'] : $product->attachments, // Keep the old attachments if not updated
@@ -227,7 +234,10 @@ class ProductService
 
     public static function destroy(Request $request, $id)
     {
-        $product = Product::authorized()->findorfail($id);
+        $product = Product::authorized()->find($id);
+        if (!$product) {
+            return null;
+        }
         $product->delete();
 
         return 'product deleted successfully.';

@@ -35,6 +35,13 @@ class StorePageWidgetInputController extends Controller
             'value' => 'nullable|string',
             'required' => 'required|boolean',
             'type' => 'nullable|string',
+            'items' => 'nullable|array',
+            'items.*.name' => 'required|string',
+            'items.*.label' => 'required|string',
+            'items.*.placeholder' => 'nullable|string',
+            'items.*.value' => 'nullable|string',
+            'items.*.required' => 'required|boolean',
+            'items.*.type' => 'nullable|string',
         ]);
 
         $pageWidget = StorePageWidget::find($pageWidgetId);
@@ -44,6 +51,12 @@ class StorePageWidgetInputController extends Controller
         }
 
         $pageWidgetInput =  $pageWidget->widgetInputs()->create($request->all());
+
+        if ($request->has('items')) {
+
+            $pageWidgetInput->items()->delete();
+            $pageWidgetInput->items()->createMany($request->items);
+        }
 
         return response()->json([
             'status' => 200,
@@ -85,6 +98,13 @@ class StorePageWidgetInputController extends Controller
             'value' => 'nullable|string',
             'required' => 'required|boolean',
             'type' => 'nullable|string',
+            'items' => 'nullable|array',
+            'items.*.name' => 'required|string',
+            'items.*.label' => 'required|string',
+            'items.*.placeholder' => 'nullable|string',
+            'items.*.value' => 'nullable|string',
+            'items.*.required' => 'required|boolean',
+            'items.*.type' => 'nullable|string',
         ]);
 
         $pageWidget = StorePageWidget::find($pageWidgetId);
@@ -101,6 +121,12 @@ class StorePageWidgetInputController extends Controller
 
         $pageWidgetInput->update($request->all());
 
+        if ($request->has('items')) {
+
+            $pageWidgetInput->items()->delete();
+            $pageWidgetInput->items()->createMany($request->items);
+        }
+        
         return response()->json([
             'status' => 200,
             'message' => 'Page Widget Input updated successfully',

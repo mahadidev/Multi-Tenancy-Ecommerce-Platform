@@ -10,7 +10,7 @@ class StorePageWidget extends Model
         'store_page_id',
         'name',
         'label',
-        'inputs'
+        // 'inputs'
     ];
 
     protected $casts = [

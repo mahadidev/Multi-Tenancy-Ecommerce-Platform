@@ -20,7 +20,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'string|required',
-            'password' => 'string|required',
+            'password' => 'required',
         ]);
 
         // Find the user by email
@@ -153,7 +153,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'string|required',
-            'password' => 'string|required',
+            'password' => 'required',
         ]);
 
         if (!$request->has('store_id')) {

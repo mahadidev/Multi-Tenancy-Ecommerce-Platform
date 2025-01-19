@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'sku' => $this->sku,
+            'short_description' => $this->short_description,
             'description' => $this->description,
             'thumbnail' => $this->thumbnail_image ? $this->thumbnail_image : 'https://placehold.co/600x400',
             'attachments' => $this->attachments_image,
@@ -36,7 +37,9 @@ class ProductResource extends JsonResource
             'discount_type' => $this->discount_type,
             'discount_amount' => $this->discount_amount,
             'price' => $this->price,
-            'discount_price' => $this->discount_price, 
+            'discount_price' => $this->discount_price,
+            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
     }
 }
