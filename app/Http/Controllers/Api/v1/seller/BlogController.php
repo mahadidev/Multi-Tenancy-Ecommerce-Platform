@@ -22,9 +22,7 @@ class BlogController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => [
-                'blogs' =>  BlogResource::collection($blogs),
-            ],
+            'data' => BlogResource::collection($blogs),
         ]);
     }
 
@@ -36,7 +34,7 @@ class BlogController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable|string',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
@@ -50,15 +48,11 @@ class BlogController extends Controller
             ],
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image') && isset($request->image)) {
-            $imagePath = $request->file('image')->store('blogs', 'public');
-        }
 
         $blog = Blog::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'image' => $imagePath ? $imagePath : null,
+            'image' => $validated['image'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status'],
         ]);
@@ -66,9 +60,7 @@ class BlogController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Blog created successfully',
-            'data' => [
-                'blog' => new BlogResource($blog),
-            ],
+            'data' =>  new BlogResource($blog),
         ]);
     }
 
@@ -89,9 +81,7 @@ class BlogController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => [
-                'blog' => new BlogResource($blog),
-            ],
+            'data' =>  new BlogResource($blog),
         ]);
     }
 
@@ -112,7 +102,7 @@ class BlogController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable|string',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
@@ -126,18 +116,10 @@ class BlogController extends Controller
             ],
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image') && isset($request->image)) {
-            if ($blog->image) {
-                Storage::disk('public')->delete($blog->image);
-            }
-            $imagePath = $request->file('image')->store('blogs', 'public');
-        }
-
         $blog->update([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'image' => $imagePath ? $imagePath : $blog->image,
+            'image' => $validated['image'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status'],
         ]);
@@ -163,10 +145,6 @@ class BlogController extends Controller
                 'success' => false,
                 'message' => 'Blog not found',
             ]);
-        }
-
-        if ($blog->image) {
-            Storage::disk('public')->delete($blog->image);
         }
 
         $blog->delete();
