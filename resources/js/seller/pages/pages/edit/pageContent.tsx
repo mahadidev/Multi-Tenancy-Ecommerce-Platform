@@ -26,7 +26,6 @@ export default function PageContent() {
                                     onClick={() =>
                                         deleteWidget.delete({
                                             widgetId: widget.id,
-                                            pageData: pageData,
                                         })
                                     }
                                     size="xs"

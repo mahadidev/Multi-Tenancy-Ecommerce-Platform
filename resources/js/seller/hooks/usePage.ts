@@ -12,6 +12,7 @@ import {
     WidgetType,
 } from "@/seller/types";
 import { useParams } from "react-router-dom";
+import { useDeleteWidgetMutation } from "../store/reducers/widgetApi";
 import {
     setSelected as setPageSelected,
     setPage as setPageState,
@@ -36,7 +37,7 @@ const usePage = () => {
     const [
         onDeleteWidget,
         { isLoading: isDeleteWidgetLoading, error: deleteWidgetError },
-    ] = useUpdatePageMutation();
+    ] = useDeleteWidgetMutation();
 
     const createPage = ({
         pageData,
@@ -123,24 +124,13 @@ const usePage = () => {
     const deleteWidget = ({
         widgetId,
         onSuccess,
-        pageData,
     }: {
         widgetId: number;
         onSuccess?: CallableFunction;
-        pageData: StorePageType | undefined;
     }) => {
         onDeleteWidget({
-            storeId: store.id,
             pageId: pageId ? pageId : 0,
-            formData: {
-                widgets: [
-                    ...(pageData && pageData.widgets
-                        ? pageData.widgets.filter(
-                              (item) => item.id !== widgetId
-                          )
-                        : []),
-                ],
-            },
+            widgetId: widgetId,
         }).then((response) => {
             if (response.data.status === 200) {
                 if (onSuccess) {
