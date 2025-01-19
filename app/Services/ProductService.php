@@ -41,9 +41,9 @@ class ProductService
             'sku' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
+            'thumbnail' => 'nullable|url',
             'attachments' => 'nullable|array',
-            'attachments.*' => 'file|mimes:jpeg,png,jpg|max:10048',
+            'attachments.*' => 'url',
             'price' => 'required|numeric',
             'stock' => 'nullable|integer',
             'has_variants' => 'nullable|boolean',
@@ -71,12 +71,12 @@ class ProductService
 
 
         // Handle the attachments (if any)
-        $attachments = [];
-        if ($request->has('attachments') && isset($request->attachments)) {
-            foreach ($request->file('attachments') as $file) {
-                $attachments[] = $file->store('products', 'public');
-            }
-        }
+        // $attachments = [];
+        // if ($request->has('attachments') && isset($request->attachments)) {
+        //     foreach ($request->file('attachments') as $file) {
+        //         $attachments[] = $file->store('products', 'public');
+        //     }
+        // }
 
         // Create the product entry
         $product = Product::create([
@@ -89,7 +89,7 @@ class ProductService
             'short_description' => $validatedData['short_description'] ?? null,
             'description' => $validatedData['description'] ?? null,
             'thumbnail' => $validatedData["thumbnail"],  // Save the thumbnail path
-            'attachments' => $attachments ? $attachments : null,  // Save the attachments as JSON
+            'attachments' => $validatedData['attachments'] ?? null,
             'price' => $validatedData['price'],
             'stock' => $validatedData['stock'] ?? null,
             'has_variants' => $validatedData['has_variants'] ?? false,
@@ -145,9 +145,10 @@ class ProductService
             'sku' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
+            'thumbnail' => 'nullable|url',
             'attachments' => 'nullable|array',
-            'attachments.*' => 'file|mimes:jpeg,png,jpg|max:10048',
+            // 'attachments.*' => 'file|mimes:jpeg,png,jpg|max:10048',
+            'attachments.*' => 'url',
             'price' => 'nullable|numeric',
             'stock' => 'nullable|integer',
             'has_variants' => 'nullable|boolean',
@@ -171,17 +172,17 @@ class ProductService
 
 
         // Handle the attachments (if any)
-        if ($request->hasFile('attachments')) {
-            // Delete old attachments if they exist
-            if ($product->attachments) {
-                $oldAttachments = json_decode($product->attachments, true);
-                foreach ($oldAttachments as $attachment) {
-                    Storage::disk('public')->delete($attachment);
-                }
-            }
+        // if ($request->hasFile('attachments')) {
+        //     // Delete old attachments if they exist
+        //     if ($product->attachments) {
+        //         $oldAttachments = json_decode($product->attachments, true);
+        //         foreach ($oldAttachments as $attachment) {
+        //             Storage::disk('public')->delete($attachment);
+        //         }
+        //     }
 
-            $validatedData['attachments'] = array_map(fn($file) => $file->store('products', 'public'), $request->file('attachments'));
-        }
+        //     $validatedData['attachments'] = array_map(fn($file) => $file->store('products', 'public'), $request->file('attachments'));
+        // }
 
         // Update the product entry
         $product->update([
@@ -193,7 +194,8 @@ class ProductService
             'short_description' => $validatedData['short_description'] ?? $product->short_description,
             'description' => $validatedData['description'] ?? $product->description,
             'thumbnail' => $validatedData['thumbnail'] ?? $product->thumbnail, // Keep the old thumbnail if not updated
-            'attachments' => isset($validatedData['attachments']) ? $validatedData['attachments'] : $product->attachments, // Keep the old attachments if not updated
+            'attachments' => $validatedData['attachments'] ?? $product->attachments,
+            // 'attachments' => isset($validatedData['attachments']) ? $validatedData['attachments'] : $product->attachments, // Keep the old attachments if not updated
             'price' => $validatedData['price'] ?? $product->price,
             'stock' => $validatedData['stock'] ?? $product->stock,
             'has_variants' => $validatedData['has_variants'] ?? $product->has_variants,

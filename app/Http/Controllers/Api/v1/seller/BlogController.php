@@ -88,7 +88,7 @@ class BlogController extends Controller
         // show error if blog is not found
         if (!$blog) {
             return response()->json([
-                'success' => false,
+                'status' => 404,
                 'message' => 'Blog not found',
             ], 404);
         }
@@ -110,7 +110,7 @@ class BlogController extends Controller
 
         if (!$blog) {
             return response()->json([
-                'success' => false,
+                'status' => 404,
                 'message' => 'Blog not found',
             ], 404);
         }
@@ -158,7 +158,7 @@ class BlogController extends Controller
 
         if (!$blog) {
             return response()->json([
-                'success' => false,
+                'status' => 404,
                 'message' => 'Blog not found',
             ]);
         }

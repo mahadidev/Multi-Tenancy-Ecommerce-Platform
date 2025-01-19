@@ -19,7 +19,7 @@ class ThemeController extends Controller
             'data' => [
                 'themes' => ThemeResource::collection($themes)
             ]
-        ]);
+        ], 200);
     }
 
     public function getTheme(Request $request, $id)
@@ -34,9 +34,8 @@ class ThemeController extends Controller
                     'status' => 404,
                     'data' => [
                         'theme' => null,
-
                     ]
-                ]);
+                ], 404);
             }
 
             return response()->json([
@@ -44,7 +43,7 @@ class ThemeController extends Controller
                 'data' => [
                     'theme' => new ThemeResource($theme)
                 ]
-            ]);
+            ], 200);
         });
     }
 

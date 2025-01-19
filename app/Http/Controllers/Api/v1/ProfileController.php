@@ -22,12 +22,12 @@ class ProfileController extends Controller
                     'data' => [
                         'user' => new UserResource($user),
                     ]
-                ]);
+                ], 200);
             }
             return response()->json([
                 'status' => 401,
                 'message' => 'User is not authenticated',
-            ]);
+            ], 401);
         });
     }
 
@@ -45,24 +45,24 @@ class ProfileController extends Controller
                     'regex:/^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8}$/', // BD format
                 ],
                 'address' => 'nullable|string|max:255',
-                'image' => 'nullable',
+                'image' => 'nullable|url',
                 // 'password' => 'nullable|string|min:8|confirmed',
             ]);
 
-            $imagePath = null;
-            if ($request->hasFile('image') && isset($request->image)) {
-                if($user->image) {
-                    Storage::disk('public')->delete($user->image);
-                }
-                $imagePath = $request->file('image')->store('users', 'public');
-            }
+            // $imagePath = null;
+            // if ($request->hasFile('image') && isset($request->image)) {
+            //     if($user->image) {
+            //         Storage::disk('public')->delete($user->image);
+            //     }
+            //     $imagePath = $request->file('image')->store('users', 'public');
+            // }
 
             $user->update([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'],
                 'address' => $validated['address'],
-                'image' => $imagePath ? $imagePath : $user->image,
+                'image' => $validated['image'] ?? $user->image,
             ]);
 
             return response()->json([
@@ -72,7 +72,7 @@ class ProfileController extends Controller
                     'token_type' => 'Bearer',
                     'user' => new UserResource($user),
                 ],
-            ]);
+            ], 200);
         });
     }
 
@@ -91,7 +91,7 @@ class ProfileController extends Controller
                 return response()->json([
                     'status' => 401,
                     'message' => 'Old password is incorrect',
-                ]);
+                ], 401);
             }
 
             $user->update([
@@ -113,7 +113,7 @@ class ProfileController extends Controller
                 //     // 'access_token' => $token,
                 //     'user' => new UserResource($user),
                 // ],
-            ]);
+            ], 200);
         });
     }
 }

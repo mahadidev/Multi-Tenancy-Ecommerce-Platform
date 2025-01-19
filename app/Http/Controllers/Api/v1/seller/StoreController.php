@@ -59,9 +59,7 @@ class StoreController extends Controller
 
                 // Also set it in the request attributes
                 $request->attributes->set('store_id', $current_store->id);
-
             }
-
         }
 
 
@@ -72,28 +70,26 @@ class StoreController extends Controller
                 'stores' => StoreResource::collection($stores),
                 'current_store' => $current_store ? new StoreResource($current_store) : null,
             ]
-        ]);
-
-
+        ], 200);
     }
 
     public function show(Request $request, $id)
     {
+        $store = Store::storeOwner()->active()->find($id);
 
-        try {
-            $store = Store::storeOwner()->active()->findorfail($id);
-
+        if (!$store) {
             return response()->json([
-                'status' => 200,
-                'data' => [
-                    'store' => new StoreResource($store),
-                ]
+                'status' => 404,
+                'message' => 'store not found'
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Invalid store id',
-            ], 404);
         }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'store' => new StoreResource($store),
+            ]
+        ], 200);
     }
 
     public function store(Request $request)
@@ -106,9 +102,10 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'logo_url' => 'nullable|string|max:255',
-            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            // 'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            // 'logo_url' => 'nullable|string|max:255',
+            'logo' => 'nullable|url',
+            'dark_logo' => 'nullable|url',
             'dark_logo_url' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
@@ -118,19 +115,19 @@ class StoreController extends Controller
 
 
         // Handle the logo file upload if present
-        $logoPath = null;
-        if ($request->hasFile('logo') && isset($request->logo)) {
-            $logoPath = $request->file('logo')->store('stores', 'public');
-        } else if ($request->logo_url) {
-            $logoPath = $request->logo_url;
-        }
+        // $logoPath = null;
+        // if ($request->hasFile('logo') && isset($request->logo)) {
+        //     $logoPath = $request->file('logo')->store('stores', 'public');
+        // } else if ($request->logo_url) {
+        //     $logoPath = $request->logo_url;
+        // }
 
-        $darkLogoPath = null;
-        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        } else if ($request->dark_logo_url) {
-            $darkLogoPath = $request->dark_logo_url;
-        }
+        // $darkLogoPath = null;
+        // if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
+        //     $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
+        // } else if ($request->dark_logo_url) {
+        //     $darkLogoPath = $request->dark_logo_url;
+        // }
 
 
         // Create a new store record
@@ -143,9 +140,9 @@ class StoreController extends Controller
             'phone' => $request->phone ?? null,
             'location' => $request->location ?? null,
             'currency' => $request->currency ?? 'BDT',
-            'logo' => $logoPath,
+            'logo' => $request->logo ?? null,
             "theme_id" => $theme_id ?? Theme::first()->id,
-            'dark_logo' => $darkLogoPath,
+            'dark_logo' => $request->dark_logo ?? null,
             'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null,
             'type' => $request->type ?? null,
@@ -160,8 +157,10 @@ class StoreController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store created successfully.',
-            'data' => new StoreResource($store),
-        ]);
+            'data' => [
+                'store' => new StoreResource($store),
+            ]
+        ], 200);
     }
 
     public function update(Request $request, $id)
@@ -173,7 +172,7 @@ class StoreController extends Controller
         if (!$store) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Invalid store id'
+                'message' => 'Store not found',
             ]);
         }
 
@@ -185,10 +184,8 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'logo_url' => 'nullable|string|max:255',
-            'dark_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            'dark_logo_url' => 'nullable|string|max:255',
+            'logo' => 'nullable|url',
+            'dark_logo' => 'nullable|url',
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
             'settings' => 'nullable|array|max:1000000',
@@ -198,19 +195,19 @@ class StoreController extends Controller
         ]);
 
         // Handle the logo file upload if present
-        $logoPath = null;
-        if ($request->hasFile('logo') && isset($request->logo)) {
-            $logoPath = $request->file('logo')->store('stores', 'public');
-        } else if ($request->logo_url) {
-            $logoPath = $request->logo_url;
-        }
+        // $logoPath = null;
+        // if ($request->hasFile('logo') && isset($request->logo)) {
+        //     $logoPath = $request->file('logo')->store('stores', 'public');
+        // } else if ($request->logo_url) {
+        //     $logoPath = $request->logo_url;
+        // }
 
-        $darkLogoPath = null;
-        if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-            $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        } else if ($request->dark_logo_url) {
-            $darkLogoPath = $request->dark_logo_url;
-        }
+        // $darkLogoPath = null;
+        // if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
+        //     $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
+        // } else if ($request->dark_logo_url) {
+        //     $darkLogoPath = $request->dark_logo_url;
+        // }
 
         $theme_id = $store->theme_id;
         if ($request->theme_id) {
@@ -232,8 +229,8 @@ class StoreController extends Controller
             'location' => $request->location ?? $store->location,
             'currency' => $request->currency ?? $store->currency,
             'status' => $request->status ?? $store->status, // Retain the existing status if not provided
-            'logo' => $logoPath ?? $store->logo,
-            'dark_logo' => $darkLogoPath ?? $store->dark_logo,
+            'logo' => $request->logo ?? $store->logo,
+            'dark_logo' => $request->dark_logo ?? $store->dark_logo,
             'primary_color' => $request->primary_color ?? $store->primary_color,
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
             'theme_id' => $theme_id,
@@ -246,7 +243,9 @@ class StoreController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store updated successfully.',
-            'data' => new StoreResource($store),
+            'data' => [
+                'store' => new StoreResource($store),
+            ]
         ], 200);
     }
 
@@ -258,9 +257,9 @@ class StoreController extends Controller
         // If the store doesn't exist or is not owned by the user, return an error
         if (!$store) {
             return response()->json([
-                'status' => 403,
-                'message' => 'You are not authorized to delete this store or it does not exist.',
-            ], 403);
+                'status' => 404,
+                'message' => 'Store not found',
+            ], 404);
         }
 
         // Delete the store record
@@ -270,7 +269,7 @@ class StoreController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store deleted successfully.',
-        ]);
+        ], 200);
     }
 
     public function switchStore(Request $request)
@@ -285,8 +284,8 @@ class StoreController extends Controller
 
         if (!$store) {
             return response()->json([
-                'status' => 400,
-                'message' => 'Invalid store id'
+                'status' => 404,
+                'message' => 'Store not found',
             ]);
         }
 
@@ -316,7 +315,7 @@ class StoreController extends Controller
             'data' => [
                 'store' => new StoreResource($store),
             ]
-        ]);
+        ], 200);
     }
 
     public function currentStore(Request $request)
@@ -326,13 +325,20 @@ class StoreController extends Controller
         $user = auth()->user();
         $store = Store::where('id', $user->storeSession->store_id)->first();
 
+        if (!$store) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'store not found'
+            ]);
+        }
+
         return response()->json([
             'status' => 200,
             'data' => [
                 'store' => new StoreResource($store)
             ]
 
-        ]);
+        ], 200);
     }
 
     public function updateStoreSession(Request $request, $store): void
@@ -354,6 +360,5 @@ class StoreController extends Controller
 
         // Also set it in the request attributes
         $request->attributes->set('store_id', $store->id);
-
     }
 }

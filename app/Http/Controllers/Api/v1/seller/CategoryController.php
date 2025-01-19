@@ -33,7 +33,9 @@ class CategoryController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' =>  CategoryResource::collection($categories),
+            'data' => [
+                'categories' => CategoryResource::collection($categories),
+            ],
             'meta' => [
                 'current_page' => $categories->currentPage(),
                 'first_page_url' => $categories->url(1),
@@ -59,7 +61,9 @@ class CategoryController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => new CategoryResource($category),
+            'data' => [
+                'category' => new CategoryResource($category),
+            ],
         ], 200);
     }
 
@@ -79,7 +83,9 @@ class CategoryController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Category created successfully',
-            'data' => new CategoryResource($category),
+            'data' => [
+                'category' => new CategoryResource($category),
+            ],
         ], 200);
     }
 
@@ -106,7 +112,9 @@ class CategoryController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Category updated successfully',
-            'data' => new CategoryResource($category),
+            'data' => [
+                'category' => new CategoryResource($category),
+            ],
         ], 200);
     }
 

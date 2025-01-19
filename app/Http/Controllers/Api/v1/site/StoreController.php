@@ -38,6 +38,6 @@ class StoreController extends Controller
             'data' => [
                 'store' => new StoreResource($store),
             ],
-        ]);
+        ], 200);
     }
 }
