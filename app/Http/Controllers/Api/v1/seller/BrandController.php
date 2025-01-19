@@ -13,19 +13,42 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $brands = Brand::authorized()->latest()->get();
+        // Retrieve query parameters
+        $search = $request->input('search'); // Search keyword
+        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
+        // Fetch brands with optional search and sorting, paginated
+        $brands = Brand::authorized()
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%')
+                    ->where('store_id', authStore());
+            })
+            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            ->paginate($perPage);
+
+        return apiResponse(function () use ($brands) {
             return response()->json([
                 'status' => 200,
-                'data' => [
-                    'brands' => BrandResource::collection($brands)
-                ],
-            ]);
+                'data' => BrandResource::collection($brands),
+                'meta' => [
+                    'current_page' => $brands->currentPage(),
+                    'first_page_url' => $brands->url(1),
+                    'last_page' => $brands->lastPage(),
+                    'last_page_url' => $brands->url($brands->lastPage()),
+                    'next_page_url' => $brands->nextPageUrl(),
+                    'prev_page_url' => $brands->previousPageUrl(),
+                    'total' => $brands->total(),
+                    'per_page' => $brands->perPage(),
+                ]
+            ], 200);
         });
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -36,12 +59,10 @@ class BrandController extends Controller
 
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|max:255',
-                'image' => 'nullable|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             ]);
 
             $validated['store_id'] = authStore();
-
 
             $brand = Brand::create([
                 'name' => $validated['name'],
@@ -53,11 +74,8 @@ class BrandController extends Controller
                 [
                     'status' => 200,
                     'message' => 'Brand created successfully',
-                    'data' => [
-                        'brands' => new BrandResource($brand)
-                    ]
-                ]
-            );
+                    'data' => new BrandResource($brand)
+                ], 200);
         });
     }
 
@@ -67,16 +85,21 @@ class BrandController extends Controller
     public function show(Request $request, $id)
     {
         return apiResponse(function () use ($request, $id) {
-            $brand = Brand::authorized()->findOrFail($id);
+            $brand = Brand::authorized()->find($id);
+
+            if (!$brand) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Brand not found'
+                ], 404);
+            }
 
             return response()->json(
                 [
                     'status' => 200,
-                    'data' => [
-                        'brands' => new BrandResource($brand)
-                    ]
+                    'data' =>  new BrandResource($brand)
                 ]
-            );
+            , 200);
         });
     }
 
@@ -86,12 +109,18 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         return apiResponse(function () use ($request, $id) {
-            $brand = Brand::authorized()->findOrFail($id);
+            $brand = Brand::authorized()->find($id);
+
+            if (!$brand) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Brand not found'
+                ], 404);
+            }
 
             $validated = $request->validate([
                 'name' => 'nullable|string|max:255',
-                'image' => 'nullable|string|max:255',
-                'slug' => 'nullable|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             ]);
 
             $brand->update([
@@ -103,11 +132,9 @@ class BrandController extends Controller
                 [
                     'status' => 200,
                     'message' => 'Brand updated successfully',
-                    'data' => [
-                        'brands' => new BrandResource($brand)
-                    ]
+                    'data' => new BrandResource($brand)
                 ]
-            );
+            , 200);
         });
     }
 
@@ -117,7 +144,14 @@ class BrandController extends Controller
     public function destroy(string $id)
     {
         return apiResponse(function () use ($id) {
-            $brand = Brand::authorized()->findOrFail($id);
+            $brand = Brand::authorized()->find($id);
+
+            if (!$brand) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Brand not found'
+                ], 404);
+            }
 
             if ($brand->image) {
                 Storage::disk('public')->delete($brand->image);
@@ -130,7 +164,7 @@ class BrandController extends Controller
                     'success' => true,
                     'message' => 'Brand deleted successfully',
                 ]
-            );
+            , 200);
         });
     }
 }

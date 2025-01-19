@@ -20,6 +20,8 @@ class BrandResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'image' => $this->brand_image,
+            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
     }
 }
