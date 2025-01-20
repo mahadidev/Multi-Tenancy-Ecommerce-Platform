@@ -29,84 +29,97 @@ class WidgetResource extends Resource
     protected static ?string $pluralLabel = 'Widgets';
 
     protected static ?string $navigationGroup = 'Settings';
-   
+
     public static function getNavigationSort(): ?int
     {
-        return 4; 
+        return 4;
     }
-   
+
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Forms\Components\Section::make('Widget Group Details')
-                ->schema([
-                    Forms\Components\TextInput::make('group_name')
-                        ->required()
-                        ->maxLength(255),
-                    Forms\Components\TextInput::make('group_label')
-                        ->required()
-                        ->maxLength(255),
-                    Forms\Components\TextInput::make('location')
-                        ->maxLength(255),
-                ]),
+            ->schema([
+                Forms\Components\Section::make('Widget Group Details')
+                    ->schema([
+                        Forms\Components\TextInput::make('group_name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('group_label')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('location')
+                            ->maxLength(255),
+                    ]),
 
-            Forms\Components\Section::make('Widgets')
-                ->schema([
-                    Forms\Components\Repeater::make('widgets')
-                        ->relationship()
-                        ->schema([
-                            Forms\Components\TextInput::make('meta_title')
-                                ->required()
-                                ->live(onBlur: true)
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('meta_name')
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\Select::make('field_type')
-                                ->label('Field Type')
-                                ->options([
-                                    'text' => 'Text Field',
-                                    'textarea' => 'Textarea Field',
-                                    'image' => 'Image Upload',
-                                    'links' => 'Links',
-                                ])
-                                ->required()
-                                ->live()
-                                ->afterStateUpdated(function ($state, callable $set) {
-                                    $set('meta_value', null);
-                                    $set('link_url', null);  // Reset link URL when field type changes
-                                }),
+                Forms\Components\Section::make('Widgets')
+                    ->schema([
+                        Forms\Components\Repeater::make('widgets')
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\TextInput::make('meta_title')
+                                    ->required()
+                                    ->live(onBlur: true)
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('meta_name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\Select::make('field_type')
+                                    ->label('Field Type')
+                                    ->options([
+                                        'text' => 'Text Field',
+                                        'textarea' => 'Textarea Field',
+                                        'image' => 'Image Upload',
+                                        'links' => 'Links',
+                                    ])
+                                    ->required()
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, callable $set) {
+                                        $set('meta_value', null);
+                                        $set('link_url', null);  // Reset link URL when field type changes
+                                    }),
 
-                            // Dynamic Meta Value field based on field_type
-                            Forms\Components\Group::make()
-                                ->schema(function ($get) {
-                                    $fieldType = $get('field_type');
+                                // Serial Field: Auto-generate or make editable
+                                Forms\Components\TextInput::make('serial')
+                                    ->label('Serial')
+                                    ->required()
+                                    ->unique(ignoreRecord: true)
+                                    ->default(function () {
+                                        return \App\Models\Widget::max('serial') + 1;
+                                    })
+                                    ->visible(function ($livewire) {
+                                        return $livewire instanceof \Filament\Resources\Pages\EditRecord;
+                                    }),
 
-                                    return match ($fieldType) {
-                                        'text' => self::text(),
-                                        'textarea' => self::textarea(),
-                                        'image' => self::files(),
-                                        'links' => self::links(),
-                                        default => [],
-                                    };
-                                }),
-                            Forms\Components\Toggle::make('is_active')
-                                ->default(true),
-                            Forms\Components\KeyValue::make('settings')
-                                ->label('Additional Settings'),
-                        ])
-                        ->orderColumn('sorting')
-                        ->defaultItems(0)
-                        ->reorderable()
-                        ->collapsible()
-                        ->collapsed()
-                        ->itemLabel(fn (array $state): ?string => $state['meta_title'] ?? ''),
-                ]),
-        ]);
+                                // Dynamic Meta Value field based on field_type
+                                Forms\Components\Group::make()
+                                    ->schema(function ($get) {
+                                        $fieldType = $get('field_type');
+
+                                        return match ($fieldType) {
+                                            'text' => self::text(),
+                                            'textarea' => self::textarea(),
+                                            'image' => self::files(),
+                                            'links' => self::links(),
+                                            default => [],
+                                        };
+                                    }),
+                                Forms\Components\Toggle::make('is_active')
+                                    ->default(true),
+                                Forms\Components\KeyValue::make('settings')
+                                    ->label('Additional Settings'),
+                            ])
+                            ->orderColumn('sorting')
+                            ->defaultItems(0)
+                            ->reorderable()
+                            ->collapsible()
+                            ->collapsed()
+                            ->itemLabel(fn(array $state): ?string => $state['meta_title'] ?? ''),
+                    ]),
+            ]);
     }
 
-    public static function text(){
+    public static function text()
+    {
         return [
             Forms\Components\TextInput::make('meta_value')
                 ->label('Text Value')
@@ -118,7 +131,7 @@ class WidgetResource extends Resource
 
     public static function textarea()
     {
-       return  [
+        return  [
             Forms\Components\Textarea::make('meta_value')
                 ->label('Content')
                 ->required(),
@@ -127,7 +140,8 @@ class WidgetResource extends Resource
         ];
     }
 
-    public static function files(){
+    public static function files()
+    {
         return [
             Forms\Components\FileUpload::make('meta_value')
                 ->label('Image')
@@ -138,7 +152,8 @@ class WidgetResource extends Resource
         ];
     }
 
-    public static function links(){
+    public static function links()
+    {
         return [
             Forms\Components\Grid::make(2)
                 ->schema([
@@ -158,32 +173,32 @@ class WidgetResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->columns([
-            TextColumn::make('group_label')
-                ->label('Groups Name')
-                ->sortable()
-                ->searchable(),
-            TextColumn::make('group_name')
-                ->label('code')
-                ->sortable()
-                ->searchable(),
-            
-            TextColumn::make('location'),
-            TextColumn::make('widgets_count')->counts('widgets'),
-            TextColumn::make('created_at')
-                ->label('Created At')
-                ->dateTime(),
-        ])
-        ->filters([
-            //
-        ])
-        ->actions([
-            Tables\Actions\EditAction::make()->label('Manage'),
-            Tables\Actions\DeleteAction::make(),
-        ])
-        ->bulkActions([
-            Tables\Actions\DeleteBulkAction::make(),
-        ]);
+            ->columns([
+                TextColumn::make('group_label')
+                    ->label('Groups Name')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('group_name')
+                    ->label('code')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('location'),
+                TextColumn::make('widgets_count')->counts('widgets'),
+                TextColumn::make('created_at')
+                    ->label('Created At')
+                    ->dateTime(),
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make()->label('Manage'),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
     }
 
     public static function getRelations(): array

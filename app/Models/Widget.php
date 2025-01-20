@@ -16,6 +16,7 @@ class Widget extends Model
         'meta_value',
         'field_type',
         'sorting',
+        'serial',
         'placeholder',
         'settings',
         'is_active',
@@ -33,4 +34,14 @@ class Widget extends Model
     {
         return $this->belongsTo(WidgetGroup::class, 'group_id');
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($widget) {
+            if (is_null($widget->serial)) {
+                $widget->serial = self::max('serial') + 1;
+            }
+        });
+    }
+    
 }
