@@ -78,18 +78,6 @@ class WidgetResource extends Resource
                                         $set('link_url', null);  // Reset link URL when field type changes
                                     }),
 
-                                // Serial Field: Auto-generate or make editable
-                                Forms\Components\TextInput::make('serial')
-                                    ->label('Serial')
-                                    ->required()
-                                    ->unique(ignoreRecord: true)
-                                    ->default(function () {
-                                        return \App\Models\Widget::max('serial') + 1;
-                                    })
-                                    ->visible(function ($livewire) {
-                                        return $livewire instanceof \Filament\Resources\Pages\EditRecord;
-                                    }),
-
                                 // Dynamic Meta Value field based on field_type
                                 Forms\Components\Group::make()
                                     ->schema(function ($get) {

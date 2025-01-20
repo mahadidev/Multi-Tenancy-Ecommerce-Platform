@@ -76,6 +76,7 @@ class StorePageWidgetController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'label' => 'required|string',
+            'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
@@ -105,6 +106,7 @@ class StorePageWidgetController extends Controller
         $pageWidget = $storePage->widgets()->create([
             'name' => $request->name,
             'label' => $request->label,
+            'serial' => $request->serial,
         ]);
 
         if ($request->has('inputs')) {
@@ -152,6 +154,7 @@ class StorePageWidgetController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'label' => 'required|string',
+            'serial' => 'nullable|numeric',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
@@ -189,6 +192,7 @@ class StorePageWidgetController extends Controller
         $pageWidget->update([
             'name' => $request->name,
             'label' => $request->label,
+            'serial' => $request->serial,
         ]);
 
         if ($request->has('inputs')) {

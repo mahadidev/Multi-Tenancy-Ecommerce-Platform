@@ -16,7 +16,6 @@ class Widget extends Model
         'meta_value',
         'field_type',
         'sorting',
-        'serial',
         'placeholder',
         'settings',
         'is_active',

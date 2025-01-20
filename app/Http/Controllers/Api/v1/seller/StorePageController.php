@@ -86,6 +86,7 @@ class StorePageController extends Controller
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',
+            'widgets.*.serial' => 'nullable|numeric', 
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -109,10 +110,12 @@ class StorePageController extends Controller
 
         // Create the widgets for the store page if they exist
         if ($request->has('widgets')) {
-            foreach ($request->widgets as $widget) {
+            foreach ($request->widgets as $key => $widget) {
                 $storePageWidgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
+                    'serial' => isset($widget['label']) ? $widget['serial'] : ($key + 1),
+
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($storePageWidgetData);
@@ -240,7 +243,8 @@ class StorePageController extends Controller
             'is_active' => 'required|boolean',
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
-            'widgets.*.label' => 'required|string',
+            'widgets.*.label' => 'required|string', 
+            'widgets.*.serial' => 'nullable|numeric', 
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -265,10 +269,11 @@ class StorePageController extends Controller
 
             $storePage->widgets()->delete();
 
-            foreach ($request->widgets as $widget) {
+            foreach ($request->widgets as $key => $widget) {
                 $widgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
+                    'serial' => isset($widget['label']) ? $widget['serial'] : ($key + 1),
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);

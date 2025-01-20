@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('widgets', function (Blueprint $table) {
-            $table->unsignedBigInteger('serial')->nullable()->unique()->after('is_active');
+        Schema::table('store_page_widgets', function (Blueprint $table) {
+            $table->tinyInteger('serial')->default(1)->after('label');
         });
     }
 
@@ -21,8 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('widgets', function (Blueprint $table) {
-            $table->dropUnique(['serial']);
+        Schema::table('store_page_widgets', function (Blueprint $table) {
             $table->dropColumn('serial');
         });
     }
