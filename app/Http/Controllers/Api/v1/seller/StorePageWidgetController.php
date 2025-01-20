@@ -14,20 +14,33 @@ class StorePageWidgetController extends Controller
     public function index(Request $request, $pageId)
     {
         $storePage = StorePage::where('id', $pageId)->first();
+        $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
         if (!$storePage) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Page not found',
-            ]);
+            ], 404);
         }
+
+        $widgets = $storePage->widgets()->paginate($perPage);
 
         return response()->json([
             'status' => 200,
             'data' => [
-                'widgets' => StorePageWidgetsResource::collection($storePage->widgets),
+                'widgets' => StorePageWidgetsResource::collection($widgets),
             ],
-        ]);
+            'meta' => [
+                'current_page' => $widgets->currentPage(),
+                'first_page_url' => $widgets->url(1),
+                'last_page' => $widgets->lastPage(),
+                'last_page_url' => $widgets->url($widgets->lastPage()),
+                'next_page_url' => $widgets->nextPageUrl(),
+                'prev_page_url' => $widgets->previousPageUrl(),
+                'total' => $widgets->total(),
+                'per_page' => $widgets->perPage(),
+            ],
+        ], 200);
     }
 
     public function view(Request $request, $pageId, $widgetId)
@@ -38,7 +51,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Page not found',
-            ]);
+            ], 404);
         }
 
         $widget = $storePage->widgets()->where('id', $widgetId)->first();
@@ -47,7 +60,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Widget not found',
-            ]);
+            ], 404);
         }
 
         return response()->json([
@@ -55,7 +68,7 @@ class StorePageWidgetController extends Controller
             'data' => [
                 'widget' => new StorePageWidgetsResource($widget),
             ],
-        ]);
+        ], 200);
     }
 
     public function store(Request $request, $pageId)
