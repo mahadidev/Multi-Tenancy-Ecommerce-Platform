@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::dropIfExists('theme_widgets');
+    }
+    
+    
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+         // Recreate the 'theme_widgets' table
+         Schema::create('theme_widgets', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('theme_id');
+            $table->string('name');
+            $table->string('label')->nullable();
+            $table->longText("inputs")->nullable();
+            $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('theme_id')
+                ->references('id')->on('themes')
+                ->onDelete('cascade');
+        });
+    }
+};
