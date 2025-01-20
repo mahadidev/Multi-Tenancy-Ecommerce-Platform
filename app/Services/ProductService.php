@@ -14,8 +14,8 @@ class ProductService
 
     public static function index(Request $request)
     {
-        $query = Product::with('category', 'store', 'variants', 'brand')->authorized();
-
+        $query = Product::authorized();
+        self::applyFiltersAndSorting($query, $request);
         $products = $query->paginate($request->per_page ?? 10);
 
         return ProductResource::collection($products);
@@ -243,5 +243,71 @@ class ProductService
         $product->delete();
 
         return 'product deleted successfully.';
+    }
+
+    public static function applyFiltersAndSorting($query, Request $request)
+    {
+        // Essential Filters
+
+        // 1. Price Range - Most important for shoppers
+        if ($request->has('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+        if ($request->has('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        // 2. Availability Filter - Critical for user experience
+        if ($request->has('in_stock')) {
+            $query->where('stock', '>', 0)
+                ->where('has_in_stocks', true);
+        }
+
+        // 3. Discounts - Important for price-sensitive customers
+        if ($request->has('on_sale')) {
+            $query->where('has_discount', true)
+                ->whereDate('discount_to', '>=', now());
+        }
+
+        // 4. Brand Filter - Key for brand-conscious shoppers
+        if ($request->has('brand_id')) {
+            $query->where('brand_id', $request->brand_id);
+        }
+
+        // 5. Search - Essential for finding specific products
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('sku', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 6. Trending Products - Important for showcasing popular products
+        if ($request->has('is_trending')) {
+            $query->where('is_trending', true);
+        }
+
+        // 7. Category Filter - Essential for category-specific products
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Essential Sorting
+        $sortField = $request->input('sort_by', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'desc');
+
+        // Limited to most important sort options
+        $allowedSortFields = [
+            'created_at',    // Latest products
+            'price',         // Price sorting
+            'name',         // Alphabetical
+            'is_trending',   // Trending products
+        ];
+
+        if (in_array($sortField, $allowedSortFields)) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        return $query;
     }
 }
