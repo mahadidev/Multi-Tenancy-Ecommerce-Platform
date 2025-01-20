@@ -22,7 +22,7 @@ export const categoryApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Categories"],
     endpoints: (builder) => ({
-        fetchCategories: builder.query<any, void>({
+        fetchCategories: builder.query<ResponseType, void>({
             query: () => {
                 return createRequest({
                     url: `${SELLER_PREFIX}/category`,

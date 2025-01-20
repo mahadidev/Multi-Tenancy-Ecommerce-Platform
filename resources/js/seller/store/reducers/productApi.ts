@@ -24,7 +24,7 @@ export const productApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Products"],
     endpoints: (builder) => ({
-        fetchProducts: builder.query<any, void>({
+        fetchProducts: builder.query<ResponseType, void>({
             query: () => {
                 return createRequest({
                     url: `${SELLER_PREFIX}/product`,

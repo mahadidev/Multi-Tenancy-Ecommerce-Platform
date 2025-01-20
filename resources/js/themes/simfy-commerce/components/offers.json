@@ -2,6 +2,7 @@
     "id": 2,
     "name": "offers",
     "label": "Offers",
+    "thumbnail": "imageurl",
     "inputs": [
         {
             "id": 1,
