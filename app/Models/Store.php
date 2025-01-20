@@ -14,7 +14,8 @@ class Store extends Model
 
     protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'type', 'description'];
     protected $casts = [
-        'settings' => 'array',
+        'settings' => 'json',
+        // 'settings' => 'array',
     ];
 
     protected static function boot()
@@ -83,5 +84,10 @@ class Store extends Model
 
     public function pages(){
         return $this->hasMany(StorePage::class, 'store_id');
+    }
+
+    public function socialMedia()
+    {
+        return $this->hasMany(StoreSocialMedia::class);
     }
 }
