@@ -102,16 +102,22 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
+
             // 'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
             // 'logo_url' => 'nullable|string|max:255',
             'logo' => 'nullable|url',
             'dark_logo' => 'nullable|url',
             'dark_logo_url' => 'nullable|string|max:255',
+
+//             'logo' => 'nullable|string|max:255',
+//             'dark_logo' => 'nullable|string|max:255',
+
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
             "theme_id" => "nullable|exists:themes,id",
             'description' => 'nullable|string',
         ]);
+
 
 
         // Handle the logo file upload if present
@@ -193,6 +199,7 @@ class StoreController extends Controller
             'type' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
+
 
         // Handle the logo file upload if present
         // $logoPath = null;

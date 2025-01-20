@@ -1,65 +1,111 @@
+import { ImageInput } from "@/seller/components";
 import useForm from "@/seller/hooks/useForm";
-import { useAppSelector } from "@/seller/store";
-import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
-import { Button, Card } from "flowbite-react";
+import useStore from "@/seller/hooks/useStore";
+import { StoreType } from "@/seller/types";
+import { Button, Card, Label, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { HiCloudUpload } from "react-icons/hi";
 
 const ProfielCard = () => {
-    const { currentStore: store } = useAppSelector((state) => state.store);
-    const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
-    const { handleChange } = useForm({
-        errors: error,
+    const { store: currentStore, updateStore } = useStore();
+    const store: StoreType = currentStore;
+    const { handleChange, formState, formErrors } = useForm({
+        errors: updateStore.error,
+        defaultState: {
+            name: store.name,
+        },
     });
 
     return (
         <>
             <Card>
-                <div className="items-center sm:flex sm:space-x-4 xl:block xl:space-x-0 2xl:flex 2xl:space-x-4">
-                    <img
-                        alt=""
-                        src={store.logos.primary}
-                        className="mb-4 rounded-lg sm:mb-0 xl:mb-4 2xl:mb-0 aspect-square object-cover object-center mx-auto md:mx-0 w-[120px]"
-                    />
-                    <div>
-                        <h3 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white text-center md:text-start">
-                            {store.name}
-                        </h3>
-                        <div className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400 text-center md:text-start">
-                            Clothing Store
+                <div className="grid grid-cols-1 gap-6">
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="name">Name</Label>
+                        <div>
+                            <TextInput
+                                id="name"
+                                name="name"
+                                placeholder="Store name"
+                                value={formState["name"]}
+                                color={formErrors["name"] ? "failure" : "gray"}
+                                helperText={
+                                    formErrors["name"]
+                                        ? formErrors["name"][0]
+                                        : false
+                                }
+                                onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    handleChange(event);
+                                }}
+                                required
+                            />
                         </div>
-
+                    </div>
+                    <div className="flex flex-col gap-2 col-span-full">
+                        <Label htmlFor="logo">Logo</Label>
+                        <div>
+                            <ImageInput
+                                id="logo"
+                                name="logo"
+                                placeholder="click to upload logo"
+                                color={formErrors["logo"] ? "failure" : "gray"}
+                                helperText={
+                                    formErrors["logo"]
+                                        ? formErrors["logo"][0]
+                                        : false
+                                }
+                                value={store["logo"]}
+                                onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    handleChange(event);
+                                }}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-2 col-span-full">
+                        <Label htmlFor="dark_logo">Logo Dark</Label>
+                        <div>
+                            <ImageInput
+                                id="dark_logo"
+                                name="dark_logo"
+                                placeholder="click to upload dark logo"
+                                color={
+                                    formErrors["dark_logo"] ? "failure" : "gray"
+                                }
+                                helperText={
+                                    formErrors["dark_logo"]
+                                        ? formErrors["dark_logo"][0]
+                                        : false
+                                }
+                                value={store["dark_logo"]}
+                                onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    handleChange(event);
+                                }}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="">
                         <Button
-                            className="relative mx-auto md:mx-0"
-                            size="sm"
                             color="blue"
-                            isProcessing={isLoading}
-                            processingLabel="Updating"
+                            isProcessing={updateStore.loading}
+                            processingLabel="Saving"
+                            disabled={updateStore.loading}
                             processingSpinner={
                                 <AiOutlineLoading className="h-6 w-6 animate-spin" />
                             }
+                            onClick={() =>
+                                updateStore.update({
+                                    storeData: formState,
+                                })
+                            }
                         >
-                            <div className="flex gap-2 items-center">
-                                <HiCloudUpload className="mr-2" />
-                                Change Logo
-                            </div>
-                            <input
-                                name="logo"
-                                type="file"
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) =>
-                                    handleChange(event, (props: any) => {
-                                        updateStore({
-                                            storeId: store.id,
-                                            formData: {
-                                                [props.name]: props.value,
-                                            },
-                                        });
-                                    })
-                                }
-                                className="w-full h-full absolute top-0 left-0 opacity-0 cursor-pointer"
-                            />
+                            Save all
                         </Button>
                     </div>
                 </div>
