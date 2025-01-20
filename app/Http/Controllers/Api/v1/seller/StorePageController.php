@@ -21,21 +21,42 @@ class StorePageController extends Controller
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'Invalid store id',
+                    'message' => 'store not found',
                 ],
                 404,
             );
         }
 
+        $search = $request->input('search'); // Search keyword
+        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+
         $pages = StorePage::with('widgets')
-            ->where('store_id', $store->id)
-            ->get();
+            ->where('store_id', $store_id)
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%')
+                    ->orWhere('title', 'like', '%' . $search . '%');
+            })  
+            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            ->paginate($perPage);
 
         return response()->json(
             [
                 'status' => 200,
                 'data' => [
                     'pages' => StorePagesResource::collection($pages),
+                ],
+                'meta' => [
+                    'current_page' => $pages->currentPage(),
+                    'first_page_url' => $pages->url(1),
+                    'last_page' => $pages->lastPage(),
+                    'last_page_url' => $pages->url($pages->lastPage()),
+                    'next_page_url' => $pages->nextPageUrl(),
+                    'prev_page_url' => $pages->previousPageUrl(),
+                    'total' => $pages->total(),
+                    'per_page' => $pages->perPage(),
                 ],
             ],
             200,
@@ -65,6 +86,7 @@ class StorePageController extends Controller
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',
+            'widgets.*.serial' => 'nullable|numeric', 
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -88,10 +110,12 @@ class StorePageController extends Controller
 
         // Create the widgets for the store page if they exist
         if ($request->has('widgets')) {
-            foreach ($request->widgets as $widget) {
+            foreach ($request->widgets as $key => $widget) {
                 $storePageWidgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
+                    'serial' => isset($widget['label']) ? $widget['serial'] : ($key + 1),
+
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($storePageWidgetData);
@@ -219,7 +243,8 @@ class StorePageController extends Controller
             'is_active' => 'required|boolean',
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
-            'widgets.*.label' => 'required|string',
+            'widgets.*.label' => 'required|string', 
+            'widgets.*.serial' => 'nullable|numeric', 
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -244,10 +269,11 @@ class StorePageController extends Controller
 
             $storePage->widgets()->delete();
 
-            foreach ($request->widgets as $widget) {
+            foreach ($request->widgets as $key => $widget) {
                 $widgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
+                    'serial' => isset($widget['label']) ? $widget['serial'] : ($key + 1),
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);

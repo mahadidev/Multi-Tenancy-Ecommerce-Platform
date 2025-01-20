@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class StorePageWidgetsResource extends JsonResource
+class StoreSocialMediaResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,12 @@ class StorePageWidgetsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'store_page_id' => $this->store_page_id,
             'name' => $this->name,
-            'label' => $this->label,
-            'serial' => $this->serial,
+            'username' => $this->username,
+            'url' => $this->url,
+            'store_id' => $this->store_id,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
-            'inputs' => $this->widgetInputs ? StorePageWidgetInputsResource::collection($this->widgetInputs) : [],
         ];
     }
 }

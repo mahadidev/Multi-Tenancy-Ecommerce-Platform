@@ -8,6 +8,7 @@ use App\Models\Theme;
 use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\StoreSession;
+use App\Models\StoreSocialMedia;
 use App\Services\StoreService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -18,7 +19,18 @@ class StoreController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        $stores = Store::where(["owner_id" => $user->id])->latest()->get();
+        $search = $request->input('search'); // Search keyword
+        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $stores = Store::where(["owner_id" => $user->id])
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('domain', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            ->paginate($perPage);
+            
         $storeSession = $user->storeSession()->first();
         $current_store = null;
 
@@ -69,6 +81,16 @@ class StoreController extends Controller
             'data' => [
                 'stores' => StoreResource::collection($stores),
                 'current_store' => $current_store ? new StoreResource($current_store) : null,
+            ],
+            'meta' => [
+                'current_page' => $stores->currentPage(),
+                'first_page_url' => $stores->url(1),
+                'last_page' => $stores->lastPage(),
+                'last_page_url' => $stores->url($stores->lastPage()),
+                'next_page_url' => $stores->nextPageUrl(),
+                'prev_page_url' => $stores->previousPageUrl(),
+                'total' => $stores->total(),
+                'per_page' => $stores->perPage(),
             ]
         ], 200);
     }
@@ -102,38 +124,15 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-
-            // 'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
-            // 'logo_url' => 'nullable|string|max:255',
             'logo' => 'nullable|url',
             'dark_logo' => 'nullable|url',
-            'dark_logo_url' => 'nullable|string|max:255',
-
-//             'logo' => 'nullable|string|max:255',
-//             'dark_logo' => 'nullable|string|max:255',
-
+            // 'dark_logo_url' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
             "theme_id" => "nullable|exists:themes,id",
             'description' => 'nullable|string',
+            'social_media' => 'nullable|array',
         ]);
-
-
-
-        // Handle the logo file upload if present
-        // $logoPath = null;
-        // if ($request->hasFile('logo') && isset($request->logo)) {
-        //     $logoPath = $request->file('logo')->store('stores', 'public');
-        // } else if ($request->logo_url) {
-        //     $logoPath = $request->logo_url;
-        // }
-
-        // $darkLogoPath = null;
-        // if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-        //     $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        // } else if ($request->dark_logo_url) {
-        //     $darkLogoPath = $request->dark_logo_url;
-        // }
 
 
         // Create a new store record
@@ -155,7 +154,25 @@ class StoreController extends Controller
             'description' => $request->description ?? null,
         ]);
 
-
+        if ($request->social_media) {
+            foreach ($request->social_media as $social_media) {
+                
+                // Ensure required fields are present in each social media item
+                if (isset($social_media['name'], $social_media['username'], $social_media['url'])) {
+                    StoreSocialMedia::firstOrCreate(
+                        [
+                            'store_id' => $store->id,
+                            'name' => $social_media['name'],
+                        ],
+                        [
+                            'username' => $social_media['username'],
+                            'url' => $social_media['url'],
+                        ]
+                    );
+                }
+            }
+        }
+        
         // update store session
         $this->updateStoreSession($request, $store);
 
@@ -164,7 +181,7 @@ class StoreController extends Controller
             'status' => 200,
             'message' => 'Store created successfully.',
             'data' => [
-                'store' => new StoreResource($store),
+                'store' => StoreResource::make($store),
             ]
         ], 200);
     }
@@ -198,23 +215,9 @@ class StoreController extends Controller
             "theme_id" => "nullable",
             'type' => 'nullable|string',
             'description' => 'nullable|string',
+            'social_media' => 'nullable|array',
         ]);
 
-
-        // Handle the logo file upload if present
-        // $logoPath = null;
-        // if ($request->hasFile('logo') && isset($request->logo)) {
-        //     $logoPath = $request->file('logo')->store('stores', 'public');
-        // } else if ($request->logo_url) {
-        //     $logoPath = $request->logo_url;
-        // }
-
-        // $darkLogoPath = null;
-        // if ($request->hasFile('dark_logo') && isset($request->dark_logo)) {
-        //     $darkLogoPath = $request->file('dark_logo')->store('stores', 'public');
-        // } else if ($request->dark_logo_url) {
-        //     $darkLogoPath = $request->dark_logo_url;
-        // }
 
         $theme_id = $store->theme_id;
         if ($request->theme_id) {
@@ -241,10 +244,33 @@ class StoreController extends Controller
             'primary_color' => $request->primary_color ?? $store->primary_color,
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
             'theme_id' => $theme_id,
-            'settings' => $request->settings ? json_encode($request->settings) : $store->settings,
+            'settings' => $request->settings ? $request->settings : $store->settings,
             'type' => $request->type ?? $store->type,
             'description' => $request->description ?? $store->description,
         ]);
+
+        if ($request->social_media) {
+
+            $store->socialMedia()->delete();
+
+            foreach ($request->social_media as $social_media) {
+                
+                // Ensure required fields are present in each social media item
+                if (isset($social_media['name'], $social_media['username'], $social_media['url'])) {
+                    StoreSocialMedia::firstOrCreate(
+                        [
+                            'store_id' => $store->id,
+                            'name' => $social_media['name'],
+                        ],
+                        [
+                            'username' => $social_media['username'],
+                            'url' => $social_media['url'],
+                        ]
+                    );
+                }
+            }
+        }
+        
 
         // Return success response
         return response()->json([

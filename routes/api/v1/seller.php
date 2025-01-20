@@ -88,4 +88,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Subscriber Routes
     Route::post('/subscriber/{store_id}', [SubscriberController::class, 'store']);
+
+    // Store Social Media Routes
+    Route::resource('/store-social-media', StoreSocialMediaController::class);
+    
 });

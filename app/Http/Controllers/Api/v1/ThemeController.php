@@ -11,40 +11,47 @@ class ThemeController extends Controller
 {
     public function getThemes(Request $request)
     {
+        $themes = Theme::with('pages.page_widgets')->active()->get();
 
-        $themes = Theme::with('widgets', 'pages.page_widgets')->active()->get();
-
-        return response()->json([
-            'status' => 200,
-            'data' => [
-                'themes' => ThemeResource::collection($themes)
-            ]
-        ], 200);
+        return response()->json(
+            [
+                'status' => 200,
+                'data' => [
+                    'themes' => ThemeResource::collection($themes),
+                ],
+            ],
+            200,
+        );
     }
 
     public function getTheme(Request $request, $id)
     {
+        $theme = Theme::with('pages.page_widgets')
+            ->active()
+            ->where(['id' => $id])
+            ->orWhere(['slug' => $id])
+            ->first();
 
-        return apiResponse(function () use ($request, $id) {
-            $theme = Theme::with('widgets', 'pages.page_widgets')->active()->where(["id" => $id])->orWhere(["slug" => $id])->first();
-
-
-            if (!$theme) {
-                response()->json([
+        if (!$theme) {
+            response()->json(
+                [
                     'status' => 404,
                     'data' => [
                         'theme' => null,
-                    ]
-                ], 404);
-            }
+                    ],
+                ],
+                404,
+            );
+        }
 
-            return response()->json([
+        return response()->json(
+            [
                 'status' => 200,
                 'data' => [
-                    'theme' => new ThemeResource($theme)
-                ]
-            ], 200);
-        });
+                    'theme' => new ThemeResource($theme),
+                ],
+            ],
+            200,
+        );
     }
-
 }
