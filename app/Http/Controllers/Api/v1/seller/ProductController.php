@@ -14,7 +14,9 @@ class ProductController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => ProductService::index($request),
+            'data' => [
+                'products' => ProductService::index($request),
+            ],
             'meta' => [
                 'current_page' => ProductService::index($request)->currentPage(),
                 'first_page_url' => ProductService::index($request)->url(1),
@@ -25,7 +27,7 @@ class ProductController extends Controller
                 'total' => ProductService::index($request)->total(),
                 'per_page' => ProductService::index($request)->perPage(),
             ],
-        ]);
+        ], 200);
     }
 
     public function show(Request $request, $id)
@@ -36,15 +38,16 @@ class ProductController extends Controller
                 [
                     'status' => 404,
                     'message' => 'product not found',
-                    'data' => $product,
                 ],
                 404,
             );
         } else {
             return response()->json([
                 'status' => 200,
-                'data' => $product,
-            ]);
+                'data' => [
+                    'product' => $product,
+                ],
+            ], 200);
         }
     }
 
@@ -53,8 +56,10 @@ class ProductController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'product created successfully',
-            'product' => ProductService::store($request),
-        ]);
+            'product' => [
+                'product' => ProductService::store($request),
+            ],
+        ],);
     }
 
     public function update(Request $request, $id)
@@ -65,7 +70,6 @@ class ProductController extends Controller
                 [
                     'status' => 404,
                     'message' => 'product not found',
-                    'data' => $product,
                 ],
                 404,
             );
@@ -73,8 +77,10 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'product updated successfully',
-                'data' => $product,
-            ]);
+                'data' => [
+                    'product' => $product,
+                ],
+            ], 200);
         }
     }
 
@@ -86,7 +92,6 @@ class ProductController extends Controller
                 [
                     'status' => 404,
                     'message' => 'product not found',
-                    'data' => $product,
                 ],
                 404,
             );
@@ -94,8 +99,10 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'product deleted successfully',
-                'data' => $product,
-            ]);
+                'data' => [
+                    'product' => $product,
+                ],
+            ], 200);
         }
     }
 }

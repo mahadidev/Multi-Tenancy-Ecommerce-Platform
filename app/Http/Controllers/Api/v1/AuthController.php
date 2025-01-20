@@ -144,7 +144,7 @@ class AuthController extends Controller
                 'access_token' => $token,
                 'user' => new UserResource($user),
             ],
-        ]);
+        ], 200);
     }
 
     // User or Customer authentication functions
@@ -325,7 +325,7 @@ class AuthController extends Controller
                 'access_token' => $token,
                 'user' => $user,
             ],
-        ]);
+        ], 200);
     }
 
     private function storeSessionData(Request $request, int $storeId): void

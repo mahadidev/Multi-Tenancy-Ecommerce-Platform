@@ -40,7 +40,9 @@ class Blog extends Model
 
             // Auto-generate slug from title if it's not provided
             if (empty($blog->slug)) {
-                $blog->slug = Str::slug($blog->title);  // Generate slug from title
+                $slug = Str::slug($blog->title);
+                $count = Blog::where('slug', 'LIKE', "{$slug}%")->count();
+                $blog->slug = $count ? "{$slug}-{$count}" : $slug;  // Make slug unique if same title found
             }
             
         });
