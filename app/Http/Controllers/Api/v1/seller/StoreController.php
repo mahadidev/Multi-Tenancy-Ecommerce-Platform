@@ -105,7 +105,7 @@ class StoreController extends Controller
             'currency' => 'nullable|string|max:255',
             'logo' => 'nullable|url',
             'dark_logo' => 'nullable|url',
-            'dark_logo_url' => 'nullable|string|max:255',
+            // 'dark_logo_url' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
             "theme_id" => "nullable|exists:themes,id",
