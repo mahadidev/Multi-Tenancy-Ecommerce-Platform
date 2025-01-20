@@ -36,13 +36,6 @@ class ThemeResource extends Resource
                     ->unique(Theme::class, 'name', ignoreRecord: true)
                     ->maxLength(255)
                     ->columnSpanFull(),
-                // Forms\Components\FileUpload::make('thumbnail')
-                //     ->disk('public')
-                //     ->label('Thumbnail')
-                //     ->directory('themes')
-                //     ->image()
-                //     ->columnSpanFull()
-                //     ->required(),
                 Forms\Components\TextInput::make('thumbnail')
                     ->label('Thumbnail URL')
                     ->columnSpanFull()
@@ -51,32 +44,6 @@ class ThemeResource extends Resource
                 Forms\Components\Toggle::make('is_active')
                     ->label('Active')
                     ->default(true),
-                Forms\Components\Toggle::make('has_widgets')
-                    ->label('Has widgets')
-                    ->reactive(),
-
-                Forms\Components\Repeater::make('widgets')
-                    ->label('Widgets')
-                    ->relationship('widgets')
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Name')
-                            ->placeholder("e.g. heroSection")
-                            ->required()
-                            ->hint('e.g., Header, Navbar, Contact Form'),
-                        Forms\Components\TextInput::make('label')
-                            ->label('Label')
-                            ->placeholder("e.g. Hero Section")
-                            ->required(),
-                        Forms\Components\Textarea::make("inputs")
-                            ->label("Inputs Array")
-                            ->placeholder("ex. []")
-                            ->rows(10)
-                            ->placeholder('enter inputs array in json')
-                    ])
-                    ->columnSpanFull()
-                    ->label('Widget')
-                    ->hidden(fn(Forms\Get $get) => !$get('has_widgets')),
             ]);
     }
 
