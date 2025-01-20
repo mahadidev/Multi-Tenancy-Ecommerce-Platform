@@ -32,6 +32,7 @@ class StoreResource extends JsonResource
             'secondary_color' => $this->secondary_color,
             'theme_id' => $this->theme_id,
             'settings' => $this->settings !== "null" ? $this->settings : null,
+            'social_media' => $this->socialMedia ? StoreSocialMediaResource::collection($this->socialMedia) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
