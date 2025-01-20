@@ -4,6 +4,11 @@ import {
     useUpdateStoreMutation,
 } from "@/seller/store/reducers/storeApi";
 import { SocialMediaType, StoreType } from "@/seller/types";
+import {
+    StoreSocialMediaPayloadType,
+    useDeleteSocialMediaMutation,
+    useStoreSocialMediaMutation,
+} from "../store/reducers/socialMediaApi";
 
 const useStore = () => {
     const { currentStore } = useAppSelector((state) => state.store);
@@ -22,14 +27,14 @@ const useStore = () => {
     const [
         onAddSocialMedia,
         { isLoading: isAddSocialMediaLoading, error: addSocialMediaError },
-    ] = useUpdateStoreMutation();
+    ] = useStoreSocialMediaMutation();
     const [
         onRemoveSocialMedia,
         {
             isLoading: isRemoveSocialMediaLoading,
             error: removeSocialMediaError,
         },
-    ] = useUpdateStoreMutation();
+    ] = useDeleteSocialMediaMutation();
     const [
         onResetSettings,
         { isLoading: isResetSettingsLoading, error: resetSettingsError },
@@ -65,27 +70,16 @@ const useStore = () => {
     };
 
     const addSocialMedia = ({
-        socialMedia,
+        formData,
         onSuccess,
     }: {
-        socialMedia: SocialMediaType;
+        formData: StoreSocialMediaPayloadType;
         onSuccess?: CallableFunction;
     }) => {
         onAddSocialMedia({
-            storeId: store.id,
-            formData: {
-                settings: {
-                    ...store.settings,
-                    social_media: [
-                        ...(store.settings && store.settings.social_media
-                            ? store.settings.social_media
-                            : []),
-                        socialMedia,
-                    ],
-                },
-            },
+            formData: formData,
         }).then((response) => {
-            if (response.data.status === 200) {
+            if (response.data?.status === 200) {
                 if (onSuccess) {
                     onSuccess();
                 }
@@ -94,28 +88,16 @@ const useStore = () => {
     };
 
     const removeSocialMedia = ({
-        socialMedia,
+        formData,
         onSuccess,
     }: {
-        socialMedia: SocialMediaType;
+        formData: SocialMediaType;
         onSuccess?: CallableFunction;
     }) => {
         onRemoveSocialMedia({
-            storeId: store.id,
-            formData: {
-                settings: {
-                    ...store.settings,
-                    social_media: [
-                        ...(store.settings && store.settings.social_media
-                            ? store.settings.social_media.filter(
-                                  (item) => item.name !== socialMedia.name
-                              )
-                            : []),
-                    ],
-                },
-            },
+            socialMediaId: formData.id,
         }).then((response) => {
-            if (response.data.status === 200) {
+            if (response.data?.status === 200) {
                 if (onSuccess) {
                     onSuccess();
                 }

@@ -2,6 +2,7 @@ import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+import { setBrands, setBrandsMeta } from "../slices/brandSlice";
 
 export interface StoreBrandPayloadType {
     name: string;
@@ -20,18 +21,21 @@ export const brandApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Brands"],
     endpoints: (builder) => ({
-        fetchBrands: builder.query<any, void>({
+        fetchBrands: builder.query<ResponseType, void>({
             query: () => {
                 return createRequest({
                     url: `${SELLER_PREFIX}/brand`,
                     method: "GET",
                 });
             },
-            transformResponse: (response: ResponseType) => {
-                return response;
-            },
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Brands"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setBrands(response.data.data.brands));
+                    dispatch(setBrandsMeta(response.data.meta));
+                });
+            },
         }),
         storeBrand: builder.mutation<
             any,

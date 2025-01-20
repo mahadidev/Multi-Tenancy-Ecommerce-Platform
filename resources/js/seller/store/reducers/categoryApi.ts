@@ -2,6 +2,7 @@ import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+import { setCategories, setCategoriesMeta } from "../slices/categorySlice";
 
 export interface StoreCategoryPayloadType {
     type: string;
@@ -29,11 +30,14 @@ export const categoryApi = createApi({
                     method: "GET",
                 });
             },
-            transformResponse: (response: ResponseType) => {
-                return response;
-            },
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Categories"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setCategories(response.data.data.categories));
+                    dispatch(setCategoriesMeta(response.data.meta));
+                });
+            },
         }),
         storeCategory: builder.mutation<
             any,

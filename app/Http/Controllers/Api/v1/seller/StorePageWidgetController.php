@@ -103,11 +103,14 @@ class StorePageWidgetController extends Controller
             ]);
         }
 
-        $pageWidget = $storePage->widgets()->create([
+        $widget = [
             'name' => $request->name,
             'label' => $request->label,
-            'serial' => $request->serial,
-        ]);
+        ];
+        if ($request->serial) {
+            $widget["serial"] = $request->serial;
+        }
+        $pageWidget = $storePage->widgets()->create($widget);
 
         if ($request->has('inputs')) {
             $pageWidget->widgetInputs()->delete();

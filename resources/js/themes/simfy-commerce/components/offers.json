@@ -24,6 +24,7 @@
                     "id": 1,
                     "name": "title",
                     "label": "Title",
+                    "type": "text",
                     "value": "Free Delivery",
                     "placeholder": "Enter offer title",
                     "required": true
@@ -32,6 +33,7 @@
                     "id": 2,
                     "name": "description",
                     "label": "Description",
+                    "type": "text",
                     "value": "Free shipping worldwide",
                     "placeholder": "Enter offer description",
                     "required": true
@@ -58,6 +60,7 @@
                     "id": 1,
                     "name": "title",
                     "label": "Title",
+                    "type": "text",
                     "value": "Member Discount",
                     "placeholder": "Enter offer title",
                     "required": true
@@ -66,6 +69,7 @@
                     "id": 2,
                     "name": "description",
                     "label": "Description",
+                    "type": "text",
                     "value": "Free deals everyweek",
                     "placeholder": "Enter offer description",
                     "required": true
@@ -92,6 +96,7 @@
                     "id": 1,
                     "name": "title",
                     "label": "Title",
+                    "type": "text",
                     "value": "Money Back",
                     "placeholder": "Enter offer title",
                     "required": true
@@ -100,6 +105,7 @@
                     "id": 2,
                     "name": "description",
                     "label": "Description",
+                    "type": "text",
                     "value": "Refund in 30 days",
                     "placeholder": "Enter offer description",
                     "required": true
@@ -126,6 +132,7 @@
                     "id": 1,
                     "name": "title",
                     "label": "Title",
+                    "type": "text",
                     "value": "Secure Payment",
                     "placeholder": "Enter offer title",
                     "required": true
@@ -135,6 +142,7 @@
                     "name": "description",
                     "label": "Description",
                     "value": "No transaction fees",
+                    "type": "text",
                     "placeholder": "Enter offer description",
                     "required": true
                 },
@@ -160,6 +168,7 @@
                     "id": 1,
                     "name": "title",
                     "label": "Title",
+                    "type": "text",
                     "value": "Free Return",
                     "placeholder": "Enter offer title",
                     "required": true
@@ -168,6 +177,7 @@
                     "id": 2,
                     "name": "description",
                     "label": "Description",
+                    "type": "text",
                     "value": "Refund in 365 days",
                     "placeholder": "Enter offer description",
                     "required": true

@@ -12,8 +12,6 @@ import {
 } from "@/seller/types";
 import { useParams } from "react-router-dom";
 import {
-    CreateWidgetPayloadType,
-    useCreateWidgetMutation,
     useDeleteWidgetMutation,
     useFetchWidgetsQuery,
     widgetApi,
@@ -27,7 +25,7 @@ import {
 
 const usePage = () => {
     const { currentStore } = useAppSelector((state) => state.store);
-    const { page, selected, widget, widgets } = useAppSelector(
+    const { page, selected, widget, widgets, pageTypes } = useAppSelector(
         (state) => state.page
     );
     const store: StoreType = currentStore;
@@ -49,7 +47,7 @@ const usePage = () => {
     const [
         onAddWidgets,
         { isLoading: isAddWidgetsLoading, error: addWidgetsError },
-    ] = useCreateWidgetMutation();
+    ] = useUpdatePageMutation();
     const [
         onDeleteWidget,
         { isLoading: isDeleteWidgetLoading, error: deleteWidgetError },
@@ -84,14 +82,17 @@ const usePage = () => {
         formData,
         onSuccess,
     }: {
-        formData: CreateWidgetPayloadType;
+        formData: WidgetType[];
         onSuccess?: CallableFunction;
     }) => {
         onAddWidgets({
-            pageId: pageId ? pageId : 0,
-            formData: formData,
+            storeId: store.id,
+            pageId: page ? page.id : 0,
+            formData: {
+                widgets: [...(page ? page.widgets : []), ...formData],
+            },
         }).then((response) => {
-            if (response?.data?.status === 200) {
+            if (response.data.status === 200) {
                 if (onSuccess) {
                     onSuccess();
                 }
@@ -245,6 +246,7 @@ const usePage = () => {
         selected,
         onChangeWidgetInput,
         onChangeWidgetInputItem,
+        pageTypes,
     };
 };
 

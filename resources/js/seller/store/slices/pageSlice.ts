@@ -1,4 +1,6 @@
 import {
+    MetaType,
+    PageTypeType,
     StorePageType,
     WidgetInputItemType,
     WidgetInputType,
@@ -13,11 +15,17 @@ export interface SetSelectedPayloadType {
 }
 
 const initialState: {
+    pages: StorePageType[];
+    pagesMeta?: MetaType | null;
+    pageTypes: PageTypeType[];
     page: StorePageType | null;
     widgets: WidgetType[];
     widget: WidgetType | null;
     selected: SetSelectedPayloadType | null;
 } = {
+    pages: [],
+    pagesMeta: null,
+    pageTypes: [],
     page: null,
     widgets: [],
     widget: null,
@@ -27,6 +35,15 @@ const pageSlice = createSlice({
     name: "page",
     initialState,
     reducers: {
+        setPages: (state, action: PayloadAction<StorePageType[]>) => {
+            state.pages = action.payload;
+        },
+        setPagesMeta: (state, action: PayloadAction<MetaType | undefined>) => {
+            state.pagesMeta = action.payload;
+        },
+        setPageTypes: (state, action: PayloadAction<PageTypeType[]>) => {
+            state.pageTypes = action.payload;
+        },
         setPage: (state, action: PayloadAction<StorePageType>) => {
             state.page = action.payload;
         },
@@ -44,6 +61,13 @@ const pageSlice = createSlice({
         },
     },
 });
-export const { setPage, setWidgets, setSelected, setWidget } =
-    pageSlice.actions;
+export const {
+    setPages,
+    setPagesMeta,
+    setPageTypes,
+    setPage,
+    setWidgets,
+    setSelected,
+    setWidget,
+} = pageSlice.actions;
 export default pageSlice.reducer;

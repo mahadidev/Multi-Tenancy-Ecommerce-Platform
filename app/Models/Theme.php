@@ -29,11 +29,11 @@ class Theme extends Model
         });
     }
 
-    protected $hidden  = [
+    protected $hidden = [
         'created_at',
         'updated_at',
     ];
-    
+
     protected $fillable = [
         'name',
         'slug',

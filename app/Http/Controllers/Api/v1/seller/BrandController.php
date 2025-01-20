@@ -60,7 +60,7 @@ class BrandController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|url',
+            'image' => 'nullable|string|max:255',
         ]);
 
         $validated['store_id'] = authStore();
@@ -130,7 +130,7 @@ class BrandController extends Controller
 
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
-            'image' => 'nullable|url',
+            'image' => 'nullable|string|max:255',
         ]);
 
         $brand->update([

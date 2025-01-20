@@ -3,7 +3,14 @@ import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
-import { setPage } from "../slices/pageSlice";
+import {
+    setPage,
+    setPages,
+    setPagesMeta,
+    setPageTypes,
+    setWidgets,
+} from "../slices/pageSlice";
+import { setSocialMedias } from "../slices/socialMediaSlice";
 
 export interface CreatePagePayloadType {
     name: string;
@@ -30,14 +37,25 @@ export const pageApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Pages", "Page", "PageTypes"],
     endpoints: (builder) => ({
-        fetchPages: builder.query<ResponseType, string>({
-            query: (string) =>
+        fetchPages: builder.query<
+            ResponseType,
+            {
+                storeId: number | string;
+            }
+        >({
+            query: (data) =>
                 createRequest({
-                    url: `${SELLER_PREFIX}/stores/${string}/pages`,
+                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages`,
                     method: "get",
                 }),
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Pages"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setPages(response.data.data.pages));
+                    dispatch(setPagesMeta(response.data.meta));
+                });
+            },
         }),
         fetchPage: builder.query<
             ResponseType,
@@ -56,23 +74,12 @@ export const pageApi = createApi({
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
                     dispatch(setPage(response.data.data.page));
+                    dispatch(setWidgets(response.data.data.page.widgets));
+                    dispatch(
+                        setSocialMedias(response.data.data.page.social_media)
+                    );
                 });
             },
-        }),
-        getPage: builder.mutation<
-            any,
-            {
-                storeId: number | string;
-                pageId: number | string;
-            }
-        >({
-            query: (props) =>
-                createRequest({
-                    url: `${SELLER_PREFIX}/stores/${props.storeId}/pages/${props.pageId}`,
-                    method: "get",
-                }),
-            transformResponse: (response) => response,
-            transformErrorResponse: (error: any) => error.data,
         }),
         createPage: builder.mutation<
             any,
@@ -114,15 +121,38 @@ export const pageApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Page"],
         }),
-        fetchPageTypes: builder.query<any, void>({
+        deletePage: builder.mutation<
+            ResponseType,
+            {
+                storeId: number | string;
+                pageId: number | string;
+            }
+        >({
+            query: (data) => {
+                return createRequest({
+                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/delete/${data.pageId}`,
+                    method: "POST",
+                    body: {
+                        _method: "DELETE",
+                    },
+                });
+            },
+            transformErrorResponse: (error: any) => error.data,
+            invalidatesTags: ["Pages"],
+        }),
+        fetchPageTypes: builder.query<ResponseType, void>({
             query: () =>
                 createRequest({
                     url: `/page-types`,
                     method: "get",
                 }),
-            transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["PageTypes"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setPageTypes(response.data.data.page_types));
+                });
+            },
         }),
     }),
 });
@@ -132,6 +162,6 @@ export const {
     useCreatePageMutation,
     useFetchPageQuery,
     useUpdatePageMutation,
-    useGetPageMutation,
     useFetchPageTypesQuery,
+    useDeletePageMutation,
 } = pageApi;

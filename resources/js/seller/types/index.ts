@@ -1,7 +1,9 @@
 export interface SocialMediaType {
+    id: string;
     name: string;
     label: string;
     username: string;
+    url: string;
 }
 
 export interface SettingsType {
@@ -26,6 +28,7 @@ export interface StoreType {
     secondary_color: null | string;
     theme_id: number;
     settings: SettingsType | null;
+    social_media: SocialMediaType[];
     created_at: string;
     updated_at: string;
 }
@@ -100,6 +103,7 @@ export interface ThemeType {
     slug: string;
     thumbnail: string | null;
     widgets: WidgetType[];
+    pages: StorePageType[];
 }
 
 export interface FileType {
@@ -116,4 +120,15 @@ export interface FileType {
     url: string;
     created_at: string;
     updated_at: string;
+}
+
+export interface MetaType {
+    current_page: number;
+    first_page_url: string;
+    last_page: number;
+    last_page_url: string;
+    next_page_url: string | null;
+    prev_page_url: string | null;
+    total: number;
+    per_page: number;
 }

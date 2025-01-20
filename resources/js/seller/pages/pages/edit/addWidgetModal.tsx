@@ -1,21 +1,18 @@
 import usePage from "@/seller/hooks/usePage";
-import { useFetchPageTypesQuery } from "@/seller/store/reducers/pageApi";
-import { useFetchThemeQuery } from "@/seller/store/reducers/themeApi";
-import { PageTypeType, StorePageType, WidgetType } from "@/seller/types";
+import useTheme from "@/seller/hooks/useTheme";
+import { PageTypeType, WidgetType } from "@/seller/types";
 import { Button, Label, Modal, Select } from "flowbite-react";
 import { useState } from "react";
 
 export default function AddWidgetModal() {
-    const { addWidgets, store, page } = usePage();
+    const { addWidgets, page, pageTypes } = usePage();
+    const { theme } = useTheme();
     const [openModal, setOpenModal] = useState(false);
-    const { data: themeResponse } = useFetchThemeQuery(store.theme_id);
-    const [type, setType] = useState<number | null>(null);
-    const [selectedWidgets] = useState<WidgetType[]>([]);
-    const [selectedWidget, setSelectedWidget] = useState<WidgetType | null>();
-    const { data: pageTypeResponse } = useFetchPageTypesQuery();
+    const [_type, setType] = useState<number | null>(null);
+    const [selectedWidgets, setSelectedWidgets] = useState<WidgetType[]>([]);
 
     const handleChange = (item: any) => {
-        setSelectedWidget(item);
+        setSelectedWidgets((prev) => [...prev, item]);
     };
 
     return (
@@ -64,7 +61,7 @@ export default function AddWidgetModal() {
                                         event: React.ChangeEvent<HTMLSelectElement>
                                     ) => setType(parseInt(event.target.value))}
                                 >
-                                    {pageTypeResponse?.data.map(
+                                    {pageTypes.map(
                                         (type: PageTypeType, index: number) => (
                                             <option
                                                 key={index}
@@ -80,63 +77,57 @@ export default function AddWidgetModal() {
                                 </Select>
                             </div>
                             <ul className="grid w-full gap-6 md:grid-cols-4">
-                                {themeResponse &&
-                                    (type &&
-                                    themeResponse.data.theme.pages.find(
-                                        (page: StorePageType) =>
-                                            page.type?.id == type
-                                    )
-                                        ? themeResponse.data.theme.pages.find(
-                                              (page: StorePageType) =>
-                                                  page.type?.id == type
-                                          ).widgets
-                                        : themeResponse.data.theme.all_widgets
-                                    ).map((item: any, index: number) => (
-                                        <li key={index}>
-                                            <input
-                                                name="widget"
-                                                type="checkbox"
-                                                id={item.id}
-                                                value={item.id}
-                                                className="hidden peer"
-                                                required
-                                                defaultChecked={
-                                                    selectedWidgets.find(
-                                                        (widget) =>
-                                                            widget.id ===
-                                                            item.id
-                                                    )
-                                                        ? true
-                                                        : false
-                                                }
-                                                onChange={() => {
-                                                    handleChange(item);
-                                                }}
-                                            />
-                                            <label
-                                                htmlFor={item.id}
-                                                className="inline-flex items-center justify-between w-full text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600
+                                {theme &&
+                                    theme.widgets.map(
+                                        (item: any, index: number) => (
+                                            <li key={index}>
+                                                <input
+                                                    name="widget"
+                                                    type="checkbox"
+                                                    id={item.id}
+                                                    value={item.id}
+                                                    className="hidden peer"
+                                                    required
+                                                    defaultChecked={
+                                                        selectedWidgets.find(
+                                                            (widget) =>
+                                                                widget.id ===
+                                                                item.id
+                                                        )
+                                                            ? true
+                                                            : false
+                                                    }
+                                                    onChange={() => {
+                                                        handleChange(item);
+                                                    }}
+                                                />
+                                                <label
+                                                    htmlFor={item.id}
+                                                    className="inline-flex items-center justify-between w-full text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600
                                         peer-checked:bg-gray-50
                                         peer-checked:dark:bg-gray-700
                                         hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 overflow-hidden"
-                                            >
-                                                <div className="block w-full">
-                                                    {item.thumbnail && (
-                                                        <img
-                                                            className="w-full block"
-                                                            src={item.thumbnail}
-                                                            alt={item.label}
-                                                        />
-                                                    )}
-                                                    <div className="w-full p-2.5">
-                                                        <p className="text-center">
-                                                            {item.label}
-                                                        </p>
+                                                >
+                                                    <div className="block w-full">
+                                                        {item.thumbnail && (
+                                                            <img
+                                                                className="w-full block"
+                                                                src={
+                                                                    item.thumbnail
+                                                                }
+                                                                alt={item.label}
+                                                            />
+                                                        )}
+                                                        <div className="w-full p-2.5">
+                                                            <p className="text-center">
+                                                                {item.label}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                    ))}
+                                                </label>
+                                            </li>
+                                        )
+                                    )}
                             </ul>
                         </Modal.Body>
                         <Modal.Footer className="justify-end">
@@ -149,17 +140,17 @@ export default function AddWidgetModal() {
                             <Button
                                 color="blue"
                                 onClick={() => {
-                                    if (selectedWidget) {
+                                    if (selectedWidgets) {
                                         addWidgets.add({
-                                            formData: selectedWidget,
+                                            formData: selectedWidgets,
                                             onSuccess: () => {
                                                 setOpenModal(false);
-                                                setSelectedWidget(null);
+                                                setSelectedWidgets([]);
                                             },
                                         });
                                     }
                                 }}
-                                disabled={!selectedWidget}
+                                disabled={selectedWidgets.length === 0}
                             >
                                 Add Widget
                             </Button>
