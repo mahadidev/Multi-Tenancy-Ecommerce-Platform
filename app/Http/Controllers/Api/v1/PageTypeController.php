@@ -18,8 +18,10 @@ class PageTypeController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => PageTypeResource::collection($pageTypes),
-        ]);
+            'data' => [
+                'page_types' => PageTypeResource::collection($pageTypes),
+            ],
+        ], 200);
     }
 
     /**
@@ -37,8 +39,10 @@ class PageTypeController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Page type created successfully.',
-            'data' => new PageTypeResource($pageType),
-        ]);
+            'data' => [
+                'page_type' => new PageTypeResource($pageType),
+            ],
+        ], 200);
     }
 
     /**
@@ -52,13 +56,15 @@ class PageTypeController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Page type not found.',
-            ]);
+            ], 404);
         }
 
         return response()->json([
             'status' => 200,
-            'data' => new PageTypeResource($pageType),
-        ]);
+            'data' => [
+                'page_type' => new PageTypeResource($pageType),
+            ],
+        ], 200);
     }
 
     /**
@@ -85,8 +91,10 @@ class PageTypeController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Page type updated successfully.',
-            'data' => new PageTypeResource($pageType),
-        ]);
+            'data' => [
+                'page_type' => new PageTypeResource($pageType),
+            ],
+        ], 200);
     }
 
     /**
@@ -100,7 +108,7 @@ class PageTypeController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Page type not found.',
-            ]);
+            ], 404);
         }
         
         $pageType->delete();
@@ -108,6 +116,6 @@ class PageTypeController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Page type deleted successfully.',
-        ]);
+        ], 200);
     }
 }

@@ -35,7 +35,9 @@ class BrandController extends Controller
         return response()->json(
             [
                 'status' => 200,
-                'data' => BrandResource::collection($brands),
+                'data' => [
+                    'brands' => BrandResource::collection($brands),
+                ],
                 'meta' => [
                     'current_page' => $brands->currentPage(),
                     'first_page_url' => $brands->url(1),
@@ -58,7 +60,7 @@ class BrandController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|url',
         ]);
 
         $validated['store_id'] = authStore();
@@ -73,7 +75,9 @@ class BrandController extends Controller
             [
                 'status' => 200,
                 'message' => 'Brand created successfully',
-                'data' => new BrandResource($brand),
+                'data' => [
+                    'brand' => new BrandResource($brand),
+                ],
             ],
             200,
         );
@@ -99,7 +103,9 @@ class BrandController extends Controller
         return response()->json(
             [
                 'status' => 200,
-                'data' => new BrandResource($brand),
+                'data' => [
+                    'brand' => new BrandResource($brand),
+                ],
             ],
             200,
         );
@@ -124,7 +130,7 @@ class BrandController extends Controller
 
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|url',
         ]);
 
         $brand->update([
@@ -136,7 +142,9 @@ class BrandController extends Controller
             [
                 'status' => 200,
                 'message' => 'Brand updated successfully',
-                'data' => new BrandResource($brand),
+                'data' => [
+                    'brand' => new BrandResource($brand),
+                ],
             ],
             200,
         );
@@ -157,10 +165,6 @@ class BrandController extends Controller
                 ],
                 404,
             );
-        }
-
-        if ($brand->image) {
-            Storage::disk('public')->delete($brand->image);
         }
 
         $brand->delete();

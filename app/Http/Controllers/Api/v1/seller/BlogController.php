@@ -23,7 +23,7 @@ class BlogController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'blogs' =>  BlogResource::collection($blogs),
+                'blogs' => BlogResource::collection($blogs),
             ],
         ]);
     }
@@ -35,8 +35,18 @@ class BlogController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (Blog::where('title', $value)->where('user_id', Auth::id())->exists()) {
+                        $fail('The title has already been taken.');
+                    }
+                },
+            ],
             'content' => 'required|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable|url',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
@@ -50,15 +60,11 @@ class BlogController extends Controller
             ],
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image') && isset($request->image)) {
-            $imagePath = $request->file('image')->store('blogs', 'public');
-        }
 
         $blog = Blog::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'image' => $imagePath ? $imagePath : null,
+            'image' => $validated['image'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status'],
         ]);
@@ -66,7 +72,7 @@ class BlogController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Blog created successfully',
-            'data' => [
+            'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
         ]);
@@ -82,14 +88,14 @@ class BlogController extends Controller
         // show error if blog is not found
         if (!$blog) {
             return response()->json([
-                'success' => false,
+                'status' => 404,
                 'message' => 'Blog not found',
             ], 404);
         }
 
         return response()->json([
             'status' => 200,
-            'data' => [
+            'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
         ]);
@@ -104,7 +110,7 @@ class BlogController extends Controller
 
         if (!$blog) {
             return response()->json([
-                'success' => false,
+                'status' => 404,
                 'message' => 'Blog not found',
             ], 404);
         }
@@ -112,7 +118,7 @@ class BlogController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable|url',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
@@ -126,18 +132,10 @@ class BlogController extends Controller
             ],
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image') && isset($request->image)) {
-            if ($blog->image) {
-                Storage::disk('public')->delete($blog->image);
-            }
-            $imagePath = $request->file('image')->store('blogs', 'public');
-        }
-
         $blog->update([
             'title' => $validated['title'],
             'content' => $validated['content'],
-            'image' => $imagePath ? $imagePath : $blog->image,
+            'image' => $validated['image'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status'],
         ]);
@@ -160,13 +158,9 @@ class BlogController extends Controller
 
         if (!$blog) {
             return response()->json([
-                'success' => false,
+                'status' => 404,
                 'message' => 'Blog not found',
             ]);
-        }
-
-        if ($blog->image) {
-            Storage::disk('public')->delete($blog->image);
         }
 
         $blog->delete();

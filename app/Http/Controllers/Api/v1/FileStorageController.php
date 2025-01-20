@@ -26,7 +26,7 @@ class FileStorageController extends Controller
         return response()->json([
             'status' => 200,
             'data' => FileStorageResource::collection($fileStorage),
-        ]);
+        ], 200);
     }
 
     public function show(Request $request, $id)
@@ -41,13 +41,13 @@ class FileStorageController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'File not found.',
-            ]);
+            ], 404);
         }
 
         return response()->json([
             'status' => 200,
             'data' => new FileStorageResource($fileStorage),
-        ]);
+        ], 200);
     }
 
     public function destroy(Request $request, $id)
@@ -65,7 +65,7 @@ class FileStorageController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'File not found.',
-            ]);
+            ], 404);
         }
 
         // Delete the file from storage
@@ -79,7 +79,7 @@ class FileStorageController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'File deleted successfully.',
-        ]);
+        ], 200);
     }
 
     public function store(Request $request)
@@ -126,7 +126,7 @@ class FileStorageController extends Controller
             'status' => 200,
             'message' => 'File uploaded successfully.',
             'data' => new FileStorageResource($fileStorage),
-        ]);
+        ], 200);
     }
 
 }
