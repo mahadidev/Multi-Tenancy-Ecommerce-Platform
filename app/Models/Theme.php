@@ -42,11 +42,6 @@ class Theme extends Model
         'has_widgets'
     ];
 
-    public function widgets()
-    {
-        return $this->hasMany(ThemeWidget::class);
-    }
-
     public function pages()
     {
         return $this->hasMany(ThemePage::class);

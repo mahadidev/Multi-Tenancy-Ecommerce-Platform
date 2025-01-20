@@ -27,11 +27,6 @@ class ThemePage extends Model
         return $this->hasMany(ThemePageWidget::class);
     }
 
-    public function theme_widgets()
-    {
-        return $this->belongsToMany(ThemeWidget::class, "theme_id");
-    }
-
     public function type()
     {
         return $this->belongsTo(PageType::class, 'type');
