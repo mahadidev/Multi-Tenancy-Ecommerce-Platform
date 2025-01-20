@@ -7,7 +7,8 @@ import { FileUploader } from "react-drag-drop-files";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const ImageInput: FC<
-    (FileInputProps & RefAttributes<HTMLInputElement>) | any
+    | (FileInputProps & RefAttributes<HTMLInputElement> & { valueType?: "url" })
+    | any
 > = (props) => {
     const [activeTab, setActiveTab] = useState<"upload" | "gallery">("gallery");
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -20,13 +21,19 @@ const ImageInput: FC<
         if (selectedImage) {
             setIputProps((prev: any) => ({
                 ...prev,
-                value: selectedImage.location,
+                value:
+                    props.valueType && props.valueType === "url"
+                        ? selectedImage.url
+                        : selectedImage.location,
             }));
 
             if (props.onChange) {
                 props.onChange({
                     target: {
-                        value: selectedImage.location,
+                        value:
+                            props.valueType && props.valueType === "url"
+                                ? selectedImage.url
+                                : selectedImage.location,
                         name: props.name,
                     },
                 });

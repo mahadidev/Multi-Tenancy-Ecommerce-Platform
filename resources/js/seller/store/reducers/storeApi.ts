@@ -1,4 +1,4 @@
-import { LogoType, SettingsType } from "@/seller/types";
+import { SettingsType } from "@/seller/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
@@ -15,8 +15,8 @@ export interface UpdateStorePayloadType {
     type?: string;
     description?: string | null;
     currency?: string;
-    logos?: LogoType;
-    logo_url?: string;
+    logo?: string;
+    dark_logo?: string;
     primary_color?: null | string;
     secondary_color?: null | string;
     theme_id?: number | "none";
@@ -84,33 +84,6 @@ export const storeApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Stores"],
         }),
-        updateStoreWithImage: builder.mutation<
-            any,
-            {
-                storeId: string;
-                formData: any;
-            }
-        >({
-            query: (data) => {
-                const formData = new FormData();
-                formData.append("_method", "put");
-                if (data.formData.settings) {
-                    delete data.formData.settings;
-                }
-                Object.keys(data.formData).map((key: any) => {
-                    formData.append(key, data.formData[key]);
-                });
-
-                return createRequest({
-                    url: `${SELLER_PREFIX}/store/${data.storeId}`,
-                    method: "POST",
-                    body: formData,
-                });
-            },
-            transformResponse: (response: { data: any }) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["CurrentStore", "Stores"],
-        }),
         updateStore: builder.mutation<
             any,
             {
@@ -160,5 +133,4 @@ export const {
     useCreateStoreMutation,
     useUpdateStoreMutation,
     useSwitchStoreMutation,
-    useUpdateStoreWithImageMutation,
 } = storeApi;

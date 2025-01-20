@@ -1,6 +1,9 @@
 import useForm from "@/seller/hooks/useForm";
-import usePage from "@/seller/hooks/usePage";
-import { useFetchPageTypesQuery } from "@/seller/store/reducers/pageApi";
+import { useAppSelector } from "@/seller/store";
+import {
+    useCreatePageMutation,
+    useFetchPageTypesQuery,
+} from "@/seller/store/reducers/pageApi";
 import { PageTypeType } from "@/seller/types";
 import {
     Button,
@@ -16,9 +19,13 @@ import { FaPlus } from "react-icons/fa";
 
 export default function AddPageModal() {
     const [isOpen, setOpen] = useState(false);
-    const { createPage } = usePage();
+    const { currentStore: store } = useAppSelector((state) => state.store);
+    const [createPage, { error, isLoading }] = useCreatePageMutation();
     const { formState, handleChange, formErrors, setFormState } = useForm({
-        errors: createPage.error,
+        errors: error,
+        defaultState: {
+            is_active: 1,
+        },
     });
     const { data: pageTypeResponse } = useFetchPageTypesQuery();
     // default page value
@@ -31,14 +38,6 @@ export default function AddPageModal() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageTypeResponse]);
-
-    useEffect(() => {
-        setFormState((prev: any) => ({
-            ...prev,
-            is_active: 1,
-        }));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <>
@@ -198,21 +197,25 @@ export default function AddPageModal() {
                                 : "gray"
                         }
                         className="md:w-1/2 [&>span]:text-sm ml-auto"
-                        isProcessing={createPage.isLoading}
+                        isProcessing={isLoading}
                         processingLabel="Creating"
                         disabled={
                             !formState["name"] ||
                             !formState["slug"] ||
                             !formState["title"] ||
-                            createPage.isLoading
+                            isLoading
                         }
                         processingSpinner={
                             <AiOutlineLoading className="h-6 w-6 animate-spin" />
                         }
                         onClick={() =>
-                            createPage.create({
-                                pageData: formState,
-                                onSuccess: () => setOpen(false),
+                            createPage({
+                                storeId: store.id,
+                                formData: formState,
+                            }).then((response) => {
+                                if (response.data.status === 200) {
+                                    setOpen(false);
+                                }
                             })
                         }
                     >

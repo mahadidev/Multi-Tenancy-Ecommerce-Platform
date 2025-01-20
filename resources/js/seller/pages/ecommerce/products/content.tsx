@@ -8,7 +8,6 @@ import {
     useStoreProductMutation,
     useUpdateProductMutation,
 } from "@/seller/store/reducers/productApi";
-import { ResponseType } from "@/seller/types/api";
 import { ProductType } from "@/seller/types/ecommerce";
 import {
     Breadcrumb,
@@ -95,8 +94,7 @@ const SearchForProducts: FC = function () {
 const AddProductModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const [storeProduct, { isLoading, error }] = useStoreProductMutation();
-    const { data } = useFetchCategoriesQuery();
-    const categoryResponse: ResponseType = data;
+    const { data: categoryResponse } = useFetchCategoriesQuery();
     const { handleChange, formState, formErrors } = useForm({
         errors: error,
     });
@@ -341,7 +339,7 @@ const AllProductsTable: FC = function () {
                 <Table.HeadCell />
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {productResponse?.products.map((product: ProductType) => (
+                {productResponse?.data?.map((product: ProductType) => (
                     <Table.Row
                         key={product.id}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -395,8 +393,7 @@ const AllProductsTable: FC = function () {
 const EditProductModal: FC<{ product: ProductType }> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const [updateProduct, { isLoading, error }] = useUpdateProductMutation();
-    const { data } = useFetchCategoriesQuery();
-    const categoryResponse: ResponseType = data;
+    const { data: categoryResponse } = useFetchCategoriesQuery();
     const { handleChange, formState, formErrors } = useForm({
         errors: error,
         defaultState: {

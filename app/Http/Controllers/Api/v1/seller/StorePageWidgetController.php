@@ -63,12 +63,13 @@ class StorePageWidgetController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'label' => 'required|string',
+            'thumbnail' => 'nullable|string',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
             'inputs.*.placeholder' => 'nullable|string',
             'inputs.*.value' => 'nullable|string',
-            'inputs.*.required' => 'required|boolean',
+            'inputs.*.required' => 'nullable|boolean',
             'inputs.*.type' => 'required|string',
             'inputs.*.items' => 'nullable|array',
             'inputs.*.items.*.name' => 'required|string',
@@ -101,9 +102,9 @@ class StorePageWidgetController extends Controller
                     'widget_id' => $pageWidget->id,
                     'name' => $input['name'],
                     'label' => $input['label'],
-                    'placeholder' => $input['placeholder'],
-                    'value' => $input['value'],
-                    'required' => $input['required'],
+                    'placeholder' => $input['placeholder'] ?? null,
+                    'value' => $input['value'] ?? null,
+                    'required' => $input['required'] ?? null,
                     'type' => $input['type'],
                 ]);
 
@@ -115,10 +116,10 @@ class StorePageWidgetController extends Controller
                             'widget_input_id' => $pageWidgetInput->id,
                             'name' => $item['name'],
                             'label' => $item['label'],
-                            'placeholder' => $input['placeholder'],
-                            'value' => $input['value'],
-                            'required' => $input['required'],
-                            'type' => $input['type'],
+                            'placeholder' => $item['placeholder'] ?? null,
+                            'value' => $item['value'],
+                            'required' => $item['required'],
+                            'type' => $item['type'] ?? "text",
                         ]);
                     }
                 }

@@ -10,6 +10,7 @@ import { pageApi } from "./reducers/pageApi";
 import { productApi } from "./reducers/productApi";
 import { storeApi } from "./reducers/storeApi";
 import { themeApi } from "./reducers/themeApi";
+import { widgetApi } from "./reducers/widgetApi";
 import authSlice from "./slices/authSlice";
 import baseSlice from "./slices/baseSlice";
 import imageUploaderSlice from "./slices/imageUploaderSlice";
@@ -29,6 +30,7 @@ const authPersistConfig = {
         "categoryApi",
         "productApi",
         "brandApi",
+        "widgetApi",
     ],
     storage,
     version: 0,
@@ -48,6 +50,7 @@ const persistedReducer = persistReducer(
         [storeApi.reducerPath]: storeApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,
         [pageApi.reducerPath]: pageApi.reducer,
+        [widgetApi.reducerPath]: widgetApi.reducer,
         [imageApi.reducerPath]: imageApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer,
         [brandApi.reducerPath]: brandApi.reducer,
@@ -65,6 +68,7 @@ export const store = configureStore({
             storeApi.middleware,
             themeApi.middleware,
             pageApi.middleware,
+            widgetApi.middleware,
             imageApi.middleware,
             categoryApi.middleware,
             brandApi.middleware,
