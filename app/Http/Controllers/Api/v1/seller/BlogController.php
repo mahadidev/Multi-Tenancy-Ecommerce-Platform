@@ -46,7 +46,7 @@ class BlogController extends Controller
                 },
             ],
             'content' => 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
@@ -118,7 +118,7 @@ class BlogController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'category_id' => [
                 'required',
