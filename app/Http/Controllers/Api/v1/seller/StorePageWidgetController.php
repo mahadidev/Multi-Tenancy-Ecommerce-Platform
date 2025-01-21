@@ -158,6 +158,7 @@ class StorePageWidgetController extends Controller
             'name' => 'required|string',
             'label' => 'required|string',
             'serial' => 'nullable|numeric',
+            'thumbnail' => 'nullable|string',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
