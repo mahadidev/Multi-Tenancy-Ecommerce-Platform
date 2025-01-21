@@ -84,6 +84,15 @@ class FileStorageController extends Controller
 
     public function store(Request $request)
     {
+
+        $maxSize = 10048 * 1024; // 10MB in bytes
+        if ($request->file('file')->getSize() > $maxSize) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'File exceeds the maximum size allowed of 10MB.',
+            ], 400);
+        }
+
         $request->validate([
             'file' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10048',
             'user_id' => 'nullable|exists:users,id',
