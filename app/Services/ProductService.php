@@ -41,7 +41,7 @@ class ProductService
             'sku' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
+            'thumbnail' => 'nullable|string',
             'attachments' => 'nullable|array',
             'attachments.*' => 'string',
             'price' => 'required|numeric',
