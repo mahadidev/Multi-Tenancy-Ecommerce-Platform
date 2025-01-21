@@ -36,8 +36,7 @@ class ThemeResource extends JsonResource
                             'inputs' => json_decode($widget->inputs),
                         ];
                     }) : null;
-
-            })[0] : null,
+            }) : null,
             'pages' => $this->pages ? $this->pages->map(function ($page) {
                 return [
                     'id' => $page->id,

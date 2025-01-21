@@ -45,7 +45,7 @@ class ProfileController extends Controller
                     'regex:/^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8}$/', // BD format
                 ],
                 'address' => 'nullable|string|max:255',
-                'image' => 'nullable|url',
+                'image' => 'nullable|string|max:255',
                 // 'password' => 'nullable|string|min:8|confirmed',
             ]);
 
