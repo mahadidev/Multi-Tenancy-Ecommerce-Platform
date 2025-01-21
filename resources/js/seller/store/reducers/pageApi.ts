@@ -10,7 +10,6 @@ import {
     setPageTypes,
     setWidgets,
 } from "../slices/pageSlice";
-import { setSocialMedias } from "../slices/socialMediaSlice";
 
 export interface CreatePagePayloadType {
     name: string;
@@ -75,9 +74,6 @@ export const pageApi = createApi({
                 await queryFulfilled.then((response) => {
                     dispatch(setPage(response.data.data.page));
                     dispatch(setWidgets(response.data.data.page.widgets));
-                    dispatch(
-                        setSocialMedias(response.data.data.page.social_media)
-                    );
                 });
             },
         }),

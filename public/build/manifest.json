@@ -3,8 +3,8 @@
     "file": "assets/chunk-K6AXKMTT-DiTgBi4-.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_index-BYWfZmTK.js": {
-    "file": "assets/index-BYWfZmTK.js",
+  "_index-uVWx6csk.js": {
+    "file": "assets/index-uVWx6csk.js",
     "name": "index",
     "imports": [
       "_chunk-K6AXKMTT-DiTgBi4-.js"
@@ -46,26 +46,26 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-D4DsSH-Y.js",
+    "file": "assets/index-CW3PaTFi.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DiTgBi4-.js",
-      "_index-BYWfZmTK.js"
+      "_index-uVWx6csk.js"
     ],
     "css": [
       "assets/index-BA35NOhX.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-DmmZkG5U.js",
+    "file": "assets/index-B4wisnDg.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DiTgBi4-.js",
-      "_index-BYWfZmTK.js"
+      "_index-uVWx6csk.js"
     ],
     "css": [
       "assets/index-Cue_Kd0V.css"

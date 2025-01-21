@@ -1,7 +1,9 @@
 import { SettingsType } from "@/seller/types";
+import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+import { setSocialMedias } from "../slices/socialMediaSlice";
 import { setCurrentStore } from "../slices/storeSlice";
 
 export interface UpdateStorePayloadType {
@@ -28,18 +30,27 @@ export const storeApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Stores", "CurrentStore"],
     endpoints: (builder) => ({
-        fetchStores: builder.query<any, void>({
+        fetchStores: builder.query<ResponseType, void>({
             query: () =>
                 createRequest({
                     url: `${SELLER_PREFIX}/get-stores`,
                     method: "get",
                 }),
-            transformResponse: (response) => response,
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Stores"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setCurrentStore(response.data.data.current_store));
+                    dispatch(
+                        setSocialMedias(
+                            response.data.data.current_store.social_media
+                        )
+                    );
+                });
+            },
         }),
         fetchCurrentStore: builder.query<
-            any,
+            ResponseType,
             {
                 responseType?: "store";
             } | void
@@ -49,13 +60,15 @@ export const storeApi = createApi({
                     url: `${SELLER_PREFIX}/current-store`,
                     method: "get",
                 }),
-            async onQueryStarted(_formData, { dispatch, queryFulfilled }) {
-                try {
-                    const { data: response } = await queryFulfilled;
-                    dispatch(setCurrentStore(response.data.store));
-                } catch (err) {
-                    /* empty */
-                }
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setCurrentStore(response.data.data.current_store));
+                    dispatch(
+                        setSocialMedias(
+                            response.data.data.current_store.social_media
+                        )
+                    );
+                });
             },
             transformResponse: (response: any, _meta, arg) => {
                 if (arg && arg.responseType == "store") {

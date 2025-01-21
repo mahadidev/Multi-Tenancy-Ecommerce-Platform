@@ -3,10 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: {
     socialMedias: SocialMediaType[];
-    socialMediasType: MetaType | null | undefined;
+    socialMediasMeta: MetaType | null | undefined;
 } = {
     socialMedias: [],
-    socialMediasType: null,
+    socialMediasMeta: null,
 };
 const socialMediaSlice = createSlice({
     name: "socialMedia",
@@ -19,7 +19,7 @@ const socialMediaSlice = createSlice({
             state,
             action: PayloadAction<MetaType | undefined>
         ) => {
-            state.socialMediasType = action.payload;
+            state.socialMediasMeta = action.payload;
         },
     },
 });

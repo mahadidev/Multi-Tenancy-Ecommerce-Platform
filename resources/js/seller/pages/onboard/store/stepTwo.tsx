@@ -1,8 +1,8 @@
+import { ImageInput } from "@/seller/components";
 import useForm from "@/seller/hooks/useForm";
 import { useAppSelector } from "@/seller/store";
-import { useUploadImageMutation } from "@/seller/store/reducers/imageApi";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
-import { Button, FileInput, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const StepTwo = ({
@@ -13,11 +13,10 @@ const StepTwo = ({
     setStep: CallableFunction;
     setFormData: CallableFunction;
 }) => {
-    const [uploadImage] = useUploadImageMutation();
     const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
     const { currentStore: store } = useAppSelector((state) => state.store);
 
-    const { formState, handleChange, formErrors, setFormState } = useForm({
+    const { formState, handleChange, formErrors } = useForm({
         errors: error,
     });
 
@@ -30,42 +29,16 @@ const StepTwo = ({
                 <div className="my-6 grid gap-5">
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="file-upload" value="Upload file" />
+                            <Label htmlFor="filogo" value="Upload file" />
                         </div>
-                        <FileInput
-                            id="file-upload"
+                        <ImageInput
                             name="logo"
+                            id="logo"
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => {
-                                if (
-                                    event.target.files &&
-                                    event.target.files[0]
-                                ) {
-                                    uploadImage({
-                                        formData: {
-                                            file: event.target.files[0],
-                                            response_type: "path",
-                                        },
-                                    }).then((response) => {
-                                        setFormData((prev: any) => ({
-                                            ...prev,
-                                            logo: response.data,
-                                        }));
-
-                                        setFormState((prev: any) => ({
-                                            ...prev,
-                                            ["logo_url"]: response.data,
-                                        }));
-
-                                        setFormData({
-                                            name: "logo_url",
-                                            value: response.data,
-                                        });
-                                    });
-                                }
+                                handleChange(event, setFormData);
                             }}
-                            color={formErrors["logo"] ? "failure" : "gray"}
                         />
                     </div>
                     <div>

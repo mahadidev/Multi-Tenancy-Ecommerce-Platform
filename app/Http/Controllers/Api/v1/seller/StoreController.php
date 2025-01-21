@@ -30,7 +30,7 @@ class StoreController extends Controller
             })
             ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
             ->paginate($perPage);
-            
+
         $storeSession = $user->storeSession()->first();
         $current_store = null;
 
@@ -124,9 +124,8 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|url',
-            'dark_logo' => 'nullable|url',
-            // 'dark_logo_url' => 'nullable|string|max:255',
+            'logo' => 'nullable|string|max:255',
+            'dark_logo' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
             "theme_id" => "nullable|exists:themes,id",
@@ -156,7 +155,7 @@ class StoreController extends Controller
 
         if ($request->social_media) {
             foreach ($request->social_media as $social_media) {
-                
+
                 // Ensure required fields are present in each social media item
                 if (isset($social_media['name'], $social_media['username'], $social_media['url'])) {
                     StoreSocialMedia::firstOrCreate(
@@ -172,7 +171,7 @@ class StoreController extends Controller
                 }
             }
         }
-        
+
         // update store session
         $this->updateStoreSession($request, $store);
 
@@ -207,8 +206,8 @@ class StoreController extends Controller
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:255',
-            'logo' => 'nullable|url',
-            'dark_logo' => 'nullable|url',
+            'logo' => 'nullable|string|max:255',
+            'dark_logo' => 'nullable|string|max:255',
             'primary_color' => 'nullable|string|max:255',
             'secondary_color' => 'nullable|string|max:255',
             'settings' => 'nullable|array|max:1000000',
@@ -254,7 +253,7 @@ class StoreController extends Controller
             $store->socialMedia()->delete();
 
             foreach ($request->social_media as $social_media) {
-                
+
                 // Ensure required fields are present in each social media item
                 if (isset($social_media['name'], $social_media['username'], $social_media['url'])) {
                     StoreSocialMedia::firstOrCreate(
@@ -270,7 +269,7 @@ class StoreController extends Controller
                 }
             }
         }
-        
+
 
         // Return success response
         return response()->json([

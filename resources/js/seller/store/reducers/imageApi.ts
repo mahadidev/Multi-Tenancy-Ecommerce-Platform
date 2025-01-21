@@ -1,3 +1,4 @@
+import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 
@@ -14,7 +15,7 @@ export const imageApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["Images", "Page"],
     endpoints: (builder) => ({
-        fetchImages: builder.query<any, void>({
+        fetchImages: builder.query<ResponseType, void>({
             query: () => {
                 return createRequest({
                     url: `/file-storage`,
@@ -28,7 +29,7 @@ export const imageApi = createApi({
             providesTags: ["Images"],
         }),
         uploadImage: builder.mutation<
-            any,
+            ResponseType,
             {
                 formData: StoreImagePayloadType;
             }
@@ -45,7 +46,6 @@ export const imageApi = createApi({
                     body: formData,
                 });
             },
-            transformResponse: (response: any) => response,
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Images"],
         }),
