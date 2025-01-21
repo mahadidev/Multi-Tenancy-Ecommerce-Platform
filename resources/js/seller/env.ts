@@ -18,11 +18,12 @@ export const RoutePath = {
         href: {
             index: () => `${SELLER_PREFIX}/products`,
         },
+        edit: (id: string | number) => `/products/${id}/edit`,
     },
     settings: "/settings",
     pages: {
         list: () => "/pages",
-        edit: (id: string) => `/pages/${id}`,
+        edit: (id: string | number) => `/pages/${id}/edit`,
     },
     themes: {
         list: () => "/themes",

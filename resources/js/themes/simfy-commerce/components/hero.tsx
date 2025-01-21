@@ -1,6 +1,7 @@
 import { WidgetType } from "@/seller/types";
 
 export default function Hero({ props }: { props: WidgetType }) {
+    console.log(props);
     return (
         <>
             <section className="flex overflow-x-auto">

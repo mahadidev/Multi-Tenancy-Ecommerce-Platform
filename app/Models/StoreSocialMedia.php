@@ -11,6 +11,7 @@ class StoreSocialMedia extends Model
         'name',
         'username',
         'url',
+        'label',
     ];
 
     public function store()

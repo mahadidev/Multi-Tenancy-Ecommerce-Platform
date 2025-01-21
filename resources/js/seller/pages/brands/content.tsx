@@ -12,26 +12,31 @@ import { RoutePath } from "@/seller/env";
 import type { FC } from "react";
 import { useState } from "react";
 import {
+    HiChevronLeft,
+    HiChevronRight,
     HiDocumentDownload,
     HiHome,
     HiOutlineExclamationCircle,
     HiPencilAlt,
+    HiPlus,
     HiTrash,
 } from "react-icons/hi";
 
 import { ImageInput } from "@/seller/components/";
 import useForm from "@/seller/hooks/useForm";
+import { useAppSelector } from "@/seller/store";
 import {
     useDeleteBrandMutation,
-    useFetchBrandsQuery,
     useStoreBrandMutation,
     useUpdateBrandMutation,
 } from "@/seller/store/reducers/brandApi";
-import { ResponseType } from "@/seller/types/api";
+import { MetaType } from "@/seller/types";
 import { BrandType } from "@/seller/types/store";
 import { AiOutlineLoading } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const BrandsListPageContent: FC = function () {
+    const { brandsMeta } = useAppSelector((state) => state.brand);
     return (
         <>
             <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 sm:flex dark:border-gray-700 dark:bg-gray-800">
@@ -41,9 +46,7 @@ const BrandsListPageContent: FC = function () {
                             <Breadcrumb.Item href={RoutePath.dashboard}>
                                 <div className="flex items-center gap-x-3">
                                     <HiHome className="text-xl" />
-                                    <span className="dark:text-white">
-                                        Dashboard
-                                    </span>
+                                    <span>Dashboard</span>
                                 </div>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item>Brands</Breadcrumb.Item>
@@ -91,7 +94,7 @@ const BrandsListPageContent: FC = function () {
                     </div>
                 </div>
             </div>
-            {/* <Pagination usersList={usersList} /> */}
+            {brandsMeta && <Pagination meta={brandsMeta} />}
         </>
     );
 };
@@ -105,14 +108,9 @@ const AddBrandModal: FC = function () {
 
     return (
         <>
-            <Button
-                size="sm"
-                color="blue"
-                className="p-0"
-                onClick={() => setOpen(true)}
-            >
-                <div className="flex items-center gap-x-2">
-                    <HiPencilAlt className="h-5 w-5" />
+            <Button color="blue" className="p-0" onClick={() => setOpen(true)}>
+                <div className="flex items-center gap-x-3">
+                    <HiPlus className="text-xl" />
                     Create brand
                 </div>
             </Button>
@@ -223,8 +221,7 @@ const AddBrandModal: FC = function () {
 };
 
 const AllBrandsTable: FC = function () {
-    const { data } = useFetchBrandsQuery();
-    const brandsResponse: ResponseType = data;
+    const { brands } = useAppSelector((state) => state.brand);
 
     return (
         <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
@@ -247,7 +244,7 @@ const AllBrandsTable: FC = function () {
                 <Table.HeadCell />
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {brandsResponse?.data?.map((brand: BrandType) => (
+                {brands.map((brand: BrandType) => (
                     <Table.Row
                         key={brand.id}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -485,66 +482,64 @@ const DeleteBrandModal: FC<{ brand: BrandType }> = function (props) {
     );
 };
 
-// const Pagination: FC<UsersListPageData> = function ({ usersList }) {
-//     const [page, setPage] = useState(0);
-//     const numEntriesPerPage = Math.min(20, usersList.length);
-//     const numPages = Math.floor(usersList.length / numEntriesPerPage);
+const Pagination: FC<{ meta: MetaType }> = function ({ meta }) {
+    const [page, setPage] = useState(0);
+    const numPages = meta.total;
 
-//     const previousPage = () => {
-//         setPage(page > 0 ? page - 1 : page);
-//     };
+    const previousPage = () => {
+        setPage(page > 0 ? page - 1 : page);
+    };
 
-//     const nextPage = () => {
-//         setPage(page < numPages - 1 ? page + 1 : page);
-//     };
+    const nextPage = () => {
+        setPage(page < numPages - 1 ? page + 1 : page);
+    };
 
-//     return (
-//         <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
-//             <div className="mb-4 flex items-center sm:mb-0">
-//                 <button
-//                     onClick={previousPage}
-//                     className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-//                 >
-//                     <span className="sr-only">Previous page</span>
-//                     <HiChevronLeft className="h-7 w-7" />
-//                 </button>
-//                 <button
-//                     onClick={nextPage}
-//                     className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-//                 >
-//                     <span className="sr-only">Next page</span>
-//                     <HiChevronRight className="h-7 w-7" />
-//                 </button>
-//                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-//                     Showing&nbsp;
-//                     <span className="font-semibold text-gray-900 dark:text-white">
-//                         {page * usersList.length + 1}-
-//                         {numEntriesPerPage * page + numEntriesPerPage}
-//                     </span>
-//                     &nbsp;of&nbsp;
-//                     <span className="font-semibold text-gray-900 dark:text-white">
-//                         {usersList.length}
-//                     </span>
-//                 </span>
-//             </div>
-//             <div className="flex items-center space-x-3">
-//                 <Link
-//                     to="#"
-//                     className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-//                 >
-//                     <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
-//                     Previous
-//                 </Link>
-//                 <Link
-//                     to="#"
-//                     className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-//                 >
-//                     Next
-//                     <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
-//                 </Link>
-//             </div>
-//         </div>
-//     );
-// };
+    return (
+        <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
+            <div className="mb-4 flex items-center sm:mb-0">
+                <button
+                    onClick={previousPage}
+                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                    <span className="sr-only">Previous page</span>
+                    <HiChevronLeft className="h-7 w-7" />
+                </button>
+                <button
+                    onClick={nextPage}
+                    className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                    <span className="sr-only">Next page</span>
+                    <HiChevronRight className="h-7 w-7" />
+                </button>
+                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    Showing&nbsp;
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                        {meta.current_page}-{meta.last_page}
+                    </span>
+                    &nbsp;of&nbsp;
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                        {meta.total}
+                    </span>
+                </span>
+            </div>
+            <div className="flex items-center space-x-3">
+                <Link
+                    to="#"
+                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                    <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
+                    Previous
+                </Link>
+                <Link
+                    to="#"
+                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                    Next
+                    <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
+                </Link>
+            </div>
+        </div>
+    );
+};
 
 export default BrandsListPageContent;

@@ -1,6 +1,8 @@
 import react from "@vitejs/plugin-react-swc";
+import fs from "fs";
 import laravel from "laravel-vite-plugin";
 import { defineConfig } from "vite";
+import { ThemesJson } from "./resources/js/themes/themes";
 
 export default defineConfig({
     plugins: [
@@ -18,5 +20,14 @@ export default defineConfig({
             refresh: true,
             tsDecorators: true,
         }),
+        {
+            name: "postbuild-commands",
+            closeBundle: () => {
+                fs.writeFileSync(
+                    "resources/js/themes/theme.json",
+                    JSON.stringify(ThemesJson, null, 2)
+                );
+            },
+        },
     ],
 });

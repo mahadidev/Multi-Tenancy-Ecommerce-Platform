@@ -2,6 +2,7 @@ import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
+import { setProducts, setProductsMeta } from "../slices/productSlice";
 
 export interface StoreProductPayloadType {
     name: string;
@@ -31,11 +32,14 @@ export const productApi = createApi({
                     method: "GET",
                 });
             },
-            transformResponse: (response: ResponseType) => {
-                return response;
-            },
             transformErrorResponse: (error: any) => error.data,
             providesTags: ["Products"],
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(setProducts(response.data.data.products));
+                    dispatch(setProductsMeta(response.data.meta));
+                });
+            },
         }),
         storeProduct: builder.mutation<
             any,

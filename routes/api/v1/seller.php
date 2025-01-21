@@ -42,7 +42,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('stores/{store_id}/pages', [StorePageController::class, 'index']);
     Route::post('stores/{store_id}/pages/store', [StorePageController::class, 'store']);
     Route::get('stores/{store_id}/pages/{page_id}', [StorePageController::class, 'view']);
-    Route::post('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
+    Route::put('stores/{store_id}/pages/update/{page_id}', [StorePageController::class, 'update']);
     Route::delete('stores/{store_id}/pages/delete/{page_id}', [StorePageController::class, 'destroy']);
 
     // Store Page Widget Routes
@@ -91,5 +91,5 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Store Social Media Routes
     Route::resource('/store-social-media', StoreSocialMediaController::class);
-    
+
 });

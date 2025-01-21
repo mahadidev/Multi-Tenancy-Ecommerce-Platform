@@ -27,6 +27,7 @@ class StoreSocialMediaController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('label', 'like', "%{$search}%")
                     ->orWhere('username', 'like', "%{$search}%")
                     ->orWhere('url', 'like', "%{$search}%");
             });
@@ -59,6 +60,7 @@ class StoreSocialMediaController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'username' => 'required|string',
+            'label' => 'required|string',
             'url' => 'required|url',
         ]);
 
@@ -86,14 +88,14 @@ class StoreSocialMediaController extends Controller
     public function update(Request $request, $id)
     {
         $storeSocialMedia = StoreSocialMedia::authoriedStore()->find($id);
-    
+
         if (!$storeSocialMedia) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Social media not found',
             ]);
         }
-    
+
         $validated = $request->validate([
             'name' => [
                 'required',
@@ -103,13 +105,14 @@ class StoreSocialMediaController extends Controller
                     return $query->where('store_id', $storeSocialMedia->store_id);
                 })->ignore($id),
             ],
+            'label' => 'required|string',
             'username' => 'required|string',
             'url' => 'required|string',
         ]);
-    
+
         $validated = array_merge($validated, ['store_id' => authStore()]);
         $storeSocialMedia->update($validated);
-    
+
         return response()->json([
             'status' => 200,
             'message' => 'Social media updated successfully',
@@ -118,7 +121,7 @@ class StoreSocialMediaController extends Controller
             ],
         ]);
     }
-    
+
 
     public function destroy($id)
     {

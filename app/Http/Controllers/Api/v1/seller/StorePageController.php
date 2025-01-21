@@ -38,7 +38,7 @@ class StorePageController extends Controller
                     ->where('name', 'like', '%' . $search . '%')
                     ->orWhere('slug', 'like', '%' . $search . '%')
                     ->orWhere('title', 'like', '%' . $search . '%');
-            })  
+            })
             ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
             ->paginate($perPage);
 
@@ -86,13 +86,14 @@ class StorePageController extends Controller
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',
-            'widgets.*.serial' => 'nullable|numeric', 
+            'widgets.*.serial' => 'nullable|numeric',
+            'widgets.*.thumbnail' => 'nullable|string',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.required' => 'required|boolean',
+            'widgets.*.inputs.*.required' => 'nullable|boolean',
             'widgets.*.inputs.*.type' => 'required|string',
             'widgets.*.inputs.*.items' => 'nullable|array',
             'widgets.*.inputs.*.items.*.name' => 'required|string',
@@ -231,26 +232,27 @@ class StorePageController extends Controller
 
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string',
+            'name' => 'nullable|string',
             'slug' => [
                 'nullable',
                 'string',
                 'max:25',
                 Rule::unique('store_pages', 'slug')->ignore($store_page_id), // Unique rule for update
             ],
-            'type' => 'required|exists:page_types,id',
+            'type' => 'nullable|exists:page_types,id',
             'title' => 'nullable|string',
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
-            'widgets.*.label' => 'required|string', 
-            'widgets.*.serial' => 'nullable|numeric', 
+            'widgets.*.label' => 'required|string',
+            'widgets.*.serial' => 'nullable|numeric',
+            'widgets.*.thumbnail' => 'nullable|string',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.required' => 'required|boolean',
+            'widgets.*.inputs.*.required' => 'nullable|boolean',
             'widgets.*.inputs.*.type' => 'required|string',
             'widgets.*.inputs.*.items' => 'nullable|array',
             'widgets.*.inputs.*.items.*.name' => 'required|string',
@@ -258,7 +260,7 @@ class StorePageController extends Controller
             'widgets.*.inputs.*.items.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.items.*.value' => 'nullable|string',
             'widgets.*.inputs.*.items.*.required' => 'required|boolean',
-            'widgets.*.inputs.*.items.*.type' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.type' => 'required|string',
         ]);
 
         // Update the store page's basic details
@@ -273,7 +275,7 @@ class StorePageController extends Controller
                 $widgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
-                    'serial' => isset($widget['label']) ? $widget['serial'] : ($key + 1),
+                    'serial' => isset($widget['serial']) ? $widget['serial'] : ($key + 1),
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);

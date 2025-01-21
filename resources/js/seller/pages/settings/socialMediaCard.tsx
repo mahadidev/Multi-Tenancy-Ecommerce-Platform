@@ -1,5 +1,6 @@
 import useStore from "@/seller/hooks/useStore";
-import { SocialMediaType, StoreType } from "@/seller/types";
+import { useAppSelector } from "@/seller/store";
+import { SocialMediaType } from "@/seller/types";
 import { Button, Card, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -9,6 +10,7 @@ const SocialMedias = [
     {
         name: "facebook",
         label: "Facebook",
+        url: "https://www.facebook.com",
         icon: (
             <svg
                 className="w-5 h-5 text-gray-800 dark:text-white"
@@ -30,6 +32,7 @@ const SocialMedias = [
     {
         name: "instagram",
         label: "Instagram",
+        url: "https://www.instagram.com",
         icon: (
             <svg
                 className="w-5 h-5 text-gray-800 dark:text-white"
@@ -52,6 +55,7 @@ const SocialMedias = [
     {
         name: "youtube",
         label: "Youtube",
+        url: "https://www.youtube.com",
         icon: (
             <svg
                 className="w-5 h-5 text-gray-800 dark:text-white"
@@ -73,19 +77,21 @@ const SocialMedias = [
 ];
 
 const SocialMediaCard = () => {
-    const {
-        store: currentStore,
-        addSocialMedia,
-        removeSocialMedia,
-    } = useStore();
-    const store: StoreType = currentStore;
+    const { addSocialMedia, removeSocialMedia } = useStore();
+    const { socialMedias } = useAppSelector((state) => state.socialMedia);
 
     const [selected, setSelected] = useState<{
         name: string;
         label: string;
         placeholder: string;
         value: string;
-    } | null>();
+        item: {
+            name: string;
+            label: string;
+            url: string;
+            icon: JSX.Element;
+        };
+    } | null>(null);
     const [disconnect, setDisconnect] = useState<SocialMediaType | null>(null);
 
     function onCloseModal() {
@@ -112,7 +118,7 @@ const SocialMediaCard = () => {
 
                                         <span
                                             className={`block truncate text-sm font-normal ${
-                                                store.settings?.social_media?.find(
+                                                socialMedias.find(
                                                     (socialMediaItem) =>
                                                         socialMediaItem.name ===
                                                         item.name
@@ -121,13 +127,13 @@ const SocialMediaCard = () => {
                                                     : "text-gray-500 dark:text-gray-400"
                                             }`}
                                         >
-                                            {store.settings?.social_media?.find(
+                                            {socialMedias.find(
                                                 (socialMediaItem) =>
                                                     socialMediaItem.name ===
                                                     item.name
                                             )
                                                 ? `@${
-                                                      store.settings.social_media.find(
+                                                      socialMedias.find(
                                                           (socialMediaItem) =>
                                                               socialMediaItem.name ===
                                                               item.name
@@ -137,7 +143,7 @@ const SocialMediaCard = () => {
                                         </span>
                                     </div>
                                     <div className="inline-flex items-center">
-                                        {store.settings?.social_media?.find(
+                                        {socialMedias.find(
                                             (socialMediaItem) =>
                                                 socialMediaItem.name ===
                                                 item.name
@@ -149,7 +155,7 @@ const SocialMediaCard = () => {
                                                     const foundItem:
                                                         | SocialMediaType
                                                         | undefined =
-                                                        store.settings?.social_media?.find(
+                                                        socialMedias?.find(
                                                             (socialMediaItem) =>
                                                                 socialMediaItem.name ===
                                                                 item.name
@@ -173,6 +179,7 @@ const SocialMediaCard = () => {
                                                         name: item.name,
                                                         placeholder: `Enter ${item.name} page username`,
                                                         value: "",
+                                                        item: item,
                                                     })
                                                 }
                                             >
@@ -249,10 +256,11 @@ const SocialMediaCard = () => {
                                 onClick={() => {
                                     if (selected) {
                                         addSocialMedia.add({
-                                            socialMedia: {
+                                            formData: {
                                                 name: selected.name,
                                                 label: selected.label,
                                                 username: selected.value,
+                                                url: selected.item.url,
                                             },
                                             onSuccess: () => onCloseModal(),
                                         });
@@ -286,7 +294,7 @@ const SocialMediaCard = () => {
                                 onClick={() => {
                                     if (disconnect) {
                                         removeSocialMedia.remove({
-                                            socialMedia: disconnect,
+                                            formData: disconnect,
                                             onSuccess: () => onCloseModal(),
                                         });
                                     }

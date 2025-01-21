@@ -1,12 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { useUpdateStoreMutation } from "@/seller/store/reducers/storeApi";
-import { useFetchThemesQuery } from "@/seller/store/reducers/themeApi";
 import { clearOnboard } from "@/seller/store/slices/storeOnboardSlice";
 import { Button } from "flowbite-react";
-import { useEffect } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
@@ -18,20 +15,15 @@ const StepThree = ({
     setStep: CallableFunction;
     setFormData: CallableFunction;
 }) => {
-    const { data: themesData, isFetching } = useFetchThemesQuery();
+    const { themes } = useAppSelector((state) => state.theme);
     const [updateStore, { isLoading, error }] = useUpdateStoreMutation();
     const { currentStore: store } = useAppSelector((state) => state.store);
-    const { formState, handleChange, setFormState } = useForm({
+    const { formState, handleChange } = useForm({
         errors: error,
+        defaultState: {
+            theme_id: themes[0] ? themes[0].id : 1,
+        },
     });
-
-    useEffect(() => {
-        if (themesData && themesData.length > 0 && !formState["theme_id"]) {
-            setFormState({
-                theme_id: themesData.data.themes[0].id,
-            });
-        }
-    }, [themesData, isFetching]);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -44,50 +36,48 @@ const StepThree = ({
             <div>
                 <div className="my-6 grid gap-5">
                     <ul className="grid w-full gap-6 md:grid-cols-3">
-                        {themesData?.data.themes.map(
-                            (item: any, index: number) => (
-                                <li key={index}>
-                                    <input
-                                        name="theme_id"
-                                        type="radio"
-                                        id={item.slug}
-                                        value={item.id}
-                                        className="hidden peer"
-                                        required
-                                        defaultChecked={
-                                            themesData?.data.themes[0].id ==
-                                                item.id ||
-                                            formState["theme_id"] == item.id
-                                        }
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            handleChange(event, setFormData);
-                                        }}
-                                    />
-                                    <label
-                                        htmlFor={item.slug}
-                                        className="inline-flex items-center justify-between w-full text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600
+                        {themes.map((item: any, index: number) => (
+                            <li key={index}>
+                                <input
+                                    name="theme_id"
+                                    type="radio"
+                                    id={item.slug}
+                                    value={item.id}
+                                    className="hidden peer"
+                                    required
+                                    defaultChecked={
+                                        (themes[0] &&
+                                            themes[0].id == item.id) ||
+                                        formState["theme_id"] == item.id
+                                    }
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        handleChange(event, setFormData);
+                                    }}
+                                />
+                                <label
+                                    htmlFor={item.slug}
+                                    className="inline-flex items-center justify-between w-full text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600
                                         peer-checked:bg-gray-50
                                         peer-checked:dark:bg-gray-700
                                         hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 overflow-hidden"
-                                    >
-                                        <div className="block w-full">
-                                            <img
-                                                className="w-full block"
-                                                src={item.thumbnail}
-                                                alt={item.name}
-                                            />
-                                            <div className="w-full p-2.5">
-                                                <p className="text-center">
-                                                    {item.name}
-                                                </p>
-                                            </div>
+                                >
+                                    <div className="block w-full">
+                                        <img
+                                            className="w-full block"
+                                            src={item.thumbnail}
+                                            alt={item.name}
+                                        />
+                                        <div className="w-full p-2.5">
+                                            <p className="text-center">
+                                                {item.name}
+                                            </p>
                                         </div>
-                                    </label>
-                                </li>
-                            )
-                        )}
+                                    </div>
+                                </label>
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0">

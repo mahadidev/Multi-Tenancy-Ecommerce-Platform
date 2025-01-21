@@ -17,6 +17,7 @@ class StoreSocialMediaResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'label' => $this->label,
             'username' => $this->username,
             'url' => $this->url,
             'store_id' => $this->store_id,

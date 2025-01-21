@@ -1,8 +1,9 @@
+import { WidgetType } from "@/seller/types";
 import Hero from "./hero";
 import Offers from "./offers";
 import PromoGrid from "./promoGrid";
 
-const Component = ({ data }: { data: any }) => {
+const Component = ({ data }: { data: WidgetType }) => {
     const components: any = {
         hero: <Hero props={data} />,
         offers: <Offers props={data} />,

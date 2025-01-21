@@ -23,14 +23,31 @@ class ThemeResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'thumbnail' => $this->thumbnail_image,
-            'pages' => $this->pages ? $this->pages->map(function ($page){
+            'widgets' => $this->pages ? $this->pages->map(function ($page) {
+                return
+                    $page->page_widgets ? $page->page_widgets->map(function ($widget) {
+                        return [
+                            'id' => $widget->id,
+                            'name' => $widget->name,
+                            'label' => $widget->label,
+                            'type' => $widget->type,
+                            'value' => $widget->value,
+                            'thumbnail' => $widget->thumbnail ? url(Storage::url($widget->thumbnail)) : null,
+                            'inputs' => json_decode($widget->inputs),
+                        ];
+                    }) : null;
+
+            })[0] : null,
+            'pages' => $this->pages ? $this->pages->map(function ($page) {
                 return [
                     'id' => $page->id,
                     'name' => $page->name,
                     'slug' => $page->slug,
-                    'type' => $page->type,
+                    'type' => new PageTypeResource(PageType::where(["id" => $page->type])->first()),
                     'title' => $page->title,
-                    'widgets' => $page->page_widgets ? $page->page_widgets->map(function ($widget){
+                    'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
+                    'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+                    'widgets' => $page->page_widgets ? $page->page_widgets->map(function ($widget) {
                         return [
                             'id' => $widget->id,
                             'name' => $widget->name,
@@ -43,7 +60,7 @@ class ThemeResource extends JsonResource
                     }) : null,
                 ];
             }) : null,
-            
+
         ];
     }
 }

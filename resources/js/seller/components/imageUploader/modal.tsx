@@ -149,7 +149,12 @@ const ImageInput: FC<
                                 )}
                             </>
                         ) : (
-                            <UploadCard />
+                            <UploadCard
+                                onUploaded={(uploadedImage: FileType) => {
+                                    setActiveTab("gallery");
+                                    setSelectedImage(uploadedImage);
+                                }}
+                            />
                         )}
                     </div>
                 </Modal.Body>
@@ -219,7 +224,7 @@ const GalleryCard = ({
     );
 };
 
-const UploadCard = () => {
+const UploadCard = ({ onUploaded }: { onUploaded: CallableFunction }) => {
     const { uploadImage } = useImageUploader();
     const handleChange = (file: any) => {
         uploadImage({
@@ -229,6 +234,7 @@ const UploadCard = () => {
                 alternate_text: "Brand Logo",
                 tags: "Logo,Tags,Brand",
             },
+            onSuccess: onUploaded,
         });
     };
 

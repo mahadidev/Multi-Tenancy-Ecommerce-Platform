@@ -1,13 +1,12 @@
 import { ImageInput } from "@/seller/components";
 import { RoutePath } from "@/seller/env";
 import useForm from "@/seller/hooks/useForm";
-import { useFetchCategoriesQuery } from "@/seller/store/reducers/categoryApi";
+import { useAppSelector } from "@/seller/store";
 import {
     useDeleteProductMutation,
-    useFetchProductsQuery,
     useStoreProductMutation,
-    useUpdateProductMutation,
 } from "@/seller/store/reducers/productApi";
+import { MetaType } from "@/seller/types";
 import { ProductType } from "@/seller/types/ecommerce";
 import {
     Breadcrumb,
@@ -28,10 +27,13 @@ import {
     HiChevronRight,
     HiHome,
     HiOutlineExclamationCircle,
+    HiPlus,
     HiTrash,
 } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const ECommerceProductsPageContent: FC = function () {
+    const { productsMeta } = useAppSelector((state) => state.product);
     return (
         <>
             <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 sm:flex dark:border-gray-700 dark:bg-gray-800">
@@ -41,9 +43,7 @@ const ECommerceProductsPageContent: FC = function () {
                             <Breadcrumb.Item href={RoutePath.dashboard}>
                                 <div className="flex items-center gap-x-3">
                                     <HiHome className="text-xl" />
-                                    <span className="dark:text-white">
-                                        Dashboard
-                                    </span>
+                                    <span>Dashboard</span>
                                 </div>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item>Products</Breadcrumb.Item>
@@ -69,7 +69,8 @@ const ECommerceProductsPageContent: FC = function () {
                     </div>
                 </div>
             </div>
-            <TableNavigation />
+
+            {productsMeta && <Pagination meta={productsMeta} />}
         </>
     );
 };
@@ -94,16 +95,18 @@ const SearchForProducts: FC = function () {
 const AddProductModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const [storeProduct, { isLoading, error }] = useStoreProductMutation();
-    const { data: categoryResponse } = useFetchCategoriesQuery();
+    const { categories } = useAppSelector((state) => state.category);
     const { handleChange, formState, formErrors } = useForm({
         errors: error,
     });
 
     return (
         <>
-            <Button color="blue" onClick={() => setOpen(!isOpen)}>
-                <FaPlus className="mr-3 text-sm" />
-                Add product
+            <Button color="blue" className="p-0" onClick={() => setOpen(true)}>
+                <div className="flex items-center gap-x-3">
+                    <HiPlus className="text-xl" />
+                    Add Product
+                </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen}>
                 <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
@@ -220,16 +223,14 @@ const AddProductModal: FC = function () {
                                         <option selected>
                                             Select a category
                                         </option>
-                                        {categoryResponse?.data?.map(
-                                            (item: any) => (
-                                                <option
-                                                    value={item.id}
-                                                    key={item.id}
-                                                >
-                                                    {item.name}
-                                                </option>
-                                            )
-                                        )}
+                                        {categories.map((item: any) => (
+                                            <option
+                                                value={item.id}
+                                                key={item.id}
+                                            >
+                                                {item.name}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -313,7 +314,7 @@ const AddProductModal: FC = function () {
 };
 
 const AllProductsTable: FC = function () {
-    const { data: productResponse } = useFetchProductsQuery();
+    const { products } = useAppSelector((state) => state.product);
 
     return (
         <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
@@ -339,7 +340,7 @@ const AllProductsTable: FC = function () {
                 <Table.HeadCell />
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {productResponse?.data?.map((product: ProductType) => (
+                {products.map((product: ProductType) => (
                     <Table.Row
                         key={product.id}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -379,7 +380,14 @@ const AllProductsTable: FC = function () {
                         </Table.Cell>
                         <Table.Cell>
                             <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                <EditProductModal product={product} />
+                                <Button
+                                    color="blue"
+                                    as={Link}
+                                    to={RoutePath.products.edit(product.id)}
+                                >
+                                    <FaPlus className="mr-3 text-sm" />
+                                    Edit product
+                                </Button>
                                 <DeleteProductModal product={product} />
                             </div>
                         </Table.Cell>
@@ -387,238 +395,6 @@ const AllProductsTable: FC = function () {
                 ))}
             </Table.Body>
         </Table>
-    );
-};
-
-const EditProductModal: FC<{ product: ProductType }> = function (props) {
-    const [isOpen, setOpen] = useState(false);
-    const [updateProduct, { isLoading, error }] = useUpdateProductMutation();
-    const { data: categoryResponse } = useFetchCategoriesQuery();
-    const { handleChange, formState, formErrors } = useForm({
-        errors: error,
-        defaultState: {
-            ...{
-                name: props.product.name,
-                slug: props.product.slug,
-                category_id: props.product.category?.id ?? null,
-                price: props.product.price,
-                sku: props.product.sku,
-                thumbnail: props.product.thumbnail,
-            },
-        },
-    });
-
-    return (
-        <>
-            <Button color="blue" onClick={() => setOpen(!isOpen)}>
-                <FaPlus className="mr-3 text-sm" />
-                Edit product
-            </Button>
-            <Modal onClose={() => setOpen(false)} show={isOpen}>
-                <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
-                    Edit product
-                </Modal.Header>
-                <Modal.Body>
-                    <form>
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="name">Product name</Label>
-                                <div>
-                                    <TextInput
-                                        id="name"
-                                        name="name"
-                                        placeholder="Product name"
-                                        value={formState["name"]}
-                                        color={
-                                            formErrors["name"]
-                                                ? "failure"
-                                                : "gray"
-                                        }
-                                        helperText={
-                                            formErrors["name"]
-                                                ? formErrors["name"][0]
-                                                : false
-                                        }
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            handleChange(event);
-                                        }}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="slug">Product slug</Label>
-                                <div>
-                                    <TextInput
-                                        id="slug"
-                                        name="slug"
-                                        placeholder="Product slug"
-                                        value={formState["slug"]}
-                                        color={
-                                            formErrors["slug"]
-                                                ? "failure"
-                                                : "gray"
-                                        }
-                                        helperText={
-                                            formErrors["slug"]
-                                                ? formErrors["slug"][0]
-                                                : false
-                                        }
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            handleChange(event);
-                                        }}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="sku">SKU</Label>
-                                <div>
-                                    <TextInput
-                                        id="sku"
-                                        name="sku"
-                                        placeholder="sku"
-                                        value={formState["sku"]}
-                                        color={
-                                            formErrors["sku"]
-                                                ? "failure"
-                                                : "gray"
-                                        }
-                                        helperText={
-                                            formErrors["sku"]
-                                                ? formErrors["sku"][0]
-                                                : false
-                                        }
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            handleChange(event);
-                                        }}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="category_id">Category</Label>
-                                <div>
-                                    <Select
-                                        id="category_id"
-                                        name="category_id"
-                                        value={formState["category_id"]}
-                                        color={
-                                            formErrors["category_id"]
-                                                ? "failure"
-                                                : "gray"
-                                        }
-                                        helperText={
-                                            formErrors["category_id"]
-                                                ? formErrors["category_id"][0]
-                                                : false
-                                        }
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLSelectElement>
-                                        ) => {
-                                            handleChange(event);
-                                        }}
-                                        required
-                                    >
-                                        <option selected>
-                                            Select a category
-                                        </option>
-                                        {categoryResponse?.data?.map(
-                                            (item: any) => (
-                                                <option
-                                                    value={item.id}
-                                                    key={item.id}
-                                                >
-                                                    {item.name}
-                                                </option>
-                                            )
-                                        )}
-                                    </Select>
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="price">Price</Label>
-                                <TextInput
-                                    id="price"
-                                    name="price"
-                                    type="number"
-                                    placeholder="2300"
-                                    value={formState["price"]}
-                                    color={
-                                        formErrors["price"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["price"]
-                                            ? formErrors["price"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                            <div className="flex flex-col gap-2 col-span-full">
-                                <Label htmlFor="thumbnail">Thumbnail</Label>
-                                <div>
-                                    <ImageInput
-                                        id="thumbnail"
-                                        name="thumbnail"
-                                        placeholder="click to upload thumbnail"
-                                        color={
-                                            formErrors["thumbnail"]
-                                                ? "failure"
-                                                : "gray"
-                                        }
-                                        helperText={
-                                            formErrors["thumbnail"]
-                                                ? formErrors["thumbnail"][0]
-                                                : false
-                                        }
-                                        value={formState["thumbnail"]}
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            handleChange(event);
-                                        }}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        color="blue"
-                        onClick={() => {
-                            updateProduct({
-                                productId: props.product.id,
-                                formData: formState,
-                            }).then((response: any) => {
-                                if (response.data.status === 200) {
-                                    setOpen(false);
-                                }
-                            });
-                        }}
-                        isProcessing={isLoading}
-                        processingLabel="updating"
-                        processingSpinner={<AiOutlineLoading />}
-                        disabled={isLoading}
-                    >
-                        Update product
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
     );
 };
 
@@ -688,45 +464,64 @@ const DeleteProductModal: FC<{ product: ProductType }> = function (props) {
     );
 };
 
-function TableNavigation() {
+const Pagination: FC<{ meta: MetaType }> = function ({ meta }) {
+    const [page, setPage] = useState(0);
+    const numPages = meta.total;
+
+    const previousPage = () => {
+        setPage(page > 0 ? page - 1 : page);
+    };
+
+    const nextPage = () => {
+        setPage(page < numPages - 1 ? page + 1 : page);
+    };
+
     return (
         <div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
             <div className="mb-4 flex items-center sm:mb-0">
-                <a
-                    href="/"
-                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
+                <button
+                    onClick={previousPage}
+                    className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
+                    <span className="sr-only">Previous page</span>
                     <HiChevronLeft className="h-7 w-7" />
-                </a>
-                <a
-                    href="/"
-                    className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
+                </button>
+                <button
+                    onClick={nextPage}
+                    className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
+                    <span className="sr-only">Next page</span>
                     <HiChevronRight className="h-7 w-7" />
-                </a>
+                </button>
                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    Showing{" "}
+                    Showing&nbsp;
                     <span className="font-semibold text-gray-900 dark:text-white">
-                        1-20
-                    </span>{" "}
-                    of{" "}
+                        {meta.current_page}-{meta.last_page}
+                    </span>
+                    &nbsp;of&nbsp;
                     <span className="font-semibold text-gray-900 dark:text-white">
-                        2290
+                        {meta.total}
                     </span>
                 </span>
             </div>
             <div className="flex items-center space-x-3">
-                <Button color="blue" size="sm">
+                <Link
+                    to="#"
+                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
                     <HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
                     Previous
-                </Button>
-                <Button color="blue" size="sm">
+                </Link>
+                <Link
+                    to="#"
+                    className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
                     Next
                     <HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
-                </Button>
+                </Link>
             </div>
         </div>
     );
-}
+};
 
 export default ECommerceProductsPageContent;

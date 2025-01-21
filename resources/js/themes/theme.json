@@ -1,26 +1,99 @@
-{
-    "id": 2,
-    "name": "offers",
-    "label": "Offers",
-    "thumbnail": "imageurl",
-    "inputs": [
-        {
+[
+  {
+    "name": "Simfy Commerce",
+    "slug": "simfy-commerce",
+    "thumbnail": "https://placehold.co/600x400",
+    "pages": [
+      {
+        "name": "home",
+        "label": "home",
+        "slug": "/",
+        "title": "Home page",
+        "type": 1,
+        "thumbnail": "https://placehold.co/600x400",
+        "widgets": [
+          {
             "id": 1,
-            "name": "title",
-            "label": "Title",
-            "type": "text",
-            "value": "What we love to do",
-            "placeholder": "Enter offer section title",
-            "required": true
-        },
-        {
+            "name": "hero",
+            "label": "Hero Section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "slide",
+                "label": "slide",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "image",
+                    "label": "Image",
+                    "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fhero_banner_1.jpg&w=1920&q=75",
+                    "type": "image",
+                    "placeholder": "Enter your image url",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "bg-color",
+                    "label": "Background Color",
+                    "value": "#ffc100",
+                    "type": "color",
+                    "placeholder": "Enter background Color Code",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "slide",
+                "label": "slide",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "image",
+                    "label": "Image",
+                    "value": "https://cholgori-com-1.vercel.app/_next/image?url=%2Fimages%2Fhero_banner_2.jpg&w=1920&q=75",
+                    "type": "image",
+                    "placeholder": "Enter your image url",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "bg-color",
+                    "label": "Background Color",
+                    "value": "#ffc100",
+                    "type": "color",
+                    "placeholder": "Enter background Color Code",
+                    "required": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "id": 2,
-            "name": "offer_box",
-            "label": "Offer Box",
-            "type": "array",
-            "required": true,
-            "items": [
-                {
+            "name": "offers",
+            "label": "Offers",
+            "thumbnail": "imageurl",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "title",
+                "label": "Title",
+                "type": "text",
+                "value": "What we love to do",
+                "placeholder": "Enter offer section title",
+                "required": true
+              },
+              {
+                "id": 2,
+                "name": "offer_box",
+                "label": "Offer Box",
+                "type": "array",
+                "required": true,
+                "items": [
+                  {
                     "id": 1,
                     "name": "title",
                     "label": "Title",
@@ -28,8 +101,8 @@
                     "value": "Free Delivery",
                     "placeholder": "Enter offer title",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 2,
                     "name": "description",
                     "label": "Description",
@@ -37,8 +110,8 @@
                     "value": "Free shipping worldwide",
                     "placeholder": "Enter offer description",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 3,
                     "name": "icon",
                     "label": "SVG Icon",
@@ -46,17 +119,17 @@
                     "placeholder": "Enter offer icon (svg)",
                     "required": true,
                     "type": "textarea"
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "name": "offer_box",
-            "label": "Offer Box",
-            "type": "array",
-            "required": true,
-            "items": [
-                {
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "offer_box",
+                "label": "Offer Box",
+                "type": "array",
+                "required": true,
+                "items": [
+                  {
                     "id": 1,
                     "name": "title",
                     "label": "Title",
@@ -64,8 +137,8 @@
                     "value": "Member Discount",
                     "placeholder": "Enter offer title",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 2,
                     "name": "description",
                     "label": "Description",
@@ -73,8 +146,8 @@
                     "value": "Free deals everyweek",
                     "placeholder": "Enter offer description",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 3,
                     "name": "icon",
                     "label": "SVG Icon",
@@ -82,17 +155,17 @@
                     "placeholder": "Enter offer icon (svg)",
                     "required": true,
                     "type": "textarea"
-                }
-            ]
-        },
-        {
-            "id": 4,
-            "name": "offer_box",
-            "label": "Offer Box",
-            "type": "array",
-            "required": true,
-            "items": [
-                {
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "offer_box",
+                "label": "Offer Box",
+                "type": "array",
+                "required": true,
+                "items": [
+                  {
                     "id": 1,
                     "name": "title",
                     "label": "Title",
@@ -100,8 +173,8 @@
                     "value": "Money Back",
                     "placeholder": "Enter offer title",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 2,
                     "name": "description",
                     "label": "Description",
@@ -109,8 +182,8 @@
                     "value": "Refund in 30 days",
                     "placeholder": "Enter offer description",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 3,
                     "name": "icon",
                     "label": "SVG Icon",
@@ -118,17 +191,17 @@
                     "placeholder": "Enter offer icon (svg)",
                     "required": true,
                     "type": "textarea"
-                }
-            ]
-        },
-        {
-            "id": 5,
-            "name": "offer_box",
-            "label": "Offer Box",
-            "type": "array",
-            "required": true,
-            "items": [
-                {
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "name": "offer_box",
+                "label": "Offer Box",
+                "type": "array",
+                "required": true,
+                "items": [
+                  {
                     "id": 1,
                     "name": "title",
                     "label": "Title",
@@ -136,8 +209,8 @@
                     "value": "Secure Payment",
                     "placeholder": "Enter offer title",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 2,
                     "name": "description",
                     "label": "Description",
@@ -145,8 +218,8 @@
                     "type": "text",
                     "placeholder": "Enter offer description",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 3,
                     "name": "icon",
                     "label": "SVG Icon",
@@ -154,17 +227,17 @@
                     "placeholder": "Enter offer icon (svg)",
                     "required": true,
                     "type": "textarea"
-                }
-            ]
-        },
-        {
-            "id": 6,
-            "name": "offer_box",
-            "label": "Offer Box",
-            "type": "array",
-            "required": true,
-            "items": [
-                {
+                  }
+                ]
+              },
+              {
+                "id": 6,
+                "name": "offer_box",
+                "label": "Offer Box",
+                "type": "array",
+                "required": true,
+                "items": [
+                  {
                     "id": 1,
                     "name": "title",
                     "label": "Title",
@@ -172,8 +245,8 @@
                     "value": "Free Return",
                     "placeholder": "Enter offer title",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 2,
                     "name": "description",
                     "label": "Description",
@@ -181,16 +254,21 @@
                     "value": "Refund in 365 days",
                     "placeholder": "Enter offer description",
                     "required": true
-                },
-                {
+                  },
+                  {
                     "id": 3,
                     "name": "icon",
                     "label": "SVG Icon",
                     "value": "<svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><desc></desc><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"></path><circle cx=\"7\" cy=\"17\" r=\"2\"></circle><circle cx=\"17\" cy=\"17\" r=\"2\"></circle><path d=\"M5 17h-2v-11a1 1 0 0 1 1 -1h9v6h-5l2 2m0 -4l-2 2\"></path><line x1=\"9\" y1=\"17\" x2=\"15\" y2=\"17\"></line><path d=\"M13 6h5l3 5v6h-2\"></path></svg>",
                     "required": true,
                     "type": "textarea"
-                }
+                  }
+                ]
+              }
             ]
-        }
+          }
+        ]
+      }
     ]
-}
+  }
+]
