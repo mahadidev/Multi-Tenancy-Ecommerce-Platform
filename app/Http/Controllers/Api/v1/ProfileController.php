@@ -13,6 +13,7 @@ class ProfileController extends Controller
     public function profile(Request $request)
     {
         return apiResponse(function () use ($request) {
+            
             $user = auth()->user(); // Changed from store to stores
 
             if ($user) {
