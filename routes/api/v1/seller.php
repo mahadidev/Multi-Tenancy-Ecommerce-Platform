@@ -94,8 +94,4 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Analytics Data Route
     Route::get('/analytics', [AnalyticsDataController::class, 'index']);
-
-    // Order Analytics Data Route
-    Route::get('/analytics/orders', [AnalyticsDataController::class, 'getOrderAnalytics']);
-
 });
