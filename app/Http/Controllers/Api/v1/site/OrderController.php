@@ -114,11 +114,6 @@ class OrderController extends Controller
             // Optionally, clear the cart after order is placed
             Cart::where('session_id', $sessionId)->orWhere('user_id', $user->id)->delete();
 
-            // Notify the user via both email and database
-            // if (env('APP_ENV') !== 'local') {
-            //     Auth::user()->notify(new OrderPlacedNotification($order));
-            // }
-
             // Commit the transaction
             DB::commit();
 
@@ -128,7 +123,9 @@ class OrderController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Order placed successfully',
-                'order' => OrderResource::collection($order->load('items')),
+                'data' => [
+                    'order' => new OrderResource($order->load('items')),
+                ]
             ]);
 
         } catch (\Exception $e) {
