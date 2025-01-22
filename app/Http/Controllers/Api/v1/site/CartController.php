@@ -44,7 +44,6 @@ class CartController extends Controller
                     'message' => 'User is not authenticated',
                 ]);
             }
-            // Get store_id from session
 
             // Get product details
             $product = Product::find($validatedData['product_id']);
