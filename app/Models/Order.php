@@ -50,5 +50,9 @@ class Order extends Model
         return $query->where('store_id', session()->get('site_store_id'));
     }
 
+    public function scopeAuthorized($query){
+        return $query->where('store_id', authStore());
+    }
+
     
 }
