@@ -14,14 +14,14 @@ use App\Models\Cart;
 use App\Models\Store;
 use App\Models\OrderItem;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class OrderController extends Controller
 {
 
-    public function index(Request $request){
-
+    public function index(Request $request)
+    {
         $orders = Order::currentStore()->where('user_id', auth()->user()->id)->with('items')->latest()->get();
-
         return response()->json([
             'status' => 200,
             'data' => ['orders' => OrderResource::collection($orders)],
@@ -40,9 +40,9 @@ class OrderController extends Controller
             'payment_method' => 'required|in:cash,card',
         ]);
 
-        $storeID = $request->has('store_id') ? $request->store_id : session()->get('site_store_id') ;
+        $storeID = $request->has('store_id') ? $request->store_id : session()->get('site_store_id');
         $store = Store::active()->find($storeID);
-        
+
         if (!$store || !$storeID) {
             return response()->json([
                 'status' => 401,
@@ -57,7 +57,7 @@ class OrderController extends Controller
 
             $sessionId = $request->has('session_id') ? $request->session_id : null;
             $user = auth()->user();
-          
+
 
             $cartItems = Cart::with('product')
                 ->when($sessionId, function ($query, $sessionId) {
@@ -127,7 +127,6 @@ class OrderController extends Controller
                     'order' => new OrderResource($order->load('items')),
                 ]
             ]);
-
         } catch (\Exception $e) {
             // Rollback transaction if something goes wrong
             DB::rollBack();
@@ -143,5 +142,37 @@ class OrderController extends Controller
                 'message' => 'Order placement failed',
             ]);
         }
+    }
+
+    public function downloadOrderDetails($uuid, $isCustomer)
+    {
+        $order = Order::where('uuid', $uuid)->with('items')->first();
+        $pdf = FacadePdf::loadView('pdf.order_confirmation', [
+            'order' => $order,
+            'isCustomer' => $isCustomer,
+        ])->setPaper('a4');
+
+        return $pdf->download("Order-{$order->uuid}.pdf");
+    }
+
+    public function test()
+    {
+        $uuid = '3975d5c2-71e8-4f6e-978f-ab84fe9c47b5';
+        $isCustomer = true;
+        // return
+        $orderdata = Order::where('uuid', $uuid)->with('items')->firstOrFail();
+        // $pdf = PDF::loadView('pdf.order_confirmation', compact('order'));
+
+        // combine the order data and isCustomer
+        $data = [
+            'order' => $orderdata,
+            'isCustomer' => $isCustomer,
+        ];
+
+        // return $data;
+
+        $pdf = FacadePdf::loadView('pdf.order_confirmation', $data);
+
+        return $pdf->stream("Order-{$orderdata->uuid}.pdf");
     }
 }

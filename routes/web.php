@@ -4,6 +4,7 @@ use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
+use App\Http\Controllers\Api\v1\site\OrderController;
 
 Route::get('/', function () {
     return view("welcome");
@@ -33,3 +34,7 @@ Route::prefix('/themes')->group(function () {
     });
 
 });
+
+
+//test
+Route::get('/test', [OrderController::class, 'test']);
