@@ -153,25 +153,4 @@ class OrderController extends Controller
 
         return $pdf->download("Order-{$order->uuid}.pdf");
     }
-
-    public function test()
-    {
-        $uuid = '3975d5c2-71e8-4f6e-978f-ab84fe9c47b5';
-        $isCustomer = true;
-        // return
-        $orderdata = Order::where('uuid', $uuid)->with('items')->firstOrFail();
-        // $pdf = PDF::loadView('pdf.order_confirmation', compact('order'));
-
-        // combine the order data and isCustomer
-        $data = [
-            'order' => $orderdata,
-            'isCustomer' => $isCustomer,
-        ];
-
-        // return $data;
-
-        $pdf = FacadePdf::loadView('emails.order_confirmation', $data);
-
-        return $pdf->stream("Order-{$orderdata->uuid}.pdf");
-    }
 }
