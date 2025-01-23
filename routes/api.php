@@ -39,6 +39,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         // File storage routes
         Route::resource('file-storage', FileStorageController::class);
+
+        // Notification routes
+        Route::get('notifications', [NotificationController::class, 'index']);
+        Route::post('notification', [NotificationController::class, 'markAsRead']);
     });
 });
 
