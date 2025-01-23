@@ -119,6 +119,9 @@ class OrderController extends Controller
             // Regenerate the session ID to ensure a unique UUID for each order
             // session()->regenerate();
 
+            // Send notifications from order model
+            $order->sendOrderConfirmationNotifications();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Order placed successfully',

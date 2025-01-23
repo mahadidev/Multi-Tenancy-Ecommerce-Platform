@@ -56,6 +56,7 @@ class OrderConfirmationNotification extends Notification
             ->line($this->isCustomer
                 ? 'Thank you for your order!'
                 : 'You have received a new order!')
+            // ->line('Order #' . $this->order)
             ->view('emails.order_confirmation', [
                 'order' => $this->order,
                 'isCustomer' => $this->isCustomer,

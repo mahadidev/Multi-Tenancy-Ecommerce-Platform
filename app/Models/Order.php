@@ -72,17 +72,11 @@ class Order extends Model
                 if ($seller) {
                     $seller->notify(new OrderConfirmationNotification($this, false));
                 }
+            } else {
+                Log::info('Order notification disabled in production, change APP_ENV to local to enable');
             }
         } catch (\Exception $e) {
             Log::error('Order notification failed: ' . $e->getMessage());
         }
-    }
-
-
-    protected static function booted()
-    {
-        static::created(function ($order) {
-            $order->sendOrderConfirmationNotifications();
-        });
     }
 }
