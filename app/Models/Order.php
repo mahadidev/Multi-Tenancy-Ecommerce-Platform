@@ -61,17 +61,18 @@ class Order extends Model
     public function sendOrderConfirmationNotifications()
     {
         try {
-            // For customer notification
-            $customer = User::find($this->user_id);
-            if ($customer) {
-                $customer->notify(new OrderConfirmationNotification($this, true));
+            if (env('APP_ENV') == 'local') {
+                // For customer notification
+                $customer = User::find($this->user_id);
+                if ($customer) {
+                    $customer->notify(new OrderConfirmationNotification($this, true));
+                }
+                // Notify seller
+                $seller = Store::find($this->store_id)->owner;
+                if ($seller) {
+                    $seller->notify(new OrderConfirmationNotification($this, false));
+                }
             }
-            // Notify seller
-            $seller = Store::find($this->store_id)->owner;
-            if ($seller) {
-                $seller->notify(new OrderConfirmationNotification($this, false));
-            }
-            
         } catch (\Exception $e) {
             Log::error('Order notification failed: ' . $e->getMessage());
         }

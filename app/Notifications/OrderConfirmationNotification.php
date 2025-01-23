@@ -37,12 +37,18 @@ class OrderConfirmationNotification extends Notification
      * Get the mail representation of the notification.
      */
 
-   
     public function toMail($notifiable)
     {
         $subject = $this->isCustomer
             ? 'Your Order Confirmation #' . $this->order->uuid
             : 'New Order Received #' . $this->order->uuid;
+
+        // Generate PDF content dynamically
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.order_confirmation', [
+            'order' => $this->order,
+            'isCustomer' => $this->isCustomer,
+        ]);
 
         return (new MailMessage)
             ->subject($subject)
@@ -53,9 +59,23 @@ class OrderConfirmationNotification extends Notification
             ->view('emails.order_confirmation', [
                 'order' => $this->order,
                 'isCustomer' => $this->isCustomer,
+            ])
+            ->attachData($pdf->output(), "Order_Confirmation_{$this->order->uuid}.pdf", [
+                'mime' => 'application/pdf',
             ]);
     }
 
+
+    // Example method to generate the PDF (use your preferred method)
+    protected function generatePdf($path)
+    {
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.order_confirmation', [
+            'order' => $this->order,
+            'isCustomer' => $this->isCustomer,
+        ]);
+        $pdf->save($path);
+    }
 
     public function toDatabase($notifiable)
     {
