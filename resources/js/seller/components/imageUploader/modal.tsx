@@ -10,10 +10,12 @@ const ImageInput: FC<
     | (FileInputProps & RefAttributes<HTMLInputElement> & { valueType?: "url" })
     | any
 > = (props) => {
-    const [activeTab, setActiveTab] = useState<"upload" | "gallery">("gallery");
-    const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const { data: imagesResponse } = useFetchImagesQuery();
     const [selectedImage, setSelectedImage] = useState<FileType | null>(null);
+    const [activeTab, setActiveTab] = useState<"upload" | "gallery">(
+        imagesResponse?.data.files.length > 0 ? "gallery" : "upload"
+    );
+    const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const inputRef = useRef(null);
     const [inputProps, setIputProps] = useState<any>(props);
 
@@ -137,14 +139,14 @@ const ImageInput: FC<
                     </Button.Group>
                 </Modal.Header>
                 <Modal.Body className="px-5 py-0">
-                    <div className="bg-gray-700 p-4 rounded-lg rounded-tl-none">
+                    <div className="bg-gray-700 p-4 rounded-lg rounded-tl-none min-h-[69dvh]">
                         {activeTab === "gallery" ? (
                             <>
-                                {imagesResponse?.data && (
+                                {imagesResponse?.data.files && (
                                     <GalleryCard
                                         selectedImage={selectedImage}
                                         setSelectedImage={setSelectedImage}
-                                        images={imagesResponse?.data}
+                                        images={imagesResponse?.data.files}
                                     />
                                 )}
                             </>
@@ -158,7 +160,7 @@ const ImageInput: FC<
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className="border-t-0">
                     <Button
                         onClick={onInsertImage}
                         disabled={!selectedImage}
@@ -187,7 +189,7 @@ const GalleryCard = ({
     setSelectedImage: CallableFunction;
 }) => {
     return (
-        <div className="">
+        <div>
             <ResponsiveMasonry
                 columnsCountBreakPoints={{ 350: 1, 750: 6, 900: 5 }}
             >

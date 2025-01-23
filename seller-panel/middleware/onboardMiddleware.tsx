@@ -1,0 +1,22 @@
+import { Path } from '@seller-panel/pages';
+import { useAppSelector } from '@seller-panel/store/store';
+import { Navigate, Outlet } from 'react-router-dom';
+
+const OnboardMiddleware = () => {
+	const { user, accessToken } = useAppSelector((state) => state.auth);
+	const { store } = useAppSelector((state) => state.store);
+
+	return (
+		<>
+			{user && accessToken ? (
+				<>
+					{/* if logged */}
+					{store ? <Navigate to={Path.DashboardPage.index()} /> : <Outlet />}
+				</>
+			) : (
+				<Navigate to={Path.LoginPage.index()} />
+			)}
+		</>
+	);
+};
+export default OnboardMiddleware;

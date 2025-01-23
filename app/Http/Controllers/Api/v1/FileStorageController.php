@@ -25,7 +25,9 @@ class FileStorageController extends Controller
             ->get();
         return response()->json([
             'status' => 200,
-            'data' => FileStorageResource::collection($fileStorage),
+            'data' => [
+                "files" => FileStorageResource::collection($fileStorage)
+            ],
         ], 200);
     }
 

@@ -30,4 +30,10 @@ class StorePage extends Model
     {
         return $this->hasMany(StorePageWidget::class, 'store_page_id');
     }
+
+    public function scopeAuthorized($query)
+    {
+        return $query->where('store_id', authStore());
+    }
+
 }
