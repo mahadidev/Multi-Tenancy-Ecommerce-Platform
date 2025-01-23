@@ -77,7 +77,6 @@ class OrderController extends Controller
             $itemSubtotal = collect($cartItems)->sum('total');
             $totalAmount = $itemSubtotal + $serviceFee;
 
-
             $order = Order::create([
                 'uuid' => $sessionId ? $sessionId : (string) Str::uuid(),
                 'user_id' => $user->id,
@@ -171,7 +170,7 @@ class OrderController extends Controller
 
         // return $data;
 
-        $pdf = FacadePdf::loadView('pdf.order_confirmation', $data);
+        $pdf = FacadePdf::loadView('emails.order_confirmation', $data);
 
         return $pdf->stream("Order-{$orderdata->uuid}.pdf");
     }

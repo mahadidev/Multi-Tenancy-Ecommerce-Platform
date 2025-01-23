@@ -45,41 +45,67 @@
             font-weight: 600;
             margin: 0;
         }
-
         h2 {
             color: #2d3748;
-            font-size: 22px;
+            font-size: 20px;
+            /* Slightly smaller font size */
             font-weight: 600;
-            margin: 30px 0 15px;
+            text-align: center !important;
+            padding-left: 30%;
+            padding-right: 30%;
+            padding-top: 50px;
+        }
+
+        h3 {
+            color: #2d3748;
+            font-size: 20px;
+            /* Slightly smaller font size */
+            font-weight: 600;
         }
 
         .order-details {
-            background-color: #f8fafc;
-            padding: 25px;
-            border-radius: 8px;
-            margin: 25px 0;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            gap: 15px;
         }
 
-        .order-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .d-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .info-item {
-            margin-bottom: 15px;
+        .col-md-6 {
+            width: 45%;
+            float: left;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        .col-md-6-left {
+            width: 54%;
+            float: right;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
 
         .info-label {
-            font-size: 14px;
+            font-size: 13px;
             color: #64748b;
-            margin-bottom: 5px;
+            font-weight: 500;
         }
 
         .info-value {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 14px;
             color: #1a202c;
+            font-weight: 500;
         }
 
         table {
@@ -190,20 +216,61 @@
             @endif
         </p>
 
-        <div class="order-details">
-            <div class="order-info">
-                <div class="info-item">
-                    <div class="info-label">Order Number</div>
-                    <div class="info-value">#{{ $order->uuid }}</div>
+        
+        <div class="order-details d-flex">
+            <div class="col-md-6">
+                <h3>Customer Details</h3>
+                <div class="info-row">
+                    <span class="info-label">Name :</span>
+                    <span class="info-value">{{ $order->name }}</span>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">Order Date</div>
-                    <div class="info-value">{{ $order->created_at->format('F j, Y') }}</div>
+                @if ($order->email)
+                    <div class="info-row">
+                        <span class="info-label">Email :</span>
+                        <span class="info-value">{{ $order->email }}</span>
+                    </div>
+                @endif
+                @if ($order->phone)
+                    <div class="info-row">
+                        <span class="info-label">Phone :</span>
+                        <span class="info-value">
+                            {{ $order->phone ?? 'N/A' }}
+                        </span>
+                    </div>
+                @endif
+                <div class="info-row">
+                    <span class="info-label">Address :</span>
+                    <span class="info-value">
+                        {{ $order->address }}
+                    </span>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">Status</div>
-                    <div class="info-value">{{ ucfirst($order->status) }}</div>
+                <!-- More details -->
+            </div>
+            <div class="col-md-6-left">
+                <h3>Order Details</h3>
+                <div class="info-row">
+                    <span class="info-label">Order No :</span>
+                    <span class="info-value">#{{ $order->uuid }}</span>
                 </div>
+                <div class="info-row">
+                    <span class="info-label">Order Date :</span>
+                    <span class="info-value">{{ $order->created_at->format('F j, Y') }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status :</span>
+                    <span class="info-value">{{ ucfirst($order->status) }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Method :</span>
+                    <span class="info-value">{{ $order->payment_method }}</span>
+                </div>
+                @if ($order->notes)
+                <div class="info-row">
+                    <span class="info-label">Notes :</span>
+                    <span class="info-value">{{ $order->notes }}</span>
+                </div>
+                @endif
+                <!-- More details -->
             </div>
         </div>
 
