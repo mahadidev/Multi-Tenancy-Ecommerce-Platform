@@ -77,6 +77,7 @@ class Order extends Model
             }
         } catch (\Exception $e) {
             Log::error('Order notification failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Order notification failed'], 500);
         }
     }
 }
