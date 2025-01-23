@@ -3,10 +3,12 @@ import { Path } from "@seller-panel/pages";
 import { Breadcrumb, Button, Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { HiDocumentDownload, HiHome } from 'react-icons/hi';
+import CreatePlaceholderModal from "./CreatePlaceholderModal";
+import PlaceholdersTable from "./PlaceholdersTable";
+// import PlaceholdersTablePagination from "./PlaceholdersTablePagination";
 
 const PlaceholdersPage: FC = function () {
     // fetch Placeholder
-
 
 	return (
 		<>
@@ -42,7 +44,7 @@ const PlaceholdersPage: FC = function () {
 							</form>
 						</div>
 						<div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-							{/* <CreateModal /> */}
+							<CreatePlaceholderModal />
 							<Button className="p-0" color="gray">
 								<div className="flex items-center gap-x-3">
 									<HiDocumentDownload className="text-xl" />
@@ -57,12 +59,12 @@ const PlaceholdersPage: FC = function () {
 				<div className="overflow-x-auto">
 					<div className="inline-block min-w-full align-middle">
 						<div className="overflow-hidden shadow">
-							{/* <PlaceholderTable /> */}
+							<PlaceholdersTable />
 						</div>
 					</div>
 				</div>
 			</div>
-            {/* <PlaceholderTablePagination /> */}
+            {/* <PlaceholdersTablePagination meta={meta} /> */}
 		</>
 	);
 };
