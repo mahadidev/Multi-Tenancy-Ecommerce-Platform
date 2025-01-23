@@ -9,10 +9,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
-class OrderConfirmationNotification extends Notification implements ShouldQueue
+class OrderConfirmationNotification extends Notification
 {
-    use Queueable;
-
     protected $order;
     protected $isCustomer;
 
