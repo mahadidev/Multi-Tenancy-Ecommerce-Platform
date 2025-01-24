@@ -1,16 +1,19 @@
 
+import useBrand from "@seller-panel/hooks/useBrand";
 import { Path } from "@seller-panel/pages";
-import { useFetchBrandsQuery } from '@seller-panel/store/reducers/brandApi';
+import { useFetchBrandsQuery } from "@seller-panel/store/reducers/brandApi";
 import { Breadcrumb, Button, Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { HiDocumentDownload, HiHome } from 'react-icons/hi';
-import BrandsTable from './BrandsTable';
+import BrandsTable from "./BrandsTable";
 import BrandsTablePagination from "./BrandsTablePagination";
-import CreateModal from './CreateBrandModal';
+import CreateBrandModal from "./CreateBrandModal";
+// import BrandsTablePagination from "./BrandsTablePagination";
 
 const BrandsPage: FC = function () {
-    // fetch brands
+    // fetch Brands
     useFetchBrandsQuery();
+    const {meta} = useBrand();
 
 	return (
 		<>
@@ -24,29 +27,29 @@ const BrandsPage: FC = function () {
 									<span>Dashboard</span>
 								</div>
 							</Breadcrumb.Item>
-							<Breadcrumb.Item>Brands</Breadcrumb.Item>
+							<Breadcrumb.Item>Brand</Breadcrumb.Item>
 						</Breadcrumb>
 						<h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-							All Brands
+							All Brand
 						</h1>
 					</div>
 					<div className="sm:flex">
 						<div className="mb-3 hidden items-center sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100 dark:divide-gray-700">
 							<form className="lg:pr-3">
-								<Label htmlFor="brands-search" className="sr-only">
+								<Label htmlFor="Brand-search" className="sr-only">
 									Search
 								</Label>
 								<div className="relative mt-1 lg:w-64 xl:w-96">
 									<TextInput
-										id="brands-search"
-										name="brands-search"
-										placeholder="Search for brands"
+										id="Brand-search"
+										name="Brand-search"
+										placeholder="Search for Brand"
 									/>
 								</div>
 							</form>
 						</div>
 						<div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-							<CreateModal />
+							<CreateBrandModal />
 							<Button className="p-0" color="gray">
 								<div className="flex items-center gap-x-3">
 									<HiDocumentDownload className="text-xl" />
@@ -66,7 +69,7 @@ const BrandsPage: FC = function () {
 					</div>
 				</div>
 			</div>
-            <BrandsTablePagination />
+			{meta && <BrandsTablePagination meta={meta} />}
 		</>
 	);
 };

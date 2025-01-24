@@ -505,7 +505,7 @@ export function UserDropdown() {
                     <span className="sr-only">User menu</span>
                     <Avatar
                         alt=""
-                        placeholderInitials={user?.name.slice(0, 1)}
+                        placeholderInitials={user?.name?.slice(0, 1)}
                         rounded
                         size="sm"
                         className="w-max"

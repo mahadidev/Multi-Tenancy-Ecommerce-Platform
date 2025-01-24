@@ -5,4 +5,6 @@ export interface CategoryType {
 	slug: string;
 	type: 'product' | 'post' | 'blog';
 	has_parent: null | CategoryType;
+	created_at: string;
+	updated_at: string;
 }

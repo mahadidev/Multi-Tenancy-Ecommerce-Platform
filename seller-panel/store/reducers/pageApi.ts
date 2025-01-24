@@ -4,7 +4,7 @@ import { PREFIX } from '@seller-panel/env';
 import baseQueryWithReAuth, {
     createRequest,
 } from '@seller-panel/store/baseQueryWithReAuth';
-import { setPage, setTablePages } from '@seller-panel/store/slices/pageSlice';
+import { setPage, setPageTypes, setTablePages } from '@seller-panel/store/slices/pageSlice';
 import { ApiResponseType } from '@seller-panel/types/apiType';
 import { PageType } from '@seller-panel/types/pageType';
 
@@ -20,9 +20,8 @@ export interface FetchPagePayloadType {
 
 export interface CreatePagePayloadType {
     name: string;
-    slug: string;
     title: string;
-    is_active: boolean;
+    type: string;
 }
 
 export interface UpdatePagePayloadType {
@@ -68,6 +67,21 @@ export const pageApi = createApi({
 				});
 			},
 		}),
+		fetchPageTypes: builder.query<ApiResponseType, void>({
+			query: (formData) =>
+				createRequest({
+					url: `page-types`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setPageTypes(response.data.data.page_types));
+				});
+			},
+		}),
 		fetchPage: builder.query<ApiResponseType, FetchPagePayloadType>({
 			query: (formData) =>
 				createRequest({
@@ -78,9 +92,7 @@ export const pageApi = createApi({
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
 				await queryFulfilled.then((response) => {
-					dispatch(
-						setPage(response.data.data.page)
-					);
+					dispatch(setPage(response.data.data.page));
 				});
 			},
 		}),
@@ -121,6 +133,7 @@ export const pageApi = createApi({
 
 export const {
 	useFetchPagesQuery,
+    useFetchPageTypesQuery,
     useCreatePageMutation,
 	useUpdatePageMutation,
 	useDeletePageMutation,

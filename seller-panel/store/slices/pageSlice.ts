@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PageType } from '@seller-panel/types/pageType';
+import { PageType, PageTypeType } from '@seller-panel/types/pageType';
 import { MetaType } from '@seller-panel/types/tableType';
 
 const initialState: {
 	pages: PageType[];
     page: PageType | null;
+    pageTypes: PageTypeType[];
 	meta: MetaType | null;
 } = {
 	pages: [],
     page: null,
 	meta: null,
+    pageTypes: [],
 };
 
 const pageSlice = createSlice({
@@ -21,6 +23,9 @@ const pageSlice = createSlice({
 		},
 		setMeta: (state, action: PayloadAction<MetaType>) => {
 			state.meta = action.payload;
+		},
+		setPageTypes: (state, action: PayloadAction<PageTypeType[]>) => {
+			state.pageTypes = action.payload;
 		},
 		setTablePages: (
 			state,
@@ -41,6 +46,6 @@ const pageSlice = createSlice({
 		},
 	},
 });
-export const { setPages, setMeta, setTablePages, clearPages, setPage } =
+export const { setPages, setMeta, setTablePages, clearPages, setPage, setPageTypes } =
 	pageSlice.actions;
 export default pageSlice.reducer;

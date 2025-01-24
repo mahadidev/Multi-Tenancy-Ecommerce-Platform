@@ -8,9 +8,9 @@ interface PropsType {
 	placeholder: any;
 }
 
-const DeletePlaceholderModal: FC<PropsType> = function () {
+const DeletePlaceholderModal: FC<PropsType> = function (_props) {
 	const [isOpen, setOpen] = useState(false);
-	// const {update} = usePlaceholder();
+	// const {delete: deletePlaceholder} = usePlaceholder();
 	return (
 		<>
 			<Button
@@ -40,16 +40,17 @@ const DeletePlaceholderModal: FC<PropsType> = function () {
 								color="failure"
 								theme={{ base: 'px-0' }}
 								// onClick={() => {
-								// 	update.submit({
-								// 		formData: formState,
-								//         onSuccess: () => {
-								//             setOpen(false);
-								//         }
-								// 	})
+								// 	deletePlaceholder.submit({
+								// 		formData: {
+								// 			id: props.placeholder.id,
+								// 		},
+								// 		onSuccess: () => {
+								// 			setOpen(false);
+								// 		},
+								// 	});
 								// }}
-								// isProcessing={isLoading}
-								// isProcessing={isLoading}
-								// disabled={isLoading}
+								// isProcessing={deletePlaceholder.isLoading}
+								// disabled={deletePlaceholder.isLoading}
 								processingLabel="Deleting"
 								processingSpinner={<AiOutlineLoading />}
 							>

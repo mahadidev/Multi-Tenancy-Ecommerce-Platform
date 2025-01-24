@@ -1,13 +1,14 @@
 
-import { CreatePagePayloadType, DeletePagePayloadType, UpdatePagePayloadType, useCreatePageMutation, useDeletePageMutation, useFetchPagesQuery, useUpdatePageMutation } from '@seller-panel/store/reducers/pageApi';
+import { CreatePagePayloadType, DeletePagePayloadType, UpdatePagePayloadType, useCreatePageMutation, useDeletePageMutation, useFetchPagesQuery, useFetchPageTypesQuery, useUpdatePageMutation } from '@seller-panel/store/reducers/pageApi';
 import { useAppSelector } from '@seller-panel/store/store';
 
 const usePage = () => {
 	// fetch pages
 	useFetchPagesQuery();
+    useFetchPageTypesQuery();
 
 	// select page
-	const { pages, meta, page } = useAppSelector((state) => state.page);
+	const { pages, meta, page, pageTypes } = useAppSelector((state) => state.page);
 
 	// create page
 	const [
@@ -91,6 +92,7 @@ const usePage = () => {
 		pages,
 		page,
 		meta,
+        pageTypes,
 		create: {
 			submit: create,
 			isLoading: isCreateLoading,

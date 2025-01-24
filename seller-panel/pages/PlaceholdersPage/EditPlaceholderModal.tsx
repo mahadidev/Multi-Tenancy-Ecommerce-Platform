@@ -8,13 +8,13 @@ interface PropsType {
 	placeholder: any
 }
 
-const EditPlaceholderModal: FC<PropsType> = function (props) {
+const EditPlaceholderModal: FC<PropsType> = function (_props) {
 	const [isOpen, setOpen] = useState(false);
 	// const {update} = usePlaceholder();
 	// const { handleChange, formState, formErrors } = useForm({
-	// 	errors: update.error,
-	// 	defaultState: {
-	// 		...props.brand,
+	// 	formValidationError: update.error,
+	// 	default: {
+	// 		...props.placeholder,
 	// 	},
 	// });
 
@@ -68,8 +68,8 @@ const EditPlaceholderModal: FC<PropsType> = function (props) {
 						//         }
 						// 	})
 						// }}
-						// isProcessing={isLoading}
-						// disabled={isLoading}
+						// isProcessing={update.isLoading}
+						// disabled={update.isLoading}
 						processingLabel="Saving"
 						processingSpinner={<AiOutlineLoading />}
 					>

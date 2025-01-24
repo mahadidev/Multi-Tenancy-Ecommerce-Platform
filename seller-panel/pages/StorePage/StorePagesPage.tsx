@@ -1,11 +1,9 @@
 import { TableCrud } from '@seller-panel/components';
-import useCategory from '@seller-panel/hooks/useCategory';
 import usePage from '@seller-panel/hooks/usePage';
 import { FC } from 'react';
 
 const StorePages: FC = function () {
 	const { pages, meta, create, delete: deleteModal, update } = usePage();
-	const { categories } = useCategory();
 
 	return (
 		<>

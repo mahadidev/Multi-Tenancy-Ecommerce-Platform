@@ -87,6 +87,11 @@ const FileInput: FC<
 					</div>
 				</div>
 			</div>
+			{props.helperText && (
+				<p className="mt-2 text-sm text-red-600 dark:text-red-500">
+					The slug field is required.
+				</p>
+			)}
 
 			<TextInput
 				className="hidden"

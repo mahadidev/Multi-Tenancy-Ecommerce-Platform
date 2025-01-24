@@ -8,14 +8,11 @@ import { useAppDispatch, useAppSelector } from '@seller-panel/store/store';
 import { Sidebar, TextInput, Tooltip } from 'flowbite-react';
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from 'react';
 import { useEffect, useState } from 'react';
-import { FaPaintBrush } from 'react-icons/fa';
 import {
-    HiAdjustments,
     HiChartPie,
     HiCog,
     HiSearch,
     HiShoppingBag,
-    HiSupport,
 } from 'react-icons/hi';
 import { MdCollectionsBookmark } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';

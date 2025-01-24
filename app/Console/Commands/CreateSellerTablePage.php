@@ -51,6 +51,7 @@ class CreateSellerTablePage extends Command
         // table file
         $tableFile = str_replace("Placeholders", $pName, $placeholderTable);
         $tableFile = str_replace("Placeholder", "$name", $tableFile);
+        $tableFile = str_replace("placeholders", strtolower($pName), $tableFile);
         $tableFile = str_replace("placeholder", strtolower($name), $tableFile);
         // put file
         file_put_contents("$createFileDir/$pName" . "Table.tsx", $tableFile);
@@ -67,7 +68,7 @@ class CreateSellerTablePage extends Command
         // put file
         file_put_contents("$createFileDir/" ."Create". $name . "Modal.tsx", $createModalFile);
 
-        // create modal file
+        // edit modal file
         $editModalFile = str_replace("Placeholders", $pName, $placeholderEditModal);
         $editModalFile = str_replace("Placeholder", "$name", $editModalFile);
         $editModalFile = str_replace("placeholder", strtolower($name), $editModalFile);

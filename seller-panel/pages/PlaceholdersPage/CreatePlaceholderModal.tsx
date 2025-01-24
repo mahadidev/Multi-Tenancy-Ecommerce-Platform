@@ -8,7 +8,7 @@ const CreatePlaceholderModal: FC = function () {
 	// const {create} = usePlaceholder();
 
 	// const { handleChange, formState, formErrors } = useForm({
-	// 	errors: create.error,
+	// 	formValidationError: create.error,
 	// });
 
 	return (
@@ -31,7 +31,7 @@ const CreatePlaceholderModal: FC = function () {
 								<TextInput
 									id="name"
 									name="name"
-									placeholder="Brand name"
+									placeholder="Placeholder name"
 									value={formState['name']}
 									color={formErrors['name'] ? 'failure' : 'gray'}
 									helperText={
@@ -52,9 +52,9 @@ const CreatePlaceholderModal: FC = function () {
 						// onClick={() => {
 						// 	create.submit({
 						// 		formData: formState,
-                        //         onSuccess: () => {
-                        //             setOpen(false);
-                        //         }
+						//         onSuccess: () => {
+						//             setOpen(false);
+						//         }
 						// 	})
 						// }}
 						// isProcessing={create.isLoading}

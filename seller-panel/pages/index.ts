@@ -8,10 +8,11 @@ export { default as LoginPage } from './AuthPage/LoginPage';
 export { default as RegisterPage } from './AuthPage/RegisterPage';
 
 // products pages
-export { default as ProductEditPage } from './ProductsPage/ProductEdit/ProductEditPage';
+export { default as ProductEditPage } from './ProductsPage/ProductEditPage/ProductEditPage';
 export { default as ProductsPage } from './ProductsPage/ProductsPage';
 
 // store pages pages
+export { default as PagesPage } from "./PagesPage/PagesPage";
 export { default as StorePagesEditPage } from './StorePage/StorePagesEdit/StorePagesEditPage';
 export { default as StorePagesPage } from './StorePage/StorePagesPage';
 

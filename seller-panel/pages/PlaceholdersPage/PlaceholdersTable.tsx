@@ -1,6 +1,8 @@
 import { Checkbox, Label, Table } from 'flowbite-react';
 
 const PlaceholdersTable = () => {
+    // const { placeholders } = usePlaceholder();
+
 	return (
 		<Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
 			<Table.Head
@@ -17,11 +19,11 @@ const PlaceholdersTable = () => {
 					</Label>
 					<Checkbox id="select-all" name="select-all" />
 				</Table.HeadCell>
-				<Table.HeadCell>YOUR_HEAD_CELL</Table.HeadCell>
+				<Table.HeadCell>ID</Table.HeadCell>
 				<Table.HeadCell />
 			</Table.Head>
 			<Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-				{/* {YOUR_DATA_ARRAY.map((YOUR_DATA_ITEM: PlaceholderType) => (
+				{/* {placeholders.map((placeholder: PlaceholderType) => (
                     <Table.Row
                         key={placeholder.id}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"

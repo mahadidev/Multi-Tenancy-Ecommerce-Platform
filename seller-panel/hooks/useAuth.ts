@@ -66,7 +66,6 @@ const useAuth = () => {
 		{
 			isLoading: isLogOutLoading,
 			isError: isLogOutError,
-			error: logOutError,
 			data: logOutData,
 		},
 	] = useLogOutMutation();

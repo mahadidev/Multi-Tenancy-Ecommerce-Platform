@@ -20,7 +20,7 @@ interface ChangeEventTargetType {
 }
 
 interface FormProps {
-	default?: FormStateType;
+	default?: FormStateType | any;
 	errors?: FormErrorType | any;
 	formValidationError?:
 		| {
@@ -40,7 +40,7 @@ const useForm = function (props?: FormProps) {
 
 	// on change form input
 	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement>,
+		e: React.ChangeEvent<HTMLInputElement | any>,
 		onChange?: CallableFunction
 	) => {
 		let { name, value, type, files }: ChangeEventTargetType = e.target;

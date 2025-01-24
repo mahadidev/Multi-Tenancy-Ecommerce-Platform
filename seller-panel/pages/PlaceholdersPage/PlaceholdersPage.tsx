@@ -8,7 +8,9 @@ import PlaceholdersTable from "./PlaceholdersTable";
 // import PlaceholdersTablePagination from "./PlaceholdersTablePagination";
 
 const PlaceholdersPage: FC = function () {
-    // fetch Placeholder
+    // fetch Placeholders
+    // useFetchPlaceholdersQuery();
+    // const { meta } = usePlaceholder();
 
 	return (
 		<>
@@ -64,7 +66,8 @@ const PlaceholdersPage: FC = function () {
 					</div>
 				</div>
 			</div>
-            {/* <PlaceholdersTablePagination meta={meta} /> */}
+
+			{/* {meta && <PlaceholdersTablePagination meta={meta} />} */}
 		</>
 	);
 };

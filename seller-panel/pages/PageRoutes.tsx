@@ -7,13 +7,13 @@ import {
     CategoriesPage,
     DashboardPage,
     LoginPage,
+    PagesPage,
     ProductEditPage,
     ProductsPage,
     RegisterPage,
     SettingsPage,
     StoreOnboardPage,
     StorePagesEditPage,
-    StorePagesPage
 } from '@seller-panel/pages';
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -30,7 +30,7 @@ export const PagesRoute: FC = function () {
 							<Route path="/" element={<DashboardPage />} />
 
 							{/* Store Pages */}
-							<Route path="pages" element={<StorePagesPage />} />
+							<Route path="pages" element={<PagesPage />} />
 							<Route path="pages/:id" element={<StorePagesEditPage />} />
 
 							{/* Products Pages */}

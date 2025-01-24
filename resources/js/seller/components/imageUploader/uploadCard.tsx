@@ -1,5 +1,5 @@
 import useImageUploader from "@/seller/hooks/useImageUploader";
-import React, { FC } from "react";
+import { FC } from "react";
 import { FileUploader } from "react-drag-drop-files";
 
 interface PropsType {

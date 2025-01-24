@@ -1,4 +1,4 @@
-import { CreateBrandPayloadType, DeleteBrandPayloadType, UpdateBrandPayloadType, useCreateBrandMutation, useDeleteBrandMutation, useFetchBrandsQuery, useUpdateBrandMutation } from '@seller-panel/store/reducers/brandApi';
+import { CreateBrandPayloadType, DeleteBrandPayloadType, UpdateBrandPayloadType, useCreateBrandMutation, useDeleteBrandMutation, useUpdateBrandMutation } from '@seller-panel/store/reducers/brandApi';
 import { useAppSelector } from '@seller-panel/store/store';
 
 const useBrand = () => {

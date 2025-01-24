@@ -1,5 +1,4 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { PREFIX } from '@seller-panel/env';
 import baseQueryWithReAuth, { createRequest } from '@seller-panel/store/baseQueryWithReAuth';
 import { ApiResponseType } from '@seller-panel/types/apiType';
 import { FileType } from '@seller-panel/types/fileType';

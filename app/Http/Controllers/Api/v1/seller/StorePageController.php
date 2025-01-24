@@ -57,7 +57,7 @@ class StorePageController extends Controller
             'slug' => 'nullable|string|max:25|unique:store_pages,slug',
             'type' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',

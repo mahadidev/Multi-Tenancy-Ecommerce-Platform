@@ -1,4 +1,3 @@
-
 import { FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { API_URL } from '@seller-panel/env';
 import { clearAuth } from '@seller-panel/store/slices/authSlice';
@@ -43,9 +42,9 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 	if (result.error && result.error.status === 401) {
 		api.dispatch(clearAuth());
 
-        if (window) {
-            window.location.href = `/seller/login`;
-        };
+		if (window) {
+			window.location.href = `/seller/login`;
+		}
 	}
 
 	return result;
@@ -61,10 +60,19 @@ export const createRequest = ({
 	method?: string;
 	body?: any;
 	apiMethod?: string;
-}) => ({
-	url,
-	method,
-	body: body ? { ...body, ...(apiMethod ?  {"_method": apiMethod}  : {}) } : undefined,
-});
+}) => {
+	if (!apiMethod) {
+		return {
+			url,
+			method,
+			body,
+		};
+	}else{
+        return {
+            ...body,
+            "_method": apiMethod
+        }
+    }
+};
 
 export default baseQueryWithReAuth;
