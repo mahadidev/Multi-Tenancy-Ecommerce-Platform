@@ -1,9 +1,10 @@
 import useForm from "@/seller/hooks/useForm";
+import useString from "@/seller/hooks/useString";
 import { useAppDispatch, useAppSelector } from "@/seller/store";
 import { useCreateStoreMutation } from "@/seller/store/reducers/storeApi";
 import { setCurrentStore } from "@/seller/store/slices/storeSlice";
 import { Button, Label, Select, TextInput } from "flowbite-react";
-import { useEffect } from "react";
+
 import { AiOutlineLoading } from "react-icons/ai";
 
 const StepOne = ({
@@ -15,21 +16,13 @@ const StepOne = ({
     setFormData: CallableFunction;
 }) => {
     const [createStore, { isLoading, error }] = useCreateStoreMutation();
-
+    const { getSlug } = useString();
+    const { formData } = useAppSelector((state) => state.storeOnboard);
     const { formState, handleChange, formErrors, setFormState } = useForm({
         errors: error,
+        defaultState: formData,
     });
-
-    const { formData } = useAppSelector((state) => state.storeOnboard);
     const { currentStore: store } = useAppSelector((state) => state.store);
-
-    useEffect(() => {
-        if (formData) {
-            setFormState(formData);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formData]);
-
     const dispatch = useAppDispatch();
 
     return (
@@ -81,6 +74,10 @@ const StepOne = ({
                                 event: React.ChangeEvent<HTMLInputElement>
                             ) => {
                                 handleChange(event, setFormData);
+                                setFormState((prev: any) => ({
+                                    ...prev,
+                                    domain: getSlug(event.target.value),
+                                }));
                             }}
                             required
                         />

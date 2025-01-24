@@ -13,26 +13,13 @@ use Illuminate\Validation\Rule;
 
 class StorePageController extends Controller
 {
-    public function index(Request $request, $store_id)
+    public function index(Request $request)
     {
-        $store = Store::storeOwner()->find($store_id);
-
-        if (!$store) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'store not found',
-                ],
-                404,
-            );
-        }
-
         $search = $request->input('search'); // Search keyword
         $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
         $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
-        $pages = StorePage::with('widgets')
-            ->where('store_id', $store_id)
+        $pages = StorePage::authorized()->with('widgets')
             ->when($search, function ($query, $search) {
                 $query
                     ->where('name', 'like', '%' . $search . '%')
@@ -63,26 +50,14 @@ class StorePageController extends Controller
         );
     }
 
-    public function store(Request $request, $store_id)
+    public function store(Request $request)
     {
-        $store = Store::storeOwner()->find($store_id);
-
-        if (!$store) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'Invalid store id',
-                ],
-                404,
-            );
-        }
-
         $validatedData = $request->validate([
             'name' => 'required|string',
             'slug' => 'nullable|string|max:25|unique:store_pages,slug',
             'type' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
             'widgets' => 'nullable|array',
             'widgets.*.name' => 'required|string',
             'widgets.*.label' => 'required|string',
@@ -103,11 +78,10 @@ class StorePageController extends Controller
             'widgets.*.inputs.*.items.*.required' => 'required|boolean',
             'widgets.*.inputs.*.items.*.type' => 'nullable|string',
         ]);
+        $validatedData["store_id"] = authStore();
 
-        // Add the $store_id from the route to the validated data
-        $validatedData['store_id'] = $store_id;
 
-        $storePage = StorePage::create($validatedData);
+        $storePage = StorePage::authorized()->create($validatedData);
 
         // Create the widgets for the store page if they exist
         if ($request->has('widgets')) {
@@ -115,7 +89,7 @@ class StorePageController extends Controller
                 $storePageWidgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
-                    'serial' => isset($widget['label']) ? $widget['serial'] : ($key + 1),
+                    'serial' =>  $widget['serial'] ?? ($key + 1),
 
                 ];
 
@@ -164,21 +138,9 @@ class StorePageController extends Controller
         );
     }
 
-    public function view(Request $request, $store_id, $page_id)
+    public function view(Request $request, $page_id)
     {
-        $store = Store::active()->find($store_id);
-        if (!$store) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'Invalid store id',
-                ],
-                404,
-            );
-        }
-
-        $page = StorePage::with('widgets')
-            ->where('store_id', $store->id)
+        $page = StorePage::authorized()->with('widgets')
             ->where('id', $page_id)
             ->first();
         if (!$page) {
@@ -202,33 +164,10 @@ class StorePageController extends Controller
         );
     }
 
-    public function update(Request $request, $store_id, $store_page_id)
+    public function update(Request $request, $store_page_id)
     {
-        // Check if the store exists and is active
-        $store = Store::storeOwner()->active()->find($store_id);
-
-        if (!$store) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'Invalid store id',
-                ],
-                404,
-            );
-        }
-
         // Find the store page to update
-        $storePage = StorePage::where('store_id', $store_id)->find($store_page_id);
-
-        if (!$storePage) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'Invalid store page id',
-                ],
-                404,
-            );
-        }
+        $storePage = StorePage::authorized()->find($store_page_id);
 
         // Validate the request data
         $validatedData = $request->validate([
@@ -329,23 +268,11 @@ class StorePageController extends Controller
         );
     }
 
-    public function destroy(Request $request, $store_id, $store_page_id)
+    public function destroy(Request $request, $store_page_id)
     {
-        // Check if the store exists and is active
-        $store = Store::storeOwner()->active()->find($store_id);
-
-        if (!$store) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'message' => 'Invalid store id',
-                ],
-                404,
-            );
-        }
 
         // Find the store page to delete
-        $storePage = StorePage::where('store_id', $store_id)->find($store_page_id);
+        $storePage = StorePage::authorized()->find($store_page_id);
 
         if (!$storePage) {
             return response()->json(

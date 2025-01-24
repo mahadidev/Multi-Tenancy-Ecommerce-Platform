@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { setStoreResponse } from '@/seller/store/slices/storeSlice';
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { RoutePath } from "./env";
 import { useAppDispatch, useAppSelector } from "./store";
 import { useFetchStoresQuery } from "./store/reducers/storeApi";
-import { setStoreResponse } from "./store/slices/storeSlice";
 
 export const SellerDashboardMiddleware = () => {
     const { currentStore } = useAppSelector((state) => state.store);
@@ -26,7 +27,6 @@ export const LoggedMiddleware = () => {
                 })
             );
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isStoreLoading, storesData]);
 
     const { user, accessToken } = useAppSelector((state) => state.auth);
