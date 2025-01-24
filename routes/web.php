@@ -12,11 +12,11 @@ Route::get('/', function () {
 Route::prefix('/seller')->group(function () {
 
     Route::get("/", function () {
-        return view("seller");
+        return view("seller-panel");
     });
 
     Route::any('/{any}', function () {
-        return view("seller");
+        return view("seller-panel");
     })->where('any', '.*');
 });
 

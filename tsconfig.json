@@ -26,7 +26,8 @@
         "target": "ESNext",
         "types": ["vite/client"],
         "paths": {
-            "@/*": ["./resources/js/*"]
+            "@seller-panel/*": ["./seller-panel/*"],
+            "@/*": ["./resources/js/*"],
         },
         "noImplicitAny": true
     },

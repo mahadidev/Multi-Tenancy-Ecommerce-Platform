@@ -81,15 +81,15 @@ class AuthController extends Controller
                 if(session()->has('store_id')){
                     session()->forget('store_id');
                 }
-    
+
                 // store the store id in session
                 session(['store_id' => $store->id]);
-    
+
                 // Also set it in the request attributes
                 $request->attributes->set('store_id', $store->id);
 
             }
-            
+
         }
 
         // Generate a Sanctum token
@@ -108,6 +108,12 @@ class AuthController extends Controller
 
         if ($store) {
             $response['data']['logged_store'] = new StoreResource($store);
+        }
+
+        // return all stores
+        $stores = Store::where(["owner_id" => $user->id])->get();
+        if($stores){
+            $response['data']['stores'] = StoreResource::collection($stores);
         }
 
         // Return the token and user details
@@ -197,7 +203,7 @@ class AuthController extends Controller
                 'message' => 'This store is not associated with the user, please sign-up'
             ]);
         }
-        
+
         // Generate a Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -333,7 +339,7 @@ class AuthController extends Controller
         if (session()->has('site_store_id')) {
             session()->forget('site_store_id');
         }
-        
+
         session(['site_store_id' => $storeId]);
         $request->attributes->set('site_store_id', $storeId);
     }
