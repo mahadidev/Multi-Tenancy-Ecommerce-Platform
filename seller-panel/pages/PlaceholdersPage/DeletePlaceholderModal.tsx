@@ -15,7 +15,7 @@ const DeletePlaceholderModal: FC<PropsType> = function (_props) {
 		<>
 			<Button
 				size="sm"
-				color="failure"
+				color="gray"
 				className="p-0"
 				onClick={() => setOpen(true)}
 			>
@@ -37,7 +37,7 @@ const DeletePlaceholderModal: FC<PropsType> = function (_props) {
 						</p>
 						<div className="flex items-center gap-x-3">
 							<Button
-								color="failure"
+								color="gray"
 								theme={{ base: 'px-0' }}
 								// onClick={() => {
 								// 	deletePlaceholder.submit({

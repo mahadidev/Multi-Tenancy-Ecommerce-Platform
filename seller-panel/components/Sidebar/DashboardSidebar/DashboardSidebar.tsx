@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@seller-panel/store/store';
 import { Sidebar, TextInput, Tooltip } from 'flowbite-react';
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from 'react';
 import { useEffect, useState } from 'react';
+import { FaPaintBrush } from 'react-icons/fa';
 import {
     HiChartPie,
     HiCog,
@@ -260,15 +261,15 @@ const externalPages: SidebarItem[] = [
 		icon: MdCollectionsBookmark,
 		label: 'Pages',
 	},
-	// {
-	// 	icon: FaPaintBrush,
-	// 	label: 'Appearance',
-	// 	items: [
-	// 		{ href: Path.themes.list(), label: 'Themes' },
-	// 		// { href: "/e-commerce/billing", label: "Billing" },
-	// 		// { href: "/e-commerce/invoice", label: "Invoice" },
-	// 	],
-	// },
+	{
+		icon: FaPaintBrush,
+		label: 'Appearance',
+		items: [
+			{ href: Path.ThemesPage.index(), label: 'Themes' },
+			// { href: "/e-commerce/billing", label: "Billing" },
+			// { href: "/e-commerce/invoice", label: "Invoice" },
+		],
+	},
 	{
 		href: Path.SettingsPage.index(),
 		icon: HiCog,

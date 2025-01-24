@@ -16,6 +16,7 @@ export default defineConfig({
 				'resources/js/seller/index.tsx',
 				'resources/js/themes/index.tsx',
 				'seller-panel/index.tsx',
+				'themes/index.tsx',
 			],
 			refresh: true,
 		}),
@@ -38,6 +39,10 @@ export default defineConfig({
 			{
 				find: '@seller-panel',
 				replacement: path.resolve(__dirname, 'seller-panel'),
+			},
+			{
+				find: '@themes',
+				replacement: path.resolve(__dirname, 'themes'),
 			},
 			{
 				find: '@',

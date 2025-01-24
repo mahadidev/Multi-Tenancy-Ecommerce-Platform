@@ -61,18 +61,19 @@ export const createRequest = ({
 	body?: any;
 	apiMethod?: string;
 }) => {
-	if (!apiMethod) {
+	if (apiMethod) {
 		return {
 			url,
 			method,
-			body,
+			body: { ...body, _method: apiMethod },
 		};
-	}else{
-        return {
-            ...body,
-            "_method": apiMethod
-        }
-    }
+	}
+
+	return {
+		url,
+		method,
+		body,
+	};
 };
 
 export default baseQueryWithReAuth;

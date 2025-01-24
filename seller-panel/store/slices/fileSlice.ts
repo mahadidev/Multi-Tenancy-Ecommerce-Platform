@@ -1,5 +1,5 @@
-import { FileType } from '@/seller/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FileType } from '@seller-panel/types/fileType';
 
 const initialState: {
 	files: FileType[]

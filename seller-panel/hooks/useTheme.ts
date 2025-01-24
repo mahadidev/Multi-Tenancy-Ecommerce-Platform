@@ -1,12 +1,48 @@
-import { useFetchThemesQuery } from "@seller-panel/store/reducers/themeApi";
+import { FetchThemePayloadType, themeApi, useFetchThemesQuery } from "@seller-panel/store/reducers/themeApi";
 import { useAppSelector } from "@seller-panel/store/store";
 
 const useTheme = () => {
     // fetch themes
     useFetchThemesQuery();
     // get themes
-    const {theme, themes} = useAppSelector((state) => state.theme)
+    const { theme, themes } = useAppSelector((state) => state.theme);
 
-    return {theme, themes}
+    // fetch theme by slug or id
+	const [
+		handleFetchThemeBySlugOrID,
+		{
+			isLoading: isFetchThemeBySlugOrIDLoading,
+			isError: isFetchThemeBySlugOrIDError,
+			error: fetchThemeBySlugOrIDError,
+			data: fetchThemeBySlugOrIDData,
+		},
+	] = themeApi.endpoints.fetchTheme.useLazyQuery();
+    const fetchThemeBySlugOrId = ({
+			formData,
+			onSuccess,
+		}: {
+			formData: FetchThemePayloadType;
+			onSuccess?: CallableFunction;
+		}) => {
+            handleFetchThemeBySlugOrID(formData).then((response) => {
+                if (response.data?.status === 200) {
+                    if (onSuccess) {
+                        onSuccess(response.data.data);
+                    }
+                }
+            });
+        };
+
+    return {
+			theme,
+			themes,
+			fetchThemeBySlugOrId: {
+				submit: fetchThemeBySlugOrId,
+				isLoading: isFetchThemeBySlugOrIDLoading,
+				isError: isFetchThemeBySlugOrIDError,
+				error: fetchThemeBySlugOrIDError,
+				data: fetchThemeBySlugOrIDData,
+			},
+		};
 }
 export default useTheme

@@ -1,5 +1,5 @@
-import { useMediaQuery } from '@/seller/hooks/use-media-query';
 import { BASE_IMAGE_URL } from '@seller-panel/env';
+import { useMediaQuery } from '@seller-panel/hooks/use-media-query';
 import useAuth from '@seller-panel/hooks/useAuth';
 import useStore from '@seller-panel/hooks/useStore';
 import { Path } from '@seller-panel/pages';
@@ -77,7 +77,7 @@ export function DashboardNavigation() {
 							</div>
 						</button>
 						<Navbar.Brand as={Link} href="/" className="mr-14">
-							{store?.logo ? (
+							{/* {store?.logo ? (
 								<>
 									<img
 										className="mr-3 h-8 w-auto dark:hidden"
@@ -95,13 +95,13 @@ export function DashboardNavigation() {
 										height={32}
 									/>
 								</>
-							) : (
+							) : ( */}
 								<>
-									<h2 className="text-primary-600 font-semibold">
+									<h2 className="font-semibold text-gray-900 dark:text-white">
 										{store?.name}
 									</h2>
 								</>
-							)}
+							{/* )} */}
 						</Navbar.Brand>
 						<form className="hidden lg:block lg:pl-2">
 							<Label htmlFor="search" className="sr-only">

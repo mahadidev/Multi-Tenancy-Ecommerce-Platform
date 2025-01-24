@@ -1,7 +1,9 @@
 import {
     CreateStorePayloadType,
+    UpdateStorePayloadType,
     useCreateStoreMutation,
     useFetchStoresQuery,
+    useUpdateStoreMutation,
 } from '@seller-panel/store/reducers/storeApi';
 import { useAppSelector } from '@seller-panel/store/store';
 
@@ -37,6 +39,32 @@ const useStore = () => {
 		});
 	};
 
+	// update product
+	const [
+		handleUpdate,
+		{
+			isLoading: isUpdateLoading,
+			isError: isUpdateError,
+			error: updateError,
+			data: updateData,
+		},
+	] = useUpdateStoreMutation();
+	const update = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: UpdateStorePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleUpdate(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
+
 	return {
 		store,
 		stores,
@@ -46,6 +74,13 @@ const useStore = () => {
 			isError: isCreateError,
 			error: createError,
 			data: createData,
+		},
+		update: {
+			submit: update,
+			isLoading: isUpdateLoading,
+			isError: isUpdateError,
+			error: updateError,
+			data: updateData,
 		},
 	};
 };
