@@ -61,7 +61,7 @@ class Order extends Model
     public function sendOrderConfirmationNotifications()
     {
         try {
-            if (env('APP_ENV') == 'local') {
+            if (env('APP_ENV') != 'local') {
                 // For customer notification
                 $customer = User::find($this->user_id);
                 if ($customer) {
