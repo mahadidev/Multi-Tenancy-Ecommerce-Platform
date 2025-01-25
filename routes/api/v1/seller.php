@@ -99,4 +99,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Store Social Media Routes
     Route::resource('/store-social-media', StoreSocialMediaController::class);
 
+    // Analytics Data Route
+    Route::get('/analytics', [AnalyticsDataController::class, 'index']);
 });
