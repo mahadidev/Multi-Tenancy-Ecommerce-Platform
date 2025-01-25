@@ -42,7 +42,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         // Notification routes
         Route::get('notifications', [NotificationController::class, 'index']);
-        Route::post('notification', [NotificationController::class, 'markAsRead']);
+        Route::get('notifications/{id}', [NotificationController::class, 'view']);
+        Route::get('notifications/all-read', [NotificationController::class, 'markAllAsRead']);
     });
 });
 

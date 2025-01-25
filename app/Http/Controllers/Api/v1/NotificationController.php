@@ -32,9 +32,9 @@ class NotificationController extends Controller
         ], 200);
     }
 
-    public function markAsRead(Request $request)
+    public function view(Request $request, $id)
     {
-        $notification = Notification::where('id', $request->notification_id)->first();
+        $notification = Notification::find('id', $id);
 
         if(!$notification) {
             return response()->json([
@@ -47,7 +47,6 @@ class NotificationController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Notification marked as read',
             'data' => [
                 'notification' => new NotificationResource($notification),
             ],
