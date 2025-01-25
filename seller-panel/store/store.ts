@@ -13,12 +13,14 @@ import categorySlice from '@seller-panel/store/slices/categorySlice';
 import fileSlice from '@seller-panel/store/slices/fileSlice';
 import pageSlice from '@seller-panel/store/slices/pageSlice';
 import productSlice from '@seller-panel/store/slices/productSlice';
+import socialMediaSlice from '@seller-panel/store/slices/socialMediaSlice';
 import storeSlice from '@seller-panel/store/slices/storeSlice';
 import themeSlice from '@seller-panel/store/slices/themeSlice';
 import uiSlice from '@seller-panel/store/slices/uiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { socialMediaApi } from './reducers/socialMediaApi';
 
 const authPersistConfig = {
 	key: '@seller-panel',
@@ -31,6 +33,7 @@ const authPersistConfig = {
 		'pageApi',
 		'productApi',
 		'brandApi',
+		'socialMediaApi',
 	],
 	storage,
 	version: 0,
@@ -48,6 +51,7 @@ const persistedReducer = persistReducer(
 		page: pageSlice,
 		product: productSlice,
 		brand: brandSlice,
+        socialMedia: socialMediaSlice,
 		[authApi.reducerPath]: authApi.reducer,
 		[fileApi.reducerPath]: fileApi.reducer,
 		[themeApi.reducerPath]: themeApi.reducer,
@@ -56,6 +60,7 @@ const persistedReducer = persistReducer(
 		[pageApi.reducerPath]: pageApi.reducer,
 		[productApi.reducerPath]: productApi.reducer,
 		[brandApi.reducerPath]: brandApi.reducer,
+        [socialMediaApi.reducerPath]: socialMediaApi.reducer
 	})
 );
 
@@ -73,6 +78,7 @@ export const store = configureStore({
 			pageApi.middleware,
 			productApi.middleware,
 			brandApi.middleware,
+			socialMediaApi.middleware,
 		]);
 	},
 });

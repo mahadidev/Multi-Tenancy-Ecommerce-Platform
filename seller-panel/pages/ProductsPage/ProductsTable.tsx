@@ -68,7 +68,7 @@ const ProductsTable = () => {
 						</Table.Cell>
 						<Table.Cell>
 							<div className="flex items-center gap-x-3 whitespace-nowrap">
-								<Button size="sm" color="blue" className="p-0">
+								<Button size="sm" color="primary" className="p-0">
 									<div className="flex items-center gap-x-2">
 										<HiPencilAlt className="h-5 w-5" />
 										Edit Product

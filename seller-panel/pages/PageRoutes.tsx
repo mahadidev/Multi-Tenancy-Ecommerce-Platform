@@ -1,4 +1,4 @@
-import { AuthLayout, DashboardLayout } from '@seller-panel/components';
+import { AuthLayout, DashboardLayout, EditorLayout } from '@seller-panel/components';
 import DashboardMiddleware from '@seller-panel/middleware/dashboardMiddleware';
 import GuestMiddleware from '@seller-panel/middleware/guestMiddleware';
 import OnboardMiddleware from '@seller-panel/middleware/onboardMiddleware';
@@ -14,6 +14,7 @@ import {
     SettingsPage,
     StoreOnboardPage,
     StorePagesEditPage,
+    ThemesPage,
 } from '@seller-panel/pages';
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -31,7 +32,6 @@ export const PagesRoute: FC = function () {
 
 							{/* Store Pages */}
 							<Route path="pages" element={<PagesPage />} />
-							<Route path="pages/:id" element={<StorePagesEditPage />} />
 
 							{/* Products Pages */}
 							<Route path="products" element={<ProductsPage />} />
@@ -45,6 +45,15 @@ export const PagesRoute: FC = function () {
 
 							{/* Settings Pages */}
 							<Route path="settings" element={<SettingsPage />} />
+
+							{/* Themes Pages */}
+							<Route path="themes" element={<ThemesPage />} />
+						</Route>
+
+						{/* Editor Layout */}
+						<Route path="/" element={<EditorLayout />}>
+							{/* Page Edit */}
+							<Route path="pages/:id" element={<StorePagesEditPage />} />
 						</Route>
 					</Route>
 

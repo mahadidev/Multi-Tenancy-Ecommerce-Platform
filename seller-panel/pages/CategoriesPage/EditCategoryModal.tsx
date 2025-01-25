@@ -25,7 +25,7 @@ const EditCategoryModal: FC<PropsType> = function (props) {
 		<>
 			<Button
 				size="sm"
-				color="blue"
+				color="primary"
 				className="p-0"
 				onClick={() => setOpen(true)}
 			>
@@ -112,7 +112,7 @@ const EditCategoryModal: FC<PropsType> = function (props) {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button
-						color="blue"
+						color="primary"
 						onClick={() => {
 							update.submit({
 								formData: formState,

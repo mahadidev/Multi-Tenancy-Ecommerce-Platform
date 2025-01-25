@@ -16,7 +16,7 @@ const DeletePageModal: FC<PropsType> = function (props) {
 		<>
 			<Button
 				size="sm"
-				color="failure"
+				color="gray"
 				className="p-0"
 				onClick={() => setOpen(true)}
 			>
@@ -38,7 +38,7 @@ const DeletePageModal: FC<PropsType> = function (props) {
 						</p>
 						<div className="flex items-center gap-x-3">
 							<Button
-								color="failure"
+								color="gray"
 								theme={{ base: 'px-0' }}
 								onClick={() => {
 									deletePage.submit({

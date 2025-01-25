@@ -1,5 +1,6 @@
 import { ResponseType } from "@/seller/types/api";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { DeleteSocialMediaPayloadType } from "@seller-panel/store/reducers/socialMediaApi";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { SELLER_PREFIX } from "../env";
 import {
@@ -67,13 +68,11 @@ export const socialMediaApi = createApi({
         }),
         deleteSocialMedia: builder.mutation<
             ResponseType,
-            {
-                socialMediaId: number | string;
-            }
+            DeleteSocialMediaPayloadType
         >({
             query: (data) => {
                 return createRequest({
-                    url: `${SELLER_PREFIX}/store-social-media/${data.socialMediaId}`,
+                    url: `${SELLER_PREFIX}/store-social-media/${data.id}`,
                     method: "POST",
                     body: {
                         _method: "DELETE",
