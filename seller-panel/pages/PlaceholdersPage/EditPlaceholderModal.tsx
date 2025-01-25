@@ -22,7 +22,7 @@ const EditPlaceholderModal: FC<PropsType> = function (_props) {
 		<>
 			<Button
 				size="sm"
-				color="blue"
+				color="primary"
 				className="p-0"
 				onClick={() => setOpen(true)}
 			>
@@ -59,7 +59,7 @@ const EditPlaceholderModal: FC<PropsType> = function (_props) {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button
-						color="blue"
+						color="primary"
 						// onClick={() => {
 						// 	update.submit({
 						// 		formData: formState,

@@ -1,11 +1,9 @@
-import { MetaType } from '@/seller/types';
+import { MetaType } from '@seller-panel/types/tableType';
+import { Button } from 'flowbite-react';
 import { FC, useState } from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
 
-const CategoriesTablePagination: FC<{ meta: MetaType }> = function ({
-	meta,
-}) {
+const CategoriesTablePagination: FC<{ meta: MetaType }> = function ({ meta }) {
 	const [page, setPage] = useState(0);
 	const numPages = meta.total;
 
@@ -46,20 +44,15 @@ const CategoriesTablePagination: FC<{ meta: MetaType }> = function ({
 				</span>
 			</div>
 			<div className="flex items-center space-x-3">
-				<Link
-					to="#"
-					className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-				>
+				<Button size="xs" className="items-center" color="primary">
 					<HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
 					Previous
-				</Link>
-				<Link
-					to="#"
-					className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-				>
+				</Button>
+
+				<Button size="xs" className="items-center" color="primary">
 					Next
 					<HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
-				</Link>
+				</Button>
 			</div>
 		</div>
 	);

@@ -20,7 +20,7 @@ const CreateProductModal: FC = function () {
 
 	return (
 		<>
-			<Button color="blue" className="p-0" onClick={() => setOpen(true)}>
+			<Button color="primary" className="p-0" onClick={() => setOpen(true)}>
 				<div className="flex items-center gap-x-3">
 					<HiPlus className="text-xl" />
 					Create Product
@@ -162,7 +162,7 @@ const CreateProductModal: FC = function () {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button
-						color="blue"
+						color="primary"
 						onClick={() => {
 							create.submit({
 								formData: formState,

@@ -1,4 +1,3 @@
-import { WidgetInputType } from '@/seller/types';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { PREFIX } from '@seller-panel/env';
 import baseQueryWithReAuth, {
@@ -7,6 +6,7 @@ import baseQueryWithReAuth, {
 import { setPage, setPageTypes, setTablePages } from '@seller-panel/store/slices/pageSlice';
 import { ApiResponseType } from '@seller-panel/types/apiType';
 import { PageType } from '@seller-panel/types/pageType';
+import { WidgetInputType } from '@seller-panel/types/widgetType';
 
 export interface PagesFetchResponse extends ApiResponseType {
 	data: {

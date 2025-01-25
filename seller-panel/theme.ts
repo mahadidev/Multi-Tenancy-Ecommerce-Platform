@@ -180,6 +180,8 @@ export const customTheme: CustomFlowbiteTheme = createTheme({
 	textarea: {
 		base: twMerge(theme.textarea.base, 'p-4'),
 		colors: {
+			primary:
+				'border-gray-300 bg-gray-50 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500',
 			gray: twMerge(
 				theme.textarea.colors.gray,
 				'text-base focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:focus:border-blue-500 dark:focus:ring-blue-500'
@@ -194,11 +196,9 @@ export const customTheme: CustomFlowbiteTheme = createTheme({
 					md: 'p-2.5 sm:text-sm',
 				},
 				colors: {
-					default:
-						'border-primary-500 bg-primary-50 text-primary-900 placeholder-primary-700 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-primary-100 dark:focus:border-primary-500 dark:focus:ring-primary-500',
 					primary:
-						'border-primary-500 bg-primary-50 text-primary-900 placeholder-primary-700 focus:border-primary-500 focus:ring-primary-500 dark:border-light-400 dark:bg-light-100 dark:focus:border-light-500 dark:focus:ring-light-500',
-					gray: 'border-gray-300 bg-gray-50 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-light-500 dark:focus:ring-light-500',
+						'border-gray-300 bg-gray-50 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500',
+					gray: 'border-gray-300 bg-gray-50 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500',
 					info: 'border-cyan-500 bg-cyan-50 text-cyan-900 placeholder-cyan-700 focus:border-cyan-500 focus:ring-cyan-500 dark:border-cyan-400 dark:bg-cyan-100 dark:focus:border-cyan-500 dark:focus:ring-cyan-500',
 					failure:
 						'border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-100 dark:focus:border-red-500 dark:focus:ring-red-500',
@@ -217,13 +217,30 @@ export const customTheme: CustomFlowbiteTheme = createTheme({
 		},
 	},
 	button: {
+		inner: {
+			base: 'flex items-center transition-all duration-200',
+			position: {
+				none: '',
+				start: 'rounded-r-none',
+				middle: 'rounded-none',
+				end: 'rounded-l-none',
+			},
+			outline: 'border border-transparent',
+			isProcessingPadding: {
+				xs: 'pl-8',
+				sm: 'pl-10',
+				md: 'pl-12',
+				lg: 'pl-16',
+				xl: 'pl-20',
+			},
+		},
 		color: {
 			primary:
-				'border border-transparent bg-primary-700 text-white focus:ring-4 focus:ring-primary-300 enabled:hover:bg-primary-800 dark:bg-light-600 dark:hover:bg-light-700 dark:focus:ring-light-800',
+				'border border-transparent bg-gray-800 text-white focus:ring-4 focus:ring-gray-300 enabled:hover:bg-gray-900 dark:border-gray-600 dark:bg-gray-600 dark:focus:ring-gray-700 dark:enabled:hover:bg-gray-700',
+			gray: 'border border-gray-200 bg-white text-gray-900 focus:text-gray-700 focus:ring-4 enabled:hover:bg-gray-100 enabled:hover:text-gray-700 dark:border-gray-600 dark:bg-transparent dark:text-gray-400 dark:enabled:hover:bg-gray-700 dark:enabled:hover:text-white',
 			dark: 'border border-transparent bg-gray-800 text-white focus:ring-4 focus:ring-gray-300 enabled:hover:bg-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-gray-800 dark:enabled:hover:bg-gray-700',
 			failure:
 				'border border-transparent bg-red-700 text-white focus:ring-4 focus:ring-red-300 enabled:hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-900 dark:enabled:hover:bg-red-700',
-			gray: ':ring-cyan-700 border border-gray-200 bg-white text-gray-900 focus:text-cyan-700 focus:ring-4 enabled:hover:bg-gray-100 enabled:hover:text-cyan-700 dark:border-gray-600 dark:bg-transparent dark:text-gray-400 dark:enabled:hover:bg-gray-700 dark:enabled:hover:text-white',
 			info: 'border border-transparent bg-cyan-700 text-white focus:ring-4 focus:ring-cyan-300 enabled:hover:bg-cyan-800 dark:bg-cyan-600 dark:focus:ring-cyan-800 dark:enabled:hover:bg-cyan-700',
 			light:
 				'border border-gray-300 bg-white text-gray-900 focus:ring-4 focus:ring-cyan-300 enabled:hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-600 dark:text-white dark:focus:ring-gray-700 dark:enabled:hover:border-gray-700 dark:enabled:hover:bg-gray-700',

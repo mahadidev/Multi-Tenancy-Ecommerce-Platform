@@ -1,17 +1,11 @@
-export interface SocialMediaType {
-	id: string;
-	name: string;
-	label: string;
-	username: string;
-	url: string;
-}
+
 
 export interface SettingsType {
 	social_media?: SocialMediaType[];
 }
 
 export interface StoreType {
-	id: number | string;
+	id: number;
 	name: string;
 	slug: string;
 	domain: string;

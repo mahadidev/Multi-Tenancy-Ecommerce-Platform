@@ -1,0 +1,2 @@
+import "./simfy-commerce/index";
+

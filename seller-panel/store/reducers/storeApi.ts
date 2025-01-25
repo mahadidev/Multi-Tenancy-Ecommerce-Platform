@@ -7,7 +7,7 @@ import { setAuthStore } from '@seller-panel/store/slices/storeSlice';
 import { ApiResponseType } from '@seller-panel/types/apiType';
 import { StoreType } from '@seller-panel/types/storeType';
 
-export interface FileFetchResponseType extends ApiResponseType {
+export interface StoresFetchResponseType extends ApiResponseType {
 	data: {
 		stores: StoreType[];
         current_store: StoreType
@@ -24,12 +24,31 @@ export interface CreateStorePayloadType {
 	theme_id?: number;
 }
 
+export interface UpdateStorePayloadType {
+    id: number;
+	name?: string;
+	slug?: string;
+	domain?: string;
+	email?: string | null;
+	phone?: string | null;
+	location?: string | null;
+	status?: 1 | 0;
+	type?: string;
+	description?: string | null;
+	currency?: string;
+	logo?: string;
+	dark_logo?: string;
+	primary_color?: null | string;
+	secondary_color?: null | string;
+	theme_id?: number | 'none';
+}
+
 export const storeApi = createApi({
 	reducerPath: 'storeApi',
 	baseQuery: baseQueryWithReAuth,
 	tagTypes: ['Stores'],
 	endpoints: (builder) => ({
-		fetchStores: builder.query<FileFetchResponseType, void>({
+		fetchStores: builder.query<StoresFetchResponseType, void>({
 			query: (formData) =>
 				createRequest({
 					url: `${PREFIX}/store`,
@@ -43,14 +62,14 @@ export const storeApi = createApi({
 					dispatch(
 						setAuthStore({
 							stores: response.data.data.stores,
-                            store: response.data.data.current_store
+							store: response.data.data.current_store,
 						})
 					);
 				});
 			},
 		}),
 		createStore: builder.mutation<
-			FileFetchResponseType,
+			ApiResponseType,
 			CreateStorePayloadType
 		>({
 			query: (formData) =>
@@ -62,7 +81,21 @@ export const storeApi = createApi({
 			invalidatesTags: ['Stores'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
+		updateStore: builder.mutation<
+			ApiResponseType,
+			UpdateStorePayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store/${formData.id}`,
+					method: 'post',
+					body: formData,
+                    apiMethod: "PUT"
+				}),
+			invalidatesTags: ['Stores'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
 	}),
 });
 
-export const { useFetchStoresQuery, useCreateStoreMutation } = storeApi;
+export const { useFetchStoresQuery, useCreateStoreMutation, useUpdateStoreMutation } = storeApi;

@@ -19,6 +19,9 @@ export { default as StorePagesPage } from './StorePage/StorePagesPage';
 // onboard pages
 export { default as StoreOnboardPage } from "./OnboardPage/StoreOnboardPage/StoreOnboardPage";
 
+// theme pages
+export { default as ThemesPage } from "./ThemesPage/ThemesPage";
+
 
 // path
 export const Path = {
@@ -53,6 +56,9 @@ export const Path = {
 	SettingsPage: {
 		index: () => '/settings',
 	},
+    ThemesPage: {
+        index: () => "/themes"
+    }
 };
 
 

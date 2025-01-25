@@ -1,7 +1,9 @@
 import usePage from '@seller-panel/hooks/usePage';
+import { Path } from "@seller-panel/pages";
 import { PageType } from '@seller-panel/types/pageType';
 import { Button, Checkbox, Label, Table } from 'flowbite-react';
 import { HiPencilAlt } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 import DeletePageModal from './DeletePageModal';
 
 const PagesTable = () => {
@@ -60,7 +62,7 @@ const PagesTable = () => {
 						</Table.Cell>
 						<Table.Cell>
 							<div className="flex items-center gap-x-3 whitespace-nowrap">
-								<Button size="sm" color="blue" className="p-0">
+								<Button as={Link} to={Path.StorePagesPage.edit(page.id)} size="sm" color="primary" className="p-0">
 									<div className="flex items-center gap-x-2">
 										<HiPencilAlt className="h-5 w-5" />
 										Edit Page

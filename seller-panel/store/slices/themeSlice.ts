@@ -1,5 +1,5 @@
-import { ThemeType } from '@/seller/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ThemeType } from '@seller-panel/types/themeType';
 
 const initialState: {
 	themes: ThemeType[];
