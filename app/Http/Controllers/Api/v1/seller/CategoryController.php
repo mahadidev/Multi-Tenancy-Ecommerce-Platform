@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use App\Imports\CategoriesImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\ValidationException;
+
 // use App\Services\StoreService;
 use Illuminate\Http\Request;
 
@@ -122,7 +126,7 @@ class CategoryController extends Controller
     public function destroy(Request $request, $id)
     {
         $category = Category::authorized()->find($id);
-        
+
         if (!$category) {
             return response()->json([
                 'status' => 404,
@@ -135,7 +139,6 @@ class CategoryController extends Controller
             'status' => 200,
             'message' => 'Category deleted successfully'
         ], 200);
-
     }
 
     public function pdf(Request $request)
@@ -145,5 +148,40 @@ class CategoryController extends Controller
         $pdf = FacadePdf::loadView('pdf.category', compact('categories'))->setPaper('a4');
 
         return $pdf->download('categories_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $file = $request->file('file');
+
+        try {
+            Excel::import(new CategoriesImport, $file);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Categories imported successfully',
+                'data' => [
+                    'categories' => CategoryResource::collection(Category::authorized()->get())
+                ]
+            ]);
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+
+            return response()->json([
+                'status' => 422,
+                'message' => 'Import validation failed',
+                'errors' => collect($failures)->map(function ($failure) {
+                    return [
+                        'row' => $failure->row(),
+                        'attribute' => $failure->attribute(),
+                        'errors' => $failure->errors()
+                    ];
+                })
+            ], 422);
+        }
     }
 }
