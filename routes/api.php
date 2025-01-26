@@ -29,6 +29,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('user/login', [AuthController::class, 'userLogin']);
     Route::post('user/register', [AuthController::class, 'userRegister']);
 
+    // User Account - Forgot Password
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
+    Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+
     // Theme Routes
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
