@@ -73,6 +73,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::post('stores/pages/widgets/inputs/{inputId}/items/update/{id}', [StorePageWidgetInputItemController::class, 'update']);
     Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
 
+    // customer routes
+    Route::get('customers', [CustomerController::class, 'index']);
+    Route::get('customers-pdf', [CustomerController::class, 'pdf']);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {

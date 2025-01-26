@@ -57,6 +57,45 @@
             /* Slightly smaller font size */
         }
 
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .table thead {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .report-metadata {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
         .company-info {
             margin-top: 10px;
             /* Reduced margin */
@@ -72,6 +111,7 @@
             text-align: right;
             font-size: 10px;
             color: #666;
+            width: 100%;
         }
 
         .page-number:after {
