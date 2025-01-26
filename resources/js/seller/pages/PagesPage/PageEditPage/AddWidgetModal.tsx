@@ -1,14 +1,13 @@
 import { GLOBAL_APP_URL } from '@/global_env';
-import usePage from '@seller/hooks/usePage';
+import useWidget from '@/seller/hooks/useWidget';
 import useTheme from '@seller/hooks/useTheme';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
-import { AiOutlineLoading } from 'react-icons/ai';
 
 const AddWidgetModal: FC = function () {
 	const [openModal, setOpenModal] = useState(false);
 	const { theme } = useTheme();
-	const { addWidget } = usePage();
+	const { onAddWidget } = useWidget();
 
 	return (
 		<div className="p-4">
@@ -47,19 +46,13 @@ const AddWidgetModal: FC = function () {
 									</h2>
 									<Button
 										onClick={() =>
-											addWidget.submit({
-												formData: {
-													widget: widget,
-												},
-												onSuccess: () => {
-													setOpenModal(false);
-												},
+											onAddWidget({
+												widget: widget,
+                                                onSuccess: () => {
+                                                    setOpenModal(false)
+                                                }
 											})
 										}
-										processingLabel="Adding"
-										processingSpinner={<AiOutlineLoading />}
-										isProcessing={addWidget.isLoading}
-										disabled={addWidget.isLoading}
 										color="primary"
 										size="sm"
 									>

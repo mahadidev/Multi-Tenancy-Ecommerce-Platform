@@ -93,12 +93,13 @@ const FileInput: FC<
 				</p>
 			)}
 
-			<TextInput
-				className="hidden"
-				{...inputProps}
-				onChange={() => console.log('ami to thik achi')}
-				ref={inputRef}
-			/>
+			<div className="hidden">
+				<TextInput
+					{...inputProps}
+					onChange={() => console.log('ami to thik achi')}
+					ref={inputRef}
+				/>
+			</div>
 
 			<Modal show={isModalOpen} onClose={() => setModalOpen(false)} size="7xl">
 				<Modal.Header className="pb-0 border-b-0">

@@ -1,4 +1,3 @@
-import { WidgetType } from '@/types/widgetType';
 import {
     CreatePagePayloadType,
     DeletePagePayloadType,
@@ -11,7 +10,8 @@ import {
     useFetchPageTypesQuery,
     useUpdatePageMutation,
 } from '@seller/store/reducers/pageApi';
-import { useAppSelector } from '@seller/store/store';
+import { useAppDispatch, useAppSelector } from '@seller/store/store';
+import { setPage } from '../store/slices/pageSlice';
 
 const usePage = () => {
 	// fetch pages
@@ -25,6 +25,9 @@ const usePage = () => {
 
 	// select widgets
 	const { widgets } = useAppSelector((state) => state.widget);
+
+	// dispatch
+	const dispatch = useAppDispatch();
 
 	// create page
 	const [
@@ -130,36 +133,17 @@ const usePage = () => {
 		});
 	};
 
-	// add widget
-	const [
-		handleAddWidget,
-		{
-			isLoading: isAddWidgetLoading,
-			isError: isAddWidgetError,
-			error: addWidgetError,
-			data: addWidgetData,
-		},
-	] = useUpdatePageMutation();
-	const addWidget = ({
-		formData,
-		onSuccess,
-	}: {
-		formData: {
-			widget: WidgetType;
-		};
-		onSuccess?: CallableFunction;
-	}) => {
+	// on change page input
+	const onChangePageInput = (
+		event: React.ChangeEvent<HTMLInputElement | any>
+	) => {
 		if (page) {
-			handleAddWidget({
-				id: page.id,
-				widgets: [...page.widgets, formData.widget],
-			}).then((response) => {
-				if (response.data?.status === 200) {
-					if (onSuccess) {
-						onSuccess(response.data.data);
-					}
-				}
-			});
+			dispatch(
+				setPage({
+					...page,
+					[event.target.name]: event.target.value,
+				})
+			);
 		}
 	};
 
@@ -225,13 +209,6 @@ const usePage = () => {
 			error: fetchPageError,
 			data: fetchPageData,
 		},
-		addWidget: {
-			submit: addWidget,
-			isLoading: isAddWidgetLoading,
-			isError: isAddWidgetError,
-			error: addWidgetError,
-			data: addWidgetData,
-		},
 		savePage: {
 			submit: savePage,
 			isLoading: isSavePageLoading,
@@ -239,6 +216,7 @@ const usePage = () => {
 			error: savePageError,
 			data: savePageData,
 		},
+		onChangePageInput,
 	};
 };
 export default usePage;

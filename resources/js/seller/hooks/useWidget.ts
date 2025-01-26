@@ -12,6 +12,37 @@ const useWidget = () => {
 	);
 	const dispatch = useAppDispatch();
 
+	// on add widget
+	const onAddWidget = ({widget, onSuccess}:{
+        widget: WidgetType,
+        onSuccess: CallableFunction
+    }) => {
+		dispatch(
+			setWidgets(
+				[
+                    ...widgets,
+                    widget
+                ]
+			)
+		);
+        dispatch(setWidget(widget));
+        if(onSuccess){
+            onSuccess()
+        }
+	};
+
+	// on delete widget
+	const onDeleteWidget = (deleteWidget: WidgetType) => {
+        if(deleteWidget.id === widget?.id){
+            dispatch(setWidget(null));
+        }
+		dispatch(
+			setWidgets(
+				widgets.filter((filterWidget) => filterWidget.id !== deleteWidget.id)
+			)
+		);
+	};
+
 	// on sort widget
 	const onSortWidget = (widgets: any) => {
 		const sortedWidgets = widgets.map((widget: WidgetType, index: number) => {
@@ -26,15 +57,6 @@ const useWidget = () => {
 		});
 
 		dispatch(setWidgets(sortedWidgets));
-	};
-
-	// on delete widget
-	const onDeleteWidget = (widget: WidgetType) => {
-		dispatch(
-			setWidgets(
-				widgets.filter((filterWidget) => filterWidget.id !== widget.id)
-			)
-		);
 	};
 
 	// on edit widget
@@ -150,6 +172,7 @@ const useWidget = () => {
 			null,
 		input,
 		item,
+        onAddWidget,
 		onSortWidget,
 		onEditWidget,
 		onDeleteWidget,
