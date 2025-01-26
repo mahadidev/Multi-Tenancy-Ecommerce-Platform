@@ -16,6 +16,7 @@
 <body>
     <div id="root">
         <h1>Coming Soon</h1>
+        <a href="https://app.chologori.com/seller">Go to here</a>
     </div>
 </body>
 
