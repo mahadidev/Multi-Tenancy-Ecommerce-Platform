@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class ProductController extends Controller
 {
@@ -104,5 +105,12 @@ class ProductController extends Controller
                 ],
             ], 200);
         }
+    }
+
+    public function pdf(Request $request)
+    {
+        $products = ProductService::index($request);
+        $pdf = FacadePdf::loadView('pdf.products', compact('products'));
+        return $pdf->download('products.pdf');
     }
 }

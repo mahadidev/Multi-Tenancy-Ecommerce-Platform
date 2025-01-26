@@ -88,6 +88,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Product Route
     Route::resource('/product', ProductController::class);
+    Route::get('/product-pdf', [ProductController::class, 'pdf']);
 
     // Product Review Route
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
