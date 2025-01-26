@@ -8,7 +8,7 @@ const OffersSection: FC<{
 }> = function ({ widget }) {
 	return (
 		<>
-			<section className="py-4 mt-4 bg-gray-100">
+			<section className="py-8 bg-gray-100">
 				<h1 className="text-center text-2xl mb-4 text-gray-800">
 					{widget.inputs.find((input) => input.name === 'title')?.value}
 				</h1>

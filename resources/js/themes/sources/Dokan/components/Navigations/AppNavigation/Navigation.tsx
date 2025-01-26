@@ -8,11 +8,11 @@ import AppNavigationNavbar from "./AppNavigationNavbar";
 const AppNavigation: FC<{
 	widget: WidgetType;
 	store: StoreType;
-}> = function ({ widget }) {
+}> = function ({ widget, store }) {
 	return (
 		<>
-			<AppNavigationNavbar />
-			<AppNavigationMenubar {...widget} />
+			<AppNavigationNavbar widget={widget} store={store} />
+			<AppNavigationMenubar widget={widget} store={store} />
 		</>
 	);
 };
