@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\UserResource;
-use App\Mail\ForgotPasswordMail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Store;
@@ -13,9 +12,8 @@ use App\Models\StoreSession;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -56,7 +54,7 @@ class AuthController extends Controller
         if ($storeSession) {
             // remove previous store id from session
             $request->session()->forget('store_id');
-            if(session()->has('store_id')){
+            if (session()->has('store_id')) {
                 session()->forget('store_id');
             }
 
@@ -73,7 +71,7 @@ class AuthController extends Controller
         if (!$storeSession) {
             $store = Store::where('owner_id', $user->id)->first();
 
-            if($store){
+            if ($store) {
                 StoreSession::updateOrCreate([
                     'user_id' => $user->id,
                 ], [
@@ -81,7 +79,7 @@ class AuthController extends Controller
                 ]);
 
                 $request->session()->forget('store_id');
-                if(session()->has('store_id')){
+                if (session()->has('store_id')) {
                     session()->forget('store_id');
                 }
 
@@ -90,9 +88,7 @@ class AuthController extends Controller
 
                 // Also set it in the request attributes
                 $request->attributes->set('store_id', $store->id);
-
             }
-
         }
 
         // Generate a Sanctum token
@@ -115,7 +111,7 @@ class AuthController extends Controller
 
         // return all stores
         $stores = Store::where(["owner_id" => $user->id])->get();
-        if($stores){
+        if ($stores) {
             $response['data']['stores'] = StoreResource::collection($stores);
         }
 
@@ -380,27 +376,27 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);
+       
+        // Generate a token for the user
+        $user = User::where('email', $request->email)->first();
 
-        // Generate a password reset link
-        $status = Password::sendResetLink(
-            $request->only('email'),
-            function ($user, $token) {
-                // Use custom ForgotPasswordMail to send reset link
-                Mail::to($user->email)->send(new ForgotPasswordMail($user, $token));
-            }
-        );
-
-        if ($status === Password::RESET_LINK_SENT) {
+        if(!$user){
             return response()->json([
-                'status' => 200,
-                'message' => 'Password reset link sent successfully.',
-            ], 200);
+                'status' => 404,
+                'message' => 'Invalid email!'
+            ]);
         }
 
+        $token = Password::createToken($user);
+
         return response()->json([
-            'status' => 500,
-            'error' => 'Failed to send password reset link.',
-        ], 500);
+            'status' => 200,
+            'message' => 'Email address matched and token generated!',
+            'data' => [
+                'email' => $request->email,
+                'token' => $token
+            ]
+        ], 200);
     }
 
     public function resetPassword(Request $request)
@@ -408,36 +404,41 @@ class AuthController extends Controller
         // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
-                'satus' => 422,
-                'message' => 'Validation failed', 
+                'status' => 422,
+                'message' => 'Validation failed',
                 'errors' => $validator->errors()
             ], 422);
         }
-
-        // Attempt to reset the password
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password),
-                ])->save();
-
-                // Optionally, you can log the user in after the reset
-                // $user->tokens()->delete(); // Revoke existing tokens if using API tokens
-            }
-        );
-
-        // Check the status and return a response
-        if ($status === Password::PASSWORD_RESET) {
-            return response()->json(['status'=>200,'message' => 'Password reset successfully.']);
-        } else {
-            return response()->json(['status'=>400,'message' => 'Password reset failed.', 'error' => __($status)], 400);
+    
+        // Verify the token using Laravel's Password Broker
+        $user = \App\Models\User::where('email', $request->email)->first();
+    
+        if (!Password::tokenExists($user, $request->token)) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Invalid or expired token.',
+            ], 403);
         }
+    
+        // Token is valid; reset the password
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+    
+        // Optionally, delete the token after successful password reset
+        Password::deleteToken($user);
+    
+        return response()->json([
+            'status' => 200,
+            'message' => 'Password has been reset successfully.',
+        ], 200);
     }
+    
 }
