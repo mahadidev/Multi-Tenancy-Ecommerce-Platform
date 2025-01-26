@@ -1,5 +1,6 @@
 import { IoClose } from 'react-icons/io5';
 
+import usePage from '@seller/hooks/usePage';
 import { RoutePath } from '@seller/seller_env';
 import {
     toggleIsOpenMobile,
@@ -7,6 +8,7 @@ import {
 } from '@seller/store/slices/uiSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Button, Navbar } from 'flowbite-react';
+import { AiOutlineLoading } from 'react-icons/ai';
 import { HiMenuAlt1, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from '../../../hooks/use-media-query';
@@ -15,6 +17,7 @@ export function EditorNavigation() {
 	const sidebar = useAppSelector((state) => state.ui.sidebar);
 	const dispatch = useAppDispatch();
 	const isDesktop = useMediaQuery('(min-width: 1024px)');
+	const { savePage } = usePage();
 
 	function handleToggleSidebar() {
 		if (isDesktop) {
@@ -59,7 +62,15 @@ export function EditorNavigation() {
 					<div className="flex items-center lg:gap-3">
 						<div className="flex items-center">
 							<div className="ml-3 flex  items-stretch">
-								<Button color="primary" className="rounded-none">
+								<Button
+									color="primary"
+									className="rounded-none"
+									onClick={() => savePage.submit({})}
+                                    isProcessing={savePage.isLoading}
+                                    processingLabel='Saving'
+                                    processingSpinner={<AiOutlineLoading />}
+                                    disabled={savePage.isLoading}
+								>
 									Save Changes
 								</Button>
 								<Button

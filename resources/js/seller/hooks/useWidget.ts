@@ -1,6 +1,10 @@
 import { setWidget, setWidgets } from '@seller/store/slices/widgetSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import { WidgetType } from '@type/widgetType';
+import {
+    WidgetInputItemType,
+    WidgetInputType,
+    WidgetType,
+} from '@type/widgetType';
 
 const useWidget = () => {
 	const { widgets, widget, input, item } = useAppSelector(
@@ -8,8 +12,7 @@ const useWidget = () => {
 	);
 	const dispatch = useAppDispatch();
 
-
-    // on sort widget
+	// on sort widget
 	const onSortWidget = (widgets: any) => {
 		const sortedWidgets = widgets.map((widget: WidgetType, index: number) => {
 			if ('chosen' in widget) {
@@ -18,24 +21,140 @@ const useWidget = () => {
 
 			return {
 				...widget,
-                serial: index
+				serial: index,
 			};
 		});
 
 		dispatch(setWidgets(sortedWidgets));
 	};
 
-    // on delete widget
-    const onDeleteWidget = (widget: WidgetType) => {
-		dispatch(setWidgets(widgets.filter((filterWidget) => filterWidget.id !== widget.id)));
-    }
+	// on delete widget
+	const onDeleteWidget = (widget: WidgetType) => {
+		dispatch(
+			setWidgets(
+				widgets.filter((filterWidget) => filterWidget.id !== widget.id)
+			)
+		);
+	};
 
-    // on edit widget
-    const onEditWidget = (widget: WidgetType) => {
-        dispatch(setWidget(widget));
-    }
+	// on edit widget
+	const onEditWidget = (widget: WidgetType) => {
+		dispatch(setWidget(widget));
+	};
 
-	return { widgets,widget, input, item, onSortWidget, onEditWidget, onDeleteWidget };
+	// on change item item
+	const onChangeInputItem = ({
+		item,
+		event,
+	}: {
+		item: WidgetInputItemType;
+		event: React.ChangeEvent<HTMLInputElement | any>;
+	}) => {
+		const findWidget = widgets.find(
+			(findWidget) => findWidget.id === widget?.id
+		);
+
+		if (findWidget) {
+			const filteredInputs: WidgetInputType[] = findWidget.inputs.filter(
+				(filterInputs) => filterInputs.id !== item.widget_input_id
+			);
+			const input: WidgetInputType | undefined = findWidget.inputs.find(
+				(findInput) => findInput.id === item.widget_input_id
+			);
+			const filteredItems: WidgetInputItemType[] | undefined =
+				input && input.items?.filter((filterItem) => filterItem.id !== item.id);
+
+			if (input && filteredItems) {
+				dispatch(
+					setWidgets([
+						...widgets.filter(
+							(filterWidget) => filterWidget.id !== findWidget.id
+						),
+						{
+							...findWidget,
+							inputs: [
+								...filteredInputs,
+								{
+									...input,
+									items: [
+										...filteredItems,
+										{ ...item, value: event.target.value },
+									],
+								},
+							],
+						},
+					])
+				);
+			}
+		}
+	};
+
+	// on change input
+	const onChangeInput = ({
+		input,
+		event,
+	}: {
+		input: WidgetInputType;
+		event: React.ChangeEvent<HTMLInputElement | any>;
+	}) => {
+		const findWidget = widgets.find(
+			(findWidget) => findWidget.id === widget?.id
+		);
+
+		if (findWidget) {
+			dispatch(
+				setWidgets([
+					...widgets.filter(
+						(filterWidgets) => filterWidgets.id !== findWidget.id
+					),
+					{
+						...findWidget,
+						inputs: [
+							...findWidget.inputs.filter(
+								(filterInputs) => filterInputs.id !== input.id
+							),
+							{
+								...input,
+								value: event.target.value,
+							},
+						],
+					},
+				])
+			);
+		}
+	};
+
+	// on change input or item
+	const onChangeInputOrItem = (props: {
+		inputOrItem: WidgetInputType | WidgetInputItemType;
+		event: React.ChangeEvent<HTMLInputElement | any>;
+	}) => {
+		// check if input  is input or items
+		if ('widget_input_id' in props.inputOrItem) {
+			onChangeInputItem({
+				event: props.event,
+				item: props.inputOrItem,
+			});
+		} else {
+			onChangeInput({
+				event: props.event,
+				input: props.inputOrItem,
+			});
+		}
+	};
+
+	return {
+		widgets,
+		widget:
+			widgets.find((findWidget: WidgetType) => findWidget.id === widget?.id) ??
+			null,
+		input,
+		item,
+		onSortWidget,
+		onEditWidget,
+		onDeleteWidget,
+		onChangeInputOrItem,
+	};
 };
 
 export default useWidget;

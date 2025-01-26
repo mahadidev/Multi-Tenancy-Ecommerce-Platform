@@ -11,20 +11,20 @@ import {
     useFetchPageTypesQuery,
     useUpdatePageMutation,
 } from '@seller/store/reducers/pageApi';
-import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import { setPage } from '../store/slices/pageSlice';
+import { useAppSelector } from '@seller/store/store';
 
 const usePage = () => {
 	// fetch pages
 	useFetchPagesQuery();
 	useFetchPageTypesQuery();
 
-	const dispatch = useAppDispatch();
-
 	// select page
 	const { pages, meta, page, pageTypes } = useAppSelector(
 		(state) => state.page
 	);
+
+	// select widgets
+	const { widgets } = useAppSelector((state) => state.widget);
 
 	// create page
 	const [
@@ -163,27 +163,32 @@ const usePage = () => {
 		}
 	};
 
-	// sort widget
-	const sortWidget = ({
-		formData,
-		onSuccess,
-	}: {
-		formData: {
-			widgets: WidgetType[];
-		};
-		onSuccess?: CallableFunction;
-	}) => {
+	// save page
+	const [
+		handleSavePage,
+		{
+			isLoading: isSavePageLoading,
+			isError: isSavePageError,
+			error: savePageError,
+			data: savePageData,
+		},
+	] = useUpdatePageMutation();
+	const savePage = ({ onSuccess }: { onSuccess?: CallableFunction }) => {
 		if (page) {
-			dispatch(
-				setPage({
-					...page,
-                    widgets: formData.widgets
-				})
-			);
-
-            if(onSuccess){
-                onSuccess();
-            }
+			handleSavePage({
+				id: page.id,
+				name: page.name,
+				slug: page.slug,
+				title: page.title,
+				is_active: page.is_active,
+				widgets: widgets,
+			}).then((response) => {
+				if (response.data?.status === 200) {
+					if (onSuccess) {
+						onSuccess(response.data.data);
+					}
+				}
+			});
 		}
 	};
 
@@ -227,8 +232,12 @@ const usePage = () => {
 			error: addWidgetError,
 			data: addWidgetData,
 		},
-		sortWidget: {
-			submit: sortWidget,
+		savePage: {
+			submit: savePage,
+			isLoading: isSavePageLoading,
+			isError: isSavePageError,
+			error: savePageError,
+			data: savePageData,
 		},
 	};
 };

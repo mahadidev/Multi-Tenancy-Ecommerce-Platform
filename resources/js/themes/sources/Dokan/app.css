@@ -7,36 +7,3 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
-
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-body {
-	font-family: 'Poppins', sans-serif;
-	overflow-x: hidden;
-}
-
-@media screen and (max-width: 992px) {
-	.container {
-		max-width: 100%;
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-}
-
-input,
-textarea,
-button {
-	outline: none !important;
-	-moz-appearance: textfield;
-	appearance: none;
-}
-
-/* HERO CAROUSEL */
-.swiper-pagination-bullet-active {
-	background-color: #fff;
-}
-/* HERO CAROUSEL END */

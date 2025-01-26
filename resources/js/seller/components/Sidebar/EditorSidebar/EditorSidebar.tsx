@@ -7,7 +7,7 @@ import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
 import { twMerge } from 'tailwind-merge';
-import WidgetEditor from '../../Layout/EditorLayout/WidgetEditor';
+import WidgetEditor from './WidgetEditor/WidgetEditor';
 
 
 export function EditorSidebar() {

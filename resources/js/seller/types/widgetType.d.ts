@@ -5,6 +5,7 @@ export interface WidgetInputItemType {
 	placeholder?: string;
 	value: string;
 	required: boolean;
+	widget_input_id: number;
 	type:
 		| 'text'
 		| 'image'
