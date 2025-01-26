@@ -1,1 +1,1 @@
-import "./simfy-commerce/index";
+import "./sources/Dokan";

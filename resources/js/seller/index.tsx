@@ -3,12 +3,12 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./app";
 import "./app.css";
-import store from "./store";
+import { store } from "./store/store";
 
-createRoot(document.getElementById("root")!).render(
-    <Provider store={store}>
-        <StrictMode>
-            <App />
-        </StrictMode>
-    </Provider>
+createRoot(document.getElementById('root')!).render(
+	<Provider store={store}>
+		<StrictMode>
+			<App />
+		</StrictMode>
+	</Provider>
 );

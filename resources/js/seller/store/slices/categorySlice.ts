@@ -1,28 +1,41 @@
-import { MetaType } from "@/seller/types";
-import { CategoryType } from "@/seller/types/store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CategoryType } from '@type/categoryType';
+import { MetaType } from '@type/tableType';
 
 const initialState: {
-    categories: CategoryType[];
-    categoriesMeta: MetaType | null | undefined;
+	categories: CategoryType[];
+	meta: MetaType | null;
 } = {
-    categories: [],
-    categoriesMeta: null,
+	categories: [],
+	meta: null,
 };
+
 const categorySlice = createSlice({
-    name: "category",
-    initialState,
-    reducers: {
-        setCategories: (state, action: PayloadAction<CategoryType[]>) => {
-            state.categories = action.payload;
-        },
-        setCategoriesMeta: (
-            state,
-            action: PayloadAction<MetaType | undefined>
-        ) => {
-            state.categoriesMeta = action.payload;
-        },
-    },
+	name: 'category',
+	initialState,
+	reducers: {
+		setCategories: (state, action: PayloadAction<CategoryType[]>) => {
+			state.categories = action.payload;
+		},
+		setMeta: (state, action: PayloadAction<MetaType>) => {
+			state.meta = action.payload;
+		},
+		setTableCategories: (
+			state,
+			action: PayloadAction<{
+				categories: CategoryType[];
+				meta: MetaType | null;
+			}>
+		) => {
+			state.categories = action.payload.categories;
+			state.meta = action.payload.meta;
+		},
+		clearCategories: (state) => {
+			state.categories = [];
+			state.meta = null;
+		},
+	},
 });
-export const { setCategories, setCategoriesMeta } = categorySlice.actions;
+export const { setCategories, setMeta, setTableCategories, clearCategories } =
+	categorySlice.actions;
 export default categorySlice.reducer;

@@ -1,107 +1,103 @@
-import { ResponseType } from "@/seller/types/api";
-import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
-import { SELLER_PREFIX } from "../env";
-import { setCategories, setCategoriesMeta } from "../slices/categorySlice";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { PREFIX } from '@seller/seller_env';
+import { ApiResponseType } from '@type/apiType';
+import { CategoryType } from '@type/categoryType';
+import baseQueryWithReAuth, {
+    createRequest,
+} from '../baseQueryWithReAuth';
+import { setTableCategories } from '../slices/categorySlice';
 
-export interface StoreCategoryPayloadType {
-    type: string;
-    name: string;
-    slug: string;
-    parent_id?: number;
+export interface CategoriesFetchResponse extends ApiResponseType {
+	data: {
+		categories: CategoryType[];
+	};
+}
+
+export interface CreateCategoryPayloadType {
+	name: string;
+    slug?: string;
+    parent_id?: string
 }
 
 export interface UpdateCategoryPayloadType {
-    name?: string;
-    slug?: string;
-    type?: "product" | "post" | "blog";
-    parent_id?: number;
+    id: number;
+	name?: string;
+	slug?: string;
+	type?: 'product' | 'post' | 'blog';
+	parent_id?: number;
+}
+
+export interface DeleteCategoryPayloadType {
+    id: number
 }
 
 export const categoryApi = createApi({
-    reducerPath: "categoryApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Categories"],
-    endpoints: (builder) => ({
-        fetchCategories: builder.query<ResponseType, void>({
-            query: () => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/category`,
-                    method: "GET",
-                });
-            },
-            transformErrorResponse: (error: any) => error.data,
-            providesTags: ["Categories"],
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setCategories(response.data.data.categories));
-                    dispatch(setCategoriesMeta(response.data.meta));
-                });
-            },
-        }),
-        storeCategory: builder.mutation<
-            any,
-            {
-                formData: StoreCategoryPayloadType;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/category`,
-                    method: "POST",
-                    body: data.formData,
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
-        }),
-        UpdateCategory: builder.mutation<
-            any,
-            {
-                formData: UpdateCategoryPayloadType;
-                categoryId: number;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/category/${data.categoryId}`,
-                    method: "POST",
-                    body: {
-                        _method: "PUT",
-                        ...data.formData,
-                    },
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
-        }),
-        deleteCategory: builder.mutation<
-            any,
-            {
-                categoryId: number;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/category/${data.categoryId}`,
-                    method: "POST",
-                    body: {
-                        _method: "DELETE",
-                    },
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Categories"],
-        }),
-    }),
+	reducerPath: 'categoryApi',
+	baseQuery: baseQueryWithReAuth,
+	tagTypes: ['Categories'],
+	endpoints: (builder) => ({
+		fetchCategories: builder.query<CategoriesFetchResponse, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/category`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Categories'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(
+						setTableCategories({
+							categories: response.data.data.categories,
+							meta: response.data.meta ?? null,
+						})
+					);
+				});
+			},
+		}),
+		createCategory: builder.mutation<
+			ApiResponseType,
+			CreateCategoryPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/category`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Categories'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		updateCategory: builder.mutation<
+			ApiResponseType,
+			UpdateCategoryPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/category/${formData.id}`,
+					method: 'post',
+					apiMethod: 'PUT',
+					body: formData,
+				}),
+			invalidatesTags: ['Categories'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		deleteCategory: builder.mutation<
+			ApiResponseType,
+			DeleteCategoryPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/category/${formData.id}`,
+					method: 'post',
+					apiMethod: 'delete',
+					body: formData,
+				}),
+			invalidatesTags: ['Categories'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+	}),
 });
 
-export const {
-    useFetchCategoriesQuery,
-    useStoreCategoryMutation,
-    useUpdateCategoryMutation,
-    useDeleteCategoryMutation,
-} = categoryApi;
+export const { useFetchCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } = categoryApi;
