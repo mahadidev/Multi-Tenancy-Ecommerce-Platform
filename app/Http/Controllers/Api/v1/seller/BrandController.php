@@ -7,6 +7,7 @@ use App\Http\Resources\BrandResource;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class BrandController extends Controller
 {
@@ -176,5 +177,14 @@ class BrandController extends Controller
             ],
             200,
         );
+    }
+
+    public function pdf(Request $request)
+    {
+        $brands = Brand::authorized()->get();
+
+        $pdf = FacadePdf::loadView('pdf.brand', compact('brands'))->setPaper('a4');
+
+        return $pdf->download('brands_' . now()->format('Ymd_His') . '.pdf');
     }
 }

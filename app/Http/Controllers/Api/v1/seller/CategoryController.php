@@ -140,15 +140,10 @@ class CategoryController extends Controller
 
     public function pdf(Request $request)
     {
-        // return response()->json([
-        //     'status' => 200,
-        //     'message' => 'Category downloaded successfully'
-        // ], 200);
-
         $categories = Category::authorized()->where('type', 'product')->get();
 
         $pdf = FacadePdf::loadView('pdf.category', compact('categories'))->setPaper('a4');
 
-        return $pdf->download('categories.pdf');
+        return $pdf->download('categories_' . now()->format('Ymd_His') . '.pdf');
     }
 }

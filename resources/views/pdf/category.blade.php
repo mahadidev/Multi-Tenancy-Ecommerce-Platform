@@ -49,22 +49,24 @@
         <p>Total Categories: {{ $categories->count() }}</p>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Category ID</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($categories as $key => $category)
+    @if ($categories)
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td>{{ $category->id }}</td>
-                    <td>{{ $category->name }}</td>
+                    <th>No.</th>
+                    <th>Category ID</th>
+                    <th>Name</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($categories as $key => $data)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $data->id ?? '' }}</td>
+                        <td>{{ $data->name ?? '' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 @endsection

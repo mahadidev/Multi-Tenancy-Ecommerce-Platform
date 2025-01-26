@@ -78,9 +78,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
     // Brand Routes
     Route::resource('/brand', BrandController::class);
+    Route::get('/brand-pdf', [BrandController::class, 'pdf']);
 
     Route::resource('/category', CategoryController::class);
-    //pdf route
     Route::get('/category-pdf', [CategoryController::class, 'pdf']);
 
     // Product Route
