@@ -18,8 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PageTypeSeeder::class,
             ThemeSeeder::class,
-            // SellerAccountSeeder::class,
-            // WidgetSeeder::class,
+            SellerAccountSeeder::class,
         ]);
     }
 }
