@@ -90,4 +90,17 @@ class Store extends Model
     {
         return $this->hasMany(StoreSocialMedia::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function brands(){
+        return $this->hasMany(Brand::class);
+    }
+
+    public function categories(){
+        return $this->hasMany(Category::class);
+    }
 }

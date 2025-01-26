@@ -14,14 +14,14 @@ use App\Models\Cart;
 use App\Models\Store;
 use App\Models\OrderItem;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class OrderController extends Controller
 {
 
-    public function index(Request $request){
-
+    public function index(Request $request)
+    {
         $orders = Order::currentStore()->where('user_id', auth()->user()->id)->with('items')->latest()->get();
-
         return response()->json([
             'status' => 200,
             'data' => ['orders' => OrderResource::collection($orders)],
@@ -40,9 +40,9 @@ class OrderController extends Controller
             'payment_method' => 'required|in:cash,card',
         ]);
 
-        $storeID = $request->has('store_id') ? $request->store_id : session()->get('site_store_id') ;
+        $storeID = $request->has('store_id') ? $request->store_id : session()->get('site_store_id');
         $store = Store::active()->find($storeID);
-        
+
         if (!$store || !$storeID) {
             return response()->json([
                 'status' => 401,
@@ -57,7 +57,7 @@ class OrderController extends Controller
 
             $sessionId = $request->has('session_id') ? $request->session_id : null;
             $user = auth()->user();
-          
+
 
             $cartItems = Cart::with('product')
                 ->when($sessionId, function ($query, $sessionId) {
@@ -76,7 +76,6 @@ class OrderController extends Controller
             $serviceFee = 0;
             $itemSubtotal = collect($cartItems)->sum('total');
             $totalAmount = $itemSubtotal + $serviceFee;
-
 
             $order = Order::create([
                 'uuid' => $sessionId ? $sessionId : (string) Str::uuid(),
@@ -120,6 +119,9 @@ class OrderController extends Controller
             // Regenerate the session ID to ensure a unique UUID for each order
             // session()->regenerate();
 
+            // Send notifications from order model
+            $order->sendOrderConfirmationNotifications();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Order placed successfully',
@@ -127,7 +129,6 @@ class OrderController extends Controller
                     'order' => new OrderResource($order->load('items')),
                 ]
             ]);
-
         } catch (\Exception $e) {
             // Rollback transaction if something goes wrong
             DB::rollBack();
@@ -143,5 +144,16 @@ class OrderController extends Controller
                 'message' => 'Order placement failed',
             ]);
         }
+    }
+
+    public function downloadOrderDetails($uuid, $isCustomer)
+    {
+        $order = Order::where('uuid', $uuid)->with('items')->first();
+        $pdf = FacadePdf::loadView('pdf.order_confirmation', [
+            'order' => $order,
+            'isCustomer' => $isCustomer,
+        ])->setPaper('a4');
+
+        return $pdf->download("Order-{$order->uuid}.pdf");
     }
 }

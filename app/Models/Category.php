@@ -28,6 +28,10 @@ class Category extends Model
             if (empty($category->slug)) {
                 $category->slug = Str::slug($category->name);  // Corrected to use $category->name
             }
+
+            if (empty($category->type)) {
+                $category->type = "product";  // Corrected to use $category->name
+            }
         });
 
         // Automatically update the slug when updating
