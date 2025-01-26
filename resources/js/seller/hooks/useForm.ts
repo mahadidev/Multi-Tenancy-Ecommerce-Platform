@@ -61,7 +61,7 @@ const useForm = function (props?: FormProps) {
 				value: value,
 			});
 		}
-		setFormErrors((prev: any) => ({ ...prev, [name]: null }));
+		setFormErrors((prev: any) => ({ ...prev, [name]: null, message: null }));
 		setFormState((prev: any) => ({ ...prev, [name]: value }));
 	};
 

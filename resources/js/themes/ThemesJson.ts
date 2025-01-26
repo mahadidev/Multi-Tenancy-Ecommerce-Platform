@@ -19,7 +19,7 @@ export const ThemesJson: {
 	{
 		name: 'Dokan',
 		slug: 'dokan',
-		thumbnail: '',
+		thumbnail: 'public/themes/dokan-thumbnail.jpg',
 		pages: [
 			{
 				name: 'home',
