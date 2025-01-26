@@ -3,7 +3,7 @@ import fs from "fs";
 import laravel from "laravel-vite-plugin";
 import path from 'path';
 import { defineConfig } from "vite";
-// import { ThemesJson } from "./resources/js/themes/themes";
+import { ThemesJson } from "./resources/js/themes/ThemesJson";
 
 
 export default defineConfig({
@@ -24,10 +24,10 @@ export default defineConfig({
 		{
 			name: 'postbuild-commands',
 			closeBundle: () => {
-				// fs.writeFileSync(
-				// 	'resources/js/themes/theme.json',
-				// 	JSON.stringify(ThemesJson, null, 2)
-				// );
+				fs.writeFileSync(
+					'resources/js/themes/theme.json',
+					JSON.stringify(ThemesJson, null, 2)
+				);
 			},
 		},
 	],

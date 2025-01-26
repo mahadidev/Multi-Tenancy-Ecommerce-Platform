@@ -3,6 +3,7 @@ import { PageType } from '@/types/pageType';
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppLayout from './components/Layouts/AppLayout/AppLayout';
+import { DOKAN_SLUG } from './donan_env';
 import Page from './pages';
 
 const App: FC = function () {
@@ -10,7 +11,7 @@ const App: FC = function () {
 
 	return (
 		<>
-			<BrowserRouter basename={`/themes/simfy-commerce`}>
+			<BrowserRouter basename={`/themes/${DOKAN_SLUG}`}>
 				{theme ? (
 					<>
 						<Routes>
