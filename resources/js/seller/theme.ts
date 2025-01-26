@@ -237,6 +237,8 @@ export const customTheme: CustomFlowbiteTheme = createTheme({
 		color: {
 			primary:
 				'border border-transparent bg-gray-800 text-white focus:ring-4 focus:ring-gray-300 enabled:hover:bg-gray-900 dark:border-gray-600 dark:bg-gray-600 dark:focus:ring-gray-700 dark:enabled:hover:bg-gray-700',
+			secondary:
+				'border border-transparent bg-light-800 text-white focus:ring-4 focus:ring-light-300 enabled:hover:bg-gray-900 dark:border-light-600 dark:bg-light-600 dark:focus:ring-light-700 dark:enabled:hover:bg-light-700',
 			gray: 'border border-gray-200 bg-white text-gray-900 focus:text-gray-700 focus:ring-4 enabled:hover:bg-gray-100 enabled:hover:text-gray-700 dark:border-gray-600 dark:bg-transparent dark:text-gray-400 dark:enabled:hover:bg-gray-700 dark:enabled:hover:text-white',
 			dark: 'border border-transparent bg-gray-800 text-white focus:ring-4 focus:ring-gray-300 enabled:hover:bg-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-gray-800 dark:enabled:hover:bg-gray-700',
 			failure:

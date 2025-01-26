@@ -16,6 +16,7 @@ module.exports = {
 			},
 			container: {
 				center: true,
+                padding: "1rem"
 			},
 			boxShadow: {
 				lg: 'rgb(0 0 0 / 0%) 0px 0px, rgb(0 0 0 / 0%) 0px 0px, rgb(0 0 0 / 6%) 0px 34px 68px',

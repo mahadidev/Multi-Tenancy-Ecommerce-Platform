@@ -14,13 +14,13 @@ const EditorLayout: FC = function () {
 		<BaseLayout>
 			<SidebarProvider initialCollapsed={sidebar.desktop.isCollapsed}>
 				<EditorNavigation />
-				<div className="mt-16 flex items-start">
+				<div className="mt-10 flex items-start">
 					<EditorSidebar />
 					<div
 						id="main-content"
 						className={twMerge(
 							'relative h-full w-full overflow-y-auto bg-white dark:bg-gray-900',
-							sidebar.desktop.isCollapsed ? 'lg:ml-16' : 'lg:ml-64'
+							sidebar.desktop.isCollapsed ? 'lg:ml-0' : 'lg:ml-64'
 						)}
 					>
 						<Outlet />

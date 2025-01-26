@@ -55,8 +55,8 @@ function DesktopSidebar() {
 			aria-label="Sidebar with multi-level dropdown example"
 			collapsed={isCollapsed}
 			className={twMerge(
-				'fixed inset-y-0 left-0 z-20 flex h-full shrink-0 flex-col border-r border-gray-200 pt-16 duration-75 lg:flex dark:border-gray-700',
-				isCollapsed && 'hidden w-16'
+				'fixed inset-y-0 left-0 z-20 flex h-full shrink-0 flex-col border-r border-gray-200 pt-10 duration-75 lg:flex dark:border-gray-700',
+				isCollapsed && 'hidden !w-0 overflow-hidden'
 			)}
 			id="sidebar"
 		>

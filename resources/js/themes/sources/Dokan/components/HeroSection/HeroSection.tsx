@@ -7,6 +7,7 @@ const HeroSection: FC<{
 	widget: WidgetType;
 	store: StoreType;
 }> = function ({ widget, store }) {
+    console.log(store)
 	return (
 		<>
 			<section className="w-full  bg-gray-100 relative">
