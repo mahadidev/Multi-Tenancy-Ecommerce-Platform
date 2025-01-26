@@ -1,93 +1,104 @@
-import { ResponseType } from "@/seller/types/api";
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { DeleteSocialMediaPayloadType } from "@seller-panel/store/reducers/socialMediaApi";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
-import { SELLER_PREFIX } from "../env";
-import {
-    setSocialMedias,
-    setSocialMediasMeta,
-} from "../slices/socialMediaSlice";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { PREFIX } from '@seller/seller_env';
+import { ApiResponseType } from '@type/apiType';
+import { SocialMediaType } from '@type/socialMediaType';
+import baseQueryWithReAuth, {
+    createRequest,
+} from '../baseQueryWithReAuth';
+import { setTableSocialMedias } from '../slices/socialMediaSlice';
 
-export interface StoreBrandPayloadType {
-    name: string;
-    slug: string;
-    image: any;
+export interface SocialMediasResponseType extends ApiResponseType {
+	data: {
+		store_social_media: SocialMediaType[];
+	};
 }
 
-export interface UpdateCategoryPayloadType {
-    name?: string;
-    slug?: string;
-    image?: any;
-}
-
-export interface StoreSocialMediaPayloadType {
+export interface CreateSocialMediaPayloadType {
     name: string;
-    label: string;
-    username: string;
     url: string;
+    username: string;
+    label?: string
+}
+
+export interface UpdateSocialMediaPayloadType {
+    id: number
+	name?: string;
+	url?: string;
+	username?: string;
+	label?: string;
+}
+
+export interface DeleteSocialMediaPayloadType {
+	id: number;
 }
 
 export const socialMediaApi = createApi({
-    reducerPath: "socialMediaApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Brands", "SocialMedias"],
-    endpoints: (builder) => ({
-        fetchSocialMedias: builder.query<ResponseType, void>({
-            query: () => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/store-social-media`,
-                    method: "GET",
-                });
-            },
-            transformErrorResponse: (error: any) => error.data,
-            providesTags: ["SocialMedias"],
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(
-                        setSocialMedias(response.data.data.store_social_media)
-                    );
-                    dispatch(setSocialMediasMeta(response.data.meta));
-                });
-            },
-        }),
-        storeSocialMedia: builder.mutation<
-            ResponseType,
-            {
-                formData: StoreSocialMediaPayloadType;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/store-social-media`,
-                    method: "POST",
-                    body: data.formData,
-                });
-            },
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["SocialMedias"],
-        }),
-        deleteSocialMedia: builder.mutation<
-            ResponseType,
-            DeleteSocialMediaPayloadType
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/store-social-media/${data.id}`,
-                    method: "POST",
-                    body: {
-                        _method: "DELETE",
-                    },
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["SocialMedias"],
-        }),
-    }),
+	reducerPath: 'socialMediaApi',
+	baseQuery: baseQueryWithReAuth,
+	tagTypes: ['SocialMedias'],
+	endpoints: (builder) => ({
+		fetchSocialMedias: builder.query<SocialMediasResponseType, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store-social-media`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['SocialMedias'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(
+						setTableSocialMedias({
+							socialMedias: response.data.data.store_social_media,
+							meta: response.data.meta ?? null,
+						})
+					);
+				});
+			},
+		}),
+		createSocialMedia: builder.mutation<
+			ApiResponseType,
+			CreateSocialMediaPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store-social-media`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['SocialMedias'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		updateCategory: builder.mutation<
+			ApiResponseType,
+			UpdateSocialMediaPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store-social-media/${formData.id}`,
+					method: 'post',
+					apiMethod: 'PUT',
+					body: formData,
+				}),
+			invalidatesTags: ['SocialMedias'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		deleteCategory: builder.mutation<
+			ApiResponseType,
+			DeleteSocialMediaPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store-social-media/${formData.id}`,
+					method: 'post',
+					apiMethod: 'delete',
+					body: formData,
+				}),
+			invalidatesTags: ['SocialMedias'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+	}),
 });
 
-export const {
-    useFetchSocialMediasQuery,
-    useStoreSocialMediaMutation,
-    useDeleteSocialMediaMutation,
-} = socialMediaApi;
+export const { useFetchSocialMediasQuery, useCreateSocialMediaMutation, useDeleteCategoryMutation } = socialMediaApi;

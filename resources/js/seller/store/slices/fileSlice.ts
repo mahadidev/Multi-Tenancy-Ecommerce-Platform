@@ -1,0 +1,26 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FileType } from '@type/fileType';
+
+const initialState: {
+	files: FileType[]
+} = {
+	files: [],
+};
+
+const fileSlice = createSlice({
+	name: 'file',
+	initialState,
+	reducers: {
+		setFiles: (
+			state,
+			action: PayloadAction<FileType[]>
+		) => {
+			state.files = action.payload;
+		},
+        clearFiles: (state) => {
+            state.files = []
+        }
+	},
+});
+export const { setFiles, clearFiles } = fileSlice.actions;
+export default fileSlice.reducer;

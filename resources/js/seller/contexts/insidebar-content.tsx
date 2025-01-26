@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
     setInSidebarCollapsed,
     setInsideIsOpenMobile,
     toggleInsideIsOpenMobile,
-} from "@/seller/store/slices/baseSlice";
+} from "@seller/store/slices/uiSlice";
+import { useAppDispatch, useAppSelector } from "@seller/store/store";
 import type { PropsWithChildren } from "react";
 import { createContext } from "react";
 
@@ -26,10 +26,10 @@ export function InSidebarProvider({
     children,
 }: PropsWithChildren<{ initialCollapsed: boolean }>) {
     const { isOpenMobile } = useAppSelector(
-        (state) => state.base.sidebar.mobile
+        (state) => state.ui.sidebar.mobile
     );
     const { isCollapsed } = useAppSelector(
-        (state) => state.base.sidebar.desktop
+        (state) => state.ui.sidebar.desktop
     );
     const dispatch = useAppDispatch();
 

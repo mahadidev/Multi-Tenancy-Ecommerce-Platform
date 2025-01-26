@@ -1,110 +1,93 @@
-import { ResponseType } from "@/seller/types/api";
-import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
-import { SELLER_PREFIX } from "../env";
-import { setBrands, setBrandsMeta } from "../slices/brandSlice";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { PREFIX } from '@seller/seller_env';
+import { ApiResponseType } from '@type/apiType';
+import { BrandType } from '@type/brandType';
+import baseQueryWithReAuth, {
+    createRequest,
+} from '../baseQueryWithReAuth';
+import { setTableBrands } from '../slices/brandSlice';
 
-export interface StoreBrandPayloadType {
-    name: string;
-    slug: string;
-    image: any;
+export interface BrandsFetchResponse extends ApiResponseType {
+	data: {
+		brands: BrandType[];
+	};
 }
 
-export interface UpdateCategoryPayloadType {
-    name?: string;
-    slug?: string;
-    image?: any;
+export interface CreateBrandPayloadType {
+	name: string;
+	slug?: string;
+	image: any;
+}
+
+export interface UpdateBrandPayloadType {
+    id: number;
+	name?: string;
+	slug?: string;
+	image?: any;
+}
+
+export interface DeleteBrandPayloadType {
+    id: number
 }
 
 export const brandApi = createApi({
-    reducerPath: "brandApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Brands"],
-    endpoints: (builder) => ({
-        fetchBrands: builder.query<ResponseType, void>({
-            query: () => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/brand`,
-                    method: "GET",
-                });
-            },
-            transformErrorResponse: (error: any) => error.data,
-            providesTags: ["Brands"],
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setBrands(response.data.data.brands));
-                    dispatch(setBrandsMeta(response.data.meta));
-                });
-            },
-        }),
-        storeBrand: builder.mutation<
-            any,
-            {
-                formData: StoreBrandPayloadType | any;
-            }
-        >({
-            query: (data) => {
-                const formData = new FormData();
-                Object.keys(data.formData).map((key: string) => {
-                    formData.append(key, data.formData[key]);
-                });
-
-                return createRequest({
-                    url: `${SELLER_PREFIX}/brand`,
-                    method: "POST",
-                    body: formData,
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Brands"],
-        }),
-        updateBrand: builder.mutation<
-            any,
-            {
-                formData: UpdateCategoryPayloadType | any;
-                brandId: number;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/brand/${data.brandId}`,
-                    method: "POST",
-                    body: {
-                        ...data.formData,
-                        _method: "PUT",
-                    },
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Brands"],
-        }),
-        deleteBrand: builder.mutation<
-            any,
-            {
-                brandId: number;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/brand/${data.brandId}`,
-                    method: "POST",
-                    body: {
-                        _method: "DELETE",
-                    },
-                });
-            },
-            transformResponse: (response: any) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Brands"],
-        }),
-    }),
+	reducerPath: 'brandApi',
+	baseQuery: baseQueryWithReAuth,
+	tagTypes: ['Brands'],
+	endpoints: (builder) => ({
+		fetchBrands: builder.query<BrandsFetchResponse, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/brand`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Brands'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(
+						setTableBrands({
+							brands: response.data.data.brands,
+							meta: response.data.meta ?? null,
+						})
+					);
+				});
+			},
+		}),
+		createBrand: builder.mutation<ApiResponseType, CreateBrandPayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/brand`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Brands'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		updateBrand: builder.mutation<ApiResponseType, UpdateBrandPayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/brand/${formData.id}`,
+					method: 'post',
+					apiMethod: 'PUT',
+					body: formData,
+				}),
+			invalidatesTags: ['Brands'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		deleteBrand: builder.mutation<ApiResponseType, DeleteBrandPayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/brand/${formData.id}`,
+					method: 'post',
+					apiMethod: 'delete',
+					body: formData,
+				}),
+			invalidatesTags: ['Brands'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+	}),
 });
 
-export const {
-    useFetchBrandsQuery,
-    useStoreBrandMutation,
-    useUpdateBrandMutation,
-    useDeleteBrandMutation,
-} = brandApi;
+export const { useFetchBrandsQuery, useCreateBrandMutation, useUpdateBrandMutation, useDeleteBrandMutation } = brandApi;

@@ -7,14 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ env('APP_URL') }}">
+    <meta name="theme-slug" content="{{$slug}}">
     <title>{{ env('APP_NAME') }}</title>
 
     @viteReactRefresh
-    @vite(['themes/index.tsx'])
+    @vite(['resources/js/themes/index.tsx'])
 </head>
 
 <body>
     <div id="{{ $slug }}"></div>
 </body>
-
 </html>

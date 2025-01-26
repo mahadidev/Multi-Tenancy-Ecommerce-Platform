@@ -1,163 +1,140 @@
-import { WidgetInputType } from "@/seller/types";
-import { ResponseType } from "@/seller/types/api";
-import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
-import { SELLER_PREFIX } from "../env";
-import {
-    setPage,
-    setPages,
-    setPagesMeta,
-    setPageTypes,
-    setWidgets,
-} from "../slices/pageSlice";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { PREFIX } from '@seller/seller_env';
+import { ApiResponseType } from '@type/apiType';
+import { PageType } from '@type/pageType';
+import { WidgetInputType } from '@type/widgetType';
+import baseQueryWithReAuth, {
+    createRequest,
+} from '../baseQueryWithReAuth';
+import { setPage, setPageTypes, setTablePages } from '../slices/pageSlice';
+
+export interface PagesFetchResponse extends ApiResponseType {
+	data: {
+		pages: PageType[];
+	};
+}
+
+export interface FetchPagePayloadType {
+	id: number;
+}
 
 export interface CreatePagePayloadType {
     name: string;
-    slug: string;
     title: string;
-    is_active: boolean;
+    type: string;
 }
 
 export interface UpdatePagePayloadType {
-    name?: string;
-    type?: string | "home" | "about" | "blog" | "contact";
-    slug?: string;
-    title?: string;
-    is_active?: 0 | 1;
-    widgets?: {
-        name: string;
-        label: string;
-        inputs: WidgetInputType[];
-    }[];
+    id: number;
+	name?: string;
+	type?: string | 'home' | 'about' | 'blog' | 'contact';
+	slug?: string;
+	title?: string;
+	is_active?: 0 | 1;
+	widgets?: {
+		name: string;
+		label: string;
+		inputs: WidgetInputType[];
+	}[];
+}
+
+export interface DeletePagePayloadType {
+	id: number;
 }
 
 export const pageApi = createApi({
-    reducerPath: "pageApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Pages", "Page", "PageTypes"],
-    endpoints: (builder) => ({
-        fetchPages: builder.query<
-            ResponseType,
-            {
-                storeId: number | string;
-            }
-        >({
-            query: (data) =>
-                createRequest({
-                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages`,
-                    method: "get",
-                }),
-            transformErrorResponse: (error: any) => error.data,
-            providesTags: ["Pages"],
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setPages(response.data.data.pages));
-                    dispatch(setPagesMeta(response.data.meta));
-                });
-            },
-        }),
-        fetchPage: builder.query<
-            ResponseType,
-            {
-                storeId: number | string;
-                pageId: number | string;
-            }
-        >({
-            query: (props) =>
-                createRequest({
-                    url: `${SELLER_PREFIX}/stores/${props.storeId}/pages/${props.pageId}`,
-                    method: "get",
-                }),
-            transformErrorResponse: (error: any) => error.data,
-            providesTags: ["Page"],
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setPage(response.data.data.page));
-                    dispatch(setWidgets(response.data.data.page.widgets));
-                });
-            },
-        }),
-        createPage: builder.mutation<
-            any,
-            {
-                storeId: number | string;
-                formData: CreatePagePayloadType;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/store`,
-                    method: "POST",
-                    body: data.formData,
-                });
-            },
-            transformResponse: (response) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Pages"],
-        }),
-        updatePage: builder.mutation<
-            any,
-            {
-                storeId: number | string;
-                pageId: number | string;
-                formData: UpdatePagePayloadType;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/update/${data.pageId}`,
-                    method: "POST",
-                    body: {
-                        ...data.formData,
-                        _method: "put",
-                    },
-                });
-            },
-            transformResponse: (response) => response,
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Page"],
-        }),
-        deletePage: builder.mutation<
-            ResponseType,
-            {
-                storeId: number | string;
-                pageId: number | string;
-            }
-        >({
-            query: (data) => {
-                return createRequest({
-                    url: `${SELLER_PREFIX}/stores/${data.storeId}/pages/delete/${data.pageId}`,
-                    method: "POST",
-                    body: {
-                        _method: "DELETE",
-                    },
-                });
-            },
-            transformErrorResponse: (error: any) => error.data,
-            invalidatesTags: ["Pages"],
-        }),
-        fetchPageTypes: builder.query<ResponseType, void>({
-            query: () =>
-                createRequest({
-                    url: `/page-types`,
-                    method: "get",
-                }),
-            transformErrorResponse: (error: any) => error.data,
-            providesTags: ["PageTypes"],
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setPageTypes(response.data.data.page_types));
-                });
-            },
-        }),
-    }),
+	reducerPath: 'pageApi',
+	baseQuery: baseQueryWithReAuth,
+	tagTypes: ['Pages', 'Page'],
+	endpoints: (builder) => ({
+		fetchPages: builder.query<PagesFetchResponse, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/stores/page`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(
+						setTablePages({
+							pages: response.data.data.pages,
+							meta: response.data.meta ?? null,
+						})
+					);
+				});
+			},
+		}),
+		fetchPageTypes: builder.query<ApiResponseType, void>({
+			query: (formData) =>
+				createRequest({
+					url: `page-types`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setPageTypes(response.data.data.page_types));
+				});
+			},
+		}),
+		fetchPage: builder.query<ApiResponseType, FetchPagePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/stores/page/${formData.id}`,
+					method: 'get',
+				}),
+			providesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setPage(response.data.data.page));
+				});
+			},
+		}),
+		createPage: builder.mutation<ApiResponseType, CreatePagePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/stores/page`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		updatePage: builder.mutation<ApiResponseType, UpdatePagePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/stores/page/${formData.id}`,
+					method: 'post',
+					body: formData,
+					apiMethod: 'PUT',
+				}),
+			invalidatesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		deletePage: builder.mutation<ApiResponseType, DeletePagePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/stores/page/${formData.id}`,
+					method: 'post',
+					apiMethod: 'delete',
+					body: formData,
+				}),
+			invalidatesTags: ['Pages'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+	}),
 });
 
 export const {
-    useFetchPagesQuery,
-    useCreatePageMutation,
-    useFetchPageQuery,
-    useUpdatePageMutation,
+	useFetchPagesQuery,
     useFetchPageTypesQuery,
-    useDeletePageMutation,
+    useCreatePageMutation,
+	useUpdatePageMutation,
+	useDeletePageMutation,
 } = pageApi;
