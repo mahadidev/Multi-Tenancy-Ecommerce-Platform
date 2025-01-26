@@ -9,7 +9,7 @@ const ThemeComponent:FC<{
 }> = ({theme, widget}) => {
 
     const themeComponentList: any = {
-        "simfy-commerce": <DokanComponent {...widget} />
+        "dokan": <DokanComponent {...widget} />
     }
 
   return <>{themeComponentList[theme.slug]}</>;

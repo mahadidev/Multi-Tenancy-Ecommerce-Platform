@@ -1,2 +1,2 @@
-export const DOKAN_SLUG = "simfy-commerce";
-export const DOKAN_NAME = "Simfy Commerce";
+export const DOKAN_SLUG = "dokan";
+export const DOKAN_NAME = "Dokan";
