@@ -34,6 +34,9 @@ const AddWidgetModal: FC = function () {
 												formData: {
 													widget: widget,
 												},
+                                                onSuccess: () => {
+                                                    setOpenModal(false);
+                                                }
 											})
 										}
                                         processingLabel='Adding'

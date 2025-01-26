@@ -1,4 +1,4 @@
-import { BASE_IMAGE_URL, RoutePath } from '@seller/seller_env';
+import { RoutePath } from '@seller/seller_env';
 import {
     toggleIsOpenMobile,
     toggleSidebar,
@@ -6,28 +6,11 @@ import {
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import {
     Avatar,
-    DarkThemeToggle,
     Dropdown,
-    Label,
     Navbar,
-    TextInput,
-    Tooltip,
 } from 'flowbite-react';
 import {
-    HiArchive,
-    HiBell,
-    HiCog,
-    HiCurrencyDollar,
-    HiEye,
-    HiInbox,
-    HiLogout,
     HiMenuAlt1,
-    HiOutlineTicket,
-    HiSearch,
-    HiShoppingBag,
-    HiUserCircle,
-    HiUsers,
-    HiViewGrid,
     HiX,
 } from 'react-icons/hi';
 import { Link, Navigate } from 'react-router-dom';

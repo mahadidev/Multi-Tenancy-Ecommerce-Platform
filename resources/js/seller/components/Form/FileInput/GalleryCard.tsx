@@ -1,6 +1,6 @@
+import { FileType } from "@type/fileType";
 import { FC } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { FileType } from "../@type/fileType";
 
 interface PropsType {
 	files: FileType[];

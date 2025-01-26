@@ -1,11 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import GetComponent from '@/themes/getComponent';
 import usePage from '@seller/hooks/usePage';
+import useTheme from '@seller/hooks/useTheme';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AddWidgetModal from './AddWidgetModal';
 
 const PageEditPage = () => {
 	const { page, fetchPage } = usePage();
+	const { theme } = useTheme();
 	const { id } = useParams();
 
 	useEffect(() => {
@@ -20,8 +23,10 @@ const PageEditPage = () => {
 
 	return (
 		<>
-			{page?.widgets.map((widget) => (
-				<div>{widget.name}</div>
+			{theme && page?.widgets.map((widget) => (
+				<>
+					<GetComponent widget={widget} theme={theme} />
+				</>
 			))}
 
 			<AddWidgetModal />
