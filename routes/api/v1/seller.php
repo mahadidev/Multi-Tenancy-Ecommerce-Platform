@@ -82,6 +82,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Brand Routes
     Route::resource('/brand', BrandController::class);
     Route::get('/brand-pdf', [BrandController::class, 'pdf']);
+    Route::post('/brand-import', [BrandController::class, 'import']);
 
     Route::resource('/category', CategoryController::class);
     Route::get('/category-pdf', [CategoryController::class, 'pdf']);

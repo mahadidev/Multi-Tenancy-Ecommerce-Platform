@@ -161,12 +161,24 @@ class CategoryController extends Controller
         try {
             Excel::import(new CategoriesImport, $file);
 
+            $categories = Category::authorized()->latest()->paginate(10);
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Categories imported successfully',
                 'data' => [
-                    'categories' => CategoryResource::collection(Category::authorized()->get())
-                ]
+                    'categories' => CategoryResource::collection($categories),
+                ],
+                'meta' => [
+                    'current_page' => $categories->currentPage(),
+                    'first_page_url' => $categories->url(1),
+                    'last_page' => $categories->lastPage(),
+                    'last_page_url' => $categories->url($categories->lastPage()),
+                    'next_page_url' => $categories->nextPageUrl(),
+                    'prev_page_url' => $categories->previousPageUrl(),
+                    'total' => $categories->total(),
+                    'per_page' => $categories->perPage(),
+                ],
             ]);
         } catch (ValidationException $e) {
             $failures = $e->failures();

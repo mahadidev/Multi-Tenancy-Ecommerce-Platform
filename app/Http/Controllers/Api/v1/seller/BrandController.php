@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use App\Imports\BrandsImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\ValidationException;
 
 class BrandController extends Controller
 {
@@ -186,5 +189,52 @@ class BrandController extends Controller
         $pdf = FacadePdf::loadView('pdf.brand', compact('brands'))->setPaper('a4');
 
         return $pdf->download('brands_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $file = $request->file('file');
+
+        try {
+            Excel::import(new BrandsImport, $file);
+
+            $brands = Brand::authorized()->latest()->paginate(10);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Brands imported successfully',
+                'data' => [
+                    'brands' => BrandResource::collection($brands),
+                ],
+                'meta' => [
+                    'current_page' => $brands->currentPage(),
+                    'first_page_url' => $brands->url(1),
+                    'last_page' => $brands->lastPage(),
+                    'last_page_url' => $brands->url($brands->lastPage()),
+                    'next_page_url' => $brands->nextPageUrl(),
+                    'prev_page_url' => $brands->previousPageUrl(),
+                    'total' => $brands->total(),
+                    'per_page' => $brands->perPage(),
+                ],
+            ]);
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+
+            return response()->json([
+                'status' => 422,
+                'message' => 'Import validation failed',
+                'errors' => collect($failures)->map(function ($failure) {
+                    return [
+                        'row' => $failure->row(),
+                        'attribute' => $failure->attribute(),
+                        'errors' => $failure->errors()
+                    ];
+                })
+            ], 422);
+        }
     }
 }
