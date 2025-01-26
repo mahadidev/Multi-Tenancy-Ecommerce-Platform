@@ -1,14 +1,27 @@
-
-import { CreatePagePayloadType, DeletePagePayloadType, UpdatePagePayloadType, useCreatePageMutation, useDeletePageMutation, useFetchPagesQuery, useFetchPageTypesQuery, useUpdatePageMutation } from '@seller/store/reducers/pageApi';
+import { WidgetType } from '@/types/widgetType';
+import {
+    CreatePagePayloadType,
+    DeletePagePayloadType,
+    FetchPagePayloadType,
+    pageApi,
+    UpdatePagePayloadType,
+    useCreatePageMutation,
+    useDeletePageMutation,
+    useFetchPagesQuery,
+    useFetchPageTypesQuery,
+    useUpdatePageMutation,
+} from '@seller/store/reducers/pageApi';
 import { useAppSelector } from '@seller/store/store';
 
 const usePage = () => {
 	// fetch pages
 	useFetchPagesQuery();
-    useFetchPageTypesQuery();
+	useFetchPageTypesQuery();
 
 	// select page
-	const { pages, meta, page, pageTypes } = useAppSelector((state) => state.page);
+	const { pages, meta, page, pageTypes } = useAppSelector(
+		(state) => state.page
+	);
 
 	// create page
 	const [
@@ -88,11 +101,70 @@ const usePage = () => {
 		});
 	};
 
+	// fetch page
+	const [
+		handleFetchPage,
+		{
+			isLoading: isFetchPageLoading,
+			isError: isFetchPageError,
+			error: fetchPageError,
+			data: fetchPageData,
+		},
+	] = pageApi.endpoints.fetchPage.useLazyQuery();
+	const fetchPage = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: FetchPagePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleFetchPage(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
+
+	// add widget
+	const [
+		handleAddWidget,
+		{
+			isLoading: isAddWidgetLoading,
+			isError: isAddWidgetError,
+			error: addWidgetError,
+			data: addWidgetData,
+		},
+	] = useUpdatePageMutation();
+	const addWidget = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: {
+			widget: WidgetType;
+		};
+		onSuccess?: CallableFunction;
+	}) => {
+		if (page) {
+			handleAddWidget({
+				id: page.id,
+				widgets: [...page.widgets, formData.widget],
+			}).then((response) => {
+				if (response.data?.status === 200) {
+					if (onSuccess) {
+						onSuccess(response.data.data);
+					}
+				}
+			});
+		}
+	};
+
 	return {
 		pages,
 		page,
 		meta,
-        pageTypes,
+		pageTypes,
 		create: {
 			submit: create,
 			isLoading: isCreateLoading,
@@ -113,6 +185,20 @@ const usePage = () => {
 			isError: isDeleteError,
 			error: deleteError,
 			data: deleteData,
+		},
+        fetchPage: {
+            submit: fetchPage,
+			isLoading: isFetchPageLoading,
+			isError: isFetchPageError,
+			error: fetchPageError,
+			data: fetchPageData,
+        },
+		addWidget: {
+			submit: addWidget,
+			isLoading: isAddWidgetLoading,
+			isError: isAddWidgetError,
+			error: addWidgetError,
+			data: addWidgetData,
 		},
 	};
 };

@@ -15,7 +15,7 @@ export interface FileFetchResponseType extends ApiResponseType {
 export interface FetchThemePayloadType {
     id?: number;
     slug?: string;
-    idOrSlug: string
+    idOrSlug: string | number
 }
 
 

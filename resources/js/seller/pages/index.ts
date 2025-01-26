@@ -12,6 +12,7 @@ export { default as ProductEditPage } from './ProductsPage/ProductEditPage/Produ
 export { default as ProductsPage } from './ProductsPage/ProductsPage';
 
 // store pages pages
+export { default as PageEditPage } from './PagesPage/PageEditPage/PageEditPage';
 export { default as PagesPage } from "./PagesPage/PagesPage";
 
 // onboard pages

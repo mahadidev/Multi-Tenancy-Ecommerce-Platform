@@ -15,7 +15,7 @@ export interface PagesFetchResponse extends ApiResponseType {
 }
 
 export interface FetchPagePayloadType {
-	id: number;
+	id: number | string;
 }
 
 export interface CreatePagePayloadType {

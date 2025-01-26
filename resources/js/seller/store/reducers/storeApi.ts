@@ -6,11 +6,12 @@ import baseQueryWithReAuth, {
     createRequest,
 } from '../baseQueryWithReAuth';
 import { setAuthStore } from '../slices/storeSlice';
+import { setTheme } from '../slices/themeSlice';
 
 export interface StoresFetchResponseType extends ApiResponseType {
 	data: {
 		stores: StoreType[];
-        current_store: StoreType
+        current_store: StoreType;
 	};
 }
 
@@ -65,6 +66,7 @@ export const storeApi = createApi({
 							store: response.data.data.current_store,
 						})
 					);
+                    dispatch(setTheme(response.data.data.current_store.theme));
 				});
 			},
 		}),

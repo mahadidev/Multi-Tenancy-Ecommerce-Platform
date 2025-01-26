@@ -5,6 +5,7 @@ import {
     CategoriesPage,
     DashboardPage,
     LoginPage,
+    PageEditPage,
     PagesPage,
     ProductEditPage,
     ProductsPage,
@@ -52,7 +53,7 @@ export const PagesRoute: FC = function () {
 						{/* Editor Layout */}
 						<Route path="/" element={<EditorLayout />}>
 							{/* Page Edit */}
-							{/* <Route path="pages/:id" element={<StorePagesEditPage />} /> */}
+							<Route path="pages/:id" element={<PageEditPage />} />
 						</Route>
 					</Route>
 

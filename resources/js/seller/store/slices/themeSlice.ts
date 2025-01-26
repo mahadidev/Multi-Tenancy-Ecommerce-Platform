@@ -16,7 +16,7 @@ const themeSlice = createSlice({
 		setThemes: (state, action: PayloadAction<ThemeType[]>) => {
 			state.themes = action.payload;
 		},
-		setTheme: (state, action: PayloadAction<ThemeType>) => {
+		setTheme: (state, action: PayloadAction<ThemeType | null>) => {
 			state.theme = action.payload;
 		},
 		clearTheme: (state) => {

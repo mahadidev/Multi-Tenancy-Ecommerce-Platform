@@ -23,7 +23,7 @@ export const baseQuery = fetchBaseQuery({
 
 		if (!accessToken) {
 			const localStrData = JSON.parse(
-				localStorage.getItem('persist:@seller-panel') || '{}'
+				localStorage.getItem('persist:seller') || '{}'
 			);
 			accessToken = localStrData.auth.accessToken;
 		}
