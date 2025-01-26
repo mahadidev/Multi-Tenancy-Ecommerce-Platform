@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@seller/components';
 import useAuth from '@seller/hooks/useAuth';
 import useForm from '@seller/hooks/useForm';
 import { BASE_IMAGE_URL, RoutePath } from '@seller/seller_env';
@@ -128,6 +129,9 @@ const RegisterPage: FC = function () {
 								</Link>
 							</Label>
 						</div>
+						{formErrors['message'] && (
+							<ErrorMessage>{formErrors['message']}</ErrorMessage>
+						)}
 						<div className="mb-7">
 							<Button
 								size="lg"

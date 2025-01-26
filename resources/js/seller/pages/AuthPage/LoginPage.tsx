@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@seller/components';
 import useAuth from '@seller/hooks/useAuth';
 import useForm from '@seller/hooks/useForm';
 import { BASE_IMAGE_URL, RoutePath } from '@seller/seller_env';
@@ -104,6 +105,10 @@ const LoginPage: FC = function () {
 								Lost Password?
 							</Link>
 						</div>
+
+						{formErrors['message'] && <ErrorMessage>
+                                {formErrors["message"]}
+                            </ErrorMessage>}
 
 						<div className="mb-6">
 							<Button
