@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 // use App\Services\StoreService;
 use Illuminate\Http\Request;
 
@@ -135,5 +136,19 @@ class CategoryController extends Controller
             'message' => 'Category deleted successfully'
         ], 200);
 
+    }
+
+    public function pdf(Request $request)
+    {
+        // return response()->json([
+        //     'status' => 200,
+        //     'message' => 'Category downloaded successfully'
+        // ], 200);
+
+        $categories = Category::authorized()->where('type', 'product')->get();
+
+        $pdf = FacadePdf::loadView('pdf.category', compact('categories'))->setPaper('a4');
+
+        return $pdf->download('categories.pdf');
     }
 }
