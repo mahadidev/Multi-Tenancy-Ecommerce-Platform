@@ -21,10 +21,11 @@ class StorePageWidgetInputItemsResource extends JsonResource
             'placeholder' => $this->placeholder,
             'value' => $this->value,
             'required' => $this->required,
+            "widget_input_id" => $this->widget_input_id,
             'type' => $this->type,
             'widget_id' => $this->widget_input_id,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
-            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),  
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
     }
 }

@@ -1,18 +1,17 @@
 import { SidebarProvider } from '@seller/contexts/sidebar-context';
 import { useAppSelector } from '@seller/store/store';
-import { customTheme } from '@seller/theme';
-import { Flowbite } from 'flowbite-react';
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { DashboardNavigation } from '../Navigation/DashboardNavigation/DashboardNavigation';
 import { DashboardSidebar } from '../Sidebar/DashboardSidebar/DashboardSidebar';
+import BaseLayout from './BaseLayout';
 
 const DashboardLayout: FC = function() {
 	const { sidebar } = useAppSelector((state) => state.ui);
 
 	return (
-		<Flowbite theme={{ theme: customTheme }}>
+		<BaseLayout>
 			<SidebarProvider initialCollapsed={sidebar.desktop.isCollapsed}>
 				<DashboardNavigation />
 				<div className="mt-16 flex items-start">
@@ -28,7 +27,7 @@ const DashboardLayout: FC = function() {
 					</div>
 				</div>
 			</SidebarProvider>
-		</Flowbite>
+		</BaseLayout>
 	);
 }
 
