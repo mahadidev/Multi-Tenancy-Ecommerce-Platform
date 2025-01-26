@@ -90,4 +90,9 @@ class Store extends Model
     {
         return $this->hasMany(StoreSocialMedia::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

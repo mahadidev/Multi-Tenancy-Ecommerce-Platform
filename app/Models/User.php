@@ -119,5 +119,10 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     {
         return $this->hasMany(Order::class, 'user_id');
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable')->orderBy('created_at', 'desc');
+    }
     
 }

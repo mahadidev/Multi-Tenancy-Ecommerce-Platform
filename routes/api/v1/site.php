@@ -42,5 +42,8 @@ Route::get('/category/{slug}/products', [ProductController::class, 'singleCatego
 // contact route
 Route::post('/contact', [ContactController::class, 'store']);
 
+// order pdf download route
+Route::get('/orders/{uuid}/{isCustomer}', [OrderController::class, 'downloadOrderDetails'])->name('order.download');
+
 
 
