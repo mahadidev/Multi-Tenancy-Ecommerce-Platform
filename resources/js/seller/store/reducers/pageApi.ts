@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { PREFIX } from '@seller/seller_env';
 import { ApiResponseType } from '@type/apiType';
 import { PageType } from '@type/pageType';
-import { WidgetInputType, WidgetType } from '@type/widgetType';
+import { WidgetInputType } from '@type/widgetType';
 import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
 import { setPage, setPageTypes, setTablePages } from '../slices/pageSlice';
 import { setWidgets } from '../slices/widgetSlice';
