@@ -1,11 +1,15 @@
+import { StoreType } from '@type/storeType';
 import { WidgetType } from '@type/widgetType';
 import { FC } from 'react';
 
-const HeroSection: FC<WidgetType> = function (props) {
+const HeroSection: FC<{
+	widget: WidgetType;
+    store: StoreType
+}> = function ({widget}) {
 	return (
 		<>
-			<section className="flex overflow-x-auto">
-				{props.inputs
+			<section className="w-full flex overflow-x-auto">
+				{widget.inputs
 					.slice()
 					.sort(function (inputA, inputB) {
 						return inputA.id - inputB.id;
@@ -25,9 +29,7 @@ const HeroSection: FC<WidgetType> = function (props) {
 								>
 									<div className="container mx-auto">
 										<div className="grid grid-cols-6">
-                                            <div className='w-full'>
-
-                                            </div>
+											<div className="w-full"></div>
 											<div className="col-span-5">
 												<img
 													className="min-w-full object-fill"

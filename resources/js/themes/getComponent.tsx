@@ -1,15 +1,17 @@
-import { ThemeType } from "@/types/themeType";
-import { WidgetType } from "@/types/widgetType";
+import { StoreType } from "@/types/storeType";
+import { ThemeType } from "@type/themeType";
+import { WidgetType } from "@type/widgetType";
 import { FC } from "react";
 import { Component as DokanComponent } from './sources/Dokan/components';
 
 const ThemeComponent:FC<{
     theme: ThemeType,
+    store: StoreType,
     widget: WidgetType
-}> = ({theme, widget}) => {
+}> = ({theme, widget, store}) => {
 
     const themeComponentList: any = {
-        "dokan": <DokanComponent {...widget} />
+        "dokan": <DokanComponent widget={widget} store={store} />
     }
 
   return <>{themeComponentList[theme.slug]}</>;

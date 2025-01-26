@@ -1,17 +1,20 @@
-import { CategoryType } from '@/types/categoryType';
+import { StoreType } from '@type/storeType';
 import { WidgetType } from '@type/widgetType';
 import { FC } from 'react';
+import HeroSection from './HeroSection/HeroSection';
+import AppNavigation from './Navigations/AppNavigation/Navigation';
+import OffersSection from './OffersSection/OffersSection';
 
 export const Component: FC<
-	WidgetType & {
-		categories?: CategoryType[];
-	}
-> = function (widget) {
+	{
+        widget: WidgetType,
+        store: StoreType
+    }
+> = function ({widget, store}) {
 	const components: any = {
-		navigation: 'navigation',
-		hero: 'Hero',
-		offers: 'offers',
-		promoGrid: 'promo',
+		navigation: <AppNavigation widget={widget} store={store} />,
+		hero: <HeroSection widget={widget} store={store} />,
+		offers: <OffersSection widget={widget} store={store} />,
 	};
 
 	return (

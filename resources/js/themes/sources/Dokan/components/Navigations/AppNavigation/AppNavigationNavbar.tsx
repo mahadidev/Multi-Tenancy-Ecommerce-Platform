@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const AppNavigationNavbar = () => {
 	return (
-		<div className="py-2">
+		<div className="py-2 bg-white">
 			<div className="container flex justify-between">
 				<Link className="w-12 sm:w-max" to="/">
 					<img

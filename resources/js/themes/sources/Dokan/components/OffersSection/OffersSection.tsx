@@ -1,15 +1,19 @@
+import { StoreType } from "@type/storeType";
 import { WidgetType } from "@type/widgetType";
 import { FC } from "react";
 
-const OffersSection: FC<WidgetType> = function (props) {
+const OffersSection: FC<{
+	widget: WidgetType;
+	store: StoreType;
+}> = function ({ widget }) {
 	return (
 		<>
-			<section className="py-4 mt-4">
+			<section className="py-4 mt-4 bg-gray-100">
 				<h1 className="text-center text-2xl mb-4 text-gray-800">
-					{props.inputs.find((input) => input.name === 'title')?.value}
+					{widget.inputs.find((input) => input.name === 'title')?.value}
 				</h1>
 				<div className="container hidden sm:!grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 last:border-r-0 flex-wrap">
-					{props.inputs
+					{widget.inputs
 						.slice()
 						.sort(function (inputA, inputB) {
 							return inputA.id - inputB.id;
