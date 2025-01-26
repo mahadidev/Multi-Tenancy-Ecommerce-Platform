@@ -11,12 +11,15 @@ import {
     useFetchPageTypesQuery,
     useUpdatePageMutation,
 } from '@seller/store/reducers/pageApi';
-import { useAppSelector } from '@seller/store/store';
+import { useAppDispatch, useAppSelector } from '@seller/store/store';
+import { setPage } from '../store/slices/pageSlice';
 
 const usePage = () => {
 	// fetch pages
 	useFetchPagesQuery();
 	useFetchPageTypesQuery();
+
+	const dispatch = useAppDispatch();
 
 	// select page
 	const { pages, meta, page, pageTypes } = useAppSelector(
@@ -160,6 +163,30 @@ const usePage = () => {
 		}
 	};
 
+	// sort widget
+	const sortWidget = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: {
+			widgets: WidgetType[];
+		};
+		onSuccess?: CallableFunction;
+	}) => {
+		if (page) {
+			dispatch(
+				setPage({
+					...page,
+                    widgets: formData.widgets
+				})
+			);
+
+            if(onSuccess){
+                onSuccess();
+            }
+		}
+	};
+
 	return {
 		pages,
 		page,
@@ -186,19 +213,22 @@ const usePage = () => {
 			error: deleteError,
 			data: deleteData,
 		},
-        fetchPage: {
-            submit: fetchPage,
+		fetchPage: {
+			submit: fetchPage,
 			isLoading: isFetchPageLoading,
 			isError: isFetchPageError,
 			error: fetchPageError,
 			data: fetchPageData,
-        },
+		},
 		addWidget: {
 			submit: addWidget,
 			isLoading: isAddWidgetLoading,
 			isError: isAddWidgetError,
 			error: addWidgetError,
 			data: addWidgetData,
+		},
+		sortWidget: {
+			submit: sortWidget,
 		},
 	};
 };

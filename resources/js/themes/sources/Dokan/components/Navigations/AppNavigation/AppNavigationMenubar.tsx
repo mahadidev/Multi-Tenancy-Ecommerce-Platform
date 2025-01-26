@@ -1,13 +1,13 @@
-import { CategoryType } from "@/types/categoryType";
 import { WidgetType } from "@/types/widgetType";
+import { StoreType } from "@type/storeType";
 import { FC } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import CategoriesList from "./CategoriesList";
 
-const AppNavigationMenubar:FC<WidgetType & {
-    categories?: CategoryType[]
-}> = function (widget){
+const AppNavigationMenubar:FC<{
+    widget: WidgetType,
+    store: StoreType
+}> = function (){
   return (
 		<nav className="bg-white relative border-t z-30">
 			<div className="container hidden lg:block">
@@ -18,11 +18,6 @@ const AppNavigationMenubar:FC<WidgetType & {
 								<CiMenuFries />
 							</span>{' '}
 							Browse Categories
-							<div className="absolute top-full left-0 w-full">
-								{widget.categories && (
-									<CategoriesList categories={widget.categories} />
-								)}
-							</div>
 						</div>
 					</div>
 					<div className="col-span-5 w-full flex gap-4 items-center justify-end">

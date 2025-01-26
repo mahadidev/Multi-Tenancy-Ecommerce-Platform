@@ -1,3 +1,4 @@
+import { CategoryType } from "./categoryType";
 import { ThemeType } from "./themeType";
 
 
@@ -22,6 +23,7 @@ export interface StoreType {
 	primary_color: null | string;
 	secondary_color: null | string;
 	theme_id: number;
+    categories: CategoryType[];
     theme: null | ThemeType;
 	settings: SettingsType | null;
 	social_media: SocialMediaType[];

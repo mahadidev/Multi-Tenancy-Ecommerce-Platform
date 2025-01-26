@@ -1,6 +1,7 @@
 import { StoreType } from "@type/storeType";
+import { dummyCategories } from "./dummyCategories";
 
-export const dummyStore: StoreType = {
+export const dummyStore: StoreType | any = {
     id: 3,
     name: 'Kacha Bazar',
     slug: 'kacha-bazar',
@@ -18,6 +19,7 @@ export const dummyStore: StoreType = {
     secondary_color: null,
     theme_id: 1,
     settings: null,
+    categories: dummyCategories,
     social_media: [
         {
             id: 1,

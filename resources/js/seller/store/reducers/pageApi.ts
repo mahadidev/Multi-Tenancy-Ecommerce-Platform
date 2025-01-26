@@ -2,11 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { PREFIX } from '@seller/seller_env';
 import { ApiResponseType } from '@type/apiType';
 import { PageType } from '@type/pageType';
-import { WidgetInputType } from '@type/widgetType';
-import baseQueryWithReAuth, {
-    createRequest,
-} from '../baseQueryWithReAuth';
+import { WidgetInputType, WidgetType } from '@type/widgetType';
+import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
 import { setPage, setPageTypes, setTablePages } from '../slices/pageSlice';
+import { setWidgets } from '../slices/widgetSlice';
 
 export interface PagesFetchResponse extends ApiResponseType {
 	data: {
@@ -19,13 +18,13 @@ export interface FetchPagePayloadType {
 }
 
 export interface CreatePagePayloadType {
-    name: string;
-    title: string;
-    type: string;
+	name: string;
+	title: string;
+	type: string;
 }
 
 export interface UpdatePagePayloadType {
-    id: number;
+	id: number;
 	name?: string;
 	type?: string | 'home' | 'about' | 'blog' | 'contact';
 	slug?: string;
@@ -93,6 +92,7 @@ export const pageApi = createApi({
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
 				await queryFulfilled.then((response) => {
 					dispatch(setPage(response.data.data.page));
+					dispatch(setWidgets(response.data.data.page.widgets));
 				});
 			},
 		}),
@@ -133,8 +133,8 @@ export const pageApi = createApi({
 
 export const {
 	useFetchPagesQuery,
-    useFetchPageTypesQuery,
-    useCreatePageMutation,
+	useFetchPageTypesQuery,
+	useCreatePageMutation,
 	useUpdatePageMutation,
 	useDeletePageMutation,
 } = pageApi;

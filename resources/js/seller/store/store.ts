@@ -21,6 +21,7 @@ import socialMediaSlice from './slices/socialMediaSlice';
 import storeSlice from './slices/storeSlice';
 import themeSlice from './slices/themeSlice';
 import uiSlice from './slices/uiSlice';
+import widgetSlice from './slices/widgetSlice';
 
 const authPersistConfig = {
 	key: 'seller',
@@ -52,6 +53,7 @@ const persistedReducer = persistReducer(
 		product: productSlice,
 		brand: brandSlice,
         socialMedia: socialMediaSlice,
+        widget: widgetSlice,
 		[authApi.reducerPath]: authApi.reducer,
 		[fileApi.reducerPath]: fileApi.reducer,
 		[themeApi.reducerPath]: themeApi.reducer,

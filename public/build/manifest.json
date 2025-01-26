@@ -1,6 +1,6 @@
 {
-  "_index-Da-poxsg.js": {
-    "file": "assets/index-Da-poxsg.js",
+  "_index-DK64YIS9.js": {
+    "file": "assets/index-DK64YIS9.js",
     "name": "index"
   },
   "resources/css/app.css": {
@@ -15,27 +15,27 @@
     "isEntry": true
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-D4fbj35k.js",
+    "file": "assets/index-6PGUo-OM.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index-Da-poxsg.js"
+      "_index-DK64YIS9.js"
     ],
     "css": [
       "assets/index-BdcaWH3u.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-CyHi0NaH.js",
+    "file": "assets/index-XkuMZxTR.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index-Da-poxsg.js"
+      "_index-DK64YIS9.js"
     ],
     "css": [
-      "assets/index-CUTqmCSv.css"
+      "assets/index-DUfnTfPF.css"
     ]
   }
 }

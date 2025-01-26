@@ -1,9 +1,15 @@
+import { StoreType } from '@type/storeType';
+import { WidgetType } from '@type/widgetType';
+import { FC } from 'react';
 import { CiSearch, CiShoppingCart } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 
-const AppNavigationNavbar = () => {
+const AppNavigationNavbar:FC<{
+	widget: WidgetType;
+	store: StoreType;
+}> = () => {
 	return (
-		<div className="py-2">
+		<div className="py-2 bg-white">
 			<div className="container flex justify-between">
 				<Link className="w-12 sm:w-max" to="/">
 					<img

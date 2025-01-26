@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@seller/components';
 import { FormErrorType, FormStateType } from '@seller/hooks/useForm';
 import useStore from '@seller/hooks/useStore';
 import useTheme from '@seller/hooks/useTheme';
@@ -67,6 +68,8 @@ const StoreStepThree: FC<PropsType> = function (props) {
 						</li>
 					))}
 				</ul>
+
+                {props.formErrors["message"] && <ErrorMessage>{props.formErrors["message"]}</ErrorMessage>}
 
 				<div className="mb-6 flex items-center justify-between">
 					<Button

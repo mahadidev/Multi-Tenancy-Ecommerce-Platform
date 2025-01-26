@@ -1,26 +1,18 @@
+import { IoClose } from 'react-icons/io5';
+
 import { RoutePath } from '@seller/seller_env';
 import {
     toggleIsOpenMobile,
     toggleSidebar,
 } from '@seller/store/slices/uiSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import {
-    Avatar,
-    Dropdown,
-    Navbar,
-} from 'flowbite-react';
-import {
-    HiMenuAlt1,
-    HiX,
-} from 'react-icons/hi';
-import { Link, Navigate } from 'react-router-dom';
+import { Button, Navbar } from 'flowbite-react';
+import { HiMenuAlt1, HiX } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 import { useMediaQuery } from '../../../hooks/use-media-query';
-import useAuth from '../../../hooks/useAuth';
-import useStore from '../../../hooks/useStore';
 
 export function EditorNavigation() {
 	const sidebar = useAppSelector((state) => state.ui.sidebar);
-	const { store } = useStore();
 	const dispatch = useAppDispatch();
 	const isDesktop = useMediaQuery('(min-width: 1024px)');
 
@@ -35,9 +27,9 @@ export function EditorNavigation() {
 	return (
 		<Navbar
 			fluid
-			className="fixed top-0 z-30 w-full border-b border-gray-200 bg-white p-0 sm:p-0 dark:border-gray-700 dark:bg-gray-800"
+			className="fixed top-0 z-40 w-full border-b border-gray-200 bg-white p-0 sm:p-0 dark:border-gray-700 dark:bg-gray-800"
 		>
-			<div className="w-full p-3 pr-4">
+			<div className="w-full px-3 py-0 pr-0">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center">
 						<button
@@ -60,61 +52,29 @@ export function EditorNavigation() {
 						</button>
 						<Navbar.Brand as={Link} href="/" className="mr-14">
 							<h2 className="font-semibold text-gray-900 dark:text-white">
-								{store?.name}
+								Page Editor
 							</h2>
 						</Navbar.Brand>
 					</div>
 					<div className="flex items-center lg:gap-3">
 						<div className="flex items-center">
-							<div className="ml-3 flex items-center">
-								<UserDropdown />
+							<div className="ml-3 flex  items-stretch">
+								<Button color="primary" className="rounded-none">
+									Save Changes
+								</Button>
+								<Button
+									as={Link}
+									to={RoutePath.StorePagesPage.index()}
+									color="red"
+									className="rounded-none"
+								>
+									<IoClose className="text-gray-800 dark:text-white text-2xl" />
+								</Button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</Navbar>
-	);
-}
-
-export function UserDropdown() {
-	const { user } = useAppSelector((state) => state.auth);
-	const { logOut } = useAuth();
-
-	return (
-		<Dropdown
-			className="rounded"
-			arrowIcon={false}
-			inline
-			label={
-				<span>
-					<span className="sr-only">User menu</span>
-					<Avatar
-						alt=""
-						placeholderInitials={user?.name.slice(0, 1)}
-						rounded
-						size="sm"
-						className="w-max"
-					/>
-				</span>
-			}
-		>
-			<Dropdown.Header className="px-4 py-3">
-				<span className="block text-sm">{user?.name}</span>
-				<span className="block truncate text-sm font-medium">
-					{user?.email}
-				</span>
-			</Dropdown.Header>
-			<Dropdown.Divider />
-			<Dropdown.Item
-				onClick={() =>
-					logOut.submit({
-						onSuccess: () => <Navigate to={RoutePath.LoginPage.index()} />,
-					})
-				}
-			>
-				Sign out
-			</Dropdown.Item>
-		</Dropdown>
 	);
 }
