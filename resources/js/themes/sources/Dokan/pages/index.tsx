@@ -1,6 +1,6 @@
 import { PageType } from "@/types/pageType";
 import { FC } from "react";
-import Component from "../components";
+import { Component } from "../components";
 
 const Page:FC<PageType> = function (page) {
   return (

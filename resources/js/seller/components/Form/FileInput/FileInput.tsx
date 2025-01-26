@@ -1,7 +1,7 @@
+import { FileType } from '@type/fileType';
 import { Button, FileInputProps, Modal, TextInput } from 'flowbite-react';
 import { FC, RefAttributes, useRef, useState } from 'react';
 import useFile from '../../../hooks/useFile';
-import { FileType } from '../@type/fileType';
 import GalleryCard from './GalleryCard';
 import UploadCard from './UploadCard';
 

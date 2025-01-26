@@ -2,9 +2,9 @@ import { CategoryType } from '@/types/categoryType';
 import { WidgetType } from '@type/widgetType';
 import { FC } from 'react';
 
-const Component: FC<
+export const Component: FC<
 	WidgetType & {
-		categories: CategoryType[];
+		categories?: CategoryType[];
 	}
 > = function (widget) {
 	const components: any = {
@@ -22,5 +22,3 @@ const Component: FC<
 		</>
 	);
 };
-
-export default Component;

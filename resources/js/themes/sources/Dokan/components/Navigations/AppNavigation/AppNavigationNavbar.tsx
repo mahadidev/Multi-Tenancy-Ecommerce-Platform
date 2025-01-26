@@ -1,10 +1,7 @@
-import useTheme from '@themes/hooks/useTheme';
 import { CiSearch, CiShoppingCart } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 
 const AppNavigationNavbar = () => {
-    const {theme} = useTheme();
-
 	return (
 		<div className="py-2">
 			<div className="container flex justify-between">
