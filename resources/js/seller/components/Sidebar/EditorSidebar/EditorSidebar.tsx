@@ -7,6 +7,7 @@ import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
 import { twMerge } from 'tailwind-merge';
+import WidgetEditor from '../../Layout/EditorLayout/WidgetEditor';
 
 
 export function EditorSidebar() {
@@ -61,7 +62,7 @@ function DesktopSidebar() {
 			id="sidebar"
 		>
 			<div className="flex h-full flex-col justify-between">
-				<div className="py-2"></div>
+                <WidgetEditor />
 			</div>
 		</Sidebar>
 	);
@@ -89,7 +90,7 @@ function MobileSidebar() {
 				id="sidebar"
 			>
 				<div className="flex h-full flex-col justify-between">
-					<div className="py-2"></div>
+					<WidgetEditor />
 				</div>
 			</Sidebar>
 			<div
@@ -100,4 +101,3 @@ function MobileSidebar() {
 		</>
 	);
 }
-
