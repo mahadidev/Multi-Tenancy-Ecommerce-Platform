@@ -9,15 +9,38 @@
     <meta name="base-url" content="{{ env('APP_URL') }}">
     <title>{{ env('APP_NAME') }}</title>
 
-    {{-- @viteReactRefresh
-    @vite(['resources/js/frontend/index.tsx']) --}}
+
+    <style>
+        @font-face {
+            font-family: ibrand;
+            src: url("{{ asset('fonts/ibrand/Ibrand.otf') }}");
+            font-weight: bold;
+        }
+
+        @font-face {
+            font-family: myriad;
+            src: url("{{ asset('fonts/myriad/MYRIADPRO-REGULAR.OTF') }}");
+        }
+
+        @font-face {
+            font-family: myriad;
+            src: url("{{ asset('fonts/myriad/MYRIADPRO-SEMIBOLD.OTF') }}");
+            font-weight: medium;
+        }
+
+        @font-face {
+            font-family: myriad;
+            src: url("{{ asset('fonts/myriad/MYRIADPRO-BOLD.OTF') }}");
+            font-weight: bold;
+        }
+    </style>
+
+    @viteReactRefresh
+    @vite(['resources/js/frontend/index.tsx'])
 </head>
 
 <body>
-    <div id="root">
-        <h1>Coming Soon</h1>
-        <a href="https://app.chologori.com/seller">Go to here</a>
-    </div>
+    <div id="root"></div>
 </body>
 
 </html>

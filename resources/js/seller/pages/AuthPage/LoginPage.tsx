@@ -1,7 +1,7 @@
 import { ErrorMessage } from "@seller/components";
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
-import { BASE_IMAGE_URL, RoutePath } from "@seller/seller_env";
+import { BASE_IMAGE_URL, BASE_URL, RoutePath } from "@seller/seller_env";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -20,25 +20,21 @@ const LoginPage: FC = function () {
     return (
         <>
             <div className="mx-auto flex flex-col items-center justify-center px-6 pt-8 md:h-screen">
-                <Link
-                    to="/"
+                <a
+                    href={BASE_URL}
                     className="mb-8 flex items-center justify-center text-2xl font-semibold lg:mb-10 dark:text-white"
                 >
                     <img
                         alt=""
                         src={`${BASE_IMAGE_URL}/logo-text.png`}
-                        width={43}
-                        height={44}
-                        className="mr-4 h-11 w-auto dark:hidden"
+                        className="mr-4 h-20 w-auto dark:hidden"
                     />
                     <img
                         alt=""
                         src={`${BASE_IMAGE_URL}/logo-text-dark.png`}
-                        width={43}
-                        height={44}
-                        className="mr-4 h-11 w-auto hidden dark:block"
+                        className="mr-4 h-20 w-auto hidden dark:block"
                     />
-                </Link>
+                </a>
                 <Card
                     horizontal
                     className="w-full md:max-w-screen-lg *:object-cover"
