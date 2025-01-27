@@ -32,7 +32,7 @@
                         <td>{{ $data->name ?? '' }}</td>
                         <td>{{ $data->brand->name ?? '' }}</td>
                         <td>{{ number_format($data->price, 2) ?? '' }}</td>
-                        <td>{{ $data->stock ?? '' }}</td>
+                        <td>{{ $data->stock ?? 0 }}</td>
                     </tr>
                 @endforeach
             </tbody>

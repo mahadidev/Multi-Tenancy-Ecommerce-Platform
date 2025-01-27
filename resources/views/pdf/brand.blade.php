@@ -13,7 +13,6 @@
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th>Image</th>
                     <th>Name</th>
                 </tr>
             </thead>
@@ -21,11 +20,6 @@
                 @foreach ($brands as $key => $data)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>
-                            @if($data->image)
-                            <img src="{{ public_path('storage/' . $data->image) }}" alt="{{ $data->name }}" width="50">
-                            @endif
-                        </td>
                         <td>{{ $data->name ?? '' }}</td>
                     </tr>
                 @endforeach

@@ -198,24 +198,7 @@ class BrandController extends Controller
             $fileName = 'brands_' . now()->format('Ymd_His') . '.xlsx';
 
             return Excel::download(new BrandsExport, $fileName); 
-            
-            // // Check if the request wants to force download
-            // if ($request->has('download')) {
-            //     return Excel::download(new BrandsExport, $fileName);
-            // }
-
-            // // Store the file temporarily and return a response with file info
-            // Excel::store(new BrandsExport, 'temp/' . $fileName, 'public');
-
-            // return response()->json([
-            //     'status' => 200,
-            //     'message' => 'Excel file generated successfully',
-            //     'data' => [
-            //         'filename' => $fileName,
-            //         'download_url' => url('storage/temp/' . $fileName),
-            //         'file_size' => Storage::disk('public')->size('temp/' . $fileName)
-            //     ]
-            // ]);
+           
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
