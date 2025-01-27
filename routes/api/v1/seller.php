@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
