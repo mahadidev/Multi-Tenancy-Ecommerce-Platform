@@ -3,7 +3,6 @@ import { RoutePath } from '@seller/seller_env';
 import { PageType } from '@type/pageType';
 import { Button, Checkbox, Label, Table } from 'flowbite-react';
 import { HiPencilAlt } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
 import DeletePageModal from './DeletePageModal';
 
 const PagesTable = () => {

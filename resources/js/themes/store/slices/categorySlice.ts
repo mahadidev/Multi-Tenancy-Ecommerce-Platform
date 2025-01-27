@@ -1,6 +1,6 @@
-import { dummyCategories } from '@/themes/dummyData/dummyCategories';
-import { CategoryType } from '@/types/categoryType';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { dummyCategories } from '@themes/dummyData/dummyCategories';
+import { CategoryType } from '@type/categoryType';
 
 const initialState: {
 	categories: CategoryType[] | null;

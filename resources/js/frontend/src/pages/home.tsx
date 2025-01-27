@@ -1,4 +1,4 @@
-import { HeroSection, IntroSection } from "@/frontend/src/components";
+import { HeroSection, IntroSection } from "@frontend/src/components";
 
 const HomePage = () => {
     return (

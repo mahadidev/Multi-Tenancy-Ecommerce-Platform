@@ -1,5 +1,5 @@
-import useTheme from '@/themes/hooks/useTheme';
-import { PageType } from '@/types/pageType';
+import useTheme from '@themes/hooks/useTheme';
+import { PageType } from '@type/pageType';
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppLayout from './components/Layouts/AppLayout/AppLayout';

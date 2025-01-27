@@ -1,5 +1,5 @@
-import { WidgetType } from "@/types/widgetType";
 import { StoreType } from "@type/storeType";
+import { WidgetType } from "@type/widgetType";
 import { FC } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { Link } from "react-router-dom";

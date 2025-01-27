@@ -1,4 +1,4 @@
-import { GLOBAL_APP_API_URL } from '@/global_env';
+import { GLOBAL_APP_API_URL } from '@helper/global_env';
 import { FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { clearAuth } from './slices/authSlice';
 import { RootState } from './store';

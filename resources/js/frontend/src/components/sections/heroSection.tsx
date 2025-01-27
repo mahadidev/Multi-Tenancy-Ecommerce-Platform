@@ -1,4 +1,4 @@
-import { Button } from "@/frontend/src/components";
+import { Button } from "@frontend/src/components";
 
 const HeroSection = () => {
     return (

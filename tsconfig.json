@@ -27,10 +27,11 @@
 		"target": "ESNext",
 		"types": ["vite/client"],
 		"paths": {
-			"@/*": ["./resources/js/*"],
 			"@seller/*": ["./resources/js/seller/*"],
 			"@themes/*": ["./resources/js/themes/*"],
-			"@type/*": ["./resources/js/types/*"]
+			"@type/*": ["./resources/js/types/*"],
+			"@frontend/*": ["./resources/js/frontend/*"],
+			"@helper/*": ["./resources/js/helper/*"]
 		},
 		"noImplicitAny": true
 	},

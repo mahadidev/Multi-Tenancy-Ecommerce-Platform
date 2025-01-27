@@ -1,5 +1,5 @@
-import { dummyStore } from "@/themes/dummyData/dummyStore";
-import { PageType } from "@/types/pageType";
+import { dummyStore } from "@themes/dummyData/dummyStore";
+import { PageType } from "@type/pageType";
 import { FC } from "react";
 import { Component } from "../components";
 
