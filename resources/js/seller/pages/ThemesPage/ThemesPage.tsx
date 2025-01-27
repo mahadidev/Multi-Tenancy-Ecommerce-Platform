@@ -1,4 +1,4 @@
-import { GLOBAL_APP_URL } from '@/global_env';
+import { GLOBAL_APP_URL } from '@helper/global_env';
 import useStore from '@seller/hooks/useStore';
 import useTheme from '@seller/hooks/useTheme';
 import { Button, Card } from 'flowbite-react';

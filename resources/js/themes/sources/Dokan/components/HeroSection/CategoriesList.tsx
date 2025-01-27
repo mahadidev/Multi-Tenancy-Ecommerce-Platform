@@ -1,4 +1,4 @@
-import { CategoryType } from "@/types/categoryType";
+import { CategoryType } from "@type/categoryType";
 import { FC } from "react";
 
 const CategoriesList:FC<{

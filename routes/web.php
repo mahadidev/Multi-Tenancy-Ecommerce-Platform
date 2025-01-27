@@ -12,11 +12,15 @@ Route::get('/', function () {
 Route::prefix('/seller')->group(function () {
 
     Route::get("/", function () {
-        return view("seller-panel");
+        return view("seller.seller");
     });
 
+    Route::any('/pages/{id}', function () {
+        return view("seller.page-editor");
+    })->where('any', '.*');
+
     Route::any('/{any}', function () {
-        return view("seller-panel");
+        return view("seller.seller");
     })->where('any', '.*');
 });
 
@@ -45,5 +49,5 @@ Route::get('/test', function(){
     $theme = \App\Models\Theme::with('pages.page_widgets')->first();
     $themeData = new \App\Http\Resources\ThemeResource($theme);
     return $pages = $themeData->pages;
-       
+
 });

@@ -1,4 +1,3 @@
-import { UserProfileType } from "@/types/authType";
 import {
     LoginPayloadType,
     RegisterPayloadType,
@@ -10,6 +9,7 @@ import {
     useUpdateUserMutation,
     useUpdateUserPasswordMutation,
 } from "@seller/store/reducers/authApi";
+import { UserProfileType } from "@type/authType";
 import { Toast } from "flowbite-react";
 import { useAppSelector } from "../store/store";
 

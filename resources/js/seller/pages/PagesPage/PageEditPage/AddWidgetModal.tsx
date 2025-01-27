@@ -1,6 +1,6 @@
-import { GLOBAL_APP_URL } from '@/global_env';
-import useWidget from '@/seller/hooks/useWidget';
+import { GLOBAL_APP_URL } from '@helper/global_env';
 import useTheme from '@seller/hooks/useTheme';
+import useWidget from '@seller/hooks/useWidget';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
 

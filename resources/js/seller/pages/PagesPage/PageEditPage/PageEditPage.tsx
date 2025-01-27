@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useWidget from '@/seller/hooks/useWidget';
-import GetComponent from '@/themes/getComponent';
 import usePage from '@seller/hooks/usePage';
 import useStore from '@seller/hooks/useStore';
 import useTheme from '@seller/hooks/useTheme';
+import useWidget from '@seller/hooks/useWidget';
+import GetComponent from '@themes/getComponent';
 import { Button } from 'flowbite-react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';

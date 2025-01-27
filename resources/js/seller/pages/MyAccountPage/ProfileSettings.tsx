@@ -1,6 +1,6 @@
-import useAuth from "@/seller/hooks/useAuth";
-import useForm from "@/seller/hooks/useForm";
-import { RoutePath } from "@/seller/seller_env";
+import useAuth from "@seller/hooks/useAuth";
+import useForm from "@seller/hooks/useForm";
+import { RoutePath } from "@seller/seller_env";
 import {
     Breadcrumb,
     Button,

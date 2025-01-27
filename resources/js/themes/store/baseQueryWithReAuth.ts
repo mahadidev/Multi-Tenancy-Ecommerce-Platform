@@ -1,4 +1,4 @@
-import { GLOBAL_APP_API_URL } from '@/global_env';
+import { GLOBAL_APP_API_URL } from '@helper/global_env';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 
 export const baseQuery = fetchBaseQuery({

@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FileInput } from '@/seller/components';
-import useBrand from '@/seller/hooks/useBrand';
-import useCategory from '@/seller/hooks/useCategory';
-import useForm from '@/seller/hooks/useForm';
-import useProduct from '@/seller/hooks/useProduct';
-import useString from '@/seller/hooks/useString';
-import { RoutePath } from '@/seller/seller_env';
-import { BrandType } from '@/seller/types/brandType';
-import { CategoryType } from '@/seller/types/categoryType';
+import { FileInput } from '@seller/components';
+import useBrand from '@seller/hooks/useBrand';
+import useCategory from '@seller/hooks/useCategory';
+import useForm from '@seller/hooks/useForm';
+import useProduct from '@seller/hooks/useProduct';
+import useString from '@seller/hooks/useString';
+import { RoutePath } from '@seller/seller_env';
+import { BrandType } from '@type/brandType';
+import { CategoryType } from '@type/categoryType';
 import {
     Breadcrumb,
     Button,
