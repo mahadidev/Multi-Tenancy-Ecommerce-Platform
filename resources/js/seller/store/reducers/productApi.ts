@@ -2,13 +2,8 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { PREFIX } from '@seller/seller_env';
 import { ApiResponseType } from '@type/apiType';
 import { ProductType } from '@type/productType';
-import baseQueryWithReAuth, {
-    createRequest,
-} from '../baseQueryWithReAuth';
-import {
-    setProduct,
-    setTableProducts,
-} from '../slices/productSlice';
+import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
+import { setProduct, setTableProducts } from '../slices/productSlice';
 
 export interface ProductsFetchResponseType extends ApiResponseType {
 	data: {
@@ -17,7 +12,7 @@ export interface ProductsFetchResponseType extends ApiResponseType {
 }
 
 export interface FetchProductPayloadType {
-	id: number;
+	id: number | string;
 }
 
 export interface CreateProductPayloadType {
@@ -30,7 +25,7 @@ export interface CreateProductPayloadType {
 }
 
 export interface UpdateProductPayloadType {
-    id: number;
+	id: number;
 	name?: string;
 	slug?: string;
 	category_id?: number;
@@ -39,9 +34,8 @@ export interface UpdateProductPayloadType {
 }
 
 export interface DeleteProductPayloadType {
-	id: number;
+	id: number | string;
 }
-
 
 export const productApi = createApi({
 	reducerPath: 'productApi',
@@ -73,9 +67,8 @@ export const productApi = createApi({
 				createRequest({
 					url: `${PREFIX}/product/${formData.id}`,
 					method: 'get',
-					body: formData,
 				}),
-			providesTags: ['Product'],
+			providesTags: ['Products'],
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
 				await queryFulfilled.then((response) => {
@@ -110,7 +103,7 @@ export const productApi = createApi({
 					url: `${PREFIX}/product/${formData.id}`,
 					method: 'post',
 					apiMethod: 'DELETE',
-                    body: formData
+					body: formData,
 				}),
 			invalidatesTags: ['Products'],
 			transformErrorResponse: (error: any) => error.data,
@@ -122,6 +115,6 @@ export const {
 	useFetchProductsQuery,
 	useFetchProductQuery,
 	useCreateProductMutation,
-    useUpdateProductMutation,
-    useDeleteProductMutation
+	useUpdateProductMutation,
+	useDeleteProductMutation,
 } = productApi;
