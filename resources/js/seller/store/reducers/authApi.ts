@@ -169,7 +169,7 @@ export const authApi = createApi({
                 }),
             invalidatesTags: ["UserUpdatePassword"],
             transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_queryArgument, { queryFulfilled }) {
                 await queryFulfilled.then(() => {
                     window.location.href = "/seller/login"; // send to login page
                 });
