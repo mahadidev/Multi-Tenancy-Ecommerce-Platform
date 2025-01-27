@@ -7,8 +7,10 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use App\Imports\CategoriesImport;
+use App\Exports\CategoriesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 // use App\Services\StoreService;
 use Illuminate\Http\Request;
@@ -149,6 +151,40 @@ class CategoryController extends Controller
 
         return $pdf->download('categories_' . now()->format('Ymd_His') . '.pdf');
     }
+
+    public function excel(Request $request)
+    {
+        try {
+            $fileName = 'category_' . now()->format('Ymd_His') . '.xlsx';
+
+            return Excel::download(new CategoriesExport, $fileName); 
+             // Check if the request wants to force download
+            // if ($request->has('download')) {
+            //     return Excel::download(new CategoriesExport, $fileName);
+            // }
+
+            // // Store the file temporarily and return a response with file info
+            // Excel::store(new CategoriesExport, 'temp/' . $fileName, 'public');
+
+            // return response()->json([
+            //     'status' => 200,
+            //     'message' => 'Excel file generated successfully',
+            //     'data' => [
+            //         'filename' => $fileName,
+            //         'download_url' => url('storage/temp/' . $fileName),
+            //         'file_size' => Storage::disk('public')->size('temp/' . $fileName)
+            //     ]
+            // ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to export Categories',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function import(Request $request)
     {

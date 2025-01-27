@@ -87,6 +87,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     Route::resource('/category', CategoryController::class);
     Route::get('/category/generate/pdf', [CategoryController::class, 'pdf']);
+    Route::get('/category/generate/excel', [CategoryController::class, 'excel']);
     Route::post('/category-import', [CategoryController::class, 'import']);
 
     // Product Route
