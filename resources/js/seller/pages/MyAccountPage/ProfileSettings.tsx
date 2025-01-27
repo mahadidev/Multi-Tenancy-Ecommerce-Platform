@@ -47,6 +47,8 @@ const ProfileSettingsPage: React.FC = () => {
         },
     });
 
+    console.log({ passwordUpdateFormErrors });
+
     return (
         <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4">
             <div className="col-span-full mb-4 xl:mb-2">
