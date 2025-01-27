@@ -35,23 +35,15 @@ const EditorInput: FC<WidgetInputType | WidgetInputItemType> = (
 
 			{inputOrItem.type == 'image' && (
 				<FileInput
-					name={inputOrItem.name}
-					placeholder={inputOrItem.placeholder}
-					value={inputOrItem.value}
-					required={inputOrItem.required}
+					{...inputOrItem}
 					className="!h-28"
 					onChange={onChange}
-					valueType={"url"}
+					valueType={'url'}
 				/>
 			)}
 
 			{inputOrItem.type == 'color' && (
-				<ColorInput
-					name={inputOrItem.name}
-					placeholder={inputOrItem.placeholder}
-					value={inputOrItem.value}
-					required={inputOrItem.required}
-				/>
+				<ColorInput {...inputOrItem} onChange={onChange} />
 			)}
 		</div>
 	);
