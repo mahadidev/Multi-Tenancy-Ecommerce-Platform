@@ -13,6 +13,7 @@ export default defineConfig({
 				'resources/js/app.js',
 				'resources/js/themes/index.tsx',
 				'resources/js/seller/index.tsx',
+				'resources/js/frontend/index.tsx',
 			],
 			refresh: true,
 		}),
