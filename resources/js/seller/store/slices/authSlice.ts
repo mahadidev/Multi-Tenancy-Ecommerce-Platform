@@ -1,37 +1,39 @@
-import { UserType } from "@/type/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserType } from '@type/authType';
 
 const initialState: {
-    accessToken?: string | null;
-    user?: UserType | null;
-    tokenType?: string | null;
+	user: UserType | null;
+	accessToken: string | null;
 } = {
-    accessToken: null,
-    user: null,
-    tokenType: null,
+	user: null,
+	accessToken: null,
 };
+
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        setAuth: (
-            state,
-            action: PayloadAction<{
-                access_token?: string | null;
-                user?: UserType | null;
-                token_type?: string | null;
-            }>
-        ) => {
-            state.accessToken = action.payload.access_token;
-            state.user = action.payload.user;
-            state.tokenType = action.payload.token_type;
-        },
-        removeAuth: (state) => {
+	name: 'auth',
+	initialState,
+	reducers: {
+		setUser: (state, action: PayloadAction<UserType>) => {
+			state.user = action.payload;
+		},
+		removeUser: (state) => {
+			state.user = null;
+		},
+		setAuth: (
+			state,
+			action: PayloadAction<{
+				user: UserType;
+				accessToken: string;
+			}>
+		) => {
+			state.user = action.payload.user;
+			state.accessToken = action.payload.accessToken;
+		},
+        clearAuth: (state) => {
             state.accessToken = null;
             state.user = null;
-            state.tokenType = null;
-        },
-    },
+        }
+	},
 });
-export const { setAuth, removeAuth } = authSlice.actions;
+export const { setUser, removeUser, setAuth, clearAuth } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,56 +1,94 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prefer-const */
-import React, { useEffect, useState } from "react";
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { useEffect, useState } from 'react';
 
-const useForm = (props: any) => {
-    const [formState, setFormState] = useState<any>(
-        props.defaultState ? props.defaultState : {}
-    );
-    const [formErrors, setFormErrors] = useState<any>({});
+export interface FormStateType {
+	[Key: string]: string | number;
+}
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        onChange?: CallableFunction
-    ) => {
-        let {
-            name,
-            value,
-            type,
-            files,
-        }: { name: string; value: any; type: string; files: any } = e.target;
+export interface FormErrorType {
+	[key: string]: string[] | string;
+}
 
-        if (type !== "file" && type !== "tel") {
-            if (/^\d+$/.test(value)) {
-                value = parseInt(value);
-            }
-        }
+interface ChangeEventTargetType {
+	name: string;
+	value: any;
+	type: string;
+	files: any;
+}
 
-        if (files) {
-            value = files[0];
-        }
+interface FormProps {
+	default?: FormStateType | any;
+	errors?: FormErrorType | any;
+	formValidationError?:
+		| {
+				message: string;
+				errors: FormErrorType[];
+		  }
+		| FetchBaseQueryError
+		| SerializedError
+		| undefined;
+}
 
-        if (onChange) {
-            onChange({
-                name: name,
-                value: value,
-            });
-        }
-        setFormErrors((prev: any) => ({ ...prev, [name]: null }));
-        setFormState((prev: any) => ({ ...prev, [name]: value }));
-    };
+const useForm = function (props?: FormProps) {
+	const [formState, setFormState] = useState<FormStateType | any>(
+		props?.default ?? {}
+	);
+	const [formErrors, setFormErrors] = useState<FormErrorType | any>({});
 
-    useEffect(() => {
-        if (props.errors && props.errors?.errors) {
-            setFormErrors(props.errors.errors);
-        }
-    }, [props.errors]);
+	// on change form input
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | any>,
+		onChange?: CallableFunction
+	) => {
+		let { name, value, type, files }: ChangeEventTargetType = e.target;
+		// if type text that is num convert it to int
+		if (type !== 'file' && type !== 'tel') {
+			if (/^\d+$/.test(value)) {
+				value = parseInt(value);
+			}
+		}
+		// if has files
+		if (files) {
+			value = files[0];
+		}
+		// if has on change
+		if (onChange) {
+			onChange({
+				name: name,
+				value: value,
+			});
+		}
+		setFormErrors((prev: any) => ({ ...prev, [name]: null, message: null }));
+		setFormState((prev: any) => ({ ...prev, [name]: value }));
+	};
 
-    return {
-        handleChange,
-        formState,
-        setFormState,
-        formErrors,
-        ...props,
-    };
+	// watch erros if any error set it form state error
+	useEffect(() => {
+		if (props?.errors) {
+			setFormErrors(props.errors);
+		}
+	}, [props?.errors]);
+
+	// formValidationError
+	useEffect(() => {
+		console.log(props?.formValidationError);
+		if (props && props.formValidationError) {
+			setFormErrors((prev: FormErrorType) => ({
+				...prev,
+				message:
+					props.formValidationError && 'message' in props.formValidationError
+						? props.formValidationError.message
+						: '',
+                ...(props.formValidationError && 'errors' in props.formValidationError
+						? props.formValidationError.errors : {})
+			}));
+		}
+	}, [props?.formValidationError]);
+
+	return { formState, setFormState, formErrors, setFormErrors, handleChange };
 };
 
 export default useForm;

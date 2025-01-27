@@ -1,253 +1,222 @@
-import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
+    CreatePagePayloadType,
+    DeletePagePayloadType,
+    FetchPagePayloadType,
+    pageApi,
     UpdatePagePayloadType,
-    useFetchPageQuery,
+    useCreatePageMutation,
+    useDeletePageMutation,
+    useFetchPagesQuery,
+    useFetchPageTypesQuery,
     useUpdatePageMutation,
-} from "@/seller/store/reducers/pageApi";
-import {
-    StoreType,
-    WidgetInputItemType,
-    WidgetInputType,
-    WidgetType,
-} from "@/seller/types";
-import { useParams } from "react-router-dom";
-import {
-    useDeleteWidgetMutation,
-    useFetchWidgetsQuery,
-    widgetApi,
-} from "../store/reducers/widgetApi";
-import {
-    setSelected as setPageSelected,
-    SetSelectedPayloadType,
-    setWidget as setSelectedWidget,
-    setWidgets,
-} from "../store/slices/pageSlice";
+} from '@seller/store/reducers/pageApi';
+import { useAppDispatch, useAppSelector } from '@seller/store/store';
+import { setPage } from '../store/slices/pageSlice';
 
 const usePage = () => {
-    const { currentStore } = useAppSelector((state) => state.store);
-    const { page, selected, widget, widgets, pageTypes } = useAppSelector(
-        (state) => state.page
-    );
-    const store: StoreType = currentStore;
-    const dispatch = useAppDispatch();
-    const params = useParams();
-    const { id: pageId } = params;
-    // call fetch page api
-    useFetchPageQuery({
-        storeId: store.id,
-        pageId: pageId ?? 0,
-    });
-    // call fetch page widget api
-    useFetchWidgetsQuery({
-        pageId: pageId ?? 0,
-    });
+	// fetch pages
+	useFetchPagesQuery();
+	useFetchPageTypesQuery();
 
-    const [onUpdatePage, { isLoading: isUpdateLoading, error: updateError }] =
-        useUpdatePageMutation();
-    const [
-        onAddWidgets,
-        { isLoading: isAddWidgetsLoading, error: addWidgetsError },
-    ] = useUpdatePageMutation();
-    const [
-        onDeleteWidget,
-        { isLoading: isDeleteWidgetLoading, error: deleteWidgetError },
-    ] = useDeleteWidgetMutation();
-    const [reFetchWidget] = widgetApi.endpoints.fetchWidgets.useLazyQuery();
+	// select page
+	const { pages, meta, page, pageTypes } = useAppSelector(
+		(state) => state.page
+	);
 
-    const updatePage = ({
-        pageData,
-        onSuccess,
-    }: {
-        pageData: UpdatePagePayloadType;
-        onSuccess?: CallableFunction;
-    }) => {
-        onUpdatePage({
-            storeId: store.id,
-            pageId: pageId ? pageId : 0,
-            formData: pageData,
-        }).then((response) => {
-            if (response.data.status === 200) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
+	// select widgets
+	const { widgets } = useAppSelector((state) => state.widget);
 
-    const setWidget = (widgetData: WidgetType) => {
-        dispatch(setSelectedWidget(widgetData));
-    };
+	// dispatch
+	const dispatch = useAppDispatch();
 
-    const addWidgets = ({
-        formData,
-        onSuccess,
-    }: {
-        formData: WidgetType[];
-        onSuccess?: CallableFunction;
-    }) => {
-        onAddWidgets({
-            storeId: store.id,
-            pageId: page ? page.id : 0,
-            formData: {
-                widgets: [...(page ? page.widgets : []), ...formData],
-            },
-        }).then((response) => {
-            if (response.data.status === 200) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
+	// create page
+	const [
+		handleCreate,
+		{
+			isLoading: isCreateLoading,
+			isError: isCreateError,
+			error: createError,
+			data: createData,
+		},
+	] = useCreatePageMutation();
+	const create = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: CreatePagePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleCreate(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const deleteWidget = ({
-        widgetId,
-        onSuccess,
-    }: {
-        widgetId: number;
-        onSuccess?: CallableFunction;
-    }) => {
-        onDeleteWidget({
-            pageId: pageId ? pageId : 0,
-            widgetId: widgetId,
-        }).then((response) => {
-            if (response.data.status === 200) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
+	// update page
+	const [
+		handleUpdate,
+		{
+			isLoading: isUpdateLoading,
+			isError: isUpdateError,
+			error: updateError,
+			data: updateData,
+		},
+	] = useUpdatePageMutation();
+	const update = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: UpdatePagePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleUpdate(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const setSelected = (payload: SetSelectedPayloadType) => {
-        dispatch(setPageSelected(payload));
-    };
+	// delete page
+	const [
+		handleDelete,
+		{
+			isLoading: isDeleteLoading,
+			isError: isDeleteError,
+			error: deleteError,
+			data: deleteData,
+		},
+	] = useDeletePageMutation();
+	const deletePage = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: DeletePagePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleDelete(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const onChangeWidgetInput = ({
-        event,
-        input,
-    }: {
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
-        input: WidgetInputType;
-    }) => {
-        const { value } = event.target;
-        const findWidget = widgets.find(
-            (findWidget) => findWidget.id === (widget?.id ?? 1)
-        );
+	// fetch page
+	const [
+		handleFetchPage,
+		{
+			isLoading: isFetchPageLoading,
+			isError: isFetchPageError,
+			error: fetchPageError,
+			data: fetchPageData,
+		},
+	] = pageApi.endpoints.fetchPage.useLazyQuery();
+	const fetchPage = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: FetchPagePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleFetchPage(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-        if (findWidget) {
-            dispatch(
-                setWidgets([
-                    ...widgets.filter(
-                        (filterWidget) => filterWidget.id !== findWidget.id
-                    ),
-                    {
-                        ...findWidget,
-                        inputs: [
-                            ...findWidget.inputs.filter(
-                                (filterInput) => filterInput.id !== input.id
-                            ),
-                            {
-                                ...input,
-                                value: value,
-                            },
-                        ],
-                    },
-                ])
-            );
-        }
-    };
+	// on change page input
+	const onChangePageInput = (
+		event: React.ChangeEvent<HTMLInputElement | any>
+	) => {
+		if (page) {
+			dispatch(
+				setPage({
+					...page,
+					[event.target.name]: event.target.value,
+				})
+			);
+		}
+	};
 
-    const onChangeWidgetInputItem = ({
-        event,
-        input,
-        item,
-    }: {
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
-        input: WidgetInputType;
-        item: WidgetInputItemType;
-    }) => {
-        const { value } = event.target;
-        const findWidget = widgets.find(
-            (findWidget) => findWidget.id === (widget?.id ?? 1)
-        );
+	// save page
+	const [
+		handleSavePage,
+		{
+			isLoading: isSavePageLoading,
+			isError: isSavePageError,
+			error: savePageError,
+			data: savePageData,
+		},
+	] = useUpdatePageMutation();
+	const savePage = ({ onSuccess }: { onSuccess?: CallableFunction }) => {
+		if (page) {
+			handleSavePage({
+				id: page.id,
+				name: page.name,
+				slug: page.slug,
+				title: page.title,
+				is_active: page.is_active,
+				widgets: widgets,
+			}).then((response) => {
+				if (response.data?.status === 200) {
+					if (onSuccess) {
+						onSuccess(response.data.data);
+					}
+				}
+			});
+		}
+	};
 
-        if (findWidget && widgets) {
-            dispatch(
-                setWidgets([
-                    ...widgets.filter(
-                        (filterWidget) => filterWidget.id !== findWidget.id
-                    ),
-                    {
-                        ...findWidget,
-                        inputs: [
-                            ...findWidget.inputs.filter(
-                                (filterInput) => filterInput.id !== input.id
-                            ),
-                            {
-                                ...input,
-                                items: [
-                                    ...(input.items
-                                        ? input.items.filter(
-                                              (filterItem) =>
-                                                  filterItem.id !== item.id
-                                          )
-                                        : []),
-                                    {
-                                        ...item,
-                                        value: value,
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                ])
-            );
-        }
-    };
-
-    const onWidgetReset = () => {
-        reFetchWidget({ pageId: page?.id ?? 0 }).then((response) =>
-            setWidget(response.data?.data.widgets)
-        );
-    };
-
-    const onSaveWidgets = () => {};
-
-    return {
-        updatePage: {
-            update: updatePage,
-            isLoading: isUpdateLoading,
-            error: updateError,
-        },
-        setWidget,
-        addWidgets: {
-            add: addWidgets,
-            isLoading: isAddWidgetsLoading,
-            error: addWidgetsError,
-        },
-        deleteWidget: {
-            delete: deleteWidget,
-            isLoading: isDeleteWidgetLoading,
-            error: deleteWidgetError,
-        },
-        saveWidgets: {
-            save: onSaveWidgets,
-            isLoading: false,
-            error: null,
-        },
-        onWidgetReset,
-        page,
-        widgets,
-        widget,
-        pageId: pageId,
-        store,
-        setSelected,
-        selected,
-        onChangeWidgetInput,
-        onChangeWidgetInputItem,
-        pageTypes,
-    };
+	return {
+		pages,
+		page,
+		meta,
+		pageTypes,
+		create: {
+			submit: create,
+			isLoading: isCreateLoading,
+			isError: isCreateError,
+			error: createError,
+			data: createData,
+		},
+		update: {
+			submit: update,
+			isLoading: isUpdateLoading,
+			isError: isUpdateError,
+			error: updateError,
+			data: updateData,
+		},
+		delete: {
+			submit: deletePage,
+			isLoading: isDeleteLoading,
+			isError: isDeleteError,
+			error: deleteError,
+			data: deleteData,
+		},
+		fetchPage: {
+			submit: fetchPage,
+			isLoading: isFetchPageLoading,
+			isError: isFetchPageError,
+			error: fetchPageError,
+			data: fetchPageData,
+		},
+		savePage: {
+			submit: savePage,
+			isLoading: isSavePageLoading,
+			isError: isSavePageError,
+			error: savePageError,
+			data: savePageData,
+		},
+		onChangePageInput,
+	};
 };
-
 export default usePage;

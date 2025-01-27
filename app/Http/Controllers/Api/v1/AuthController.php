@@ -11,8 +11,9 @@ use App\Models\Store;
 use App\Models\StoreSession;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Auth;
-use App\Helpers\ApiResponse;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -53,7 +54,7 @@ class AuthController extends Controller
         if ($storeSession) {
             // remove previous store id from session
             $request->session()->forget('store_id');
-            if(session()->has('store_id')){
+            if (session()->has('store_id')) {
                 session()->forget('store_id');
             }
 
@@ -70,7 +71,7 @@ class AuthController extends Controller
         if (!$storeSession) {
             $store = Store::where('owner_id', $user->id)->first();
 
-            if($store){
+            if ($store) {
                 StoreSession::updateOrCreate([
                     'user_id' => $user->id,
                 ], [
@@ -78,7 +79,7 @@ class AuthController extends Controller
                 ]);
 
                 $request->session()->forget('store_id');
-                if(session()->has('store_id')){
+                if (session()->has('store_id')) {
                     session()->forget('store_id');
                 }
 
@@ -87,9 +88,7 @@ class AuthController extends Controller
 
                 // Also set it in the request attributes
                 $request->attributes->set('store_id', $store->id);
-
             }
-
         }
 
         // Generate a Sanctum token
@@ -112,7 +111,7 @@ class AuthController extends Controller
 
         // return all stores
         $stores = Store::where(["owner_id" => $user->id])->get();
-        if($stores){
+        if ($stores) {
             $response['data']['stores'] = StoreResource::collection($stores);
         }
 
@@ -371,4 +370,75 @@ class AuthController extends Controller
             return $this->errorResponse('User is not authenticated', 400);
         });
     }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+       
+        // Generate a token for the user
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid email!'
+            ]);
+        }
+
+        $token = Password::createToken($user);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Email address matched and token generated!',
+            'data' => [
+                'email' => $request->email,
+                'token' => $token
+            ]
+        ], 200);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        // Validate the incoming request
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    
+        // Verify the token using Laravel's Password Broker
+        $user = \App\Models\User::where('email', $request->email)->first();
+    
+        if (!Password::tokenExists($user, $request->token)) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'Invalid or expired token.',
+            ], 403);
+        }
+    
+        // Token is valid; reset the password
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+    
+        // Optionally, delete the token after successful password reset
+        Password::deleteToken($user);
+    
+        return response()->json([
+            'status' => 200,
+            'message' => 'Password has been reset successfully.',
+        ], 200);
+    }
+    
 }

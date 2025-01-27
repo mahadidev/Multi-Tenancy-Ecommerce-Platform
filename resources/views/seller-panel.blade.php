@@ -33,9 +33,7 @@
     </style>
 
     @viteReactRefresh
-    @vite(['resources/js/themes/index.tsx', 'seller-panel/index.tsx'])
-
-
+    @vite(['resources/js/themes/index.tsx', 'resources/js/seller/index.tsx'])
 </head>
 
 

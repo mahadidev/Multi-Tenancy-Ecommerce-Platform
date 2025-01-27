@@ -2,12 +2,19 @@
 
 namespace Database\Seeders;
 
+use App\Http\Resources\ThemeResource;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\StorePage;
+use App\Models\StorePageWidget;
+use App\Models\StorePageWidgetInput;
+use App\Models\StorePageWidgetInputItem;
+use App\Models\Theme;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class SellerAccountSeeder extends Seeder
 {
@@ -19,24 +26,111 @@ class SellerAccountSeeder extends Seeder
         // Ensure the 'store-owner' role exists
         $role = Role::firstOrCreate(['name' => 'seller']);
 
-        $store = Store::get();
+        // Find the user by email or create a new one
+        $user = User::updateOrCreate(
+            ['email' => 'team@chologori.com'], // Search criteria
+            [
+                // Data to update or create
+                'name' => 'Chologori-Team',
+                'password' => Hash::make('123'), // Default password
+            ],
+        );
 
-        if ($store->count() <= 0) {
+        // Assign the 'store-owner' role to the user
+        if (!$user->hasRole($role->name)) {
+            $user->assignRole($role);
+        }
 
-            // Create 10 users with unique emails and the 'store-owner' role
-            for ($i = 1; $i <= 10; $i++) {
-                
-                $user = User::create([
-                    'name' => "Store Owner $i",
-                    'email' => "store$i@example.com",
-                    'password' => Hash::make('password'), // Default password
-                ]);
+        $store = Store::updateOrCreate(
+            [
+                'owner_id' => $user->id,
+                'domain' => 'goody-bro',
+                'slug' => 'goody-bro',
+            ],
+            [
+                'name' => 'Goody Bro',
+                'currency' => 'BDT',
+                'status' => 1,
+            ],
+        );
 
-                // Assign the 'store-owner' role to the user
-                $user->assignRole($role);
-            }
-        } 
-
+        $theme = Theme::with('pages.page_widgets')->first();
+        $themeData = new \App\Http\Resources\ThemeResource($theme);
         
+        if ($theme) {
+            $store->update(['theme_id' => $theme->id]);
+            $pages = $themeData->pages;
+
+            if ($pages) {
+                foreach ($pages as $page) {
+                    if (isset($page)) {
+                        $storePage = StorePage::updateOrCreate(
+                            [
+                                'store_id' => $store->id,
+                                'name' => $page['name'],
+                            ],
+                            [
+                                'type' => $page['type'],
+                                'slug' => $page['slug'],
+                                'title' => $page['title'],
+                                'is_active' => true,
+                            ],
+                        );
+
+                        if (isset($page['page_widgets'])) {
+                            foreach ($page['page_widgets'] as $key => $widget) {
+                                $storePageWidget = StorePageWidget::updateOrCreate(
+                                    [
+                                        'store_page_id' => $storePage->id,
+                                        'name' => $widget['name'],
+                                    ],
+                                    [
+                                        'label' => $widget['label'] ?? null,
+                                        'serial' => $key + 1,
+                                    ]
+                                );
+                        
+                                if (isset($widget['inputs'])) {
+                                    foreach (json_decode($widget['inputs']) as $inputKey => $input) {
+                                        $storePageWidgetInput = StorePageWidgetInput::updateOrCreate(
+                                            [
+                                                'widget_id' => $storePageWidget->id,
+                                                'name' => $input->name,
+                                            ],
+                                            [
+                                                'label' => $input->label ?? null,
+                                                'placeholder' => $input->placeholder ?? null,
+                                                'value' => $input->value ?? null,
+                                                'required' => $input->required ?? false,
+                                                'type' => $input->type ?? null,
+                                            ]
+                                        );
+                                        
+                                        if (isset($input->items)) {
+                                            foreach ($input->items as $itemKey => $item) {
+                                                $storePageWidgetInputItems = StorePageWidgetInputItem::updateOrCreate(
+                                                    [
+                                                        'widget_input_id' => $storePageWidgetInput->id,
+                                                        'name' => $item->name,
+                                                    ],
+                                                    [
+                                                        'label' => $item->label ?? null,
+                                                        'placeholder' => $item->placeholder ?? null,
+                                                        'value' => $item->value ?? null,
+                                                        'required' => $item->required ?? false,
+                                                        'type' => $item->type ?? null,
+                                                    ]
+                                                );
+                                            }
+                                        }
+                                       
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

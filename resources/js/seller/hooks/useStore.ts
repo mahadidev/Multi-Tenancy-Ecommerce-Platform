@@ -1,160 +1,163 @@
-import { useAppSelector } from "@/seller/store";
 import {
+    CreateStorePayloadType,
     UpdateStorePayloadType,
+    useCreateStoreMutation,
+    useFetchStoresQuery,
     useUpdateStoreMutation,
-} from "@/seller/store/reducers/storeApi";
-import { SocialMediaType, StoreType } from "@/seller/types";
-import {
-    StoreSocialMediaPayloadType,
-    useDeleteSocialMediaMutation,
-    useStoreSocialMediaMutation,
-} from "../store/reducers/socialMediaApi";
+} from '@seller/store/reducers/storeApi';
+import { useAppSelector } from '@seller/store/store';
 
 const useStore = () => {
-    const { currentStore } = useAppSelector((state) => state.store);
-    const store: StoreType = currentStore;
+	// fetch stores
+	useFetchStoresQuery();
+	// select store
+	const { store, stores } = useAppSelector((state) => state.store);
 
-    const [onUpdate, { isLoading: isUpdateLoading, error: updateError }] =
-        useUpdateStoreMutation();
-    const [
-        onActiveTheme,
-        { isLoading: isThemeActiveLoading, error: themeActiveError },
-    ] = useUpdateStoreMutation();
-    const [
-        onDeActiveTHeme,
-        { isLoading: isThemeDeActiveLoading, error: themeDeActiveError },
-    ] = useUpdateStoreMutation();
-    const [
-        onAddSocialMedia,
-        { isLoading: isAddSocialMediaLoading, error: addSocialMediaError },
-    ] = useStoreSocialMediaMutation();
-    const [
-        onRemoveSocialMedia,
-        {
-            isLoading: isRemoveSocialMediaLoading,
-            error: removeSocialMediaError,
-        },
-    ] = useDeleteSocialMediaMutation();
-    const [
-        onResetSettings,
-        { isLoading: isResetSettingsLoading, error: resetSettingsError },
-    ] = useUpdateStoreMutation();
+	// create store
+	const [
+		handleCreate,
+		{
+			isLoading: isCreateLoading,
+			isError: isCreateError,
+			error: createError,
+			data: createData,
+		},
+	] = useCreateStoreMutation();
+	const create = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: CreateStorePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleCreate(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const updateStore = ({
-        storeData,
-    }: {
-        storeData: UpdateStorePayloadType;
-    }) => {
-        onUpdate({
-            storeId: store.id,
-            formData: storeData,
-        });
-    };
+	// update store
+	const [
+		handleUpdate,
+		{
+			isLoading: isUpdateLoading,
+			isError: isUpdateError,
+			error: updateError,
+			data: updateData,
+		},
+	] = useUpdateStoreMutation();
+	const update = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: UpdateStorePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleUpdate(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const activeTheme = (theme_id: number | "none") => {
-        onActiveTheme({
-            storeId: store.id,
-            formData: {
-                theme_id: theme_id,
-            },
-        });
-    };
+	// active theme
+	const [
+		handleActiveTheme,
+		{
+			isLoading: isActiveThemeLoading,
+			isError: isActiveThemeError,
+			error: activeThemeError,
+			data: activeThemeData,
+		},
+	] = useUpdateStoreMutation();
+	const activeTheme = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: {
+			theme_id: number;
+		};
+		onSuccess?: CallableFunction;
+	}) => {
+		if (store) {
+			handleActiveTheme({
+				id: store.id,
+				theme_id: formData.theme_id,
+			}).then((response) => {
+				if (response.data?.status === 200) {
+					if (onSuccess) {
+						onSuccess(response.data.data);
+					}
+				}
+			});
+		}
+	};
 
-    const deActiveTheme = () => {
-        onDeActiveTHeme({
-            storeId: store.id,
-            formData: {
-                theme_id: "none",
-            },
-        });
-    };
+	// deactive theme
+	const [
+		handleDeactiveTheme,
+		{
+			isLoading: isDeactiveThemeLoading,
+			isError: isDeactiveThemeError,
+			error: deactiveThemeError,
+			data: deactiveThemeData,
+		},
+	] = useUpdateStoreMutation();
+	const deactiveTheme = ({
+		onSuccess,
+	}: {
+		onSuccess?: CallableFunction;
+	}) => {
+		if (store) {
+			handleDeactiveTheme({
+				id: store.id,
+				theme_id: "none",
+			}).then((response) => {
+				if (response.data?.status === 200) {
+					if (onSuccess) {
+						onSuccess(response.data.data);
+					}
+				}
+			});
+		}
+	};
 
-    const addSocialMedia = ({
-        formData,
-        onSuccess,
-    }: {
-        formData: StoreSocialMediaPayloadType;
-        onSuccess?: CallableFunction;
-    }) => {
-        onAddSocialMedia({
-            formData: formData,
-        }).then((response) => {
-            if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
-
-    const removeSocialMedia = ({
-        formData,
-        onSuccess,
-    }: {
-        formData: SocialMediaType;
-        onSuccess?: CallableFunction;
-    }) => {
-        onRemoveSocialMedia({
-            socialMediaId: formData.id,
-        }).then((response) => {
-            if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
-
-    const resetSettings = ({ onSuccess }: { onSuccess?: CallableFunction }) => {
-        onResetSettings({
-            storeId: store.id,
-            formData: {
-                settings: {
-                    social_media: [],
-                },
-            },
-        }).then((response) => {
-            if (response.data.status) {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            }
-        });
-    };
-
-    return {
-        updateStore: {
-            update: updateStore,
-            loading: isUpdateLoading,
-            error: updateError,
-        },
-        activeTheme: {
-            active: activeTheme,
-            loading: isThemeActiveLoading,
-            error: themeActiveError,
-        },
-        deActiveTheme: {
-            deactive: deActiveTheme,
-            loading: isThemeDeActiveLoading,
-            error: themeDeActiveError,
-        },
-        addSocialMedia: {
-            add: addSocialMedia,
-            loading: isAddSocialMediaLoading,
-            error: addSocialMediaError,
-        },
-        removeSocialMedia: {
-            remove: removeSocialMedia,
-            loading: isRemoveSocialMediaLoading,
-            error: removeSocialMediaError,
-        },
-        resetSettings: {
-            reset: resetSettings,
-            loading: isResetSettingsLoading,
-            error: resetSettingsError,
-        },
-        store: store,
-    };
+	return {
+		store,
+		stores,
+		create: {
+			submit: create,
+			isLoading: isCreateLoading,
+			isError: isCreateError,
+			error: createError,
+			data: createData,
+		},
+		update: {
+			submit: update,
+			isLoading: isUpdateLoading,
+			isError: isUpdateError,
+			error: updateError,
+			data: updateData,
+		},
+		activeTheme: {
+			submit: activeTheme,
+			isLoading: isActiveThemeLoading,
+			isError: isActiveThemeError,
+			error: activeThemeError,
+			data: activeThemeData,
+		},
+		deactiveTheme: {
+			submit: deactiveTheme,
+			isLoading: isDeactiveThemeLoading,
+			isError: isDeactiveThemeError,
+			error: deactiveThemeError,
+			data: deactiveThemeData,
+		},
+	};
 };
-
 export default useStore;

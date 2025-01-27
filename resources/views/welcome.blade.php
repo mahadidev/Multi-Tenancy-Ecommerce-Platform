@@ -9,12 +9,15 @@
     <meta name="base-url" content="{{ env('APP_URL') }}">
     <title>{{ env('APP_NAME') }}</title>
 
-    @viteReactRefresh
-    @vite(['resources/js/frontend/index.tsx'])
+    {{-- @viteReactRefresh
+    @vite(['resources/js/frontend/index.tsx']) --}}
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <h1>Coming Soon</h1>
+        <a href="https://app.chologori.com/seller">Go to here</a>
+    </div>
 </body>
 
 </html>

@@ -1,47 +1,39 @@
-import { StoreType } from "@/seller/types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { StoreType } from '@type/storeType';
 
 const initialState: {
-    stores: StoreType[] | any;
-    currentStore: StoreType | any | null;
+	store: StoreType | null;
+    stores: StoreType[] | null
 } = {
-    stores: [],
-    currentStore: null,
+	store: null,
+    stores: []
 };
+
 const storeSlice = createSlice({
-    name: "store",
-    initialState,
-    reducers: {
-        setStoreResponse: (
-            state,
-            action: PayloadAction<{
-                stores: [];
-                currentStore: any;
-            }>
-        ) => {
-            state.stores = action.payload.stores;
-            state.currentStore = action.payload.currentStore;
-        },
-        setStores: (state, action: PayloadAction<[]>) => {
-            state.stores = action.payload;
-        },
-        addStore: (state, action: PayloadAction<any>) => {
-            state.stores = [...state.stores, action.payload];
-        },
-        setCurrentStore: (state, action: PayloadAction<any>) => {
-            state.currentStore = action.payload;
-        },
-        removeStore: (state) => {
-            state.stores = null;
-            state.currentStore = null;
-        },
-    },
+	name: 'store',
+	initialState,
+	reducers: {
+		setStore: (state, action: PayloadAction<StoreType>) => {
+			state.store = action.payload;
+		},
+		setStores: (state, action: PayloadAction<StoreType[]>) => {
+			state.stores = action.payload;
+		},
+		setAuthStore: (
+			state,
+			action: PayloadAction<{
+				store: StoreType;
+				stores: StoreType[];
+			}>
+		) => {
+			state.store = action.payload.store;
+			state.stores = action.payload.stores;
+		},
+		clearStore: (state) => {
+			state.store = null;
+			state.stores = [];
+		},
+	},
 });
-export const {
-    setStores,
-    addStore,
-    setCurrentStore,
-    removeStore,
-    setStoreResponse,
-} = storeSlice.actions;
+export const { setStore, setStores, setAuthStore, clearStore } = storeSlice.actions;
 export default storeSlice.reducer;

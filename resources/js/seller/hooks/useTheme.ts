@@ -1,15 +1,52 @@
-import { useAppSelector } from "@/seller/store";
-import { useFetchThemeQuery } from "@/seller/store/reducers/themeApi";
+import {
+    FetchThemePayloadType,
+    themeApi,
+    useFetchThemesQuery,
+} from '@seller/store/reducers/themeApi';
+import { useAppSelector } from '@seller/store/store';
 
 const useTheme = () => {
-    const { store, theme } = useAppSelector((state) => state);
-    // fetch theme
-    useFetchThemeQuery(store.currentStore.theme_id);
+	// fetch themes
+	useFetchThemesQuery();
+	// get themes
+	const { theme, themes } = useAppSelector((state) => state.theme);
 
-    return {
-        theme: theme.theme,
-        themes: theme.themes,
-    };
+	// fetch theme by slug or id
+	const [
+		handleFetchThemeBySlugOrID,
+		{
+			isLoading: isFetchThemeBySlugOrIDLoading,
+			isError: isFetchThemeBySlugOrIDError,
+			error: fetchThemeBySlugOrIDError,
+			data: fetchThemeBySlugOrIDData,
+		},
+	] = themeApi.endpoints.fetchTheme.useLazyQuery();
+	const fetchThemeBySlugOrId = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: FetchThemePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleFetchThemeBySlugOrID(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
+
+	return {
+		theme,
+		themes,
+		fetchThemeBySlugOrId: {
+			submit: fetchThemeBySlugOrId,
+			isLoading: isFetchThemeBySlugOrIDLoading,
+			isError: isFetchThemeBySlugOrIDError,
+			error: fetchThemeBySlugOrIDError,
+			data: fetchThemeBySlugOrIDData,
+		},
+	};
 };
-
 export default useTheme;

@@ -1,0 +1,47 @@
+export interface WidgetInputItemType {
+	id: number;
+	name: string;
+	label: string;
+	placeholder?: string;
+	value: string;
+	widget_input_id: number;
+	required: boolean;
+	type:
+		| 'text'
+		| 'image'
+		| 'file'
+		| 'textarea'
+		| 'email'
+		| 'tel'
+		| 'array'
+		| 'color';
+}
+export interface WidgetInputType {
+	id: number;
+	name: string;
+	label: string;
+	placeholder?: string;
+	value?: string;
+	required?: boolean;
+	type:
+		| 'text'
+		| 'image'
+		| 'file'
+		| 'textarea'
+		| 'email'
+		| 'tel'
+		| 'array'
+		| 'color';
+	items?: WidgetInputItemType[];
+}
+
+export interface WidgetType {
+	id: number;
+	store_page_id: number;
+	name: string;
+	label: string;
+	serial: number;
+	created_at: string;
+	updated_at: string;
+	inputs: WidgetInputType[];
+}

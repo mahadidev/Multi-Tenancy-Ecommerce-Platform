@@ -37,4 +37,13 @@ Route::prefix('/themes')->group(function () {
 
 
 //test
-Route::get('/test', [OrderController::class, 'test']);
+Route::get('/test', function(){
+    // $theme = \App\Models\Theme::with('pages.page_widgets')->first();
+    // $data = new \App\Http\Resources\ThemeResource($theme);
+    // return $data->pages;
+
+    $theme = \App\Models\Theme::with('pages.page_widgets')->first();
+    $themeData = new \App\Http\Resources\ThemeResource($theme);
+    return $pages = $themeData->pages;
+       
+});

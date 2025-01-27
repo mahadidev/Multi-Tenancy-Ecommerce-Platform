@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,8 +32,12 @@ class StoreResource extends JsonResource
             'primary_color' => $this->primary_color,
             'secondary_color' => $this->secondary_color,
             'theme_id' => $this->theme_id,
+            "theme" => $this->theme_id ? new ThemeResource(Theme::where(["id" => $this->theme_id])->first()) : null,
             'settings' => $this->settings !== "null" ? $this->settings : null,
             'social_media' => $this->socialMedia ? StoreSocialMediaResource::collection($this->socialMedia) : [],
+            'categories' => $this->categories ? CategoryResource::collection($this->categories) : [],
+            'brands' => $this->brands ? BrandResource::collection($this->brands) : [],
+            'pages' => $this->pages ? StorePagesResource::collection($this->pages) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

@@ -1,80 +1,111 @@
-import { RoutePath } from "@/seller/env";
-import { useAppDispatch, useAppSelector } from "@/seller/store";
 import {
-    authApi,
     LoginPayloadType,
     RegisterPayloadType,
-    useLoginUserMutation,
-    useRegisterUserMutation,
-} from "@/seller/store/reducers/authApi";
-import { storeApi } from "@/seller/store/reducers/storeApi";
-import { useNavigate } from "react-router-dom";
-import { removeAuth, setAuth } from "../store/slices/authSlice";
-import { removeStore, setStoreResponse } from "../store/slices/storeSlice";
+    useLoginMutation,
+    useLogOutMutation,
+    useRegisterMutation,
+} from '@seller/store/reducers/authApi';
 
 const useAuth = () => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const { user } = useAppSelector((state) => state.auth);
+	// login
+	const [
+		handleLogin,
+		{
+			isLoading: isLoginLoading,
+			isError: isLoginError,
+			error: loginError,
+			data: loginData,
+		},
+	] = useLoginMutation();
+	const login = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: LoginPayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleLogin(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const [onLogin, { isLoading: isLoginLoading, error: isLoginError }] =
-        useLoginUserMutation();
-    const [
-        onRegister,
-        { isLoading: isRegisterLoading, error: isRegisterError },
-    ] = useRegisterUserMutation();
+	// register
+	const [
+		handleRegister,
+		{
+			isLoading: isRegisterLoading,
+			isError: isRegisterError,
+			error: registerError,
+			data: registerData,
+		},
+	] = useRegisterMutation();
 
-    const login = (props: LoginPayloadType) => {
-        onLogin(props).then((response: any) => {
-            if (response.data.status === 200) {
-                dispatch(
-                    setAuth({
-                        access_token: response.data.data.access_token,
-                        token_type: response.data.data.token_type,
-                        user: response.data.data.user,
-                    })
-                );
-                if (response.data.data.logged_store) {
-                    dispatch(
-                        setStoreResponse({
-                            stores: response.data.data.user.stores,
-                            currentStore: response.data.data.logged_store,
-                        })
-                    );
-                    navigate(RoutePath.dashboard);
-                } else {
-                    navigate(RoutePath.storeOnboard);
-                }
-            }
-        });
-    };
+	const register = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: RegisterPayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleRegister(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const register = (props: RegisterPayloadType) => {
-        onRegister(props).then((response: any) => {
-            if (response.data.status === 200) {
-                navigate(RoutePath.storeOnboard);
-            }
-        });
-    };
+	// login
+	const [
+		handleLogOut,
+		{
+			isLoading: isLogOutLoading,
+			isError: isLogOutError,
+			data: logOutData,
+		},
+	] = useLogOutMutation();
+	const logOut = ({
+		onSuccess,
+	}: {
+		onSuccess?: CallableFunction;
+	}) => {
+		handleLogOut().then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
 
-    const loggedOut = () => {
-        dispatch(removeAuth());
-        dispatch(removeStore());
-        dispatch(storeApi.util.resetApiState());
-        dispatch(authApi.util.resetApiState());
-        navigate(RoutePath.login);
-    };
-
-    return {
-        loggedOut,
-        login,
-        isLoginLoading,
-        isLoginError,
-        register,
-        isRegisterLoading,
-        isRegisterError,
-        user,
-    };
+	return {
+		login: {
+			submit: login,
+			isLoading: isLoginLoading,
+			isError: isLoginError,
+			error: loginError,
+			data: loginData,
+		},
+		register: {
+			submit: register,
+			isLoading: isRegisterLoading,
+			isError: isRegisterError,
+			error: registerError,
+			data: registerData,
+		},
+        logOut: {
+            submit: logOut,
+            isLoading: isLogOutLoading,
+            isError: isLogOutError,
+            error: isLogOutError,
+            data: logOutData
+        }
+	};
 };
 
 export default useAuth;

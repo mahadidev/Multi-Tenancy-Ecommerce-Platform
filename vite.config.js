@@ -3,7 +3,7 @@ import fs from "fs";
 import laravel from "laravel-vite-plugin";
 import path from 'path';
 import { defineConfig } from "vite";
-import { ThemesJson } from "./resources/js/themes/themes";
+import { ThemesJson } from "./resources/js/themes/ThemesJson";
 
 
 export default defineConfig({
@@ -12,11 +12,8 @@ export default defineConfig({
 			input: [
 				'resources/css/app.css',
 				'resources/js/app.js',
-				'resources/js/frontend/index.tsx',
-				'resources/js/seller/index.tsx',
 				'resources/js/themes/index.tsx',
-				'seller-panel/index.tsx',
-				'themes/index.tsx',
+				'resources/js/seller/index.tsx',
 			],
 			refresh: true,
 		}),
@@ -37,16 +34,20 @@ export default defineConfig({
 	resolve: {
 		alias: [
 			{
-				find: '@seller-panel',
-				replacement: path.resolve(__dirname, 'seller-panel'),
+				find: '@',
+				replacement: path.resolve(__dirname, 'resources/js'),
+			},
+			{
+				find: '@seller',
+				replacement: path.resolve(__dirname, 'resources/js/seller'),
 			},
 			{
 				find: '@themes',
-				replacement: path.resolve(__dirname, 'themes'),
+				replacement: path.resolve(__dirname, 'resources/js/themes'),
 			},
 			{
-				find: '@',
-				replacement: path.resolve(__dirname, 'resources/js'),
+				find: '@type',
+				replacement: path.resolve(__dirname, 'resources/js/types'),
 			},
 		],
 	},
