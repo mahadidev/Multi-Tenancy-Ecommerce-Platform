@@ -15,7 +15,6 @@
     "isEntry": true
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-DSTT_Mai.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
