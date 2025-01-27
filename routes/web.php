@@ -28,21 +28,22 @@ Route::prefix("/sites")->group(function () {
     Route::get("/{slug}", function($slug){
         return view("site.index", ["slug" => $slug]);
     });
+
+    Route::prefix("/{slug}")->group(function () {
+        Route::get("/{any}", function ($slug) {
+            return view("site.index", ["slug" => $slug]);
+        })->where('any', '.*');
+    });
 });
 
 
 Route::prefix("/themes")->group(function () {
     Route::get("/{slug}", [ThemeController::class, "show"]);
-});
-
-
-Route::prefix('/themes')->group(function () {
 
     Route::prefix("/{slug}")->group(function () {
         Route::get("/{any}", [ThemeController::class, "show"])->where('any', '.*');
         ;
     });
-
 });
 
 
