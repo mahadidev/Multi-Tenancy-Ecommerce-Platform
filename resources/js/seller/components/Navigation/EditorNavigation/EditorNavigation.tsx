@@ -74,8 +74,7 @@ export function EditorNavigation() {
 									Save Changes
 								</Button>
 								<Button
-									as={Link}
-									to={RoutePath.StorePagesPage.index()}
+									href={RoutePath.StorePagesPage.indexUrl()}
 									color="red"
 									className="rounded-none"
 								>

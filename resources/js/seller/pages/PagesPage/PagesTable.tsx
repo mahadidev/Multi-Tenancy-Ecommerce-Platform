@@ -62,7 +62,7 @@ const PagesTable = () => {
 						</Table.Cell>
 						<Table.Cell>
 							<div className="flex items-center gap-x-3 whitespace-nowrap">
-								<Button as={Link} to={RoutePath.StorePagesPage.edit(page.id)} size="sm" color="primary" className="p-0">
+								<Button href={RoutePath.StorePagesPage.editUrl(page.id)} size="sm" color="primary" className="p-0">
 									<div className="flex items-center gap-x-2">
 										<HiPencilAlt className="h-5 w-5" />
 										Edit Page

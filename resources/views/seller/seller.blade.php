@@ -13,27 +13,31 @@
     <style>
         @font-face {
             font-family: ibrand;
-            src: url("{{ asset("fonts/ibrand/Ibrand.otf") }}");
+            src: url("{{ asset('fonts/ibrand/Ibrand.otf') }}");
             font-weight: bold;
         }
+
         @font-face {
             font-family: myriad;
-            src: url("{{ asset("fonts/myriad/MYRIADPRO-REGULAR.OTF") }}");
+            src: url("{{ asset('fonts/myriad/MYRIADPRO-REGULAR.OTF') }}");
         }
+
         @font-face {
             font-family: myriad;
-            src: url("{{ asset("fonts/myriad/MYRIADPRO-SEMIBOLD.OTF") }}");
+            src: url("{{ asset('fonts/myriad/MYRIADPRO-SEMIBOLD.OTF') }}");
             font-weight: medium;
         }
+
         @font-face {
             font-family: myriad;
-            src: url("{{ asset("fonts/myriad/MYRIADPRO-BOLD.OTF") }}");
+            src: url("{{ asset('fonts/myriad/MYRIADPRO-BOLD.OTF') }}");
             font-weight: bold;
         }
     </style>
 
     @viteReactRefresh
-    @vite(['resources/js/themes/index.tsx', 'resources/js/seller/index.tsx'])
+    {{-- @vite(['resources/js/themes/index.tsx', 'resources/js/seller/index.tsx']) --}}
+    @vite(['resources/js/seller/index.tsx'])
 </head>
 
 
