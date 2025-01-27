@@ -6,7 +6,9 @@ import {
     useLoginMutation,
     useLogOutMutation,
     useRegisterMutation,
+    UserUpdatePasswordPayloadType,
     useUpdateUserMutation,
+    useUpdateUserPasswordMutation,
 } from "@seller/store/reducers/authApi";
 import { Toast } from "flowbite-react";
 import { useAppSelector } from "../store/store";
@@ -90,7 +92,7 @@ const useAuth = () => {
 
     // update user profile
     const [
-        handleUpdate,
+        handleUpdateUser,
         {
             isLoading: isUpdateLoading,
             isError: isUpdateError,
@@ -105,10 +107,37 @@ const useAuth = () => {
         formData: UserProfileType;
         onSuccess?: CallableFunction;
     }) => {
-        handleUpdate(formData).then((response) => {
+        handleUpdateUser(formData).then((response) => {
             if (response.data?.status === 200) {
                 if (onSuccess) {
                     onSuccess(response.data.data);
+                }
+            }
+        });
+    };
+
+    // update user password
+    const [
+        handleUpdateUserPassword,
+        {
+            isLoading: isUpdatePasswordLoading,
+            isError: isUpdatePasswordError,
+            error: updatePasswordError,
+            data: updatePasswordData,
+        },
+    ] = useUpdateUserPasswordMutation();
+    const updatePassword = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: UserUpdatePasswordPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleUpdateUserPassword(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                    console.log(response.data.data);
                     Toast({ title: "Profile updated successfully" });
                 }
             }
@@ -144,6 +173,13 @@ const useAuth = () => {
             isError: isUpdateError,
             error: updateError,
             data: updateData,
+        },
+        updatePassword: {
+            submit: updatePassword,
+            isLoading: isUpdatePasswordLoading,
+            isError: isUpdatePasswordError,
+            error: updatePasswordError,
+            data: updatePasswordData,
         },
     };
 };

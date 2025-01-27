@@ -44,7 +44,12 @@ export interface UserResponseType extends ApiResponseType {
 export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery: baseQuery,
-    tagTypes: ["User", "LoggedInUser", "UserProfileUpdate"],
+    tagTypes: [
+        "User",
+        "LoggedInUser",
+        "UserProfileUpdate",
+        "UserUpdatePassword",
+    ],
     endpoints: (builder) => ({
         login: builder.mutation<LoginResponseType, LoginPayloadType>({
             query: (formData) =>
@@ -150,6 +155,26 @@ export const authApi = createApi({
                 });
             },
         }),
+
+        // update user password
+        updateUserPassword: builder.mutation<
+            ApiResponseType,
+            UserUpdatePasswordPayloadType
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/profile/password-change`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["UserUpdatePassword"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then(() => {
+                    window.location.href = "/seller/login"; // send to login page
+                });
+            },
+        }),
     }),
 });
 
@@ -158,5 +183,12 @@ export const {
     useRegisterMutation,
     useLogOutMutation,
     useFetchUserQuery,
+    useUpdateUserPasswordMutation,
     useUpdateUserMutation,
 } = authApi;
+
+export interface UserUpdatePasswordPayloadType {
+    old_password: string;
+    password: string;
+    confirm_password: string;
+}

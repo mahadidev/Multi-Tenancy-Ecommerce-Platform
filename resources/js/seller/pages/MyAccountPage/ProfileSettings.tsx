@@ -14,9 +14,14 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 
 const ProfileSettingsPage: React.FC = () => {
-    const { userProfileData: user, update } = useAuth();
+    const { userProfileData: user, update, updatePassword } = useAuth();
 
-    const { handleChange, formState, formErrors } = useForm({
+    // update profile information form
+    const {
+        handleChange: profileSettingsHandleChange,
+        formState: profileSettingsFormState,
+        formErrors: profileSettingsFormErrors,
+    } = useForm({
         formValidationError: update.error,
         default: {
             // id: user?.id,
@@ -24,6 +29,21 @@ const ProfileSettingsPage: React.FC = () => {
             phone: user?.phone,
             email: user?.email,
             address: user?.address,
+        },
+    });
+
+    // change password form
+    const {
+        handleChange: passwordUpdateHandleChange,
+        formState: passwordUpdateFormState,
+        formErrors: passwordUpdateFormErrors,
+    } = useForm({
+        formValidationError: updatePassword.error,
+        default: {
+            // id: user?.id,
+            old_password: "",
+            password: "",
+            confirm_password: "",
         },
     });
 
@@ -47,6 +67,8 @@ const ProfileSettingsPage: React.FC = () => {
                     </h1>
                 </div>
             </div>
+
+            {/* seller profile settings */}
             <Card>
                 <h3 className="mb-4 text-xl font-bold dark:text-white">
                     Profile information
@@ -61,17 +83,21 @@ const ProfileSettingsPage: React.FC = () => {
                                 id="name"
                                 placeholder="Your name"
                                 type="text"
-                                value={formState["name"]}
-                                color={formErrors["name"] ? "failure" : "gray"}
+                                value={profileSettingsFormState["name"]}
+                                color={
+                                    profileSettingsFormErrors["name"]
+                                        ? "failure"
+                                        : "gray"
+                                }
                                 helperText={
-                                    formErrors["name"]
-                                        ? formErrors["name"][0]
+                                    profileSettingsFormErrors["name"]
+                                        ? profileSettingsFormErrors["name"][0]
                                         : false
                                 }
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
                                 ) => {
-                                    handleChange(event);
+                                    profileSettingsHandleChange(event);
                                 }}
                                 required
                             />
@@ -84,17 +110,21 @@ const ProfileSettingsPage: React.FC = () => {
                                 id="email"
                                 placeholder="Your Email"
                                 type="email"
-                                value={formState["email"]}
-                                color={formErrors["email"] ? "failure" : "gray"}
+                                value={profileSettingsFormState["email"]}
+                                color={
+                                    profileSettingsFormErrors["email"]
+                                        ? "failure"
+                                        : "gray"
+                                }
                                 helperText={
-                                    formErrors["email"]
-                                        ? formErrors["email"][0]
+                                    profileSettingsFormErrors["email"]
+                                        ? profileSettingsFormErrors["email"][0]
                                         : false
                                 }
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
                                 ) => {
-                                    handleChange(event);
+                                    profileSettingsHandleChange(event);
                                 }}
                                 required
                                 disabled
@@ -109,17 +139,21 @@ const ProfileSettingsPage: React.FC = () => {
                                 id="phone"
                                 placeholder="Your phone number"
                                 type="tel"
-                                value={formState["phone"]}
-                                color={formErrors["phone"] ? "failure" : "gray"}
+                                value={profileSettingsFormState["phone"]}
+                                color={
+                                    profileSettingsFormErrors["phone"]
+                                        ? "failure"
+                                        : "gray"
+                                }
                                 helperText={
-                                    formErrors["phone"]
-                                        ? formErrors["phone"][0]
+                                    profileSettingsFormErrors["phone"]
+                                        ? profileSettingsFormErrors["phone"][0]
                                         : false
                                 }
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
                                 ) => {
-                                    handleChange(event);
+                                    profileSettingsHandleChange(event);
                                 }}
                                 required
                             />
@@ -131,21 +165,23 @@ const ProfileSettingsPage: React.FC = () => {
                                 name="address"
                                 id="address"
                                 placeholder="Your street address"
-                                value={formState["address"]}
+                                value={profileSettingsFormState["address"]}
                                 color={
-                                    formErrors["address"]
+                                    profileSettingsFormErrors["address"]
                                         ? "failure"
                                         : "primary"
                                 }
                                 helperText={
-                                    formErrors["address"]
-                                        ? formErrors["address"][0]
+                                    profileSettingsFormErrors["address"]
+                                        ? profileSettingsFormErrors[
+                                              "address"
+                                          ][0]
                                         : false
                                 }
                                 onChange={(
                                     event: React.ChangeEvent<HTMLTextAreaElement>
                                 ) => {
-                                    handleChange(event);
+                                    profileSettingsHandleChange(event);
                                 }}
                                 required
                             ></Textarea>
@@ -162,11 +198,141 @@ const ProfileSettingsPage: React.FC = () => {
                                 }
                                 onClick={() =>
                                     update.submit({
-                                        formData: formState,
+                                        formData: profileSettingsFormState,
                                     })
                                 }
                             >
                                 Save Info
+                            </Button>
+                        </div>
+                    </div>
+                </form>
+            </Card>
+
+            {/* seller account password changing */}
+            <Card>
+                <h3 className="mb-4 text-xl font-bold dark:text-white">
+                    Change password
+                </h3>
+                <form action="#">
+                    <div className="grid grid-cols-12 gap-6">
+                        <div className="col-span-full grid grid-cols-1 gap-y-2 ">
+                            <Label htmlFor="old_password">
+                                Current Password
+                            </Label>
+
+                            {/* <TextInput
+                                id="password"
+                                name="password"
+                                placeholder="••••••••"
+                                type="password"
+                                value={formState["password"]}
+                                color={
+                                    formErrors["password"] ? "failure" : "gray"
+                                }
+                                helperText={
+                                    formErrors["password"]
+                                        ? formErrors["password"][0]
+                                        : false
+                                }
+                                onChange={handleChange}
+                            /> */}
+                            <TextInput
+                                id="old_password"
+                                name="old_password"
+                                placeholder="••••••••"
+                                type="password"
+                                value={passwordUpdateFormState["old_password"]}
+                                color={
+                                    passwordUpdateFormErrors["old_password"]
+                                        ? "failure"
+                                        : "gray"
+                                }
+                                helperText={
+                                    passwordUpdateFormErrors["old_password"]
+                                        ? passwordUpdateFormErrors[
+                                              "old_password"
+                                          ][0]
+                                        : false
+                                }
+                                onChange={passwordUpdateHandleChange}
+                            />
+                        </div>{" "}
+                        <div className="col-span-full grid grid-cols-1 gap-y-2 ">
+                            <Label htmlFor="old_password">New Password</Label>
+
+                            <TextInput
+                                id="password"
+                                name="password"
+                                placeholder="••••••••"
+                                type="password"
+                                value={profileSettingsFormState["password"]}
+                                color={
+                                    passwordUpdateFormErrors["password"]
+                                        ? "failure"
+                                        : "gray"
+                                }
+                                helperText={
+                                    passwordUpdateFormErrors["password"]
+                                        ? passwordUpdateFormErrors[
+                                              "password"
+                                          ][0]
+                                        : false
+                                }
+                                onChange={passwordUpdateHandleChange}
+                            />
+                        </div>{" "}
+                        <div className="col-span-full grid grid-cols-1 gap-y-2 ">
+                            <Label htmlFor="old_password">
+                                Confirm Password
+                            </Label>
+
+                            <TextInput
+                                id="confirm_password"
+                                name="confirm_password"
+                                placeholder="••••••••"
+                                type="password"
+                                value={
+                                    profileSettingsFormState["confirm_password"]
+                                }
+                                color={
+                                    passwordUpdateFormErrors["confirm_password"]
+                                        ? "failure"
+                                        : "gray"
+                                }
+                                helperText={
+                                    passwordUpdateFormErrors["confirm_password"]
+                                        ? passwordUpdateFormErrors[
+                                              "confirm_password"
+                                          ][0]
+                                        : false
+                                }
+                                onChange={passwordUpdateHandleChange}
+                            />
+                        </div>
+                        <div className="col-span-6">
+                            <Button
+                                color="blue"
+                                isProcessing={updatePassword.isLoading}
+                                processingLabel="Changing"
+                                disabled={updatePassword.isLoading}
+                                processingSpinner={
+                                    <AiOutlineLoading className="h-6 w-6 animate-spin" />
+                                }
+                                onClick={() =>
+                                    updatePassword.submit({
+                                        formData: {
+                                            old_password:
+                                                passwordUpdateFormState?.old_password.toString(),
+                                            password:
+                                                passwordUpdateFormState?.password.toString(),
+                                            confirm_password:
+                                                passwordUpdateFormState?.confirm_password.toString(),
+                                        },
+                                    })
+                                }
+                            >
+                                Change
                             </Button>
                         </div>
                     </div>
