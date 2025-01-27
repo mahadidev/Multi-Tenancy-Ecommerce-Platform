@@ -75,22 +75,22 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // customer routes
     Route::get('customers', [CustomerController::class, 'index']);
-    Route::get('customers-pdf', [CustomerController::class, 'pdf']);
+    Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
     // Brand Routes
     Route::resource('/brand', BrandController::class);
-    Route::get('/brand-pdf', [BrandController::class, 'pdf']);
+    Route::get('/brand/generate/pdf', [BrandController::class, 'pdf']);
     Route::post('/brand-import', [BrandController::class, 'import']);
 
     Route::resource('/category', CategoryController::class);
-    Route::get('/category-pdf', [CategoryController::class, 'pdf']);
+    Route::get('/category/generate/pdf', [CategoryController::class, 'pdf']);
     Route::post('/category-import', [CategoryController::class, 'import']);
 
     // Product Route
     Route::resource('/product', ProductController::class);
-    Route::get('/product-pdf', [ProductController::class, 'pdf']);
+    Route::get('/product/generate/pdf', [ProductController::class, 'pdf']);
 
     // Product Review Route
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);

@@ -9,6 +9,7 @@ use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use App\Imports\BrandsImport;
+use App\Exports\BrandsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\ValidationException;
 
@@ -189,6 +190,21 @@ class BrandController extends Controller
         $pdf = FacadePdf::loadView('pdf.brand', compact('brands'))->setPaper('a4');
 
         return $pdf->download('brands_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+    public function export(Request $request)
+    {
+        try {
+            $fileName = 'brands_' . now()->format('Ymd_His') . '.xlsx';
+
+            return Excel::download(new BrandsExport, $fileName);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to export brands',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function import(Request $request)
