@@ -4,15 +4,18 @@ export { default as DashboardPage } from "./DashboardPage/DashboardPage";
 export { default as SettingsPage } from "./SettingsPage/SettingsPage";
 
 // auth pages
-export { default as LoginPage } from './AuthPage/LoginPage';
-export { default as RegisterPage } from './AuthPage/RegisterPage';
+export { default as LoginPage } from "./AuthPage/LoginPage";
+export { default as RegisterPage } from "./AuthPage/RegisterPage";
+
+// seller accounts pages
+export { default as ProfileSettingsPage } from "./MyAccountPage/ProfileSettings";
 
 // products pages
-export { default as ProductEditPage } from './ProductsPage/ProductEditPage/ProductEditPage';
-export { default as ProductsPage } from './ProductsPage/ProductsPage';
+export { default as ProductEditPage } from "./ProductsPage/ProductEditPage/ProductEditPage";
+export { default as ProductsPage } from "./ProductsPage/ProductsPage";
 
 // store pages pages
-export { default as PageEditPage } from './PagesPage/PageEditPage/PageEditPage';
+export { default as PageEditPage } from "./PagesPage/PageEditPage/PageEditPage";
 export { default as PagesPage } from "./PagesPage/PagesPage";
 
 // onboard pages

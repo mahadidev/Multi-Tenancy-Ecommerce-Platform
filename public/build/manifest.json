@@ -4,7 +4,7 @@
     "name": "index"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Be8QZbAG.css",
+    "file": "assets/app-BQIb5vFF.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -15,7 +15,7 @@
     "isEntry": true
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-gW8mgv8l.js",
+    "file": "assets/index-VIxg_Rq2.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
