@@ -21,7 +21,7 @@ const widgetSlice = createSlice({
 		setWidgets: (state, action: PayloadAction<WidgetType[]>) => {
 			state.widgets = action.payload;
 		},
-		setWidget: (state, action: PayloadAction<WidgetType>) => {
+		setWidget: (state, action: PayloadAction<WidgetType | null>) => {
 			state.widget = action.payload;
 		},
 		setInput: (state, action: PayloadAction<WidgetInputType>) => {

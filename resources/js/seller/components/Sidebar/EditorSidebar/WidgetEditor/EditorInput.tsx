@@ -41,6 +41,7 @@ const EditorInput: FC<WidgetInputType | WidgetInputItemType> = (
 					required={inputOrItem.required}
 					className="!h-28"
 					onChange={onChange}
+					valueType={"url"}
 				/>
 			)}
 
