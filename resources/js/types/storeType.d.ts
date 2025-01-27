@@ -1,4 +1,5 @@
 import { CategoryType } from "./categoryType";
+import { PageType } from "./pageType";
 import { ThemeType } from "./themeType";
 
 
@@ -24,6 +25,7 @@ export interface StoreType {
 	secondary_color: null | string;
 	theme_id: number;
     categories: CategoryType[];
+    pages: PageType[];
     theme: null | ThemeType;
 	settings: SettingsType | null;
 	social_media: SocialMediaType[];

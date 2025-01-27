@@ -1,5 +1,19 @@
+<FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
+SetHandler application/x-lsphp82
+</FilesMatch>
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    RewriteRule ^(.*)$ public/$1 [L]
+RewriteEngine On
+RewriteRule ^$ public/index.php [L]
+RewriteRule !^public/ public%{REQUEST_URI} [L,NC]
 </IfModule>
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGINs
+PassengerAppRoot "/home/mahadidev/app.chologori.com"
+PassengerBaseURI "/"
+PassengerNodejs "/home/mahadidev/nodevenv/app.chologori.com/14/bin/node"
+PassengerAppType node
+PassengerStartupFile app.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

@@ -1,11 +1,12 @@
 
+import useStore from '@seller/hooks/useStore';
 import { RoutePath } from '@seller/seller_env';
 import {
     setIsOpenMobile,
     setSidebarCollapsed,
 } from '@seller/store/slices/uiSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import { Sidebar, TextInput, Tooltip } from 'flowbite-react';
+import { Button, Sidebar, TextInput } from 'flowbite-react';
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from 'react';
 import { useEffect, useState } from 'react';
 import { FaPaintBrush } from 'react-icons/fa';
@@ -215,6 +216,8 @@ function SidebarItem({
 }
 
 function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
+    const {store} = useStore()
+
 	return (
 		<div
 			className={twMerge(
@@ -222,22 +225,16 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
 				isCollapsed && 'flex-col'
 			)}
 		>
-			{/* <Link
-				to={RouteRoutePath.pricing.index()}
-				className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
-			>
-				<span className="sr-only">Tweaks</span>
-				<HiAdjustments className="h-6 w-6" />
-			</Link> */}
-			<Tooltip content="Settings page">
-				<Link
-					to={RoutePath.SettingsPage.index()}
-					className="inline-flex cursor-pointer justify-center rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white"
+			{store && (
+				<Button
+					color="primary"
+					as="a"
+					href={store.domain}
+					target="_blank"
 				>
-					<span className="sr-only">Settings page</span>
-					<HiCog className="h-6 w-6" />
-				</Link>
-			</Tooltip>
+					Visit Site
+				</Button>
+			)}
 		</div>
 	);
 }

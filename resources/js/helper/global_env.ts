@@ -9,3 +9,5 @@ export const GLOBAL_APP_URL = document.head.querySelector(
 ).content;
 
 export const GLOBAL_APP_API_URL = GLOBAL_APP_URL + "/api/v1"
+
+export const GLOBAL_APP_SITE_PATH = `${GLOBAL_APP_URL}/sites`;
