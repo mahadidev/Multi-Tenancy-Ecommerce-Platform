@@ -3,6 +3,7 @@ import { ProductType } from '@type/productType';
 import { Button, Checkbox, Label, Table } from 'flowbite-react';
 import { HiPencilAlt } from 'react-icons/hi';
 import DeleteProductModal from './DeleteProductModal';
+import { Link } from 'react-router-dom';
 
 const ProductsTable = () => {
     const { products } = useProduct();
@@ -68,7 +69,7 @@ const ProductsTable = () => {
 						</Table.Cell>
 						<Table.Cell>
 							<div className="flex items-center gap-x-3 whitespace-nowrap">
-								<Button size="sm" color="primary" className="p-0">
+								<Button as={Link} to={`/products/${product.id}`}  size="sm" color="primary" className="p-0">
 									<div className="flex items-center gap-x-2">
 										<HiPencilAlt className="h-5 w-5" />
 										Edit Product
