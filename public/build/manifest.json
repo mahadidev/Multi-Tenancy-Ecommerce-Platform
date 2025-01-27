@@ -1,41 +1,33 @@
 {
-  "_index-8q4x_dSw.js": {
-    "file": "assets/index-8q4x_dSw.js",
-    "name": "index"
-  },
-  "resources/css/app.css": {
-    "file": "assets/app-BFmtg6i8.css",
-    "src": "resources/css/app.css",
-    "isEntry": true
-  },
-  "resources/js/app.js": {
-    "file": "assets/app-Xaw6OIO1.js",
-    "name": "app",
-    "src": "resources/js/app.js",
-    "isEntry": true
-  },
-  "resources/js/seller/index.tsx": {
-    "file": "assets/index-BPuTl2lT.js",
-    "name": "index",
-    "src": "resources/js/seller/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_index-8q4x_dSw.js"
-    ],
-    "css": [
-      "assets/index-BhyHQBOY.css"
-    ]
-  },
-  "resources/js/themes/index.tsx": {
-    "file": "assets/index-CLQ0LcF4.js",
-    "name": "index",
-    "src": "resources/js/themes/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_index-8q4x_dSw.js"
-    ],
-    "css": [
-      "assets/index-vLAobMf4.css"
-    ]
-  }
+    "_index-8q4x_dSw.js": {
+        "file": "assets/index-8q4x_dSw.js",
+        "name": "index"
+    },
+    "resources/css/app.css": {
+        "file": "assets/app-BgVQy12f.css",
+        "src": "resources/css/app.css",
+        "isEntry": true
+    },
+    "resources/js/app.js": {
+        "file": "assets/app-Xaw6OIO1.js",
+        "name": "app",
+        "src": "resources/js/app.js",
+        "isEntry": true
+    },
+    "resources/js/seller/index.tsx": {
+        "file": "assets/index-gW8mgv8l.js",
+        "name": "index",
+        "src": "resources/js/seller/index.tsx",
+        "isEntry": true,
+        "imports": ["_index-8q4x_dSw.js"],
+        "css": ["assets/index-DtdmuCvi.css"]
+    },
+    "resources/js/themes/index.tsx": {
+        "file": "assets/index-CLQ0LcF4.js",
+        "name": "index",
+        "src": "resources/js/themes/index.tsx",
+        "isEntry": true,
+        "imports": ["_index-8q4x_dSw.js"],
+        "css": ["assets/index-vLAobMf4.css"]
+    }
 }

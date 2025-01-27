@@ -1,4 +1,15 @@
-import { CreateProductPayloadType, DeleteProductPayloadType, UpdateProductPayloadType, useCreateProductMutation, useDeleteProductMutation, useFetchProductsQuery, useUpdateProductMutation } from '@seller/store/reducers/productApi';
+import {
+    CreateProductPayloadType,
+    DeleteProductPayloadType,
+    FetchProductPayloadType,
+    productApi,
+    UpdateProductPayloadType,
+    useCreateProductMutation,
+    useDeleteProductMutation,
+    useFetchProductQuery,
+    useFetchProductsQuery,
+    useUpdateProductMutation,
+} from '@seller/store/reducers/productApi';
 import { useAppSelector } from '@seller/store/store';
 
 const useProduct = () => {
@@ -86,6 +97,32 @@ const useProduct = () => {
 		});
 	};
 
+	// fetchProduct
+	const [
+		handleFetchProduct,
+		{
+			isLoading: isFetchProductLoading,
+			isError: isFetchProductError,
+			error: fetchProductError,
+			data: fetchProductData,
+		},
+	] = productApi.endpoints.fetchProduct.useLazyQuery();
+	const fetchProduct = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: FetchProductPayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleFetchProduct(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
+				}
+			}
+		});
+	};
+
 	return {
 		products,
 		product,
@@ -110,6 +147,13 @@ const useProduct = () => {
 			isError: isDeleteError,
 			error: deleteError,
 			data: deleteData,
+		},
+		fetchProduct: {
+			submit: fetchProduct,
+			isLoading: isFetchProductLoading,
+			isError: isFetchProductError,
+			error: fetchProductError,
+			data: fetchProductData,
 		},
 	};
 };
