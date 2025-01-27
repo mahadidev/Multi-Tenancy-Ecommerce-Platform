@@ -68,30 +68,31 @@ const productInitialValues = {
 const ProductEditPage = () => {
     const { id } = useParams();
     const productId = parseInt(id || "0");
+    
+  
     const { categories } = useCategory();
+    const { update, product ,fetchProduct} = useProduct();
     const { brands } = useBrand();
-    const { handleChange, formState, formErrors, setFormState } = useForm();
-    const { update } = useProduct();
+    const { handleChange, formState, formErrors, setFormState } = useForm({
+      default: productInitialValues
+    });
+    
+    
     const { getSlug } = useString();
 
-    // Fetch product data
-    const {
-        data: productData,
-        isLoading,
-        isError,
-        error,
-    } = useFetchProductQuery({ id: productId });
 
-    // Set product data
+    
+
     useEffect(() => {
-        if (productData && productData.data?.product) {
-            setFormState(productData.data.product);
-        } else {
-            setFormState(productInitialValues);
-        }
-    }, [productData, setFormState]);
+      if (id) {
+        fetchProduct.submit({
+          formData: {
+            id: productId,
+          },
+        });
+      }
+    }, [id]);
 
-    console.log(productData);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

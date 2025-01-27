@@ -69,20 +69,19 @@ export const productApi = createApi({
 			},
 		}),
 		fetchProduct: builder.query<ApiResponseType, FetchProductPayloadType>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/product/${formData.id}`,
-					method: 'get',
-					body: formData,
+					query: (formData) =>
+						createRequest({
+							url: `${PREFIX}/product/${formData.id}`,
+							method: 'get',
+						}),
+					providesTags: ['Products'],
+					transformErrorResponse: (error: any) => error.data,
+					async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+						await queryFulfilled.then((response) => {
+							dispatch(setProduct(response.data.data.product));
+						});
+					},
 				}),
-			providesTags: ['Product'],
-			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-				await queryFulfilled.then((response) => {
-					dispatch(setProduct(response.data.data.product));
-				});
-			},
-		}),
 		createProduct: builder.mutation<ApiResponseType, CreateProductPayloadType>({
 			query: (formData) =>
 				createRequest({
