@@ -14,6 +14,7 @@ export default defineConfig({
 				'resources/js/themes/index.tsx',
 				'resources/js/seller/index.tsx',
 				'resources/js/frontend/index.tsx',
+				'resources/js/site/index.tsx',
 			],
 			refresh: true,
 		}),
@@ -36,6 +37,10 @@ export default defineConfig({
 			{
 				find: '@frontend',
 				replacement: path.resolve(__dirname, 'resources/js/frontend'),
+			},
+			{
+				find: '@site',
+				replacement: path.resolve(__dirname, 'resources/js/site'),
 			},
 			{
 				find: '@seller',
