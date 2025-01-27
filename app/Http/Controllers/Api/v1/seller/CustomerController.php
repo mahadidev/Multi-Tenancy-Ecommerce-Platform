@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1\seller;
 
+use App\Exports\CustomersExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\CustomerResource;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+
 
 class CustomerController extends Controller
 {
@@ -53,5 +57,38 @@ class CustomerController extends Controller
         $pdf = FacadePdf::loadView('pdf.customers', compact('customers'))->setPaper('a4');
 
         return $pdf->download('customers_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+    public function excel(Request $request)
+    {
+        try {
+            $fileName = 'customers_' . now()->format('Ymd_His') . '.xlsx';
+
+            return Excel::download(new CustomersExport, $fileName); 
+            
+            // // Check if the request wants to force download
+            // if ($request->has('download')) {
+            //     return Excel::download(new CustomersExport, $fileName);
+            // }
+
+            // // Store the file temporarily and return a response with file info
+            // Excel::store(new CustomersExport, 'temp/' . $fileName, 'public');
+
+            // return response()->json([
+            //     'status' => 200,
+            //     'message' => 'Excel file generated successfully',
+            //     'data' => [
+            //         'filename' => $fileName,
+            //         'download_url' => url('storage/temp/' . $fileName),
+            //         'file_size' => Storage::disk('public')->size('temp/' . $fileName)
+            //     ]
+            // ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to export brands',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -76,6 +76,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     // customer routes
     Route::get('customers', [CustomerController::class, 'index']);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
+    Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
