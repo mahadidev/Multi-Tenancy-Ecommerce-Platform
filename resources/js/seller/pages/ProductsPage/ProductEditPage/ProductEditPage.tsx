@@ -15,11 +15,11 @@ import {
 import { HiHome, HiTrash } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useFetchProductQuery } from "@/seller/store/reducers/productApi";
 import { FaPlus } from "react-icons/fa";
 import { BrandType } from "@/seller/types/brandType";
 import useBrand from "@/seller/hooks/useBrand";
 import { FileInput } from "@/seller/components";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const productInitialValues = {
     name: "Google Pixel 11",
@@ -73,7 +73,7 @@ const ProductEditPage = () => {
     const { update, product, fetchProduct } = useProduct();
     const { brands } = useBrand();
     const { handleChange, formState, formErrors, setFormState } = useForm({
-        default: productInitialValues,
+        default: product,
     });
 
     const { getSlug } = useString();
@@ -645,8 +645,22 @@ const ProductEditPage = () => {
                         </div>
                     </div>
                     <div className="flex justify-end mt-6">
-                        <Button type="submit" color="primary" className="px-6">
-                            Save Changes
+                        <Button
+                            color="primary"
+                            onClick={() => {
+                                update.submit({
+                                    formData: formState,
+                                    onSuccess: () => {
+                                        alert("Product updated successfully!");
+                                    },
+                                });
+                            }}
+                            isProcessing={update.isLoading}
+                            disabled={update.isLoading}
+                            processingLabel="Saving"
+                            processingSpinner={<AiOutlineLoading />}
+                        >
+                            Save all
                         </Button>
                     </div>
                 </form>
