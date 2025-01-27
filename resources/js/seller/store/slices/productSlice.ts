@@ -34,6 +34,8 @@ const productSlice = createSlice({
 		},
 		setProduct: (state, action: PayloadAction<ProductType>) => {
 			state.product = action.payload;
+			console.log(state.product);
+			
 		},
 		clearProducts: (state) => {
 			state.products = [];
