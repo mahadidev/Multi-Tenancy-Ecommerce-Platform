@@ -15,7 +15,6 @@
     "isEntry": true
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-DpmzrsJR.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
@@ -23,7 +22,7 @@
       "_index-JhpZtB2u.js"
     ],
     "css": [
-      "assets/index-CIk0lWlS.css"
+      "assets/index-8kdU7Ls6.css"
     ]
   },
   "resources/js/themes/index.tsx": {
