@@ -6,7 +6,7 @@ import {
     UpdateProductPayloadType,
     useCreateProductMutation,
     useDeleteProductMutation,
-    useFetchProductQuery,
+   
     useFetchProductsQuery,
     useUpdateProductMutation,
 } from '@seller/store/reducers/productApi';
