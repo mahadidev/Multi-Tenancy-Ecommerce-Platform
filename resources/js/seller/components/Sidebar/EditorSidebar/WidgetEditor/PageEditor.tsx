@@ -7,34 +7,36 @@ import { useEffect } from "react";
 const PageEditor = () => {
     const { page, savePage, onChangePageInput } = usePage();
     const { formState, formErrors, setFormState } = useForm({
-			formValidationError: savePage.error,
-			default: {
-				...page,
-			},
-		});
+        formValidationError: savePage.error,
+        default: {
+            ...page,
+        },
+    });
 
     useEffect(() => {
         setFormState(page);
-    }, [page])
+    }, [page]);
 
-  return (
-		<>
-			<div className="space-y-2">
-				<Label htmlFor="title">Page Title</Label>
-				<TextInput
-					id="title"
-					name="title"
-					placeholder="Page title"
-					value={formState['title']}
-					color={formErrors['title'] ? 'failure' : 'gray'}
-					helperText={formErrors['title'] ? formErrors['title'][0] : false}
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						onChangePageInput(event);
-					}}
-					required
-				/>
-			</div>
-		</>
-	);
-}
-export default PageEditor
+    return (
+        <>
+            <div className="space-y-2">
+                <Label htmlFor="title">Page Title</Label>
+                <TextInput
+                    id="title"
+                    name="title"
+                    placeholder="Page title"
+                    value={formState["title"]}
+                    color={formErrors["title"] ? "failure" : "gray"}
+                    helperText={
+                        formErrors["title"] ? formErrors["title"][0] : false
+                    }
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        onChangePageInput(event);
+                    }}
+                    required
+                />
+            </div>
+        </>
+    );
+};
+export default PageEditor;
