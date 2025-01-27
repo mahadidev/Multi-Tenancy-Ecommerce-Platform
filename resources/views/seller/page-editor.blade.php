@@ -9,6 +9,7 @@
     <meta name="base-url" content="{{ env('APP_URL') }}">
     <meta name="app-name" content="{{ env('APP_NAME') }}">
     <title>{{ env('APP_NAME') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo-icon.png') }}">
 
     <style>
         @font-face {

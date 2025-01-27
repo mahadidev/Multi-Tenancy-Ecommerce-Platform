@@ -1,7 +1,14 @@
 {
-  "_index-JhpZtB2u.js": {
-    "file": "assets/index-JhpZtB2u.js",
-    "name": "index"
+  "_chunk-K6AXKMTT-Dy1qEZXh.js": {
+    "file": "assets/chunk-K6AXKMTT-Dy1qEZXh.js",
+    "name": "chunk-K6AXKMTT"
+  },
+  "_index-C8H1fCGS.js": {
+    "file": "assets/index-C8H1fCGS.js",
+    "name": "index",
+    "imports": [
+      "_chunk-K6AXKMTT-Dy1qEZXh.js"
+    ]
   },
   "resources/css/app.css": {
     "file": "assets/app-BgVQy12f.css",
@@ -14,25 +21,51 @@
     "src": "resources/js/app.js",
     "isEntry": true
   },
+  "resources/js/frontend/assets/images/search-bg-mobile.jpg": {
+    "file": "assets/search-bg-mobile-uE9uvdUB.jpg",
+    "src": "resources/js/frontend/assets/images/search-bg-mobile.jpg"
+  },
+  "resources/js/frontend/assets/images/search-bg.jpg": {
+    "file": "assets/search-bg-C0rmdiVZ.jpg",
+    "src": "resources/js/frontend/assets/images/search-bg.jpg"
+  },
+  "resources/js/frontend/index.tsx": {
+    "file": "assets/index-B_nzdmAQ.js",
+    "name": "index",
+    "src": "resources/js/frontend/index.tsx",
+    "isEntry": true,
+    "imports": [
+      "_chunk-K6AXKMTT-Dy1qEZXh.js"
+    ],
+    "css": [
+      "assets/index-CuHhE1Is.css"
+    ],
+    "assets": [
+      "assets/search-bg-mobile-uE9uvdUB.jpg",
+      "assets/search-bg-C0rmdiVZ.jpg"
+    ]
+  },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-B-Yc32I_.js",
+    "file": "assets/index-CD-ylAsx.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index-JhpZtB2u.js"
+      "_chunk-K6AXKMTT-Dy1qEZXh.js",
+      "_index-C8H1fCGS.js"
     ],
     "css": [
       "assets/index-8kdU7Ls6.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-CGRxVhAe.js",
+    "file": "assets/index-DQZlChCd.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index-JhpZtB2u.js"
+      "_chunk-K6AXKMTT-Dy1qEZXh.js",
+      "_index-C8H1fCGS.js"
     ],
     "css": [
       "assets/index-vLAobMf4.css"

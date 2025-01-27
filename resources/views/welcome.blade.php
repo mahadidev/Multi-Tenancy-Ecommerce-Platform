@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="base-url" content="{{ env('APP_URL') }}">
     <title>{{ env('APP_NAME') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo-icon.png') }}">
 
 
     <style>
