@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1\seller;
 
+use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -113,4 +116,38 @@ class ProductController extends Controller
         $pdf = FacadePdf::loadView('pdf.products', compact('products'));
         return $pdf->download('products.pdf');
     }
+
+    public function excel(Request $request)
+    {
+        try {
+            $fileName = 'product_' . now()->format('Ymd_His') . '.xlsx';
+
+            return Excel::download(new ProductsExport, $fileName); 
+
+            // if ($request->has('download')) {
+            //     return Excel::download(new ProductsExport, $fileName);
+            // }
+
+            // // Store the file temporarily and return a response with file info
+            // Excel::store(new ProductsExport, 'temp/' . $fileName, 'public');
+
+            // return response()->json([
+            //     'status' => 200,
+            //     'message' => 'Excel file generated successfully',
+            //     'data' => [
+            //         'filename' => $fileName,
+            //         'download_url' => url('storage/temp/' . $fileName),
+            //         'file_size' => Storage::disk('public')->size('temp/' . $fileName)
+            //     ]
+            // ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to export Products',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }
