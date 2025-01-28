@@ -45,6 +45,7 @@
             font-weight: 600;
             margin: 0;
         }
+
         h2 {
             color: #2d3748;
             font-size: 20px;
@@ -182,6 +183,10 @@
             font-size: 13px;
         }
 
+        .store-info-value {
+            color: #1e293b !important;
+        }
+
         @media print {
             body {
                 background-color: #ffffff;
@@ -203,8 +208,32 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://app.chologori.com/images/logos/logo-black.png" alt="{{ config('app.url') }}"  class="logo">
-            <h1>{{ $isCustomer ? 'Order Confirmation' : 'New Order Notification' }}</h1>
+ 
+            @if (isset($logoUrl))
+                <img src="{{ $logoUrl }}" alt="{{ $store->name }}" class="logo">
+            @else
+                <!-- Fallback if logo URL is not set -->
+                <h2 style="margin-bottom: 20px;">{{ $store->name }}</h2>
+            @endif
+
+            <div class="store-info-line">
+                <div class="store-info-item">
+                    @if ($store->computed_domain)
+                        <a href="{{ $store->computed_domain }}" target="_blank" class="store-info-value"
+                            style="text-decoration: none;">{{ $store->computed_domain }}</a>
+                    @endif
+                    @if ($store->email)
+                        |
+                        <span class="store-info-value">{{ $store->email }}</span>
+                    @endif
+                    @if ($store->phone)
+                        |
+                        <span class="store-info-value">{{ $store->phone }}</span>
+                    @endif
+                </div>
+            </div>
+
+            <h1>@yield('title')</h1>
         </div>
 
         <p class="greeting">
@@ -216,7 +245,7 @@
             @endif
         </p>
 
-        
+
         <div class="order-details d-flex">
             <div class="col-md-6">
                 <h3>Customer Details</h3>
@@ -265,10 +294,10 @@
                     <span class="info-value">{{ $order->payment_method }}</span>
                 </div>
                 @if ($order->notes)
-                <div class="info-row">
-                    <span class="info-label">Notes :</span>
-                    <span class="info-value">{{ $order->notes }}</span>
-                </div>
+                    <div class="info-row">
+                        <span class="info-label">Notes :</span>
+                        <span class="info-value">{{ $order->notes }}</span>
+                    </div>
                 @endif
                 <!-- More details -->
             </div>
@@ -306,18 +335,24 @@
             </a>
             &nbsp;
             &nbsp;
-            <a href="{{ route('order.download', ['uuid' => $order->uuid, 'isCustomer' => $isCustomer ? '1' : '0']) }}" class="button success">
+            <a href="{{ route('order.download', ['uuid' => $order->uuid, 'isCustomer' => $isCustomer ? '1' : '0']) }}"
+                class="button success">
                 Download Invoice
             </a>
         </div>
 
         <div class="footer">
-            <p>Thank you for choosing {{ config('app.name') }}!</p>
+            <p>Thank you for choosing {{ $store->name }}</p>
             <div class="company-info">
-                {{ config('app.name') }}
+                <span>© {{ now()->year }} | {{ $store->name }}</span>
+                @if ($store->address)
+                    |
+                    <span>Address: {{ $store->address }}</span>
+                @endif
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
