@@ -22,9 +22,9 @@ class CategoryResource extends JsonResource
             'type' => $this->type,
             'has_parent' => $this->parent
                 ? [
-                    'id' => $this->id,
-                    'name' => $this->name,
-                    'slug' => $this->slug,
+                    'id' => $this->parent->id,
+                    'name' => $this->parent->name,
+                    'slug' => $this->parent->slug,
                 ]
                 : null,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
