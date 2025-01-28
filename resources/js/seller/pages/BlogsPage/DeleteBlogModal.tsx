@@ -1,17 +1,17 @@
-import useProduct from '@seller/hooks/useProduct';
-import { ProductType } from '@type/productType';
+import useBlog from '@seller/hooks/useBlog';
+import { BlogType } from '@type/blogType';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { HiOutlineExclamationCircle, HiTrash } from 'react-icons/hi';
 
 interface PropsType {
-	product: ProductType  //todo type
+	blog: BlogType  //todo type
 }
 
 const DeleteBlogModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
-	const {delete: deleteProduct} = useProduct();
+	const {delete: deletePost} = useBlog();
 	return (
 		<>
 			<Button
@@ -22,36 +22,36 @@ const DeleteBlogModal: FC<PropsType> = function (props) {
 			>
 				<div className="flex items-center gap-x-2">
 					<HiTrash className="h-5 w-5" />
-					Delete Product
+					Delete Post
 				</div>
 			</Button>
 			<Modal onClose={() => setOpen(false)} show={isOpen} size="md">
 				<Modal.Header className="border-none p-2">
-					<span className="sr-only">Delete Product</span>
+					<span className="sr-only">Delete Post</span>
 				</Modal.Header>
 				<Modal.Body className="px-6 pb-6 pt-0">
 					<div className="flex flex-col items-center gap-y-6 text-center">
 						<HiOutlineExclamationCircle className="mx-auto h-20 w-20 text-red-600" />
 						<p className="text-xl font-normal text-gray-500 dark:text-gray-400">
 							Are you sure you want to delete this{' '}
-							{props.product.name}?
+							{props.blog.title}?
 						</p>
 						<div className="flex items-center gap-x-3">
 							<Button
 								color="gray"
 								theme={{ base: 'px-0' }}
 								onClick={() => {
-									deleteProduct.submit({
+									deletePost.submit({
 										formData: {
-											id: props.product.id,
+											id: props.blog.id,
 										},
 										onSuccess: () => {
 											setOpen(false);
 										},
 									});
 								}}
-								isProcessing={deleteProduct.isLoading}
-								disabled={deleteProduct.isLoading}
+								isProcessing={deletePost.isLoading}
+								disabled={deletePost.isLoading}
 								processingLabel="Deleting"
 								processingSpinner={<AiOutlineLoading />}
 							>

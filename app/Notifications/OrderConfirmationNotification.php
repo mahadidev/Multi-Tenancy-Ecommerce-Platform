@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Order;
+use App\Models\Store;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,14 +13,16 @@ use Illuminate\Support\Facades\Log;
 class OrderConfirmationNotification extends Notification
 {
     protected $order;
+    protected $store;
     protected $isCustomer;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Order $order, bool $isCustomer = true)
+    public function __construct(Order $order, Store $store, bool $isCustomer = true)
     {
         $this->order = $order;
+        $this->store = $store;
         $this->isCustomer = $isCustomer;
     }
 
@@ -47,6 +50,7 @@ class OrderConfirmationNotification extends Notification
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('pdf.order_confirmation', [
             'order' => $this->order,
+            'store' => $this->store,
             'isCustomer' => $this->isCustomer,
         ]);
 
@@ -59,6 +63,7 @@ class OrderConfirmationNotification extends Notification
             // ->line('Order #' . $this->order)
             ->view('emails.order_confirmation', [
                 'order' => $this->order,
+                'store' => $this->store,
                 'isCustomer' => $this->isCustomer,
             ])
             ->attachData($pdf->output(), "Order_Confirmation_{$this->order->uuid}.pdf", [
@@ -73,6 +78,7 @@ class OrderConfirmationNotification extends Notification
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('pdf.order_confirmation', [
             'order' => $this->order,
+            'store' => $this->store,
             'isCustomer' => $this->isCustomer,
         ]);
         $pdf->save($path);
@@ -83,6 +89,8 @@ class OrderConfirmationNotification extends Notification
         return [
             'order_id' => $this->order->id,
             'order_uuid' => $this->order->uuid,
+            'store_id' => $this->store->id,
+            'store_name' => $this->store->name,
             'title' => $this->isCustomer ? 'Order Confirmed' : 'New Order Received',
             'message' => $this->isCustomer
                 ? 'Your order #' . $this->order->uuid . ' has been confirmed.'

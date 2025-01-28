@@ -14,9 +14,6 @@ const CreateCategoryModal: FC = function () {
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
-        default: {
-            type: "product",
-        },
     });
 
     return (

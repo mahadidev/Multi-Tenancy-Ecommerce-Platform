@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FileInput } from '@seller/components';
-import useBrand from '@seller/hooks/useBrand';
-import useCategory from '@seller/hooks/useCategory';
-import useForm from '@seller/hooks/useForm';
-import useProduct from '@seller/hooks/useProduct';
-import useString from '@seller/hooks/useString';
-import { RoutePath } from '@seller/seller_env';
-import { BrandType } from '@type/brandType';
-import { CategoryType } from '@type/categoryType';
+import { FileInput } from "@seller/components";
+import useBlog from "@seller/hooks/useBlog";
+import useCategory from "@seller/hooks/useCategory";
+import useForm from "@seller/hooks/useForm";
+import useString from "@seller/hooks/useString";
+import { RoutePath } from "@seller/seller_env";
+import { CategoryType } from "@type/categoryType";
 import {
     Breadcrumb,
     Button,
@@ -15,264 +13,196 @@ import {
     Select,
     Textarea,
     TextInput,
-} from 'flowbite-react';
-import { useEffect } from 'react';
-import { AiOutlineLoading } from 'react-icons/ai';
-import { HiHome } from 'react-icons/hi';
-import { useParams } from 'react-router-dom';
+} from "flowbite-react";
+
+import { AiOutlineLoading } from "react-icons/ai";
+import { HiHome } from "react-icons/hi";
+
 
 const BlogCreatePage = () => {
-	const { id } = useParams();
-	const { categories } = useCategory();
-	const { update, product, fetchProduct } = useProduct();
-	const { brands } = useBrand();
-	const { getSlug } = useString();
+   
+    const { categories } = useCategory();
+    const { create   } = useBlog();
+    const { getSlug } = useString();
 	const { handleChange, formState, formErrors, setFormState } = useForm({
-		default: product,
-	});
-
-	useEffect(() => {
-		if (id) {
-			fetchProduct.submit({
-				formData: {
-					id: id,
-				},
-			});
+        formValidationError: create.error,
+		default:{
+			status:"active"
 		}
-	}, [id]);
+    });
 
-	return (
-		<div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-			<div className="mb-4">
-				<Breadcrumb className="mb-5">
-					<Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
-						<div className="flex items-center gap-x-3">
-							<HiHome className="text-xl" />
-							<span>Dashboard</span>
-						</div>
-					</Breadcrumb.Item>
-					<Breadcrumb.Item href={'/seller/blogs'}>Blogs</Breadcrumb.Item>
-					<Breadcrumb.Item>Edit</Breadcrumb.Item>
-				</Breadcrumb>
-				<h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-					Add New Blog
-				</h1>
-			</div>
+ 
 
-			<section>
-				<div>
-					<div>
-						<div className="flex flex-col gap-6">
-							<div className="flex gap-6 w-full">
-								<div className="grid grid-cols-1 gap-6 sm:grid-cols-3 w-full ">
-									<div className="flex flex-col col-span-2 gap-2">
-										<Label htmlFor="title">Title</Label>
-										<TextInput
-											id="title"
-											name="title"
-											placeholder="Blog title"
-											value={formState['title']}
-											onChange={(e) => {
-												handleChange(e);
-												setFormState((prev: any) => ({
-													...prev,
-													slug: getSlug(e.target.value),
-												}));
-											}}
-											required
-										/>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="slug">Slug</Label>
-										<TextInput
-											id="slug"
-											name="slug"
-											placeholder="Product slug"
-											value={formState['slug']}
-											onChange={(e) => {
-												handleChange(e);
-												setFormState((prev: any) => ({
-													...prev,
-													slug: getSlug(e.target.value),
-												}));
-											}}
-											required
-										/>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="sku">SKU</Label>
-										<TextInput
-											id="sku"
-											name="sku"
-											placeholder="Product sku"
-											value={formState['sku']}
-											onChange={(e) => {
-												handleChange(e);
-												setFormState((prev: any) => ({
-													...prev,
-													slug: getSlug(e.target.value),
-												}));
-											}}
-											required
-										/>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="category_id">Category</Label>
-										<Select
-											id="category_id"
-											name="category_id"
-											value={formState['category_id']}
-											onChange={handleChange}
-											required
-										>
-											<option value={0}>Select a Category</option>
-											{categories.map((category: CategoryType) => (
-												<option value={category.id} key={category.id}>
-													{category.name}
-												</option>
-											))}
-										</Select>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="brand_id">Brand</Label>
-										<Select
-											id="brand_id"
-											name="brand_id"
-											value={formState['brand_id']}
-											onChange={handleChange}
-											required
-										>
-											<option value={0}>Select a brand</option>
-											{brands.map((brand: BrandType) => (
-												<option value={brand.id} key={brand.id}>
-													{brand.name}
-												</option>
-											))}
-										</Select>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="price">Price</Label>
-										<TextInput
-											id="price"
-											name="price"
-											type="number"
-											placeholder="Enter price"
-											value={formState['price']}
-											onChange={handleChange}
-											required
-										/>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="discount_amount">Discount amount</Label>
-										<TextInput
-											id="discount_amount"
-											name="discount_amount"
-											type="number"
-											placeholder="Enter discount_amount"
-											value={formState['discount_amount']}
-											onChange={handleChange}
-											required
-										/>
-									</div>
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="stock">Stock</Label>
-										<TextInput
-											id="stock"
-											name="stock"
-											type="number"
-											placeholder="Enter stock"
-											value={formState['stock']}
-											onChange={handleChange}
-											required
-										/>
-									</div>
+    return (
+        <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+            <div className="mb-4">
+                <Breadcrumb className="mb-5">
+                    <Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
+                        <div className="flex items-center gap-x-3">
+                            <HiHome className="text-xl" />
+                            <span>Dashboard</span>
+                        </div>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item href={"/seller/blogs"}>
+                        Blogs
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>Add New Blog</Breadcrumb.Item>
+                </Breadcrumb>
+                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+                    Add New Blog
+                </h1>
+            </div>
 
-									<div className="flex flex-col gap-2 sm:col-span-3">
-										<Label htmlFor="short_description">Sort Description</Label>
-										<Textarea
-											id="short_description"
-											name="short_description"
-											placeholder="Enter product short_description"
-											rows={5}
-											value={formState['short_description']}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
+            <section>
+                <div>
+                    <div>
+                        <div className="flex flex-col gap-6">
+                            <div className="flex gap-6 w-full">
+                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
+                                    <div className="flex flex-col col-span-2 gap-2">
+                                        <Label htmlFor="title">Title</Label>
+                                        <TextInput
+                                            id="title"
+                                            name="title"
+                                            placeholder="Blog title"
+                                            value={formState["title"]}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                                setFormState((prev: any) => ({
+                                                    ...prev,
+                                                    slug: getSlug(
+                                                        e.target.value
+                                                    ),
+                                                }));
+                                            }}
+                                            required
+                                        />
+                                    </div>
 
-								<div className="w-[70%] ">
-									<div className="flex flex-col gap-6 col-span-full">
-										<div className="flex flex-col gap-2">
-											<Label htmlFor="thumbnail">Thumbnail</Label>
-											<div>
-												<FileInput
-													id="thumbnail"
-													name="thumbnail"
-													placeholder="Click to upload thumbnail"
-													value={formState['thumbnail']}
-													color={formErrors['thumbnail'] ? 'failure' : 'gray'}
-													helperText={
-														formErrors['thumbnail']
-															? formErrors['thumbnail'][0]
-															: false
-													}
-													onChange={(
-														event: React.ChangeEvent<HTMLInputElement>
-													) => {
-														handleChange(event);
-													}}
-												/>
-											</div>
-										</div>
-										<div>
-											{formState['thumbnail'] && (
-												<img
-													src={formState['thumbnail']}
-													alt="thumbnail"
-													className="w-36 h-36 object-cover rounded-md"
-												/>
-											)}
-										</div>
-									</div>
-								</div>
-							</div>
+                                    <div className="flex flex-col gap-2">
+                                        <Label htmlFor="category_id">
+                                            Category
+                                        </Label>
+                                        <Select
+                                            id="category_id"
+                                            name="category_id"
+                                            value={formState["category_id"]}
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option value={0}>
+                                                Select a Category
+                                            </option>
+                                            {categories.map(
+                                                (category: CategoryType) => (
+                                                    <option
+                                                        value={category.id}
+                                                        key={category.id}
+                                                    >
+                                                        {category.name}
+                                                    </option>
+                                                )
+                                            )}
+                                        </Select>
+                                    </div>
 
-							{/* second section  */}
-							<div className="flex flex-col gap-2 sm:col-span-3">
-								<Label htmlFor="description">Description</Label>
-								<Textarea
-									id="description"
-									name="description"
-									placeholder="Enter product description"
-									rows={5}
-									value={formState['description']}
+									  {/* active status change  */}
+									  <div className="flex flex-col gap-2">
+                                <Label htmlFor="status">Status</Label>
+                                <Select
+                                    id="status"
+                                    name="status"
+									value={formState["status"]}
 									onChange={handleChange}
-								/>
-							</div>
-						</div>
+                                    required
+                                >
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </Select>
+                            </div>
 
-						
-					</div>
-				</div>
-				<div className="flex justify-end mt-6">
-					<Button
-						color="primary"
-						onClick={() => {
-							update.submit({
-								formData: formState,
-							});
-						}}
-						isProcessing={update.isLoading}
-						disabled={update.isLoading}
-						processingLabel="Saving"
-						processingSpinner={<AiOutlineLoading />}
-					>
-						Save all
-					</Button>
-				</div>
-			</section>
-		</div>
-	);
+                                    <div className=" col-span-full">
+                                        <div className="flex flex-col gap-2">
+                                            <Label htmlFor="image">
+                                                Image
+                                            </Label>
+                                            <div>
+                                                <FileInput
+                                                    id="image"
+                                                    name="image"
+                                                    placeholder="Click to upload image"
+                                                    value={
+                                                        formState["image"]
+                                                    }
+                                                    color={
+                                                        formErrors["image"]
+                                                            ? "failure"
+                                                            : "gray"
+                                                    }
+                                                    helperText={
+                                                        formErrors["image"]
+                                                            ? formErrors[
+                                                                  "image"
+                                                              ][0]
+                                                            : false
+                                                    }
+                                                    onChange={(
+                                                        event: React.ChangeEvent<HTMLInputElement>
+                                                    ) => {
+                                                        handleChange(event);
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                        {/* <div>
+                                            {formState["thumbnail"] && (
+                                                <img
+                                                    src={formState["thumbnail"]}
+                                                    alt="thumbnail"
+                                                    className="w-36 h-36 object-cover rounded-md"
+                                                />
+                                            )}
+                                        </div> */}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* second section  */}
+                            <div className="flex flex-col gap-2 sm:col-span-3">
+                                <Label htmlFor="description">Content</Label>
+                                <Textarea
+                                    id="content"
+                                    name="content"
+                                    placeholder="Enter blog content"
+                                    rows={5}
+                                    value={formState["content"]}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                          
+                        </div>
+                    </div>
+                </div>
+                <div className="flex justify-end mt-6">
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            create.submit({
+                                formData: formState,
+                            });
+                        }}
+                        isProcessing={create.isLoading}
+                        disabled={create.isLoading}
+                        processingLabel="Saving"
+                        processingSpinner={<AiOutlineLoading />}
+                    >
+                        Save all
+                    </Button>
+                </div>
+            </section>
+        </div>
+    );
 };
 
 export default BlogCreatePage;

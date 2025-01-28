@@ -1,5 +1,6 @@
 import useBrand from "@seller/hooks/useBrand";
 import useForm from "@seller/hooks/useForm";
+import useString from "@seller/hooks/useString";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -8,9 +9,10 @@ import { HiPlus } from "react-icons/hi";
 const CreateBrandModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const { create } = useBrand();
+    const { getSlug } = useString();
 
-    const { handleChange, formState, formErrors } = useForm({
-        errors: create.error,
+    const { handleChange, formState, formErrors, setFormState } = useForm({
+        formValidationError: create.error,
     });
 
     return (
@@ -49,6 +51,10 @@ const CreateBrandModal: FC = function () {
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         handleChange(event);
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            slug: getSlug(event.target.value),
+                                        }));
                                     }}
                                     required
                                 />
@@ -60,7 +66,7 @@ const CreateBrandModal: FC = function () {
                                 <TextInput
                                     id="slug"
                                     name="slug"
-                                    placeholder="Brand name"
+                                    placeholder="Brand slug"
                                     value={formState["slug"]}
                                     color={
                                         formErrors["slug"] ? "failure" : "gray"
@@ -91,6 +97,7 @@ const CreateBrandModal: FC = function () {
                                     setOpen(false);
                                 },
                             });
+                            setFormState({});
                         }}
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}

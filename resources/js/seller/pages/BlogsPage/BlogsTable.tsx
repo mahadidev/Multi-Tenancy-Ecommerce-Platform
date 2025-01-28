@@ -4,9 +4,14 @@ import { Button, Checkbox, Label, Table } from 'flowbite-react';
 import { HiPencilAlt } from 'react-icons/hi';
 import DeleteProductModal from './DeleteBlogModal';
 import { Link } from 'react-router-dom';
+import useBlog from '@seller/hooks/useBlog';
+import { BlogType } from '@type/blogType';
+import DeleteBlogCategoryModal from './BlogCategories/DeleteBlogCategoryModal';
+import DeleteBlogModal from './DeleteBlogModal';
+import { FaEye } from 'react-icons/fa';
 
 const BlogsTable = () => {
-    const { products } = useProduct();
+    const { blogs } = useBlog();
 
 	return (
 		<Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
@@ -26,56 +31,60 @@ const BlogsTable = () => {
 				</Table.HeadCell>
 				<Table.HeadCell>ID</Table.HeadCell>
 				<Table.HeadCell>Name</Table.HeadCell>
-				<Table.HeadCell>SKU</Table.HeadCell>
 				<Table.HeadCell>Category</Table.HeadCell>
-				<Table.HeadCell>Price</Table.HeadCell>
+				<Table.HeadCell>Status</Table.HeadCell>
 				<Table.HeadCell />
 			</Table.Head>
 			<Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-				{products.map((product: ProductType) => (
+				{blogs.map((blog: BlogType) => (
 					<Table.Row
-						key={product.id}
+						key={blog.id}
 						className="hover:bg-gray-100 dark:hover:bg-gray-700"
 					>
 						<Table.Cell className="w-4 p-4">
 							<Checkbox aria-describedby="checkbox-1" id="checkbox-1" />
 						</Table.Cell>
 						<Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-							{product.id}
+							{blog.id}
 						</Table.Cell>
 						<Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
 							<img
 								alt=""
-								src={product.thumbnail}
+								src={blog.image}
 								className="w-10 h-10 rounded-full aspect-square object-cover"
 							/>
 							<div className="text-sm font-normal text-gray-500 dark:text-gray-400">
 								<div className="text-base font-semibold text-gray-900 dark:text-white">
-									{product.name}
+									{blog.title}
 								</div>
 								<div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-									10 products
+									10 blogs
 								</div>
 							</div>
 						</Table.Cell>
+						
 						<Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-							{product.sku}
+							{blog?.category_id ?? "No Category"}
 						</Table.Cell>
 						<Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-							{product.category?.name ?? "No Category"}
+							{blog.status}
 						</Table.Cell>
-						<Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-							{product.price}
-						</Table.Cell>
+					
 						<Table.Cell>
 							<div className="flex items-center gap-x-3 whitespace-nowrap">
-								<Button as={Link} to={`/products/${product.id}`}  size="sm" color="primary" className="p-0">
+								<Button as={Link} to={`/blogs/${blog.id}`}  size="sm" color="primary" className="p-0">
 									<div className="flex items-center gap-x-2">
-										<HiPencilAlt className="h-5 w-5" />
-										Edit Product
+										<FaEye className="h-5 w-5" />
+										View Post
 									</div>
 								</Button>
-								<DeleteProductModal product={product} />
+								<Button as={Link} to={`/blogs/${blog.id}`}  size="sm" color="primary" className="p-0">
+									<div className="flex items-center gap-x-2">
+										<HiPencilAlt className="h-5 w-5" />
+										Edit Post
+									</div>
+								</Button>
+								<DeleteBlogModal blog={blog} />
 							</div>
 						</Table.Cell>
 					</Table.Row>

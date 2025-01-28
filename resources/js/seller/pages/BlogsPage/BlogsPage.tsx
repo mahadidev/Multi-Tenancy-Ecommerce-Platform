@@ -3,8 +3,6 @@ import { RoutePath } from '@seller/seller_env';
 import { Breadcrumb, Button, Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { HiDocumentDownload, HiHome, HiPlus } from 'react-icons/hi';
-import CreateProductModal from "./CreateProductModal";
-
 import BlogsTablePagination from "./BlogsTablePagination";
 import BlogsTable from "./BlogsTable";
 import useBlog from "@seller/hooks/useBlog";
