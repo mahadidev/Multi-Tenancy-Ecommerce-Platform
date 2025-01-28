@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ProductResource;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\ProductVariantOption;
+use App\Models\ProductVariantOptionType;
 class ProductService
 {
-
     public static function index(Request $request)
     {
         $query = Product::authorized();
@@ -58,25 +58,21 @@ class ProductService
 
             'variants' => 'nullable|array|required_if:has_variants,1',
             'variants.*.label' => 'required|string|max:255',
+            'variants.*.slug' => 'required|string|max:255',
+
             'variants.*.options' => 'required|array|min:1',
             'variants.*.options.*.label' => 'required|string|max:255',
-            'variants.*.options.*.price' => 'required|numeric|min:0',
-            'variants.*.options.*.qty_stock' => 'required|integer|min:0',
-            'variants.*.options.*.code' => 'nullable|string',
+            'variants.*.options.*.slug' => 'required|string|max:255',
 
+            'variants.*.options.*.types' => 'required|array|min:1',
+            'variants.*.options.*.types.*.label' => 'required|string|max:255',
+            'variants.*.options.*.types.*.price' => 'nullable|numeric|min:0',
+            'variants.*.options.*.types.*.qty_stock' => 'nullable|integer|min:0',
+            'variants.*.options.*.types.*.code' => 'nullable|string',
         ]);
 
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
-
-
-        // Handle the attachments (if any)
-        // $attachments = [];
-        // if ($request->has('attachments') && isset($request->attachments)) {
-        //     foreach ($request->file('attachments') as $file) {
-        //         $attachments[] = $file->store('products', 'public');
-        //     }
-        // }
 
         // Create the product entry
         $product = Product::create([
@@ -88,7 +84,7 @@ class ProductService
             'sku' => $validatedData['sku'] ?? null,
             'short_description' => $validatedData['short_description'] ?? null,
             'description' => $validatedData['description'] ?? null,
-            'thumbnail' => $validatedData["thumbnail"],  // Save the thumbnail path
+            'thumbnail' => $validatedData['thumbnail'],
             'attachments' => $validatedData['attachments'] ?? null,
             'price' => $validatedData['price'],
             'stock' => $validatedData['stock'] ?? null,
@@ -102,25 +98,35 @@ class ProductService
             'discount_amount' => $validatedData['discount_amount'] ?? null,
         ]);
 
-
+        // Handle variants if they exist
         if ($request->has('variants')) {
             foreach ($request->variants as $variant) {
-                // Ensure the options are formatted correctly as an array
-                $options = collect($variant['options'])->map(function ($option) {
-                    return [
-                        'code' => $option['code'] ?? null,  // Ensure 'code' is null if not provided
-                        'label' => $option['label'],
-                        'price' => $option['price'],
-                        'qty_stock' => $option['qty_stock'],
-                    ];
-                })->toArray();
-
-                // Create the variant record
+                // Create the product variant record
                 $productVariant = ProductVariant::create([
                     'product_id' => $product->id,
                     'label' => $variant['label'],
-                    'options' => ($options),  // Save options as a JSON-encoded string
+                    'slug' => $variant['slug'],
                 ]);
+
+                // Handle variant options
+                foreach ($variant['options'] as $option) {
+                    $productVariantOption = ProductVariantOption::create([
+                        'variant_id' => $productVariant->id,
+                        'label' => $option['label'],
+                        'slug' => $option['slug'],
+                    ]);
+
+                    // Handle option types
+                    foreach ($option['types'] as $type) {
+                        ProductVariantOptionType::create([
+                            'option_id' => $productVariantOption->id,
+                            'label' => $type['label'],
+                            'code' => $type['code'] ?? null,
+                            'price' => $type['price'] ?? 0,
+                            'qty_stock' => $type['qty_stock'] ?? 0,
+                        ]);
+                    }
+                }
             }
         }
 
@@ -128,14 +134,13 @@ class ProductService
         return new ProductResource($product);
     }
 
-
     public static function update(Request $request, $id)
     {
-
         $product = Product::with('category', 'store', 'variants', 'brand')->authorized()->find($id);
         if (!$product) {
             return null;
         }
+
         // Validate the incoming data
         $validatedData = $request->validate([
             'category_id' => 'nullable|exists:categories,id',
@@ -153,35 +158,23 @@ class ProductService
             'has_variants' => 'nullable|boolean',
             'has_in_stocks' => 'nullable|boolean',
             'status' => 'nullable|boolean',
-
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
             'discount_to' => 'nullable|date',
             'discount_type' => 'nullable|string|in:flat,percentage',
             'discount_amount' => 'nullable|numeric|min:0',
-
             'variants' => 'nullable|array|required_if:has_variants,1',
             'variants.*.label' => 'required|string|max:255',
+            'variants.*.slug' => 'required|string|max:255',
             'variants.*.options' => 'required|array|min:1',
             'variants.*.options.*.label' => 'required|string|max:255',
-            'variants.*.options.*.price' => 'required|numeric|min:0',
-            'variants.*.options.*.qty_stock' => 'required|integer|min:0',
-            'variants.*.options.*.code' => 'nullable|string',
+            'variants.*.options.*.slug' => 'required|string|max:255',
+            'variants.*.options.*.types' => 'required|array|min:1',
+            'variants.*.options.*.types.*.label' => 'required|string|max:255',
+            'variants.*.options.*.types.*.price' => 'nullable|numeric|min:0',
+            'variants.*.options.*.types.*.qty_stock' => 'nullable|integer|min:0',
+            'variants.*.options.*.types.*.code' => 'nullable|string',
         ]);
-
-
-        // Handle the attachments (if any)
-        // if ($request->hasFile('attachments')) {
-        //     // Delete old attachments if they exist
-        //     if ($product->attachments) {
-        //         $oldAttachments = json_decode($product->attachments, true);
-        //         foreach ($oldAttachments as $attachment) {
-        //             Storage::disk('public')->delete($attachment);
-        //         }
-        //     }
-
-        //     $validatedData['attachments'] = array_map(fn($file) => $file->store('products', 'public'), $request->file('attachments'));
-        // }
 
         // Update the product entry
         $product->update([
@@ -192,9 +185,8 @@ class ProductService
             'sku' => $validatedData['sku'] ?? $product->sku,
             'short_description' => $validatedData['short_description'] ?? $product->short_description,
             'description' => $validatedData['description'] ?? $product->description,
-            'thumbnail' => $validatedData['thumbnail'] ?? $product->thumbnail, // Keep the old thumbnail if not updated
+            'thumbnail' => $validatedData['thumbnail'] ?? $product->thumbnail,
             'attachments' => $validatedData['attachments'] ?? $product->attachments,
-            // 'attachments' => isset($validatedData['attachments']) ? $validatedData['attachments'] : $product->attachments, // Keep the old attachments if not updated
             'price' => $validatedData['price'] ?? $product->price,
             'stock' => $validatedData['stock'] ?? $product->stock,
             'has_variants' => $validatedData['has_variants'] ?? $product->has_variants,
@@ -209,28 +201,41 @@ class ProductService
 
         // Handle variants if present
         if (!empty($validatedData['variants'])) {
-            // Delete existing variants
+           
             $product->variants()->delete();
 
             // Add new variants
             foreach ($validatedData['variants'] as $variant) {
-                $options = collect($variant['options'])->map(fn($option) => [
-                    'code' => $option['code'] ?? null,
-                    'label' => $option['label'],
-                    'price' => $option['price'],
-                    'qty_stock' => $option['qty_stock'],
-                ])->toArray();
-
-                ProductVariant::create([
+                $productVariant = ProductVariant::create([
                     'product_id' => $product->id,
                     'label' => $variant['label'],
-                    'options' => $options, // Save options as JSON
+                    'slug' => $variant['slug'],
                 ]);
+
+                // Add options for the variant
+                foreach ($variant['options'] as $option) {
+                    $productVariantOption = ProductVariantOption::create([
+                        'variant_id' => $productVariant->id,
+                        'label' => $option['label'],
+                        'slug' => $option['slug'],
+                    ]);
+
+                    // Add types for the option
+                    foreach ($option['types'] as $type) {
+                        ProductVariantOptionType::create([
+                            'option_id' => $productVariantOption->id,
+                            'label' => $type['label'],
+                            'code' => $type['code'] ?? null,
+                            'price' => $type['price'] ?? 0,
+                            'qty_stock' => $type['qty_stock'] ?? 0,
+                        ]);
+                    }
+                }
             }
         }
 
         // Return the updated product response
-        return new ProductResource($product);
+        return new ProductResource($product->load('variants.options.types'));
     }
 
     public static function destroy(Request $request, $id)
@@ -258,14 +263,12 @@ class ProductService
 
         // 2. Availability Filter - Critical for user experience
         if ($request->has('in_stock')) {
-            $query->where('stock', '>', 0)
-                ->where('has_in_stocks', true);
+            $query->where('stock', '>', 0)->where('has_in_stocks', true);
         }
 
         // 3. Discounts - Important for price-sensitive customers
         if ($request->has('on_sale')) {
-            $query->where('has_discount', true)
-                ->whereDate('discount_to', '>=', now());
+            $query->where('has_discount', true)->whereDate('discount_to', '>=', now());
         }
 
         // 4. Brand Filter - Key for brand-conscious shoppers
@@ -276,8 +279,7 @@ class ProductService
         // 5. Search - Essential for finding specific products
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('sku', 'like', '%' . $request->search . '%');
+                $q->where('name', 'like', '%' . $request->search . '%')->orWhere('sku', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -297,10 +299,10 @@ class ProductService
 
         // Limited to most important sort options
         $allowedSortFields = [
-            'created_at',    // Latest products
-            'price',         // Price sorting
-            'name',         // Alphabetical
-            'is_trending',   // Trending products
+            'created_at', // Latest products
+            'price', // Price sorting
+            'name', // Alphabetical
+            'is_trending', // Trending products
         ];
 
         if (in_array($sortField, $allowedSortFields)) {
