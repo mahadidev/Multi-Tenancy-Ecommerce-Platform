@@ -192,3 +192,9 @@ export interface UserUpdatePasswordPayloadType {
     password: string;
     confirm_password: string;
 }
+
+// reset password
+
+export interface PasswordResetRequestPayloadType {
+    email: string;
+}
