@@ -180,6 +180,42 @@
             }
         }
 
+        
+        .store-info-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding bottom: 10px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .store-info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .store-info-item i {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .store-info-value {
+            color: #1e293b;
+        }
+        .page-footer {
+            position: fixed;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            text-align: right;
+            font-size: 10px;
+            color: #666;
+            width: 100%;
+        }
+
         .watermark {
             position: absolute;
             top: 50%;
@@ -204,6 +240,23 @@
         <div class="header">
             <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
                 alt="{{ config('app.name') }}" class="logo">
+                <div class="store-info-line">
+                    <div class="store-info-item">
+                        <i class="fas fa-store"></i>
+                        @if ($store->domain)
+                            <a href="{{ $store->domain }}" target="_blank" class="store-info-value"
+                                style="text-decoration: none;">{{ $store->domain }}</a>
+                        @endif
+                        @if ($store->email)
+                            |
+                            <span class="store-info-value">{{ $store->email }}</span>
+                        @endif
+                        @if ($store->phone)
+                            |
+                            <span class="store-info-value">{{ $store->phone }}</span>
+                        @endif
+                    </div>
+                </div>
             <h1>{{ $isCustomer ? 'Order Confirmation' : 'New Order Notification' }}</h1>
         </div>
 
@@ -300,11 +353,19 @@
         </table>
 
         <div class="footer">
-            <p>Thank you for choosing {{ config('app.name') }}!</p>
+            <p>Thank you for choosing {{ $store->name }}</p>
             <div class="company-info">
-                {{ config('app.name') }}
+                <span>© {{ now()->year }} | {{ $store->name }}</span>
+                @if ($store->address)
+                    |
+                    <span>Address: {{ $store->address }}</span>
+                @endif
             </div>
         </div>
+    </div>
+    <div class="page-footer">
+        <p>Generated on: {{ now()->format('F d, Y H:i:s') }}</p>
+        <p>Powerd By: Chologori.com</p>
     </div>
 </body>
 

@@ -116,7 +116,7 @@ class ProductController extends Controller
         $products = ProductService::index($request);
         $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
         $store->domain = $store->domain();
-        $pdf = FacadePdf::loadView('pdf.products', compact('products', $store))->setPaper('a4');
+        $pdf = FacadePdf::loadView('pdf.products', compact('products', 'store'))->setPaper('a4');
         return $pdf->download('products_' . now()->format('Ymd_His') . '.pdf');
     }
 

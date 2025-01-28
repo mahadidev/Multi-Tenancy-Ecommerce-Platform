@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>@yield('title')</title>
     <style>
         body {
@@ -37,12 +38,13 @@
             font-size: 24px;
             font-weight: 600;
             margin: 0;
+            padding-top: 10px;
         }
 
         .logo {
             max-width: 150px;
             /* Reduced logo size */
-            margin-bottom: 15px;
+            /* margin-bottom: 15px; */
             /* Reduced margin */
         }
 
@@ -56,6 +58,39 @@
             font-size: 13px;
             /* Slightly smaller font size */
         }
+
+        .store-info-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding bottom: 10px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .store-info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .store-info-item i {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .store-info-value {
+            color: #1e293b;
+        }
+
+        @media (max-width: 640px) {
+            .store-info-line {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
 
         .table {
             width: 100%;
@@ -105,7 +140,7 @@
 
         .page-footer {
             position: fixed;
-            bottom: 0px;
+            bottom: -40px;
             left: 0;
             right: 0;
             text-align: right;
@@ -160,21 +195,44 @@
         <div class="header">
             <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
                 alt="{{ config('app.name') }}" class="logo">
+
+            <div class="store-info-line">
+                <div class="store-info-item">
+                    <i class="fas fa-store"></i>
+                    @if ($store->domain)
+                        <a href="{{ $store->domain }}" target="_blank" class="store-info-value"
+                            style="text-decoration: none;">{{ $store->domain }}</a>
+                    @endif
+                    @if ($store->email)
+                        |
+                        <span class="store-info-value">{{ $store->email }}</span>
+                    @endif
+                    @if ($store->phone)
+                        |
+                        <span class="store-info-value">{{ $store->phone }}</span>
+                    @endif
+                </div>
+            </div>
+
             <h1>@yield('title')</h1>
         </div>
 
         @yield('content')
 
         <div class="footer">
-            <p>Thank you for choosing {{ config('app.name') }}!</p>
+            <p>Thank you for choosing {{ $store->name }}</p>
             <div class="company-info">
-                © {{ now()->year }} | {{ config('app.name') }}
+                <span>© {{ now()->year }} | {{ $store->name }}</span>
+                @if ($store->address)
+                    |
+                    <span>Address: {{ $store->address }}</span>
+                @endif
             </div>
         </div>
     </div>
 
     <div class="page-footer">
-        <p>Generated on: {{ now()->format('F d, Y H:i:s') }}</span></p>
+        <p>Generated on: {{ now()->format('F d, Y H:i:s') }}</p>
         <p>Powerd By: Chologori.com</p>
     </div>
 </body>
