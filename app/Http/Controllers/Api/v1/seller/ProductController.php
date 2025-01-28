@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api\v1\seller;
 
+use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Store;
 
 class ProductController extends Controller
 {
@@ -55,7 +60,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'message' => 'product created successfully',
+            'message' => 'Product created successfully',
             'product' => [
                 'product' => ProductService::store($request),
             ],
@@ -69,14 +74,14 @@ class ProductController extends Controller
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'product not found',
+                    'message' => 'Product not found',
                 ],
                 404,
             );
         } else {
             return response()->json([
                 'status' => 200,
-                'message' => 'product updated successfully',
+                'message' => 'Product updated successfully',
                 'data' => [
                     'product' => $product,
                 ],
@@ -99,10 +104,33 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'product deleted successfully',
-                'data' => [
-                    'product' => $product,
-                ],
             ], 200);
         }
     }
+
+    public function pdf(Request $request)
+    {
+        $products = ProductService::index($request);
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
+        $store->domain = $store->domain();
+        $pdf = FacadePdf::loadView('pdf.products', compact('products', 'store'))->setPaper('a4');
+        return $pdf->download('products_' . now()->format('Ymd_His') . '.pdf');
+    }
+
+    public function excel(Request $request)
+    {
+        try {
+            $fileName = 'product_' . now()->format('Ymd_His') . '.xlsx';
+
+            return Excel::download(new ProductsExport, $fileName); 
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to export Products',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

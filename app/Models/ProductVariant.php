@@ -30,7 +30,7 @@ class ProductVariant extends Model
     protected $fillable = [
         'product_id', // The product to which this variant belongs
         'label',      // Variant label, e.g., "Color", "Size"
-        'options',    // JSON data for variant options (nested structure)
+        // 'options',    // JSON data for variant options (nested structure)
     ];
 
     protected $hidden = [
@@ -39,12 +39,15 @@ class ProductVariant extends Model
     ];
 
     protected $casts = [
-        'options' => 'array',
+        // 'options' => 'array',
     ];
     
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
-    
+
+    public function options(){
+        return $this->hasMany(ProductVariantOption::class, 'variant_id');
+    }
 }

@@ -21,10 +21,38 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $orders = Order::currentStore()->where('user_id', auth()->user()->id)->with('items')->latest()->get();
+        $search = $request->input('search'); // Search keyword
+        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+
+        $orders = Order::where('name', $search)
+            ->currentStore()
+            ->where('user_id', auth()->user()->id)
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('address', 'like', '%' . $search . '%')
+                    ->orWhere('payment_method', 'like', '%' . $search . '%');
+            })
+            ->with('items')
+            ->orderBy('created_at', $sort)
+            ->paginate($perPage);
+
         return response()->json([
             'status' => 200,
             'data' => ['orders' => OrderResource::collection($orders)],
+            'meta' => [
+                'current_page' => $orders->currentPage(),
+                'first_page_url' => $orders->url(1),
+                'last_page' => $orders->lastPage(),
+                'last_page_url' => $orders->url($orders->lastPage()),
+                'next_page_url' => $orders->nextPageUrl(),
+                'prev_page_url' => $orders->previousPageUrl(),
+                'total' => $orders->total(),
+                'per_page' => $orders->perPage(),
+            ],
         ]);
     }
 
@@ -149,8 +177,12 @@ class OrderController extends Controller
     public function downloadOrderDetails($uuid, $isCustomer)
     {
         $order = Order::where('uuid', $uuid)->with('items')->first();
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find($order->store_id);
+        $store->domain = $store->domain();
+
         $pdf = FacadePdf::loadView('pdf.order_confirmation', [
             'order' => $order,
+            'store' => $store,
             'isCustomer' => $isCustomer,
         ])->setPaper('a4');
 
