@@ -16,6 +16,8 @@ class ProductVariantResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'label' => $this->label,
+            'slug' => $this->slug,
             'product_id' => $this->product->id,
             'options' => $this->options ? ProductVariantOptionResource::collection($this->options) : null,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),

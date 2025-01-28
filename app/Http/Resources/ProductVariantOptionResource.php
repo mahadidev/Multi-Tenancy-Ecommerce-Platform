@@ -16,10 +16,12 @@ class ProductVariantOptionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'variant_id' => $this->variant,
+            'variant_id' => $this->variant_id,
             'label' => $this->label,
             'slug' => $this->slug,
-            'types' => $this->types ? ProductVariantOptionTypeResource::collection($this->types) : null,
+            'code' => $this->code,
+            'price' => $this->price,
+            'qty_stock' => $this->qty_stock,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
