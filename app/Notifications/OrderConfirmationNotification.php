@@ -46,6 +46,21 @@ class OrderConfirmationNotification extends Notification
             ? 'Your Order Confirmation #' . $this->order->uuid
             : 'New Order Received #' . $this->order->uuid;
 
+        $appUrl = config('app.url');
+
+        // Ensure we have a trailing slash
+        if (!str_ends_with($appUrl, '/')) {
+            $appUrl .= '/';
+        }
+
+        // Get store logo URL
+        $logoUrl = null;
+        if ($this->store->logo) {
+            $logoUrl = $appUrl . 'storage/' . $this->store->logo;
+        } else {
+            $logoUrl = $appUrl . 'images/logo-text.png';
+        }
+
         // Generate PDF content dynamically
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('pdf.order_confirmation', [
@@ -65,6 +80,8 @@ class OrderConfirmationNotification extends Notification
                 'order' => $this->order,
                 'store' => $this->store,
                 'isCustomer' => $this->isCustomer,
+                'appUrl' => $appUrl,
+                'logoUrl' => $logoUrl // Pass the logo URL to the view
             ])
             ->attachData($pdf->output(), "Order_Confirmation_{$this->order->uuid}.pdf", [
                 'mime' => 'application/pdf',

@@ -66,12 +66,15 @@ class Order extends Model
                 $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')
                     ->find($this->store_id);
 
-                Log::info('store: ' . $store);
-
                 if (!$store) {
                     Log::error('Store not found for order: ' . $this->uuid);
-                    return;
+                    // return;
                 }
+
+                $d = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/sites/' . $store->domain;
+                $store->setAttribute('computed_domain', $d);
+
+                // Log::info('store: ' . $store);
 
                 // For customer notification
                 $customer = User::find($this->user_id);

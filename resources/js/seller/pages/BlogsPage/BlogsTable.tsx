@@ -1,12 +1,8 @@
-import useProduct from '@seller/hooks/useProduct';
-import { ProductType } from '@type/productType';
 import { Button, Checkbox, Label, Table } from 'flowbite-react';
 import { HiPencilAlt } from 'react-icons/hi';
-import DeleteProductModal from './DeleteBlogModal';
 import { Link } from 'react-router-dom';
 import useBlog from '@seller/hooks/useBlog';
 import { BlogType } from '@type/blogType';
-import DeleteBlogCategoryModal from './BlogCategories/DeleteBlogCategoryModal';
 import DeleteBlogModal from './DeleteBlogModal';
 import { FaEye } from 'react-icons/fa';
 

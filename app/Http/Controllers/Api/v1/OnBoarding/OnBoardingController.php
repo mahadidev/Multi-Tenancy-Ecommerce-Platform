@@ -96,7 +96,7 @@ class OnBoardingController extends Controller
     public function storeBranding(Request $request)
     {
         $request->validate([
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'logo' => 'nullable|string|max:255',
             'primary_color' => 'nullable|string',
             'secondary_color' => 'nullable|string',
         ]);
@@ -112,10 +112,8 @@ class OnBoardingController extends Controller
             ],404);
         }
 
-        $logoPath = $request->file('logo')->store('stores', 'public');
-
         $store->update([
-            'logo' => $logoPath,
+            'logo' => $request->logo ?? 'https://placehold.co/600x400',
             'primary_color' => $request->primary_color,
             'secondary_color' => $request->secondary_color,
         ]);
