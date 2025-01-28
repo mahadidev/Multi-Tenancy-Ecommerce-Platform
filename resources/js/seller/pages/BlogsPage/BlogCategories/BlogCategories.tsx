@@ -1,20 +1,18 @@
 
 import { RoutePath } from '@seller/seller_env';
-
 import { Breadcrumb, Button, Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { HiDocumentDownload, HiHome } from 'react-icons/hi';
-
 import BlogCategoriesTable from "./BlogCategoriesTable";
 import CreateBlogCategoryModal from "./CreateBlogCategoryModal";
 import BlogCategoriesTablePagination from "./BlogCategoriesTablePagination";
-import useBlogCategory from "@seller/hooks/useBlogCategory";
-import { useFetchBlogCategoriesQuery } from '@seller/store/reducers/blogCategoryApi';
+import useCategory from '@seller/hooks/useCategory';
+import { useFetchCategoriesQuery } from '@seller/store/reducers/categoryApi';
 
 const BlogCategories: FC = function () {
     // fetch Categories
-    useFetchBlogCategoriesQuery();
-    const { meta } = useBlogCategory();
+    useFetchCategoriesQuery();
+    const { meta } = useCategory();
 
 	return (
 		<>

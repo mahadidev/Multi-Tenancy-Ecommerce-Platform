@@ -197,7 +197,7 @@ const BlogCreatePage = () => {
                         processingLabel="Saving"
                         processingSpinner={<AiOutlineLoading />}
                     >
-                        Save all
+                        Create
                     </Button>
                 </div>
             </section>

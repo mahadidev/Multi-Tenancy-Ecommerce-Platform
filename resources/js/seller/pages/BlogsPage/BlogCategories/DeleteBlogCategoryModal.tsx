@@ -1,4 +1,4 @@
-import useBlogCategory from '@seller/hooks/useBlogCategory';
+import useCategory from '@seller/hooks/useCategory';
 import { CategoryType } from '@type/categoryType';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
@@ -11,7 +11,7 @@ interface PropsType {
 
 const DeleteBlogCategoryModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
-	const {delete: categoryDelete} = useBlogCategory();
+	const {delete: categoryDelete} = useCategory();
 	return (
 		<>
 			<Button

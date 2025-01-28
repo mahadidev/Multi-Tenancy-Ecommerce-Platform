@@ -9,7 +9,7 @@ export interface BlogType {
 	content: string;
 	status: string;
 	user_id: number;
-	category_id: number;
+	category: CategoryType;
     created_at: string;
     updated_at: string;
 }

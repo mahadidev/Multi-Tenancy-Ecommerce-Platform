@@ -1,4 +1,4 @@
-import useBlogCategory from "@seller/hooks/useBlogCategory";
+import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
 
@@ -9,7 +9,7 @@ import { HiPlus } from "react-icons/hi";
 
 const CreateBlogCategoryModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
-    const { create } = useBlogCategory();
+    const { create } = useCategory();
     const { getSlug } = useString();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({

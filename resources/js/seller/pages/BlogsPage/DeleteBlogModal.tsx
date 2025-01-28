@@ -6,7 +6,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { HiOutlineExclamationCircle, HiTrash } from 'react-icons/hi';
 
 interface PropsType {
-	blog: BlogType  //todo type
+	blog: BlogType  
 }
 
 const DeleteBlogModal: FC<PropsType> = function (props) {
