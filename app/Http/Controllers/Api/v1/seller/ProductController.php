@@ -60,7 +60,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'message' => 'product created successfully',
+            'message' => 'Product created successfully',
             'product' => [
                 'product' => ProductService::store($request),
             ],
@@ -74,14 +74,14 @@ class ProductController extends Controller
             return response()->json(
                 [
                     'status' => 404,
-                    'message' => 'product not found',
+                    'message' => 'Product not found',
                 ],
                 404,
             );
         } else {
             return response()->json([
                 'status' => 200,
-                'message' => 'product updated successfully',
+                'message' => 'Product updated successfully',
                 'data' => [
                     'product' => $product,
                 ],
@@ -104,9 +104,6 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'product deleted successfully',
-                'data' => [
-                    'product' => $product,
-                ],
             ], 200);
         }
     }

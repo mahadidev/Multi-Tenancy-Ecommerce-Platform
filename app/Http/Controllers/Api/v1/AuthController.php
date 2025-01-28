@@ -72,11 +72,14 @@ class AuthController extends Controller
             $store = Store::where('owner_id', $user->id)->first();
 
             if ($store) {
-                StoreSession::updateOrCreate([
-                    'user_id' => $user->id,
-                ], [
-                    'store_id' => $store->id,
-                ]);
+                StoreSession::updateOrCreate(
+                    [
+                        'user_id' => $user->id,
+                    ],
+                    [
+                        'store_id' => $store->id,
+                    ],
+                );
 
                 $request->session()->forget('store_id');
                 if (session()->has('store_id')) {
@@ -110,7 +113,7 @@ class AuthController extends Controller
         }
 
         // return all stores
-        $stores = Store::where(["owner_id" => $user->id])->get();
+        $stores = Store::where(['owner_id' => $user->id])->get();
         if ($stores) {
             $response['data']['stores'] = StoreResource::collection($stores);
         }
@@ -141,15 +144,18 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'singup success',
-            'data' => [
-                'token_type' => 'Bearer',
-                'access_token' => $token,
-                'user' => new UserResource($user),
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'singup success',
+                'data' => [
+                    'token_type' => 'Bearer',
+                    'access_token' => $token,
+                    'user' => new UserResource($user),
+                ],
             ],
-        ], 200);
+            200,
+        );
     }
 
     // User or Customer authentication functions
@@ -186,12 +192,10 @@ class AuthController extends Controller
 
             $statusCode = !$user || !Hash::check($request->password, $user->password) ? 401 : 403;
 
-            return response()->json(
-                [
-                    'status' => $statusCode,
-                    'message' => $message,
-                ],
-            );
+            return response()->json([
+                'status' => $statusCode,
+                'message' => $message,
+            ]);
         }
 
         // Check if 'store_id' is null or if the store ID doesn't exist in the array for users table
@@ -199,7 +203,7 @@ class AuthController extends Controller
         if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
             return response()->json([
                 'status' => 404,
-                'message' => 'This store is not associated with the user, please sign-up'
+                'message' => 'This store is not associated with the user, please sign-up',
             ]);
         }
 
@@ -233,29 +237,27 @@ class AuthController extends Controller
 
     public function userRegister(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $this->validateRegistrationRequest($request);
+        $this->validateRegistrationRequest($request);
 
-            $storeId = (int) $request->store_id;
-            $email = $request->email;
+        $storeId = (int) $request->store_id;
+        $email = $request->email;
 
-            // Check for existing user with same email and store
-            if ($this->userExistsInStore($email, $storeId)) {
-                return $this->errorResponse('Email already registered for this store', 400);
-            }
+        // Check for existing user with same email and store
+        if ($this->userExistsInStore($email, $storeId)) {
+            return $this->errorResponse('Email already registered for this store', 400);
+        }
 
-            // Try to find user with same email in different store
-            $existingUser = $this->findUserInDifferentStore($email, $storeId);
+        // Try to find user with same email in different store
+        $existingUser = $this->findUserInDifferentStore($email, $storeId);
 
-            if ($existingUser) {
-                return $this->handleExistingUserRegistration($existingUser, $storeId, $request);
-            }
+        if ($existingUser) {
+            return $this->handleExistingUserRegistration($existingUser, $storeId, $request);
+        }
 
-            // Create new user
-            $user = $this->createNewUser($request, $storeId);
+        // Create new user
+        $user = $this->createNewUser($request, $storeId);
 
-            return $this->generateSuccessResponse($user, $request, $storeId);
-        });
+        return $this->generateSuccessResponse($user, $request, $storeId);
     }
 
     private function validateRegistrationRequest(Request $request)
@@ -322,15 +324,18 @@ class AuthController extends Controller
 
         $this->storeSessionData($request, $storeId);
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Signup successful',
-            'data' => [
-                'token_type' => 'Bearer',
-                'access_token' => $token,
-                'user' => $user,
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Signup successful',
+                'data' => [
+                    'token_type' => 'Bearer',
+                    'access_token' => $token,
+                    'user' => $user,
+                ],
             ],
-        ], 200);
+            200,
+        );
     }
 
     private function storeSessionData(Request $request, int $storeId): void
@@ -357,18 +362,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        return apiResponse(function () use ($request) {
-            $user = auth()->user();
-            if ($user) {
-                $user->tokens()->delete();
-                session()->flush();
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Logout successful',
-                ]);
-            }
-            return $this->errorResponse('User is not authenticated', 400);
-        });
+        $user = auth()->user();
+        if ($user) {
+            $user->tokens()->delete();
+            session()->flush();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Logout successful',
+            ]);
+        }
+        return $this->errorResponse('User is not authenticated', 400);
     }
 
     public function sendResetLinkEmail(Request $request)
@@ -376,27 +379,30 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);
-       
+
         // Generate a token for the user
         $user = User::where('email', $request->email)->first();
 
-        if(!$user){
+        if (!$user) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Invalid email!'
+                'message' => 'Invalid email!',
             ]);
         }
 
         $token = Password::createToken($user);
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Email address matched and token generated!',
-            'data' => [
-                'email' => $request->email,
-                'token' => $token
-            ]
-        ], 200);
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Email address matched and token generated!',
+                'data' => [
+                    'email' => $request->email,
+                    'token' => $token,
+                ],
+            ],
+            200,
+        );
     }
 
     public function resetPassword(Request $request)
@@ -408,37 +414,45 @@ class AuthController extends Controller
             'password' => 'required',
             'confirm_password' => 'required|same:password',
         ]);
-    
+
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 422,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ],
+                422,
+            );
         }
-    
+
         // Verify the token using Laravel's Password Broker
         $user = \App\Models\User::where('email', $request->email)->first();
-    
+
         if (!Password::tokenExists($user, $request->token)) {
-            return response()->json([
-                'status' => 403,
-                'message' => 'Invalid or expired token.',
-            ], 403);
+            return response()->json(
+                [
+                    'status' => 403,
+                    'message' => 'Invalid or expired token.',
+                ],
+                403,
+            );
         }
-    
+
         // Token is valid; reset the password
         $user->update([
             'password' => Hash::make($request->password),
         ]);
-    
+
         // Optionally, delete the token after successful password reset
         Password::deleteToken($user);
-    
-        return response()->json([
-            'status' => 200,
-            'message' => 'Password has been reset successfully.',
-        ], 200);
+
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Password has been reset successfully.',
+            ],
+            200,
+        );
     }
-    
 }
