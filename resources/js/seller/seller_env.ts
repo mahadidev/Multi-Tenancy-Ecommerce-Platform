@@ -11,13 +11,12 @@ export const BASE_URL: string = document.head.querySelector(
 	: 'http://localhost:8000';
 
 // variables
-export const PREFIX = "/seller"
+export const PREFIX = '/seller';
 export const BASE_IMAGE_URL = `${BASE_URL}/images`;
 export const API_URL = BASE_URL + '/api/v1';
 export const APP_NAME: string = document.head.querySelector(
 	'meta[name="app-name"]'
 )?.content;
-
 
 export const RoutePath = {
 	LoginPage: {
@@ -25,6 +24,9 @@ export const RoutePath = {
 	},
 	RegisterPage: {
 		index: () => '/register',
+	},
+	MyAccountPage: {
+		ProfileSettings: { index: () => '/my-account/profile-settings' },
 	},
 	Onboard: {
 		Store: {
@@ -42,7 +44,9 @@ export const RoutePath = {
 	},
 	StorePagesPage: {
 		index: () => '/pages',
+		indexUrl: () => BASE_URL + PREFIX + `/pages`,
 		edit: (pageId: number) => `/pages/${pageId}`,
+		editUrl: (pageId: number) => BASE_URL + PREFIX + `/pages/${pageId}`,
 	},
 	ProductsPage: {
 		index: () => '/products',
@@ -55,6 +59,3 @@ export const RoutePath = {
 		index: () => '/themes',
 	},
 };
-
-
-

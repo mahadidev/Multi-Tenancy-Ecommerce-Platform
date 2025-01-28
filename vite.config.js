@@ -1,10 +1,9 @@
 import react from "@vitejs/plugin-react-swc";
 import fs from "fs";
 import laravel from "laravel-vite-plugin";
-import path from 'path';
+import path from "path";
 import { defineConfig } from "vite";
 import { ThemesJson } from "./resources/js/themes/ThemesJson";
-
 
 export default defineConfig({
 	plugins: [
@@ -14,6 +13,8 @@ export default defineConfig({
 				'resources/js/app.js',
 				'resources/js/themes/index.tsx',
 				'resources/js/seller/index.tsx',
+				'resources/js/frontend/index.tsx',
+				'resources/js/site/index.tsx',
 			],
 			refresh: true,
 		}),
@@ -34,8 +35,12 @@ export default defineConfig({
 	resolve: {
 		alias: [
 			{
-				find: '@',
-				replacement: path.resolve(__dirname, 'resources/js'),
+				find: '@frontend',
+				replacement: path.resolve(__dirname, 'resources/js/frontend'),
+			},
+			{
+				find: '@site',
+				replacement: path.resolve(__dirname, 'resources/js/site'),
 			},
 			{
 				find: '@seller',
@@ -48,6 +53,10 @@ export default defineConfig({
 			{
 				find: '@type',
 				replacement: path.resolve(__dirname, 'resources/js/types'),
+			},
+			{
+				find: '@helper',
+				replacement: path.resolve(__dirname, 'resources/js/helper'),
 			},
 		],
 	},

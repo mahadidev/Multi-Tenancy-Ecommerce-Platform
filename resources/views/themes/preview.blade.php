@@ -9,6 +9,7 @@
     <meta name="base-url" content="{{ env('APP_URL') }}">
     <meta name="theme-slug" content="{{$slug}}">
     <title>{{ env('APP_NAME') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo-icon.png') }}">
 
     @viteReactRefresh
     @vite(['resources/js/themes/index.tsx'])

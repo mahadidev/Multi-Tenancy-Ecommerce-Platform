@@ -1,6 +1,7 @@
 import { IoClose } from 'react-icons/io5';
 
 import usePage from '@seller/hooks/usePage';
+import useStore from '@seller/hooks/useStore';
 import { RoutePath } from '@seller/seller_env';
 import {
     toggleIsOpenMobile,
@@ -18,6 +19,7 @@ export function EditorNavigation() {
 	const dispatch = useAppDispatch();
 	const isDesktop = useMediaQuery('(min-width: 1024px)');
 	const { savePage } = usePage();
+    const {store} = useStore()
 
 	function handleToggleSidebar() {
 		if (isDesktop) {
@@ -59,23 +61,32 @@ export function EditorNavigation() {
 							</h2>
 						</Navbar.Brand>
 					</div>
-					<div className="flex items-center lg:gap-3">
-						<div className="flex items-center">
+					<div className="flex items-stretch">
+						<Button
+							color="primary"
+							className="rounded-none"
+							href={store?.domain}
+							target="_blank"
+						>
+							View Site
+						</Button>
+					</div>
+					<div className="flex items-stretch lg:gap-3">
+						<div className="flex items-stretch">
 							<div className="ml-3 flex  items-stretch">
 								<Button
 									color="primary"
 									className="rounded-none"
 									onClick={() => savePage.submit({})}
-                                    isProcessing={savePage.isLoading}
-                                    processingLabel='Saving'
-                                    processingSpinner={<AiOutlineLoading />}
-                                    disabled={savePage.isLoading}
+									isProcessing={savePage.isLoading}
+									processingLabel="Saving"
+									processingSpinner={<AiOutlineLoading />}
+									disabled={savePage.isLoading}
 								>
 									Save Changes
 								</Button>
 								<Button
-									as={Link}
-									to={RoutePath.StorePagesPage.index()}
+									href={RoutePath.StorePagesPage.indexUrl()}
 									color="red"
 									className="rounded-none"
 								>

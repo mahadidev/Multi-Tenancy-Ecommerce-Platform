@@ -12,27 +12,38 @@ Route::get('/', function () {
 Route::prefix('/seller')->group(function () {
 
     Route::get("/", function () {
-        return view("seller-panel");
+        return view("seller.seller");
     });
 
-    Route::any('/{any}', function () {
-        return view("seller-panel");
+    Route::any('/pages/{id}', function () {
+        return view("seller.page-editor");
     })->where('any', '.*');
+
+    Route::any('/{any}', function () {
+        return view("seller.seller");
+    })->where('any', '.*');
+});
+
+Route::prefix("/sites")->group(function () {
+    Route::get("/{slug}", function($slug){
+        return view("site.index", ["slug" => $slug]);
+    });
+
+    Route::prefix("/{slug}")->group(function () {
+        Route::get("/{any}", function ($slug) {
+            return view("site.index", ["slug" => $slug]);
+        })->where('any', '.*');
+    });
 });
 
 
 Route::prefix("/themes")->group(function () {
     Route::get("/{slug}", [ThemeController::class, "show"]);
-});
-
-
-Route::prefix('/themes')->group(function () {
 
     Route::prefix("/{slug}")->group(function () {
         Route::get("/{any}", [ThemeController::class, "show"])->where('any', '.*');
         ;
     });
-
 });
 
 
@@ -45,5 +56,5 @@ Route::get('/test', function(){
     $theme = \App\Models\Theme::with('pages.page_widgets')->first();
     $themeData = new \App\Http\Resources\ThemeResource($theme);
     return $pages = $themeData->pages;
-       
+
 });

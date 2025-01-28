@@ -1,6 +1,6 @@
-import { dummyStore } from '@/themes/dummyData/dummyStore';
-import { StoreType } from '@/types/storeType';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { dummyStore } from '@themes/dummyData/dummyStore';
+import { StoreType } from '@type/storeType';
 
 
 const initialState: {

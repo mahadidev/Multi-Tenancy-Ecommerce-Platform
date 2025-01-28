@@ -1,4 +1,4 @@
-import { StoreType } from "@/types/storeType";
+import { StoreType } from "@type/storeType";
 import { ThemeType } from "@type/themeType";
 import { WidgetType } from "@type/widgetType";
 import { FC } from "react";
