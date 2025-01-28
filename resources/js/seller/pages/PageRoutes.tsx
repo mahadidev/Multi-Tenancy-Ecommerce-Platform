@@ -1,6 +1,9 @@
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
+    BlogCategories,
+    BlogEditPage,
+    BlogsPage,
     BrandsPage,
     CategoriesPage,
     DashboardPage,
@@ -39,6 +42,17 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="products/:id"
                                 element={<ProductEditPage />}
+                            />
+
+                            {/* Blogs Pages */}
+                            <Route path="blogs" element={<BlogsPage />} />
+                            <Route
+                                path="blogs/categories"
+                                element={<BlogCategories />}
+                            />
+                            <Route
+                                path="blogs/:id"
+                                element={<BlogEditPage />}
                             />
 
                             {/* Categories Pages */}

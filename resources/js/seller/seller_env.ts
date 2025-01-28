@@ -52,6 +52,11 @@ export const RoutePath = {
 		index: () => '/products',
 		edit: (productId: number) => `/products/${productId}`,
 	},
+	BlogsPage: {
+		index: () => '/blogs',
+		categories: () => `/blogs/categories`,
+		edit: (blogId: number) => `/blogs/${blogId}`,
+	},
 	SettingsPage: {
 		index: () => '/settings',
 	},
