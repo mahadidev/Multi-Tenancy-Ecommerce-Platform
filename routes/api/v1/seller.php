@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
@@ -73,16 +74,28 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::post('stores/pages/widgets/inputs/{inputId}/items/update/{id}', [StorePageWidgetInputItemController::class, 'update']);
     Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
 
+    // customer routes
+    Route::get('customers', [CustomerController::class, 'index']);
+    Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
+    Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
     // Brand Routes
     Route::resource('/brand', BrandController::class);
+    Route::get('/brand/generate/pdf', [BrandController::class, 'pdf']);
+    Route::get('/brand/generate/excel', [BrandController::class, 'excel']);
+    Route::post('/brand-import', [BrandController::class, 'import']);
 
     Route::resource('/category', CategoryController::class);
+    Route::get('/category/generate/pdf', [CategoryController::class, 'pdf']);
+    Route::get('/category/generate/excel', [CategoryController::class, 'excel']);
+    Route::post('/category-import', [CategoryController::class, 'import']);
 
     // Product Route
     Route::resource('/product', ProductController::class);
+    Route::get('/product/generate/pdf', [ProductController::class, 'pdf']);
+    Route::get('/product/generate/excel', [ProductController::class, 'excel']);
 
     // Product Review Route
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
