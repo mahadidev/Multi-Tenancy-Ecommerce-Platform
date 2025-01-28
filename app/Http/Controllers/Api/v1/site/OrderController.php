@@ -179,6 +179,7 @@ class OrderController extends Controller
         $order = Order::where('uuid', $uuid)->with('items')->first();
         $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
         $store->domain = $store->domain();
+
         $pdf = FacadePdf::loadView('pdf.order_confirmation', [
             'order' => $order,
             'isCustomer' => $isCustomer,

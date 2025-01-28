@@ -239,7 +239,8 @@
     <div class="container">
         <div class="header">
             <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
-                alt="{{ config('app.name') }}" class="logo">
+            alt="{{ config('app.name') }}" class="logo">
+            
                 <div class="store-info-line">
                     <div class="store-info-item">
                         <i class="fas fa-store"></i>

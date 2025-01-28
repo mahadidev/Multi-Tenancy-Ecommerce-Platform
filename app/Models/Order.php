@@ -61,16 +61,27 @@ class Order extends Model
     public function sendOrderConfirmationNotifications()
     {
         try {
-            if (env('APP_ENV') != 'local') {
+            if (env('APP_ENV') == 'local') {
+                // Retrieve the store with proper error handling
+                $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')
+                    ->find($this->store_id); // Use store_id from the order instead of authStore()
+                // $store = $store->domain();
+
+                if (!$store) {
+                    Log::error('Store not found for order: ' . $this->uuid);
+                    return;
+                }
+
                 // For customer notification
                 $customer = User::find($this->user_id);
                 if ($customer) {
-                    $customer->notify(new OrderConfirmationNotification($this, true));
+                    $customer->notify(new OrderConfirmationNotification($this, $store, true));
                 }
+
                 // Notify seller
-                $seller = Store::find($this->store_id)->owner;
+                $seller = $store->owner;
                 if ($seller) {
-                    $seller->notify(new OrderConfirmationNotification($this, false));
+                    $seller->notify(new OrderConfirmationNotification($this, $store, false));
                 }
             } else {
                 Log::info('Order notification disabled in production, change APP_ENV to local to enable');
