@@ -22,7 +22,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('store_page_widgets', function (Blueprint $table) {
-            $table->dropColumn('serial');
+            if (Schema::hasColumn('store_page_widgets', 'serial')) {
+                $table->dropColumn('serial');
+            }
         });
     }
 };
