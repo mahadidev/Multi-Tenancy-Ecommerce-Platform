@@ -49,6 +49,8 @@ export const authApi = createApi({
         "LoggedInUser",
         "UserProfileUpdate",
         "UserUpdatePassword",
+        "PasswordForgotRequest",
+        "PasswordReset",
     ],
     endpoints: (builder) => ({
         login: builder.mutation<LoginResponseType, LoginPayloadType>({
@@ -175,6 +177,46 @@ export const authApi = createApi({
                 });
             },
         }),
+
+        // forgot password api
+        forgotPasswordRequest: builder.mutation<
+            ApiResponseType,
+            PasswordForgotRequestPayloadType
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `/forgot-password`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["PasswordForgotRequest"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { queryFulfilled }) {
+                await queryFulfilled.then(() => {
+                    // window.location.href = "/seller/login"; // send to login page
+                });
+            },
+        }),
+
+        // reset password api
+        resetPassword: builder.mutation<
+            ApiResponseType,
+            ResetPasswordPayloadType
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `/password/reset`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["PasswordReset"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { queryFulfilled }) {
+                await queryFulfilled.then(() => {
+                    // window.location.href = "/seller/login"; // send to login page
+                });
+            },
+        }),
     }),
 });
 
@@ -185,6 +227,8 @@ export const {
     useFetchUserQuery,
     useUpdateUserPasswordMutation,
     useUpdateUserMutation,
+    useForgotPasswordRequestMutation,
+    useResetPasswordMutation,
 } = authApi;
 
 export interface UserUpdatePasswordPayloadType {
@@ -193,8 +237,15 @@ export interface UserUpdatePasswordPayloadType {
     confirm_password: string;
 }
 
-// reset password
-
-export interface PasswordResetRequestPayloadType {
+// forgot password payload type
+export interface PasswordForgotRequestPayloadType {
     email: string;
+}
+
+// reset password payload type
+export interface ResetPasswordPayloadType {
+    email: string;
+    token: string;
+    password: string;
+    confirm_password: string;
 }
