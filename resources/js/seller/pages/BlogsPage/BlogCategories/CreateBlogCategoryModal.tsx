@@ -1,15 +1,15 @@
 import useBlogCategory from "@seller/hooks/useBlogCategory";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
-import { CategoryType } from "@type/categoryType";
-import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
+
+import { Button, Label, Modal,  TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
 
 const CreateBlogCategoryModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
-    const { create, categories } = useBlogCategory();
+    const { create } = useBlogCategory();
     const { getSlug } = useString();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
@@ -89,49 +89,7 @@ const CreateBlogCategoryModal: FC = function () {
                                 />
                             </div>
                         </div>
-                        {/* <div className="flex flex-col gap-2">
-                            <Label htmlFor="parent_id">Parent Category</Label>
-                            <div>
-                                <Select
-                                    id="parent_id"
-                                    name="parent_id"
-                                    value={formState["parent_id"]}
-                                    color={
-                                        formErrors["parent_id"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["parent_id"]
-                                            ? formErrors["parent_id"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLSelectElement>
-                                    ) => {
-                                        if (event.target.value === "0") {
-                                            event.target.value = "null";
-                                        }
-                                        handleChange(event);
-                                    }}
-                                    required
-                                >
-                                    <option value={0}>
-                                        Select a Parent Category
-                                    </option>
-                                    {categories.map(
-                                        (category: CategoryType) => (
-                                            <option
-                                                value={category.id}
-                                                key={category.id}
-                                            >
-                                                {category.name}
-                                            </option>
-                                        )
-                                    )}
-                                </Select>
-                            </div>
-                        </div> */}
+                       
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

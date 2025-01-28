@@ -15,6 +15,7 @@ import AuthSlice from './slices/authSlice';
 import brandSlice from './slices/brandSlice';
 import categorySlice from './slices/categorySlice';
 import blogCategorySlice from './slices/blogCategorySlice';
+import blogSlice from './slices/blogSlice';
 import fileSlice from './slices/fileSlice';
 import pageSlice from './slices/pageSlice';
 import productSlice from './slices/productSlice';
@@ -24,6 +25,7 @@ import themeSlice from './slices/themeSlice';
 import uiSlice from './slices/uiSlice';
 import widgetSlice from './slices/widgetSlice';
 import { blogCategoryApi } from './reducers/blogCategoryApi';
+import { blogApi } from './reducers/blogApi';
 
 const authPersistConfig = {
 	key: 'seller',
@@ -36,6 +38,7 @@ const authPersistConfig = {
 		'blogCategoryApi',
 		'pageApi',
 		'productApi',
+		'blogApi',
 		'brandApi',
 		'socialMediaApi',
 	],
@@ -53,6 +56,7 @@ const persistedReducer = persistReducer(
 		ui: uiSlice,
 		category: categorySlice,
 		blogCategory: blogCategorySlice,
+		blog: blogSlice,
 		page: pageSlice,
 		product: productSlice,
 		brand: brandSlice,
@@ -64,6 +68,7 @@ const persistedReducer = persistReducer(
 		[storeApi.reducerPath]: storeApi.reducer,
 		[categoryApi.reducerPath]: categoryApi.reducer,
 		[blogCategoryApi.reducerPath]: blogCategoryApi.reducer,
+		[blogApi.reducerPath]: blogApi.reducer,
 		[pageApi.reducerPath]: pageApi.reducer,
 		[productApi.reducerPath]: productApi.reducer,
 		[brandApi.reducerPath]: brandApi.reducer,
@@ -85,6 +90,7 @@ export const store = configureStore({
 			blogCategoryApi.middleware,
 			pageApi.middleware,
 			productApi.middleware,
+			blogApi.middleware,
 			brandApi.middleware,
 			socialMediaApi.middleware,
 		]);

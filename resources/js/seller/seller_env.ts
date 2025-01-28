@@ -55,6 +55,7 @@ export const RoutePath = {
 	BlogsPage: {
 		index: () => '/blogs',
 		categories: () => `/blogs/categories`,
+		create: () => `/blogs/create`,
 		edit: (blogId: number) => `/blogs/${blogId}`,
 	},
 	SettingsPage: {

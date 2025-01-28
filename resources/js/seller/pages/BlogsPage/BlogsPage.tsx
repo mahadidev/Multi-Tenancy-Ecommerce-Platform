@@ -1,19 +1,20 @@
 
-import useProduct from "@seller/hooks/useProduct";
 import { RoutePath } from '@seller/seller_env';
-import { useFetchProductsQuery } from "@seller/store/reducers/productApi";
 import { Breadcrumb, Button, Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
-import { HiDocumentDownload, HiHome } from 'react-icons/hi';
+import { HiDocumentDownload, HiHome, HiPlus } from 'react-icons/hi';
 import CreateProductModal from "./CreateProductModal";
 
 import BlogsTablePagination from "./BlogsTablePagination";
 import BlogsTable from "./BlogsTable";
+import useBlog from "@seller/hooks/useBlog";
+import { useFetchBlogsQuery } from "@seller/store/reducers/blogApi";
+import { Link } from 'react-router-dom';
 
 const BlogsPage: FC = function () {
     // fetch Products
-    useFetchProductsQuery();
-    const { meta } = useProduct();
+    useFetchBlogsQuery();
+    const { meta } = useBlog();
 
 	return (
 		<>
@@ -27,10 +28,10 @@ const BlogsPage: FC = function () {
 									<span>Dashboard</span>
 								</div>
 							</Breadcrumb.Item>
-							<Breadcrumb.Item>Product</Breadcrumb.Item>
+							<Breadcrumb.Item>Blog</Breadcrumb.Item>
 						</Breadcrumb>
 						<h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-							All Product
+							All Blog
 						</h1>
 					</div>
 					<div className="sm:flex">
@@ -41,15 +42,25 @@ const BlogsPage: FC = function () {
 								</Label>
 								<div className="relative mt-1 lg:w-64 xl:w-96">
 									<TextInput
-										id="Product-search"
-										name="Product-search"
-										placeholder="Search for Product"
+										id="Blog-search"
+										name="Blog-search"
+										placeholder="Search for Blog"
 									/>
 								</div>
 							</form>
 						</div>
 						<div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-							<CreateProductModal />
+							  <Button
+											color="primary"
+											className="p-0"
+											as={Link} 
+											to={`/blogs/create`}
+										>
+											<div className="flex items-center gap-x-3">
+												<HiPlus className="text-xl" />
+												Create Blog
+											</div>
+										</Button>
 							<Button className="p-0" color="gray">
 								<div className="flex items-center gap-x-3">
 									<HiDocumentDownload className="text-xl" />

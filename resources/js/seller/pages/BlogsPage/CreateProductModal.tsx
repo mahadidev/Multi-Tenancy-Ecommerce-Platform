@@ -27,11 +27,11 @@ const CreateProductModal: FC = function () {
             >
                 <div className="flex items-center gap-x-3">
                     <HiPlus className="text-xl" />
-                    Create Product
+                    Create Blog
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen}>
-                <Modal.Header>Create a new Product</Modal.Header>
+                <Modal.Header>Create a new Blog</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="flex flex-col gap-2">
