@@ -123,23 +123,6 @@ class ProductController extends Controller
             $fileName = 'product_' . now()->format('Ymd_His') . '.xlsx';
 
             return Excel::download(new ProductsExport, $fileName); 
-
-            // if ($request->has('download')) {
-            //     return Excel::download(new ProductsExport, $fileName);
-            // }
-
-            // // Store the file temporarily and return a response with file info
-            // Excel::store(new ProductsExport, 'temp/' . $fileName, 'public');
-
-            // return response()->json([
-            //     'status' => 200,
-            //     'message' => 'Excel file generated successfully',
-            //     'data' => [
-            //         'filename' => $fileName,
-            //         'download_url' => url('storage/temp/' . $fileName),
-            //         'file_size' => Storage::disk('public')->size('temp/' . $fileName)
-            //     ]
-            // ]);
             
         } catch (\Exception $e) {
             return response()->json([
