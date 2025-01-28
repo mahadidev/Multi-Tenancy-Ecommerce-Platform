@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use App\Imports\BrandsImport;
 use App\Exports\BrandsExport;
+use App\Models\Store;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\ValidationException;
 
@@ -187,7 +188,13 @@ class BrandController extends Controller
     {
         $brands = Brand::authorized()->get();
 
-        $pdf = FacadePdf::loadView('pdf.brand', compact('brands'))->setPaper('a4');
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
+        $store->domain = $store->domain();
+        // $store->logo = $store->logo_image;
+
+        // return $store;
+
+        $pdf = FacadePdf::loadView('pdf.brand', compact('brands', 'store'))->setPaper('a4');
 
         return $pdf->download('brands_' . now()->format('Ymd_His') . '.pdf');
     }

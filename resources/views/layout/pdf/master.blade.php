@@ -114,10 +114,6 @@
             width: 100%;
         }
 
-        .page-number:after {
-            content: counter(page);
-        }
-
         @page {
             margin: 60px 20px 60px 20px;
         }
@@ -146,7 +142,7 @@
             transform: translate(-50%, -50%) rotate(-45deg);
             width: 100%;
             height: 120%;
-            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logos/logo-black.png'))) }}');
+            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path($store->logo ? 'storage/' . $store->logo : 'images/logo-text.png'))) }}');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -162,7 +158,8 @@
     <div class="watermark"></div>
     <div class="container">
         <div class="header">
-            <img src="{{ base_path('public/images/logos/logo-black.png') }}" alt="{{ config('app.name') }}" class="logo">
+            <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
+                alt="{{ config('app.name') }}" class="logo">
             <h1>@yield('title')</h1>
         </div>
 
@@ -174,12 +171,11 @@
                 © {{ now()->year }} | {{ config('app.name') }}
             </div>
         </div>
-
-
     </div>
-    
+
     <div class="page-footer">
-        <p>Generated on: {{ now()->format('F d, Y H:i:s') }} | Page <span class="page-number"></span></p>
+        <p>Generated on: {{ now()->format('F d, Y H:i:s') }}</span></p>
+        <p>Powerd By: Chologori.com</p>
     </div>
 </body>
 

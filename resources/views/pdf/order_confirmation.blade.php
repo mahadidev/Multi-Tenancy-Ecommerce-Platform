@@ -187,7 +187,7 @@
             transform: translate(-50%, -50%) rotate(-45deg);
             width: 100%;
             height: 120%;
-            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logos/logo-black.png'))) }}');
+            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path($store->logo ? 'storage/' . $store->logo : 'images/logo-text.png'))) }}');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -202,7 +202,8 @@
     <div class="watermark"></div>
     <div class="container">
         <div class="header">
-            <img src="{{ base_path('public/images/logos/logo-black.png') }}" alt="{{ config('app.name') }}" class="logo">
+            <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
+                alt="{{ config('app.name') }}" class="logo">
             <h1>{{ $isCustomer ? 'Order Confirmation' : 'New Order Notification' }}</h1>
         </div>
 
