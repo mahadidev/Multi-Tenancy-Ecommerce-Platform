@@ -6,6 +6,7 @@ use App\Exports\CustomersExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Store;
 use App\Http\Resources\CustomerResource;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
@@ -53,8 +54,10 @@ class CustomerController extends Controller
     public function pdf(Request $request)
     {
         $customers = User::whereJsonContains('store_id', authStore())->get();
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
+        $store->domain = $store->domain();
 
-        $pdf = FacadePdf::loadView('pdf.customers', compact('customers'))->setPaper('a4');
+        $pdf = FacadePdf::loadView('pdf.customers', compact('customers', $store))->setPaper('a4');
 
         return $pdf->download('customers_' . now()->format('Ymd_His') . '.pdf');
     }

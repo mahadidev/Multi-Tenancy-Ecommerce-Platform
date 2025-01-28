@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Models\Store;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use App\Imports\CategoriesImport;
 use App\Exports\CategoriesExport;
@@ -147,7 +148,10 @@ class CategoryController extends Controller
     {
         $categories = Category::authorized()->where('type', 'product')->get();
 
-        $pdf = FacadePdf::loadView('pdf.category', compact('categories'))->setPaper('a4');
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
+        $store->domain = $store->domain();
+
+        $pdf = FacadePdf::loadView('pdf.category', compact('categories', 'store'))->setPaper('a4');
 
         return $pdf->download('categories_' . now()->format('Ymd_His') . '.pdf');
     }

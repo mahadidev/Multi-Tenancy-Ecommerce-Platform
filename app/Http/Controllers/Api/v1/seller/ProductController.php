@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Store;
 
 class ProductController extends Controller
 {
@@ -113,8 +114,10 @@ class ProductController extends Controller
     public function pdf(Request $request)
     {
         $products = ProductService::index($request);
-        $pdf = FacadePdf::loadView('pdf.products', compact('products'));
-        return $pdf->download('products.pdf');
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
+        $store->domain = $store->domain();
+        $pdf = FacadePdf::loadView('pdf.products', compact('products', $store))->setPaper('a4');
+        return $pdf->download('products_' . now()->format('Ymd_His') . '.pdf');
     }
 
     public function excel(Request $request)

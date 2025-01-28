@@ -190,9 +190,6 @@ class BrandController extends Controller
 
         $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
         $store->domain = $store->domain();
-        // $store->logo = $store->logo_image;
-
-        // return $store;
 
         $pdf = FacadePdf::loadView('pdf.brand', compact('brands', 'store'))->setPaper('a4');
 
