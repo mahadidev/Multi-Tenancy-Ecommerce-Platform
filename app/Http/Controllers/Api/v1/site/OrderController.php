@@ -177,13 +177,13 @@ class OrderController extends Controller
     public function downloadOrderDetails($uuid, $isCustomer)
     {
         $order = Order::where('uuid', $uuid)->with('items')->first();
-        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find(authStore());
+        $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')->find($order->store_id);
         $store->domain = $store->domain();
 
         $pdf = FacadePdf::loadView('pdf.order_confirmation', [
             'order' => $order,
-            'isCustomer' => $isCustomer,
             'store' => $store,
+            'isCustomer' => $isCustomer,
         ])->setPaper('a4');
 
         return $pdf->download("Order-{$order->uuid}.pdf");

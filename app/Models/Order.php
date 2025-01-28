@@ -64,8 +64,9 @@ class Order extends Model
             if (env('APP_ENV') == 'local') {
                 // Retrieve the store with proper error handling
                 $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')
-                    ->find($this->store_id); // Use store_id from the order instead of authStore()
-                // $store = $store->domain();
+                    ->find($this->store_id);
+
+                Log::info('store: ' . $store);
 
                 if (!$store) {
                     Log::error('Store not found for order: ' . $this->uuid);
