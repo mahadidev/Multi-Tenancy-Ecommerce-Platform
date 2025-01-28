@@ -9,7 +9,6 @@ use App\Http\Resources\ProductResource;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ProductVariantOption;
-use App\Models\ProductVariantOptionType;
 class ProductService
 {
     public static function index(Request $request)
@@ -63,12 +62,9 @@ class ProductService
             'variants.*.options' => 'required|array|min:1',
             'variants.*.options.*.label' => 'required|string|max:255',
             'variants.*.options.*.slug' => 'required|string|max:255',
-
-            'variants.*.options.*.types' => 'required|array|min:1',
-            'variants.*.options.*.types.*.label' => 'required|string|max:255',
-            'variants.*.options.*.types.*.price' => 'nullable|numeric|min:0',
-            'variants.*.options.*.types.*.qty_stock' => 'nullable|integer|min:0',
-            'variants.*.options.*.types.*.code' => 'nullable|string',
+            'variants.*.options.*.price' => 'nullable|numeric|min:0',
+            'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
+            'variants.*.options.*.code' => 'nullable|string',
         ]);
 
         // Add the authenticated store ID to the data
@@ -114,18 +110,11 @@ class ProductService
                         'variant_id' => $productVariant->id,
                         'label' => $option['label'],
                         'slug' => $option['slug'],
+                        'code' => $option['code'] ?? null,
+                        'price' => $option['price'] ?? 0,
+                        'qty_stock' => $option['qty_stock'] ?? 0,
                     ]);
-
-                    // Handle option types
-                    foreach ($option['types'] as $type) {
-                        ProductVariantOptionType::create([
-                            'option_id' => $productVariantOption->id,
-                            'label' => $type['label'],
-                            'code' => $type['code'] ?? null,
-                            'price' => $type['price'] ?? 0,
-                            'qty_stock' => $type['qty_stock'] ?? 0,
-                        ]);
-                    }
+                  
                 }
             }
         }
@@ -169,11 +158,9 @@ class ProductService
             'variants.*.options' => 'required|array|min:1',
             'variants.*.options.*.label' => 'required|string|max:255',
             'variants.*.options.*.slug' => 'required|string|max:255',
-            'variants.*.options.*.types' => 'required|array|min:1',
-            'variants.*.options.*.types.*.label' => 'required|string|max:255',
-            'variants.*.options.*.types.*.price' => 'nullable|numeric|min:0',
-            'variants.*.options.*.types.*.qty_stock' => 'nullable|integer|min:0',
-            'variants.*.options.*.types.*.code' => 'nullable|string',
+            'variants.*.options.*.price' => 'nullable|numeric|min:0',
+            'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
+            'variants.*.options.*.code' => 'nullable|string',
         ]);
 
         // Update the product entry
@@ -218,24 +205,16 @@ class ProductService
                         'variant_id' => $productVariant->id,
                         'label' => $option['label'],
                         'slug' => $option['slug'],
+                        'code' => $option['code'] ?? null,
+                        'price' => $option['price'] ?? 0,
+                        'qty_stock' => $option['qty_stock'] ?? 0,
                     ]);
-
-                    // Add types for the option
-                    foreach ($option['types'] as $type) {
-                        ProductVariantOptionType::create([
-                            'option_id' => $productVariantOption->id,
-                            'label' => $type['label'],
-                            'code' => $type['code'] ?? null,
-                            'price' => $type['price'] ?? 0,
-                            'qty_stock' => $type['qty_stock'] ?? 0,
-                        ]);
-                    }
                 }
             }
         }
 
         // Return the updated product response
-        return new ProductResource($product->load('variants.options.types'));
+        return new ProductResource($product->load('variants.options'));
     }
 
     public static function destroy(Request $request, $id)
