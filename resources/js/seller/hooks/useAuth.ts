@@ -71,7 +71,7 @@ const useAuth = () => {
         });
     };
 
-    // login
+    // logout
     const [
         handleLogOut,
         {
@@ -144,6 +144,31 @@ const useAuth = () => {
         });
     };
 
+    // send reset request
+    const [
+        handlePasswordResetRequest,
+        {
+            isLoading: isPasswordResetRequestLoading,
+            isError: isPasswordResetRequestError,
+            error: passwordResetRequestError,
+            data: passwordResetRequestData,
+        },
+    ] = useLoginMutation();
+    const passwordResetRequest = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: LoginPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handlePasswordResetRequest(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            }
+        });
+    };
     return {
         userProfileData,
         login: {
@@ -180,6 +205,13 @@ const useAuth = () => {
             isError: isUpdatePasswordError,
             error: updatePasswordError,
             data: updatePasswordData,
+        },
+        passwordResetRequest: {
+            submit: passwordResetRequest,
+            isLoading: isPasswordResetRequestLoading,
+            isError: isPasswordResetRequestError,
+            error: passwordResetRequestError,
+            data: passwordResetRequestData,
         },
     };
 };

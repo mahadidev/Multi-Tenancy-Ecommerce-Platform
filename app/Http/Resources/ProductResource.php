@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\ProductVariantResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,7 +31,7 @@ class ProductResource extends JsonResource
             'stock' => $this->stock,
             'status' => $this->status,
             'store' => $this->store ? ['id' => $this->store->id , 'name' => $this->store->name , 'slug' => $this->store->slug  ] : null,
-            'variants' => $this->variants->isNotEmpty() ? $this->variants : null,
+            'variants' => $this->variants->isNotEmpty() ? ProductVariantResource::collection($this->variants) : null,
             'is_trending' => $this->is_trending,
             'has_discount' => $this->has_discount,
             'discount_to' => $this->discount_to,
