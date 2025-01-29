@@ -24,6 +24,7 @@ import DashboardMiddleware from "../middleware/dashboardMiddleware";
 import GuestMiddleware from "../middleware/guestMiddleware";
 import OnboardMiddleware from "../middleware/onboardMiddleware";
 import ForgotPassword from "./AuthPage/ForgotPassword";
+import ResetPassword from "./AuthPage/ResetPassword";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -110,6 +111,10 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="forgot-password"
                                 element={<ForgotPassword />}
+                            />
+                            <Route
+                                path="reset-password"
+                                element={<ResetPassword />}
                             />
                         </Route>
                     </Route>

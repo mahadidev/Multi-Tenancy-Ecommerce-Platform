@@ -1,19 +1,24 @@
 import {
     LoginPayloadType,
+    PasswordForgotRequestPayloadType,
     RegisterPayloadType,
+    ResetPasswordPayloadType,
     useFetchUserQuery,
+    useForgotPasswordRequestMutation,
     useLoginMutation,
     useLogOutMutation,
     useRegisterMutation,
+    useResetPasswordMutation,
     UserUpdatePasswordPayloadType,
     useUpdateUserMutation,
     useUpdateUserPasswordMutation,
 } from "@seller/store/reducers/authApi";
 import { UserProfileType } from "@type/authType";
-import { Toast } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/store";
 
 const useAuth = () => {
+    const navigate = useNavigate();
     useFetchUserQuery();
     // select user
     const { userProfileData } = useAppSelector((state) => state.auth);
@@ -137,38 +142,61 @@ const useAuth = () => {
             if (response.data?.status === 200) {
                 if (onSuccess) {
                     onSuccess(response.data.data);
-                    console.log(response.data.data);
-                    Toast({ title: "Profile updated successfully" });
+                    navigate("/login");
                 }
             }
         });
     };
 
-    // send reset request
+    // send forgot password request
     const [
-        handlePasswordResetRequest,
+        handleForgotPasswordRequest,
         {
-            isLoading: isPasswordResetRequestLoading,
-            isError: isPasswordResetRequestError,
-            error: passwordResetRequestError,
-            data: passwordResetRequestData,
+            isLoading: isForgotPasswordRequestLoading,
+            isError: isForgotPasswordRequestError,
+            error: forgotPasswordRequestError,
+            data: forgotPasswordRequestData,
         },
-    ] = useLoginMutation();
-    const passwordResetRequest = ({
+    ] = useForgotPasswordRequestMutation();
+    const forgotPasswordRequest = ({
         formData,
-        onSuccess,
     }: {
-        formData: LoginPayloadType;
+        formData: PasswordForgotRequestPayloadType;
         onSuccess?: CallableFunction;
     }) => {
-        handlePasswordResetRequest(formData).then((response) => {
+        handleForgotPasswordRequest(formData).then((response) => {
             if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess(response.data.data);
-                }
+                navigate(
+                    `/reset-password?email=${response?.data?.data?.email}&token=${response?.data?.data?.token}`
+                );
             }
         });
     };
+
+    // reset password
+    const [
+        handleResetPassword,
+        {
+            isLoading: isResetPasswordLoading,
+            isError: isResetPasswordError,
+            error: resetPasswordError,
+            data: resetPasswordData,
+        },
+    ] = useResetPasswordMutation();
+    const resetPassword = ({
+        formData,
+    }: {
+        formData: ResetPasswordPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleResetPassword(formData).then((response) => {
+            if (response.data?.status === 200) {
+                navigate(`/login`);
+            }
+        });
+    };
+
+    // return from here
     return {
         userProfileData,
         login: {
@@ -206,12 +234,19 @@ const useAuth = () => {
             error: updatePasswordError,
             data: updatePasswordData,
         },
-        passwordResetRequest: {
-            submit: passwordResetRequest,
-            isLoading: isPasswordResetRequestLoading,
-            isError: isPasswordResetRequestError,
-            error: passwordResetRequestError,
-            data: passwordResetRequestData,
+        forgotPasswordRequest: {
+            submit: forgotPasswordRequest,
+            isLoading: isForgotPasswordRequestLoading,
+            isError: isForgotPasswordRequestError,
+            error: forgotPasswordRequestError,
+            data: forgotPasswordRequestData,
+        },
+        resetPassword: {
+            submit: resetPassword,
+            isLoading: isResetPasswordLoading,
+            isError: isResetPasswordError,
+            error: resetPasswordError,
+            data: resetPasswordData,
         },
     };
 };

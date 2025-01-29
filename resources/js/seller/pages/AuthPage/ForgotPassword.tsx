@@ -1,4 +1,3 @@
-import { ErrorMessage } from "@seller/components";
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
@@ -8,12 +7,12 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 const ForgotPassword: React.FC = () => {
-    const { passwordResetRequest } = useAuth();
+    const { forgotPasswordRequest } = useAuth();
     const { formState, formErrors, handleChange } = useForm({
         default: {
             email: "",
         },
-        formValidationError: passwordResetRequest.error,
+        formValidationError: forgotPasswordRequest.error,
     });
 
     return (
@@ -56,10 +55,6 @@ const ForgotPassword: React.FC = () => {
                             />
                         </div>
 
-                        {formErrors["message"] && (
-                            <ErrorMessage>{formErrors["message"]}</ErrorMessage>
-                        )}
-
                         <div className="mb-6">
                             <Button
                                 type="button"
@@ -68,12 +63,12 @@ const ForgotPassword: React.FC = () => {
                                 theme={{ inner: { base: "px-5 py-3" } }}
                                 className="w-full px-0 py-px sm:w-auto"
                                 onClick={() => {
-                                    passwordResetRequest.submit({
+                                    forgotPasswordRequest.submit({
                                         formData: formState,
                                     });
                                 }}
-                                isProcessing={passwordResetRequest.isLoading}
-                                disabled={passwordResetRequest.isLoading}
+                                isProcessing={forgotPasswordRequest.isLoading}
+                                disabled={forgotPasswordRequest.isLoading}
                                 processingSpinner={
                                     <AiOutlineLoading className="h-6 w-6 animate-spin" />
                                 }
