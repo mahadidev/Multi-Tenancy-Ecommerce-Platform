@@ -49,7 +49,7 @@ class Theme extends Model
 
     public function getThumbnailImageAttribute()
     {
-        return $this->thumbnail ? url(($this->thumbnail)) : null;
+        return $this->thumbnail ? url(Storage::url($this->thumbnail)) : null;
     }
 
     public function scopeActive($query)
