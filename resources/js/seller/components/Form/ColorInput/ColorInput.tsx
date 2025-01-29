@@ -18,7 +18,7 @@ const ColorInput: FC<
 				</div>
 				<TextInput
 					className="opacity-0 w-full h-full absolute top-0 left-0 z-10"
-					{...props}
+                    {...{...props, type: "color"}}
 				/>
 			</div>
 		</>
