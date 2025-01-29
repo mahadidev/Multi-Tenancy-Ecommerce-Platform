@@ -17,18 +17,18 @@ const FileInput: FC<
     const [selectedFile, setSelectedFile] = useState<FileType | null>(null);
     const inputRef = useRef(null);
     const [activeTab, setActiveTab] = useState<"upload" | "gallery">("gallery");
-    const [inputProps, setIputProps] = useState<any>(props);
+    const [inputProps, setInputProps] = useState<any>(props);
 
     const { files } = useFile();
 
     const onInsertFile = () => {
         if (selectedFile) {
-            setIputProps((prev: any) => ({
+            setInputProps((prev: any) => ({
                 ...prev,
-                value:
-                    props.valueType && props.valueType === "url"
-                        ? selectedFile.url
-                        : selectedFile.location,
+                value: selectedFile?.url,
+                // props.valueType && props.valueType === "url"
+                //     ? selectedFile.url
+                //     : selectedFile.location,
             }));
 
             if (props.onChange) {
@@ -99,14 +99,14 @@ const FileInput: FC<
             </div>
             {props.helperText && (
                 <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                    The slug field is required.
+                    The file field is required.
                 </p>
             )}
 
             <div className="hidden">
                 <TextInput
                     {...inputProps}
-                    onChange={() => console.log("ami to thik achi")}
+                    onChange={(e: any) => console.log(e)}
                     ref={inputRef}
                 />
             </div>

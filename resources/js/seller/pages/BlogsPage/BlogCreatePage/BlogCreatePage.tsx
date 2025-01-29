@@ -20,7 +20,7 @@ import { HiHome } from "react-icons/hi";
 const BlogCreatePage = () => {
     const { categories } = useCategory();
     const { create } = useBlog();
-    const { handleChange, formState, formErrors, setFormState } = useForm({
+    const { handleChange, formState, formErrors } = useForm({
         formValidationError: create.error,
         default: {
             status: "active",

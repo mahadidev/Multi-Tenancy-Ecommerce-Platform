@@ -53,6 +53,7 @@ const useForm = function (props?: FormProps) {
         // if has files
         if (files) {
             value = files[0];
+            console.log(files);
         }
         // if has on change
         if (onChange) {

@@ -2,6 +2,7 @@
 import { ErrorMessage, FileInput } from "@seller/components";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
+import useFile from "@seller/hooks/useFile";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
 import { CategoryType } from "@type/categoryType";
@@ -13,7 +14,7 @@ import {
     Textarea,
     TextInput,
 } from "flowbite-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { useParams } from "react-router-dom";
@@ -22,9 +23,9 @@ const BlogEditPage = () => {
     const { id } = useParams();
     const { categories } = useCategory();
     const { update, blog, fetchBlog } = useBlog();
-    const { handleChange, formState, formErrors, setFormState } = useForm({
-        default: blog,
-    });
+    const { files } = useFile();
+    const { handleChange, formState, formErrors, setFormState } = useForm();
+    const [imageLocation, setImageLocation] = useState<string>("");
 
     useEffect(() => {
         if (id) {
@@ -96,9 +97,6 @@ const BlogEditPage = () => {
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="category_id">
                                             Category{" "}
-                                            {JSON.stringify(
-                                                formState["category_id"]
-                                            )}
                                         </Label>
                                         <Select
                                             id="category_id"
@@ -187,7 +185,11 @@ const BlogEditPage = () => {
                                                               ][0]
                                                             : false
                                                     }
-                                                    onChange={handleChange}
+                                                    onChange={(e: any) =>
+                                                        setImageLocation(
+                                                            e.target?.value
+                                                        )
+                                                    }
                                                 />
                                             </div>
                                         </div>
@@ -239,7 +241,17 @@ const BlogEditPage = () => {
                         color="primary"
                         onClick={() => {
                             update.submit({
-                                formData: { ...formState, id: blog?.id },
+                                formData: {
+                                    id: blog?.id!,
+                                    title: formState?.title,
+                                    category_id: formState?.category_id,
+                                    content: formState?.content,
+                                    status: formState?.status,
+                                    image: files?.find(
+                                        (file: any) =>
+                                            file?.location === imageLocation
+                                    )?.url,
+                                },
                             });
                         }}
                         isProcessing={update.isLoading}

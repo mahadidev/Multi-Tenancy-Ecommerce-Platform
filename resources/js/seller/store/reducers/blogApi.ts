@@ -25,8 +25,9 @@ export interface CreateBlogPayloadType {
 
 export interface UpdateBlogPayloadType {
     id: number;
-    tiltle?: string;
+    title?: string;
     slug?: string;
+    status?: string;
     category_id?: number;
     content?: string;
     image?: string;
