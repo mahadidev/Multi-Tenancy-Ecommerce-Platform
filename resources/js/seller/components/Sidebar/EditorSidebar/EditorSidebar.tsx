@@ -56,7 +56,7 @@ function DesktopSidebar() {
 			aria-label="Sidebar with multi-level dropdown example"
 			collapsed={isCollapsed}
 			className={twMerge(
-				'fixed inset-y-0 left-0 z-20 flex h-full shrink-0 flex-col border-r border-gray-200 pt-10 duration-75 lg:flex dark:border-gray-700',
+				'fixed inset-y-0 left-0 z-40 flex h-full shrink-0 flex-col border-r border-gray-200 pt-10 duration-75 lg:flex dark:border-gray-700',
 				isCollapsed && 'hidden !w-0 overflow-hidden'
 			)}
 			id="sidebar"
@@ -84,7 +84,7 @@ function MobileSidebar() {
 			<Sidebar
 				aria-label="Sidebar with multi-level dropdown example"
 				className={twMerge(
-					'fixed inset-y-0 left-0 z-20 hidden h-full shrink-0 flex-col border-r border-gray-200 pt-16 lg:flex dark:border-gray-700',
+					'fixed inset-y-0 left-0 z-40 hidden h-full shrink-0 flex-col border-r border-gray-200 pt-16 lg:flex dark:border-gray-700',
 					isOpen && 'flex'
 				)}
 				id="sidebar"
@@ -96,7 +96,7 @@ function MobileSidebar() {
 			<div
 				onClick={close}
 				aria-hidden="true"
-				className="fixed inset-0 z-10 h-full w-full bg-gray-900/50 pt-16 dark:bg-gray-900/90"
+				className="fixed inset-0 z-30 h-full w-full bg-gray-900/50 pt-16 dark:bg-gray-900/90"
 			/>
 		</>
 	);

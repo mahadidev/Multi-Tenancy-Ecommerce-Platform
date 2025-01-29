@@ -153,7 +153,7 @@ const EditCategoryModal: FC<PropsType> = function (props) {
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}
                         processingLabel="Saving"
-                        processingSpinner={<AiOutlineLoading />}
+                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
                     >
                         Save all
                     </Button>

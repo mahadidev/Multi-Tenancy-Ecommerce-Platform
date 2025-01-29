@@ -1,17 +1,15 @@
 
+import useBlog from "@seller/hooks/useBlog";
 import { RoutePath } from '@seller/seller_env';
 import { Breadcrumb, Button, Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { HiDocumentDownload, HiHome, HiPlus } from 'react-icons/hi';
-import BlogsTablePagination from "./BlogsTablePagination";
-import BlogsTable from "./BlogsTable";
-import useBlog from "@seller/hooks/useBlog";
-import { useFetchBlogsQuery } from "@seller/store/reducers/blogApi";
 import { Link } from 'react-router-dom';
+import BlogsTable from "./BlogsTable";
+import BlogsTablePagination from "./BlogsTablePagination";
 
 const BlogsPage: FC = function () {
     // fetch Products
-    useFetchBlogsQuery();
     const { meta } = useBlog();
 
 	return (
@@ -51,7 +49,7 @@ const BlogsPage: FC = function () {
 							  <Button
 											color="primary"
 											className="p-0"
-											as={Link} 
+											as={Link}
 											to={`/blogs/create`}
 										>
 											<div className="flex items-center gap-x-3">

@@ -53,7 +53,7 @@ const DeleteBlogCategoryModal: FC<PropsType> = function (props) {
 								isProcessing={categoryDelete.isLoading}
 								disabled={categoryDelete.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>

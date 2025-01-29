@@ -52,7 +52,7 @@ export function DashboardNavigation() {
     return (
         <Navbar
             fluid
-            className="fixed top-0 z-30 w-full border-b border-gray-200 bg-white p-0 sm:p-0 dark:border-gray-700 dark:bg-gray-800"
+            className="fixed top-0 z-[45] w-full border-b border-gray-200 bg-white p-0 sm:p-0 dark:border-gray-700 dark:bg-gray-800"
         >
             <div className="w-full p-3 pr-4">
                 <div className="flex items-center justify-between">
@@ -76,31 +76,9 @@ export function DashboardNavigation() {
                             </div>
                         </button>
                         <Navbar.Brand as={Link} href="/" className="mr-14">
-                            {/* {store?.logo ? (
-								<>
-									<img
-										className="mr-3 h-8 w-auto dark:hidden"
-										alt=""
-										src={`${store.logo}`}
-										width={32}
-										height={32}
-									/>
-
-									<img
-										className="mr-3 h-8 w-auto hidden dark:block"
-										alt=""
-										src={`${store.dark_logo ?? store.logo}`}
-										width={32}
-										height={32}
-									/>
-								</>
-							) : ( */}
-                            <>
                                 <h2 className="font-semibold text-gray-900 dark:text-white">
                                     {store?.name}
                                 </h2>
-                            </>
-                            {/* )} */}
                         </Navbar.Brand>
                         <form className="hidden lg:block lg:pl-2">
                             <Label htmlFor="search" className="sr-only">

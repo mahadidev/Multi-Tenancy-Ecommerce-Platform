@@ -53,7 +53,7 @@ const DeletePageModal: FC<PropsType> = function (props) {
 								isProcessing={deletePage.isLoading}
 								disabled={deletePage.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>

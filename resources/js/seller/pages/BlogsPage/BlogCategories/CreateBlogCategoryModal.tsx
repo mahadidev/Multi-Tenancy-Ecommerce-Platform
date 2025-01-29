@@ -2,7 +2,7 @@ import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
 
-import { Button, Label, Modal,  TextInput } from "flowbite-react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
@@ -89,7 +89,7 @@ const CreateBlogCategoryModal: FC = function () {
                                 />
                             </div>
                         </div>
-                       
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -107,7 +107,7 @@ const CreateBlogCategoryModal: FC = function () {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading />}
+                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
                     >
                         Create
                     </Button>

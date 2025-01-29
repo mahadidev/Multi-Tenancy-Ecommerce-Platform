@@ -130,7 +130,7 @@ const CreatePageModal: FC = function () {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading />}
+                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
                     >
                         Create
                     </Button>

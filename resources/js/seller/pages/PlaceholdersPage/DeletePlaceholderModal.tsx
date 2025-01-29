@@ -52,7 +52,7 @@ const DeletePlaceholderModal: FC<PropsType> = function (_props) {
 								// isProcessing={deletePlaceholder.isLoading}
 								// disabled={deletePlaceholder.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>
