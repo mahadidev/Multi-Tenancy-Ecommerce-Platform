@@ -80,7 +80,7 @@ const ThemesPage: FC = function () {
 								color="gray"
 								onClick={() => deactiveTheme.submit({})}
 								processingLabel="Deactivating"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 								isProcessing={deactiveTheme.isLoading}
 							>
 								Deactive
@@ -96,7 +96,7 @@ const ThemesPage: FC = function () {
 									})
 								}
 								processingLabel="Activating"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 								isProcessing={activeTheme.isLoading}
 							>
 								Active

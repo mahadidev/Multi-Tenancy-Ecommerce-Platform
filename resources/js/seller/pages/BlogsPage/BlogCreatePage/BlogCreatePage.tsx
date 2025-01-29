@@ -20,7 +20,7 @@ import { HiHome } from "react-icons/hi";
 
 
 const BlogCreatePage = () => {
-   
+
     const { categories } = useCategory();
     const { create   } = useBlog();
     const { getSlug } = useString();
@@ -31,7 +31,7 @@ const BlogCreatePage = () => {
 		}
     });
 
- 
+
 
     return (
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
@@ -180,7 +180,7 @@ const BlogCreatePage = () => {
                                 />
                             </div>
 
-                          
+
                         </div>
                     </div>
                 </div>
@@ -195,7 +195,7 @@ const BlogCreatePage = () => {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Saving"
-                        processingSpinner={<AiOutlineLoading />}
+                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
                     >
                         Create
                     </Button>

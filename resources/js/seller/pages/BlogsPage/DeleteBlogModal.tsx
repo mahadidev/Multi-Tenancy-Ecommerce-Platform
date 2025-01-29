@@ -6,7 +6,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { HiOutlineExclamationCircle, HiTrash } from 'react-icons/hi';
 
 interface PropsType {
-	blog: BlogType  
+	blog: BlogType
 }
 
 const DeleteBlogModal: FC<PropsType> = function (props) {
@@ -53,7 +53,7 @@ const DeleteBlogModal: FC<PropsType> = function (props) {
 								isProcessing={deletePost.isLoading}
 								disabled={deletePost.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>

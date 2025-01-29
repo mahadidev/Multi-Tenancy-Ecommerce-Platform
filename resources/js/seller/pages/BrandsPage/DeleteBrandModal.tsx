@@ -53,7 +53,7 @@ const DeleteBrandModal: FC<PropsType> = function (props) {
 								isProcessing={deleteBrand.isLoading}
 								disabled={deleteBrand.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading />}
+								processingSpinner={<AiOutlineLoading className="animate-spin" />}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>
