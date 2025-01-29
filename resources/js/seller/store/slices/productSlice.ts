@@ -35,15 +35,19 @@ const productSlice = createSlice({
 		setProduct: (state, action: PayloadAction<ProductType>) => {
 			state.product = action.payload;
 			console.log(state.product);
-			
 		},
 		clearProducts: (state) => {
 			state.products = [];
 			state.meta = null;
-            state.product = null
+			state.product = null;
 		},
 	},
 });
-export const { setProducts, setMeta, setTableProducts, setProduct,clearProducts } =
-	productSlice.actions;
+export const {
+	setProducts,
+	setMeta,
+	setTableProducts,
+	setProduct,
+	clearProducts,
+} = productSlice.actions;
 export default productSlice.reducer;
