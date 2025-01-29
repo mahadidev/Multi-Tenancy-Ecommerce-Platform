@@ -38,9 +38,9 @@ class CategoryController extends Controller
         // $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
         $categories = $query
-                        ->get()
+                        ->get();
                         // ->paginate($perPage)
-                        ->appends($request->only(['type', 'search', 'per_page']));
+                        // ->appends($request->only(['type', 'search', 'per_page']));
 
         return response()->json([
             'status' => 200,

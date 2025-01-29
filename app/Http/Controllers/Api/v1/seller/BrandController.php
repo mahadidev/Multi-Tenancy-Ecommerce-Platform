@@ -24,7 +24,7 @@ class BrandController extends Controller
     {
         // Retrieve query parameters
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
         // $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
         // Fetch brands with optional search and sorting, paginated
@@ -35,8 +35,9 @@ class BrandController extends Controller
                     ->orWhere('slug', 'like', '%' . $search . '%')
                     ->where('store_id', authStore());
             })
-            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
             // ->paginate($perPage);
+            ->latest()
             ->get();
 
         return response()->json(
