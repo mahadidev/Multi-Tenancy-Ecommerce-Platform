@@ -26,7 +26,10 @@ class UserController extends Controller
     
         // Return the response
         return response()->json([
-            'users' => UserResource::collection($users),
+            'status' => 200,
+            'data' => [
+                'users' => UserResource::collection($users),
+            ],
         ]);
     }
     
@@ -53,7 +56,11 @@ class UserController extends Controller
         $user->assignRole($role->name);
 
         return response()->json([
-            'user' => new UserResource($user)
+            'status' => 201,
+            'message' => 'User created successfully!',
+            'data' => [
+                'user' => new UserResource($user)
+            ]
         ]);
 
     }
@@ -61,16 +68,31 @@ class UserController extends Controller
  
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::find($id);
+        if(!$user){
+            return response()->json([
+                'status' => 404,
+                'message' => 'User not found'
+            ]);
+        }
         return response()->json([
-            'user' => new UserResource($user)
+            'status' => 200,
+            'data' => [
+                'user' => new UserResource($user)
+            ]
         ]);
     }
 
    
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::find($id);
+        if(!$user){
+            return response()->json([
+                'status' => 404,
+                'message' => 'User not found'
+            ]);
+        }
 
         $request->validate([
             'name' => 'required|string',
@@ -86,19 +108,30 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'user' => $user
+            'status' => 200,
+            'message' => 'User updated successfully!',
+            'data' => [
+                'user' => new UserResource($user)
+            ]
         ]);
     }
 
    
     public function destroy(string $id)
     {
-        $removed  = $user = User::findOrFail($id);
+        $user = User::find($id);
+        if(!$user){
+            return response()->json([
+                'status' => 404,
+                'message' => 'User not found'
+            ]);
+        }
+
         $user->delete();
 
         return response()->json([
-            'message' => 'User deleted successfully!',
-            'removed-user' => $removed
+            'status' => 200,
+            'message' => 'User deleted successfully!'
         ]);
     }
 }
