@@ -56,7 +56,7 @@ class UserController extends Controller
         $user->assignRole($role->name);
 
         return response()->json([
-            'status' => 201,
+            'status' => 200,
             'message' => 'User created successfully!',
             'data' => [
                 'user' => new UserResource($user)
