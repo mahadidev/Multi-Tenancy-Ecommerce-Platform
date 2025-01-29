@@ -15,7 +15,10 @@ class ProductService
     {
         $query = Product::authorized();
         self::applyFiltersAndSorting($query, $request);
-        $products = $query->paginate($request->per_page ?? 10);
+        $products = $query
+                    ->latest()
+                    ->get();
+                    // ->paginate($request->per_page ?? 10);
 
         return ProductResource::collection($products);
     }
@@ -273,8 +276,8 @@ class ProductService
         }
 
         // Essential Sorting
-        $sortField = $request->input('sort_by', 'created_at');
-        $sortDirection = $request->input('sort_direction', 'desc');
+        // $sortField = $request->input('sort_by', 'created_at');
+        // $sortDirection = $request->input('sort_direction', 'desc');
 
         // Limited to most important sort options
         $allowedSortFields = [
@@ -284,9 +287,9 @@ class ProductService
             'is_trending', // Trending products
         ];
 
-        if (in_array($sortField, $allowedSortFields)) {
-            $query->orderBy($sortField, $sortDirection);
-        }
+        // if (in_array($sortField, $allowedSortFields)) {
+        //     $query->orderBy($sortField, $sortDirection);
+        // }
 
         return $query;
     }
