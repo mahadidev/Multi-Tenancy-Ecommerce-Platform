@@ -69,7 +69,7 @@ const useForm = function (props?: FormProps) {
         setFormState((prev: any) => ({ ...prev, [name]: value }));
     };
 
-    // watch erros if any error set it form state error
+    // watch errors if any error set it form state error
     useEffect(() => {
         if (props?.errors) {
             setFormErrors(props.errors);
@@ -78,7 +78,6 @@ const useForm = function (props?: FormProps) {
 
     // formValidationError
     useEffect(() => {
-        console.log(props?.formValidationError);
         if (props && props.formValidationError) {
             setFormErrors((prev: FormErrorType) => ({
                 ...prev,
