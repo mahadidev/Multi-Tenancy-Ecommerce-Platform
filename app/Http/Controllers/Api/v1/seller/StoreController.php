@@ -20,16 +20,18 @@ class StoreController extends Controller
     {
         $user = auth()->user();
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
         $stores = Store::where(["owner_id" => $user->id])
             ->when($search, function ($query, $search) {
                 $query
                     ->where('name', 'like', '%' . $search . '%')
                     ->orWhere('domain', 'like', '%' . $search . '%');
             })
-            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            ->paginate($perPage);
+            ->latest()
+            ->get();
+            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            // ->paginate($perPage);
 
         $storeSession = $user->storeSession()->first();
         $current_store = null;
@@ -82,16 +84,16 @@ class StoreController extends Controller
                 'stores' => StoreResource::collection($stores),
                 'current_store' => $current_store ? new StoreResource($current_store) : null,
             ],
-            'meta' => [
-                'current_page' => $stores->currentPage(),
-                'first_page_url' => $stores->url(1),
-                'last_page' => $stores->lastPage(),
-                'last_page_url' => $stores->url($stores->lastPage()),
-                'next_page_url' => $stores->nextPageUrl(),
-                'prev_page_url' => $stores->previousPageUrl(),
-                'total' => $stores->total(),
-                'per_page' => $stores->perPage(),
-            ]
+            // 'meta' => [
+            //     'current_page' => $stores->currentPage(),
+            //     'first_page_url' => $stores->url(1),
+            //     'last_page' => $stores->lastPage(),
+            //     'last_page_url' => $stores->url($stores->lastPage()),
+            //     'next_page_url' => $stores->nextPageUrl(),
+            //     'prev_page_url' => $stores->previousPageUrl(),
+            //     'total' => $stores->total(),
+            //     'per_page' => $stores->perPage(),
+            // ]
         ], 200);
     }
 

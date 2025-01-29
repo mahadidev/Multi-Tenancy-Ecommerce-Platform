@@ -22,16 +22,16 @@ class ProductController extends Controller
             'data' => [
                 'products' => ProductService::index($request),
             ],
-            'meta' => [
-                'current_page' => ProductService::index($request)->currentPage(),
-                'first_page_url' => ProductService::index($request)->url(1),
-                'last_page' => ProductService::index($request)->lastPage(),
-                'last_page_url' => ProductService::index($request)->url(ProductService::index($request)->lastPage()),
-                'next_page_url' => ProductService::index($request)->nextPageUrl(),
-                'prev_page_url' => ProductService::index($request)->previousPageUrl(),
-                'total' => ProductService::index($request)->total(),
-                'per_page' => ProductService::index($request)->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => ProductService::index($request)->currentPage(),
+            //     'first_page_url' => ProductService::index($request)->url(1),
+            //     'last_page' => ProductService::index($request)->lastPage(),
+            //     'last_page_url' => ProductService::index($request)->url(ProductService::index($request)->lastPage()),
+            //     'next_page_url' => ProductService::index($request)->nextPageUrl(),
+            //     'prev_page_url' => ProductService::index($request)->previousPageUrl(),
+            //     'total' => ProductService::index($request)->total(),
+            //     'per_page' => ProductService::index($request)->perPage(),
+            // ],
         ], 200);
     }
 

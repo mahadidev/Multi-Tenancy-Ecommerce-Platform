@@ -18,24 +18,27 @@ class StorePageWidgetInputItemController extends Controller
             return response()->json(['status' => 404, 'message' => 'Widget Input not found'], 404);
         }
 
-        $per_page = $request->input('per_page', 10);
-        $widgetInputItems = $pageWidgetInput->items()->paginate($per_page);
+        // $per_page = $request->input('per_page', 10);
+        $widgetInputItems = $pageWidgetInput->items()
+                                            ->latest()
+                                            ->get();
+                                    // ->paginate($per_page);
 
         return response()->json([
             'status' => 200,
             'data' => [
                 'widget_input_items' => StorePageWidgetInputItemsResource::collection($widgetInputItems),
             ],
-            'meta' => [
-                'current_page' => $widgetInputItems->currentPage(),
-                'first_page_url' => $widgetInputItems->url(1),
-                'last_page' => $widgetInputItems->lastPage(),
-                'last_page_url' => $widgetInputItems->url($widgetInputItems->lastPage()),
-                'next_page_url' => $widgetInputItems->nextPageUrl(),
-                'prev_page_url' => $widgetInputItems->previousPageUrl(),
-                'total' => $widgetInputItems->total(),
-                'per_page' => $widgetInputItems->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $widgetInputItems->currentPage(),
+            //     'first_page_url' => $widgetInputItems->url(1),
+            //     'last_page' => $widgetInputItems->lastPage(),
+            //     'last_page_url' => $widgetInputItems->url($widgetInputItems->lastPage()),
+            //     'next_page_url' => $widgetInputItems->nextPageUrl(),
+            //     'prev_page_url' => $widgetInputItems->previousPageUrl(),
+            //     'total' => $widgetInputItems->total(),
+            //     'per_page' => $widgetInputItems->perPage(),
+            // ],
         ], 200);
     }
 

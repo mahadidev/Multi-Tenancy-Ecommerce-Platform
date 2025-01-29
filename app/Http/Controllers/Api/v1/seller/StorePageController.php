@@ -16,8 +16,8 @@ class StorePageController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
         $pages = StorePage::authorized()->with('widgets')
             ->when($search, function ($query, $search) {
@@ -26,8 +26,10 @@ class StorePageController extends Controller
                     ->orWhere('slug', 'like', '%' . $search . '%')
                     ->orWhere('title', 'like', '%' . $search . '%');
             })
-            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            ->paginate($perPage);
+            ->latest()
+            ->get();
+            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            // ->paginate($perPage);
 
         return response()->json(
             [
@@ -35,16 +37,16 @@ class StorePageController extends Controller
                 'data' => [
                     'pages' => StorePagesResource::collection($pages),
                 ],
-                'meta' => [
-                    'current_page' => $pages->currentPage(),
-                    'first_page_url' => $pages->url(1),
-                    'last_page' => $pages->lastPage(),
-                    'last_page_url' => $pages->url($pages->lastPage()),
-                    'next_page_url' => $pages->nextPageUrl(),
-                    'prev_page_url' => $pages->previousPageUrl(),
-                    'total' => $pages->total(),
-                    'per_page' => $pages->perPage(),
-                ],
+                // 'meta' => [
+                //     'current_page' => $pages->currentPage(),
+                //     'first_page_url' => $pages->url(1),
+                //     'last_page' => $pages->lastPage(),
+                //     'last_page_url' => $pages->url($pages->lastPage()),
+                //     'next_page_url' => $pages->nextPageUrl(),
+                //     'prev_page_url' => $pages->previousPageUrl(),
+                //     'total' => $pages->total(),
+                //     'per_page' => $pages->perPage(),
+                // ],
             ],
             200,
         );
