@@ -25,7 +25,7 @@ class BrandController extends Controller
         // Retrieve query parameters
         $search = $request->input('search'); // Search keyword
         $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
         // Fetch brands with optional search and sorting, paginated
         $brands = Brand::authorized()
@@ -36,7 +36,8 @@ class BrandController extends Controller
                     ->where('store_id', authStore());
             })
             ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            ->paginate($perPage);
+            // ->paginate($perPage);
+            ->get();
 
         return response()->json(
             [
@@ -44,16 +45,16 @@ class BrandController extends Controller
                 'data' => [
                     'brands' => BrandResource::collection($brands),
                 ],
-                'meta' => [
-                    'current_page' => $brands->currentPage(),
-                    'first_page_url' => $brands->url(1),
-                    'last_page' => $brands->lastPage(),
-                    'last_page_url' => $brands->url($brands->lastPage()),
-                    'next_page_url' => $brands->nextPageUrl(),
-                    'prev_page_url' => $brands->previousPageUrl(),
-                    'total' => $brands->total(),
-                    'per_page' => $brands->perPage(),
-                ],
+                // 'meta' => [
+                //     'current_page' => $brands->currentPage(),
+                //     'first_page_url' => $brands->url(1),
+                //     'last_page' => $brands->lastPage(),
+                //     'last_page_url' => $brands->url($brands->lastPage()),
+                //     'next_page_url' => $brands->nextPageUrl(),
+                //     'prev_page_url' => $brands->previousPageUrl(),
+                //     'total' => $brands->total(),
+                //     'per_page' => $brands->perPage(),
+                // ],
             ],
             200,
         );
@@ -223,7 +224,10 @@ class BrandController extends Controller
         try {
             Excel::import(new BrandsImport, $file);
 
-            $brands = Brand::authorized()->latest()->paginate(10);
+            $brands = Brand::authorized()
+                            ->latest()
+                            ->get();
+                            // ->paginate(10);
 
             return response()->json([
                 'status' => 200,
@@ -231,16 +235,16 @@ class BrandController extends Controller
                 'data' => [
                     'brands' => BrandResource::collection($brands),
                 ],
-                'meta' => [
-                    'current_page' => $brands->currentPage(),
-                    'first_page_url' => $brands->url(1),
-                    'last_page' => $brands->lastPage(),
-                    'last_page_url' => $brands->url($brands->lastPage()),
-                    'next_page_url' => $brands->nextPageUrl(),
-                    'prev_page_url' => $brands->previousPageUrl(),
-                    'total' => $brands->total(),
-                    'per_page' => $brands->perPage(),
-                ],
+                // 'meta' => [
+                //     'current_page' => $brands->currentPage(),
+                //     'first_page_url' => $brands->url(1),
+                //     'last_page' => $brands->lastPage(),
+                //     'last_page_url' => $brands->url($brands->lastPage()),
+                //     'next_page_url' => $brands->nextPageUrl(),
+                //     'prev_page_url' => $brands->previousPageUrl(),
+                //     'total' => $brands->total(),
+                //     'per_page' => $brands->perPage(),
+                // ],
             ]);
         } catch (ValidationException $e) {
             $failures = $e->failures();
