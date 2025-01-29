@@ -3,7 +3,6 @@ import { FileInput } from "@seller/components";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
-import useString from "@seller/hooks/useString";
 import { RoutePath } from "@seller/seller_env";
 import { CategoryType } from "@type/categoryType";
 import {
@@ -18,20 +17,15 @@ import {
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 
-
 const BlogCreatePage = () => {
-
     const { categories } = useCategory();
-    const { create   } = useBlog();
-    const { getSlug } = useString();
-	const { handleChange, formState, formErrors, setFormState } = useForm({
+    const { create } = useBlog();
+    const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
-		default:{
-			status:"active"
-		}
+        default: {
+            status: "active",
+        },
     });
-
-
 
     return (
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
@@ -66,15 +60,17 @@ const BlogCreatePage = () => {
                                             name="title"
                                             placeholder="Blog title"
                                             value={formState["title"]}
-                                            onChange={(e) => {
-                                                handleChange(e);
-                                                setFormState((prev: any) => ({
-                                                    ...prev,
-                                                    slug: getSlug(
-                                                        e.target.value
-                                                    ),
-                                                }));
-                                            }}
+                                            color={
+                                                formErrors["title"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["title"]
+                                                    ? formErrors["title"][0]
+                                                    : false
+                                            }
+                                            onChange={handleChange}
                                             required
                                         />
                                     </div>
@@ -88,6 +84,18 @@ const BlogCreatePage = () => {
                                             name="category_id"
                                             value={formState["category_id"]}
                                             onChange={handleChange}
+                                            color={
+                                                formErrors["category_id"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["category_id"]
+                                                    ? formErrors[
+                                                          "category_id"
+                                                      ][0]
+                                                    : false
+                                            }
                                             required
                                         >
                                             <option value={0}>
@@ -106,34 +114,44 @@ const BlogCreatePage = () => {
                                         </Select>
                                     </div>
 
-									  {/* active status change  */}
-									  <div className="flex flex-col gap-2">
-                                <Label htmlFor="status">Status</Label>
-                                <Select
-                                    id="status"
-                                    name="status"
-									value={formState["status"]}
-									onChange={handleChange}
-                                    required
-                                >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </Select>
-                            </div>
+                                    {/* active status change  */}
+                                    <div className="flex flex-col gap-2">
+                                        <Label htmlFor="status">Status</Label>
+                                        <Select
+                                            id="status"
+                                            name="status"
+                                            value={formState["status"]}
+                                            onChange={handleChange}
+                                            color={
+                                                formErrors["status"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["status"]
+                                                    ? formErrors["status"][0]
+                                                    : false
+                                            }
+                                            required
+                                        >
+                                            <option value="active">
+                                                Active
+                                            </option>
+                                            <option value="inactive">
+                                                Inactive
+                                            </option>
+                                        </Select>
+                                    </div>
 
                                     <div className=" col-span-full">
                                         <div className="flex flex-col gap-2">
-                                            <Label htmlFor="image">
-                                                Image
-                                            </Label>
+                                            <Label htmlFor="image">Image</Label>
                                             <div>
                                                 <FileInput
                                                     id="image"
                                                     name="image"
                                                     placeholder="Click to upload image"
-                                                    value={
-                                                        formState["image"]
-                                                    }
+                                                    value={formState["image"]}
                                                     color={
                                                         formErrors["image"]
                                                             ? "failure"
@@ -154,7 +172,7 @@ const BlogCreatePage = () => {
                                                 />
                                             </div>
                                         </div>
-                                        {/* <div>
+                                        <div>
                                             {formState["thumbnail"] && (
                                                 <img
                                                     src={formState["thumbnail"]}
@@ -162,7 +180,7 @@ const BlogCreatePage = () => {
                                                     className="w-36 h-36 object-cover rounded-md"
                                                 />
                                             )}
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -177,10 +195,18 @@ const BlogCreatePage = () => {
                                     rows={5}
                                     value={formState["content"]}
                                     onChange={handleChange}
+                                    color={
+                                        formErrors["content"]
+                                            ? "failure"
+                                            : "gray"
+                                    }
+                                    helperText={
+                                        formErrors["content"]
+                                            ? formErrors["content"][0]
+                                            : false
+                                    }
                                 />
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -195,7 +221,9 @@ const BlogCreatePage = () => {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Saving"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Create
                     </Button>

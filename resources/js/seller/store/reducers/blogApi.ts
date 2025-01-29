@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { BlogType } from "@type/blogType";
+import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { setBlog, setTableBlogs } from "../slices/blogSlice";
 
 export interface BlogsFetchResponseType extends ApiResponseType {
@@ -88,7 +88,7 @@ export const blogApi = createApi({
         updateBlog: builder.mutation<ApiResponseType, UpdateBlogPayloadType>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/blog/${formData.id}`,
+                    url: `${PREFIX}/blog/${formData?.id}`,
                     method: "post",
                     apiMethod: "PUT",
                     body: formData,

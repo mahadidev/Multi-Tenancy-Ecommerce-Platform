@@ -1,8 +1,8 @@
+import useBlog from "@seller/hooks/useBlog";
+import { BlogType } from "@type/blogType";
 import { Button, Checkbox, Label, Table } from "flowbite-react";
 import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import useBlog from "@seller/hooks/useBlog";
-import { BlogType } from "@type/blogType";
 import DeleteBlogModal from "./DeleteBlogModal";
 import PreviewPostModal from "./PreviewBlogModal";
 
