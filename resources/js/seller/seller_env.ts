@@ -25,6 +25,9 @@ export const RoutePath = {
     RegisterPage: {
         index: () => "/register",
     },
+    ForgotPasswordPage: {
+        index: () => "/forgot-password",
+    },
     MyAccountPage: {
         ProfileSettings: { index: () => "/my-account/profile-settings" },
     },
@@ -59,9 +62,9 @@ export const RoutePath = {
         index: () => "/themes",
     },
     BlogsPage: {
-      index: () => '/blogs',
-      categories: () => `/blogs/categories`,
-      create: () => `/blogs/create`,
-      edit: (blogId: number) => `/blogs/${blogId}`,
+        index: () => "/blogs",
+        categories: () => `/blogs/categories`,
+        create: () => `/blogs/create`,
+        edit: (blogId: number) => `/blogs/${blogId}`,
     },
 };

@@ -77,7 +77,7 @@ const ForgotPassword: React.FC = () => {
                             </Button>
                         </div>
                         <p className="text-sm font-medium text-gray-500 dark:text-light-400">
-                            Have you remember?&nbsp;
+                            Go back to?&nbsp;
                             <Link
                                 to={RoutePath.LoginPage.index()}
                                 className="text-primary-700 hover:underline dark:text-light-500"

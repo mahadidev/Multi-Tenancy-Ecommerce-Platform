@@ -5,9 +5,12 @@ import { BASE_IMAGE_URL, BASE_URL, RoutePath } from "@seller/seller_env";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const LoginPage: FC = function () {
+    const [searchParams] = useSearchParams();
+    const guidAlertMessage = searchParams.get("guidAlertMessage");
+
     const { login } = useAuth();
     const { formState, formErrors, handleChange } = useForm({
         default: {
@@ -53,6 +56,11 @@ const LoginPage: FC = function () {
                     <h2 className="text-2xl font-bold text-gray-900 lg:text-3xl dark:text-white">
                         Sign in to platform
                     </h2>
+                    {guidAlertMessage && (
+                        <h4 className="text-lg font-normal bg-[#374151] p-3 rounded-md text-red-500 lg:text-xl">
+                            {guidAlertMessage}
+                        </h4>
+                    )}
                     <div className="mt-8 space-y-6">
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="email">Your email</Label>

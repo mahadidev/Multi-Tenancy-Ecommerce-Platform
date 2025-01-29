@@ -133,17 +133,15 @@ const useAuth = () => {
     ] = useUpdateUserPasswordMutation();
     const updatePassword = ({
         formData,
-        onSuccess,
     }: {
         formData: UserUpdatePasswordPayloadType;
         onSuccess?: CallableFunction;
     }) => {
         handleUpdateUserPassword(formData).then((response) => {
             if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess(response.data.data);
-                    navigate("/login");
-                }
+                navigate(
+                    "/login?guidAlertMessage=Your password has been changed. Please login again."
+                );
             }
         });
     };
@@ -191,7 +189,9 @@ const useAuth = () => {
     }) => {
         handleResetPassword(formData).then((response) => {
             if (response.data?.status === 200) {
-                navigate(`/login`);
+                navigate(
+                    `/login?guidAlertMessage=Your password has been reset. Please login again.`
+                );
             }
         });
     };
