@@ -20,31 +20,33 @@ class BlogController extends Controller
     {
         // Retrieve query parameters
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
+        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
         // Fetch blogs with optional search and sorting, paginated
         $blogs = Blog::where('title', 'like', '%' . $search . '%')
             ->where('user_id', Auth::id())
             ->with('category')
-            ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            ->paginate($perPage);
+            ->latest()
+            ->get();
+            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
+            // ->paginate($perPage);
 
         return response()->json([
             'status' => 200,
             'data' => [
                 'blogs' => BlogResource::collection($blogs),
             ],
-            'meta' => [
-                'current_page' => $blogs->currentPage(),
-                'first_page_url' => $blogs->url(1),
-                'last_page' => $blogs->lastPage(),
-                'last_page_url' => $blogs->url($blogs->lastPage()),
-                'next_page_url' => $blogs->nextPageUrl(),
-                'prev_page_url' => $blogs->previousPageUrl(),
-                'total' => $blogs->total(),
-                'per_page' => $blogs->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $blogs->currentPage(),
+            //     'first_page_url' => $blogs->url(1),
+            //     'last_page' => $blogs->lastPage(),
+            //     'last_page_url' => $blogs->url($blogs->lastPage()),
+            //     'next_page_url' => $blogs->nextPageUrl(),
+            //     'prev_page_url' => $blogs->previousPageUrl(),
+            //     'total' => $blogs->total(),
+            //     'per_page' => $blogs->perPage(),
+            // ],
         ]);
     }
 

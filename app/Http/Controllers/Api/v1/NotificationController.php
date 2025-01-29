@@ -12,23 +12,27 @@ class NotificationController extends Controller
 {
     public function index(Request $request)
     {
-        $notifications = $request->user()->notifications()->paginate(10);
+        $notifications = $request->user()
+                        ->notifications()
+                        ->latest()
+                        ->get();
+                        // ->paginate(10);
 
         return response()->json([
             'status' => 200,
             'data' =>  [
                 NotificationResource::collection($notifications),
             ],
-            'meta' => [
-                'current_page' => $notifications->currentPage(),
-                'first_page_url' => $notifications->url(1),
-                'last_page' => $notifications->lastPage(),
-                'last_page_url' => $notifications->url($notifications->lastPage()),
-                'next_page_url' => $notifications->nextPageUrl(),
-                'prev_page_url' => $notifications->previousPageUrl(),
-                'total' => $notifications->total(),
-                'per_page' => $notifications->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $notifications->currentPage(),
+            //     'first_page_url' => $notifications->url(1),
+            //     'last_page' => $notifications->lastPage(),
+            //     'last_page_url' => $notifications->url($notifications->lastPage()),
+            //     'next_page_url' => $notifications->nextPageUrl(),
+            //     'prev_page_url' => $notifications->previousPageUrl(),
+            //     'total' => $notifications->total(),
+            //     'per_page' => $notifications->perPage(),
+            // ],
         ], 200);
     }
 

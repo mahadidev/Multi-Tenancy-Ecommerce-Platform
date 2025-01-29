@@ -18,25 +18,28 @@ class StorePageWidgetInputController extends Controller
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);
         }
 
-        $per_page = $request->input('per_page', 10);
+        // $per_page = $request->input('per_page', 10);
 
-        $widgetInput = $pageWidget->widgetInputs()->paginate($per_page);
+        $widgetInput = $pageWidget->widgetInputs()
+                                    ->latest()
+                                    ->get();
+                                    // ->paginate($per_page);
 
         return response()->json([
             'status' => 200,
             'data' => [
                 'widget_inputs' => StorePageWidgetInputsResource::collection($widgetInput),
             ],
-            'meta' => [
-                'current_page' => $widgetInput->currentPage(),
-                'first_page_url' => $widgetInput->url(1),
-                'last_page' => $widgetInput->lastPage(),
-                'last_page_url' => $widgetInput->url($widgetInput->lastPage()),
-                'next_page_url' => $widgetInput->nextPageUrl(),
-                'prev_page_url' => $widgetInput->previousPageUrl(),
-                'total' => $widgetInput->total(),
-                'per_page' => $widgetInput->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $widgetInput->currentPage(),
+            //     'first_page_url' => $widgetInput->url(1),
+            //     'last_page' => $widgetInput->lastPage(),
+            //     'last_page_url' => $widgetInput->url($widgetInput->lastPage()),
+            //     'next_page_url' => $widgetInput->nextPageUrl(),
+            //     'prev_page_url' => $widgetInput->previousPageUrl(),
+            //     'total' => $widgetInput->total(),
+            //     'per_page' => $widgetInput->perPage(),
+            // ],
         ], 200);
     }
 
