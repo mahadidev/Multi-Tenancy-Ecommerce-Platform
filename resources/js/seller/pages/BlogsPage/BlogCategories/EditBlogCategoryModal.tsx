@@ -1,34 +1,42 @@
-import useBrand from "@seller/hooks/useBrand";
+import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
-import useString from "@seller/hooks/useString";
+import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { HiPlus } from "react-icons/hi";
+import { HiPencilAlt } from "react-icons/hi";
 
-const CreateBrandModal: FC = function () {
+interface PropsType {
+    category: CategoryType;
+}
+
+const EditBlogCategoryModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const { create } = useBrand();
-    const { getSlug } = useString();
-
-    const { handleChange, formState, formErrors, setFormState } = useForm({
-        formValidationError: create.error,
+    const { update } = useCategory();
+    const { handleChange, formState, formErrors } = useForm({
+        formValidationError: update.error,
+        default: {
+            ...props.category,
+            category_id: props.category.has_parent?.id,
+            type: "post",
+        },
     });
 
     return (
         <>
             <Button
+                size="sm"
                 color="primary"
                 className="p-0"
                 onClick={() => setOpen(true)}
             >
-                <div className="flex items-center gap-x-3">
-                    <HiPlus className="text-xl" />
-                    Create Brand
+                <div className="flex items-center gap-x-2">
+                    <HiPencilAlt className="h-5 w-5" />
+                    Edit Category
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen}>
-                <Modal.Header>Create a new Brand</Modal.Header>
+                <Modal.Header>Edit Category</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="flex flex-col gap-2">
@@ -37,7 +45,7 @@ const CreateBrandModal: FC = function () {
                                 <TextInput
                                     id="name"
                                     name="name"
-                                    placeholder="Brand name"
+                                    placeholder="Category name"
                                     value={formState["name"]}
                                     color={
                                         formErrors["name"] ? "failure" : "gray"
@@ -51,10 +59,6 @@ const CreateBrandModal: FC = function () {
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         handleChange(event);
-                                        setFormState((prev: any) => ({
-                                            ...prev,
-                                            slug: getSlug(event.target.value),
-                                        }));
                                     }}
                                     required
                                 />
@@ -66,11 +70,11 @@ const CreateBrandModal: FC = function () {
                                 <TextInput
                                     id="slug"
                                     name="slug"
-                                    placeholder="Brand slug"
                                     value={formState["slug"]}
                                     color={
                                         formErrors["slug"] ? "failure" : "gray"
                                     }
+                                    placeholder="Category slug"
                                     helperText={
                                         formErrors["slug"]
                                             ? formErrors["slug"][0]
@@ -85,30 +89,31 @@ const CreateBrandModal: FC = function () {
                                 />
                             </div>
                         </div>
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
                         color="primary"
                         onClick={() => {
-                            create.submit({
+                            update.submit({
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
                                 },
                             });
-                            setFormState({});
                         }}
-                        isProcessing={create.isLoading}
-                        disabled={create.isLoading}
-                        processingLabel="Creating"
+                        isProcessing={update.isLoading}
+                        disabled={update.isLoading}
+                        processingLabel="Saving"
                         processingSpinner={<AiOutlineLoading className="animate-spin" />}
                     >
-                        Create
+                        Save all
                     </Button>
                 </Modal.Footer>
             </Modal>
         </>
     );
 };
-export default CreateBrandModal;
+
+export default EditBlogCategoryModal;

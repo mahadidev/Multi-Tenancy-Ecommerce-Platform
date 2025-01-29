@@ -34,6 +34,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
+            // Drop the foreign key constraint first
+            $table->dropForeign(['brand_id']);
+
+            // Then drop the columns
             $table->dropColumn(['brand_id', 'is_trending', 'has_discount', 'discount_to', 'discount_type', 'discount_amount']);
         });
     }

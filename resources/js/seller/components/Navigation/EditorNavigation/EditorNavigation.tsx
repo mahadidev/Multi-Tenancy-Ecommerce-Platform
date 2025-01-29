@@ -32,7 +32,7 @@ export function EditorNavigation() {
 	return (
 		<Navbar
 			fluid
-			className="fixed top-0 z-40 w-full border-b border-gray-200 bg-white p-0 sm:p-0 dark:border-gray-700 dark:bg-gray-800"
+			className="fixed top-0 z-[45] w-full border-b border-gray-200 bg-white p-0 sm:p-0 dark:border-gray-700 dark:bg-gray-800"
 		>
 			<div className="w-full px-3 py-0 pr-0">
 				<div className="flex items-center justify-between">
@@ -80,7 +80,9 @@ export function EditorNavigation() {
 									onClick={() => savePage.submit({})}
 									isProcessing={savePage.isLoading}
 									processingLabel="Saving"
-									processingSpinner={<AiOutlineLoading />}
+									processingSpinner={
+										<AiOutlineLoading className="animate-spin" />
+									}
 									disabled={savePage.isLoading}
 								>
 									Save Changes

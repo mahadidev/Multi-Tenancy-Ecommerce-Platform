@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Button, Sidebar, TextInput } from 'flowbite-react';
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from 'react';
 import { useEffect, useState } from 'react';
-import { FaPaintBrush } from 'react-icons/fa';
+import { FaBlogger, FaPaintBrush } from 'react-icons/fa';
 import {
     HiChartPie,
     HiCog,
@@ -80,7 +80,7 @@ function DesktopSidebar() {
 			aria-label="Sidebar with multi-level dropdown example"
 			collapsed={isCollapsed}
 			className={twMerge(
-				'fixed inset-y-0 left-0 z-20 flex h-full shrink-0 flex-col border-r border-gray-200 pt-16 duration-75 lg:flex dark:border-gray-700',
+				'fixed inset-y-0 left-0 z-40 flex h-full shrink-0 flex-col border-r border-gray-200 pt-16 duration-75 lg:flex dark:border-gray-700',
 				isCollapsed && 'hidden w-16'
 			)}
 			id="sidebar"
@@ -123,7 +123,7 @@ function MobileSidebar() {
 			<Sidebar
 				aria-label="Sidebar with multi-level dropdown example"
 				className={twMerge(
-					'fixed inset-y-0 left-0 z-20 hidden h-full shrink-0 flex-col border-r border-gray-200 pt-16 lg:flex dark:border-gray-700',
+					'fixed inset-y-0 left-0 z-40 hidden h-full shrink-0 flex-col border-r border-gray-200 pt-16 lg:flex dark:border-gray-700',
 					isOpen && 'flex'
 				)}
 				id="sidebar"
@@ -158,7 +158,7 @@ function MobileSidebar() {
 			<div
 				onClick={close}
 				aria-hidden="true"
-				className="fixed inset-0 z-10 h-full w-full bg-gray-900/50 pt-16 dark:bg-gray-900/90"
+				className="fixed inset-0 z-30 h-full w-full bg-gray-900/50 pt-16 dark:bg-gray-900/90"
 			/>
 		</>
 	);
@@ -254,6 +254,14 @@ const pages: SidebarItem[] = [
 			{ href: RoutePath.CategoriesPage.index(), label: 'Category' },
 			{ href: RoutePath.BrandsPage.index(), label: 'Brand' },
 			{ href: RoutePath.ProductsPage.index(), label: 'Products' },
+		],
+	},
+	{
+		icon: FaBlogger ,
+		label: 'Blogs',
+		items: [
+			{ href: RoutePath.BlogsPage.categories(), label: 'Category' },
+			{ href: RoutePath.BlogsPage.index(), label: 'Blogs' },
 		],
 	},
 ];

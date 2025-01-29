@@ -1,18 +1,22 @@
-import useBrand from "@seller/hooks/useBrand";
+import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
+
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
 
-const CreateBrandModal: FC = function () {
+const CreateBlogCategoryModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
-    const { create } = useBrand();
+    const { create } = useCategory();
     const { getSlug } = useString();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
+        default: {
+            type: "post",
+        },
     });
 
     return (
@@ -24,11 +28,11 @@ const CreateBrandModal: FC = function () {
             >
                 <div className="flex items-center gap-x-3">
                     <HiPlus className="text-xl" />
-                    Create Brand
+                    Create Category
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen}>
-                <Modal.Header>Create a new Brand</Modal.Header>
+                <Modal.Header>Create a new blog category</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="flex flex-col gap-2">
@@ -37,7 +41,7 @@ const CreateBrandModal: FC = function () {
                                 <TextInput
                                     id="name"
                                     name="name"
-                                    placeholder="Brand name"
+                                    placeholder="Category name"
                                     value={formState["name"]}
                                     color={
                                         formErrors["name"] ? "failure" : "gray"
@@ -66,11 +70,11 @@ const CreateBrandModal: FC = function () {
                                 <TextInput
                                     id="slug"
                                     name="slug"
-                                    placeholder="Brand slug"
                                     value={formState["slug"]}
                                     color={
                                         formErrors["slug"] ? "failure" : "gray"
                                     }
+                                    placeholder="Category slug"
                                     helperText={
                                         formErrors["slug"]
                                             ? formErrors["slug"][0]
@@ -85,6 +89,7 @@ const CreateBrandModal: FC = function () {
                                 />
                             </div>
                         </div>
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -95,9 +100,9 @@ const CreateBrandModal: FC = function () {
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
+                                    setFormState({});
                                 },
                             });
-                            setFormState({});
                         }}
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
@@ -111,4 +116,4 @@ const CreateBrandModal: FC = function () {
         </>
     );
 };
-export default CreateBrandModal;
+export default CreateBlogCategoryModal;

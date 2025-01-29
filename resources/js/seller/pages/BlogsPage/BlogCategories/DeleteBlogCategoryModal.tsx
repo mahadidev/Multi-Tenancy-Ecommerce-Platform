@@ -9,7 +9,7 @@ interface PropsType {
 	category: CategoryType
 }
 
-const DeleteCategoryModal: FC<PropsType> = function (props) {
+const DeleteBlogCategoryModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
 	const {delete: categoryDelete} = useCategory();
 	return (
@@ -71,4 +71,4 @@ const DeleteCategoryModal: FC<PropsType> = function (props) {
 		</>
 	);
 };
-export default DeleteCategoryModal;
+export default DeleteBlogCategoryModal;
