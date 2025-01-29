@@ -29,16 +29,16 @@ class StorePageWidgetInputItemController extends Controller
             'data' => [
                 'widget_input_items' => StorePageWidgetInputItemsResource::collection($widgetInputItems),
             ],
-            'meta' => [
-                'current_page' => $widgetInputItems->currentPage(),
-                'first_page_url' => $widgetInputItems->url(1),
-                'last_page' => $widgetInputItems->lastPage(),
-                'last_page_url' => $widgetInputItems->url($widgetInputItems->lastPage()),
-                'next_page_url' => $widgetInputItems->nextPageUrl(),
-                'prev_page_url' => $widgetInputItems->previousPageUrl(),
-                'total' => $widgetInputItems->total(),
-                'per_page' => $widgetInputItems->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $widgetInputItems->currentPage(),
+            //     'first_page_url' => $widgetInputItems->url(1),
+            //     'last_page' => $widgetInputItems->lastPage(),
+            //     'last_page_url' => $widgetInputItems->url($widgetInputItems->lastPage()),
+            //     'next_page_url' => $widgetInputItems->nextPageUrl(),
+            //     'prev_page_url' => $widgetInputItems->previousPageUrl(),
+            //     'total' => $widgetInputItems->total(),
+            //     'per_page' => $widgetInputItems->perPage(),
+            // ],
         ], 200);
     }
 
