@@ -35,25 +35,28 @@ class CategoryController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
 
-        $categories = $query->paginate($perPage)->appends($request->only(['type', 'search', 'per_page']));
+        $categories = $query
+                        ->get()
+                        // ->paginate($perPage)
+                        ->appends($request->only(['type', 'search', 'per_page']));
 
         return response()->json([
             'status' => 200,
             'data' => [
                 'categories' => CategoryResource::collection($categories),
             ],
-            'meta' => [
-                'current_page' => $categories->currentPage(),
-                'first_page_url' => $categories->url(1),
-                'last_page' => $categories->lastPage(),
-                'last_page_url' => $categories->url($categories->lastPage()),
-                'next_page_url' => $categories->nextPageUrl(),
-                'prev_page_url' => $categories->previousPageUrl(),
-                'total' => $categories->total(),
-                'per_page' => $categories->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $categories->currentPage(),
+            //     'first_page_url' => $categories->url(1),
+            //     'last_page' => $categories->lastPage(),
+            //     'last_page_url' => $categories->url($categories->lastPage()),
+            //     'next_page_url' => $categories->nextPageUrl(),
+            //     'prev_page_url' => $categories->previousPageUrl(),
+            //     'total' => $categories->total(),
+            //     'per_page' => $categories->perPage(),
+            // ],
         ], 200);
     }
 
@@ -184,7 +187,10 @@ class CategoryController extends Controller
         try {
             Excel::import(new CategoriesImport, $file);
 
-            $categories = Category::authorized()->latest()->paginate(10);
+            $categories = Category::authorized()
+                                    ->latest()
+                                    ->get();
+                                    // ->paginate(10);
 
             return response()->json([
                 'status' => 200,
@@ -192,16 +198,16 @@ class CategoryController extends Controller
                 'data' => [
                     'categories' => CategoryResource::collection($categories),
                 ],
-                'meta' => [
-                    'current_page' => $categories->currentPage(),
-                    'first_page_url' => $categories->url(1),
-                    'last_page' => $categories->lastPage(),
-                    'last_page_url' => $categories->url($categories->lastPage()),
-                    'next_page_url' => $categories->nextPageUrl(),
-                    'prev_page_url' => $categories->previousPageUrl(),
-                    'total' => $categories->total(),
-                    'per_page' => $categories->perPage(),
-                ],
+                // 'meta' => [
+                //     'current_page' => $categories->currentPage(),
+                //     'first_page_url' => $categories->url(1),
+                //     'last_page' => $categories->lastPage(),
+                //     'last_page_url' => $categories->url($categories->lastPage()),
+                //     'next_page_url' => $categories->nextPageUrl(),
+                //     'prev_page_url' => $categories->previousPageUrl(),
+                //     'total' => $categories->total(),
+                //     'per_page' => $categories->perPage(),
+                // ],
             ]);
         } catch (ValidationException $e) {
             $failures = $e->failures();
