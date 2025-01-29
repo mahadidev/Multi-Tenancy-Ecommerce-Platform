@@ -18,8 +18,11 @@ class StorePageWidgetInputItemController extends Controller
             return response()->json(['status' => 404, 'message' => 'Widget Input not found'], 404);
         }
 
-        $per_page = $request->input('per_page', 10);
-        $widgetInputItems = $pageWidgetInput->items()->paginate($per_page);
+        // $per_page = $request->input('per_page', 10);
+        $widgetInputItems = $pageWidgetInput->items()
+                                            ->latest()
+                                            ->get();
+                                    // ->paginate($per_page);
 
         return response()->json([
             'status' => 200,
