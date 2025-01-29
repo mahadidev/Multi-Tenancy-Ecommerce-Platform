@@ -1,6 +1,10 @@
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
+    BlogCategories,
+    BlogCreatePage,
+    BlogEditPage,
+    BlogsPage,
     BrandsPage,
     CategoriesPage,
     DashboardPage,
@@ -20,6 +24,7 @@ import DashboardMiddleware from "../middleware/dashboardMiddleware";
 import GuestMiddleware from "../middleware/guestMiddleware";
 import OnboardMiddleware from "../middleware/onboardMiddleware";
 import ForgotPassword from "./AuthPage/ForgotPassword";
+import ResetPassword from "./AuthPage/ResetPassword";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -40,6 +45,21 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="products/:id"
                                 element={<ProductEditPage />}
+                            />
+
+                            {/* Blogs Pages */}
+                            <Route path="blogs" element={<BlogsPage />} />
+                            <Route
+                                path="blogs/categories"
+                                element={<BlogCategories />}
+                            />
+                            <Route
+                                path="blogs/create"
+                                element={<BlogCreatePage />}
+                            />
+                            <Route
+                                path="blogs/:id"
+                                element={<BlogEditPage />}
                             />
 
                             {/* Categories Pages */}
@@ -91,6 +111,10 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="forgot-password"
                                 element={<ForgotPassword />}
+                            />
+                            <Route
+                                path="reset-password"
+                                element={<ResetPassword />}
                             />
                         </Route>
                     </Route>
