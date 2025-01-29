@@ -14,6 +14,12 @@ export { default as ProfileSettingsPage } from "./MyAccountPage/ProfileSettings"
 export { default as ProductEditPage } from "./ProductsPage/ProductEditPage/ProductEditPage";
 export { default as ProductsPage } from "./ProductsPage/ProductsPage";
 
+// blogs pages
+export { default as BlogEditPage } from "./BlogsPage/BlogEditPage/BlogEditPage";
+export { default as BlogCreatePage } from "./BlogsPage/BlogCreatePage/BlogCreatePage";
+export { default as BlogCategories } from "./BlogsPage/BlogCategories/BlogCategories";
+export { default as BlogsPage } from "./BlogsPage/BlogsPage";
+
 // store pages pages
 export { default as PageEditPage } from "./PagesPage/PageEditPage/PageEditPage";
 export { default as PagesPage } from "./PagesPage/PagesPage";

@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Button, Sidebar, TextInput } from 'flowbite-react';
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from 'react';
 import { useEffect, useState } from 'react';
-import { FaPaintBrush } from 'react-icons/fa';
+import { FaBlogger, FaPaintBrush } from 'react-icons/fa';
 import {
     HiChartPie,
     HiCog,
@@ -254,6 +254,14 @@ const pages: SidebarItem[] = [
 			{ href: RoutePath.CategoriesPage.index(), label: 'Category' },
 			{ href: RoutePath.BrandsPage.index(), label: 'Brand' },
 			{ href: RoutePath.ProductsPage.index(), label: 'Products' },
+		],
+	},
+	{
+		icon: FaBlogger ,
+		label: 'Blogs',
+		items: [
+			{ href: RoutePath.BlogsPage.categories(), label: 'Category' },
+			{ href: RoutePath.BlogsPage.index(), label: 'Blogs' },
 		],
 	},
 ];
