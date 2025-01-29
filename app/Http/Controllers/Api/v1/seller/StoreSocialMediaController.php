@@ -33,8 +33,12 @@ class StoreSocialMediaController extends Controller
             });
         }
 
-        $perPage = $request->input('per_page', 10); // Default items per page is 10
-        $storeSocialMedia = $query->paginate($perPage)->appends($request->only(['media_name', 'media_username', 'search', 'per_page']));
+        // $perPage = $request->input('per_page', 10); // Default items per page is 10
+        $storeSocialMedia = $query
+                                ->latest()
+                                ->get();
+                                // ->paginate($perPage)
+                                // ->appends($request->only(['media_name', 'media_username', 'search', 'per_page']));
 
         return response()->json([
             'status' => 200,
@@ -42,16 +46,16 @@ class StoreSocialMediaController extends Controller
             'data' => [
                 'store_social_media' => StoreSocialMediaResource::collection($storeSocialMedia),
             ],
-            'meta' => [
-                'current_page' => $storeSocialMedia->currentPage(),
-                'first_page_url' => $storeSocialMedia->url(1),
-                'last_page' => $storeSocialMedia->lastPage(),
-                'last_page_url' => $storeSocialMedia->url($storeSocialMedia->lastPage()),
-                'next_page_url' => $storeSocialMedia->nextPageUrl(),
-                'prev_page_url' => $storeSocialMedia->previousPageUrl(),
-                'total' => $storeSocialMedia->total(),
-                'per_page' => $storeSocialMedia->perPage(),
-            ],
+            // 'meta' => [
+            //     'current_page' => $storeSocialMedia->currentPage(),
+            //     'first_page_url' => $storeSocialMedia->url(1),
+            //     'last_page' => $storeSocialMedia->lastPage(),
+            //     'last_page_url' => $storeSocialMedia->url($storeSocialMedia->lastPage()),
+            //     'next_page_url' => $storeSocialMedia->nextPageUrl(),
+            //     'prev_page_url' => $storeSocialMedia->previousPageUrl(),
+            //     'total' => $storeSocialMedia->total(),
+            //     'per_page' => $storeSocialMedia->perPage(),
+            // ],
         ]);
     }
 
