@@ -18,57 +18,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $query = Category::authorized()->latest();
-
-    //     if ($request->has('type')) {
-    //         $query->where('type', $request->input('type'));
-    //     }
-
-    //     // Search functionality
-    //     if ($request->has('search')) {
-    //         $search = $request->input('search');
-    //         $query->where(function ($q) use ($search) {
-    //             $q->where('name', 'like', "%{$search}%")
-    //                 ->orWhere('slug', 'like', "%{$search}%");
-    //         });
-    //     }
-
-    //     $sort = $request->input('sort'); // Sort order,
-    //     $perPage = $request->input('per_page'); // Items per page, 
-
-    //     $categories = $query
-    //         ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
-
-    //     // Paginate or get all results based on the presence of `per_page`
-    //     $paginated = $perPage ? $categories->paginate($perPage) : $categories->get();
-
-    //     // Prepare the response
-    //     $response = [
-    //         'status' => 200,
-    //         'data' => [
-    //             'categories' => CategoryResource::collection($paginated),
-    //         ],
-    //     ];
-
-    //     // Add pagination meta data if `per_page` is provided
-    //     if ($perPage) {
-    //         $response['meta'] = [
-    //             'current_page' => $paginated->currentPage(),
-    //             'first_page_url' => $paginated->url(1),
-    //             'last_page' => $paginated->lastPage(),
-    //             'last_page_url' => $paginated->url($paginated->lastPage()),
-    //             'next_page_url' => $paginated->nextPageUrl(),
-    //             'prev_page_url' => $paginated->previousPageUrl(),
-    //             'total' => $paginated->total(),
-    //             'per_page' => $paginated->perPage(),
-    //         ];
-    //     }
-
-    //     return response()->json($response, 200);
-    // }
-
     public function index(Request $request)
     {
         // Retrieve query parameters
@@ -76,7 +25,7 @@ class CategoryController extends Controller
         $sort = $request->input('sort'); // Sort order, default is 'desc'
         $perPage = $request->input('per_page'); // Items per page, default is 10
         $type = $request->input('type');
-        
+
         // Fetch brands with optional search and sorting, paginated
         $categories = Category::authorized()
             ->when($search, function ($query, $search) {
