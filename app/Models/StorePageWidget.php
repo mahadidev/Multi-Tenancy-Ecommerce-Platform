@@ -10,11 +10,13 @@ class StorePageWidget extends Model
         'store_page_id',
         'name',
         'label',
-        'serial'
+        'serial',
+        'is_editable'
     ];
 
     protected $casts = [
         'inputs' => 'array',
+        'is_editable' => 'boolean',
     ];
 
     protected $hidden  = [
