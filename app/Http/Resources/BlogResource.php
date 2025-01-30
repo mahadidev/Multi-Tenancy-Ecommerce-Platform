@@ -20,7 +20,7 @@ class BlogResource extends JsonResource
             'category' => $this->category_id ? new CategoryResource($this->category) : null,
             'title' => $this->title,
             'slug' => $this->slug,
-            'image' => $this->image,
+            'image' => $this->blog_image,
             'content' => $this->content,
             'status' => $this->status,
             'created_at' => $this->created_at,
