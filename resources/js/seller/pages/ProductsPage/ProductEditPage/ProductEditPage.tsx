@@ -28,9 +28,7 @@ const ProductEditPage = () => {
     const { update, product, fetchProduct } = useProduct();
     const { brands } = useBrand();
     const { getSlug } = useString();
-    const { handleChange, formState, formErrors, setFormState } = useForm({
-        default: product,
-    });
+    const { handleChange, formState, formErrors, setFormState } = useForm();
 
     useEffect(() => {
         if (id) {
@@ -40,14 +38,53 @@ const ProductEditPage = () => {
                 },
             });
         }
+
+        setFormState({});
     }, [id]);
 
+    console.log({ formState });
     const removeVariant = (idx: number) => {};
     const removeVariantOption = (idx: number, idx2: number) => {};
 
     const addVariantOption = (idx: number) => {};
-    const addVariant = () => {};
+    const addVariant = () => {
+        const newVariants = [...formState.variants];
+        newVariants.push({
+            name: "",
+            options: [],
+        });
+        setFormState((prev: any) => ({
+            ...prev,
+            variants: newVariants,
+        }));
+    };
 
+    const handlePrice = (e: any, variantIndex: number, optionIndex: number) => {
+        const newPrice = e.target.value;
+        setFormState((prev: any) => {
+            const updatedVariants = [...prev.variants];
+            updatedVariants[variantIndex].options[optionIndex].price = newPrice;
+            return {
+                ...prev,
+                variants: updatedVariants,
+            };
+        });
+    };
+    const handleOptionLabel = (
+        e: any,
+        variantIndex: number,
+        optionIndex: number
+    ) => {
+        const newPrice = e.target.value;
+        setFormState((prev: any) => {
+            const updatedVariants = [...prev.variants];
+            updatedVariants[variantIndex].options[optionIndex].price = newPrice;
+            return {
+                ...prev,
+                variants: updatedVariants,
+            };
+        });
+    };
     return (
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
             <div className="mb-4">
@@ -357,42 +394,28 @@ const ProductEditPage = () => {
                                                                 value={
                                                                     option.label
                                                                 }
-                                                                onChange={(
-                                                                    e
-                                                                ) => {
-                                                                    const newLabel =
-                                                                        e.target
-                                                                            .value;
-                                                                    setFormState(
-                                                                        (
-                                                                            prev: any
-                                                                        ) => {
-                                                                            const updatedVariants =
-                                                                                [
-                                                                                    ...prev.variants,
-                                                                                ];
-                                                                            updatedVariants[
-                                                                                variantIndex
-                                                                            ].options[
-                                                                                optionIndex
-                                                                            ].label =
-                                                                                newLabel;
-                                                                            return {
-                                                                                ...prev,
-                                                                                variants:
-                                                                                    updatedVariants,
-                                                                            };
-                                                                        }
-                                                                    );
-                                                                }}
+                                                                onChange={(e) =>
+                                                                    handleOptionLabel(
+                                                                        e,
+                                                                        variantIndex,
+                                                                        optionIndex
+                                                                    )
+                                                                }
                                                             />
+
                                                             <TextInput
                                                                 placeholder="Price"
                                                                 type="number"
                                                                 value={
                                                                     option.price
                                                                 }
-                                                                // onChange={handlePrice}
+                                                                onChange={(e) =>
+                                                                    handlePrice(
+                                                                        e,
+                                                                        variantIndex,
+                                                                        optionIndex
+                                                                    )
+                                                                }
                                                             />
                                                             <TextInput
                                                                 placeholder="Stock Qty"
@@ -501,14 +524,3 @@ const ProductEditPage = () => {
 };
 
 export default ProductEditPage;
-// const handlePrice = (e: any) => {
-//     const newPrice = e.target.value;
-//     setFormState((prev: any) => {
-//         const updatedVariants = [...prev.variants];
-//         updatedVariants[variantIndex].options[optionIndex].price = newPrice;
-//         return {
-//             ...prev,
-//             variants: updatedVariants,
-//         };
-//     });
-// };

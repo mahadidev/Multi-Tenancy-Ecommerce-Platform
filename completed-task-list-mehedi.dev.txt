@@ -1,3 +1,4 @@
 - Responsive issue in profile settings page.
 - Categories issue in create product and update product page.
 - Categories issue in blog create page and update page fixed.
+- password input create with password show and encrypt features and added everywhere done
