@@ -18,39 +18,42 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page'); // Items per page, default is 10
 
         $customers = User::whereJsonContains('store_id', authStore())
             ->when($search, function ($query, $search) {
                 $query
                     ->where('name', 'like', '%' . $search . '%');
             })
-            ->latest()
-            ->get();
-            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            // ->paginate($perPage);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json(
-            [
-                'status' => 200,
-                'message' => 'Customers fetched successfully',
-                'data' => [
-                    'customers' => CustomerResource::collection($customers),
-                ],
-                // 'meta' => [
-                //     'current_page' => $customers->currentPage(),
-                //     'first_page_url' => $customers->url(1),
-                //     'last_page' => $customers->lastPage(),
-                //     'last_page_url' => $customers->url($customers->lastPage()),
-                //     'next_page_url' => $customers->nextPageUrl(),
-                //     'prev_page_url' => $customers->previousPageUrl(),
-                //     'total' => $customers->total(),
-                //     'per_page' => $customers->perPage(),
-                // ],
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $customers->paginate($perPage) : $customers->get();
+
+        // Prepare the response
+        $response = [
+            'status' => 200,
+            'data' => [
+                'customers' => CustomerResource::collection($paginated),
             ],
-            200,
-        );
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function pdf(Request $request)
