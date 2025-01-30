@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@seller/components";
+import PasswordInput from "@seller/components/Form/PasswordInput/PasswordInput";
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
 import { BASE_IMAGE_URL, BASE_URL, RoutePath } from "@seller/seller_env";
@@ -81,11 +82,11 @@ const LoginPage: FC = function () {
                         </div>
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="password">Your password</Label>
-                            <TextInput
+
+                            <PasswordInput
                                 id="password"
                                 name="password"
                                 placeholder="••••••••"
-                                type="password"
                                 value={formState["password"]}
                                 color={
                                     formErrors["password"] ? "failure" : "gray"

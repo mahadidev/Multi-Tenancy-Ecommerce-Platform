@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@seller/components";
+import PasswordInput from "@seller/components/Form/PasswordInput/PasswordInput";
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
@@ -229,7 +230,7 @@ const ProfileSettingsPage: React.FC = () => {
                             <Label htmlFor="old_password">
                                 Current Password
                             </Label>
-                            <TextInput
+                            <PasswordInput
                                 id="old_password"
                                 name="old_password"
                                 placeholder="••••••••"
@@ -253,7 +254,7 @@ const ProfileSettingsPage: React.FC = () => {
                         <div className="col-span-full grid grid-cols-1 gap-y-2 ">
                             <Label htmlFor="old_password">New Password</Label>
 
-                            <TextInput
+                            <PasswordInput
                                 id="password"
                                 name="password"
                                 placeholder="••••••••"
@@ -279,7 +280,7 @@ const ProfileSettingsPage: React.FC = () => {
                                 Confirm Password
                             </Label>
 
-                            <TextInput
+                            <PasswordInput
                                 id="confirm_password"
                                 name="confirm_password"
                                 placeholder="••••••••"
