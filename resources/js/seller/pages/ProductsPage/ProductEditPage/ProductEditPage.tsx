@@ -182,7 +182,7 @@ const ProductEditPage = () => {
                                             <option value={0}>
                                                 Select a Category
                                             </option>
-                                            {productCategories.map(
+                                            {productCategories?.map(
                                                 (category: CategoryType) => (
                                                     <option
                                                         value={category.id}
