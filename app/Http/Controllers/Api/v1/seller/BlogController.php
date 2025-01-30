@@ -104,7 +104,7 @@ class BlogController extends Controller
             'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
-        ], 201);
+        ], 200);
     }
 
     /**
@@ -127,7 +127,7 @@ class BlogController extends Controller
             'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
-        ]);
+        ],200);
     }
 
     /**
@@ -185,7 +185,7 @@ class BlogController extends Controller
             'data' => [
                 'blog' => new BlogResource($blog),
             ],
-        ]);
+        ],200);
     }
 
     /**
@@ -207,6 +207,6 @@ class BlogController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Blog deleted successfully',
-        ]);
+        ],200);
     }
 }
