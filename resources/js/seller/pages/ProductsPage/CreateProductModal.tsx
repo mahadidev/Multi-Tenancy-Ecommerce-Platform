@@ -12,7 +12,7 @@ import { FileInput } from "../../components";
 const CreateProductModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const { create } = useProduct();
-    const { categories } = useCategory();
+    const { productCategories } = useCategory();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
     });
@@ -169,7 +169,7 @@ const CreateProductModal: FC = function () {
                                     <option value={0}>
                                         Select a Parent Category
                                     </option>
-                                    {categories.map(
+                                    {productCategories?.map(
                                         (category: CategoryType) => (
                                             <option
                                                 value={category.id}
@@ -225,7 +225,9 @@ const CreateProductModal: FC = function () {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Create
                     </Button>

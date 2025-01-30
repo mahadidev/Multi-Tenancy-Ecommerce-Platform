@@ -21,7 +21,7 @@ import { useParams } from "react-router-dom";
 
 const BlogEditPage = () => {
     const { id } = useParams();
-    const { categories } = useCategory();
+    const { blogCategories } = useCategory();
     const { update, blog, fetchBlog } = useBlog();
     const { files } = useFile();
     const { handleChange, formState, formErrors, setFormState } = useForm();
@@ -120,7 +120,7 @@ const BlogEditPage = () => {
                                             <option value={0}>
                                                 Select a Category
                                             </option>
-                                            {categories.map(
+                                            {blogCategories.map(
                                                 (category: CategoryType) => (
                                                     <option
                                                         value={category.id}

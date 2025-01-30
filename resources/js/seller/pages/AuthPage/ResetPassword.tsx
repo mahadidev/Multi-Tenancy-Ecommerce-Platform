@@ -1,7 +1,8 @@
+import PasswordInput from "@seller/components/Form/PasswordInput/PasswordInput";
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
-import { Button, Card, Label, TextInput } from "flowbite-react";
+import { Button, Card, Label } from "flowbite-react";
 import React from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useSearchParams } from "react-router-dom";
@@ -46,7 +47,7 @@ const ResetPassword: React.FC = () => {
                     <div className="mt-8 space-y-6">
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="password">New Password</Label>
-                            <TextInput
+                            <PasswordInput
                                 id="password"
                                 name="password"
                                 placeholder="••••••••"
@@ -65,7 +66,7 @@ const ResetPassword: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="password">Confirm Password</Label>
-                            <TextInput
+                            <PasswordInput
                                 id="confirm_password"
                                 name="confirm_password"
                                 placeholder="••••••••"

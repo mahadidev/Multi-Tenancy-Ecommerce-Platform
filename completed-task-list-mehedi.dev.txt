@@ -1,0 +1,3 @@
+- Responsive issue in profile settings page.
+- Categories issue in create product and update product page.
+- Categories issue in blog create page and update page fixed.
