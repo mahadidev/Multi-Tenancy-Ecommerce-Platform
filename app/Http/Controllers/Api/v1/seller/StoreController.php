@@ -20,18 +20,19 @@ class StoreController extends Controller
     {
         $user = auth()->user();
         $search = $request->input('search'); // Search keyword
-        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page'); // Items per page, default is 10
+
         $stores = Store::where(["owner_id" => $user->id])
             ->when($search, function ($query, $search) {
                 $query
                     ->where('name', 'like', '%' . $search . '%')
                     ->orWhere('domain', 'like', '%' . $search . '%');
             })
-            ->latest()
-            ->get();
-            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            // ->paginate($perPage);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $stores->paginate($perPage) : $stores->get();
 
         $storeSession = $user->storeSession()->first();
         $current_store = null;
@@ -76,25 +77,30 @@ class StoreController extends Controller
             }
         }
 
-
-        // Return success response
-        return response()->json([
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'stores' => StoreResource::collection($stores),
+                'stores' => StoreResource::collection($paginated),
                 'current_store' => $current_store ? new StoreResource($current_store) : null,
             ],
-            // 'meta' => [
-            //     'current_page' => $stores->currentPage(),
-            //     'first_page_url' => $stores->url(1),
-            //     'last_page' => $stores->lastPage(),
-            //     'last_page_url' => $stores->url($stores->lastPage()),
-            //     'next_page_url' => $stores->nextPageUrl(),
-            //     'prev_page_url' => $stores->previousPageUrl(),
-            //     'total' => $stores->total(),
-            //     'per_page' => $stores->perPage(),
-            // ]
-        ], 200);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function show(Request $request, $id)

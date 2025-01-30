@@ -22,8 +22,8 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page,
 
         $orders = Order::where('name', $search)
             ->currentStore()
@@ -37,25 +37,34 @@ class OrderController extends Controller
                     ->orWhere('payment_method', 'like', '%' . $search . '%');
             })
             ->with('items')
-            ->latest()
-            ->get();
-            // ->orderBy('created_at', $sort)
-            // ->paginate($perPage);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json([
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $orders->paginate($perPage) : $orders->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
-            'data' => ['orders' => OrderResource::collection($orders)],
-            // 'meta' => [
-            //     'current_page' => $orders->currentPage(),
-            //     'first_page_url' => $orders->url(1),
-            //     'last_page' => $orders->lastPage(),
-            //     'last_page_url' => $orders->url($orders->lastPage()),
-            //     'next_page_url' => $orders->nextPageUrl(),
-            //     'prev_page_url' => $orders->previousPageUrl(),
-            //     'total' => $orders->total(),
-            //     'per_page' => $orders->perPage(),
-            // ],
-        ]);
+            'data' => [
+                'orders' => OrderResource::collection($paginated),
+            ],
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function placeOrder(Request $request)

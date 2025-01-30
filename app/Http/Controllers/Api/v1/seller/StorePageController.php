@@ -16,8 +16,8 @@ class StorePageController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
 
         $pages = StorePage::authorized()->with('widgets')
             ->when($search, function ($query, $search) {
@@ -26,30 +26,34 @@ class StorePageController extends Controller
                     ->orWhere('slug', 'like', '%' . $search . '%')
                     ->orWhere('title', 'like', '%' . $search . '%');
             })
-            ->latest()
-            ->get();
-            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            // ->paginate($perPage);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json(
-            [
-                'status' => 200,
-                'data' => [
-                    'pages' => StorePagesResource::collection($pages),
-                ],
-                // 'meta' => [
-                //     'current_page' => $pages->currentPage(),
-                //     'first_page_url' => $pages->url(1),
-                //     'last_page' => $pages->lastPage(),
-                //     'last_page_url' => $pages->url($pages->lastPage()),
-                //     'next_page_url' => $pages->nextPageUrl(),
-                //     'prev_page_url' => $pages->previousPageUrl(),
-                //     'total' => $pages->total(),
-                //     'per_page' => $pages->perPage(),
-                // ],
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $pages->paginate($perPage) : $pages->get();
+
+        // Prepare the response
+        $response = [
+            'status' => 200,
+            'data' => [
+                'pages' => StorePagesResource::collection($paginated),
             ],
-            200,
-        );
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function store(Request $request)
@@ -65,6 +69,7 @@ class StorePageController extends Controller
             'widgets.*.label' => 'required|string',
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
+            'widgets.*.is_editable' => 'nullable|boolean',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -92,6 +97,7 @@ class StorePageController extends Controller
                     'name' => $widget['name'],
                     'label' => $widget['label'],
                     'serial' =>  $widget['serial'] ?? ($key + 1),
+                    'is_editable' => $widget['is_editable'] ?? true,
 
                 ];
 
@@ -188,6 +194,7 @@ class StorePageController extends Controller
             'widgets.*.label' => 'required|string',
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
+            'widgets.*.is_editable' => 'nullable|boolean',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -217,6 +224,7 @@ class StorePageController extends Controller
                     'name' => $widget['name'],
                     'label' => $widget['label'],
                     'serial' => isset($widget['serial']) ? $widget['serial'] : ($key + 1),
+                    'is_editable' => $widget['is_editable'],
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);

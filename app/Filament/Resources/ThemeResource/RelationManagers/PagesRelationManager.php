@@ -9,6 +9,7 @@ use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -54,6 +55,10 @@ class PagesRelationManager extends RelationManager
                             ->columnSpanFull()
                             ->nullable()
                             ->columnSpanFull(),
+                        Forms\Components\Toggle::make('is_editable')
+                            ->label('Is Editable')
+                            ->default(true),
+
                     ])
                     ->reorderable()
                     ->collapsible()
