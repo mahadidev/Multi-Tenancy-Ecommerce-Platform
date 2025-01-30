@@ -28,9 +28,7 @@ const ProductEditPage = () => {
     const { update, product, fetchProduct } = useProduct();
     const { brands } = useBrand();
     const { getSlug } = useString();
-    const { handleChange, formState, formErrors, setFormState } = useForm({
-        default: product,
-    });
+    const { handleChange, formState, formErrors, setFormState } = useForm();
 
     useEffect(() => {
         if (id) {
@@ -40,14 +38,84 @@ const ProductEditPage = () => {
                 },
             });
         }
+
+        setFormState({
+            name: product?.name || "",
+            slug: product?.slug || "",
+            sku: product?.sku || "",
+            category: product?.category?.id || "",
+            brand: product?.brand?.id || "",
+            price: product?.price,
+            discount_amount: product?.discount_amount,
+            stock: product?.stock,
+            thumbnail: product?.thumbnail,
+            description: product?.description,
+            short_description: product?.short_description,
+            variants: product?.variants,
+        });
     }, [id]);
 
+    console.log({ formState });
+
+    // handle remove variant
     const removeVariant = (idx: number) => {};
+
+    // handle remove variant option
     const removeVariantOption = (idx: number, idx2: number) => {};
 
-    const addVariantOption = (idx: number) => {};
-    const addVariant = () => {};
+    // handle add variant
+    const addVariant = () => {
+        setFormState((prev: any) => ({
+            ...prev,
+            variants: [
+                // ...product?.variants!,
+                {
+                    name: "",
+                    options: [],
+                },
+            ],
+        }));
+    };
 
+    // handle add variant option
+    const addVariantOption = (idx: number) => {
+        // const newVariants = [...formState.variants];
+        // newVariants[idx].options.push("");
+        // setFormState((prev: any) => ({
+        //     ...prev,
+        //     variants: newVariants,
+        // }));
+    };
+
+    //  handle variant price
+    const handlePrice = (e: any, variantIndex: number, optionIndex: number) => {
+        const newPrice = e.target.value;
+        setFormState((prev: any) => {
+            const updatedVariants = [...prev.variants];
+            updatedVariants[variantIndex].options[optionIndex].price = newPrice;
+            return {
+                ...prev,
+                variants: updatedVariants,
+            };
+        });
+    };
+
+    // handle variant option label
+    const handleOptionLabel = (
+        e: any,
+        variantIndex: number,
+        optionIndex: number
+    ) => {
+        const newPrice = e.target.value;
+        setFormState((prev: any) => {
+            const updatedVariants = [...prev.variants];
+            updatedVariants[variantIndex].options[optionIndex].price = newPrice;
+            return {
+                ...prev,
+                variants: updatedVariants,
+            };
+        });
+    };
     return (
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
             <div className="mb-4">
@@ -136,16 +204,16 @@ const ProductEditPage = () => {
                                             Category
                                         </Label>
                                         <Select
-                                            id="category_id"
-                                            name="category_id"
-                                            value={formState["category_id"]}
+                                            id="category"
+                                            name="category"
+                                            value={formState["category"]}
                                             onChange={handleChange}
                                             required
                                         >
                                             <option value={0}>
                                                 Select a Category
                                             </option>
-                                            {productCategories.map(
+                                            {productCategories?.map(
                                                 (category: CategoryType) => (
                                                     <option
                                                         value={category.id}
@@ -299,7 +367,7 @@ const ProductEditPage = () => {
                         {/* Variants Section */}
                         <div className="my-6">
                             <Label>Variants</Label>
-                            {formState.variants?.map(
+                            {formState?.variants?.map(
                                 (variant: any, variantIndex: number) => (
                                     <div
                                         key={variantIndex}
@@ -357,42 +425,28 @@ const ProductEditPage = () => {
                                                                 value={
                                                                     option.label
                                                                 }
-                                                                onChange={(
-                                                                    e
-                                                                ) => {
-                                                                    const newLabel =
-                                                                        e.target
-                                                                            .value;
-                                                                    setFormState(
-                                                                        (
-                                                                            prev: any
-                                                                        ) => {
-                                                                            const updatedVariants =
-                                                                                [
-                                                                                    ...prev.variants,
-                                                                                ];
-                                                                            updatedVariants[
-                                                                                variantIndex
-                                                                            ].options[
-                                                                                optionIndex
-                                                                            ].label =
-                                                                                newLabel;
-                                                                            return {
-                                                                                ...prev,
-                                                                                variants:
-                                                                                    updatedVariants,
-                                                                            };
-                                                                        }
-                                                                    );
-                                                                }}
+                                                                onChange={(e) =>
+                                                                    handleOptionLabel(
+                                                                        e,
+                                                                        variantIndex,
+                                                                        optionIndex
+                                                                    )
+                                                                }
                                                             />
+
                                                             <TextInput
                                                                 placeholder="Price"
                                                                 type="number"
                                                                 value={
                                                                     option.price
                                                                 }
-                                                                // onChange={handlePrice}
+                                                                onChange={(e) =>
+                                                                    handlePrice(
+                                                                        e,
+                                                                        variantIndex,
+                                                                        optionIndex
+                                                                    )
+                                                                }
                                                             />
                                                             <TextInput
                                                                 placeholder="Stock Qty"
@@ -501,14 +555,3 @@ const ProductEditPage = () => {
 };
 
 export default ProductEditPage;
-// const handlePrice = (e: any) => {
-//     const newPrice = e.target.value;
-//     setFormState((prev: any) => {
-//         const updatedVariants = [...prev.variants];
-//         updatedVariants[variantIndex].options[optionIndex].price = newPrice;
-//         return {
-//             ...prev,
-//             variants: updatedVariants,
-//         };
-//     });
-// };
