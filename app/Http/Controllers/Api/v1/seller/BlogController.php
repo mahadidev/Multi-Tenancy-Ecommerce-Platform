@@ -54,7 +54,7 @@ class BlogController extends Controller
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, 200);
     }
 
     /**
@@ -104,7 +104,7 @@ class BlogController extends Controller
             'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
-        ]);
+        ], 201);
     }
 
     /**
@@ -146,6 +146,16 @@ class BlogController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($id) {
+                    if (Blog::where('title', $value)->where('user_id', Auth::id())->where('id', '!=', $id)->exists()) {
+                        $fail('The title has already been taken.');
+                    }
+                },
+            ],
             'content' => 'required|string',
             'image' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
