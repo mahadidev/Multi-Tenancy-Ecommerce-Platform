@@ -43,7 +43,7 @@ class CategoryController extends Controller
         $response = [
             'status' => 200,
             'data' => [
-                'brands' => CategoryResource::collection($paginated),
+                'categories' => CategoryResource::collection($paginated),
             ],
         ];
 
