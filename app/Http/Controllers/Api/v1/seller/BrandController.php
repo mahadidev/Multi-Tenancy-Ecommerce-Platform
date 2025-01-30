@@ -24,8 +24,8 @@ class BrandController extends Controller
     {
         // Retrieve query parameters
         $search = $request->input('search'); // Search keyword
-        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page'); // Items per page, default is 10
 
         // Fetch brands with optional search and sorting, paginated
         $brands = Brand::authorized()
@@ -35,30 +35,34 @@ class BrandController extends Controller
                     ->orWhere('slug', 'like', '%' . $search . '%')
                     ->where('store_id', authStore());
             })
-            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            // ->paginate($perPage);
-            ->latest()
-            ->get();
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json(
-            [
-                'status' => 200,
-                'data' => [
-                    'brands' => BrandResource::collection($brands),
-                ],
-                // 'meta' => [
-                //     'current_page' => $brands->currentPage(),
-                //     'first_page_url' => $brands->url(1),
-                //     'last_page' => $brands->lastPage(),
-                //     'last_page_url' => $brands->url($brands->lastPage()),
-                //     'next_page_url' => $brands->nextPageUrl(),
-                //     'prev_page_url' => $brands->previousPageUrl(),
-                //     'total' => $brands->total(),
-                //     'per_page' => $brands->perPage(),
-                // ],
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $brands->paginate($perPage) : $brands->get();
+
+        // Prepare the response
+        $response = [
+            'status' => 200,
+            'data' => [
+                'brands' => BrandResource::collection($paginated),
             ],
-            200,
-        );
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     /**

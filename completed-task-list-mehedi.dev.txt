@@ -1,0 +1,7 @@
+- Responsive issue in profile settings page.
+- Categories issue in create product and update product page.
+- Categories issue in blog create page and update page fixed.
+- Password input create with password show and encrypt features and added everywhere done
+- Fixed product category and blog category refetch issue after create
+- Product edit form prefill issue fixed
+- Product variant form and functionality partially done and so on.

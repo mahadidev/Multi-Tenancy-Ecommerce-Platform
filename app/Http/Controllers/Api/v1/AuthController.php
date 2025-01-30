@@ -14,6 +14,8 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -380,7 +382,7 @@ class AuthController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
 
-        // Generate a token for the user
+        // Find the user
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
@@ -390,19 +392,29 @@ class AuthController extends Controller
             ]);
         }
 
+        $stackHolder = $user->hasRole('seller') ? 'seller' : 'user';
+
+        // Generate a reset token
         $token = Password::createToken($user);
 
-        return response()->json(
-            [
+        // Create the reset URL
+        $resetUrl = url('/'.$stackHolder.'/reset-password?email=' . urlencode($user->email) . '&token=' . $token);
+
+        // Send the email
+        try {
+            Mail::to($user->email)->send(new ResetPasswordMail($resetUrl, $user->name));
+
+            return response()->json([
                 'status' => 200,
-                'message' => 'Email address matched and token generated!',
-                'data' => [
-                    'email' => $request->email,
-                    'token' => $token,
-                ],
-            ],
-            200,
-        );
+                'message' => 'Reset password email sent successfully!',
+            ]);
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Internal Error!',
+            ]);
+        }
     }
 
     public function resetPassword(Request $request)

@@ -18,7 +18,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 
 const BlogCreatePage = () => {
-    const { categories } = useCategory();
+    const { blogCategories } = useCategory();
     const { create } = useBlog();
     const { handleChange, formState, formErrors } = useForm({
         formValidationError: create.error,
@@ -101,7 +101,7 @@ const BlogCreatePage = () => {
                                             <option value={0}>
                                                 Select a Category
                                             </option>
-                                            {categories.map(
+                                            {blogCategories.map(
                                                 (category: CategoryType) => (
                                                     <option
                                                         value={category.id}

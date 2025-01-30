@@ -13,26 +13,54 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        // Retrieve query parameters
+        $sort = $request->input('sort'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page'); // Items per page, optional
         // Start the query
         $query = User::query();
-    
+
         // Check if a 'role' query parameter is present in the request
         if ($request->has('role')) {
             $query->role($request->input('role'));
         }
-    
+
         // Fetch the users
-        $users = $query->get();
-    
-        // Return the response
-        return response()->json([
+        $users = $query
+            ->when($request->has('search'), function ($query) use ($request) {
+                $search = $request->input('search');
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $users->paginate($perPage) : $users->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'users' => UserResource::collection($users),
+                'users' => UserResource::collection($paginated),
             ],
-        ]);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
-    
+
 
     public function store(Request $request)
     {
@@ -40,7 +68,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|string|email|unique:users,email',
             'phone' => 'nullable',
-            'password' => 'required|string', 
+            'password' => 'required|string',
         ]);
 
         $user = User::create([
@@ -62,14 +90,13 @@ class UserController extends Controller
                 'user' => new UserResource($user)
             ]
         ]);
-
     }
 
- 
+
     public function show($id)
     {
         $user = User::find($id);
-        if(!$user){
+        if (!$user) {
             return response()->json([
                 'status' => 404,
                 'message' => 'User not found'
@@ -83,11 +110,11 @@ class UserController extends Controller
         ]);
     }
 
-   
+
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        if(!$user){
+        if (!$user) {
             return response()->json([
                 'status' => 404,
                 'message' => 'User not found'
@@ -116,11 +143,11 @@ class UserController extends Controller
         ]);
     }
 
-   
+
     public function destroy(string $id)
     {
         $user = User::find($id);
-        if(!$user){
+        if (!$user) {
             return response()->json([
                 'status' => 404,
                 'message' => 'User not found'

@@ -49,7 +49,10 @@ class Blog extends Model
 
         static::updating(function ($blog) {
             if ($blog->isDirty('title')) {
-                $blog->slug = Str::slug($blog->title);
+                // $blog->slug = Str::slug($blog->title);
+                $slug = Str::slug($blog->title);
+                $count = Blog::where('slug', 'LIKE', "{$slug}%")->count();
+                $blog->slug = $count ? "{$slug}-{$count}" : $slug;  // Make slug unique if same title found
             }
         });
     }

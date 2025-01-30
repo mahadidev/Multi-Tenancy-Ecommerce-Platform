@@ -33,30 +33,38 @@ class StoreSocialMediaController extends Controller
             });
         }
 
-        // $perPage = $request->input('per_page', 10); // Default items per page is 10
-        $storeSocialMedia = $query
-                                ->latest()
-                                ->get();
-                                // ->paginate($perPage)
-                                // ->appends($request->only(['media_name', 'media_username', 'search', 'per_page']));
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
 
-        return response()->json([
+        $storeSocialMedia = $query
+        ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $storeSocialMedia->paginate($perPage) : $storeSocialMedia->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
-            'message' => 'Social media retrieved successfully',
             'data' => [
-                'store_social_media' => StoreSocialMediaResource::collection($storeSocialMedia),
+                'store_social_media' => StoreSocialMediaResource::collection($paginated),
             ],
-            // 'meta' => [
-            //     'current_page' => $storeSocialMedia->currentPage(),
-            //     'first_page_url' => $storeSocialMedia->url(1),
-            //     'last_page' => $storeSocialMedia->lastPage(),
-            //     'last_page_url' => $storeSocialMedia->url($storeSocialMedia->lastPage()),
-            //     'next_page_url' => $storeSocialMedia->nextPageUrl(),
-            //     'prev_page_url' => $storeSocialMedia->previousPageUrl(),
-            //     'total' => $storeSocialMedia->total(),
-            //     'per_page' => $storeSocialMedia->perPage(),
-            // ],
-        ]);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function store(Request $request)

@@ -17,22 +17,31 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        return response()->json([
+        $perPage = $request->input('per_page'); // Items per page, optional
+
+        $products = ProductService::index($request);
+
+        $response = [
             'status' => 200,
             'data' => [
-                'products' => ProductService::index($request),
+                'products' => ProductResource::collection($products),
             ],
-            // 'meta' => [
-            //     'current_page' => ProductService::index($request)->currentPage(),
-            //     'first_page_url' => ProductService::index($request)->url(1),
-            //     'last_page' => ProductService::index($request)->lastPage(),
-            //     'last_page_url' => ProductService::index($request)->url(ProductService::index($request)->lastPage()),
-            //     'next_page_url' => ProductService::index($request)->nextPageUrl(),
-            //     'prev_page_url' => ProductService::index($request)->previousPageUrl(),
-            //     'total' => ProductService::index($request)->total(),
-            //     'per_page' => ProductService::index($request)->perPage(),
-            // ],
-        ], 200);
+        ];
+
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $products->currentPage(),
+                'first_page_url' => $products->url(1),
+                'last_page' => $products->lastPage(),
+                'last_page_url' => $products->url($products->lastPage()),
+                'next_page_url' => $products->nextPageUrl(),
+                'prev_page_url' => $products->previousPageUrl(),
+                'total' => $products->total(),
+                'per_page' => $products->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function show(Request $request, $id)

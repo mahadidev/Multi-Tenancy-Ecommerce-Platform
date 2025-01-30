@@ -20,44 +20,48 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Category::authorized()->latest();
+        // Retrieve query parameters
+        $search = $request->input('search'); // Search keyword
+        $sort = $request->input('sort'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page'); // Items per page, default is 10
+        $type = $request->input('type');
 
-        if ($request->has('type')) {
-            $query->where('type', $request->input('type'));
-        }
+        // Fetch brands with optional search and sorting, paginated
+        $categories = Category::authorized()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%');
+            })
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest())
+            ->when($type, fn($query) => $query->where('type', $type));
 
-        // Search functionality
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('slug', 'like', "%{$search}%");
-            });
-        }
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $categories->paginate($perPage) : $categories->get();
 
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
-
-        $categories = $query
-                        ->get();
-                        // ->paginate($perPage)
-                        // ->appends($request->only(['type', 'search', 'per_page']));
-
-        return response()->json([
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'categories' => CategoryResource::collection($categories),
+                'categories' => CategoryResource::collection($paginated),
             ],
-            // 'meta' => [
-            //     'current_page' => $categories->currentPage(),
-            //     'first_page_url' => $categories->url(1),
-            //     'last_page' => $categories->lastPage(),
-            //     'last_page_url' => $categories->url($categories->lastPage()),
-            //     'next_page_url' => $categories->nextPageUrl(),
-            //     'prev_page_url' => $categories->previousPageUrl(),
-            //     'total' => $categories->total(),
-            //     'per_page' => $categories->perPage(),
-            // ],
-        ], 200);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function show(Request $request, $id)
@@ -164,8 +168,7 @@ class CategoryController extends Controller
         try {
             $fileName = 'category_' . now()->format('Ymd_His') . '.xlsx';
 
-            return Excel::download(new CategoriesExport, $fileName); 
-            
+            return Excel::download(new CategoriesExport, $fileName);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,
@@ -188,9 +191,9 @@ class CategoryController extends Controller
             Excel::import(new CategoriesImport, $file);
 
             $categories = Category::authorized()
-                                    ->latest()
-                                    ->get();
-                                    // ->paginate(10);
+                ->latest()
+                ->get();
+            // ->paginate(10);
 
             return response()->json([
                 'status' => 200,
