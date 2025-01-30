@@ -9,7 +9,7 @@ import { HiPlus } from "react-icons/hi";
 
 const CreateCategoryModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
-    const { create, categories } = useCategory();
+    const { create, productCategories } = useCategory();
     const { getSlug } = useString();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
@@ -116,7 +116,7 @@ const CreateCategoryModal: FC = function () {
                                     <option value={0}>
                                         Select a Parent Category
                                     </option>
-                                    {categories.map(
+                                    {productCategories?.map(
                                         (category: CategoryType) => (
                                             <option
                                                 value={category.id}
@@ -146,7 +146,9 @@ const CreateCategoryModal: FC = function () {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Create
                     </Button>

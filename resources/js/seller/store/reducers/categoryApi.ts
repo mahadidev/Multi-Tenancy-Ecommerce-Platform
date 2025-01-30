@@ -36,7 +36,7 @@ export interface DeleteCategoryPayloadType {
 export const categoryApi = createApi({
     reducerPath: "categoryApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Categories", "ProductCategories", "BlogCategories"],
+    tagTypes: ["Categories"],
     endpoints: (builder) => ({
         fetchProductCategories: builder.query<CategoriesFetchResponse, void>({
             query: (formData) =>
@@ -45,7 +45,7 @@ export const categoryApi = createApi({
                     method: "get",
                     body: formData,
                 }),
-            providesTags: ["ProductCategories"],
+            providesTags: ["Categories"],
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
@@ -65,7 +65,7 @@ export const categoryApi = createApi({
                     method: "get",
                     body: formData,
                 }),
-            providesTags: ["BlogCategories"],
+            providesTags: ["Categories"],
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {

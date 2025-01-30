@@ -39,26 +39,55 @@ const ProductEditPage = () => {
             });
         }
 
-        setFormState({});
+        setFormState({
+            name: product?.name || "",
+            slug: product?.slug || "",
+            sku: product?.sku || "",
+            category: product?.category?.id || "",
+            brand: product?.brand?.id || "",
+            price: product?.price,
+            discount_amount: product?.discount_amount,
+            stock: product?.stock,
+            thumbnail: product?.thumbnail,
+            description: product?.description,
+            short_description: product?.short_description,
+            variants: product?.variants,
+        });
     }, [id]);
 
     console.log({ formState });
+
+    // handle remove variant
     const removeVariant = (idx: number) => {};
+
+    // handle remove variant option
     const removeVariantOption = (idx: number, idx2: number) => {};
 
-    const addVariantOption = (idx: number) => {};
+    // handle add variant
     const addVariant = () => {
-        const newVariants = [...formState.variants];
-        newVariants.push({
-            name: "",
-            options: [],
-        });
         setFormState((prev: any) => ({
             ...prev,
-            variants: newVariants,
+            variants: [
+                // ...product?.variants!,
+                {
+                    name: "",
+                    options: [],
+                },
+            ],
         }));
     };
 
+    // handle add variant option
+    const addVariantOption = (idx: number) => {
+        // const newVariants = [...formState.variants];
+        // newVariants[idx].options.push("");
+        // setFormState((prev: any) => ({
+        //     ...prev,
+        //     variants: newVariants,
+        // }));
+    };
+
+    //  handle variant price
     const handlePrice = (e: any, variantIndex: number, optionIndex: number) => {
         const newPrice = e.target.value;
         setFormState((prev: any) => {
@@ -70,6 +99,8 @@ const ProductEditPage = () => {
             };
         });
     };
+
+    // handle variant option label
     const handleOptionLabel = (
         e: any,
         variantIndex: number,
@@ -173,9 +204,9 @@ const ProductEditPage = () => {
                                             Category
                                         </Label>
                                         <Select
-                                            id="category_id"
-                                            name="category_id"
-                                            value={formState["category_id"]}
+                                            id="category"
+                                            name="category"
+                                            value={formState["category"]}
                                             onChange={handleChange}
                                             required
                                         >
@@ -336,7 +367,7 @@ const ProductEditPage = () => {
                         {/* Variants Section */}
                         <div className="my-6">
                             <Label>Variants</Label>
-                            {formState.variants?.map(
+                            {formState?.variants?.map(
                                 (variant: any, variantIndex: number) => (
                                     <div
                                         key={variantIndex}
