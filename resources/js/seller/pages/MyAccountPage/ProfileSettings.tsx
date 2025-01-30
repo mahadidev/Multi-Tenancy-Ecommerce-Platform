@@ -49,7 +49,7 @@ const ProfileSettingsPage: React.FC = () => {
     });
 
     return (
-        <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4">
+        <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 gap-y-4 xl:gap-4">
             <div className="col-span-full mb-4 xl:mb-2">
                 <Breadcrumb className="mb-5">
                     <Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
