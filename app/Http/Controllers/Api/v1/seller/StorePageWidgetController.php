@@ -13,6 +13,9 @@ class StorePageWidgetController extends Controller
 {
     public function index(Request $request, $pageId)
     {
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
+
         $storePage = StorePage::where('id', $pageId)
             ->first();
         // $perPage = $request->input('per_page', 10); // Items per page, default is 10
@@ -25,26 +28,34 @@ class StorePageWidgetController extends Controller
         }
 
         $widgets = $storePage->widgets()
-                            ->latest()
-                            ->get();
-        // ->paginate($perPage);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json([
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $widgets->paginate($perPage) : $widgets->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'widgets' => StorePageWidgetsResource::collection($widgets),
+                'widgets' => StorePageWidgetsResource::collection($paginated),
             ],
-            // 'meta' => [
-            //     'current_page' => $widgets->currentPage(),
-            //     'first_page_url' => $widgets->url(1),
-            //     'last_page' => $widgets->lastPage(),
-            //     'last_page_url' => $widgets->url($widgets->lastPage()),
-            //     'next_page_url' => $widgets->nextPageUrl(),
-            //     'prev_page_url' => $widgets->previousPageUrl(),
-            //     'total' => $widgets->total(),
-            //     'per_page' => $widgets->perPage(),
-            // ],
-        ], 200);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function view(Request $request, $pageId, $widgetId)
@@ -82,6 +93,7 @@ class StorePageWidgetController extends Controller
             'label' => 'required|string',
             'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
+            'is_editable' => 'nullable|boolean',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
@@ -110,6 +122,7 @@ class StorePageWidgetController extends Controller
         $widget = [
             'name' => $request->name,
             'label' => $request->label,
+            'is_editable' => $request->is_editable ?? 1,
         ];
         if ($request->serial) {
             $widget["serial"] = $request->serial;
@@ -163,6 +176,7 @@ class StorePageWidgetController extends Controller
             'label' => 'required|string',
             'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
+            'is_editable' => 'nullable|boolean',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
@@ -200,7 +214,8 @@ class StorePageWidgetController extends Controller
         $pageWidget->update([
             'name' => $request->name,
             'label' => $request->label,
-            'serial' => $request->serial,
+            'serial' => $request->serial ?? $pageWidget->serial,
+            'is_editable' => $request->is_editable,
         ]);
 
         if ($request->has('inputs')) {

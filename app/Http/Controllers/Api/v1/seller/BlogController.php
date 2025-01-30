@@ -20,34 +20,41 @@ class BlogController extends Controller
     {
         // Retrieve query parameters
         $search = $request->input('search'); // Search keyword
-        // $sort = $request->input('sort', 'desc'); // Sort order, default is 'desc'
-        // $perPage = $request->input('per_page', 10); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, default is 'desc'
+        $perPage = $request->input('per_page'); // Items per page, optional
 
-        // Fetch blogs with optional search and sorting, paginated
+        // Build the base query
         $blogs = Blog::where('title', 'like', '%' . $search . '%')
             ->where('user_id', Auth::id())
             ->with('category')
-            ->latest()
-            ->get();
-            // ->orderBy('created_at', $sort) // Sort by 'created_at' in the specified order
-            // ->paginate($perPage);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json([
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $blogs->paginate($perPage) : $blogs->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'blogs' => BlogResource::collection($blogs),
+                'blogs' => BlogResource::collection($paginated),
             ],
-            // 'meta' => [
-            //     'current_page' => $blogs->currentPage(),
-            //     'first_page_url' => $blogs->url(1),
-            //     'last_page' => $blogs->lastPage(),
-            //     'last_page_url' => $blogs->url($blogs->lastPage()),
-            //     'next_page_url' => $blogs->nextPageUrl(),
-            //     'prev_page_url' => $blogs->previousPageUrl(),
-            //     'total' => $blogs->total(),
-            //     'per_page' => $blogs->perPage(),
-            // ],
-        ]);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     /**
@@ -97,7 +104,7 @@ class BlogController extends Controller
             'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
-        ]);
+        ], 200);
     }
 
     /**
@@ -120,7 +127,7 @@ class BlogController extends Controller
             'data' =>  [
                 'blog' => new BlogResource($blog),
             ],
-        ]);
+        ],200);
     }
 
     /**
@@ -139,6 +146,16 @@ class BlogController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($id) {
+                    if (Blog::where('title', $value)->where('user_id', Auth::id())->where('id', '!=', $id)->exists()) {
+                        $fail('The title has already been taken.');
+                    }
+                },
+            ],
             'content' => 'required|string',
             'image' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
@@ -168,7 +185,7 @@ class BlogController extends Controller
             'data' => [
                 'blog' => new BlogResource($blog),
             ],
-        ]);
+        ],200);
     }
 
     /**
@@ -190,6 +207,6 @@ class BlogController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Blog deleted successfully',
-        ]);
+        ],200);
     }
 }

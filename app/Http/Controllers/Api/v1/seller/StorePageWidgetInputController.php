@@ -12,6 +12,9 @@ class StorePageWidgetInputController extends Controller
 
     public function index(Request $request, $pageWidgetId)
     {
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
+
         $pageWidget = StorePageWidget::with('widgetInputs')->find($pageWidgetId);
 
         if (!$pageWidget) {
@@ -21,26 +24,34 @@ class StorePageWidgetInputController extends Controller
         // $per_page = $request->input('per_page', 10);
 
         $widgetInput = $pageWidget->widgetInputs()
-                                    ->latest()
-                                    ->get();
-                                    // ->paginate($per_page);
+        ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json([
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $widgetInput->paginate($perPage) : $widgetInput->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'widget_inputs' => StorePageWidgetInputsResource::collection($widgetInput),
+                'widget_inputs' => StorePageWidgetInputsResource::collection($paginated),
             ],
-            // 'meta' => [
-            //     'current_page' => $widgetInput->currentPage(),
-            //     'first_page_url' => $widgetInput->url(1),
-            //     'last_page' => $widgetInput->lastPage(),
-            //     'last_page_url' => $widgetInput->url($widgetInput->lastPage()),
-            //     'next_page_url' => $widgetInput->nextPageUrl(),
-            //     'prev_page_url' => $widgetInput->previousPageUrl(),
-            //     'total' => $widgetInput->total(),
-            //     'per_page' => $widgetInput->perPage(),
-            // ],
-        ], 200);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function store(Request $request,  $pageWidgetId)

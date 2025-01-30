@@ -14,11 +14,13 @@ class ThemePageWidget extends Model
         'value',
         'inputs',
         'thumbnail',
+        'is_editable',
     ];
 
     protected $casts = [
         'value' => 'json', // Use 'json' instead of 'array'
         'inputs' => 'json',
+        'is_editable' => 'boolean',
     ];
 
     protected $hidden  = [

@@ -20,6 +20,7 @@ class StorePageWidgetsResource extends JsonResource
             'name' => $this->name,
             'label' => $this->label,
             'serial' => $this->serial,
+            'is_editable' => $this->is_editable,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
             'inputs' => $this->widgetInputs ? StorePageWidgetInputsResource::collection($this->widgetInputs) : [],

@@ -12,6 +12,8 @@ class StorePageWidgetInputItemController extends Controller
 {
     public function index(Request $request, $inputId)
     {
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
         $pageWidgetInput = StorePageWidgetInput::with('items')->find($inputId);
 
         if (!$pageWidgetInput) {
@@ -20,26 +22,34 @@ class StorePageWidgetInputItemController extends Controller
 
         // $per_page = $request->input('per_page', 10);
         $widgetInputItems = $pageWidgetInput->items()
-                                            ->latest()
-                                            ->get();
-                                    // ->paginate($per_page);
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        return response()->json([
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $widgetInputItems->paginate($perPage) : $widgetInputItems->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'widget_input_items' => StorePageWidgetInputItemsResource::collection($widgetInputItems),
+                'widget_input_items' => StorePageWidgetInputItemsResource::collection($paginated),
             ],
-            // 'meta' => [
-            //     'current_page' => $widgetInputItems->currentPage(),
-            //     'first_page_url' => $widgetInputItems->url(1),
-            //     'last_page' => $widgetInputItems->lastPage(),
-            //     'last_page_url' => $widgetInputItems->url($widgetInputItems->lastPage()),
-            //     'next_page_url' => $widgetInputItems->nextPageUrl(),
-            //     'prev_page_url' => $widgetInputItems->previousPageUrl(),
-            //     'total' => $widgetInputItems->total(),
-            //     'per_page' => $widgetInputItems->perPage(),
-            // ],
-        ], 200);
+        ];
+
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function store(Request $request, $inputId)
@@ -141,7 +151,7 @@ class StorePageWidgetInputItemController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem), 
+                'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem),
             ],
         ]);
     }

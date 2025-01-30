@@ -13,14 +13,20 @@ class ProductService
 {
     public static function index(Request $request)
     {
-        $query = Product::authorized();
-        self::applyFiltersAndSorting($query, $request);
-        $products = $query
-                    ->latest()
-                    ->get();
-                    // ->paginate($request->per_page ?? 10);
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
 
-        return ProductResource::collection($products);
+        $query = Product::authorized();
+        
+        self::applyFiltersAndSorting($query, $request);
+
+        $products = $query
+                ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $products->paginate($perPage) : $products->get();
+
+        return ProductResource::collection($paginated);
     }
 
     public static function show(Request $request, $id)
