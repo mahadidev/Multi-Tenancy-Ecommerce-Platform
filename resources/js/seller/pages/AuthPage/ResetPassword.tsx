@@ -1,9 +1,10 @@
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
+import { RoutePath } from "@seller/seller_env";
 import { Button, Card, Label, TextInput } from "flowbite-react";
 import React from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const ResetPassword: React.FC = () => {
     //  get page query params
@@ -109,6 +110,15 @@ const ResetPassword: React.FC = () => {
                                 Reset Now
                             </Button>
                         </div>
+                        <p className="text-sm font-medium text-gray-500 dark:text-light-400">
+                            Go back to?&nbsp;
+                            <Link
+                                to={RoutePath.ForgotPasswordPage.index()}
+                                className="text-primary-700 hover:underline dark:text-light-500"
+                            >
+                                Forgot Password
+                            </Link>
+                        </p>
                     </div>
                 </Card>
             </div>

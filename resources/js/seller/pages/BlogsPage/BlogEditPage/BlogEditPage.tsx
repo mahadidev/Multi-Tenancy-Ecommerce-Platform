@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FileInput } from '@seller/components';
-import useBlog from '@seller/hooks/useBlog';
-import useCategory from '@seller/hooks/useCategory';
-import useForm from '@seller/hooks/useForm';
-import useString from '@seller/hooks/useString';
-import { RoutePath } from '@seller/seller_env';
-import { CategoryType } from '@type/categoryType';
+import { ErrorMessage, FileInput } from "@seller/components";
+import useBlog from "@seller/hooks/useBlog";
+import useCategory from "@seller/hooks/useCategory";
+import useFile from "@seller/hooks/useFile";
+import useForm from "@seller/hooks/useForm";
+import { RoutePath } from "@seller/seller_env";
+import { CategoryType } from "@type/categoryType";
 import {
     Breadcrumb,
     Button,
@@ -13,50 +13,60 @@ import {
     Select,
     Textarea,
     TextInput,
-} from 'flowbite-react';
-import { useEffect } from 'react';
-import { AiOutlineLoading } from 'react-icons/ai';
-import { HiHome } from 'react-icons/hi';
-import { useParams } from 'react-router-dom';
+} from "flowbite-react";
+import { useEffect, useState } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
+import { HiHome } from "react-icons/hi";
+import { useParams } from "react-router-dom";
 
 const BlogEditPage = () => {
-	const { id } = useParams();
-	const { categories } = useCategory();
-	const { update, blog, fetchBlog } = useBlog();
-	const { getSlug } = useString();
-	const { handleChange, formState, formErrors, setFormState } = useForm({
-		default: blog,
-	});
+    const { id } = useParams();
+    const { categories } = useCategory();
+    const { update, blog, fetchBlog } = useBlog();
+    const { files } = useFile();
+    const { handleChange, formState, formErrors, setFormState } = useForm();
+    const [imageLocation, setImageLocation] = useState<string>("");
 
-	useEffect(() => {
-		if (id) {
-			fetchBlog.submit({
-				formData: {
-					id: id,
-				},
-			});
-		}
-	}, [id]);
+    useEffect(() => {
+        if (id) {
+            fetchBlog.submit({
+                formData: {
+                    id: id,
+                },
+            });
+        }
 
-	return (
-		<div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-			<div className="mb-4">
-				<Breadcrumb className="mb-5">
-					<Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
-						<div className="flex items-center gap-x-3">
-							<HiHome className="text-xl" />
-							<span>Dashboard</span>
-						</div>
-					</Breadcrumb.Item>
-					<Breadcrumb.Item href={'/seller/blogs'}>Blogs</Breadcrumb.Item>
-					<Breadcrumb.Item>Edit</Breadcrumb.Item>
-				</Breadcrumb>
-				<h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-					Edit Blog
-				</h1>
-			</div>
+        // prefill form with existing data
+        setFormState({
+            title: blog?.title,
+            category_id: blog?.category?.id,
+            status: blog?.status,
+            image: blog?.image,
+            content: blog?.content,
+        });
+    }, [id]);
 
-			<section>
+    return (
+        <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+            <div className="mb-4">
+                <Breadcrumb className="mb-5">
+                    <Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
+                        <div className="flex items-center gap-x-3">
+                            <HiHome className="text-xl" />
+                            <span>Dashboard</span>
+                        </div>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item href={"/seller/blogs"}>
+                        Blogs
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>Edit</Breadcrumb.Item>
+                </Breadcrumb>
+                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+                    Edit Blog
+                </h1>
+            </div>
+
+            <section>
                 <div>
                     <div>
                         <div className="flex flex-col gap-6">
@@ -69,27 +79,41 @@ const BlogEditPage = () => {
                                             name="title"
                                             placeholder="Blog title"
                                             value={formState["title"]}
-                                            onChange={(e) => {
-                                                handleChange(e);
-                                                setFormState((prev: any) => ({
-                                                    ...prev,
-                                                    slug: getSlug(
-                                                        e.target.value
-                                                    ),
-                                                }));
-                                            }}
+                                            onChange={handleChange}
+                                            color={
+                                                formErrors["title"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["title"]
+                                                    ? formErrors["title"][0]
+                                                    : false
+                                            }
                                             required
                                         />
                                     </div>
 
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="category_id">
-                                            Category
+                                            Category{" "}
                                         </Label>
                                         <Select
                                             id="category_id"
                                             name="category_id"
                                             value={formState["category_id"]}
+                                            color={
+                                                formErrors["category_id"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["category_id"]
+                                                    ? formErrors[
+                                                          "category_id"
+                                                      ][0]
+                                                    : false
+                                            }
                                             onChange={handleChange}
                                             required
                                         >
@@ -109,34 +133,46 @@ const BlogEditPage = () => {
                                         </Select>
                                     </div>
 
-									  {/* active status change  */}
-									  <div className="flex flex-col gap-2">
-                                <Label htmlFor="status">Status</Label>
-                                <Select
-                                    id="status"
-                                    name="status"
-									value={formState["status"]}
-									onChange={handleChange}
-                                    required
-                                >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </Select>
-                            </div>
+                                    {/* active status change  */}
+                                    <div className="flex flex-col gap-2">
+                                        <Label htmlFor="status">Status</Label>
+                                        <Select
+                                            id="status"
+                                            name="status"
+                                            value={formState["status"]}
+                                            color={
+                                                formErrors["category_id"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["category_id"]
+                                                    ? formErrors[
+                                                          "category_id"
+                                                      ][0]
+                                                    : false
+                                            }
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option value="active">
+                                                Active
+                                            </option>
+                                            <option value="inactive">
+                                                Inactive
+                                            </option>
+                                        </Select>
+                                    </div>
 
                                     <div className=" col-span-full">
                                         <div className="flex flex-col gap-2">
-                                            <Label htmlFor="image">
-                                                Image
-                                            </Label>
+                                            <Label htmlFor="image">Image</Label>
                                             <div>
                                                 <FileInput
                                                     id="image"
                                                     name="image"
                                                     placeholder="Click to upload image"
-                                                    value={
-                                                        formState["image"]
-                                                    }
+                                                    value={formState["image"]}
                                                     color={
                                                         formErrors["image"]
                                                             ? "failure"
@@ -149,15 +185,15 @@ const BlogEditPage = () => {
                                                               ][0]
                                                             : false
                                                     }
-                                                    onChange={(
-                                                        event: React.ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        handleChange(event);
-                                                    }}
+                                                    onChange={(e: any) =>
+                                                        setImageLocation(
+                                                            e.target?.value
+                                                        )
+                                                    }
                                                 />
                                             </div>
                                         </div>
-                                        {/* <div>
+                                        <div>
                                             {formState["thumbnail"] && (
                                                 <img
                                                     src={formState["thumbnail"]}
@@ -165,7 +201,7 @@ const BlogEditPage = () => {
                                                     className="w-36 h-36 object-cover rounded-md"
                                                 />
                                             )}
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -179,33 +215,58 @@ const BlogEditPage = () => {
                                     placeholder="Enter blog content"
                                     rows={5}
                                     value={formState["content"]}
+                                    color={
+                                        formErrors["content"]
+                                            ? "failure"
+                                            : "gray"
+                                    }
+                                    helperText={
+                                        formErrors["content"]
+                                            ? formErrors["content"][0]
+                                            : false
+                                    }
                                     onChange={handleChange}
                                 />
                             </div>
-
-
                         </div>
                     </div>
                 </div>
+
+                {formErrors["message"] && (
+                    <ErrorMessage>{formErrors["message"]}</ErrorMessage>
+                )}
+
                 <div className="flex justify-end mt-6">
                     <Button
                         color="primary"
                         onClick={() => {
                             update.submit({
-                                formData: formState,
+                                formData: {
+                                    id: blog?.id!,
+                                    title: formState?.title,
+                                    category_id: formState?.category_id,
+                                    content: formState?.content,
+                                    status: formState?.status,
+                                    image: files?.find(
+                                        (file: any) =>
+                                            file?.location === imageLocation
+                                    )?.url,
+                                },
                             });
                         }}
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}
                         processingLabel="Saving"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Save all
                     </Button>
                 </div>
             </section>
-		</div>
-	);
+        </div>
+    );
 };
 
 export default BlogEditPage;

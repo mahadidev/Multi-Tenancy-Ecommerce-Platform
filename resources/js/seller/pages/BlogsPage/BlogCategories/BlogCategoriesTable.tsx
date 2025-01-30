@@ -1,11 +1,12 @@
+import useCategory from "@seller/hooks/useCategory";
 import { CategoryType } from "@type/categoryType";
 import { Checkbox, Label, Table } from "flowbite-react";
-import EditBlogCategoryModal from "./EditBlogCategoryModal";
 import DeleteBlogCategoryModal from "./DeleteBlogCategoryModal";
-import useCategory from "@seller/hooks/useCategory";
+import EditBlogCategoryModal from "./EditBlogCategoryModal";
 
 const BlogCategoriesTable = () => {
-    const { categories } = useCategory();
+    // get the blog categories
+    const { blogCategories } = useCategory();
 
     return (
         <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
@@ -31,9 +32,9 @@ const BlogCategoriesTable = () => {
                 <Table.HeadCell />
             </Table.Head>
             <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {categories
-                    .filter((category) => category.type === "post")
-                    .map((category: CategoryType, idx: number) => (
+                {blogCategories
+                    ?.filter((category) => category.type === "post")
+                    ?.map((category: CategoryType, idx: number) => (
                         <Table.Row
                             key={idx}
                             className="hover:bg-gray-100 dark:hover:bg-gray-700"

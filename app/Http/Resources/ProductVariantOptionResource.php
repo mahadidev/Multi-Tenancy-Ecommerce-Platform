@@ -18,7 +18,6 @@ class ProductVariantOptionResource extends JsonResource
             'id' => $this->id,
             'variant_id' => $this->variant_id,
             'label' => $this->label,
-            'slug' => $this->slug,
             'code' => $this->code,
             'price' => $this->price,
             'qty_stock' => $this->qty_stock,

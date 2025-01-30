@@ -1,3 +1,4 @@
+import { ErrorMessage } from "@seller/components";
 import useAuth from "@seller/hooks/useAuth";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
@@ -25,10 +26,10 @@ const ProfileSettingsPage: React.FC = () => {
         formValidationError: update.error,
         default: {
             // id: user?.id,
-            name: user?.name,
-            phone: user?.phone,
-            email: user?.email,
-            address: user?.address,
+            name: user?.name || "",
+            phone: user?.phone || "",
+            email: user?.email || "",
+            address: user?.address || "",
         },
     });
 
@@ -46,8 +47,6 @@ const ProfileSettingsPage: React.FC = () => {
             confirm_password: "",
         },
     });
-
-    console.log({ passwordUpdateFormErrors });
 
     return (
         <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-2 xl:gap-4">
@@ -189,7 +188,15 @@ const ProfileSettingsPage: React.FC = () => {
                             ></Textarea>
                         </div>
 
-                        <div className="col-span-6">
+                        {profileSettingsFormErrors["message"] && (
+                            <div className="col-span-12">
+                                <ErrorMessage>
+                                    {profileSettingsFormErrors["message"]}
+                                </ErrorMessage>
+                            </div>
+                        )}
+
+                        <div className="col-span-12">
                             <Button
                                 color="blue"
                                 isProcessing={update.isLoading}
@@ -222,23 +229,6 @@ const ProfileSettingsPage: React.FC = () => {
                             <Label htmlFor="old_password">
                                 Current Password
                             </Label>
-
-                            {/* <TextInput
-                                id="password"
-                                name="password"
-                                placeholder="••••••••"
-                                type="password"
-                                value={formState["password"]}
-                                color={
-                                    formErrors["password"] ? "failure" : "gray"
-                                }
-                                helperText={
-                                    formErrors["password"]
-                                        ? formErrors["password"][0]
-                                        : false
-                                }
-                                onChange={handleChange}
-                            /> */}
                             <TextInput
                                 id="old_password"
                                 name="old_password"
@@ -312,7 +302,14 @@ const ProfileSettingsPage: React.FC = () => {
                                 onChange={passwordUpdateHandleChange}
                             />
                         </div>
-                        <div className="col-span-6">
+                        {passwordUpdateFormErrors["message"] && (
+                            <div className="col-span-12">
+                                <ErrorMessage>
+                                    {passwordUpdateFormErrors["message"]}
+                                </ErrorMessage>
+                            </div>
+                        )}
+                        <div className="col-span-12">
                             <Button
                                 color="blue"
                                 isProcessing={updatePassword.isLoading}

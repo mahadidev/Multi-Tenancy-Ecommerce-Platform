@@ -11,7 +11,10 @@ class ThemeController extends Controller
 {
     public function getThemes(Request $request)
     {
-        $themes = Theme::with('pages.page_widgets')->active()->get();
+        $themes = Theme::with('pages.page_widgets')
+                        ->active()
+                        ->latest()
+                        ->get();
 
         return response()->json(
             [
