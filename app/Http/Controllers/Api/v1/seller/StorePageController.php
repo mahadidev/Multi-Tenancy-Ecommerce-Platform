@@ -16,8 +16,8 @@ class StorePageController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page'); // Items per page, default is 10
+        $sort = $request->input('sort'); // Sort order, 
+        $perPage = $request->input('per_page'); // Items per page, 
 
         $pages = StorePage::authorized()->with('widgets')
             ->when($search, function ($query, $search) {
