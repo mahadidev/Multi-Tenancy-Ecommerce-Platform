@@ -6,7 +6,7 @@ use App\Models\Brand;
 use App\Models\Store;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\Storage;
 class BrandSeeder extends Seeder
 {
     /**
@@ -16,11 +16,11 @@ class BrandSeeder extends Seeder
     {
 
         $brands = [
-            ["name" => "Apple", "slug" => "apple"],
-            ["name" => "Samsung", "slug" => "samsung"],
-            ["name" => "Nike", "slug" => "nike"],
-            ["name" => "Adidas", "slug" => "adidas"],
-            ["name" => "Sony", "slug" => "sony"],
+            ["name" => "Apple", "slug" => "apple", "image" => 'images/brands/apple.jpg'],
+            ["name" => "Samsung", "slug" => "samsung", "image" => 'images/brands/samsung.jpg'],
+            ["name" => "Nike", "slug" => "nike", "image" => 'images/brands/nike.jpg'],
+            ["name" => "Adidas", "slug" => "adidas", "image" => 'images/brands/adidas.jpg'],
+            ["name" => "Sony", "slug" => "sony", "image" => 'images/brands/sony.jpg'],
             ["name" => "Microsoft", "slug" => "microsoft"],
             ["name" => "Gucci", "slug" => "gucci"],
             ["name" => "Puma", "slug" => "puma"],
@@ -37,6 +37,9 @@ class BrandSeeder extends Seeder
 
         if($store){
             foreach ($brands as $brand) {
+
+                $imagePath = isset($brand['image']) ? asset($brand['image']) : null;
+
                 Brand::updateOrCreate(
                     [
                         'name' => $brand['name'],
@@ -44,6 +47,7 @@ class BrandSeeder extends Seeder
                         'store_id' => $store->id,
                     ],
                     [
+                        'image' => $imagePath ?? null,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]
