@@ -142,7 +142,7 @@ class StoreController extends Controller
             'social_media.*.name' => 'required_with:social_media|string',
             'social_media.*.username' => 'required_with:social_media|string',
             'social_media.*.url' => 'required_with:social_media|string',
-            'social_media.*.label' => 'required|string',
+            'social_media.*.label' => 'required_with:social_media|string',
         ]);
 
 
@@ -231,7 +231,7 @@ class StoreController extends Controller
             'social_media.*.name' => 'required_with:social_media|string',
             'social_media.*.username' => 'required_with:social_media|string',
             'social_media.*.url' => 'required_with:social_media|string',
-            'social_media.*.label' => 'required|string',
+            'social_media.*.label' => 'required_with:social_media|string',
         ]);
 
 
