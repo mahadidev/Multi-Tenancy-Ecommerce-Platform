@@ -183,7 +183,7 @@ class BrandController extends Controller
 
         return response()->json(
             [
-                'success' => 200,
+                'status' => 200,
                 'message' => 'Brand deleted successfully',
             ],
             200,
