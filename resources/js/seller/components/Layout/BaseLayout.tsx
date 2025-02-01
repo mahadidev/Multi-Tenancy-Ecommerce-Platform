@@ -1,6 +1,7 @@
 import { customTheme } from '@seller/theme';
 import { Flowbite } from 'flowbite-react';
 import React, { FC } from 'react';
+import ToastMessage from '../ToastMessage/ToastMessage';
 
 interface BaseLayoutProps {
 	children: React.ReactNode;
@@ -9,7 +10,10 @@ interface BaseLayoutProps {
 const BaseLayout: FC<BaseLayoutProps> = function (props) {
 	return (
 		<>
-			<Flowbite theme={{ theme: customTheme }}>{props.children}</Flowbite>
+			<Flowbite theme={{ theme: customTheme }}>
+				{props.children}
+				<ToastMessage />
+			</Flowbite>
 		</>
 	);
 };
