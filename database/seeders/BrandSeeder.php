@@ -16,21 +16,21 @@ class BrandSeeder extends Seeder
     {
 
         $brands = [
-            ["name" => "Apple", "slug" => "apple", "image" => 'seeder/brands/apple.jpg'],
-            ["name" => "Samsung", "slug" => "samsung", "image" => 'seeder/brands/samsung.jpg'],
-            ["name" => "Nike", "slug" => "nike", "image" => 'seeder/brands/nike.jpg'],
-            ["name" => "Adidas", "slug" => "adidas", "image" => 'seeder/brands/adidas.jpg'],
-            ["name" => "Sony", "slug" => "sony", "image" => 'seeder/brands/sony.jpg'],
-            ["name" => "Microsoft", "slug" => "microsoft", "image" => 'seeder/brands/microsoft.jpg'],
-            ["name" => "Gucci", "slug" => "gucci", "image" => 'seeder/brands/gucci.jpg'],
-            ["name" => "Puma", "slug" => "puma", "image" => 'seeder/brands/puma.jpg'],
-            ["name" => "L'Oréal", "slug" => "loreal", "image" => 'seeder/brands/loreal.jpg'],
-            ["name" => "Coca-Cola", "slug" => "coca-cola", "image" => 'seeder/brands/coca-cola.jpg'],
-            ["name" => "Tesla", "slug" => "tesla", "image" => 'seeder/brands/tesla.jpg'],
-            ["name" => "Toyota", "slug" => "toyota", "image" => 'seeder/brands/toyota.jpg'],
-            ["name" => "Chanel", "slug" => "chanel", "image" => 'seeder/brands/chanel.jpg'],
-            ["name" => "Intel", "slug" => "intel", "image" => 'seeder/brands/intel.jpg'],
-            ["name" => "Dell", "slug" => "dell", "image" => 'seeder/brands/dell.jpg'],
+            ["name" => "Apple", "slug" => "apple", "image" => 'seeders/brands/apple.jpg'],
+            ["name" => "Samsung", "slug" => "samsung", "image" => 'seeders/brands/samsung.jpg'],
+            ["name" => "Nike", "slug" => "nike", "image" => 'seeders/brands/nike.jpg'],
+            ["name" => "Adidas", "slug" => "adidas", "image" => 'seeders/brands/adidas.jpg'],
+            ["name" => "Sony", "slug" => "sony", "image" => 'seeders/brands/sony.jpg'],
+            ["name" => "Microsoft", "slug" => "microsoft", "image" => 'seeders/brands/microsoft.jpg'],
+            ["name" => "Gucci", "slug" => "gucci", "image" => 'seeders/brands/gucci.jpg'],
+            ["name" => "Puma", "slug" => "puma", "image" => 'seeders/brands/puma.jpg'],
+            ["name" => "L'Oréal", "slug" => "loreal", "image" => 'seeders/brands/loreal.jpg'],
+            ["name" => "Coca-Cola", "slug" => "coca-cola", "image" => 'seeders/brands/coca-cola.jpg'],
+            ["name" => "Tesla", "slug" => "tesla", "image" => 'seeders/brands/tesla.jpg'],
+            ["name" => "Toyota", "slug" => "toyota", "image" => 'seeders/brands/toyota.jpg'],
+            ["name" => "Chanel", "slug" => "chanel", "image" => 'seeders/brands/chanel.jpg'],
+            ["name" => "Intel", "slug" => "intel", "image" => 'seeders/brands/intel.jpg'],
+            ["name" => "Dell", "slug" => "dell", "image" => 'seeders/brands/dell.jpg'],
         ];
 
         $store = Store::where('slug', 'goody-bro')->orWhere('domain', 'goody-bro')->first();

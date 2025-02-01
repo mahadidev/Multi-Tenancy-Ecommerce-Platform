@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'iphone-14-pro',
                 'sku' => 'IPH14PRO',
                 'price' => 999.99,
-                'thumbnail' => 'seeder/products/iphone-14-pro.jpg',
+                'thumbnail' => 'seeders/products/iphone-14-pro.jpg',
                 'category_slug' => 'electronics',
                 'brand_slug' => 'apple'
             ],
@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'samsung-galaxy-s23',
                 'sku' => 'GALAXYS23',
                 'price' => 849.99,
-                'thumbnail' => 'seeder/products/samsung-galaxy-s23.jpg',
+                'thumbnail' => 'seeders/products/samsung-galaxy-s23.jpg',
                 'category_slug' => 'electronics',
                 'brand_slug' => 'samsung'
             ],
@@ -38,7 +38,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'nike-air-max-270',
                 'sku' => 'NIKEAM270',
                 'price' => 129.99,
-                'thumbnail' => 'seeder/products/nike-air-max-270.jpg',
+                'thumbnail' => 'seeders/products/nike-air-max-270.jpg',
                 'category_slug' => 'clothing',
                 'brand_slug' => 'nike'
             ],
@@ -47,7 +47,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'adidas-ultraboost',
                 'sku' => 'ADIBOOST',
                 'price' => 149.99,
-                'thumbnail' => 'seeder/products/adidas-ultraboost.jpg',
+                'thumbnail' => 'seeders/products/adidas-ultraboost.jpg',
                 'category_slug' => 'clothing',
                 'brand_slug' => 'adidas'
             ],
@@ -56,7 +56,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'sony-wh-1000xm5',
                 'sku' => 'SONYXM5',
                 'price' => 299.99,
-                'thumbnail' => 'seeder/products/sony-wh-1000xm5.jpg',
+                'thumbnail' => 'seeders/products/sony-wh-1000xm5.jpg',
                 'category_slug' => 'electronics',
                 'brand_slug' => 'sony'
             ],
@@ -65,7 +65,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'microsoft-surface-pro-9',
                 'sku' => 'SURFACEPRO9',
                 'price' => 1099.99,
-                'thumbnail' => 'seeder/products/microsoft-surface-pro-9.jpg',
+                'thumbnail' => 'seeders/products/microsoft-surface-pro-9.jpg',
                 'category_slug' => 'electronics',
                 'brand_slug' => 'microsoft'
             ],
@@ -74,7 +74,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'gucci-leather-bag',
                 'sku' => 'GUCCIBAG01',
                 'price' => 1999.99,
-                'thumbnail' => 'seeder/products/gucci-leather-bag.jpg',
+                'thumbnail' => 'seeders/products/gucci-leather-bag.jpg',
                 'category_slug' => 'travel-luggage',
                 'brand_slug' => 'gucci'
             ],
@@ -83,7 +83,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'puma-running-shoes',
                 'sku' => 'PUMASHOE01',
                 'price' => 89.99,
-                'thumbnail' => 'seeder/products/puma-running-shoes.jpg',
+                'thumbnail' => 'seeders/products/puma-running-shoes.jpg',
                 'category_slug' => 'clothing',
                 'brand_slug' => 'puma'
             ],
@@ -92,7 +92,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'loreal-face-cream',
                 'sku' => 'LOREALCREAM01',
                 'price' => 29.99,
-                'thumbnail' => 'seeder/products/loreal-face-cream.jpg',
+                'thumbnail' => 'seeders/products/loreal-face-cream.jpg',
                 'category_slug' => 'beauty-personal-care',
                 'brand_slug' => 'loreal'
             ],
@@ -101,7 +101,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'coca-cola-pack-12',
                 'sku' => 'COCACOLA12',
                 'price' => 8.99,
-                'thumbnail' => 'seeder/products/coca-cola-pack-12.jpg',
+                'thumbnail' => 'seeders/products/coca-cola-pack-12.jpg',
                 'category_slug' => 'groceries',
                 'brand_slug' => 'coca-cola'
             ],
@@ -110,7 +110,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'tesla-model-y',
                 'sku' => 'TESLAY01',
                 'price' => 49999.99,
-                'thumbnail' => 'seeder/products/tesla-model-y.jpg',
+                'thumbnail' => 'seeders/products/tesla-model-y.jpg',
                 'category_slug' => 'automotive',
                 'brand_slug' => 'tesla'
             ],
@@ -119,7 +119,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'toyota-corolla-2023',
                 'sku' => 'TOYCOR23',
                 'price' => 22999.99,
-                'thumbnail' => 'seeder/products/toyota-corolla-2023.jpg',
+                'thumbnail' => 'seeders/products/toyota-corolla-2023.jpg',
                 'category_slug' => 'automotive',
                 'brand_slug' => 'toyota'
             ],
@@ -128,7 +128,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'chanel-no-5',
                 'sku' => 'CHANEL05',
                 'price' => 129.99,
-                'thumbnail' => 'seeder/products/chanel-no-5.jpg',
+                'thumbnail' => 'seeders/products/chanel-no-5.jpg',
                 'category_slug' => 'beauty-personal-care',
                 'brand_slug' => 'chanel'
             ],
@@ -137,7 +137,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'intel-core-i9',
                 'sku' => 'INTELI9',
                 'price' => 499.99,
-                'thumbnail' => 'seeder/products/intel-core-i9.jpg',
+                'thumbnail' => 'seeders/products/intel-core-i9.jpg',
                 'category_slug' => 'electronics',
                 'brand_slug' => 'intel'
             ],
@@ -146,7 +146,7 @@ class ProductSeeder extends Seeder
                 'slug' => 'dell-xps-15',
                 'sku' => 'XPS15',
                 'price' => 1599.99,
-                'thumbnail' => 'seeder/products/dell-xps-15.jpg',
+                'thumbnail' => 'seeders/products/dell-xps-15.jpg',
                 'category_slug' => 'electronics',
                 'brand_slug' => 'dell'
             ],
