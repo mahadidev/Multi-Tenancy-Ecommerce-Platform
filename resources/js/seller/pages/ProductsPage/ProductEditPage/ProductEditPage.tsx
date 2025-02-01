@@ -55,8 +55,6 @@ const ProductEditPage = () => {
         });
     }, [id]);
 
-    console.log({ formState });
-
     // handle remove variant
     const removeVariant = (idx: number) => {
         console.log(idx);

@@ -12,7 +12,7 @@ const CreateCategoryModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const { create, productCategories } = useCategory();
     const { getSlug } = useString();
-    const {toaster} = useToast();
+    const { toaster } = useToast();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
@@ -144,8 +144,8 @@ const CreateCategoryModal: FC = function () {
                                     setFormState({});
                                     toaster({
                                         text: "Category has been created",
-                                        status: "success"
-                                    })
+                                        status: "success",
+                                    });
                                 },
                             });
                         }}

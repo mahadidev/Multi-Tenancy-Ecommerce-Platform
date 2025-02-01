@@ -12,7 +12,7 @@
 </g>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 12H28V8H0V12Z" fill="#262626"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0L13.3333 10L0 20V0Z" fill="#262626"/>
-<path d="M-0.666585 17.3627V2.63709L9.5281 9.99992L-0.666585 17.3627Z" stroke="#FDCE12" stroke-width="1.33333"/>
+<path d="M-0.666585 17.3627V2.63709L9.5281 9.99992L-0.666585 17.3627Z" stroke="#FDCE12" strokeWidth="1.33333"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M9.33325 10.6666H27.9999V9.33325H9.33325V10.6666Z" fill="#FDCE12"/>
 </g>
 <defs>

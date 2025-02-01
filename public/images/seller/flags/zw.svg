@@ -11,7 +11,7 @@
 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 12H28V8H0V12Z" fill="#262626"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 5.33341H28V2.66675H0V5.33341Z" fill="#FFD40E"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 17.3334H28V14.6667H0V17.3334Z" fill="#FFD40E"/>
-<path d="M-0.666585 19.3333V0.666667H-0.222141L12.2223 10L-0.222141 19.3333H-0.666585Z" fill="white" stroke="#262626" stroke-width="1.33333"/>
+<path d="M-0.666585 19.3333V0.666667H-0.222141L12.2223 10L-0.222141 19.3333H-0.666585Z" fill="white" stroke="#262626" strokeWidth="1.33333"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M4.00008 11.3001L2.0408 12.6968L2.76371 10.4018L0.829893 8.97002L3.23596 8.94836L4.00008 6.66675L4.7642 8.94836L7.17027 8.97002L5.23645 10.4018L5.95937 12.6968L4.00008 11.3001Z" fill="url(#paint0_linear)"/>
 </g>
 <defs>
