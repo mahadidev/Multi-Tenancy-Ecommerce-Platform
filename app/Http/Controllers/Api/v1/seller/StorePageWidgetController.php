@@ -107,7 +107,7 @@ class StorePageWidgetController extends Controller
             'inputs.*.items.*.placeholder' => 'nullable|string',
             'inputs.*.items.*.value' => 'nullable|string',
             'inputs.*.items.*.required' => 'required|boolean',
-            'inputs.*.items.*.type' => 'nullable|string',
+            'inputs.*.items.*.type' => 'required|string',
         ]);
 
         $storePage = StorePage::where('id', $pageId)->first();
@@ -116,7 +116,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Page not found',
-            ]);
+            ], 404);
         }
 
         $widget = [
@@ -166,7 +166,7 @@ class StorePageWidgetController extends Controller
             'data' => [
                 'widget' => new StorePageWidgetsResource($pageWidget),
             ],
-        ]);
+        ], 200);
     }
 
     public function update(Request $request, $pageId, $widgetId)
@@ -190,7 +190,7 @@ class StorePageWidgetController extends Controller
             'inputs.*.items.*.placeholder' => 'nullable|string',
             'inputs.*.items.*.value' => 'nullable|string',
             'inputs.*.items.*.required' => 'required|boolean',
-            'inputs.*.items.*.type' => 'nullable|string',
+            'inputs.*.items.*.type' => 'required|string',
         ]);
 
         $storePage = StorePage::where('id', $pageId)->first();
@@ -199,7 +199,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Page not found',
-            ]);
+            ], 404);
         }
 
         $pageWidget = $storePage->widgets()->where('id', $widgetId)->first();
@@ -208,7 +208,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Widget not found',
-            ]);
+            ], 404);
         }
 
         $pageWidget->update([
@@ -255,7 +255,7 @@ class StorePageWidgetController extends Controller
             'data' => [
                 'widget' => new StorePageWidgetsResource($pageWidget),
             ],
-        ]);
+        ], 200);
     }
 
     public function destroy(Request $request, $pageId, $widgetId)
@@ -266,7 +266,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Page not found',
-            ]);
+            ], 404);
         }
 
         $pageWidget = $storePage->widgets()->where('id', $widgetId)->first();
@@ -275,7 +275,7 @@ class StorePageWidgetController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Widget not found',
-            ]);
+            ], 404);
         }
 
         $pageWidget->delete();
@@ -283,6 +283,6 @@ class StorePageWidgetController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Widget deleted successfully',
-        ]);
+        ], 200);
     }
 }

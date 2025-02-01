@@ -20,8 +20,8 @@ class BlogController extends Controller
     {
         // Retrieve query parameters
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page'); // Items per page, optional
+        $sort = $request->input('sort'); // Sort order
+        $perPage = $request->input('per_page'); // Items per page
 
         // Build the base query
         $blogs = Blog::where('title', 'like', '%' . $search . '%')
@@ -199,7 +199,7 @@ class BlogController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Blog not found',
-            ]);
+            ], 404);
         }
 
         $blog->delete();

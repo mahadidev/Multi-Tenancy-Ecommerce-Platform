@@ -201,16 +201,6 @@ class CategoryController extends Controller
                 'data' => [
                     'categories' => CategoryResource::collection($categories),
                 ],
-                // 'meta' => [
-                //     'current_page' => $categories->currentPage(),
-                //     'first_page_url' => $categories->url(1),
-                //     'last_page' => $categories->lastPage(),
-                //     'last_page_url' => $categories->url($categories->lastPage()),
-                //     'next_page_url' => $categories->nextPageUrl(),
-                //     'prev_page_url' => $categories->previousPageUrl(),
-                //     'total' => $categories->total(),
-                //     'per_page' => $categories->perPage(),
-                // ],
             ]);
         } catch (ValidationException $e) {
             $failures = $e->failures();

@@ -111,7 +111,7 @@ class StoreController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'store not found'
-            ]);
+            ], 404);
         }
 
         return response()->json([
@@ -139,6 +139,10 @@ class StoreController extends Controller
             "theme_id" => "nullable|exists:themes,id",
             'description' => 'nullable|string',
             'social_media' => 'nullable|array',
+            'social_media.*.name' => 'required_with:social_media|string',
+            'social_media.*.username' => 'required_with:social_media|string',
+            'social_media.*.url' => 'required_with:social_media|string',
+            'social_media.*.label' => 'nullable|string',
         ]);
 
 
@@ -174,6 +178,7 @@ class StoreController extends Controller
                         [
                             'username' => $social_media['username'],
                             'url' => $social_media['url'],
+                            'label' => $social_media['label'] ?? null,
                         ]
                     );
                 }
@@ -203,7 +208,7 @@ class StoreController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Store not found',
-            ]);
+            ], 404);
         }
 
         // Validate the incoming request data
@@ -223,6 +228,10 @@ class StoreController extends Controller
             'type' => 'nullable|string',
             'description' => 'nullable|string',
             'social_media' => 'nullable|array',
+            'social_media.*.name' => 'required_with:social_media|string',
+            'social_media.*.username' => 'required_with:social_media|string',
+            'social_media.*.url' => 'required_with:social_media|string',
+            'social_media.*.label' => 'nullable|string',
         ]);
 
 
@@ -272,6 +281,7 @@ class StoreController extends Controller
                         [
                             'username' => $social_media['username'],
                             'url' => $social_media['url'],
+                            'label' => $social_media['label']
                         ]
                     );
                 }
@@ -326,7 +336,7 @@ class StoreController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Store not found',
-            ]);
+            ], 404);
         }
 
         // update store_id in store_session table
@@ -369,7 +379,7 @@ class StoreController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'store not found'
-            ]);
+            ], 404);
         }
 
         return response()->json([
@@ -377,7 +387,6 @@ class StoreController extends Controller
             'data' => [
                 'store' => new StoreResource($store)
             ]
-
         ], 200);
     }
 
