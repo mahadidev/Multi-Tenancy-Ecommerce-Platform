@@ -60,7 +60,8 @@ class SubscriberController extends Controller
                 'data' => [
                     'subscribers' => $subscriber
                 ]
-            ]
+                ],
+            200
         );
     }
 
