@@ -58,10 +58,14 @@ const ProductEditPage = () => {
     console.log({ formState });
 
     // handle remove variant
-    const removeVariant = (idx: number) => {};
+    const removeVariant = (idx: number) => {
+        console.log(idx);
+    };
 
     // handle remove variant option
-    const removeVariantOption = (idx: number, idx2: number) => {};
+    const removeVariantOption = (idx: number, idx2: number) => {
+        console.log({ idx, idx2 });
+    };
 
     // handle add variant
     const addVariant = () => {
@@ -85,6 +89,7 @@ const ProductEditPage = () => {
         //     ...prev,
         //     variants: newVariants,
         // }));
+        console.log(idx);
     };
 
     //  handle variant price
