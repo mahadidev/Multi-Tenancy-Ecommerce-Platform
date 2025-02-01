@@ -205,7 +205,7 @@ class BlogController extends Controller
         $blog->delete();
 
         return response()->json([
-            'success' => true,
+            'status' => 200,
             'message' => 'Blog deleted successfully',
         ],200);
     }
