@@ -37,7 +37,7 @@ const BlogEditPage = () => {
                 content: blog?.content || "",
             });
         }
-    }, [id]);
+    }, [id, blog]);
 
     return (
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
@@ -58,10 +58,9 @@ const BlogEditPage = () => {
                     Edit Blog
                 </h1>
             </div>
-            <div className="bg-white p-5">
-                {" "}
-                {JSON.stringify({ formState, blog }, null, 2)}
-            </div>
+            {/* <div className="bg-white p-5"> */}{" "}
+            {/* {JSON.stringify({ formState, blog }, null, 2)} */}
+            {/* </div> */}
             <section>
                 <div>
                     <div>
@@ -238,6 +237,7 @@ const BlogEditPage = () => {
                             update.submit({
                                 formData: { ...formState, id },
                             });
+                            setFormState({});
                         }}
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}

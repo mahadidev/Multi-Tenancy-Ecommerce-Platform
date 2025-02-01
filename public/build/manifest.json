@@ -1,21 +1,21 @@
 {
-  "_chunk-K6AXKMTT-DZy3nHUu.js": {
-    "file": "assets/chunk-K6AXKMTT-DZy3nHUu.js",
+  "_chunk-K6AXKMTT-B5PAf5HV.js": {
+    "file": "assets/chunk-K6AXKMTT-B5PAf5HV.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_getComponent-Dw91XbPr.js": {
-    "file": "assets/getComponent-Dw91XbPr.js",
+  "_getComponent-Bd7R9Jgp.js": {
+    "file": "assets/getComponent-Bd7R9Jgp.js",
     "name": "getComponent",
     "imports": [
-      "_chunk-K6AXKMTT-DZy3nHUu.js",
-      "_index-lNMMapX6.js"
+      "_chunk-K6AXKMTT-B5PAf5HV.js",
+      "_index-Dd7nDN71.js"
     ]
   },
-  "_index-lNMMapX6.js": {
-    "file": "assets/index-lNMMapX6.js",
+  "_index-Dd7nDN71.js": {
+    "file": "assets/index-Dd7nDN71.js",
     "name": "index",
     "imports": [
-      "_chunk-K6AXKMTT-DZy3nHUu.js"
+      "_chunk-K6AXKMTT-B5PAf5HV.js"
     ]
   },
   "resources/css/app.css": {
@@ -38,12 +38,12 @@
     "src": "resources/js/frontend/assets/images/search-bg.jpg"
   },
   "resources/js/frontend/index.tsx": {
-    "file": "assets/index-DL5y0wCZ.js",
+    "file": "assets/index-C0WMU1B7.js",
     "name": "index",
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DZy3nHUu.js"
+      "_chunk-K6AXKMTT-B5PAf5HV.js"
     ],
     "css": [
       "assets/index-CuHhE1Is.css"
@@ -54,38 +54,38 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-D2WIMdIJ.js",
+    "file": "assets/index-DGPgoWrz.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DZy3nHUu.js",
-      "_index-lNMMapX6.js",
-      "_getComponent-Dw91XbPr.js"
+      "_chunk-K6AXKMTT-B5PAf5HV.js",
+      "_index-Dd7nDN71.js",
+      "_getComponent-Bd7R9Jgp.js"
     ],
     "css": [
-      "assets/index-BY7HfKR5.css"
+      "assets/index-Ds4fmLPG.css"
     ]
   },
   "resources/js/site/index.tsx": {
-    "file": "assets/index-CCV_d83F.js",
+    "file": "assets/index-DLPcNgku.js",
     "name": "index",
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DZy3nHUu.js",
-      "_index-lNMMapX6.js",
-      "_getComponent-Dw91XbPr.js"
+      "_chunk-K6AXKMTT-B5PAf5HV.js",
+      "_index-Dd7nDN71.js",
+      "_getComponent-Bd7R9Jgp.js"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-C6T3XBi5.js",
+    "file": "assets/index-CPpBe6RR.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-DZy3nHUu.js",
-      "_index-lNMMapX6.js"
+      "_chunk-K6AXKMTT-B5PAf5HV.js",
+      "_index-Dd7nDN71.js"
     ],
     "css": [
       "assets/index-vLAobMf4.css"
