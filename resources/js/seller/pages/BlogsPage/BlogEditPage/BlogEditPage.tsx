@@ -3,18 +3,10 @@ import { ErrorMessage, FileInput } from "@seller/components";
 import QuillRichTextEditor from "@seller/components/TextEditor/QuillRichTextEditor";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
-import useFile from "@seller/hooks/useFile";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
 import { CategoryType } from "@type/categoryType";
-import {
-    Breadcrumb,
-    Button,
-    Label,
-    Select,
-    Textarea,
-    TextInput,
-} from "flowbite-react";
+import { Breadcrumb, Button, Label, Select, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
@@ -24,9 +16,9 @@ const BlogEditPage = () => {
     const { id } = useParams();
     const { blogCategories } = useCategory();
     const { update, blog, fetchBlog } = useBlog();
-    const { files } = useFile();
+    // const { files } = useFile();
     const { handleChange, formState, formErrors, setFormState } = useForm();
-    const [imageLocation, setImageLocation] = useState<string>("");
+    const [, setImageLocation] = useState<string>("");
 
     useEffect(() => {
         if (id) {
@@ -35,16 +27,16 @@ const BlogEditPage = () => {
                     id: id,
                 },
             });
-        }
 
-        // prefill form with existing data
-        setFormState({
-            title: blog?.title,
-            category_id: blog?.category?.id,
-            status: blog?.status,
-            image: blog?.image,
-            content: blog?.content,
-        });
+            // prefill form with existing data
+            setFormState({
+                title: blog?.title || "",
+                category_id: blog?.category?.id || "",
+                status: blog?.status || "",
+                image: blog?.image || "",
+                content: blog?.content || "",
+            });
+        }
     }, [id]);
 
     return (
@@ -66,7 +58,10 @@ const BlogEditPage = () => {
                     Edit Blog
                 </h1>
             </div>
-
+            <div className="bg-white p-5">
+                {" "}
+                {JSON.stringify({ formState, blog }, null, 2)}
+            </div>
             <section>
                 <div>
                     <div>
@@ -115,7 +110,13 @@ const BlogEditPage = () => {
                                                       ][0]
                                                     : false
                                             }
-                                            onChange={handleChange}
+                                            onChange={(e) =>
+                                                setFormState({
+                                                    ...formState,
+                                                    category_id:
+                                                        e?.target?.value,
+                                                })
+                                            }
                                             required
                                         >
                                             <option value={0}>
@@ -206,30 +207,18 @@ const BlogEditPage = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* second section  */}
                             <div className="flex flex-col gap-2 sm:col-span-3">
                                 <Label htmlFor="description">Content</Label>
-                                <Textarea
-                                    id="content"
-                                    name="content"
-                                    placeholder="Enter blog content"
-                                    rows={5}
-                                    value={formState["content"]}
-                                    color={
-                                        formErrors["content"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["content"]
-                                            ? formErrors["content"][0]
-                                            : false
-                                    }
-                                    onChange={handleChange}
+                                <QuillRichTextEditor
+                                    content={formState["content"]}
+                                    onChangeContent={(value: string) => {
+                                        // @ts-ignore
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            content: value,
+                                        }));
+                                    }}
                                 />
-
-                                <QuillRichTextEditor />
                             </div>
                         </div>
                     </div>
@@ -243,18 +232,11 @@ const BlogEditPage = () => {
                     <Button
                         color="primary"
                         onClick={() => {
+                            // console.log({
+                            //     formData: formState,
+                            // });
                             update.submit({
-                                formData: {
-                                    id: blog?.id!,
-                                    title: formState?.title,
-                                    category_id: formState?.category_id,
-                                    content: formState?.content,
-                                    status: formState?.status,
-                                    image: files?.find(
-                                        (file: any) =>
-                                            file?.location === imageLocation
-                                    )?.url,
-                                },
+                                formData: { ...formState, id },
                             });
                         }}
                         isProcessing={update.isLoading}
@@ -263,6 +245,7 @@ const BlogEditPage = () => {
                         processingSpinner={
                             <AiOutlineLoading className="animate-spin" />
                         }
+                        type="submit"
                     >
                         Save all
                     </Button>

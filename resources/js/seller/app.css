@@ -186,3 +186,10 @@
 .shadow-clear {
     box-shadow: none !important;
 }
+
+.ql-toolbar.ql-snow {
+    color: red;
+    background: rgb(224, 223, 223);
+    border: none !important;
+    height: auto;
+}

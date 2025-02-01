@@ -1,15 +1,29 @@
-import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import styles
 
-const QuillRichTextEditor = () => {
-    const [value, setValue] = useState("");
-
+interface IRichTextEditorProps {
+    content: string;
+    onChangeContent: (value: string) => void;
+}
+const QuillRichTextEditor: React.FC<IRichTextEditorProps> = ({
+    content,
+    onChangeContent,
+}) => {
+    const modules = {
+        toolbar: [
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image"],
+        ],
+    };
     return (
-        <div>
-            <h2>Quill Editor</h2>
-            <ReactQuill theme="snow" value={value} onChange={setValue} />
-        </div>
+        <ReactQuill
+            className="bg-[#374151] !text-white"
+            value={content}
+            onChange={(e) => onChangeContent(e)}
+            modules={modules}
+        />
     );
 };
 
