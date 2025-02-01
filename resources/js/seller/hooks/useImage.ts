@@ -28,7 +28,7 @@ const useImage = () => {
 		crop,
 	}: {
 		image: HTMLImageElement;
-		crop: PixelCrop;
+		crop: any;
 	}) => {
 		if (!crop.width || !crop.height) return null;
 
