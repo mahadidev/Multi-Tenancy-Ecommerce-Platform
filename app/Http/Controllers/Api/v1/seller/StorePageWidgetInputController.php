@@ -69,7 +69,7 @@ class StorePageWidgetInputController extends Controller
             'items.*.placeholder' => 'nullable|string',
             'items.*.value' => 'nullable|string',
             'items.*.required' => 'required|boolean',
-            'items.*.type' => 'nullable|string',
+            'items.*.type' => 'required|string',
         ]);
 
         $pageWidget = StorePageWidget::find($pageWidgetId);
@@ -92,7 +92,7 @@ class StorePageWidgetInputController extends Controller
             'data' => [
                 'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput)      
             ]
-        ]);
+        ], 200);
     }
 
     public function show(Request $request, $pageWidgetId, $id)
@@ -114,7 +114,7 @@ class StorePageWidgetInputController extends Controller
             'data' => [
                 'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput) 
             ]
-        ]);
+        ], 200);
     }
 
     public function update(Request $request, $pageWidgetId, $id)
@@ -132,7 +132,7 @@ class StorePageWidgetInputController extends Controller
             'items.*.placeholder' => 'nullable|string',
             'items.*.value' => 'nullable|string',
             'items.*.required' => 'required|boolean',
-            'items.*.type' => 'nullable|string',
+            'items.*.type' => 'required|string',
         ]);
 
         $pageWidget = StorePageWidget::find($pageWidgetId);
@@ -169,13 +169,13 @@ class StorePageWidgetInputController extends Controller
         $pageWidget = StorePageWidget::find($pageWidgetId);
 
         if (!$pageWidget) {
-            return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
+            return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);
         }
 
         $pageWidgetInput = $pageWidget->widgetInputs()->find($id);
 
         if (!$pageWidgetInput) {
-            return response()->json([ 'status' => 404 ,'message' => 'Widget Input not found']);
+            return response()->json([ 'status' => 404 ,'message' => 'Widget Input not found'], 404);
         }
 
         $pageWidgetInput->delete();
@@ -183,6 +183,6 @@ class StorePageWidgetInputController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Page Widget Input deleted successfully'
-        ]);
+        ], 200);
     }
 }

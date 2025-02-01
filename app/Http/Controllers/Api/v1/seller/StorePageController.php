@@ -83,7 +83,7 @@ class StorePageController extends Controller
             'widgets.*.inputs.*.items.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.items.*.value' => 'nullable|string',
             'widgets.*.inputs.*.items.*.required' => 'required|boolean',
-            'widgets.*.inputs.*.items.*.type' => 'nullable|string',
+            'widgets.*.inputs.*.items.*.type' => 'required|string',
         ]);
         $validatedData["store_id"] = authStore();
 
@@ -142,7 +142,8 @@ class StorePageController extends Controller
                 'status' => 200,
                 'message' => 'Store page created successfully.',
                 'data' => new StorePagesResource($storePage->load('widgets')),
-            ]
+            ],
+            200,
         );
     }
 
@@ -151,6 +152,7 @@ class StorePageController extends Controller
         $page = StorePage::authorized()->with('widgets')
             ->where('id', $page_id)
             ->first();
+
         if (!$page) {
             return response()->json(
                 [
@@ -177,9 +179,19 @@ class StorePageController extends Controller
         // Find the store page to update
         $storePage = StorePage::authorized()->find($store_page_id);
 
+        if (!$storePage) {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'message' => 'Invalid store page id',
+                ],
+                404,
+            );
+        }
+
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'nullable|string',
+            'name' => 'required|string',
             'slug' => [
                 'nullable',
                 'string',
@@ -275,6 +287,7 @@ class StorePageController extends Controller
                 'message' => 'Store page updated successfully.',
                 'data' => new StorePagesResource($storePage->load('widgets.widgetInputs.items')),
             ]
+            , 200,
         );
     }
 

@@ -89,7 +89,7 @@ class UserController extends Controller
             'data' => [
                 'user' => new UserResource($user)
             ]
-        ]);
+        ], 201);
     }
 
 
@@ -100,14 +100,14 @@ class UserController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'User not found'
-            ]);
+            ], 404);
         }
         return response()->json([
             'status' => 200,
             'data' => [
                 'user' => new UserResource($user)
             ]
-        ]);
+        ], 200);
     }
 
 
@@ -118,7 +118,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'User not found'
-            ]);
+            ], 404);
         }
 
         $request->validate([
@@ -140,7 +140,7 @@ class UserController extends Controller
             'data' => [
                 'user' => new UserResource($user)
             ]
-        ]);
+        ], 200);
     }
 
 
@@ -151,7 +151,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'User not found'
-            ]);
+            ], 404);
         }
 
         $user->delete();
@@ -159,6 +159,6 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'User deleted successfully!'
-        ]);
+        ], 200);
     }
 }

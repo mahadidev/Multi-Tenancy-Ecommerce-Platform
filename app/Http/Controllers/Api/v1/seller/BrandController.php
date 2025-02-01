@@ -183,7 +183,7 @@ class BrandController extends Controller
 
         return response()->json(
             [
-                'success' => 200,
+                'status' => 200,
                 'message' => 'Brand deleted successfully',
             ],
             200,
@@ -240,16 +240,6 @@ class BrandController extends Controller
                 'data' => [
                     'brands' => BrandResource::collection($brands),
                 ],
-                // 'meta' => [
-                //     'current_page' => $brands->currentPage(),
-                //     'first_page_url' => $brands->url(1),
-                //     'last_page' => $brands->lastPage(),
-                //     'last_page_url' => $brands->url($brands->lastPage()),
-                //     'next_page_url' => $brands->nextPageUrl(),
-                //     'prev_page_url' => $brands->previousPageUrl(),
-                //     'total' => $brands->total(),
-                //     'per_page' => $brands->perPage(),
-                // ],
             ]);
         } catch (ValidationException $e) {
             $failures = $e->failures();

@@ -84,8 +84,8 @@ class OrderController extends Controller
 
         if (!$store || !$storeID) {
             return response()->json([
-                'status' => 401,
-                'message' => 'Store id is not found',
+                'status' => 404,
+                'message' => 'Invalid Store Id',
             ]);
         }
 

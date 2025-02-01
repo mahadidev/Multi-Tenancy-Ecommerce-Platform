@@ -16,10 +16,15 @@ import {
 import { UserProfileType } from "@type/authType";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/store";
+import useToast from "./useToast";
 
 const useAuth = () => {
-    const navigate = useNavigate();
-    useFetchUserQuery();
+    const navigate = useNavigate(); // for routing
+
+    const { toaster } = useToast(); // for showing toast messages
+
+    useFetchUserQuery(); // user query
+
     // select user
     const { userProfileData } = useAppSelector((state) => state.auth);
 
@@ -164,9 +169,11 @@ const useAuth = () => {
     }) => {
         handleForgotPasswordRequest(formData).then((response) => {
             if (response.data?.status === 200) {
-                navigate(
-                    `/reset-password?email=${response?.data?.data?.email}&token=${response?.data?.data?.token}`
-                );
+                toaster({
+                    status: "success",
+                    text: "Reset password link sent.",
+                    description: "Please check your email inbox!",
+                });
             }
         });
     };
@@ -189,9 +196,20 @@ const useAuth = () => {
     }) => {
         handleResetPassword(formData).then((response) => {
             if (response.data?.status === 200) {
+                toaster({
+                    status: "success",
+                    text: "Password has been reset.",
+                    description: "Please login again!",
+                });
                 navigate(
                     `/login?guidAlertMessage=Your password has been reset. Please login again.`
                 );
+            } else {
+                toaster({
+                    status: "error",
+                    text: "Failed to reset password.",
+                    description: "Token is invalid",
+                });
             }
         });
     };
