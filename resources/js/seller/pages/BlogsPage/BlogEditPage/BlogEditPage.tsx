@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ErrorMessage, FileInput } from "@seller/components";
+import QuillRichTextEditor from "@seller/components/TextEditor/QuillRichTextEditor";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
 import useFile from "@seller/hooks/useFile";
@@ -227,6 +228,8 @@ const BlogEditPage = () => {
                                     }
                                     onChange={handleChange}
                                 />
+
+                                <QuillRichTextEditor />
                             </div>
                         </div>
                     </div>

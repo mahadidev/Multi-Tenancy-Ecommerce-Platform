@@ -1,27 +1,27 @@
-import { clearToast, setToast } from '@seller/store/slices/notificationSlice';
-import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import { ToastMessageType } from '@type/notification';
+import { clearToast, setToast } from "@seller/store/slices/notificationSlice";
+import { useAppDispatch, useAppSelector } from "@seller/store/store";
+import { ToastMessageType } from "@type/notification";
 
 const useToast = () => {
-	// select toast
-	const { toast } = useAppSelector((state) => state.notification);
+    // select toast
+    const { toast } = useAppSelector((state) => state.notification);
 
-	const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-	// toast
-	const toaster = (toast: ToastMessageType) => {
-		dispatch(setToast(toast));
+    // toast
+    const toaster = (toast: ToastMessageType) => {
+        dispatch(setToast(toast));
 
         setTimeout(() => {
-            dismissToaster()
-        }, 2000)
-	};
+            dismissToaster();
+        }, 5000);
+    };
 
-	// dismiss toaster
-	const dismissToaster = () => {
-		dispatch(clearToast());
-	};
+    // dismiss toaster
+    const dismissToaster = () => {
+        dispatch(clearToast());
+    };
 
-	return { toast, toaster, dismissToaster };
+    return { toast, toaster, dismissToaster };
 };
 export default useToast;
