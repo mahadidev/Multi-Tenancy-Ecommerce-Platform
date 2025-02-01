@@ -1,4 +1,5 @@
 import useCategory from '@seller/hooks/useCategory';
+import useToast from '@seller/hooks/useToast';
 import { CategoryType } from '@type/categoryType';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
@@ -6,12 +7,14 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { HiOutlineExclamationCircle, HiTrash } from 'react-icons/hi';
 
 interface PropsType {
-	category: CategoryType
+	category: CategoryType;
 }
 
 const DeleteCategoryModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
-	const {delete: categoryDelete} = useCategory();
+	const { delete: categoryDelete } = useCategory();
+	const { toaster } = useToast();
+
 	return (
 		<>
 			<Button
@@ -33,8 +36,7 @@ const DeleteCategoryModal: FC<PropsType> = function (props) {
 					<div className="flex flex-col items-center gap-y-6 text-center">
 						<HiOutlineExclamationCircle className="mx-auto h-20 w-20 text-red-600" />
 						<p className="text-xl font-normal text-gray-500 dark:text-gray-400">
-							Are you sure you want to delete this{' '}
-							{props.category.name}?
+							Are you sure you want to delete this {props.category.name}?
 						</p>
 						<div className="flex items-center gap-x-3">
 							<Button
@@ -43,17 +45,23 @@ const DeleteCategoryModal: FC<PropsType> = function (props) {
 								onClick={() => {
 									categoryDelete.submit({
 										formData: {
-											id: props.category.id
+											id: props.category.id,
 										},
 										onSuccess: () => {
 											setOpen(false);
+											toaster({
+												text: 'Category has been deleted',
+												status: 'danger',
+											});
 										},
 									});
 								}}
 								isProcessing={categoryDelete.isLoading}
 								disabled={categoryDelete.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading className="animate-spin" />}
+								processingSpinner={
+									<AiOutlineLoading className="animate-spin" />
+								}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>

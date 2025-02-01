@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
+import { blogApi } from "./reducers/blogApi";
 import { brandApi } from "./reducers/brandApi";
 import { categoryApi } from "./reducers/categoryApi";
 import { fileApi } from "./reducers/fileApi";
@@ -12,10 +13,11 @@ import { socialMediaApi } from "./reducers/socialMediaApi";
 import { storeApi } from "./reducers/storeApi";
 import { themeApi } from "./reducers/themeApi";
 import AuthSlice from "./slices/authSlice";
+import blogSlice from "./slices/blogSlice";
 import brandSlice from "./slices/brandSlice";
 import categorySlice from "./slices/categorySlice";
-import blogSlice from "./slices/blogSlice";
 import fileSlice from "./slices/fileSlice";
+import notificationSlice from './slices/notificationSlice';
 import pageSlice from "./slices/pageSlice";
 import productSlice from "./slices/productSlice";
 import socialMediaSlice from "./slices/socialMediaSlice";
@@ -23,7 +25,6 @@ import storeSlice from "./slices/storeSlice";
 import themeSlice from "./slices/themeSlice";
 import uiSlice from "./slices/uiSlice";
 import widgetSlice from "./slices/widgetSlice";
-import { blogApi } from "./reducers/blogApi";
 
 const authPersistConfig = {
     key: "seller",
@@ -38,6 +39,7 @@ const authPersistConfig = {
         "blogApi",
         "brandApi",
         "socialMediaApi",
+        'notification'
     ],
     storage,
     version: 0,
@@ -58,6 +60,7 @@ const persistedReducer = persistReducer(
         brand: brandSlice,
         socialMedia: socialMediaSlice,
         widget: widgetSlice,
+        notification: notificationSlice,
         [authApi.reducerPath]: authApi.reducer,
         [fileApi.reducerPath]: fileApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,
