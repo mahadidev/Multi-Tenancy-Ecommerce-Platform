@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('social_media', function (Blueprint $table) {
+        Schema::table('store_social_media', function (Blueprint $table) {
             $table->string('label')->nullable(false)->change();
         });
     }
