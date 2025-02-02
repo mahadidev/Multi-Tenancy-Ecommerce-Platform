@@ -4,6 +4,7 @@ import {
     PasswordForgotRequestPayloadType,
     RegisterPayloadType,
     ResetPasswordPayloadType,
+    useFetchDashboardAnalyticsQuery,
     useFetchUserQuery,
     useForgotPasswordRequestMutation,
     useLoginMutation,
@@ -25,6 +26,7 @@ const useAuth = () => {
     const { toaster } = useToast(); // for showing toast messages
 
     useFetchUserQuery(); // user query
+    useFetchDashboardAnalyticsQuery();
 
     // select user
     const { userProfileData } = useAppSelector((state) => state.auth);
