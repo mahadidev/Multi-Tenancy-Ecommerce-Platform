@@ -6,12 +6,18 @@ const Chart = React.lazy(() => import("react-apexcharts"));
 
 const DashboardPage: FC = function () {
     const { analytics } = useDashboardAnalytics();
-
+    console.log({ analytics });
     const [state, setState] = React.useState({
         series: [
             {
                 name: "Orders",
-                data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 23, 67, 23],
+                // data: analytics?.order_analytics?.orders,
+                data: [23, 12, 34, 345, 2332, 5345, 456, 464, 346],
+            },
+            {
+                name: "Revenue",
+                // data: analytics?.order_analytics?.monthly_revenues,
+                data: [23, 12, 34, 345, 2332, 5345, 456, 464, 646],
             },
         ],
         options: {
@@ -49,6 +55,7 @@ const DashboardPage: FC = function () {
                 width: 2,
                 colors: ["transparent"],
             },
+
             xaxis: {
                 categories: [
                     "Jan",
@@ -70,6 +77,7 @@ const DashboardPage: FC = function () {
                     text: "Order Count",
                 },
             },
+
             fill: {
                 opacity: 1,
             },
@@ -80,13 +88,6 @@ const DashboardPage: FC = function () {
                     },
                 },
             },
-            legend: {
-                show: true,
-                floating: true,
-                position: "top",
-                // offsetX: 70,
-                offsetY: 200,
-            },
         },
     });
 
@@ -94,25 +95,25 @@ const DashboardPage: FC = function () {
         {
             id: 1,
             title: "Products",
-            value: 17,
+            value: analytics?.products_count,
             icon: <FaBox className="text-blue-500 text-3xl" />,
         },
         {
             id: 2,
             title: "Categories",
-            value: 17,
+            value: analytics?.categories_count,
             icon: <FaList className="text-green-500 text-3xl" />,
         },
         {
             id: 3,
             title: "Orders",
-            value: 3,
+            value: analytics?.orders_count,
             icon: <FaShoppingCart className="text-yellow-500 text-3xl" />,
         },
         {
             id: 4,
             title: "Customers",
-            value: 1,
+            value: analytics?.customers_count,
             icon: <FaUsers className="text-red-500 text-3xl" />,
         },
     ];

@@ -5,6 +5,7 @@ import { UserProfileType, UserType } from "@type/authType";
 import { StoreType } from "@type/storeType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { clearAuth, setAuth, setLoggedInUser } from "../slices/authSlice";
+import { setDashboardAnalytics } from "../slices/dashboardAnalyticsSlice";
 import { clearStore, setAuthStore } from "../slices/storeSlice";
 import { DashboardAnalyticsType } from "./dashboardAnalyticsApi";
 
@@ -232,12 +233,11 @@ export const authApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    // dispatch(
-                    //     setDashboardAnalytics({
-                    //         analytics: response?.data?.data,
-                    //     })
-                    // );
-                    console.log(response);
+                    dispatch(
+                        setDashboardAnalytics({
+                            analytics: response?.data?.data,
+                        })
+                    );
                 });
             },
         }),

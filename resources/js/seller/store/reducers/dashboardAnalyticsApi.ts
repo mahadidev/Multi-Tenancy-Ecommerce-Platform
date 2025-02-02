@@ -16,8 +16,11 @@ export interface AnalyticsResponseData {
 }
 
 export interface OrderAnalytics {
+    total_revenue: number;
+    average_order_value: number;
     filter: string;
     orders: number[];
+    monthly_revenues: number[];
 }
 
 export const dashboardAnalyticsApi = createApi({
