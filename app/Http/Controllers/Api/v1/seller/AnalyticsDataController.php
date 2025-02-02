@@ -14,12 +14,13 @@ class AnalyticsDataController extends Controller
 {
     public function index(Request $request)
     {
+        $orders = Order::authorized()->get();
         $products_count = Product::authorized()->count() ?? 0;
         $categories_count = Category::authorized()->where('type', 'product')->count() ?? 0;
-        $orders_count = Order::authorized()->count() ?? 0;
+        $orders_count = $orders->count() ?? 0;
         $customers_count = User::whereJsonContains('store_id', authStore())->count() ?? 0;
-
-        // Get order analytics if filter or date parameters exist
+    
+        //Get order analytics if filter or date parameters exist
         if ($request->has(['filter']) || $request->has(['start_date', 'end_date'])) {
             $analyticsResponse = $this->getOrderAnalytics($request);
             $responseData = $analyticsResponse->getData();
@@ -58,79 +59,27 @@ class AnalyticsDataController extends Controller
             ], 400);
         }
 
-        $filter = $request->query('filter', 'month');
+        $filter = $request->query('filter', 'year');
 
-        // Check if filter is custom and required parameters
-        if ($filter === 'custom') {
-            if (!$request->has(['start_date', 'end_date'])) {
-                return response()->json([
-                    'status' => '400',
-                    'message' => 'start_date and end_date are required for custom filter.'
-                ], 400);
-            }
-
-            // Check if dates are valid
-            if (!strtotime($request->start_date) || !strtotime($request->end_date)) {
-                return response()->json([
-                    'status' => '400',
-                    'message' => 'start_date and end_date must be valid dates.'
-                ], 400);
-            }
-        }
-
-        $startDate = $request->query('start_date');
-        $endDate = $request->query('end_date');
+        $startDate = $request->query('start_date') ?? now()->startOfYear();
+        $endDate = $request->query('end_date') ?? now()->endOfYear();
         $query = Order::authorized();
 
-        // Determine date range and grouping logic
-        $dateRanges = [];
-        $groupExpression = null;
 
-        switch ($filter) {
-            case 'week':
-                $dateRanges = [now()->startOfWeek(), now()->endOfWeek()];
-                $groupExpression = 'DATE(created_at)';
-                break;
+        // Get the counts grouped by month for filter: year
+        $orders = $query->whereBetween('created_at', [$startDate, $endDate])
+        ->select(DB::raw('MONTH(created_at) as month, COUNT(*) as order_count'))
+        ->groupBy('month')
+        ->pluck('order_count', 'month'); // Creates a key-value pair [month => order_count]
 
-            case 'month':
-                $dateRanges = [now()->startOfMonth(), now()->endOfMonth()];
-                $groupExpression = 'DATE(created_at)';
-                break;
-
-            case 'year':
-                $dateRanges = [now()->startOfYear(), now()->endOfYear()];
-                $groupExpression = 'CONCAT(YEAR(created_at), "-", MONTH(created_at))';
-                break;
-
-            case 'custom':
-                $dateRanges = [$startDate, $endDate];
-                $groupExpression = 'DATE(created_at)';
-                break;
-
-            default:
-                return response()->json([
-                    'status' => '400',
-                    'message' => 'Invalid filter type. Use week, month, year, or custom.'
-                ], 400);
-        }
-
-        // Apply date range filter
-        $filteredQuery = $query->whereBetween('created_at', $dateRanges);
-        $totalOrders = $filteredQuery->count();
-
-        // Fetch grouped data
-        $orders = $filteredQuery
-            ->selectRaw("$groupExpression as date, COUNT(*) as order_count")
-            ->groupByRaw($groupExpression)
-            ->orderByRaw($groupExpression)
-            ->get();
+        // Initialize an array for all 12 months and merge actual counts
+        $orderCounts = array_values(array_replace(array_fill(1, 12, 0), $orders->toArray()));
 
         return response()->json([
             'status' => '200',
             'data' => [
                 'filter' => $filter,
-                'total_orders' => $totalOrders,
-                'orders' => $orders
+                'orders' => $orderCounts
             ]
         ], 200);
     }
