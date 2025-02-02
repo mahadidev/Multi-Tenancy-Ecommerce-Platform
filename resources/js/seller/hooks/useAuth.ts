@@ -1,3 +1,4 @@
+import { RoutePath } from "@seller/seller_env";
 import {
     LoginPayloadType,
     PasswordForgotRequestPayloadType,
@@ -174,6 +175,7 @@ const useAuth = () => {
                     text: "Reset password link sent.",
                     description: "Please check your email inbox!",
                 });
+                navigate(RoutePath.ForgotPasswordSuccessPage.index());
             }
         });
     };
