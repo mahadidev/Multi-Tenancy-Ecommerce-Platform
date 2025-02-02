@@ -23,8 +23,8 @@ class BlogResource extends JsonResource
             'image' => $this->blog_image,
             'content' => $this->content,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
     }
 }

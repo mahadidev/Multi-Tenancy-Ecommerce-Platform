@@ -2,7 +2,7 @@ import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
 
@@ -10,18 +10,24 @@ interface PropsType {
     category: CategoryType;
 }
 
-const EditBlogCategoryModal: FC<PropsType> = function (props) {
+const EditBlogCategoryModal: FC<PropsType> = function ({ category }) {
     const [isOpen, setOpen] = useState(false);
     const { update } = useCategory();
-    const { handleChange, formState, formErrors } = useForm({
+    const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
         default: {
-            ...props.category,
-            category_id: props.category.has_parent?.id,
+            ...category,
+            category_id: category.has_parent?.id,
             type: "post",
         },
     });
 
+    // reload data
+    useEffect(() => {
+        if (category) {
+            setFormState(category);
+        }
+    }, [category]);
     return (
         <>
             <Button
@@ -89,7 +95,6 @@ const EditBlogCategoryModal: FC<PropsType> = function (props) {
                                 />
                             </div>
                         </div>
-
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -106,7 +111,9 @@ const EditBlogCategoryModal: FC<PropsType> = function (props) {
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}
                         processingLabel="Saving"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Save all
                     </Button>

@@ -1,18 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FileInput } from "@seller/components";
+import QuillRichTextEditor from "@seller/components/TextEditor/QuillRichTextEditor";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import { RoutePath } from "@seller/seller_env";
 import { CategoryType } from "@type/categoryType";
-import {
-    Breadcrumb,
-    Button,
-    Label,
-    Select,
-    Textarea,
-    TextInput,
-} from "flowbite-react";
+import { Breadcrumb, Button, Label, Select, TextInput } from "flowbite-react";
 
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
@@ -20,7 +14,7 @@ import { HiHome } from "react-icons/hi";
 const BlogCreatePage = () => {
     const { blogCategories } = useCategory();
     const { create } = useBlog();
-    const { handleChange, formState, formErrors } = useForm({
+    const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
         default: {
             status: "active",
@@ -185,26 +179,16 @@ const BlogCreatePage = () => {
                                 </div>
                             </div>
 
-                            {/* second section  */}
                             <div className="flex flex-col gap-2 sm:col-span-3">
                                 <Label htmlFor="description">Content</Label>
-                                <Textarea
-                                    id="content"
-                                    name="content"
-                                    placeholder="Enter blog content"
-                                    rows={5}
-                                    value={formState["content"]}
-                                    onChange={handleChange}
-                                    color={
-                                        formErrors["content"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["content"]
-                                            ? formErrors["content"][0]
-                                            : false
-                                    }
+                                <QuillRichTextEditor
+                                    content={formState["content"]}
+                                    onChangeContent={(value: string) => {
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            content: value,
+                                        }));
+                                    }}
                                 />
                             </div>
                         </div>
