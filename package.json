@@ -16,6 +16,7 @@
         "@popperjs/core": "^2.10.2",
         "@reduxjs/toolkit": "^2.3.0",
         "@types/jquery": "^3.5.32",
+        "apexcharts": "^4.4.0",
         "classnames": "^2.3.2",
         "datatables.net": "^2.2.1",
         "flowbite": "^2.5.2",

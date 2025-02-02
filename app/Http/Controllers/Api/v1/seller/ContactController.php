@@ -5,21 +5,53 @@ namespace App\Http\Controllers\Api\v1\seller;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use App\Http\Resources\ContactResource;
 
 class ContactController extends Controller
 {
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
+        // Retrieve query parameters
+        $search = $request->input('search'); // Search keyword
+        $sort = $request->input('sort'); // Sort order
+        $perPage = $request->input('per_page'); // Items per page
 
-        $contacts = Contact::authorized()->get();
-        
-        return response()->json([
+        // Fetch contacts with optional search and sorting, paginated
+        $contacts = Contact::authorized()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+
+        // Paginate or get all results based on the presence of `per_page`
+        $paginated = $perPage ? $contacts->paginate($perPage) : $contacts->get();
+
+        // Prepare the response
+        $response = [
             'status' => 200,
             'data' => [
-                'contacts' => $contacts
+                'contacts' => ContactResource::collection($paginated),
             ],
-        ]);
+        ];
 
+        // Add pagination meta data if `per_page` is provided
+        if ($perPage) {
+            $response['meta'] = [
+                'current_page' => $paginated->currentPage(),
+                'first_page_url' => $paginated->url(1),
+                'last_page' => $paginated->lastPage(),
+                'last_page_url' => $paginated->url($paginated->lastPage()),
+                'next_page_url' => $paginated->nextPageUrl(),
+                'prev_page_url' => $paginated->previousPageUrl(),
+                'total' => $paginated->total(),
+                'per_page' => $paginated->perPage(),
+            ];
+        }
+
+        return response()->json($response, 200);
     }
 
     public function store(Request $request)
@@ -40,10 +72,9 @@ class ContactController extends Controller
             'status' => 200,
             'message' => 'contact has been sumbitted',
             'data' => [
-                'contact' => $contact
+                'contact' => new ContactResource($contact),
             ],
-        ]);
-
+        ], 200);
     }
 
     /**
@@ -53,7 +84,7 @@ class ContactController extends Controller
     {
         $contact = Contact::authorized()->find($id);
 
-        if(!$contact){
+        if (!$contact) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Contact not found'
@@ -63,9 +94,9 @@ class ContactController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'contact' => $contact
+                'contact' => new ContactResource($contact),
             ],
-        ]);
+        ], 200);
     }
 
     /**
@@ -75,19 +106,18 @@ class ContactController extends Controller
     {
         $contact = Contact::authorized()->find($id);
 
-        if(!$contact){
+        if (!$contact) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Contact not found'
             ], 404);
         }
-        
+
         $contact->delete();
 
         return response()->json([
             'status' => 200,
             'message' => 'Contact deleted successfully',
-        ]);
-
+        ], 200);
     }
 }

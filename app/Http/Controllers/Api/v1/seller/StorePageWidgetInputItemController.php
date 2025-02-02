@@ -76,7 +76,7 @@ class StorePageWidgetInputItemController extends Controller
             'data' => [
                 'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem),
             ],
-        ]);
+        ], 200);
     }
 
     public function update(Request $request, $inputId, $itemId)
@@ -109,7 +109,7 @@ class StorePageWidgetInputItemController extends Controller
             'data' => [
                 'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem),
             ],
-        ]);
+        ], 200);
     }
 
     public function destroy(Request $request, $inputId, $itemId)
@@ -117,13 +117,13 @@ class StorePageWidgetInputItemController extends Controller
         $pageWidgetInput = StorePageWidgetInput::find($inputId);
 
         if (!$pageWidgetInput) {
-            return response()->json(['status' => 404, 'message' => 'Widget Input not found']);
+            return response()->json(['status' => 404, 'message' => 'Widget Input not found'], 404);
         }
 
         $pageWidgetInputItem = $pageWidgetInput->items()->find($itemId);
 
         if (!$pageWidgetInputItem) {
-            return response()->json(['status' => 404, 'message' => 'Widget Input Item not found']);
+            return response()->json(['status' => 404, 'message' => 'Widget Input Item not found'], 404);
         }
 
         $pageWidgetInputItem->delete();
@@ -131,7 +131,7 @@ class StorePageWidgetInputItemController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Widget Input Item deleted successfully',
-        ]);
+        ], 200);
     }
 
     public function show(Request $request, $inputId, $itemId)
@@ -153,6 +153,6 @@ class StorePageWidgetInputItemController extends Controller
             'data' => [
                 'widget_input_item' => new StorePageWidgetInputItemsResource($pageWidgetInputItem),
             ],
-        ]);
+        ], 200);
     }
 }

@@ -94,7 +94,7 @@ class StoreSocialMediaController extends Controller
             'data' => [
                 'store_social_media' => new StoreSocialMediaResource($storeSocialMedia),
             ],
-        ]);
+        ], 200);
     }
 
     public function update(Request $request, $id)
@@ -105,7 +105,7 @@ class StoreSocialMediaController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Social media not found',
-            ]);
+            ], 404);
         }
 
         $validated = $request->validate([
@@ -131,7 +131,7 @@ class StoreSocialMediaController extends Controller
             'data' => [
                 'store_social_media' => StoreSocialMediaResource::collection($storeSocialMedia),
             ],
-        ]);
+        ], 200);
     }
 
 
@@ -143,7 +143,7 @@ class StoreSocialMediaController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Social media not found',
-            ]);
+            ], 404);
         }
 
         $storeSocialMedia->delete();
@@ -151,7 +151,7 @@ class StoreSocialMediaController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Social media deleted successfully',
-        ]);
+        ], 200);
     }
 
     public function show($id)
@@ -162,7 +162,7 @@ class StoreSocialMediaController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Social media not found',
-            ]);
+            ], 404);
         }
 
         return response()->json([
@@ -171,6 +171,6 @@ class StoreSocialMediaController extends Controller
             'data' => [
                 'store_social_media' => $storeSocialMedia,
             ],
-        ]);
+        ], 200);
     }
 }
