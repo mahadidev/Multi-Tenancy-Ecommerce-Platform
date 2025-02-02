@@ -6,18 +6,18 @@ const Chart = React.lazy(() => import("react-apexcharts"));
 
 const DashboardPage: FC = function () {
     const { analytics } = useDashboardAnalytics();
-    console.log({ analytics });
-    const [state, setState] = React.useState({
+
+    const [state] = React.useState({
         series: [
             {
                 name: "Orders",
-                // data: analytics?.order_analytics?.orders,
-                data: [23, 12, 34, 345, 2332, 5345, 456, 464, 346],
+                data: analytics?.order_analytics?.orders,
+                // data: [23, 12, 34, 345, 2332, 5345, 456, 464, 346],
             },
             {
                 name: "Revenue",
-                // data: analytics?.order_analytics?.monthly_revenues,
-                data: [23, 12, 34, 345, 2332, 5345, 456, 464, 646],
+                data: analytics?.order_analytics?.monthly_revenues,
+                // data: [23, 12, 34, 345, 2332, 5345, 456, 464, 646],
             },
         ],
         options: {
