@@ -21,6 +21,8 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
+
+        return 0;
         $search = $request->input('search'); // Search keyword
         $sort = $request->input('sort'); // Sort order, 
         $perPage = $request->input('per_page'); // Items per page,
