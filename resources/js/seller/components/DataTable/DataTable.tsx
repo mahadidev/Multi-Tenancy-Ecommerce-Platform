@@ -1,50 +1,50 @@
-import "datatables.net";
-import "flowbite/dist/flowbite.css";
-import $ from "jquery";
-import { useEffect } from "react";
+import { Button, TextInput } from "flowbite-react";
+import React from "react";
+import { CSVLink } from "react-csv";
+import DataTable from "react-data-table-component";
+import { HiDocumentDownload } from "react-icons/hi";
 
-const DataTable = () => {
-    useEffect(() => {
-        // Initialize DataTable
-        $(document).ready(function () {
-            $("#example").DataTable();
-        });
-    }, []);
+interface DataTableProps {
+    columns: any[];
+    data: any[];
+    handleSearch: (value: string) => void;
+}
 
+const ReactDataTable: React.FC<DataTableProps> = ({
+    columns,
+    data,
+    handleSearch,
+}) => {
     return (
-        <div className="p-4">
-            <table id="example" className="display w-full">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011-04-25</td>
-                        <td>$320,800</td>
-                    </tr>
-                    <tr>
-                        <td>Garrett Winters</td>
-                        <td>Accountant</td>
-                        <td>Tokyo</td>
-                        <td>63</td>
-                        <td>2011-07-25</td>
-                        <td>$170,750</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div className="p-4 shadow-md rounded-lg" id="react-data-table-wrapper">
+            <div className="mb-4 flex justify-between items-center">
+                <div className="relative mt-1 lg:w-64 xl:w-96">
+                    <TextInput
+                        id="Category-search"
+                        name="Category-search"
+                        placeholder="Search for data..."
+                        onChange={(e) => handleSearch(e.target.value)}
+                    />
+                </div>
+                <CSVLink data={data} filename={"data.csv"}>
+                    <Button className="p-0" color="gray">
+                        <div className="flex items-center gap-x-3">
+                            <HiDocumentDownload className="text-xl" />
+                            <span>Export</span>
+                        </div>
+                    </Button>
+                </CSVLink>
+            </div>
+
+            <DataTable
+                columns={columns}
+                data={data}
+                pagination
+                highlightOnHover
+                striped
+            />
         </div>
     );
 };
 
-export default DataTable;
+export default ReactDataTable;

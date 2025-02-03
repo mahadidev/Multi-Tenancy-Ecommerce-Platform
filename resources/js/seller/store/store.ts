@@ -6,6 +6,7 @@ import { authApi } from "./reducers/authApi";
 import { blogApi } from "./reducers/blogApi";
 import { brandApi } from "./reducers/brandApi";
 import { categoryApi } from "./reducers/categoryApi";
+import { dashboardAnalyticsApi } from "./reducers/dashboardAnalyticsApi";
 import { fileApi } from "./reducers/fileApi";
 import { pageApi } from "./reducers/pageApi";
 import { productApi } from "./reducers/productApi";
@@ -16,8 +17,9 @@ import AuthSlice from "./slices/authSlice";
 import blogSlice from "./slices/blogSlice";
 import brandSlice from "./slices/brandSlice";
 import categorySlice from "./slices/categorySlice";
+import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
-import notificationSlice from './slices/notificationSlice';
+import notificationSlice from "./slices/notificationSlice";
 import pageSlice from "./slices/pageSlice";
 import productSlice from "./slices/productSlice";
 import socialMediaSlice from "./slices/socialMediaSlice";
@@ -30,6 +32,7 @@ const authPersistConfig = {
     key: "seller",
     blacklist: [
         "authApi",
+        "dashboardAnalyticsApi",
         "fileApi",
         "themeApi",
         "storeApi",
@@ -39,7 +42,7 @@ const authPersistConfig = {
         "blogApi",
         "brandApi",
         "socialMediaApi",
-        'notification'
+        "notification",
     ],
     storage,
     version: 0,
@@ -49,6 +52,7 @@ const persistedReducer = persistReducer(
     authPersistConfig,
     combineReducers({
         auth: AuthSlice,
+        analytics: DashboardAnalyticsSlice,
         store: storeSlice,
         file: fileSlice,
         theme: themeSlice,
@@ -76,11 +80,13 @@ const persistedReducer = persistReducer(
 
 export const store = configureStore({
     reducer: persistedReducer,
+    // @ts-ignore
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({
             serializableCheck: false,
         }).concat([
             authApi.middleware,
+            dashboardAnalyticsApi.middleware,
             fileApi.middleware,
             themeApi.middleware,
             storeApi.middleware,

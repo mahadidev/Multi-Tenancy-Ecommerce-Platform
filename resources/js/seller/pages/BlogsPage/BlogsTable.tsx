@@ -1,6 +1,8 @@
 import useBlog from "@seller/hooks/useBlog";
 import { BlogType } from "@type/blogType";
+import "datatables.net";
 import { Button, Checkbox, Label, Table } from "flowbite-react";
+import "flowbite/dist/flowbite.css";
 import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import DeleteBlogModal from "./DeleteBlogModal";

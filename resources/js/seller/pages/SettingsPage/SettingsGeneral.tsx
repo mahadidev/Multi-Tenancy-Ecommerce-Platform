@@ -78,7 +78,7 @@ const SettingsGeneral = () => {
                         <div className="col-span-full grid grid-cols-1 gap-y-2 ">
                             <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
                                 <Label htmlFor="store-description">
-                                    Store Name
+                                    Store Description
                                 </Label>
 
                                 <Textarea
