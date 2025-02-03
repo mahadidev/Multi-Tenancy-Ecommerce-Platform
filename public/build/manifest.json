@@ -1,106 +1,88 @@
 {
-  "_chunk-K6AXKMTT-BnIgBbzJ.js": {
-    "file": "assets/chunk-K6AXKMTT-BnIgBbzJ.js",
-    "name": "chunk-K6AXKMTT"
-  },
-  "_getComponent-DtBbzTy-.js": {
-    "file": "assets/getComponent-DtBbzTy-.js",
-    "name": "getComponent",
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js",
-      "_index-D2T1X0LL.js"
-    ]
-  },
-  "_index-D2T1X0LL.js": {
-    "file": "assets/index-D2T1X0LL.js",
-    "name": "index",
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js"
-    ]
-  },
-  "_react-apexcharts.min-CxuU_Hol.js": {
-    "file": "assets/react-apexcharts.min-CxuU_Hol.js",
-    "name": "react-apexcharts.min",
-    "isDynamicEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js",
-      "resources/js/seller/index.tsx"
-    ]
-  },
-  "resources/css/app.css": {
-    "file": "assets/app-DbqQPFye.css",
-    "src": "resources/css/app.css",
-    "isEntry": true
-  },
-  "resources/js/app.js": {
-    "file": "assets/app-Xaw6OIO1.js",
-    "name": "app",
-    "src": "resources/js/app.js",
-    "isEntry": true
-  },
-  "resources/js/frontend/assets/images/search-bg-mobile.jpg": {
-    "file": "assets/search-bg-mobile-uE9uvdUB.jpg",
-    "src": "resources/js/frontend/assets/images/search-bg-mobile.jpg"
-  },
-  "resources/js/frontend/assets/images/search-bg.jpg": {
-    "file": "assets/search-bg-C0rmdiVZ.jpg",
-    "src": "resources/js/frontend/assets/images/search-bg.jpg"
-  },
-  "resources/js/frontend/index.tsx": {
-    "file": "assets/index-Bs98BPMh.js",
-    "name": "index",
-    "src": "resources/js/frontend/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js"
-    ],
-    "css": [
-      "assets/index-CuHhE1Is.css"
-    ],
-    "assets": [
-      "assets/search-bg-mobile-uE9uvdUB.jpg",
-      "assets/search-bg-C0rmdiVZ.jpg"
-    ]
-  },
-  "resources/js/seller/index.tsx": {
-    "file": "assets/index-DtcymIDU.js",
-    "name": "index",
-    "src": "resources/js/seller/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js",
-      "_index-D2T1X0LL.js",
-      "_getComponent-DtBbzTy-.js"
-    ],
-    "dynamicImports": [
-      "_react-apexcharts.min-CxuU_Hol.js"
-    ],
-    "css": [
-      "assets/index-B75eRxwz.css"
-    ]
-  },
-  "resources/js/site/index.tsx": {
-    "file": "assets/index-BKTJ_MN8.js",
-    "name": "index",
-    "src": "resources/js/site/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js",
-      "_index-D2T1X0LL.js",
-      "_getComponent-DtBbzTy-.js"
-    ]
-  },
-  "resources/js/themes/index.tsx": {
-    "file": "assets/index-CXicDy2W.js",
-    "name": "index",
-    "src": "resources/js/themes/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-BnIgBbzJ.js",
-      "_index-D2T1X0LL.js"
-    ],
-    "css": [
-      "assets/index-vLAobMf4.css"
-    ]
-  }
+    "_chunk-K6AXKMTT-BnIgBbzJ.js": {
+        "file": "assets/chunk-K6AXKMTT-BnIgBbzJ.js",
+        "name": "chunk-K6AXKMTT"
+    },
+    "_getComponent-DtBbzTy-.js": {
+        "file": "assets/getComponent-DtBbzTy-.js",
+        "name": "getComponent",
+        "imports": ["_chunk-K6AXKMTT-BnIgBbzJ.js", "_index-D2T1X0LL.js"]
+    },
+    "_index-D2T1X0LL.js": {
+        "file": "assets/index-D2T1X0LL.js",
+        "name": "index",
+        "imports": ["_chunk-K6AXKMTT-BnIgBbzJ.js"]
+    },
+    "_react-apexcharts.min-Cb5Et43b.js": {
+        "file": "assets/react-apexcharts.min-Cb5Et43b.js",
+        "name": "react-apexcharts.min",
+        "isDynamicEntry": true,
+        "imports": [
+            "_chunk-K6AXKMTT-BnIgBbzJ.js",
+            "resources/js/seller/index.tsx"
+        ]
+    },
+    "resources/css/app.css": {
+        "file": "assets/app-CCl6rqYx.css",
+        "src": "resources/css/app.css",
+        "isEntry": true
+    },
+    "resources/js/app.js": {
+        "file": "assets/app-Xaw6OIO1.js",
+        "name": "app",
+        "src": "resources/js/app.js",
+        "isEntry": true
+    },
+    "resources/js/frontend/assets/images/search-bg-mobile.jpg": {
+        "file": "assets/search-bg-mobile-uE9uvdUB.jpg",
+        "src": "resources/js/frontend/assets/images/search-bg-mobile.jpg"
+    },
+    "resources/js/frontend/assets/images/search-bg.jpg": {
+        "file": "assets/search-bg-C0rmdiVZ.jpg",
+        "src": "resources/js/frontend/assets/images/search-bg.jpg"
+    },
+    "resources/js/frontend/index.tsx": {
+        "file": "assets/index-Bs98BPMh.js",
+        "name": "index",
+        "src": "resources/js/frontend/index.tsx",
+        "isEntry": true,
+        "imports": ["_chunk-K6AXKMTT-BnIgBbzJ.js"],
+        "css": ["assets/index-CuHhE1Is.css"],
+        "assets": [
+            "assets/search-bg-mobile-uE9uvdUB.jpg",
+            "assets/search-bg-C0rmdiVZ.jpg"
+        ]
+    },
+    "resources/js/seller/index.tsx": {
+        "file": "assets/index-DaUH7Uw4.js",
+        "name": "index",
+        "src": "resources/js/seller/index.tsx",
+        "isEntry": true,
+        "imports": [
+            "_chunk-K6AXKMTT-BnIgBbzJ.js",
+            "_index-D2T1X0LL.js",
+            "_getComponent-DtBbzTy-.js"
+        ],
+        "dynamicImports": ["_react-apexcharts.min-Cb5Et43b.js"],
+        "css": ["assets/index-7kgHWLh1.css"]
+    },
+    "resources/js/site/index.tsx": {
+        "file": "assets/index-BKTJ_MN8.js",
+        "name": "index",
+        "src": "resources/js/site/index.tsx",
+        "isEntry": true,
+        "imports": [
+            "_chunk-K6AXKMTT-BnIgBbzJ.js",
+            "_index-D2T1X0LL.js",
+            "_getComponent-DtBbzTy-.js"
+        ]
+    },
+    "resources/js/themes/index.tsx": {
+        "file": "assets/index-CXicDy2W.js",
+        "name": "index",
+        "src": "resources/js/themes/index.tsx",
+        "isEntry": true,
+        "imports": ["_chunk-K6AXKMTT-BnIgBbzJ.js", "_index-D2T1X0LL.js"],
+        "css": ["assets/index-vLAobMf4.css"]
+    }
 }
