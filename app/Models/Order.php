@@ -63,7 +63,7 @@ class Order extends Model
         try {
             if (env('APP_ENV') == 'production') {
                 // Retrieve the store with proper error handling
-                $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')
+                $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency', 'owner_id')
                     ->find($this->store_id);
 
                 if (!$store) {
@@ -84,6 +84,7 @@ class Order extends Model
 
                 // Notify seller
                 $seller = $store->owner;
+                // log::info('seller: ' . $seller);
                 if ($seller) {
                     $seller->notify(new OrderConfirmationNotification($this, $store, false));
                 }
