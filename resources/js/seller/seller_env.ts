@@ -28,6 +28,9 @@ export const RoutePath = {
     ForgotPasswordPage: {
         index: () => "/forgot-password",
     },
+    ForgotPasswordSuccessPage: {
+        index: () => "/forgot-password-success",
+    },
     MyAccountPage: {
         ProfileSettings: { index: () => "/my-account/profile-settings" },
     },
