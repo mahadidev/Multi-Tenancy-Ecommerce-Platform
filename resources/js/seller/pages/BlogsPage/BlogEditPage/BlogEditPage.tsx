@@ -212,7 +212,7 @@ const BlogEditPage: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2 sm:col-span-3">
+                            <div className="flex flex-col gap-2 sm:col-span-3 ">
                                 <Label htmlFor="description">Content</Label>
                                 <QuillRichTextEditor
                                     content={formState["content"]}
