@@ -1,6 +1,8 @@
 import useBlog from "@seller/hooks/useBlog";
 import { RoutePath } from "@seller/seller_env";
+import "datatables.net";
 import { Breadcrumb, Button, Label, TextInput } from "flowbite-react";
+import "flowbite/dist/flowbite.css";
 import { FC } from "react";
 import { HiDocumentDownload, HiHome, HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -10,6 +12,13 @@ import BlogsTablePagination from "./BlogsTablePagination";
 const BlogsPage: FC = function () {
     // fetch Products
     const { meta } = useBlog();
+
+    // useEffect(() => {
+    //     // Initialize DataTable
+    //     $(document).ready(function () {
+    //         $("#example").DataTable();
+    //     });
+    // }, []);
 
     return (
         <>
@@ -76,6 +85,7 @@ const BlogsPage: FC = function () {
                     <div className="inline-block min-w-full align-middle">
                         <div className="overflow-hidden shadow">
                             <BlogsTable />
+                            {/* <DataTable /> */}
                         </div>
                     </div>
                 </div>
