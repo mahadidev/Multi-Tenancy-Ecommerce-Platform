@@ -1,25 +1,34 @@
 {
-  "_chunk-K6AXKMTT-B5PAf5HV.js": {
-    "file": "assets/chunk-K6AXKMTT-B5PAf5HV.js",
+  "_chunk-K6AXKMTT-BnIgBbzJ.js": {
+    "file": "assets/chunk-K6AXKMTT-BnIgBbzJ.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_getComponent-Bd7R9Jgp.js": {
-    "file": "assets/getComponent-Bd7R9Jgp.js",
+  "_getComponent-DtBbzTy-.js": {
+    "file": "assets/getComponent-DtBbzTy-.js",
     "name": "getComponent",
     "imports": [
-      "_chunk-K6AXKMTT-B5PAf5HV.js",
-      "_index-Dd7nDN71.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "_index-D2T1X0LL.js"
     ]
   },
-  "_index-Dd7nDN71.js": {
-    "file": "assets/index-Dd7nDN71.js",
+  "_index-D2T1X0LL.js": {
+    "file": "assets/index-D2T1X0LL.js",
     "name": "index",
     "imports": [
-      "_chunk-K6AXKMTT-B5PAf5HV.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js"
+    ]
+  },
+  "_react-apexcharts.min-Cb5Et43b.js": {
+    "file": "assets/react-apexcharts.min-Cb5Et43b.js",
+    "name": "react-apexcharts.min",
+    "isDynamicEntry": true,
+    "imports": [
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "resources/js/seller/index.tsx"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-DbqQPFye.css",
+    "file": "assets/app-CCl6rqYx.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -38,12 +47,12 @@
     "src": "resources/js/frontend/assets/images/search-bg.jpg"
   },
   "resources/js/frontend/index.tsx": {
-    "file": "assets/index-C0WMU1B7.js",
+    "file": "assets/index-Bs98BPMh.js",
     "name": "index",
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-B5PAf5HV.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js"
     ],
     "css": [
       "assets/index-CuHhE1Is.css"
@@ -54,38 +63,41 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-CL07Gf9K.js",
+    "file": "assets/index-DaUH7Uw4.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-B5PAf5HV.js",
-      "_index-Dd7nDN71.js",
-      "_getComponent-Bd7R9Jgp.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "_index-D2T1X0LL.js",
+      "_getComponent-DtBbzTy-.js"
+    ],
+    "dynamicImports": [
+      "_react-apexcharts.min-Cb5Et43b.js"
     ],
     "css": [
-      "assets/index-Ds4fmLPG.css"
+      "assets/index-7kgHWLh1.css"
     ]
   },
   "resources/js/site/index.tsx": {
-    "file": "assets/index-DLPcNgku.js",
+    "file": "assets/index-BKTJ_MN8.js",
     "name": "index",
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-B5PAf5HV.js",
-      "_index-Dd7nDN71.js",
-      "_getComponent-Bd7R9Jgp.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "_index-D2T1X0LL.js",
+      "_getComponent-DtBbzTy-.js"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-CPpBe6RR.js",
+    "file": "assets/index-CXicDy2W.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-B5PAf5HV.js",
-      "_index-Dd7nDN71.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "_index-D2T1X0LL.js"
     ],
     "css": [
       "assets/index-vLAobMf4.css"

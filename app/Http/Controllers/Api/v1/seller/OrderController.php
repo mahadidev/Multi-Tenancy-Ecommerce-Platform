@@ -33,6 +33,25 @@ class OrderController extends Controller
         ]);
     }
 
+    public function show(Request $request, $id){
+        
+        $order = Order::authorized()->find($id);
+
+        if (!$order) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid order Id',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'order' => OrderResource::make($order),
+            ],
+        ]);
+    }
+
     public function updateOrderStatus(Request $request, $id)
     {
         $request->validate([
