@@ -1,5 +1,6 @@
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
+import useString from "@seller/hooks/useString";
 import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
@@ -13,6 +14,7 @@ interface PropsType {
 const EditBlogCategoryModal: FC<PropsType> = function ({ category }) {
     const [isOpen, setOpen] = useState(false);
     const { update } = useCategory();
+    const { getSlug } = useString();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
         default: {
@@ -65,6 +67,10 @@ const EditBlogCategoryModal: FC<PropsType> = function ({ category }) {
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         handleChange(event);
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            slug: getSlug(event.target.value),
+                                        }));
                                     }}
                                     required
                                 />
