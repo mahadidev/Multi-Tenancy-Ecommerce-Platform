@@ -143,11 +143,13 @@ class BrandController extends Controller
         $validated = $request->validate([
             'name' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:255',
+            'slug' => 'nullable|string|max:255',
         ]);
 
         $brand->update([
             'name' => $validated['name'] ?? $brand->name,
             'image' => $validated['image'] ?? $brand->image,
+            'slug' => $validated['slug'] ?? $brand->image,
         ]);
 
         return response()->json(
@@ -207,8 +209,8 @@ class BrandController extends Controller
         try {
             $fileName = 'brands_' . now()->format('Ymd_His') . '.xlsx';
 
-            return Excel::download(new BrandsExport, $fileName); 
-           
+            return Excel::download(new BrandsExport, $fileName);
+
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,

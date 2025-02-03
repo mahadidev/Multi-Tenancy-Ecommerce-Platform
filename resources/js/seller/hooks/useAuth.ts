@@ -1,8 +1,10 @@
+import { RoutePath } from "@seller/seller_env";
 import {
     LoginPayloadType,
     PasswordForgotRequestPayloadType,
     RegisterPayloadType,
     ResetPasswordPayloadType,
+    useFetchDashboardAnalyticsQuery,
     useFetchUserQuery,
     useForgotPasswordRequestMutation,
     useLoginMutation,
@@ -24,6 +26,7 @@ const useAuth = () => {
     const { toaster } = useToast(); // for showing toast messages
 
     useFetchUserQuery(); // user query
+    useFetchDashboardAnalyticsQuery();
 
     // select user
     const { userProfileData } = useAppSelector((state) => state.auth);
@@ -174,6 +177,7 @@ const useAuth = () => {
                     text: "Reset password link sent.",
                     description: "Please check your email inbox!",
                 });
+                navigate(RoutePath.ForgotPasswordSuccessPage.index());
             }
         });
     };

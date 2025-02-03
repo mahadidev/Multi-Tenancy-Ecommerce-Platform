@@ -1,7 +1,10 @@
 import flowbite from 'flowbite-react/tailwind';
 
 module.exports = {
-	content: ['./resources/js/seller/**/*.{ts,tsx,mdx}', flowbite.content()],
+	content: [
+		'./resources/js/seller/**/*.{ts,tsx,mdx}',
+		flowbite.content(),
+	],
 	theme: {
 		fontFamily: {
 			myriad: ['myriad', 'system-ui'],

@@ -25,8 +25,7 @@ class OrderController extends Controller
         $sort = $request->input('sort'); // Sort order, 
         $perPage = $request->input('per_page'); // Items per page,
 
-        $orders = Order::where('name', $search)
-            ->currentStore()
+        $orders = Order::currentStore()
             ->where('user_id', auth()->user()->id)
             ->when($search, function ($query, $search) {
                 $query

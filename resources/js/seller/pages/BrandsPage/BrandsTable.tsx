@@ -1,68 +1,80 @@
-import useBrand from "@seller/hooks/useBrand";
-import { BrandType } from "@type/brandType";
-import { Checkbox, Label, Table } from "flowbite-react";
-import DeleteBrandModal from "./DeleteBrandModal";
-import EditBrandModal from "./EditBrandModal";
+import { DataTable } from '@seller/components';
+import useBrand from '@seller/hooks/useBrand';
+import { BrandType } from '@type/brandType';
+import { Table } from 'flowbite-react';
+import CreateBrandModal from './CreateBrandModal';
+import DeleteBrandModal from './DeleteBrandModal';
+import EditBrandModal from './EditBrandModal';
 
 const BrandsTable = () => {
-    const { brands } = useBrand();
+	const { brands } = useBrand();
 
-    return (
-        <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-            <Table.Head
-                className="bg-gray-100 dark:bg-gray-700"
-                theme={{
-                    cell: {
-                        base: "p-4 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400",
-                    },
+	return (
+		<>
+			<DataTable
+				columns={[
+					{
+						label: 'ID',
+						key: 'id',
+						render: (row: BrandType) => (
+							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+								{row.id}
+							</Table.Cell>
+						),
+						sortable: true,
+					},
+					{
+						label: 'Name',
+						key: 'name',
+						render: (row: BrandType) => (
+							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+								{row.name}
+							</Table.Cell>
+						),
+						sortable: true,
+					},
+					{
+						label: 'Slug',
+						key: 'slug',
+						render: (row: BrandType) => (
+							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+								{row.slug}
+							</Table.Cell>
+						),
+						sortable: true,
+					},
+					{
+						label: 'Created At',
+						key: 'created_at',
+						render: (row: BrandType) => (
+							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+								{row.created_at}
+							</Table.Cell>
+						),
+						sortable: true,
+					},
+					{
+						render: (row: BrandType) => (
+							<Table.Cell>
+								<div className="flex items-center gap-x-3 whitespace-nowrap">
+									<EditBrandModal brand={row} />
+									<DeleteBrandModal brand={row} />
+								</div>
+							</Table.Cell>
+						),
+					},
+				]}
+                search={{
+                    placeholder: "Search for brand",
+                    columns: ["name", "slug", "created_at"]
                 }}
-            >
-                <Table.HeadCell className="p-4">
-                    <Label htmlFor="select-all" className="sr-only">
-                        Select all
-                    </Label>
-                    <Checkbox id="select-all" name="select-all" />
-                </Table.HeadCell>
-                <Table.HeadCell>SL</Table.HeadCell>
-                <Table.HeadCell>Name</Table.HeadCell>
-                <Table.HeadCell>Slug</Table.HeadCell>
-                <Table.HeadCell>Created At</Table.HeadCell>
-                <Table.HeadCell />
-            </Table.Head>
-            <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {brands.map((brand: BrandType, idx: number) => (
-                    <Table.Row
-                        key={idx}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                        <Table.Cell className="w-4 p-4">
-                            <Checkbox
-                                aria-describedby="checkbox-1"
-                                id="checkbox-1"
-                            />
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            {idx + 1}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            {brand.name}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            {brand.slug}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            {brand.created_at}
-                        </Table.Cell>
-                        <Table.Cell>
-                            <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                <EditBrandModal brand={brand} />
-                                <DeleteBrandModal brand={brand} />
-                            </div>
-                        </Table.Cell>
-                    </Table.Row>
-                ))}
-            </Table.Body>
-        </Table>
-    );
+				data={brands}
+				head={{
+					render: (_data: BrandType[]) => <CreateBrandModal />,
+				}}
+				exportable={true}
+			/>
+		</>
+	);
 };
 export default BrandsTable;

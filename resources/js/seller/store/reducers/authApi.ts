@@ -5,7 +5,9 @@ import { UserProfileType, UserType } from "@type/authType";
 import { StoreType } from "@type/storeType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { clearAuth, setAuth, setLoggedInUser } from "../slices/authSlice";
+import { setDashboardAnalytics } from "../slices/dashboardAnalyticsSlice";
 import { clearStore, setAuthStore } from "../slices/storeSlice";
+import { DashboardAnalyticsType } from "./dashboardAnalyticsApi";
 
 export interface LoginResponseType extends ApiResponseType {
     data: {
@@ -51,6 +53,7 @@ export const authApi = createApi({
         "UserUpdatePassword",
         "PasswordForgotRequest",
         "PasswordReset",
+        "DashboardAnalytics",
     ],
     endpoints: (builder) => ({
         login: builder.mutation<LoginResponseType, LoginPayloadType>({
@@ -218,6 +221,26 @@ export const authApi = createApi({
                 });
             },
         }),
+
+        fetchDashboardAnalytics: builder.query<DashboardAnalyticsType, void>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/analytics?filter=month&start_date=2024-01-01&end_date=2025-02-02`,
+                    method: "get",
+                    body: formData,
+                }),
+            providesTags: ["DashboardAnalytics"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(
+                        setDashboardAnalytics({
+                            analytics: response?.data?.data,
+                        })
+                    );
+                });
+            },
+        }),
     }),
 });
 
@@ -230,6 +253,7 @@ export const {
     useUpdateUserMutation,
     useForgotPasswordRequestMutation,
     useResetPasswordMutation,
+    useFetchDashboardAnalyticsQuery,
 } = authApi;
 
 export interface UserUpdatePasswordPayloadType {
