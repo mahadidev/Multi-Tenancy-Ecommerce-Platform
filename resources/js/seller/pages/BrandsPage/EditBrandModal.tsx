@@ -1,8 +1,9 @@
 import useBrand from "@seller/hooks/useBrand";
 import useForm from "@seller/hooks/useForm";
+import useString from "@seller/hooks/useString";
 import { BrandType } from "@type/brandType";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
 
@@ -13,12 +14,20 @@ interface PropsType {
 const EditBrandModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const { update } = useBrand();
-    const { handleChange, formState, formErrors } = useForm({
+    const { getSlug } = useString();
+    const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
         default: {
             ...props.brand,
         },
     });
+
+    // reload data
+    useEffect(() => {
+        if (props.brand) {
+            setFormState(props.brand);
+        }
+    }, [props.brand]);
 
     return (
         <>
@@ -57,6 +66,10 @@ const EditBrandModal: FC<PropsType> = function (props) {
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         handleChange(event);
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            slug: getSlug(event.target.value),
+                                        }));
                                     }}
                                     required
                                 />
@@ -103,7 +116,9 @@ const EditBrandModal: FC<PropsType> = function (props) {
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}
                         processingLabel="Saving"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Save all
                     </Button>

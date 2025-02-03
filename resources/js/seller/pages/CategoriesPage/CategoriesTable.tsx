@@ -1,15 +1,11 @@
 import ReactDataTable from "@seller/components/DataTable/DataTable";
 import useCategory from "@seller/hooks/useCategory";
-import { useFetchProductCategoriesQuery } from "@seller/store/reducers/categoryApi";
 import { CategoryType } from "@type/categoryType";
 import { useState } from "react";
 import DeleteCategoryModal from "./DeleteCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
 
 const CategoriesTable = () => {
-    // fetch product categories
-    useFetchProductCategoriesQuery();
-
     // table data
     const data: any[] = [];
 
@@ -30,9 +26,9 @@ const CategoriesTable = () => {
     // get the product categories
     const { productCategories } = useCategory();
 
-    productCategories?.map((category: CategoryType, idx: number) =>
+    productCategories?.map((category: CategoryType) =>
         data?.push({
-            id: idx + 1,
+            id: category?.id,
             name: category?.name,
             slug: category?.slug,
             has_parent: category?.has_parent,
