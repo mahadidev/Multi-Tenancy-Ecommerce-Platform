@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Chart from "react-apexcharts";
 
 interface AnalyticsChartProps {
