@@ -228,6 +228,8 @@ const BlogEditPage: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* loader */}
                 <LoadingOverlay isLoading={fetchBlog.isLoading} />
                 {formErrors["message"] && (
                     <ErrorMessage>{formErrors["message"]}</ErrorMessage>
