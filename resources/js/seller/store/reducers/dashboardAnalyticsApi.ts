@@ -38,7 +38,7 @@ export const dashboardAnalyticsApi = createApi({
                 }),
             providesTags: ["DashboardAnalytics"],
             transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_queryArgument, { queryFulfilled }) {
                 await queryFulfilled.then((response) => {
                     // dispatch(
                     //     setDashboardAnalytics({

@@ -1,4 +1,3 @@
-import useCategory from "@seller/hooks/useCategory";
 import { RoutePath } from "@seller/seller_env";
 
 import { Breadcrumb } from "flowbite-react";
@@ -8,8 +7,6 @@ import CategoriesTable from "./CategoriesTable";
 import CreateCategoryModal from "./CreateCategoryModal";
 
 const CategoriesPage: FC = function () {
-    const { productCategoriesMeta } = useCategory();
-
     return (
         <>
             <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 sm:flex dark:border-gray-700 dark:bg-gray-800">
