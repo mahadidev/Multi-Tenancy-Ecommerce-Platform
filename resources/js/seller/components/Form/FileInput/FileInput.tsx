@@ -1,6 +1,6 @@
 import { FileType } from "@type/fileType";
 import { Button, FileInputProps, Modal, TextInput } from "flowbite-react";
-import { FC, RefAttributes, useRef, useState } from "react";
+import { FC, RefAttributes, useEffect, useRef, useState } from "react";
 import useFile from "../../../hooks/useFile";
 import GalleryCard from "./GalleryCard";
 import UploadCard from "./UploadCard";
@@ -46,6 +46,11 @@ const FileInput: FC<
             setModalOpen(false);
         }
     };
+
+    useEffect(() => {
+        setInputProps(props);
+    }, [props])
+
     return (
         <>
             <div

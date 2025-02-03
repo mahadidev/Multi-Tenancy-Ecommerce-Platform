@@ -1,4 +1,5 @@
 import useProduct from '@seller/hooks/useProduct';
+import useToast from '@seller/hooks/useToast';
 import { ProductType } from '@type/productType';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
@@ -6,12 +7,14 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { HiOutlineExclamationCircle, HiTrash } from 'react-icons/hi';
 
 interface PropsType {
-	product: ProductType
+	product: ProductType;
 }
 
 const DeleteProductModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
-	const {delete: deleteProduct} = useProduct();
+	const { delete: deleteProduct } = useProduct();
+	const { toaster } = useToast();
+
 	return (
 		<>
 			<Button
@@ -33,8 +36,7 @@ const DeleteProductModal: FC<PropsType> = function (props) {
 					<div className="flex flex-col items-center gap-y-6 text-center">
 						<HiOutlineExclamationCircle className="mx-auto h-20 w-20 text-red-600" />
 						<p className="text-xl font-normal text-gray-500 dark:text-gray-400">
-							Are you sure you want to delete this{' '}
-							{props.product.name}?
+							Are you sure you want to delete this {props.product.name}?
 						</p>
 						<div className="flex items-center gap-x-3">
 							<Button
@@ -47,13 +49,19 @@ const DeleteProductModal: FC<PropsType> = function (props) {
 										},
 										onSuccess: () => {
 											setOpen(false);
+											toaster({
+												text: 'Product has been deleted',
+												status: 'danger',
+											});
 										},
 									});
 								}}
 								isProcessing={deleteProduct.isLoading}
 								disabled={deleteProduct.isLoading}
 								processingLabel="Deleting"
-								processingSpinner={<AiOutlineLoading className="animate-spin" />}
+								processingSpinner={
+									<AiOutlineLoading className="animate-spin" />
+								}
 							>
 								<span className="text-base font-medium">Yes, I'm sure</span>
 							</Button>
