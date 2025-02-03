@@ -27,10 +27,6 @@ class OrderController extends Controller
             ]);
         }
 
-        // $orders = $store->orders ?? [];
-
-        // $paginated = $perPage ? $orders->paginate($perPage) : $orders;
-
         // Start with a query builder instead of getting collection
         $ordersQuery = $store->orders();
 
