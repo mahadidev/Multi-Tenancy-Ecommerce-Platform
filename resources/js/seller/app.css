@@ -193,3 +193,7 @@
 	border: none !important;
 	height: auto;
 }
+
+.ql-editor {
+    height: 150px;
+}

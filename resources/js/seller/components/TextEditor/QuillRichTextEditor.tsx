@@ -19,7 +19,7 @@ const QuillRichTextEditor: React.FC<IRichTextEditorProps> = ({
     };
     return (
         <ReactQuill
-            className="bg-[#374151] !text-white"
+            className="bg-[#374151] !text-white pb-0"
             value={content}
             onChange={(e) => onChangeContent(e)}
             modules={modules}

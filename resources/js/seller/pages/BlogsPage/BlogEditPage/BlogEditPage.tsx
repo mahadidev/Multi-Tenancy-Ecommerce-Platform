@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { ErrorMessage, FileInput } from "@seller/components";
+import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
 import QuillRichTextEditor from "@seller/components/TextEditor/QuillRichTextEditor";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
@@ -12,12 +12,14 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 
-const BlogEditPage = () => {
+const BlogEditPage: React.FC = () => {
     const { id } = useParams();
     const { blogCategories } = useCategory();
     const { update, blog, fetchBlog } = useBlog();
     // const { files } = useFile();
-    const { handleChange, formState, formErrors, setFormState } = useForm();
+    const { handleChange, formState, formErrors, setFormState } = useForm({
+        default: blog,
+    });
     const [, setImageLocation] = useState<string>("");
 
     useEffect(() => {
@@ -27,7 +29,12 @@ const BlogEditPage = () => {
                     id: id,
                 },
             });
+        }
+    }, [id]);
 
+    useEffect(() => {
+        setFormState({});
+        if (blog) {
             // prefill form with existing data
             setFormState({
                 title: blog?.title || "",
@@ -37,8 +44,7 @@ const BlogEditPage = () => {
                 content: blog?.content || "",
             });
         }
-    }, [id, blog]);
-
+    }, [blog]);
     return (
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
             <div className="mb-4">
@@ -206,7 +212,7 @@ const BlogEditPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-2 sm:col-span-3">
+                            <div className="flex flex-col gap-2 sm:col-span-3 ">
                                 <Label htmlFor="description">Content</Label>
                                 <QuillRichTextEditor
                                     content={formState["content"]}
@@ -223,6 +229,8 @@ const BlogEditPage = () => {
                     </div>
                 </div>
 
+                {/* loader */}
+                <LoadingOverlay isLoading={fetchBlog.isLoading} />
                 {formErrors["message"] && (
                     <ErrorMessage>{formErrors["message"]}</ErrorMessage>
                 )}
@@ -237,7 +245,6 @@ const BlogEditPage = () => {
                             update.submit({
                                 formData: { ...formState, id },
                             });
-                            setFormState({});
                         }}
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}
