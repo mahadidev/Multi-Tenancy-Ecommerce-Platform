@@ -1,1 +1,0 @@
-import{j as o}from"./chunk-K6AXKMTT-CV3tAeEp.js";import{C as s}from"./index-DhLy6mM6.js";const a=({theme:t,widget:n,store:e})=>{const m={dokan:o.jsx(s,{widget:n,store:e})};return o.jsx(o.Fragment,{children:m[t.slug]})};export{a as T};

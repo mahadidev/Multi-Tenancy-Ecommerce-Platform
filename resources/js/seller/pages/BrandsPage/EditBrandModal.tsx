@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import useBrand from "@seller/hooks/useBrand";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";

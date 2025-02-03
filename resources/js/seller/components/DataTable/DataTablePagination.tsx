@@ -1,5 +1,6 @@
-import { Pagination } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { FC } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 interface PropsType {
 	currentPage: number;
@@ -10,13 +11,58 @@ interface PropsType {
 const DataTablePagination: FC<PropsType> = (props) => {
 	return (
 		<>
-			<div className="flex overflow-x-auto sm:justify-center">
-				<Pagination
-					currentPage={props.currentPage}
-					totalPages={props.totalPages}
-					onPageChange={props.onPageChange}
-					showIcons
-				/>
+			<div className="sticky bottom-0 right-0 w-full items-center border-t border-gray-200 bg-white p-4 sm:flex sm:justify-between dark:border-gray-700 dark:bg-gray-800">
+				<div className="mb-4 flex items-center sm:mb-0">
+					<button
+						onClick={() => props.onPageChange(props.currentPage - 1)}
+						disabled={props.currentPage === 1}
+						className="inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+					>
+						<span className="sr-only">Previous page</span>
+						<HiChevronLeft className="h-7 w-7" />
+					</button>
+					<button
+						onClick={() => props.onPageChange(props.currentPage + 1)}
+						disabled={props.currentPage === props.totalPages}
+						className="mr-2 inline-flex cursor-pointer justify-center rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+					>
+						<span className="sr-only">Next page</span>
+						<HiChevronRight className="h-7 w-7" />
+					</button>
+					<span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+						Showing&nbsp;
+						<span className="font-semibold text-gray-900 dark:text-white">
+							{props.currentPage * 10} - {props.totalPages * 10}
+						</span>
+						&nbsp;of&nbsp;
+						<span className="font-semibold text-gray-900 dark:text-white">
+							{props.totalPages}
+						</span>
+					</span>
+				</div>
+				<div className="flex items-center space-x-3">
+					<Button
+						size="xs"
+						className="items-center"
+						color="primary"
+						onClick={() => props.onPageChange(props.currentPage - 1)}
+						disabled={props.currentPage === 1}
+					>
+						<HiChevronLeft className="-ml-1 mr-1 h-5 w-5" />
+						Previous
+					</Button>
+
+					<Button
+						size="xs"
+						className="items-center"
+						color="primary"
+						onClick={() => props.onPageChange(props.currentPage + 1)}
+						disabled={props.currentPage === props.totalPages}
+					>
+						Next
+						<HiChevronRight className="-mr-1 ml-1 h-5 w-5" />
+					</Button>
+				</div>
 			</div>
 		</>
 	);

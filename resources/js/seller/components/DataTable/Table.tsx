@@ -171,7 +171,7 @@ const DataTable: FC<PropsType> = (props) => {
 					</div>
 				</div>
 			</div>
-
+            <div className='h-10'></div>
 			<DataTablePagination
 				currentPage={paginate.currentPage}
 				totalPages={paginate.totalPages}
