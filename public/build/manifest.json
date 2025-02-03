@@ -1,23 +1,4 @@
 {
-  "_chunk-K6AXKMTT-CV3tAeEp.js": {
-    "file": "assets/chunk-K6AXKMTT-CV3tAeEp.js",
-    "name": "chunk-K6AXKMTT"
-  },
-  "_getComponent-CpcCbbuJ.js": {
-    "file": "assets/getComponent-CpcCbbuJ.js",
-    "name": "getComponent",
-    "imports": [
-      "_chunk-K6AXKMTT-CV3tAeEp.js",
-      "_index-DhLy6mM6.js"
-    ]
-  },
-  "_index-DhLy6mM6.js": {
-    "file": "assets/index-DhLy6mM6.js",
-    "name": "index",
-    "imports": [
-      "_chunk-K6AXKMTT-CV3tAeEp.js"
-    ]
-  },
   "resources/css/app.css": {
     "file": "assets/app-BFmtg6i8.css",
     "src": "resources/css/app.css",
@@ -43,7 +24,7 @@
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-CV3tAeEp.js"
+      "_chunk-K6AXKMTT-BnIgBbzJ.js"
     ],
     "css": [
       "assets/index-CuHhE1Is.css"
@@ -54,11 +35,19 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-Cupi2_kD.js",
-    "name": "index",
-    "src": "resources/js/seller/index.tsx",
-    "isEntry": true,
-    "imports": [
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "_index-D2T1X0LL.js",
+      "_getComponent-DtBbzTy-.js"
+    ],
+    "dynamicImports": [
+      "_react-apexcharts.min-9CgQlxvJ.js"
+    ],
+    "css": [
+      "assets/index-z3o5iHXZ.css"
+    ]
+  },
+  "resources/js/site/index.tsx": {
+    "file": "assets/index-BKTJ_MN8.js",
       "_chunk-K6AXKMTT-CV3tAeEp.js",
       "_index-DhLy6mM6.js",
       "_getComponent-CpcCbbuJ.js"
@@ -73,6 +62,13 @@
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
+      "_chunk-K6AXKMTT-BnIgBbzJ.js",
+      "_index-D2T1X0LL.js",
+      "_getComponent-DtBbzTy-.js"
+    ]
+  },
+  "resources/js/themes/index.tsx": {
+    "file": "assets/index-CXicDy2W.js",
       "_chunk-K6AXKMTT-CV3tAeEp.js",
       "_index-DhLy6mM6.js",
       "_getComponent-CpcCbbuJ.js"
@@ -84,8 +80,6 @@
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-CV3tAeEp.js",
-      "_index-DhLy6mM6.js"
     ],
     "css": [
       "assets/index-vLAobMf4.css"

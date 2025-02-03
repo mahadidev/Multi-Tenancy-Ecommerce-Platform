@@ -40,7 +40,7 @@ const EditCategoryModal: FC<PropsType> = function (props) {
             <Button
                 size="sm"
                 color="primary"
-                className="p-0"
+                className="p-0 whitespace-nowrap"
                 onClick={() => setOpen(true)}
             >
                 <div className="flex items-center gap-x-2">
