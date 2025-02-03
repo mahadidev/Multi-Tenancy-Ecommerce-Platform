@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
+import useString from "@seller/hooks/useString";
 import useToast from "@seller/hooks/useToast";
 import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
@@ -16,12 +17,14 @@ const EditCategoryModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const { update, productCategories } = useCategory();
     const { toaster } = useToast();
+    const { getSlug } = useString();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
         default: {
             ...props.category,
             category_id: props.category.has_parent?.id,
             type: "product",
+            id: props?.category?.id,
         },
     });
 
@@ -46,6 +49,7 @@ const EditCategoryModal: FC<PropsType> = function (props) {
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen}>
+                {" "}
                 <Modal.Header>Edit Category</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -69,6 +73,10 @@ const EditCategoryModal: FC<PropsType> = function (props) {
                                         event: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         handleChange(event);
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            slug: getSlug(event.target.value),
+                                        }));
                                     }}
                                     required
                                 />

@@ -11,13 +11,13 @@ const DashboardPage: FC = function () {
         series: [
             {
                 name: "Orders",
-                data: analytics?.order_analytics?.orders,
-                // data: [23, 12, 34, 345, 2332, 5345, 456, 464, 346],
+                // data: analytics?.order_analytics?.orders,
+                data: [2233, 2122, 3424, 3435, 2332],
             },
             {
                 name: "Revenue",
-                data: analytics?.order_analytics?.monthly_revenues,
-                // data: [23, 12, 34, 345, 2332, 5345, 456, 464, 646],
+                // data: analytics?.order_analytics?.monthly_revenues,
+                data: [2232, 1542, 3324, 3245, 2332],
             },
         ],
         options: {
@@ -27,7 +27,7 @@ const DashboardPage: FC = function () {
                 height: 350,
                 foreColor: "#ccc",
                 toolbar: {
-                    show: false,
+                    show: true,
                 },
                 dropShadow: {
                     enabled: true,
@@ -35,14 +35,6 @@ const DashboardPage: FC = function () {
                     // left: 1,
                     blur: 4,
                     opacity: 1,
-                },
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: "55%",
-                    borderRadius: 5,
-                    borderRadiusApplication: "end",
                 },
             },
             dataLabels: {
@@ -57,20 +49,7 @@ const DashboardPage: FC = function () {
             },
 
             xaxis: {
-                categories: [
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    "Aug",
-                    "Sep",
-                    "Oct",
-                    "Nov",
-                    "Dec",
-                ],
+                categories: ["Jan", "Feb", "Mar", "Apr", "May"],
             },
             yaxis: {
                 title: {

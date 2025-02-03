@@ -30,9 +30,9 @@ const CategoriesTable = () => {
     // get the product categories
     const { productCategories } = useCategory();
 
-    productCategories?.map((category: CategoryType, idx: number) =>
+    productCategories?.map((category: CategoryType) =>
         data?.push({
-            id: idx + 1,
+            id: category?.id,
             name: category?.name,
             slug: category?.slug,
             has_parent: category?.has_parent,

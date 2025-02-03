@@ -102,7 +102,9 @@ const CreateBrandModal: FC = function () {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Create
                     </Button>
