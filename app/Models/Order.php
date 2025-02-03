@@ -61,7 +61,7 @@ class Order extends Model
     public function sendOrderConfirmationNotifications()
     {
         try {
-            if (env('APP_ENV') == 'local') {
+            if (env('APP_ENV') == 'production') {
                 // Retrieve the store with proper error handling
                 $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency')
                     ->find($this->store_id);
@@ -88,11 +88,11 @@ class Order extends Model
                     $seller->notify(new OrderConfirmationNotification($this, $store, false));
                 }
             } else {
-                Log::info('Order notification disabled in production, change APP_ENV to local to enable');
+                Log::info('Order notification disabled in local, change APP_ENV to production to enable');
             }
         } catch (\Exception $e) {
             Log::error('Order notification failed: ' . $e->getMessage());
-            return response()->json(['error' => 'Order notification failed'], 500);
+            return response()->json(['status'=> 500,'message' => 'Order notification failed'], 500);
         }
     }
 }
