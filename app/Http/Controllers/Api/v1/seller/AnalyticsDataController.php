@@ -15,16 +15,22 @@ class AnalyticsDataController extends Controller
 {
 
     public function index(Request $request){
-  
-        $filter = $request->has('filter') ? $request->query('filter') : 'year';
-  
+
         // Filtered queries
         $orders = Order::authorized()->get();
         $products_count = Product::authorized()->count() ?? 0;
         $categories_count = Category::authorized()->where('type', 'product')->count() ?? 0;
         $orders_count = $orders->count() ?? 0;
         $customers_count = User::whereJsonContains('store_id', authStore())->count() ?? 0;
-       
+        
+        // visitors query
+        $store = getStore();
+        $visitor_count = $store?->visitors() ?? 0;
+        $unique_visitor_count = $store?->uniqueVisitors() ?? 0;
+        $unique_visitor_today_count = $store?->uniqueVisitorsToday() ?? 0;
+        
+        $filter = $request->has('filter') ? $request->query('filter') : 'year';
+        
         // Charts and Graphs data
         $order_analytics = $this->getOrderAnalytics($request, $filter) ?? null;
 
@@ -36,6 +42,9 @@ class AnalyticsDataController extends Controller
                 'categories_count' => $categories_count,
                 'orders_count' => $orders_count,
                 'customers_count' => $customers_count,
+                'visitor_count' => $visitor_count,
+                'unique_visitor_count' => $unique_visitor_count,
+                'unique_visitor_today_count' => $unique_visitor_today_count,
                 'order_analytics' => $order_analytics
             ]
         ], 200);
