@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export interface DataTablePropsType {
     columns: {
-        label?: string;
+        label?: string | React.ReactNode;
         key?: string;
         render: CallableFunction;
         sortable?: boolean;
