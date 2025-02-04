@@ -7,6 +7,7 @@ module.exports = {
 	],
 	theme: {
 		fontFamily: {
+            sans: ["Inter", "serif"],
 			myriad: ['myriad', 'system-ui'],
 			ibrand: ['ibrand', 'system-ui'],
 		},

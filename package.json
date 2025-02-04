@@ -17,6 +17,7 @@
         "@reduxjs/toolkit": "^2.3.0",
         "@types/jquery": "^3.5.32",
         "@types/react-csv": "^1.1.10",
+        "@types/react-svg-map": "^2.1.4",
         "apexcharts": "^4.4.0",
         "classnames": "^2.3.2",
         "datatables.net": "^2.2.1",
