@@ -8,8 +8,13 @@ import {
     useUpdateBrandMutation,
 } from "@seller/store/reducers/brandApi";
 import { useAppSelector } from "@seller/store/store";
+import useToast from "./useToast";
 
 const useBrand = () => {
+    // toaster hook
+    const { toaster } = useToast();
+
+    // fetch brands
     useFetchBrandsQuery();
 
     // select brand
@@ -37,6 +42,15 @@ const useBrand = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
+                toaster({
+                    text: "Brand created successfully",
+                    status: "success",
+                });
+            } else {
+                toaster({
+                    text: "Failed to create brand",
+                    status: "error",
+                });
             }
         });
     };
@@ -63,6 +77,15 @@ const useBrand = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
+                toaster({
+                    text: "Brand updated successfully",
+                    status: "success",
+                });
+            } else {
+                toaster({
+                    text: "Failed to update brand",
+                    status: "error",
+                });
             }
         });
     };
@@ -89,6 +112,15 @@ const useBrand = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
+                toaster({
+                    text: "Brand deleted successfully",
+                    status: "success",
+                });
+            } else {
+                toaster({
+                    text: "Failed to delete brand",
+                    status: "error",
+                });
             }
         });
     };

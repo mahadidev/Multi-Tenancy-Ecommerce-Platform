@@ -46,16 +46,16 @@ const useTable = (props: DataTablePropsType) => {
         };
         data: any;
     }) => {
-        if (sort.dir === "desc") {
-            return data.sort((x: any, y: any) => {
-                if (x[sort.key] < y[sort.key]) return -1;
-                if (x[sort.key] > y[sort.key]) return 1;
+        if (sort?.dir === "desc") {
+            return data?.sort((x: any, y: any) => {
+                if (x[sort?.key] < y[sort?.key]) return -1;
+                if (x[sort?.key] > y[sort?.key]) return 1;
                 return 0;
             });
-        } else if (sort.dir === "asc") {
-            return data.sort((x: any, y: any) => {
-                if (x[sort.key] > y[sort.key]) return -1;
-                if (x[sort.key] < y[sort.key]) return 1;
+        } else if (sort?.dir === "asc") {
+            return data?.sort((x: any, y: any) => {
+                if (x[sort?.key] > y[sort?.key]) return -1;
+                if (x[sort?.key] < y[sort?.key]) return 1;
                 return 0;
             });
         }
@@ -65,10 +65,10 @@ const useTable = (props: DataTablePropsType) => {
     const onSort = (val: string) => {
         setCurrentPage(1);
         setSort((prev: any) => {
-            if (prev && prev.dir === "asc") {
+            if (prev && prev?.dir === "asc") {
                 onSearch(searchQuery, true);
                 return null;
-            } else if (prev && prev.dir === "desc") {
+            } else if (prev && prev?.dir === "desc") {
                 setData((prevData) => {
                     return sortData({
                         data: prevData,
@@ -105,12 +105,12 @@ const useTable = (props: DataTablePropsType) => {
     // handle on search
     const onSearch = (query: string, onlySearch?: boolean) => {
         setCurrentPage(1);
-        if (props.search?.columns) {
+        if (props?.search?.columns) {
             setSearchQuery(query);
             setData(() => {
-                const sortedData = props.data.filter((dataItem: any) => {
-                    const result = props.search?.columns.map((column) => {
-                        return dataItem[column].includes(query);
+                const sortedData = props?.data?.filter((dataItem: any) => {
+                    const result = props?.search?.columns.map((column) => {
+                        return dataItem[column]?.includes(query);
                     });
 
                     if (result?.includes(true)) {
@@ -133,7 +133,7 @@ const useTable = (props: DataTablePropsType) => {
             indexOfLastRow,
             indexOfFirstRow,
             currentPage,
-            currentData: data.slice(indexOfFirstRow, indexOfLastRow),
+            currentData: data?.slice(indexOfFirstRow, indexOfLastRow),
             onNextPage,
         },
         columns,

@@ -67,7 +67,7 @@ const ProductEditPage = () => {
                 slug: product?.slug || "",
                 sku: product?.sku || "",
                 category_id: product?.category?.id || "",
-                brand: product?.brand?.id || "",
+                brand_id: product?.brand?.id || "",
                 price: product?.price,
                 discount_amount: product?.discount_amount,
                 stock: product?.stock,
@@ -146,10 +146,6 @@ const ProductEditPage = () => {
                                         value={formState["sku"]}
                                         onChange={(e) => {
                                             handleChange(e);
-                                            setFormState((prev: any) => ({
-                                                ...prev,
-                                                slug: getSlug(e.target.value),
-                                            }));
                                         }}
                                         required
                                     />
@@ -270,10 +266,10 @@ const ProductEditPage = () => {
                                     <Label>Variants</Label>
                                     {product?.variants?.map((variant) => (
                                         <div
-                                            className="bg-gray-100 p-2.5 rounded-md"
+                                            className="dark:bg-[#374151] bg-[#F9FAFB] p-2.5 rounded-md"
                                             key={variant.id}
                                         >
-                                            <div className="flex justify-between gap-2.5">
+                                            <div className="flex justify-between gap-2.5 dark:text-white">
                                                 {variant.label}
 
                                                 <p
@@ -304,7 +300,7 @@ const ProductEditPage = () => {
                                                         {variant.options.map(
                                                             (option) => (
                                                                 <Table.Row
-                                                                    className="bg-white"
+                                                                    className="dark:text-white text-dark"
                                                                     key={
                                                                         option.id
                                                                     }
