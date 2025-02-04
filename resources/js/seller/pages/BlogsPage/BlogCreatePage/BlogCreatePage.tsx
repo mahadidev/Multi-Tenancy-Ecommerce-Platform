@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FileInput } from "@seller/components";
+import { ErrorMessage, FileInput } from "@seller/components";
 import QuillRichTextEditor from "@seller/components/TextEditor/QuillRichTextEditor";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
@@ -190,10 +190,23 @@ const BlogCreatePage = () => {
                                         }));
                                     }}
                                 />
+
+                                {formErrors["content"] && (
+                                    <ErrorMessage>
+                                        {formErrors["content"]
+                                            ? formErrors["content"][0]
+                                            : false}
+                                    </ErrorMessage>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
+                {/* 
+                {formErrors["message"] && (
+                    <ErrorMessage>{formErrors["message"]}</ErrorMessage>
+                )} */}
+
                 <div className="flex justify-end mt-6">
                     <Button
                         color="primary"

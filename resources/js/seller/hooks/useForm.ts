@@ -79,6 +79,7 @@ const useForm = function (props?: FormProps) {
 
     // formValidationError
     useEffect(() => {
+        console.log({ formProps: props });
         if (props && props.formValidationError) {
             setFormErrors((prev: FormErrorType) => ({
                 ...prev,

@@ -33,6 +33,9 @@ const CreateProductModal: FC = function () {
             <Modal onClose={() => setOpen(false)} show={isOpen}>
                 <Modal.Header>Create a new Product</Modal.Header>
                 <Modal.Body>
+                    {/* <div className="!text-white">
+                        {JSON.stringify(formErrors, null, 4)}
+                    </div> */}
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
@@ -219,6 +222,7 @@ const CreateProductModal: FC = function () {
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
+                                    setFormState({});
                                 },
                             });
                         }}
