@@ -335,8 +335,7 @@
             </a>
             &nbsp;
             &nbsp;
-            <a href="{{ route('order.download', ['uuid' => $order->uuid, 'isCustomer' => $isCustomer ? '1' : '0']) }}"
-                class="button success">
+            <a href="{{ url('/api/v1/orders-pdf/' . $order->uuid . '/' . ($isCustomer ? '1' : '0')) }}" class="button success">
                 Download Invoice
             </a>
         </div>

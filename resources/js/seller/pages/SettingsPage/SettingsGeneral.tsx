@@ -1,12 +1,14 @@
 import { ColorInput } from "@seller/components";
 import useForm from "@seller/hooks/useForm";
 import useStore from "@seller/hooks/useStore";
+import useString from "@seller/hooks/useString";
 import { Button, Card, Label, Textarea, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const SettingsGeneral = () => {
     const { store, update } = useStore();
-    const { handleChange, formState, formErrors } = useForm({
+    const { getSlug } = useString();
+    const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
         default: {
             id: store?.id,
@@ -48,6 +50,10 @@ const SettingsGeneral = () => {
                                     event: React.ChangeEvent<HTMLInputElement>
                                 ) => {
                                     handleChange(event);
+                                    setFormState((prev: any) => ({
+                                        ...prev,
+                                        slug: getSlug(event.target.value),
+                                    }));
                                 }}
                                 required
                             />

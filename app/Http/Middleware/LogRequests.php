@@ -24,7 +24,7 @@ class LogRequests
             'body' => json_encode($request->all()),
             'ip' => $request->ip(),
         ]);
-
+        
         return $next($request);
     }
 }

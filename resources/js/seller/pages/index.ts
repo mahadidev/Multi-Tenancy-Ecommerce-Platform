@@ -15,9 +15,9 @@ export { default as ProductEditPage } from "./ProductsPage/ProductEditPage/Produ
 export { default as ProductsPage } from "./ProductsPage/ProductsPage";
 
 // blogs pages
-export { default as BlogEditPage } from "./BlogsPage/BlogEditPage/BlogEditPage";
-export { default as BlogCreatePage } from "./BlogsPage/BlogCreatePage/BlogCreatePage";
 export { default as BlogCategories } from "./BlogsPage/BlogCategories/BlogCategories";
+export { default as BlogCreatePage } from "./BlogsPage/BlogCreatePage/BlogCreatePage";
+export { default as BlogEditPage } from "./BlogsPage/BlogEditPage/BlogEditPage";
 export { default as BlogsPage } from "./BlogsPage/BlogsPage";
 
 // store pages pages

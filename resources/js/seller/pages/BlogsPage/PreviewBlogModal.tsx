@@ -1,6 +1,6 @@
+import { BlogType } from "@type/blogType";
 import { Button, Modal } from "flowbite-react";
 import { FC, useState } from "react";
-import { BlogType } from "@type/blogType";
 import { FaEye } from "react-icons/fa";
 
 interface PropsType {
@@ -25,26 +25,29 @@ const PreviewPostModal: FC<PropsType> = function (props) {
             <Modal onClose={() => setOpen(false)} show={isOpen}>
                 <Modal.Header>Preview Blog Post</Modal.Header>
                 <Modal.Body>
-                    
-                  <div className="space-y-6">
-                    <h1 className="text-2xl dark:text-white font-bold">{props.blog.title}</h1>
-                    <img src={props.blog.image} alt={props.blog.title} />
-                    <p className="dark:text-white">{props.blog.content}</p>
-                  </div>
-
-
+                    <div className="space-y-6">
+                        <h1 className="text-2xl dark:text-white font-bold">
+                            {props.blog.title}
+                        </h1>
+                        <img src={props.blog.image} alt={props.blog.title} />
+                        <p
+                            className="dark:text-white"
+                            dangerouslySetInnerHTML={{
+                                __html: props.blog.content,
+                            }}
+                        ></p>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
-
-                <div className="flex justify-end w-full mt-6">
-                    <Button
-                        color="primary"
-                        onClick={() => {
-                            setOpen(false);
-                        }}
-                    >
-                        Close
-                    </Button>
+                    <div className="flex justify-end w-full mt-6">
+                        <Button
+                            color="primary"
+                            onClick={() => {
+                                setOpen(false);
+                            }}
+                        >
+                            Close
+                        </Button>
                     </div>
                 </Modal.Footer>
             </Modal>
