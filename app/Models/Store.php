@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Store extends Model
 {
@@ -102,5 +103,29 @@ class Store extends Model
 
     public function categories(){
         return $this->hasMany(Category::class);
+    }
+
+    public function uniqueVisitorsToday()
+    {
+        return DB::table('store_visitors')
+            ->where('store_id', $this->id)
+            ->whereDate('visited_at', now()->toDateString())
+            ->distinct('ip_address')
+            ->count();
+    }
+
+    public function visitors()
+    {
+        return DB::table('store_visitors')
+            ->where('store_id', $this->id)
+            ->count();
+    }
+
+    public function uniqueVisitors()
+    {
+        return DB::table('store_visitors')
+            ->where('store_id', $this->id)
+            ->distinct('ip_address')
+            ->count();
     }
 }
