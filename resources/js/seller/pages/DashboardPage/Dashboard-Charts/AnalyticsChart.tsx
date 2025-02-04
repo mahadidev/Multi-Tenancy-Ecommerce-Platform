@@ -9,7 +9,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({ series }) => {
     const options = {
         chart: {
             type: "bar",
-            foreColor: "#ccc",
+            foreColor: "#6B7280",
             height: 450,
             toolbar: { show: false },
         },
@@ -53,7 +53,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({ series }) => {
             options={options!}
             series={series}
             type="bar"
-            height={350}
+            height={450}
         />
     );
 };

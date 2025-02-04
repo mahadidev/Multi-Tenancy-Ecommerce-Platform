@@ -1,47 +1,32 @@
 import useDashboardAnalytics from "@seller/hooks/useDashboradAnalytics";
-import React, { FC } from "react";
-import { FaBox, FaList, FaShoppingCart, FaUsers } from "react-icons/fa";
-import AnalyticsChart from "./AnalyticsChart";
-import OverViewCard from "./OverViewCard";
+import { Card } from "flowbite-react";
+import { FC } from "react";
+import AnalyticsChart from "./Dashboard-Charts/AnalyticsChart";
+import OverviewChart from "./Dashboard-Charts/OverViewChart";
 
 const DashboardPage: FC = function () {
     const { analytics } = useDashboardAnalytics();
 
     //  orders analytics chart data
-    const dataSeries: any[] = [
+    const orderAnalyticsDataSeries: any[] = [
         { name: "Revenue", data: [50, 70, 65, 55, 80, 75, 60] },
         { name: "Orders", data: [30, 45, 60, 40, 55, 70, 50] },
     ];
 
     // real data comes from api
-    // const dataSeries: any[] = [
+    // const orderAnalyticsDataSeries: any[] = [
     //     { name: "Revenue", data: analytics?.order_analytics?.monthly_revenues },
     //     { name: "Orders", data: analytics?.order_analytics?.orders },
     // ];
 
-    // stats
-    const stats: DashboardStatsType[] = [
-        {
-            title: "Products",
-            value: analytics?.products_count || 0,
-            icon: <FaBox className="text-blue-500 text-2xl" />,
-        },
-        {
-            title: "Categories",
-            value: analytics?.categories_count || 0,
-            icon: <FaList className="text-green-500 text-2xl" />,
-        },
-        {
-            title: "Orders",
-            value: analytics?.orders_count || 0,
-            icon: <FaShoppingCart className="text-yellow-500 text-2xl" />,
-        },
-        {
-            title: "Customers",
-            value: analytics?.customers_count || 0,
-            icon: <FaUsers className="text-red-500 text-2xl" />,
-        },
+    // overview chart data analytics
+    const overviewChartData: number[] = [
+        analytics?.products_count || 0,
+        analytics?.categories_count || 0,
+        analytics?.orders_count || 6,
+        analytics?.customers_count || 8,
     ];
+
     return (
         <div className="block border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
             <div className="mb-4">
@@ -49,33 +34,22 @@ const DashboardPage: FC = function () {
                     Dashboard Analytics
                 </h1>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
-                {stats?.map((stat, idx) => (
-                    <OverViewCard key={idx} stat={stat} />
-                ))}
-            </div>
 
             <div className="grid xl:grid-cols-2 gap-4">
-                <div className="rounded-lg bg-[#2b384e]">
-                    <p className="pl-5 pt-5 text-xl font-bold text-white">
-                        Order -{" "}
-                        {analytics?.order_analytics?.average_order_value || 0}
-                    </p>
-                    <p className="pl-5 pt-2 text-xl font-bold text-white">
-                        Revenue -{" "}
-                        {analytics?.order_analytics?.total_revenue || 0} BDT
+                <Card className="rounded-lg dark:bg-[#2b384e] h-[580px]">
+                    <p className="pl-5 pb-8 text-xl font-bold dark:text-white">
+                        Order & Revenue
                     </p>
 
-                    <AnalyticsChart series={dataSeries} />
-                </div>
-                <div className=" rounded-lg">
-                    {/* <Chart
-                        type="bar"
-                        // @ts-ignore
-                        options={state?.options!}
-                        series={state?.series}
-                        height={500}
-                    /> */}
+                    <AnalyticsChart series={orderAnalyticsDataSeries} />
+                </Card>
+                <div className="rounded-lg">
+                    <Card className="rounded-lg dark:bg-[#2b384e] h-[580px]">
+                        <p className="pl-5 text-xl pb-10 font-bold dark:text-white">
+                            Acquisition Overview
+                        </p>
+                        <OverviewChart series={overviewChartData} />{" "}
+                    </Card>
                 </div>
             </div>
         </div>
@@ -83,9 +57,3 @@ const DashboardPage: FC = function () {
 };
 
 export default DashboardPage;
-
-export interface DashboardStatsType {
-    title: string;
-    value: number;
-    icon: React.ReactElement;
-}
