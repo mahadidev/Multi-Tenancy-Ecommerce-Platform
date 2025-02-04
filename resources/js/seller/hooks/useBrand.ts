@@ -4,11 +4,14 @@ import {
     UpdateBrandPayloadType,
     useCreateBrandMutation,
     useDeleteBrandMutation,
+    useFetchBrandsQuery,
     useUpdateBrandMutation,
 } from "@seller/store/reducers/brandApi";
 import { useAppSelector } from "@seller/store/store";
 
 const useBrand = () => {
+    useFetchBrandsQuery();
+
     // select brand
     const { brands, meta } = useAppSelector((state) => state.brand);
 
