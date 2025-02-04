@@ -79,6 +79,8 @@ class ProductService
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
 
+        // return $validatedData;
+
         // Create the product entry
         $product = Product::create([
             'store_id' => $validatedData['store_id'],
@@ -89,7 +91,7 @@ class ProductService
             'sku' => $validatedData['sku'] ?? null,
             'short_description' => $validatedData['short_description'] ?? null,
             'description' => $validatedData['description'] ?? null,
-            'thumbnail' => $validatedData['thumbnail'],
+            'thumbnail' => $validatedData['thumbnail'] ?? null,
             'attachments' => $validatedData['attachments'] ?? null,
             'price' => $validatedData['price'],
             'stock' => $validatedData['stock'] ?? null,
@@ -103,6 +105,7 @@ class ProductService
             'discount_amount' => $validatedData['discount_amount'] ?? null,
         ]);
 
+        // return $product;
         // Handle variants if they exist
         if ($request->has('variants')) {
             foreach ($request->variants as $variant) {
@@ -127,6 +130,8 @@ class ProductService
                 }
             }
         }
+
+        // return $product;
 
         // Return the created product response
         return new ProductResource($product);
