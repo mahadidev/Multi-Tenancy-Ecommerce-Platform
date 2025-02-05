@@ -5,12 +5,12 @@
 </mask>
 <g mask="url(#mask0)">
 <g filter="url(#filter0_d)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 20.0002H28V9.3335H0V20.0002Z" fill="#F12641"/>
+<path fillRule="evenodd" clip-rule="evenodd" d="M0 20.0002H28V9.3335H0V20.0002Z" fill="#F12641"/>
 </g>
 <g filter="url(#filter1_d)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 9.33333H28V0H0V9.33333Z" fill="#FFD648"/>
+<path fillRule="evenodd" clip-rule="evenodd" d="M0 9.33333H28V0H0V9.33333Z" fill="#FFD648"/>
 </g>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 20H10.6667V0H0V20Z" fill="#17A668"/>
+<path fillRule="evenodd" clip-rule="evenodd" d="M0 20H10.6667V0H0V20Z" fill="#17A668"/>
 </g>
 <defs>
 <filter id="filter0_d" x="0" y="9.3335" width="28" height="10.6667" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">

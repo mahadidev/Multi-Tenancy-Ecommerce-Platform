@@ -6,7 +6,7 @@ import { HiHome } from "react-icons/hi";
 import BrandsTable from "./BrandsTable";
 
 const BrandsPage: FC = function () {
-    useBrand()
+    useBrand();
 
     return (
         <>

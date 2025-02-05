@@ -26,7 +26,7 @@ import OnboardMiddleware from "../middleware/onboardMiddleware";
 import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
-import OrdersPage from "./OrdersPage";
+import OrdersPage from "./OrdersPage/OrdersPage";
 
 // routes
 export const PagesRoute: FC = function () {

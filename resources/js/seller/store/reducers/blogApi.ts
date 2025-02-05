@@ -40,7 +40,7 @@ export interface DeleteBlogPayloadType {
 export const blogApi = createApi({
     reducerPath: "blogApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Blogs", "Blog"],
+    tagTypes: ["Blogs"],
     endpoints: (builder) => ({
         fetchBlogs: builder.query<BlogsFetchResponseType, void>({
             query: (formData) =>
@@ -94,7 +94,7 @@ export const blogApi = createApi({
                     apiMethod: "PUT",
                     body: formData,
                 }),
-            invalidatesTags: ["Blog", "Blogs"],
+            invalidatesTags: ["Blogs"],
             transformErrorResponse: (error: any) => error.data,
         }),
         deleteBlog: builder.mutation<ApiResponseType, DeleteBlogPayloadType>({

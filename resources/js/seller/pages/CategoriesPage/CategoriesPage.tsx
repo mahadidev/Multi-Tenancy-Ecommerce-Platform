@@ -21,7 +21,10 @@ const CategoriesPage: FC = function () {
                                 </div>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item>Category</Breadcrumb.Item>
-                        </Breadcrumb>
+                        </Breadcrumb>{" "}
+                        <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+                            All Product Categories
+                        </h1>
                     </div>
                 </div>
             </div>

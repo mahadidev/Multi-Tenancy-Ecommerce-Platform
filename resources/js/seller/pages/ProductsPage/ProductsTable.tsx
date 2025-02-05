@@ -1,7 +1,7 @@
 import { DataTable } from "@seller/components";
 import useProduct from "@seller/hooks/useProduct";
 import { ProductType } from "@type/productType";
-import { Button, Checkbox, Label, Table } from "flowbite-react";
+import { Button, Table } from "flowbite-react";
 import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import CreateProductModal from "./CreateProductModal";
@@ -17,37 +17,6 @@ const ProductsTable = () => {
         <>
             <DataTable
                 columns={[
-                    {
-                        label: (
-                            <>
-                                {" "}
-                                <Label htmlFor="select-all" className="sr-only">
-                                    Select all
-                                </Label>
-                                <Checkbox id="select-all" name="select-all" />{" "}
-                            </>
-                        ),
-                        key: "id",
-                        render: () => (
-                            <Table.Cell className="w-4 p-4">
-                                <Checkbox
-                                    aria-describedby="checkbox-1"
-                                    id="checkbox-1"
-                                />
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
-                    {
-                        label: "ID",
-                        key: "id",
-                        render: (row: ProductType) => (
-                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.id}
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
                     {
                         label: "Name",
                         key: "name",
@@ -128,7 +97,8 @@ const ProductsTable = () => {
                 head={{
                     render: (_data: ProductType[]) => <CreateProductModal />,
                 }}
-                exportable={true}         filename="products"
+                exportable={true}
+                filename="products"
             />
         </>
     );
