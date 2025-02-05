@@ -63,5 +63,9 @@ class Blog extends Model
     {
         return $this->image ? url(Storage::url($this->image)) : null;
     }
-    
+
+    public function scopeAuthorized($query)
+    {
+        return $query->where('store_id', authStore());
+    }
 }
