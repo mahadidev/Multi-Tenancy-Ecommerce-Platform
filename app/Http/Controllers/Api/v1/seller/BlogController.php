@@ -25,7 +25,8 @@ class BlogController extends Controller
 
         // Build the base query
         $blogs = Blog::where('title', 'like', '%' . $search . '%')
-            ->where('user_id', Auth::id())
+            ->where('store_id', authStore())
+            ->orWhere('user_id', auth()->id())
             ->with('category')
             ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
@@ -112,7 +113,7 @@ class BlogController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $blog = Blog::with('category')->where('user_id', Auth::id())->find($id);
+        $blog = Blog::with('category')->where('store_id', authStore())->orWhere('user_id', auth()->id())->find($id);
 
         // show error if blog is not found
         if (!$blog) {
@@ -135,7 +136,7 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $blog = Blog::where('user_id', Auth::id())->find($id);
+        $blog = Blog::where('store_id', authStore())->orWhere('user_id', auth()->id())->find($id);
 
         if (!$blog) {
             return response()->json([
@@ -193,7 +194,7 @@ class BlogController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $blog = Blog::where('user_id', auth()->id())->find($id);
+        $blog = Blog::where('store_id', authStore())->orWhere('user_id', auth()->id())->find($id);
 
         if (!$blog) {
             return response()->json([
