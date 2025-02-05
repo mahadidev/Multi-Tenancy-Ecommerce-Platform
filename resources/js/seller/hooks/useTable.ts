@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export interface DataTablePropsType {
     columns: {
-        label?: string;
+        label?: string | ReactNode;
         key?: string;
         render: CallableFunction;
         sortable?: boolean;
