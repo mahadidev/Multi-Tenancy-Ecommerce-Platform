@@ -28,7 +28,7 @@ const DashboardPage: FC = function () {
     ];
 
     return (
-        <div className="block border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className="block bg-white p-4  dark:bg-gray-900">
             <div className="mb-4">
                 <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
                     Dashboard Analytics
@@ -36,7 +36,7 @@ const DashboardPage: FC = function () {
             </div>
 
             <div className="grid xl:grid-cols-2 gap-4">
-                <Card className="rounded-lg dark:bg-[#2b384e] h-[580px]">
+                <Card className="rounded-lg dark:bg-gray-800 h-[580px]">
                     <p className="pl-5 pb-8 text-xl font-bold dark:text-white">
                         Order & Revenue
                     </p>
@@ -44,7 +44,7 @@ const DashboardPage: FC = function () {
                     <AnalyticsChart series={orderAnalyticsDataSeries} />
                 </Card>
                 <div className="rounded-lg">
-                    <Card className="rounded-lg dark:bg-[#2b384e] h-[580px]">
+                    <Card className="rounded-lg dark:bg-gray-800 h-[580px]">
                         <p className="pl-5 text-xl pb-10 font-bold dark:text-white">
                             Acquisition Overview
                         </p>
