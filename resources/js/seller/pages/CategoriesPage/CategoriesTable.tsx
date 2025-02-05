@@ -105,6 +105,7 @@ const CategoriesTable = () => {
                     render: (_data: CategoryType[]) => <CreateCategoryModal />,
                 }}
                 exportable={true}
+                filename="product_categories"
             />
         </>
     );

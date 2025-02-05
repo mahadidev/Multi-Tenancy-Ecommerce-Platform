@@ -131,6 +131,7 @@ const BlogsTable = () => {
                     ),
                 }}
                 exportable={true}
+                filename="blogs"
             />
         </>
     );

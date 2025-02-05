@@ -33,7 +33,7 @@ const useTable = (props: DataTablePropsType) => {
         setData(props.data);
     }, [props.data]);
 
-    // hangle paginate page change
+    // handle paginate page change
     const onNextPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);

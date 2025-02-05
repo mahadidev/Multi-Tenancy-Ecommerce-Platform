@@ -93,6 +93,7 @@ const BrandsTable = () => {
                     render: (_data: BrandType[]) => <CreateBrandModal />,
                 }}
                 exportable={true}
+                filename="brands"
             />
         </>
     );
