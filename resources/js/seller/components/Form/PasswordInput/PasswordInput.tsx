@@ -7,17 +7,17 @@ const PasswordInput: FC<any> = (props) => {
     return (
         <div className="relative">
             <TextInput className="w-full h-full z-10" {...{ ...props, type }} />
-            <div className="absolute right-1 top-[13%]">
+            <div className="absolute h-max right-2 top-0 bottom-0 my-auto">
                 <button
                     onClick={() =>
                         setType(type === "text" ? "password" : "text")
                     }
-                    className="flex justify-center items-center py-2 px-3 rounded-lg bg-gray-200 dark:bg-[#1F2937] text-gray-800 dark:text-white"
+                    className="flex justify-center items-center py-1 px-2 rounded-md bg-gray-200 dark:bg-[#1F2937] text-gray-800 dark:text-white"
                 >
                     {type === "password" ? (
-                        <FiEye className="text-gray-600 dark:text-white" />
+                        <FiEye className="text-sm text-gray-900 dark:text-white" />
                     ) : (
-                        <FiEyeOff className="text-gray-600 dark:text-white" />
+                        <FiEyeOff className="text-sm text-gray-900 dark:text-white" />
                     )}
                 </button>
             </div>
