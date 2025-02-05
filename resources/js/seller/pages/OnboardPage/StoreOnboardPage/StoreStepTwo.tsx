@@ -1,4 +1,4 @@
-import { ColorInput, FileInput } from '@seller/components';
+import { FileInput } from '@seller/components';
 import { FormErrorType, FormStateType } from '@seller/hooks/useForm';
 import { Button, Label } from 'flowbite-react';
 import { ChangeEventHandler, FC } from 'react';
@@ -37,7 +37,7 @@ const StoreStepTwo: FC<PropsType> = function (props) {
 						placeholder="Click to upload logo"
 					/>
 				</div>
-				<div className="flex flex-col gap-y-2">
+				{/* <div className="flex flex-col gap-y-2">
 					<Label htmlFor="primaryColor">Primary Color</Label>
 					<ColorInput
 						id="primaryColor"
@@ -66,7 +66,7 @@ const StoreStepTwo: FC<PropsType> = function (props) {
 						}
 						onChange={props.handleChange}
 					/>
-				</div>
+				</div> */}
 
 				<div className="mb-6 flex items-center justify-between">
 					<Button
