@@ -1,7 +1,7 @@
 import { DataTable } from "@seller/components";
 import useCategory from "@seller/hooks/useCategory";
 import { CategoryType } from "@type/categoryType";
-import { Table } from "flowbite-react";
+import { Checkbox, Label, Table } from "flowbite-react";
 import CreateCategoryModal from "./CreateCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
@@ -14,6 +14,27 @@ const CategoriesTable = () => {
         <>
             <DataTable
                 columns={[
+                    {
+                        label: (
+                            <>
+                                {" "}
+                                <Label htmlFor="select-all" className="sr-only">
+                                    Select all
+                                </Label>
+                                <Checkbox id="select-all" name="select-all" />{" "}
+                            </>
+                        ),
+                        key: "id",
+                        render: () => (
+                            <Table.Cell className="w-4 p-4">
+                                <Checkbox
+                                    aria-describedby="checkbox-1"
+                                    id="checkbox-1"
+                                />
+                            </Table.Cell>
+                        ),
+                        sortable: true,
+                    },
                     {
                         label: "ID",
                         key: "id",
@@ -84,6 +105,7 @@ const CategoriesTable = () => {
                     render: (_data: CategoryType[]) => <CreateCategoryModal />,
                 }}
                 exportable={true}
+                filename="product_categories"
             />
         </>
     );

@@ -1,6 +1,8 @@
+import { DataTable } from "@seller/components";
 import useCategory from "@seller/hooks/useCategory";
 import { CategoryType } from "@type/categoryType";
 import { Checkbox, Label, Table } from "flowbite-react";
+import CreateBlogCategoryModal from "./CreateBlogCategoryModal";
 import DeleteBlogCategoryModal from "./DeleteBlogCategoryModal";
 import EditBlogCategoryModal from "./EditBlogCategoryModal";
 
@@ -9,71 +11,105 @@ const BlogCategoriesTable = () => {
     const { blogCategories } = useCategory();
 
     return (
-        <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-            <Table.Head
-                className="bg-gray-100 dark:bg-gray-700"
-                theme={{
-                    cell: {
-                        base: "p-4 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400",
-                    },
-                }}
-            >
-                <Table.HeadCell className="p-4">
-                    <Label htmlFor="select-all" className="sr-only">
-                        Select all
-                    </Label>
-                    <Checkbox id="select-all" name="select-all" />
-                </Table.HeadCell>
-                <Table.HeadCell>SL</Table.HeadCell>
-                <Table.HeadCell>Post Titie</Table.HeadCell>
-                <Table.HeadCell>Slug</Table.HeadCell>
-                {/* <Table.HeadCell>Parent</Table.HeadCell> */}
-                <Table.HeadCell>Created At</Table.HeadCell>
-                <Table.HeadCell />
-            </Table.Head>
-            <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                {blogCategories
-                    ?.filter((category) => category.type === "post")
-                    ?.map((category: CategoryType, idx: number) => (
-                        <Table.Row
-                            key={idx}
-                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
+        <>
+            <DataTable
+                columns={[
+                    {
+                        label: (
+                            <>
+                                {" "}
+                                <Label htmlFor="select-all" className="sr-only">
+                                    Select all
+                                </Label>
+                                <Checkbox id="select-all" name="select-all" />{" "}
+                            </>
+                        ),
+                        key: "id",
+                        render: () => (
                             <Table.Cell className="w-4 p-4">
                                 <Checkbox
                                     aria-describedby="checkbox-1"
                                     id="checkbox-1"
                                 />
                             </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {idx + 1}
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        label: "ID",
+                        key: "id",
+                        render: (row: CategoryType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row.id}
                             </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {category.name}
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        label: "Name",
+                        key: "name",
+                        render: (row: CategoryType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row.name}
                             </Table.Cell>
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {category.slug}
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        label: "Slug",
+                        key: "slug",
+                        render: (row: CategoryType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row.slug}
                             </Table.Cell>
-                            {/* <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                            {category.has_parent?.name}
-                        </Table.Cell> */}
-                            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                                {category.created_at}
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        label: "Parent",
+                        key: "parent",
+                        render: (row: CategoryType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row?.has_parent?.name}
                             </Table.Cell>
+                        ),
+                        sortable: false,
+                    },
+                    {
+                        label: "Created At",
+                        key: "created_at",
+                        render: (row: CategoryType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row.created_at}
+                            </Table.Cell>
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        render: (row: CategoryType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                    <EditBlogCategoryModal
-                                        category={category}
-                                    />
-                                    <DeleteBlogCategoryModal
-                                        category={category}
-                                    />
+                                    <EditBlogCategoryModal category={row} />
+                                    <DeleteBlogCategoryModal category={row} />
                                 </div>
                             </Table.Cell>
-                        </Table.Row>
-                    ))}
-            </Table.Body>
-        </Table>
+                        ),
+                    },
+                ]}
+                search={{
+                    placeholder: "Search for category",
+                    columns: ["name", "slug", "parent", "created_at"],
+                }}
+                data={blogCategories}
+                head={{
+                    render: (_data: CategoryType[]) => (
+                        <CreateBlogCategoryModal />
+                    ),
+                }}
+                exportable={true}
+                filename="blog_category"
+            />
+        </>
     );
 };
 export default BlogCategoriesTable;
