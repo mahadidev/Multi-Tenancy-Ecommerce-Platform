@@ -22,17 +22,18 @@ class BlogController extends Controller
         $search = $request->input('search'); // Search keyword
         $sort = $request->input('sort'); // Sort order
         $perPage = $request->input('per_page'); // Items per page
-
+    
         // Build the base query
-        $blogs = Blog::where('title', 'like', '%' . $search . '%')
-            ->where('store_id', authStore())
-            ->orWhere('user_id', auth()->id())
+        $blogs = Blog::authorized()
             ->with('category')
+            ->when($search, function ($query) use ($search) {
+                $query->whereRaw('LOWER(title) LIKE ?', ['%' . strtolower($search) . '%'])->orWhereRaw('LOWER(slug) LIKE ?', ['%' . strtolower($search) . '%']);
+            })
             ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
-
+    
         // Paginate or get all results based on the presence of `per_page`
         $paginated = $perPage ? $blogs->paginate($perPage) : $blogs->get();
-
+    
         // Prepare the response
         $response = [
             'status' => 200,
@@ -40,7 +41,7 @@ class BlogController extends Controller
                 'blogs' => BlogResource::collection($paginated),
             ],
         ];
-
+    
         // Add pagination meta data if `per_page` is provided
         if ($perPage) {
             $response['meta'] = [
@@ -54,10 +55,10 @@ class BlogController extends Controller
                 'per_page' => $paginated->perPage(),
             ];
         }
-
+    
         return response()->json($response, 200);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -113,7 +114,7 @@ class BlogController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $blog = Blog::with('category')->where('store_id', authStore())->orWhere('user_id', auth()->id())->find($id);
+        $blog = Blog::with('category')->authorized()->find($id);
 
         // show error if blog is not found
         if (!$blog) {
@@ -136,7 +137,7 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $blog = Blog::where('store_id', authStore())->orWhere('user_id', auth()->id())->find($id);
+        $blog = Blog::authorized()->find($id);
 
         if (!$blog) {
             return response()->json([
@@ -194,7 +195,7 @@ class BlogController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $blog = Blog::where('store_id', authStore())->orWhere('user_id', auth()->id())->find($id);
+        $blog = Blog::authorized()->find($id);
 
         if (!$blog) {
             return response()->json([
