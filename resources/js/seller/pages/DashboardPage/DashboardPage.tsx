@@ -8,16 +8,16 @@ const DashboardPage: FC = function () {
     const { analytics } = useDashboardAnalytics();
 
     //  orders analytics chart data
-    const orderAnalyticsDataSeries: any[] = [
-        { name: "Revenue", data: [50, 70, 65, 55, 80, 75, 60] },
-        { name: "Orders", data: [30, 45, 60, 40, 55, 70, 50] },
-    ];
+    // const orderAnalyticsDataSeries: any[] = [
+    //     { name: "Revenue", data: [50, 70, 65, 55, 80, 75, 60] },
+    //     { name: "Orders", data: [30, 45, 60, 40, 55, 70, 50] },
+    // ];
 
     // real data comes from api
-    // const orderAnalyticsDataSeries: any[] = [
-    //     { name: "Revenue", data: analytics?.order_analytics?.monthly_revenues },
-    //     { name: "Orders", data: analytics?.order_analytics?.orders },
-    // ];
+    const orderAnalyticsDataSeries: any[] = [
+        { name: "Revenue", data: analytics?.order_analytics?.monthly_revenues },
+        { name: "Orders", data: analytics?.order_analytics?.orders },
+    ];
 
     // overview chart data analytics
     const overviewChartData: number[] = [

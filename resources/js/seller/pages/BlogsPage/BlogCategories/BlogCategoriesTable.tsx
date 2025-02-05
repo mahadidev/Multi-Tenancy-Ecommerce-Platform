@@ -107,7 +107,7 @@ const BlogCategoriesTable = () => {
                     ),
                 }}
                 exportable={true}
-                filename="blog_category"
+                filename="blog_categories"
             />
         </>
     );
