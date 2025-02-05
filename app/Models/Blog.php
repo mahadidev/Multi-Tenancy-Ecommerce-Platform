@@ -14,6 +14,7 @@ class Blog extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'store_id',
         'title',
         'slug',
         'image',
@@ -35,7 +36,8 @@ class Blog extends Model
         static::creating(function ($blog) {
             // Set the authenticated user's ID when a new blog is being created
             if (Auth::check()) {
-                $blog->user_id = Auth::id();
+                $blog->user_id = auth()->id();
+                $blog->store_id = authStore();
             }
 
             // Auto-generate slug from title if it's not provided
