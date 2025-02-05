@@ -120,7 +120,7 @@ class BlogController extends Controller
         if (!$blog) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Blog not found',
+                'message' => 'Invalid blog Id',
             ], 404);
         }
 
@@ -142,7 +142,7 @@ class BlogController extends Controller
         if (!$blog) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Blog not found',
+                'message' => 'Invalid blog Id',
             ], 404);
         }
 
@@ -200,7 +200,7 @@ class BlogController extends Controller
         if (!$blog) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Blog not found',
+                'message' => 'Invalid blog Id',
             ], 404);
         }
 
