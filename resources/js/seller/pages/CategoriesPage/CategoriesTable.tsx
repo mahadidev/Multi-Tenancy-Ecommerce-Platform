@@ -88,7 +88,7 @@ const CategoriesTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for category",
+                    placeholder: "Search for products category...",
                     columns: ["name", "slug", "parent", "created_at"],
                 }}
                 data={productCategories}

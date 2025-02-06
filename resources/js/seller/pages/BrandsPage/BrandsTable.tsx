@@ -54,7 +54,7 @@ const BrandsTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for brand",
+                    placeholder: "Search for brand...",
                     columns: ["name", "slug", "created_at"],
                 }}
                 data={brands}

@@ -3,7 +3,8 @@ import StatusBadge from "@seller/components/Badge/StatusBadge";
 import useOrders from "@seller/hooks/useOrders";
 import { OrderType } from "@type/orderType";
 import { Button, Table } from "flowbite-react";
-import { HiEye, HiPencilAlt } from "react-icons/hi";
+import { HiEye } from "react-icons/hi";
+import EditOrderStatusModal from "./EditOrderStatusModal";
 
 const OrdersTable = () => {
     // get the orders
@@ -64,23 +65,13 @@ const OrdersTable = () => {
                         sortable: true,
                     },
                     {
-                        render: () => (
+                        render: (row: OrderType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
+                                    <EditOrderStatusModal order={row} />
                                     <Button
                                         size="sm"
-                                        color="primary"
-                                        className="p-0"
-                                        // onClick={() => setOpen(true)}
-                                    >
-                                        <div className="flex items-center gap-x-2">
-                                            <HiPencilAlt className="h-5 w-5" />
-                                            Edit Status
-                                        </div>
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        color="dark"
+                                        color="gray"
                                         className="p-0"
                                         // onClick={() => setOpen(true)}
                                     >
@@ -95,7 +86,7 @@ const OrdersTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for category",
+                    placeholder: "Search for order...",
                     columns: ["order_uuid", "user_name", "total", "created_at"],
                 }}
                 data={orders!}

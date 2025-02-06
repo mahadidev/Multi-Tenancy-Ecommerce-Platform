@@ -9,34 +9,19 @@ export const orderApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ["Orders"],
     endpoints: (builder) => ({
-        // login: builder.mutation<any, any>({
-        //     query: (formData) =>
-        //         createRequest({
-        //             url: `${PREFIX}/login`,
-        //             method: "post",
-        //             body: formData,
-        //         }),
-        //     invalidatesTags: ["Orders"],
-        //     transformErrorResponse: (error: any) => error.data,
-        //     async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-        //         await queryFulfilled.then((response) => {
-        //             dispatch(
-        //                 setAuth({
-        //                     user: response.data.data.user,
-        //                     accessToken: response.data.data.access_token,
-        //                 })
-        //             );
-        //             dispatch(
-        //                 setAuthStore({
-        //                     store: response.data.data.logged_store,
-        //                     stores: response.data.data.stores,
-        //                 })
-        //             );
-        //         });
-        //     },
-        // }),
+        updateOrderStatus: builder.mutation<any, any>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/orders/update/status/${formData?.id}`,
+                    method: "post",
+                    apiMethod: "PUT",
+                    body: formData,
+                }),
+            invalidatesTags: ["Orders"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
 
-        // fetch user profile information
+        // fetch orders
         fetchOrders: builder.query<OrdersApiResponse, void>({
             query: (formData) =>
                 createRequest({
@@ -57,4 +42,4 @@ export const orderApi = createApi({
     }),
 });
 
-export const { useFetchOrdersQuery } = orderApi;
+export const { useFetchOrdersQuery, useUpdateOrderStatusMutation } = orderApi;
