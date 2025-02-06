@@ -6,10 +6,10 @@
 <g mask="url(#mask0)">
 <rect width="28" height="20" fill="#86D7FF"/>
 <g filter="url(#filter0_d)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M14 2.6665L20 17.3332H8L14 2.6665Z" fill="white"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M14 2.6665L20 17.3332H8L14 2.6665Z" fill="white"/>
 </g>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M13.9999 5.3335L18.6666 17.3335H9.33325L13.9999 5.3335Z" fill="#262626"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M14 9.3335L20 17.3335H8L14 9.3335Z" fill="#FFDA57"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M13.9999 5.3335L18.6666 17.3335H9.33325L13.9999 5.3335Z" fill="#262626"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M14 9.3335L20 17.3335H8L14 9.3335Z" fill="#FFDA57"/>
 </g>
 <defs>
 <filter id="filter0_d" x="8" y="2.6665" width="12" height="15.6667" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">

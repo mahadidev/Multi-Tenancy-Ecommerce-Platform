@@ -16,7 +16,6 @@ const BlogEditPage: React.FC = () => {
     const { id } = useParams();
     const { blogCategories } = useCategory();
     const { update, blog, fetchBlog } = useBlog();
-    // const { files } = useFile();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         default: blog,
     });

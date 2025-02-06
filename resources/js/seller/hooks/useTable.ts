@@ -4,7 +4,7 @@ export interface DataTablePropsType {
     columns: {
         label?: string | ReactNode;
         key?: string;
-        render: CallableFunction;
+        render?: CallableFunction;
         sortable?: boolean;
     }[];
     data: any[];
@@ -19,8 +19,8 @@ const useTable = (props: DataTablePropsType) => {
         key: string;
         dir: "asc" | "desc";
     } | null>();
-    const [columns] = useState(props.columns);
-    const [data, setData] = useState(props.data);
+    const [columns] = useState(props?.columns);
+    const [data, setData] = useState(props?.data);
 
     const rowsPerPage = 10;
     const totalPages = Math.ceil(data.length / rowsPerPage);
@@ -30,8 +30,8 @@ const useTable = (props: DataTablePropsType) => {
 
     // refresh
     useEffect(() => {
-        setData(props.data);
-    }, [props.data]);
+        setData(props?.data);
+    }, [props?.data]);
 
     // handle paginate page change
     const onNextPage = (page: number) => {
@@ -53,7 +53,7 @@ const useTable = (props: DataTablePropsType) => {
     }) => {
         data = [...data];
         if (sort?.dir === "desc") {
-            return (Array.isArray(data) ? data : data.split("")).sort(
+            return (Array?.isArray(data) ? data : data?.split(""))?.sort(
                 (x: any, y: any) => {
                     if (x[sort?.key] < y[sort?.key]) return -1;
                     if (x[sort?.key] > y[sort?.key]) return 1;
@@ -61,7 +61,7 @@ const useTable = (props: DataTablePropsType) => {
                 }
             );
         } else if (sort?.dir === "asc") {
-            return (Array.isArray(data) ? data : data.split("")).sort(
+            return (Array?.isArray(data) ? data : data?.split(""))?.sort(
                 (x: any, y: any) => {
                     if (x[sort?.key] > y[sort?.key]) return -1;
                     if (x[sort?.key] < y[sort?.key]) return 1;

@@ -87,6 +87,9 @@ const DataTable: FC<PropsType> = (props) => {
                                         },
                                     }}
                                 >
+                                    <Table.HeadCell className="!text-center">
+                                        SL
+                                    </Table.HeadCell>
                                     {columns.map((column, index: number) => (
                                         <Table.HeadCell
                                             key={index}
@@ -126,9 +129,9 @@ const DataTable: FC<PropsType> = (props) => {
                                                                     viewBox="0 0 24 24"
                                                                 >
                                                                     <path
-                                                                        fill-rule="evenodd"
+                                                                        fillRule="evenodd"
                                                                         d="M5.575 13.729C4.501 15.033 5.43 17 7.12 17h9.762c1.69 0 2.618-1.967 1.544-3.271l-4.881-5.927a2 2 0 0 0-3.088 0l-4.88 5.927Z"
-                                                                        clip-rule="evenodd"
+                                                                        clipRule="evenodd"
                                                                     />
                                                                 </svg>
                                                             </span>
@@ -150,9 +153,9 @@ const DataTable: FC<PropsType> = (props) => {
                                                                     viewBox="0 0 24 24"
                                                                 >
                                                                     <path
-                                                                        fill-rule="evenodd"
+                                                                        fillRule="evenodd"
                                                                         d="M18.425 10.271C19.499 8.967 18.57 7 16.88 7H7.12c-1.69 0-2.618 1.967-1.544 3.271l4.881 5.927a2 2 0 0 0 3.088 0l4.88-5.927Z"
-                                                                        clip-rule="evenodd"
+                                                                        clipRule="evenodd"
                                                                     />
                                                                 </svg>
                                                             </span>
@@ -164,20 +167,28 @@ const DataTable: FC<PropsType> = (props) => {
                                     ))}
                                 </Table.Head>
                                 <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                                    {paginate.currentData.map((row: any) => (
-                                        <Table.Row
-                                            key={row.id}
-                                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        >
-                                            {columns.map((column) => (
-                                                <>
-                                                    {column.render
-                                                        ? column.render(row)
-                                                        : row[column.key ?? 0]}
-                                                </>
-                                            ))}
-                                        </Table.Row>
-                                    ))}
+                                    {paginate.currentData.map(
+                                        (row: any, idx) => (
+                                            <Table.Row
+                                                key={row.id}
+                                                className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            >
+                                                <td className="!text-center font-bold dark:text-white">
+                                                    {idx + 1}
+                                                </td>
+                                                {columns.map((column, idx) => (
+                                                    <td key={idx}>
+                                                        {column.render
+                                                            ? column.render(row)
+                                                            : row[
+                                                                  column.key ??
+                                                                      0
+                                                              ]}
+                                                    </td>
+                                                ))}
+                                            </Table.Row>
+                                        )
+                                    )}
                                 </Table.Body>
                             </Table>
                         </div>

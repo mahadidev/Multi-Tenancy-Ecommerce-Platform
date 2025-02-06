@@ -8,16 +8,16 @@ const DashboardPage: FC = function () {
     const { analytics } = useDashboardAnalytics();
 
     //  orders analytics chart data
-    const orderAnalyticsDataSeries: any[] = [
-        { name: "Revenue", data: [50, 70, 65, 55, 80, 75, 60] },
-        { name: "Orders", data: [30, 45, 60, 40, 55, 70, 50] },
-    ];
+    // const orderAnalyticsDataSeries: any[] = [
+    //     { name: "Revenue", data: [50, 70, 65, 55, 80, 75, 60] },
+    //     { name: "Orders", data: [30, 45, 60, 40, 55, 70, 50] },
+    // ];
 
     // real data comes from api
-    // const orderAnalyticsDataSeries: any[] = [
-    //     { name: "Revenue", data: analytics?.order_analytics?.monthly_revenues },
-    //     { name: "Orders", data: analytics?.order_analytics?.orders },
-    // ];
+    const orderAnalyticsDataSeries: any[] = [
+        { name: "Revenue", data: analytics?.order_analytics?.monthly_revenues },
+        { name: "Orders", data: analytics?.order_analytics?.orders },
+    ];
 
     // overview chart data analytics
     const overviewChartData: number[] = [
@@ -49,9 +49,9 @@ const DashboardPage: FC = function () {
                                 xmlns="http://www.w3.org/2000/svg"
                             >
                                 <path
-                                    fill-rule="evenodd"
+                                    fillRule="evenodd"
                                     d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"
+                                    clipRule="evenodd"
                                 ></path>
                             </svg>
                         </div>
@@ -78,9 +78,9 @@ const DashboardPage: FC = function () {
                                 xmlns="http://www.w3.org/2000/svg"
                             >
                                 <path
-                                    fill-rule="evenodd"
+                                    fillRule="evenodd"
                                     d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"
+                                    clipRule="evenodd"
                                 ></path>
                             </svg>
                         </div>

@@ -4,8 +4,8 @@
 <rect width="28" height="20" rx="2" fill="white"/>
 </mask>
 <g mask="url(#mask0)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 13.3332H28V6.6665H0V13.3332Z" fill="#118357"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 20.0002H28V13.3335H0V20.0002Z" fill="#D8343D"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 6.66667H28V0H0V6.66667Z" fill="#FEC34B"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M0 13.3332H28V6.6665H0V13.3332Z" fill="#118357"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M0 20.0002H28V13.3335H0V20.0002Z" fill="#D8343D"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M0 6.66667H28V0H0V6.66667Z" fill="#FEC34B"/>
 </g>
 </svg>

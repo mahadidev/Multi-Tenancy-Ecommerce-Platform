@@ -1,7 +1,7 @@
 import { DataTable } from "@seller/components";
 import useBrand from "@seller/hooks/useBrand";
 import { BrandType } from "@type/brandType";
-import { Checkbox, Label, Table } from "flowbite-react";
+import { Table } from "flowbite-react";
 import CreateBrandModal from "./CreateBrandModal";
 import DeleteBrandModal from "./DeleteBrandModal";
 import EditBrandModal from "./EditBrandModal";
@@ -12,37 +12,6 @@ const BrandsTable = () => {
         <>
             <DataTable
                 columns={[
-                    {
-                        label: (
-                            <>
-                                {" "}
-                                <Label htmlFor="select-all" className="sr-only">
-                                    Select all
-                                </Label>
-                                <Checkbox id="select-all" name="select-all" />{" "}
-                            </>
-                        ),
-                        key: "id",
-                        render: () => (
-                            <Table.Cell className="w-4 p-4">
-                                <Checkbox
-                                    aria-describedby="checkbox-1"
-                                    id="checkbox-1"
-                                />
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
-                    {
-                        label: "ID",
-                        key: "id",
-                        render: (row: BrandType) => (
-                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.id}
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
                     {
                         label: "Name",
                         key: "name",
