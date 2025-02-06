@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Api\v1\OnBoarding\OnBoardingController;
+use App\Http\Controllers\Api\v1\Auth\GoogleLoginController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,5 +50,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('notifications/{id}', [NotificationController::class, 'view']);
         Route::get('notifications/mark/all-read', [NotificationController::class, 'markAllAsRead']);
     });
-});
 
+
+    Route::get('/auth/google', [GoogleLoginController::class, 'redirectToGoogle']);
+    Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
+});
