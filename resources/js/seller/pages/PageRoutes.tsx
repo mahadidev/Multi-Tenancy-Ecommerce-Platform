@@ -26,6 +26,7 @@ import OnboardMiddleware from "../middleware/onboardMiddleware";
 import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
+import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
 
 // routes
@@ -86,6 +87,12 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="my-account/profile-settings"
                                 element={<ProfileSettingsPage />}
+                            />
+
+                            {/* Notifications page */}
+                            <Route
+                                path="notifications"
+                                element={<NotificationsPage />}
                             />
                         </Route>
 
