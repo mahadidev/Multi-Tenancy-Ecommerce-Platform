@@ -16,7 +16,7 @@ interface PropsType {
     order: OrderType;
 }
 
-const EditOrderStatusModal: FC<PropsType> = function (props) {
+const UpdateOrderStatusModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const { updateOrderStatus } = useOrders();
     const { toaster } = useToast();
@@ -135,4 +135,4 @@ const EditOrderStatusModal: FC<PropsType> = function (props) {
     );
 };
 
-export default EditOrderStatusModal;
+export default UpdateOrderStatusModal;

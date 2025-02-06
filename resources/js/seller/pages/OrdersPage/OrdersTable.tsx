@@ -2,9 +2,9 @@ import { DataTable } from "@seller/components";
 import StatusBadge from "@seller/components/Badge/StatusBadge";
 import useOrders from "@seller/hooks/useOrders";
 import { OrderType } from "@type/orderType";
-import { Button, Table } from "flowbite-react";
-import { HiEye } from "react-icons/hi";
-import EditOrderStatusModal from "./EditOrderStatusModal";
+import { Table } from "flowbite-react";
+import OrderInfoModal from "./OrderInfoModal";
+import UpdateOrderStatusModal from "./UpdateOrderStatusModal";
 
 const OrdersTable = () => {
     // get the orders
@@ -68,18 +68,8 @@ const OrdersTable = () => {
                         render: (row: OrderType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                    <EditOrderStatusModal order={row} />
-                                    <Button
-                                        size="sm"
-                                        color="gray"
-                                        className="p-0"
-                                        // onClick={() => setOpen(true)}
-                                    >
-                                        <div className="flex items-center gap-x-2">
-                                            <HiEye className="h-5 w-5" />
-                                            Order Info
-                                        </div>
-                                    </Button>
+                                    <UpdateOrderStatusModal order={row} />
+                                    <OrderInfoModal order={row} />
                                 </div>
                             </Table.Cell>
                         ),

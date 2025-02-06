@@ -6,7 +6,7 @@ interface BadgeProps {
 const StatusBadge: React.FC<BadgeProps> = ({ status }) => {
     return (
         <span
-            className={`text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm ${getBadgeStyle(
+            className={`capitalize text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm ${getBadgeStyle(
                 status
             )}`}
         >
