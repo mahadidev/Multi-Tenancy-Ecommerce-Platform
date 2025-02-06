@@ -15,81 +15,107 @@ use Illuminate\Support\Str;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\StoreResource;
 
-class GoogleLoginController extends Controller
+class SocialLoginController extends Controller
 {
     public function redirectToGoogle(Request $request)
     {
         $storeId = $request->query('store_id');
         session(['store_id' => $storeId]); // Store store_id in session
-        return Socialite::driver('google')->stateless()->redirect();
+        return Socialite::driver('google')
+            ->stateless()
+            ->redirect();
     }
 
+    public function redirectToFacebook(Request $request)
+    {
+        $storeId = $request->query('store_id');
+        session(['store_id' => $storeId]); // Store store_id in session
+        return Socialite::driver('facebook')
+            ->stateless()
+            ->redirect();
+    }
 
     public function UserHandleGoogleCallback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
-            $storeId = session('store_id'); // Retrieve store_id from session
-
-            if (!$storeId) {
-                return response()->json(['status' => 404, 'message' => 'Store ID is not found']);
-            }
-
-            $store = Store::find($storeId);
-
-            if (!$store) {
-                return response()->json(['status' => 404, 'message' => 'Invalid store ID']);
-            }
-
-            $user = User::where('email', $googleUser->getEmail())->first();
-
-            if ($user) {
-                // If user exists but store_id is not associated, append it
-                if (!in_array($store->id, (array) $user->store_id)) {
-                    $user->store_id = array_merge((array) $user->store_id, [$store->id]);
-                    $user->save();
-                }
-            } else {
-                // Create new user
-                $user = User::create([
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'password' => Hash::make(Str::random(24)),
-                    'store_id' => [$store->id],
-                ]);
-
-                // Assign role (default to 'user')
-                $role = Role::firstOrCreate(['name' => $request->input('role', 'user')]);
-                $user->assignRole($role->name);
-            }
-
-            // Generate API token
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            // Store store_id in session
-            session(['site_store_id' => $store->id]);
-
-            return response()->json([
-                'status' => 200,
-                'message' => 'Login successful',
-                'data' => [
-                    'token_type' => 'Bearer',
-                    'access_token' => $token,
-                    'user' => [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                    ],
-                    'store' => [
-                        'id' => $store->id,
-                        'name' => $store->name,
-                        'domain' => $store->domain,
-                    ],
-                ],
-            ]);
+            return $this->handleSocialLogin($googleUser, $request);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to login with Google'], 500);
         }
+    }
+
+    public function UserHandleFacebookCallback(Request $request)
+    {
+        try {
+            $facebookUser = Socialite::driver('facebook')->stateless()->user();
+            return $this->handleSocialLogin($facebookUser, $request);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to login with Facebook'], 500);
+        }
+    }
+
+    private function handleSocialLogin($socialUser, Request $request)
+    {
+        $store = Store::find(session('store_id'));
+
+        if (!$store) {
+            return response()->json(['status' => 404, 'message' => 'Invalid store ID']);
+        }
+
+        $user = User::where('email', $socialUser->getEmail())->first();
+
+        if ($user) {
+            // If user exists but store_id is not associated, append it
+            if (!in_array($store->id, (array) $user->store_id)) {
+                $user->store_id = array_merge((array) $user->store_id, [$store->id]);
+                $user->save();
+            }
+        } else {
+            // Create new user
+            $user = User::create([
+                'name' => $socialUser->getName(),
+                'email' => $socialUser->getEmail(),
+                'password' => Hash::make(Str::random(24)),
+                'store_id' => [$store->id],
+            ]);
+
+            // Assign role (default to 'user')
+            $role = Role::firstOrCreate(['name' => $request->input('role', 'user')]);
+            $user->assignRole($role->name);
+        }
+
+        // Generate API token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Store store_id in session
+        session(['site_store_id' => $store->id]);
+        if (session()->has('site_store_id')) {
+            session()->forget('site_store_id');
+        }
+
+        session(['store_id' => $store->id]);
+        session(['site_store_id' => $store->id]);
+        $request->attributes->set('site_store_id', $store->id);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Login successful',
+            'data' => [
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'store' => [
+                    'id' => $store->id,
+                    'name' => $store->name,
+                    'domain' => $store->domain,
+                ]
+            ],
+        ]);
     }
 
 
@@ -197,3 +223,4 @@ class GoogleLoginController extends Controller
     // }
 
 }
+
