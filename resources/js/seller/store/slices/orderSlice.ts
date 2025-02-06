@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { OrderType } from "@type/orderType";
 
 const initialState: {
-    orders: OrderType[] | null;
+    orders: OrderType[];
     order: OrderType | null;
 } = {
-    orders: null,
+    orders: [],
     order: null,
 };
 
@@ -23,7 +23,7 @@ const orderSlice = createSlice({
         },
         clearOrdersStore: (state) => {
             state.order = null;
-            state.orders = null;
+            state.orders = [];
         },
         setOrders: (
             state,
