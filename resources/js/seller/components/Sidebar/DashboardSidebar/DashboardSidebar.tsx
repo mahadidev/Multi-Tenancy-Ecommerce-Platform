@@ -9,7 +9,6 @@ import { Button, Sidebar, TextInput } from "flowbite-react";
 import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from "react";
 import { useEffect, useState } from "react";
 import { FaBlogger, FaPaintBrush } from "react-icons/fa";
-import { FiShoppingCart } from "react-icons/fi";
 import { HiChartPie, HiCog, HiSearch, HiShoppingBag } from "react-icons/hi";
 import { MdCollectionsBookmark } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
@@ -267,7 +266,12 @@ const pages: SidebarItem[] = [
         items: [
             { href: RoutePath.CategoriesPage.index(), label: "Category" },
             { href: RoutePath.BrandsPage.index(), label: "Brand" },
+
             { href: RoutePath.ProductsPage.index(), label: "Products" },
+            {
+                href: RoutePath.OrdersPage.index(),
+                label: "Orders",
+            },
         ],
     },
     {
@@ -281,11 +285,6 @@ const pages: SidebarItem[] = [
 ];
 
 const externalPages: SidebarItem[] = [
-    {
-        href: RoutePath.OrdersPage.index(),
-        icon: FiShoppingCart,
-        label: "Orders",
-    },
     {
         href: RoutePath.StorePagesPage.index(),
         icon: MdCollectionsBookmark,

@@ -1,5 +1,5 @@
 import useTable, { DataTablePropsType } from "@seller/hooks/useTable";
-import { Button, Label, Table, TextInput } from "flowbite-react";
+import { Button, Card, Label, Table, TextInput } from "flowbite-react";
 import { FC } from "react";
 import { CSVLink } from "react-csv";
 import { HiDocumentDownload } from "react-icons/hi";
@@ -167,30 +167,43 @@ const DataTable: FC<PropsType> = (props) => {
                                     ))}
                                 </Table.Head>
                                 <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                                    {paginate.currentData.map(
-                                        (row: any, idx) => (
-                                            <Table.Row
-                                                key={row.id}
-                                                className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                                <td className="!text-center font-bold dark:text-white">
-                                                    {idx + 1}
-                                                </td>
-                                                {columns.map((column, idx) => (
-                                                    <td key={idx}>
-                                                        {column.render
-                                                            ? column.render(row)
-                                                            : row[
-                                                                  column.key ??
-                                                                      0
-                                                              ]}
+                                    <>
+                                        {paginate.currentData.map(
+                                            (row: any, idx) => (
+                                                <Table.Row
+                                                    key={row.id}
+                                                    className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                >
+                                                    <td className="!text-center font-bold dark:text-white">
+                                                        {idx + 1}
                                                     </td>
-                                                ))}
-                                            </Table.Row>
-                                        )
-                                    )}
+                                                    {columns.map(
+                                                        (column, idx) => (
+                                                            <td key={idx}>
+                                                                {column.render
+                                                                    ? column.render(
+                                                                          row
+                                                                      )
+                                                                    : row[
+                                                                          column.key ??
+                                                                              0
+                                                                      ]}
+                                                            </td>
+                                                        )
+                                                    )}
+                                                </Table.Row>
+                                            )
+                                        )}
+                                    </>
                                 </Table.Body>
-                            </Table>
+                            </Table>{" "}
+                            {paginate.currentData?.length ? null : (
+                                <>
+                                    <Card className="dark:text-gray-200 font-semibold p-5 text-center">
+                                        No records found
+                                    </Card>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

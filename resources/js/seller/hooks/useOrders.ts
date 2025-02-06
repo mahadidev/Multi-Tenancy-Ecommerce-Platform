@@ -8,7 +8,6 @@ const useOrders = () => {
 
     // select orders
     const { orders, order } = useAppSelector((state) => state.order);
-    console.log(orders);
     // update order status
     // const [
     //     handleUpdateOrder,
