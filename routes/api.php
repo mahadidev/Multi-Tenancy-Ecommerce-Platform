@@ -51,7 +51,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('notifications/mark/all-read', [NotificationController::class, 'markAllAsRead']);
     });
 
-
     Route::get('/auth/google', [GoogleLoginController::class, 'redirectToGoogle']);
-    Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
+    Route::get('/auth/google/callback', [GoogleLoginController::class, 'UserHandleGoogleCallback']);
+
 });
