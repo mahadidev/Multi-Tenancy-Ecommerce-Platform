@@ -14,16 +14,28 @@ const CategoriesTable = () => {
         <>
             <DataTable
                 columns={[
-                    {
-                        label: "ID",
-                        key: "id",
-                        render: (row: CategoryType) => (
-                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.id}
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
+                    // {
+                    //     label: (
+                    //         <>
+                    //             {" "}
+                    //             <Label htmlFor="select-all" className="sr-only">
+                    //                 Select all
+                    //             </Label>
+                    //             <Checkbox id="select-all" name="select-all" />{" "}
+                    //         </>
+                    //     ),
+                    //     key: "id",
+                    //     render: () => (
+                    //         <Table.Cell className="w-4 p-4">
+                    //             <Checkbox
+                    //                 aria-describedby="checkbox-1"
+                    //                 id="checkbox-1"
+                    //             />
+                    //         </Table.Cell>
+                    //     ),
+                    //     sortable: true,
+                    // },
+
                     {
                         label: "Name",
                         key: "name",
@@ -76,7 +88,7 @@ const CategoriesTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for category",
+                    placeholder: "Search for products category...",
                     columns: ["name", "slug", "parent", "created_at"],
                 }}
                 data={productCategories}
@@ -84,6 +96,7 @@ const CategoriesTable = () => {
                     render: (_data: CategoryType[]) => <CreateCategoryModal />,
                 }}
                 exportable={true}
+                filename="product_categories"
             />
         </>
     );

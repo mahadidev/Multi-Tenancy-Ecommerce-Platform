@@ -5,6 +5,6 @@
 </mask>
 <g mask="url(#mask0)">
 <rect width="28" height="20" fill="#FF5F38"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 20L28 0H0V20Z" fill="#FFD951"/>
+<path fillRule="evenodd" clip-rule="evenodd" d="M0 20L28 0H0V20Z" fill="#FFD951"/>
 </g>
 </svg>

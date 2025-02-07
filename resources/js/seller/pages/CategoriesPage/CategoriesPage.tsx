@@ -4,7 +4,6 @@ import { Breadcrumb } from "flowbite-react";
 import { FC } from "react";
 import { HiHome } from "react-icons/hi";
 import CategoriesTable from "./CategoriesTable";
-import CreateCategoryModal from "./CreateCategoryModal";
 
 const CategoriesPage: FC = function () {
     return (
@@ -22,13 +21,10 @@ const CategoriesPage: FC = function () {
                                 </div>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item>Category</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                    <div className="ml-auto flex justify-between items-center space-x-2 sm:space-x-3">
+                        </Breadcrumb>{" "}
                         <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-                            All Category
-                        </h1>{" "}
-                        <CreateCategoryModal />
+                            All Product Categories
+                        </h1>
                     </div>
                 </div>
             </div>

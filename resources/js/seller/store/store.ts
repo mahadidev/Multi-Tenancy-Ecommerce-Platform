@@ -8,6 +8,7 @@ import { brandApi } from "./reducers/brandApi";
 import { categoryApi } from "./reducers/categoryApi";
 import { dashboardAnalyticsApi } from "./reducers/dashboardAnalyticsApi";
 import { fileApi } from "./reducers/fileApi";
+import { orderApi } from "./reducers/orderApi";
 import { pageApi } from "./reducers/pageApi";
 import { productApi } from "./reducers/productApi";
 import { socialMediaApi } from "./reducers/socialMediaApi";
@@ -20,6 +21,7 @@ import categorySlice from "./slices/categorySlice";
 import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
 import notificationSlice from "./slices/notificationSlice";
+import OrderSlice from "./slices/orderSlice";
 import pageSlice from "./slices/pageSlice";
 import productSlice from "./slices/productSlice";
 import socialMediaSlice from "./slices/socialMediaSlice";
@@ -31,6 +33,7 @@ import widgetSlice from "./slices/widgetSlice";
 const authPersistConfig = {
     key: "seller",
     blacklist: [
+        "orderApi",
         "authApi",
         "dashboardAnalyticsApi",
         "fileApi",
@@ -52,6 +55,7 @@ const persistedReducer = persistReducer(
     authPersistConfig,
     combineReducers({
         auth: AuthSlice,
+        order: OrderSlice,
         analytics: DashboardAnalyticsSlice,
         store: storeSlice,
         file: fileSlice,
@@ -66,6 +70,7 @@ const persistedReducer = persistReducer(
         widget: widgetSlice,
         notification: notificationSlice,
         [authApi.reducerPath]: authApi.reducer,
+        [orderApi.reducerPath]: orderApi.reducer,
         [fileApi.reducerPath]: fileApi.reducer,
         [themeApi.reducerPath]: themeApi.reducer,
         [storeApi.reducerPath]: storeApi.reducer,
@@ -86,6 +91,7 @@ export const store = configureStore({
             serializableCheck: false,
         }).concat([
             authApi.middleware,
+            orderApi.middleware,
             dashboardAnalyticsApi.middleware,
             fileApi.middleware,
             themeApi.middleware,

@@ -42,6 +42,9 @@ export const RoutePath = {
     DashboardPage: {
         index: () => "/",
     },
+    OrdersPage: {
+        index: () => "/orders",
+    },
     BrandsPage: {
         index: () => "/brands",
     },
@@ -69,5 +72,8 @@ export const RoutePath = {
         categories: () => `/blogs/categories`,
         create: () => `/blogs/create`,
         edit: (blogId: number) => `/blogs/${blogId}`,
+    },
+    NotificationsPage: {
+        index: () => "/notifications",
     },
 };

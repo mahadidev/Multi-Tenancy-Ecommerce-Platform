@@ -13,16 +13,6 @@ const BrandsTable = () => {
             <DataTable
                 columns={[
                     {
-                        label: "ID",
-                        key: "id",
-                        render: (row: BrandType) => (
-                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.id}
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
-                    {
                         label: "Name",
                         key: "name",
                         render: (row: BrandType) => (
@@ -64,7 +54,7 @@ const BrandsTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for brand",
+                    placeholder: "Search for brand...",
                     columns: ["name", "slug", "created_at"],
                 }}
                 data={brands}
@@ -72,6 +62,7 @@ const BrandsTable = () => {
                     render: (_data: BrandType[]) => <CreateBrandModal />,
                 }}
                 exportable={true}
+                filename="brands"
             />
         </>
     );
