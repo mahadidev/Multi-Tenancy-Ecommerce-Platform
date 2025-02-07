@@ -73,4 +73,7 @@ export const RoutePath = {
         create: () => `/blogs/create`,
         edit: (blogId: number) => `/blogs/${blogId}`,
     },
+    NotificationsPage: {
+        index: () => "/notifications",
+    },
 };

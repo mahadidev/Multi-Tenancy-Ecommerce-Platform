@@ -26,10 +26,10 @@ export interface OrderType {
     billing_address: null;
     created_at: string;
     updated_at: string;
-    items: Item[];
+    items: ProductItem[];
 }
 
-export interface Item {
+export interface ProductItem {
     id: number;
     order_id: number;
     product_id: number;

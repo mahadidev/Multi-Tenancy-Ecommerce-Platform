@@ -66,7 +66,7 @@ const BlogCategoriesTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for category",
+                    placeholder: "Search for blog category...",
                     columns: ["name", "slug", "parent", "created_at"],
                 }}
                 data={blogCategories}

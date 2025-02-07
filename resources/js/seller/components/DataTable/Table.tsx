@@ -61,7 +61,13 @@ const DataTable: FC<PropsType> = (props) => {
                                         data={props.data}
                                         filename={props.filename}
                                     >
-                                        <Button className="p-0" color="gray">
+                                        <Button
+                                            className="p-0"
+                                            color="gray"
+                                            disabled={
+                                                !paginate?.currentData?.length
+                                            }
+                                        >
                                             <div className="flex items-center gap-x-3">
                                                 <HiDocumentDownload className="text-xl" />
                                                 <span>Export</span>

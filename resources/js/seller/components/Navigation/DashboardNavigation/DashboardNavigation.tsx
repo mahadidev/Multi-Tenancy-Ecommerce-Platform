@@ -76,9 +76,9 @@ export function DashboardNavigation() {
                             </div>
                         </button>
                         <Navbar.Brand as={Link} href="/" className="mr-14">
-                                <h2 className="font-semibold text-gray-900 dark:text-white">
-                                    {store?.name}
-                                </h2>
+                            <h2 className="font-semibold text-gray-900 dark:text-white">
+                                {store?.name}
+                            </h2>
                         </Navbar.Brand>
                         <form className="hidden lg:block lg:pl-2">
                             <Label htmlFor="search" className="sr-only">
