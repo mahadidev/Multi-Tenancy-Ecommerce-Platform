@@ -8,6 +8,7 @@ import { brandApi } from "./reducers/brandApi";
 import { categoryApi } from "./reducers/categoryApi";
 import { dashboardAnalyticsApi } from "./reducers/dashboardAnalyticsApi";
 import { fileApi } from "./reducers/fileApi";
+import { notificationApi } from "./reducers/notificationApi";
 import { orderApi } from "./reducers/orderApi";
 import { pageApi } from "./reducers/pageApi";
 import { productApi } from "./reducers/productApi";
@@ -20,6 +21,7 @@ import brandSlice from "./slices/brandSlice";
 import categorySlice from "./slices/categorySlice";
 import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
+import NotificationDataSlice from "./slices/notificationsDataSlice";
 import notificationSlice from "./slices/notificationSlice";
 import OrderSlice from "./slices/orderSlice";
 import pageSlice from "./slices/pageSlice";
@@ -46,6 +48,7 @@ const authPersistConfig = {
         "brandApi",
         "socialMediaApi",
         "notification",
+        "notificationApi",
     ],
     storage,
     version: 0,
@@ -56,6 +59,7 @@ const persistedReducer = persistReducer(
     combineReducers({
         auth: AuthSlice,
         order: OrderSlice,
+        notificationsData: NotificationDataSlice,
         analytics: DashboardAnalyticsSlice,
         store: storeSlice,
         file: fileSlice,
@@ -69,6 +73,7 @@ const persistedReducer = persistReducer(
         socialMedia: socialMediaSlice,
         widget: widgetSlice,
         notification: notificationSlice,
+        [notificationApi.reducerPath]: notificationApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [orderApi.reducerPath]: orderApi.reducer,
         [fileApi.reducerPath]: fileApi.reducer,
@@ -92,6 +97,7 @@ export const store = configureStore({
         }).concat([
             authApi.middleware,
             orderApi.middleware,
+            notificationApi.middleware,
             dashboardAnalyticsApi.middleware,
             fileApi.middleware,
             themeApi.middleware,
