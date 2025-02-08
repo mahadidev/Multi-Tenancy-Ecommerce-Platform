@@ -60,9 +60,10 @@ class CartController extends Controller
         // Check if item already exists in the cart
         $cartItem = Cart::where('product_id', $product->id)
             ->where('store_id', $store_id)
+            // ->where('user_id', $user_id)
             ->where(function ($query) use ($sessionId, $user_id) {
                 if ($user_id) {
-                    $query->where('session_id', $sessionId)->orwhere('user_id', $user_id);
+                    $query->where('user_id', $user_id);
                 } else {
                     $query->where('session_id', $sessionId);
                 }

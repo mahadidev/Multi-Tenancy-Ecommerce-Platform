@@ -125,6 +125,4 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     
     // Order Placement for a user
     Route::post('/place-order', [OrderController::class, 'placeOrder']);
-
-
 });
