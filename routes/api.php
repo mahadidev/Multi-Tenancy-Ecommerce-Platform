@@ -57,4 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/auth/facebook', [SocialLoginController::class, 'redirectToFacebook']);
     Route::get('/auth/facebook/callback', [SocialLoginController::class, 'UserHandleFacebookCallback']);
+
+    // svg icons routes
+    Route::resource('svg-icons', SvgIconController::class);
 });
