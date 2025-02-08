@@ -30,6 +30,14 @@ class PageTypeSeeder extends Seeder
                 'type' => 'products',
                 'label' => 'Products',
             ],
+            [
+                'type' => 'signin',
+                'label' => 'Sing In',
+            ],
+            [
+                'type' => 'singup',
+                'label' => 'Sing Up',
+            ],
         ];
 
         foreach ($pageTypes as $pageType) {

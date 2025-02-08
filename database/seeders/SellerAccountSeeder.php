@@ -46,6 +46,9 @@ class SellerAccountSeeder extends Seeder
                 'owner_id' => $user->id,
                 'domain' => 'goody-bro',
                 'slug' => 'goody-bro',
+                'primary_color' => "#ffc100",
+                'secondary_color' => "#fbcfe8",
+                'logo' => "seeders/stores/goddybro-logo.png",
             ],
             [
                 'name' => 'Goody Bro',
@@ -56,7 +59,7 @@ class SellerAccountSeeder extends Seeder
 
         $theme = Theme::with('pages.page_widgets')->first();
         $themeData = new \App\Http\Resources\ThemeResource($theme);
-        
+
         if ($theme) {
             $store->update(['theme_id' => $theme->id]);
             $pages = $themeData->pages;
@@ -89,7 +92,7 @@ class SellerAccountSeeder extends Seeder
                                         'serial' => $key + 1,
                                     ]
                                 );
-                        
+
                                 if (isset($widget['inputs'])) {
                                     foreach (json_decode($widget['inputs']) as $inputKey => $input) {
                                         $storePageWidgetInput = StorePageWidgetInput::updateOrCreate(
@@ -105,7 +108,7 @@ class SellerAccountSeeder extends Seeder
                                                 'type' => $input->type ?? null,
                                             ]
                                         );
-                                        
+
                                         if (isset($input->items)) {
                                             foreach ($input->items as $itemKey => $item) {
                                                 $storePageWidgetInputItems = StorePageWidgetInputItem::updateOrCreate(
@@ -123,7 +126,7 @@ class SellerAccountSeeder extends Seeder
                                                 );
                                             }
                                         }
-                                       
+
                                     }
                                 }
                             }

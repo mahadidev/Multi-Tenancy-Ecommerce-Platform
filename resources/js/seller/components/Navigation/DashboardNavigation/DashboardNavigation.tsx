@@ -9,7 +9,7 @@ import {
 } from "@seller/store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "@seller/store/store";
 import { NotificationType } from "@type/notification";
-import { Store } from "@type/orderType";
+import { StoreType } from "@type/storeType";
 import {
     Avatar,
     DarkThemeToggle,
@@ -225,7 +225,7 @@ export function StoresDropdown() {
             theme={{ content: "py-0" }}
         >
             <div className="max-w-sm">
-                {stores?.map((store: Store, idx: number) => (
+                {stores?.map((store: StoreType, idx: number) => (
                     <div
                         key={idx}
                         className="w-[300px] flex gap-2 items-center cursor-pointer px-8 py-3 hover:bg-gray-100 dark:hover:bg-gray-600"

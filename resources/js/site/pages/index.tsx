@@ -1,3 +1,4 @@
+import useHook from '@site/hooks';
 import useStore from '@site/hooks/useStore';
 import GetComponent from '@themes/getComponent';
 import { PageType } from '@type/pageType';
@@ -5,6 +6,8 @@ import { FC } from 'react';
 
 const Page: FC<PageType> = function (page) {
 	const { store } = useStore();
+    const {auth} = useHook()
+
 	return (
 		<>
 			{page.widgets
@@ -19,6 +22,9 @@ const Page: FC<PageType> = function (page) {
 									store={store}
 									widget={widget}
 									theme={store.theme}
+                                    hooks={{
+                                        auth: auth
+                                    }}
 								/>
 							)}
 						</>

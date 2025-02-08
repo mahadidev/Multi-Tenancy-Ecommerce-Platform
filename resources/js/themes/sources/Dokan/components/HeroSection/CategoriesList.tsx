@@ -6,7 +6,7 @@ const CategoriesList:FC<{
 }> = ({categories}) => {
     return (
 		<div className="w-full h-full bg-white">
-			{categories.map((item: any) => (
+			{categories?.slice(0, 15).map((item: any) => (
 				<a
 					href={item.slug}
 					className="block py-2 px-4 hover:bg-gray-100"

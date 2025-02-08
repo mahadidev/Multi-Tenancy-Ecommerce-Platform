@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Button, Navbar } from 'flowbite-react';
 import { AiOutlineLoading } from 'react-icons/ai';
-import { FaCheck, FaEye } from 'react-icons/fa6';
+import { FaCheck } from 'react-icons/fa6';
 import { FiEye, FiSettings } from 'react-icons/fi';
 import { HiMenuAlt1, HiX } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';

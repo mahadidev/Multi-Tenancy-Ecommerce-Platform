@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery, createRequest } from '@themes/store/baseQueryWithReAuth';
-import { setAuth } from '@themes/store/slices/authSlice';
 import { USER_PREFIX } from '@themes/theme_env';
 
 export const cartApi = createApi({
@@ -25,14 +24,14 @@ export const cartApi = createApi({
 				}),
 			invalidatesTags: ['User'],
 			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-				await queryFulfilled.then((response) => {
-					dispatch(
-						setAuth({
-							user: response.data.data.user,
-							accessToken: response.data.data.access_token,
-						})
-					);
+			async onQueryStarted(_queryArgument, {  queryFulfilled }) {
+				await queryFulfilled.then(() => {
+					// dispatch(
+					// 	setAuth({
+					// 		user: response.data.data.user,
+					// 		accessToken: response.data.data.access_token,
+					// 	})
+					// );
 				});
 			},
 		}),
