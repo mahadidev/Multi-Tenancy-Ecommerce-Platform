@@ -21,18 +21,8 @@ class NotificationController extends Controller
         return response()->json([
             'status' => 200,
             'data' =>  [
-                NotificationResource::collection($notifications),
+                'notifications' => NotificationResource::collection($notifications),
             ],
-            // 'meta' => [
-            //     'current_page' => $notifications->currentPage(),
-            //     'first_page_url' => $notifications->url(1),
-            //     'last_page' => $notifications->lastPage(),
-            //     'last_page_url' => $notifications->url($notifications->lastPage()),
-            //     'next_page_url' => $notifications->nextPageUrl(),
-            //     'prev_page_url' => $notifications->previousPageUrl(),
-            //     'total' => $notifications->total(),
-            //     'per_page' => $notifications->perPage(),
-            // ],
         ], 200);
     }
 
