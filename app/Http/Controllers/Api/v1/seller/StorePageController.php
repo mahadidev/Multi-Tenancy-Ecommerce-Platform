@@ -73,6 +73,7 @@ class StorePageController extends Controller
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
+            'widgets.*.inputs.*.serial' => 'nullable|numeric',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.value' => 'nullable|string',
             'widgets.*.inputs.*.required' => 'nullable|boolean',
@@ -105,10 +106,11 @@ class StorePageController extends Controller
 
                 // Create the inputs for the widget
                 if (isset($widget['inputs'])) {
-                    foreach ($widget['inputs'] as $input) {
+                    foreach ($widget['inputs'] as $key2 => $input) {
                         $inputData = [
                             'name' => $input['name'],
                             'label' => $input['label'],
+                            'serial' => $input['serial'] ?? ($key2 + 1),
                             'placeholder' => $input['placeholder'],
                             'value' => $input['value'],
                             'required' => $input['required'],
@@ -210,6 +212,7 @@ class StorePageController extends Controller
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
+            'widgets.*.inputs.*.serial' => 'nullable|numeric',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
             'widgets.*.inputs.*.value' => 'nullable|string',
             'widgets.*.inputs.*.required' => 'nullable|boolean',
@@ -246,10 +249,11 @@ class StorePageController extends Controller
 
                     $storePageWidget->widgetInputs()->delete();
 
-                    foreach ($widget['inputs'] as $input) {
+                    foreach ($widget['inputs'] as $key2 => $input) {
                         $inputData = [
                             'name' => $input['name'] ?? null,
                             'label' => $input['label'] ?? null,
+                            'serial' => isset($input['serial']) ? $input['serial'] : ($key2 + 1),
                             'placeholder' => $input['placeholder'] ?? null,
                             'value' => $input['value'] ?? null,
                             'required' => $input['required'] ?? null,

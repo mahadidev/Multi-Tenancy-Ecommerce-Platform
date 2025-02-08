@@ -9,6 +9,7 @@ class StorePageWidgetInput extends Model
     protected $fillable = [
         "name",
         "label",
+        "serial",
         "placeholder",
         "value",
         "required",

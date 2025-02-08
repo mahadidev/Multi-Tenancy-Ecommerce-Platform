@@ -18,6 +18,7 @@ class StorePageWidgetInputsResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'label' => $this->label,
+            'serial' => $this->serial,
             'placeholder' => $this->placeholder,
             'value' => $this->value,
             'required' => $this->required,
