@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Cart;
 use App\Models\Store;
@@ -66,7 +67,7 @@ class OrderController extends Controller
         return response()->json($response, 200);
     }
 
-    public function placeOrder(Request $request)
+    public static function placeOrder(Request $request, $userID = null)
     {
         // Validate the incoming request
         $request->validate([
@@ -94,8 +95,14 @@ class OrderController extends Controller
         try {
 
             $sessionId = $request->has('session_id') ? $request->session_id : null;
-            $user = auth()->user();
+            $user = $userID == null ? auth()->user() : User::storeRegistered()->find($userID);
 
+            if(!$user){
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Invalid User Id, not a registered user for this store'
+                ],404);
+            }
 
             $cartItems = Cart::with('product')
                 ->when($sessionId, function ($query, $sessionId) {
