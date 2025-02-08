@@ -19,7 +19,6 @@ import {
     TextInput,
     Tooltip,
 } from "flowbite-react";
-import { FaArrowUp } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import {
     HiArchive,
@@ -30,6 +29,7 @@ import {
     HiInbox,
     HiLogout,
     HiMenuAlt1,
+    HiOutlineArrowDown,
     HiOutlineTicket,
     HiSearch,
     HiShoppingBag,
@@ -121,7 +121,7 @@ export function DashboardNavigation() {
                             <div className="ml-3 flex items-center">
                                 <UserDropdown />
                             </div>
-                            <div className="hidden dark:block">
+                            <div>
                                 <StoresDropdown />
                             </div>
                         </div>
@@ -152,21 +152,15 @@ export function NotificationBellDropdown() {
                     Notifications
                 </div>
                 <div>
-                    {notifications?.map(
-                        (notification: NotificationType, idx: number) => (
+                    {notifications
+                        ?.slice(0, 10)
+                        ?.map((notification: NotificationType, idx: number) => (
                             <Link
                                 to="#"
                                 className="flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
                                 key={idx}
                             >
                                 <div className="shrink-0">
-                                    <img
-                                        alt=""
-                                        height={44}
-                                        src="/images/users/bonnie-green.png"
-                                        width={44}
-                                        className="rounded-full"
-                                    />
                                     <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
                                         <svg
                                             className="h-3 w-3 text-white"
@@ -182,8 +176,9 @@ export function NotificationBellDropdown() {
                                 <div className="w-full pl-3">
                                     <div className="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
                                         {/* New message from&nbsp; */}
-                                        {notification?.title}
-                                        <span className="font-semibold text-gray-900 dark:text-white"></span>
+                                        <span className="font-semibold text-gray-900 dark:text-white">
+                                            {notification?.title}
+                                        </span>
                                         : &quot;{notification?.message}
                                     </div>
                                     <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
@@ -191,18 +186,25 @@ export function NotificationBellDropdown() {
                                     </div>
                                 </div>
                             </Link>
-                        )
-                    )}
+                        ))}
                 </div>
-                <Link
-                    to={"/notifications"}
-                    className="block rounded-b-xl border-t border-gray-200 bg-gray-50 py-2 text-center text-base font-normal text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:underline"
-                >
-                    <div className="inline-flex items-center gap-x-2">
-                        <HiEye className="h-5 w-5" />
-                        <span>View all</span>
+
+                {notifications?.length === 0 && (
+                    <div className="text-sm text-gray-500 dark:text-gray-400 p-5">
+                        No notifications found.
                     </div>
-                </Link>
+                )}
+                {notifications?.length !== 0 && (
+                    <Link
+                        to={"/notifications"}
+                        className="block rounded-b-xl border-t border-gray-200 bg-gray-50 py-2 text-center text-base font-normal text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:underline"
+                    >
+                        <div className="inline-flex items-center gap-x-2">
+                            <HiEye className="h-5 w-5" />
+                            <span>View all</span>
+                        </div>
+                    </Link>
+                )}
             </div>
         </Dropdown>
     );
@@ -216,10 +218,10 @@ export function StoresDropdown() {
             arrowIcon={false}
             inline
             label={
-                <span className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white flex gap-2 mx-2">
+                <span className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white flex items-center gap-2 ml-3">
                     <span className="sr-only">Stores</span>
                     {currentStore?.name} &nbsp;{" "}
-                    <FaArrowUp className="h-6 w-6" />
+                    <HiOutlineArrowDown className="h-5 w-5" />
                 </span>
             }
             theme={{ content: "py-0" }}
@@ -355,8 +357,6 @@ export function AppDrawerDropdown() {
 export function UserDropdown() {
     const { user } = useAppSelector((state) => state.auth);
     const { logOut } = useAuth();
-    const { stores } = useStore();
-    console.log({ stores });
     return (
         <Dropdown
             className="rounded"

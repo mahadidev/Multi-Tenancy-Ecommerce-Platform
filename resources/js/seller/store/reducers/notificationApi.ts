@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "@seller/seller_env";
 import { NotificationsResponseType } from "@type/notification";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
-import { setNotifications } from "../slices/notificationsDataSlice";
+import { setNotifications } from "../slices/notificationSlice";
 
 export const notificationApi = createApi({
     reducerPath: "notificationApi",

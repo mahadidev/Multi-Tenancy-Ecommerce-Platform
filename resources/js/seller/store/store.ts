@@ -21,7 +21,6 @@ import brandSlice from "./slices/brandSlice";
 import categorySlice from "./slices/categorySlice";
 import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
-import NotificationDataSlice from "./slices/notificationsDataSlice";
 import notificationSlice from "./slices/notificationSlice";
 import OrderSlice from "./slices/orderSlice";
 import pageSlice from "./slices/pageSlice";
@@ -47,7 +46,6 @@ const authPersistConfig = {
         "blogApi",
         "brandApi",
         "socialMediaApi",
-        "notification",
         "notificationApi",
     ],
     storage,
@@ -59,7 +57,6 @@ const persistedReducer = persistReducer(
     combineReducers({
         auth: AuthSlice,
         order: OrderSlice,
-        notificationsData: NotificationDataSlice,
         analytics: DashboardAnalyticsSlice,
         store: storeSlice,
         file: fileSlice,
@@ -73,6 +70,7 @@ const persistedReducer = persistReducer(
         socialMedia: socialMediaSlice,
         widget: widgetSlice,
         notification: notificationSlice,
+        [dashboardAnalyticsApi.reducerPath]: dashboardAnalyticsApi.reducer,
         [notificationApi.reducerPath]: notificationApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [orderApi.reducerPath]: orderApi.reducer,

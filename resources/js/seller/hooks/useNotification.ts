@@ -6,9 +6,7 @@ const useNotification = () => {
     useFetchNotificationsQuery();
 
     // select notifications
-    const { notifications } = useAppSelector(
-        (state) => state.notificationsData
-    );
+    const { notifications } = useAppSelector((state) => state.notification);
 
     return { notifications };
 };

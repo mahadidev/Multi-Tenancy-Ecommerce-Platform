@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
+import { setDashboardAnalytics } from "../slices/dashboardAnalyticsSlice";
 
 export interface DashboardAnalyticsType extends ApiResponseType {
     data: AnalyticsResponseData;
@@ -38,14 +39,13 @@ export const dashboardAnalyticsApi = createApi({
                 }),
             providesTags: ["DashboardAnalytics"],
             transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { queryFulfilled }) {
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    // dispatch(
-                    //     setDashboardAnalytics({
-                    //         analytics: response?.data?.data,
-                    //     })
-                    // );
-                    console.log(response);
+                    dispatch(
+                        setDashboardAnalytics({
+                            analytics: response?.data?.data,
+                        })
+                    );
                 });
             },
         }),
