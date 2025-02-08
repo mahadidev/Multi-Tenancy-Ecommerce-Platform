@@ -138,4 +138,20 @@ class OrderController extends Controller
             ],
         ]);
     }
+
+    public function placeOrder(Request $request){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'phone' => 'required',
+            'address' => 'required|string|max:2000',
+            'notes' => 'nullable|string|max:1000',
+            'payment_method' => 'required|in:cash,card',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $response = \App\Http\Controllers\Api\v1\site\OrderController::placeOrder($request, $request->user_id);
+
+        return $response->original;
+    }
 }
