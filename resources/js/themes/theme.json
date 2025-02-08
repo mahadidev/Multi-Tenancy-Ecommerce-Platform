@@ -429,6 +429,202 @@
                 ]
               }
             ]
+          },
+          {
+            "id": 2,
+            "name": "featuredProducts",
+            "label": "Featured Products",
+            "thumbnail": "imageurl",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "title",
+                "label": "Section Title",
+                "type": "text",
+                "value": "Featured Products",
+                "placeholder": "Enter offer section title",
+                "required": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "login",
+        "title": "Login Page",
+        "label": "Login Page",
+        "thumbnail": "",
+        "slug": "/login",
+        "type": 5,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "navigation",
+            "label": "Navigation",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "menu",
+                "label": "Navigation Menu",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "label",
+                    "label": "Label",
+                    "value": "Home",
+                    "type": "text",
+                    "placeholder": "Enter item label",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "href",
+                    "label": "Href",
+                    "value": "/",
+                    "type": "text",
+                    "placeholder": "Enter item href",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "id": 1,
+                "name": "menu",
+                "label": "Navigation Menu",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "label",
+                    "label": "Label",
+                    "value": "Shop",
+                    "type": "text",
+                    "placeholder": "Enter item label",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "href",
+                    "label": "Href",
+                    "value": "/shop",
+                    "type": "text",
+                    "placeholder": "Enter item href",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "id": 1,
+                "name": "menu",
+                "label": "Navigation Menu",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "label",
+                    "label": "Label",
+                    "value": "Conact",
+                    "type": "text",
+                    "placeholder": "Enter item label",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "href",
+                    "label": "Href",
+                    "value": "/contact",
+                    "type": "text",
+                    "placeholder": "Enter item href",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "id": 1,
+                "name": "menu",
+                "label": "Navigation Menu",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "label",
+                    "label": "Label",
+                    "value": "About",
+                    "type": "text",
+                    "placeholder": "Enter item label",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "href",
+                    "label": "Href",
+                    "value": "/about",
+                    "type": "text",
+                    "placeholder": "Enter item href",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "id": 1,
+                "name": "quick_links",
+                "label": "Qucik Links",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "label",
+                    "label": "Label",
+                    "value": "Sing Up",
+                    "type": "text",
+                    "placeholder": "Enter item label",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "href",
+                    "label": "Href",
+                    "value": "/sing-up",
+                    "type": "text",
+                    "placeholder": "Enter item href",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "id": 1,
+                "name": "quick_links",
+                "label": "Qucik Links",
+                "type": "array",
+                "items": [
+                  {
+                    "id": 1,
+                    "name": "label",
+                    "label": "Label",
+                    "value": "Login",
+                    "type": "text",
+                    "placeholder": "Enter item label",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "href",
+                    "label": "Href",
+                    "value": "/login",
+                    "type": "text",
+                    "placeholder": "Enter item href",
+                    "required": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 1,
+            "name": "loginForm",
+            "label": "Login Form",
+            "inputs": []
           }
         ]
       }

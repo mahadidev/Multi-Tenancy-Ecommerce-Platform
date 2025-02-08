@@ -1,4 +1,6 @@
+import FeaturedProductsSection from './sources/Dokan/components/FeaturedProductsSection/FeaturedProductsSection.json';
 import HeroSection from './sources/Dokan/components/HeroSection/HeroSection.json';
+import LoginForm from './sources/Dokan/components/LoginForm/LoginForm.json';
 import Navigation from './sources/Dokan/components/Navigations/AppNavigation/Navigation.json';
 import OffersSection from './sources/Dokan/components/OffersSection/OffersSection.json';
 
@@ -28,7 +30,21 @@ export const ThemesJson: {
 				thumbnail: '',
 				slug: '/',
 				type: 1,
-				widgets: [Navigation, HeroSection, OffersSection],
+				widgets: [
+					Navigation,
+					HeroSection,
+					OffersSection,
+					FeaturedProductsSection,
+				],
+			},
+			{
+				name: 'login',
+				title: 'Login Page',
+				label: 'Login Page',
+				thumbnail: '',
+				slug: '/login',
+				type: 5,
+				widgets: [Navigation, LoginForm],
 			},
 		],
 	},

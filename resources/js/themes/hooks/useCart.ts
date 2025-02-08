@@ -8,11 +8,12 @@ const useCart = () => {
 		productId: number;
 		qty: number;
 	}) => {
-
+        return cartItem;
 	};
 
 	return {
 		cartItems,
+		onAddCart,
 	};
 };
 

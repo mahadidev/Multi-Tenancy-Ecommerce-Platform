@@ -5,7 +5,7 @@ import { FC } from "react";
 const LoginForm: FC<{
 	widget: WidgetType;
 	store: StoreType;
-}> = function ({store, widget}) {
+}> = function ({store}) {
 
 	return (
 		<>
