@@ -3,7 +3,6 @@ import { PageType } from "@type/pageType";
 import { FC } from "react";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import Page from "./pages";
-import LoginPage from "./pages/auth/login";
 import { SITE_SLUG } from "./site_env";
 
 const App: FC = function () {
@@ -38,12 +37,6 @@ const App: FC = function () {
                                                             key={index}
                                                         />
                                                     }
-                                                />
-                                                <Route
-                                                    key={index}
-                                                    path={"/login"}
-                                                    index
-                                                    element={<LoginPage />}
                                                 />
                                             </Route>
                                         );

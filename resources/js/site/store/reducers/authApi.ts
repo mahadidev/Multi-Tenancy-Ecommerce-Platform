@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { clearAuth, setAuth } from "@site/store/slices/authSlice";
 import { baseQuery, createRequest } from "@themes/store/baseQueryWithReAuth";
-import { clearAuth, setAuth } from "@themes/store/slices/authSlice";
 import { USER_PREFIX } from "@themes/theme_env";
 import { ApiResponseType } from "@type/apiType";
 import { UserProfileType, UserType } from "@type/authType";
@@ -103,6 +103,7 @@ export interface RegisterPayloadType {
 	email: string;
 	password: string;
 	confirm_password: string;
+    store_id: number
 }
 
 export interface RegisterResponseType extends ApiResponseType {
