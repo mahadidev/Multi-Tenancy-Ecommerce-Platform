@@ -1,5 +1,5 @@
 import StatusBadge from "@seller/components/Badge/StatusBadge";
-import { OrderType, ProductItem } from "@type/orderType";
+import { OrderType } from "@type/orderType";
 import { Card, Table } from "flowbite-react";
 
 interface OrderSummaryProps {
@@ -11,8 +11,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
 
     // total amount
     const totalAmount = items?.reduce(
-        (sum, item: ProductItem) =>
-            sum + item.qty * parseFloat(item?.price as string),
+        (sum, item) => sum + item.qty * parseFloat(item?.price as string),
         0
     );
 

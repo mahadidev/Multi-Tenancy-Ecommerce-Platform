@@ -39,7 +39,7 @@ const authSlice = createSlice({
                 loggedInUser: any;
             }>
         ) => {
-            // state.userProfileData = action.payload.loggedInUser;
+            state.user = action.payload.loggedInUser;
         },
     },
 });
