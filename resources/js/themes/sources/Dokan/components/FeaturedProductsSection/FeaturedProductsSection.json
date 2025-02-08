@@ -1,0 +1,17 @@
+{
+	"id": 2,
+	"name": "featuredProducts",
+	"label": "Featured Products",
+	"thumbnail": "imageurl",
+	"inputs": [
+		{
+			"id": 1,
+			"name": "title",
+			"label": "Section Title",
+			"type": "text",
+			"value": "Featured Products",
+			"placeholder": "Enter offer section title",
+			"required": true
+		}
+	]
+}

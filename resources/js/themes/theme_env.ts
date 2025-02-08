@@ -7,3 +7,5 @@ const document: {
 export const THEME_SLUG = document.head.querySelector(
 	'meta[name="theme-slug"]'
 )?.content;
+
+export const USER_PREFIX = "/users"

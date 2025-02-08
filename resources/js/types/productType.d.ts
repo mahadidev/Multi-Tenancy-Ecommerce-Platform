@@ -22,9 +22,9 @@ export interface ProductType {
 	discount_to: null;
 	discount_type: null;
 	discount_amount: number | null;
-    discount_price: number;
-    created_at: string;
-    updated_at: string;
+	discount_price: number;
+	created_at: string;
+	updated_at: string;
 }
 
 

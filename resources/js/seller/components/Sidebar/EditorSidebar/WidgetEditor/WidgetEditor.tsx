@@ -1,9 +1,8 @@
 import useWidget from '@seller/hooks/useWidget';
 import { WidgetInputType } from '@type/widgetType';
-import { Accordion } from 'flowbite-react';
 import { FC, useEffect, useState } from 'react';
 import EditorInput from './EditorInput';
-import PageEditor from './PageEditor';
+import WidgetArrayInput from './WidgetArrayInput';
 
 const WidgetEditor: FC = () => {
 	const { widget, widgets } = useWidget();
@@ -17,7 +16,7 @@ const WidgetEditor: FC = () => {
 		if (widget) {
 			widgets
 				.find((findWidget) => findWidget.id === widget.id)
-				?.inputs.slice()
+				?.inputs?.slice()
 				.sort(function (inputA, inputB) {
 					return inputA.id - inputB.id;
 				})
@@ -36,18 +35,15 @@ const WidgetEditor: FC = () => {
 
 	return (
 		<div className="space-y-4">
-			<div className="p-2 border-b text-center text-gray-800 dark:text-white">
+			<div className="p-2 border-b border-gray-500 text-center text-gray-800 dark:text-white">
 				{widget ? <>Edit {widget?.label}</> : 'Page Editor'}
 			</div>
-            {/* page editor */}
-            {!widget && <PageEditor />}
 
-            {/* widget editor */}
 			{widget && (
 				<>
 					{/* If input is not array */}
 					{widget?.inputs
-						.slice()
+						?.slice()
 						.sort(function (inputA, inputB) {
 							return inputA.id - inputB.id;
 						})
@@ -62,30 +58,10 @@ const WidgetEditor: FC = () => {
 						Object.keys(widgetInputsGroup).map((key, index) => (
 							<>
 								{widgetInputsGroup[key] && (
-									<div key={index}>
-										<Accordion>
-											<Accordion.Panel>
-												<Accordion.Title>
-													{widgetInputsGroup[key][0]?.label}
-												</Accordion.Title>
-												<Accordion.Content className="space-y-4">
-													{widgetInputsGroup[key].map((input) => (
-														<div className="dark:bg-gray-800 p-4 rounded-md space-y-4">
-															{input.items &&
-																input.items
-																	.slice()
-																	.sort(function (itemA, itemB) {
-																		return itemA.id - itemB.id;
-																	})
-																	.map((item) => (
-																		<EditorInput key={item.id} {...item} />
-																	))}
-														</div>
-													))}
-												</Accordion.Content>
-											</Accordion.Panel>
-										</Accordion>
-									</div>
+									<WidgetArrayInput
+										groupInputs={widgetInputsGroup[key]}
+										key={index}
+									/>
 								)}
 							</>
 						))}

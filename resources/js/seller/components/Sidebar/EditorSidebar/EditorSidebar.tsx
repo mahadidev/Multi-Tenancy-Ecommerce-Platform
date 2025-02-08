@@ -6,7 +6,9 @@ import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
+import useWidget from '@seller/hooks/useWidget';
 import { twMerge } from 'tailwind-merge';
+import PageEditor from './PageEditor/PageEditor';
 import WidgetEditor from './WidgetEditor/WidgetEditor';
 
 
@@ -30,6 +32,7 @@ function DesktopSidebar() {
 		dispatch(setSidebarCollapsed(value));
 	}
 	const [isPreview, setIsPreview] = useState(isCollapsed);
+    const { widget } = useWidget();
 
 	useEffect(() => {
 		if (isCollapsed) setIsPreview(false);
@@ -56,13 +59,19 @@ function DesktopSidebar() {
 			aria-label="Sidebar with multi-level dropdown example"
 			collapsed={isCollapsed}
 			className={twMerge(
-				'fixed inset-y-0 left-0 z-40 flex h-full shrink-0 flex-col border-r border-gray-200 pt-10 duration-75 lg:flex dark:border-gray-700',
+				'fixed inset-y-0 left-0 z-40 flex h-full shrink-0 flex-col border-r border-gray-200 pt-10 duration-75 lg:flex dark:border-gray-700 dark',
 				isCollapsed && 'hidden !w-0 overflow-hidden'
 			)}
 			id="sidebar"
+			theme={{
+				root: {
+					base: 'bg-gray-900',
+					inner: 'bg-gray-900 px-2.5',
+				},
+			}}
 		>
 			<div className="flex h-full flex-col justify-between">
-                <WidgetEditor />
+				{widget ? <WidgetEditor /> : <PageEditor />}
 			</div>
 		</Sidebar>
 	);
@@ -73,6 +82,7 @@ function MobileSidebar() {
 	const { isOpenMobile: isOpen } = useAppSelector(
 		(state) => state.ui.sidebar.mobile
 	);
+    const {widget} = useWidget()
 	function close() {
 		dispatch(setIsOpenMobile(false));
 	}
@@ -84,13 +94,19 @@ function MobileSidebar() {
 			<Sidebar
 				aria-label="Sidebar with multi-level dropdown example"
 				className={twMerge(
-					'fixed inset-y-0 left-0 z-40 hidden h-full shrink-0 flex-col border-r border-gray-200 pt-16 lg:flex dark:border-gray-700',
+					'fixed inset-y-0 left-0 z-40 hidden h-full shrink-0 flex-col border-r border-gray-200 pt-10 lg:flex dark:border-gray-700 dark',
 					isOpen && 'flex'
 				)}
 				id="sidebar"
+				theme={{
+					root: {
+						base: 'bg-gray-900',
+						inner: 'bg-gray-900 px-2.5',
+					},
+				}}
 			>
 				<div className="flex h-full flex-col justify-between">
-					<WidgetEditor />
+					{widget ? <WidgetEditor /> : <PageEditor />}
 				</div>
 			</Sidebar>
 			<div

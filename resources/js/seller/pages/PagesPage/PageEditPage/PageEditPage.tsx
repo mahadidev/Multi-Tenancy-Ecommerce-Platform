@@ -6,6 +6,8 @@ import useWidget from '@seller/hooks/useWidget';
 import GetComponent from '@themes/getComponent';
 import { Button } from 'flowbite-react';
 import { useEffect } from 'react';
+import { IoMdMove } from 'react-icons/io';
+import { MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { ReactSortable } from 'react-sortablejs';
 import AddWidgetModal from './AddWidgetModal';
@@ -45,13 +47,25 @@ const PageEditPage = () => {
 									<GetComponent store={store} widget={widget} theme={theme} />
 								)}
 
-								<div className="absolute top-0 left-0 right-0 w-full h-full bg-gray-900/75 z-30 opacity-0 hover:opacity-100 transition-all duration-300 flex justify-center items-center gap-2.5 cursor-grab">
-									<Button color="red" onClick={() => onDeleteWidget(widget)}>
-										Delete
-									</Button>
-									<Button color="primary" onClick={() => onEditWidget(widget)}>
-										Edit {widget.label}
-									</Button>
+								<div className="absolute top-0 left-0 right-0 w-full h-full  z-30 opacity-0 hover:opacity-100 transition-all duration-300 cursor-grab flex justify-end">
+									<div className="w-max h-max flex gap-2.5 items-center p-2.5">
+										<Button.Group>
+											<Button
+												color="dark"
+											>
+												<IoMdMove className="text-2xl" />
+											</Button>
+											<Button
+												color="dark"
+												onClick={() => onDeleteWidget(widget)}
+											>
+												<MdDeleteOutline className="text-2xl" />
+											</Button>
+											<Button color="dark" onClick={() => onEditWidget(widget)}>
+												<MdModeEditOutline className="text-2xl" />
+											</Button>
+										</Button.Group>
+									</div>
 								</div>
 							</div>
 						))}
