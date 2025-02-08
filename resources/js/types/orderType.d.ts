@@ -1,3 +1,7 @@
+import { UserType } from "./authType";
+import { ProductType } from "./productType";
+import { StoreType } from "./storeType";
+
 export interface OrdersApiResponse {
     status: number;
     data: OrdersResponse;
@@ -14,8 +18,8 @@ export interface OrderType {
     email: string;
     phone: string;
     address: string;
-    user: User;
-    store: Store;
+    user: UserType;
+    store: StoreType;
     total: string;
     status: string;
     payment_status: null;
@@ -26,34 +30,17 @@ export interface OrderType {
     billing_address: null;
     created_at: string;
     updated_at: string;
-    items: ProductItem[];
+    items: OrderItemType[];
 }
 
-export interface ProductItem {
-    id: number;
-    order_id: number;
-    product_id: number;
-    qty: number;
-    price: string;
-    total: string;
-    product: Product;
+export interface OrderItemType {
+	id: number;
+	order_id: number;
+	product_id: number;
+	qty: number;
+	price: string;
+	total: string;
+	product: ProductType;
 }
 
-export interface Product {
-    id: number;
-    name: string;
-    price: string;
-    image: string;
-}
 
-export interface Store {
-    id: number;
-    name: string;
-    domain: string;
-}
-
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-}

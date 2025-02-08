@@ -3,6 +3,7 @@ import flowbite from 'flowbite-react/tailwind';
 module.exports = {
 	content: [
 		'./resources/js/seller/**/*.{ts,tsx,mdx}',
+		'./resources/js/themes/sources/dokan/**/*.{ts,tsx,mdx}',
 		flowbite.content(),
 	],
 	theme: {

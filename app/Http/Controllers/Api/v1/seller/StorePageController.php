@@ -16,8 +16,8 @@ class StorePageController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort'); // Sort order, 
-        $perPage = $request->input('per_page'); // Items per page, 
+        $sort = $request->input('sort'); // Sort order,
+        $perPage = $request->input('per_page'); // Items per page,
 
         $pages = StorePage::authorized()->with('widgets')
             ->when($search, function ($query, $search) {
@@ -236,7 +236,7 @@ class StorePageController extends Controller
                     'name' => $widget['name'],
                     'label' => $widget['label'],
                     'serial' => isset($widget['serial']) ? $widget['serial'] : ($key + 1),
-                    'is_editable' => $widget['is_editable'],
+                    'is_editable' => $widget['is_editable'] ?? true,
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);

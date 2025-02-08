@@ -10,7 +10,7 @@ const AppNavigationNavbar:FC<{
 }> = () => {
 	return (
 		<div className="py-2 bg-white">
-			<div className="container flex justify-between">
+			<div className="container mx-auto flex justify-between">
 				<Link className="w-12 sm:w-max" to="/">
 					<img
 						className="max-w-[60px] w-full aspect-square"
@@ -26,7 +26,7 @@ const AppNavigationNavbar:FC<{
 							type="text"
 							placeholder="search..."
 						/>
-						<button className="bg-primary text-gray-800 px-3 text-lg">
+						<button className="bg-[var(--primary-color)] text-gray-800 px-3 text-lg">
 							<CiSearch />
 						</button>
 					</div>
@@ -38,7 +38,7 @@ const AppNavigationNavbar:FC<{
 					<Link to="/cart" className="flex gap-3 items-center text-gray-800">
 						<span className="text-gray-500 text-2xl relative">
 							<CiShoppingCart />
-							<span className="absolute -top-2 -right-2 bg-primary text-gray-900 w-5 h-5 text-xs rounded-full flex items-center justify-center">
+							<span className="absolute -top-2 -right-2 bg-[var(--primary-color)] text-gray-900 w-5 h-5 text-xs rounded-full flex items-center justify-center">
 								0
 							</span>
 						</span>

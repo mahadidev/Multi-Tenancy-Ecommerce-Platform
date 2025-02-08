@@ -15,7 +15,5 @@ const uiSlice = createSlice({
 		},
 	},
 });
-export const {
-	setHeroSectionHeight
-} = uiSlice.actions;
+export const { setHeroSectionHeight } = uiSlice.actions;
 export default uiSlice.reducer;
