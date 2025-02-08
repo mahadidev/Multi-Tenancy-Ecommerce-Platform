@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Api\v1\OnBoarding\OnBoardingController;
+use App\Http\Controllers\Api\v1\Auth\SocialLoginController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,5 +50,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('notifications/{id}', [NotificationController::class, 'view']);
         Route::get('notifications/mark/all-read', [NotificationController::class, 'markAllAsRead']);
     });
-});
 
+    // Social Login Routes
+    Route::get('/auth/google', [SocialLoginController::class, 'redirectToGoogle']);
+    Route::get('/auth/google/callback', [SocialLoginController::class, 'UserHandleGoogleCallback']);
+
+    Route::get('/auth/facebook', [SocialLoginController::class, 'redirectToFacebook']);
+    Route::get('/auth/facebook/callback', [SocialLoginController::class, 'UserHandleFacebookCallback']);
+});
