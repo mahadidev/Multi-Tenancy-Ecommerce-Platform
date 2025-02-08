@@ -9,6 +9,7 @@ import {
 } from "@seller/store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "@seller/store/store";
 import { NotificationType } from "@type/notification";
+import { Store } from "@type/orderType";
 import {
     Avatar,
     DarkThemeToggle,
@@ -18,6 +19,8 @@ import {
     TextInput,
     Tooltip,
 } from "flowbite-react";
+import { FaArrowUp } from "react-icons/fa";
+import { FiCheck } from "react-icons/fi";
 import {
     HiArchive,
     HiBell,
@@ -39,10 +42,9 @@ import { Link, Navigate } from "react-router-dom";
 
 export function DashboardNavigation() {
     const sidebar = useAppSelector((state) => state.ui.sidebar);
-    const { store } = useStore();
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
-
+    const { store } = useStore();
     function handleToggleSidebar() {
         if (isDesktop) {
             dispatch(toggleSidebar());
@@ -110,6 +112,7 @@ export function DashboardNavigation() {
                                     <DarkThemeToggle />
                                 </Tooltip>
                             </div>
+
                             <div className="dark:hidden">
                                 <Tooltip content="Toggle dark mode">
                                     <DarkThemeToggle />
@@ -117,6 +120,9 @@ export function DashboardNavigation() {
                             </div>
                             <div className="ml-3 flex items-center">
                                 <UserDropdown />
+                            </div>
+                            <div className="hidden dark:block">
+                                <StoresDropdown />
                             </div>
                         </div>
                     </div>
@@ -197,6 +203,46 @@ export function NotificationBellDropdown() {
                         <span>View all</span>
                     </div>
                 </Link>
+            </div>
+        </Dropdown>
+    );
+}
+
+export function StoresDropdown() {
+    const { stores, store: currentStore, switchStore } = useStore();
+    return (
+        <Dropdown
+            className="rounded"
+            arrowIcon={false}
+            inline
+            label={
+                <span className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white flex gap-2 mx-2">
+                    <span className="sr-only">Stores</span>
+                    {currentStore?.name} &nbsp;{" "}
+                    <FaArrowUp className="h-6 w-6" />
+                </span>
+            }
+            theme={{ content: "py-0" }}
+        >
+            <div className="max-w-sm">
+                {stores?.map((store: Store, idx: number) => (
+                    <div
+                        key={idx}
+                        className="w-[300px] flex gap-2 items-center cursor-pointer px-8 py-3 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        onClick={() =>
+                            switchStore.submit({
+                                formData: {
+                                    store_id: store.id,
+                                },
+                            })
+                        }
+                    >
+                        {store?.id === currentStore?.id && (
+                            <FiCheck size={20} />
+                        )}{" "}
+                        <p>{store?.name}</p>
+                    </div>
+                ))}
             </div>
         </Dropdown>
     );
@@ -309,7 +355,8 @@ export function AppDrawerDropdown() {
 export function UserDropdown() {
     const { user } = useAppSelector((state) => state.auth);
     const { logOut } = useAuth();
-
+    const { stores } = useStore();
+    console.log({ stores });
     return (
         <Dropdown
             className="rounded"
