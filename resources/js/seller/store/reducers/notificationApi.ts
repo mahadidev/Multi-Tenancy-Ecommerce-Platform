@@ -1,61 +1,31 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { PREFIX } from "@seller/seller_env";
-import { ApiResponseType } from "@type/apiType";
-import { BlogType } from "@type/blogType";
-import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
-import { setNotifications } from "../slices/notificationSlice";
-
-export interface BlogsFetchResponseType extends ApiResponseType {
-    data: {
-        blogs: BlogType[];
-    };
-}
-
-export interface FetchBlogPayloadType {
-    id: number | string;
-}
-
-export interface CreateBlogPayloadType {
-    title: string;
-    slug: string;
-    content: string;
-    category_id: number;
-    image: string;
-}
-
-export interface UpdateBlogPayloadType {
-    id: number;
-    title?: string;
-    slug?: string;
-    status?: string;
-    category_id?: number;
-    content?: string;
-    image?: string;
-}
-
-export interface DeleteBlogPayloadType {
-    id: number | string;
-}
+import { API_URL } from "@seller/seller_env";
+import { NotificationsResponseType } from "@type/notification";
+import { baseQuery, createRequest } from "../baseQueryWithReAuth";
+import { setNotifications } from "../slices/notificationsDataSlice";
 
 export const notificationApi = createApi({
     reducerPath: "notificationApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Notifications"],
+    baseQuery: baseQuery,
+    tagTypes: ["NotificationsData"],
     endpoints: (builder) => ({
-        fetchNotifications: builder.query<
-            ApiResponseType,
-            FetchBlogPayloadType
-        >({
-            query: () =>
+        // fetch notifications
+        fetchNotifications: builder.query<NotificationsResponseType, void>({
+            query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/notifications`,
+                    url: `${API_URL}/notifications`,
                     method: "get",
+                    body: formData,
                 }),
-            providesTags: ["Notifications"],
+            providesTags: ["NotificationsData"],
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    dispatch(setNotifications(response.data.data));
+                    dispatch(
+                        setNotifications({
+                            notifications: response?.data?.data?.notifications,
+                        })
+                    );
                 });
             },
         }),

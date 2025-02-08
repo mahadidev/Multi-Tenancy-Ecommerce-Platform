@@ -11,3 +11,11 @@ export interface NotificationType {
     message: string;
     read_at: null;
 }
+
+export interface NotificationsResponseType {
+    data: NotificationsResponse;
+}
+
+export interface NotificationsType {
+    notifications: Notification[];
+}
