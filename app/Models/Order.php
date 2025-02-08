@@ -61,7 +61,7 @@ class Order extends Model
     public function sendOrderConfirmationNotifications()
     {
         try {
-            if (env('APP_ENV') == 'production') {
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
                 // Retrieve the store with proper error handling
                 $store = Store::select('id', 'logo', 'name', 'phone', 'domain', 'location', 'email', 'currency', 'owner_id')
                     ->find($this->store_id);

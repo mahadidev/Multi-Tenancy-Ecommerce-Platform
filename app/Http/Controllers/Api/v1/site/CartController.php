@@ -13,7 +13,7 @@ class CartController extends Controller
 {
     // need to work on product discount as well
 
-    public function addToCart(Request $request)
+    public static function addToCart(Request $request, $userID = null, $response = false)
     {
         $validatedData = $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -23,16 +23,16 @@ class CartController extends Controller
         ]);
 
         // Get user_id
-        $user_id = auth()->user()->id;
+        $user_id = ($userID != null) ? $userID : auth()->user()->id;
 
         if ($user_id) {
             // Check if store_id exists
-            $store_id = session()->get('site_store_id');
+            $store_id = $response ? authStore() : session()->get('site_store_id');
 
             if (!$store_id) {
                 // show error message
                 return response()->json([
-                    'status' => 401,
+                    'status' => 404,
                     'message' => 'Store id is not found',
                 ]);
             }
@@ -117,7 +117,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function updateCartItem(Request $request)
+    public static function updateCartItem(Request $request)
     {
         $validatedData = $request->validate([
             'cart_id' => 'required|exists:carts,id',
@@ -149,7 +149,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function deleteCartItem(Request $request)
+    public static function deleteCartItem(Request $request)
     {
         $validatedData = $request->validate([
             'cart_id' => 'required|exists:carts,id',
