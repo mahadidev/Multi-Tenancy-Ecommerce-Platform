@@ -10,10 +10,12 @@ const AppNavigationMenubar:FC<{
 }> = function (){
   return (
 		<nav className="bg-white relative border-t z-30">
-			<div className="container hidden lg:block">
+			<div className="container mx-auto hidden lg:block">
 				<div className="grid grid-cols-6">
 					<div className="">
-						<div className="w-full px-4 py-2 bg-primary text-gray-800 flex gap-2 items-center relative">
+						<div
+							className={`w-full px-4 py-2 text-gray-800 flex gap-2 items-center relative bg-[var(--primary-color)]`}
+						>
 							<span className="text-lg">
 								<CiMenuFries />
 							</span>{' '}

@@ -2,16 +2,19 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { authApi } from './reducers/authApi';
+import { cartApi } from './reducers/cartApi';
 import { themeApi } from './reducers/themeApi';
-import storeSlice from "./slices/storeSlice";
+import authSlice from './slices/authSlice';
+import cartSlice from './slices/cartSlice';
+import storeSlice from './slices/storeSlice';
 import themeSlice from "./slices/themeSlice";
+import uiSlice from "./slices/uiSlice";
 
 
 const authPersistConfig = {
 	key: 'themes',
-	blacklist: [
-        "themeApi"
-	],
+	blacklist: ['themeApi', 'authApi', 'cartApi'],
 	storage,
 	version: 0,
 };
@@ -20,8 +23,13 @@ const persistedReducer = persistReducer(
 	authPersistConfig,
 	combineReducers({
 		theme: themeSlice,
-        store: storeSlice,
+		store: storeSlice,
+		ui: uiSlice,
+		cart: cartSlice,
+		auth: authSlice,
 		[themeApi.reducerPath]: themeApi.reducer,
+		[authApi.reducerPath]: authApi.reducer,
+		[cartApi.reducerPath]: cartApi.reducer,
 	})
 );
 
@@ -31,7 +39,9 @@ export const store = configureStore({
 		return getDefaultMiddleware({
 			serializableCheck: false,
 		}).concat([
-            themeApi.middleware
+			themeApi.middleware,
+			authApi.middleware,
+			cartApi.middleware,
 		]);
 	},
 });

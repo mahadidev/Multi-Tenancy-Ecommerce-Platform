@@ -13,29 +13,25 @@ const useWidget = () => {
 	const dispatch = useAppDispatch();
 
 	// on add widget
-	const onAddWidget = ({widget, onSuccess}:{
-        widget: WidgetType,
-        onSuccess: CallableFunction
-    }) => {
-		dispatch(
-			setWidgets(
-				[
-                    ...widgets,
-                    widget
-                ]
-			)
-		);
-        dispatch(setWidget(widget));
-        if(onSuccess){
-            onSuccess()
-        }
+	const onAddWidget = ({
+		widget,
+		onSuccess,
+	}: {
+		widget: WidgetType;
+		onSuccess: CallableFunction;
+	}) => {
+		dispatch(setWidgets([...widgets, widget]));
+		dispatch(setWidget(widget));
+		if (onSuccess) {
+			onSuccess();
+		}
 	};
 
 	// on delete widget
 	const onDeleteWidget = (deleteWidget: WidgetType) => {
-        if(deleteWidget.id === widget?.id){
-            dispatch(setWidget(null));
-        }
+		if (deleteWidget.id === widget?.id) {
+			dispatch(setWidget(null));
+		}
 		dispatch(
 			setWidgets(
 				widgets.filter((filterWidget) => filterWidget.id !== deleteWidget.id)
@@ -64,7 +60,86 @@ const useWidget = () => {
 		dispatch(setWidget(widget));
 	};
 
-	// on change item item
+	// on add input item
+	const onAddArrayInput = ({ input }: { input: WidgetInputType }) => {
+		const findWidget = widgets.find(
+			(findWidget) => findWidget.id === widget?.id
+		);
+
+		if (findWidget) {
+			if (input) {
+				dispatch(
+					setWidgets([
+						...widgets.filter(
+							(filterWidget) => filterWidget.id !== findWidget.id
+						),
+						{
+							...findWidget,
+							inputs: [
+								...findWidget.inputs,
+								{
+									...input,
+									id:
+										((findWidget.inputs &&
+											findWidget.inputs[findWidget.inputs.length - 1]?.id) ??
+											1) + 100,
+									items: input.items
+										?.slice()
+										.sort(function (itemA, itemB) {
+											return itemA.id - itemB.id;
+										})
+										.map((item, index: number) => {
+											return {
+												...item,
+												id:
+													((input.items &&
+														input.items[input.items.length - 1]?.id) ??
+														1) +
+													100 +
+													index,
+												widget_input_id:
+													((findWidget.inputs &&
+														findWidget.inputs[findWidget.inputs.length - 1]
+															?.id) ??
+														1) + 100,
+												value: '',
+											};
+										}),
+								},
+							],
+						},
+					])
+				);
+			}
+		}
+	};
+
+	// on delete input item
+	const onDeleteArrayInput = ({ input }: { input: WidgetInputType }) => {
+		const findWidget = widgets.find(
+			(findWidget) => findWidget.id === widget?.id
+		);
+
+		if (findWidget) {
+			if (input) {
+				dispatch(
+					setWidgets([
+						...widgets.filter(
+							(filterWidget) => filterWidget.id !== findWidget.id
+						),
+						{
+							...findWidget,
+							inputs: [
+								...findWidget.inputs.filter((filterInput) => filterInput.id !== input.id)
+							],
+						},
+					])
+				);
+			}
+		}
+	};
+
+	// on change input item
 	const onChangeInputItem = ({
 		item,
 		event,
@@ -75,6 +150,8 @@ const useWidget = () => {
 		const findWidget = widgets.find(
 			(findWidget) => findWidget.id === widget?.id
 		);
+
+        console.log(findWidget)
 
 		if (findWidget) {
 			const filteredInputs: WidgetInputType[] = findWidget.inputs.filter(
@@ -172,9 +249,11 @@ const useWidget = () => {
 			null,
 		input,
 		item,
-        onAddWidget,
+		onAddWidget,
 		onSortWidget,
 		onEditWidget,
+		onAddArrayInput,
+        onDeleteArrayInput,
 		onDeleteWidget,
 		onChangeInputOrItem,
 	};
