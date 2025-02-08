@@ -116,4 +116,15 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::put('/orders/update/status/{id}', [OrderController::class, 'updateOrderStatus']);
+
+    // Cart Routes - for Seller panel
+    Route::post('cart/add-items', [CartController::class, 'placeOrder']);
+    Route::get('cart/items', [CartController::class, 'getCartItems']);
+    Route::put('cart/update/items', [CartController::class, 'updateCartItem']);
+    Route::delete('cart/delete/items', [CartController::class, 'deleteCartItem']);
+    
+    // Order Placement for a user
+    Route::post('/place-order', [OrderController::class, 'placeOrder']);
+
+
 });

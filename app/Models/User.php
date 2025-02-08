@@ -125,4 +125,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return $this->morphMany(Notification::class, 'notifiable')->orderBy('created_at', 'desc');
     }
     
+    public function scopeStoreRegistered($query)
+    {
+        return $query->whereJsonContains('store_id', authStore());
+    }
+    
 }
