@@ -1,8 +1,10 @@
 import {
     CreateStorePayloadType,
+    SwitchStorePayloadType,
     UpdateStorePayloadType,
     useCreateStoreMutation,
     useFetchStoresQuery,
+    useSwitchStoreMutation,
     useUpdateStoreMutation,
 } from "@seller/store/reducers/storeApi";
 import { useAppSelector } from "@seller/store/store";
@@ -82,6 +84,37 @@ const useStore = () => {
             } else {
                 toaster({
                     text: "Failed to update store",
+                    status: "error",
+                });
+            }
+        });
+    };
+
+    // update store
+    const [
+        handleSwitchStore,
+        {
+            isLoading: isSwitchStoreLoading,
+            isError: isSwitchStoreError,
+            error: switchStoreError,
+            data: switchStoreData,
+        },
+    ] = useSwitchStoreMutation();
+    const switchStore = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: SwitchStorePayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleSwitchStore(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            } else {
+                toaster({
+                    text: "Failed to switched store",
                     status: "error",
                 });
             }
@@ -181,6 +214,13 @@ const useStore = () => {
             isError: isUpdateError,
             error: updateError,
             data: updateData,
+        },
+        switchStore: {
+            submit: switchStore,
+            isLoading: isSwitchStoreLoading,
+            isError: isSwitchStoreError,
+            error: switchStoreError,
+            data: switchStoreData,
         },
         activeTheme: {
             submit: activeTheme,
