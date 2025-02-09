@@ -27,6 +27,7 @@ import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
+import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
 
 // routes
@@ -42,6 +43,12 @@ export const PagesRoute: FC = function () {
 
                             {/* Orders Pages */}
                             <Route path="/orders" element={<OrdersPage />} />
+
+                            {/* Ocreate orders Pages */}
+                            <Route
+                                path="/orders/create-order"
+                                element={<CreateOrderPage />}
+                            />
 
                             {/* Store Pages */}
                             <Route path="pages" element={<PagesPage />} />

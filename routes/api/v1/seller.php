@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
@@ -75,7 +74,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
 
     // customer routes
-    Route::get('customers', [CustomerController::class, 'index']);
+    Route::resource('customers', CustomerController::class);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 });
@@ -122,7 +121,13 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::get('cart/items', [CartController::class, 'getCartItems']);
     Route::put('cart/update/items', [CartController::class, 'updateCartItem']);
     Route::delete('cart/delete/items', [CartController::class, 'deleteCartItem']);
-    
+
     // Order Placement for a user
     Route::post('/place-order', [OrderController::class, 'placeOrder']);
+
+    // Store Menus Routes
+    Route::resource('store-menus', StoreMenuController::class);
+
+    // Store Menu Items Routes
+    Route::resource('store-menu-items', StoreMenuItemController::class);
 });
