@@ -4,7 +4,29 @@
     "name": "Simfy",
     "slug": "simfy",
     "thumbnail": null,
-    "widgets": [],
+    "widgets": [
+      {
+        "id": 1,
+        "name": "layout",
+        "label": "Layout",
+        "type": "layout",
+        "inputs": []
+      },
+      {
+        "id": 1,
+        "name": "navigation",
+        "label": "Navigation",
+        "type": "layout",
+        "inputs": []
+      },
+      {
+        "id": 1,
+        "name": "footer",
+        "label": "Footer",
+        "type": "layout",
+        "inputs": []
+      }
+    ],
     "pages": [
       {
         "id": 0,
@@ -20,7 +42,7 @@
             "id": 1,
             "name": "hero",
             "label": "Hero Section",
-            "type": "widget",
+            "type": "section",
             "inputs": [
               {
                 "id": 1,

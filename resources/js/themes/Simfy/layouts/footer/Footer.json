@@ -1,7 +1,7 @@
 {
 	"id": 1,
-	"name": "layout",
-	"label": "Layout",
+	"name": "footer",
+	"label": "Footer",
     "type": "layout",
 	"inputs": []
 }

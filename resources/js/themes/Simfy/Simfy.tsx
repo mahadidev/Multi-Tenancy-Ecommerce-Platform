@@ -6,6 +6,11 @@ import {
 import Layout from './layouts/Layout';
 import Widget from './widgets/Widget';
 
+// import layout json
+import FooterJson from './layouts/footer/Footer.json';
+import LayoutJson from './layouts/Layout.json';
+import NavigationJson from './layouts/navigation/Navigation.json';
+
 // import widget json
 import HeroJson from "./widgets/hero/Hero.json";
 
@@ -21,17 +26,17 @@ export const SimfySeeder: ThemeType | any = {
 	name: Simfy.name,
 	slug: Simfy.name.toLowerCase().replaceAll(' ', '-'),
 	thumbnail: null,
-	widgets: [],
+	widgets: [LayoutJson, NavigationJson, FooterJson],
 	pages: [
 		{
 			id: 0,
 			name: 'home',
-            label: "Home",
+			label: 'Home',
 			slug: '/',
 			title: 'Home Page',
 			is_active: 1,
 			type: 'home',
-            thumbnail: null,
+			thumbnail: null,
 			widgets: [HeroJson],
 		},
 	],
