@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { USER_PREFIX } from '@site/site_env';
-import { createRequest } from '@themes/store/baseQueryWithReAuth';
-import baseQueryWithReAuth from '../baseQueryWithReAuth';
+import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
 import { setUserProfile } from '../slices/authSlice';
 
 export const userApi = createApi({

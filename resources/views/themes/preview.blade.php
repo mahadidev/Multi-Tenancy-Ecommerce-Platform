@@ -16,6 +16,6 @@
 </head>
 
 <body class="light">
-    <div id="{{ $slug }}"></div>
+    <div id="root"></div>
 </body>
 </html>

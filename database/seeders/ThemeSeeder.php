@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PageType;
 use App\Models\Theme;
 use App\Models\ThemePage;
 use App\Models\ThemePageWidget;
@@ -16,7 +17,7 @@ class ThemeSeeder extends Seeder
      */
     public function run(): void
     {
-        $simfy_commerce = file_get_contents("resources/js/themes/theme.json", );
+        $simfy_commerce = file_get_contents("resources/js/themes/themesSeeder.json", );
         $themes = json_decode($simfy_commerce);
 
         foreach ($themes as $key => $theme) {
@@ -31,6 +32,15 @@ class ThemeSeeder extends Seeder
 
 
             foreach ($theme->pages as $page) {
+                // check type exist else create
+                if(PageType::where(["type" => $page->type])->first()){
+                    $page->type = PageType::where(["type" => $page->type])->first()->id;
+                }else{
+                    $createdPageType = PageType::create(["type" => $page->type, "label" => strtoupper($page->type)]);
+
+                    $page->type = $createdPageType->id;
+                }
+
                 $newThemePage = ThemePage::updateOrCreate(
                     [
                         'slug' => $page->slug,  // Assuming these two fields should uniquely identify a page
