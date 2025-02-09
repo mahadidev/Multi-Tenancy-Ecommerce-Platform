@@ -1,10 +1,10 @@
 import useAuth from "./useAuth";
+import useUser from "./useUser";
 
 const useHook = () => {
-	const authHook = useAuth();
-
 	return {
-		auth: authHook,
+		useAuth: useAuth,
+		useUser: useUser,
 	};
 };
 export default useHook;

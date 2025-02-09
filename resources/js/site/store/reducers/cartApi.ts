@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { USER_PREFIX } from '@site/site_env';
 import { baseQuery, createRequest } from '@themes/store/baseQueryWithReAuth';
-import { USER_PREFIX } from '@themes/theme_env';
 
 export const cartApi = createApi({
 	reducerPath: 'cartApi',

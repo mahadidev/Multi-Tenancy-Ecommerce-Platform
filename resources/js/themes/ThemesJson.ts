@@ -3,6 +3,7 @@ import HeroSection from './sources/Dokan/components/HeroSection/HeroSection.json
 import LoginForm from './sources/Dokan/components/LoginForm/LoginForm.json';
 import Navigation from './sources/Dokan/components/Navigations/AppNavigation/Navigation.json';
 import OffersSection from './sources/Dokan/components/OffersSection/OffersSection.json';
+import ProfileCard from './sources/Dokan/components/ProfileCard.tsx/ProfileCard.json';
 import SingupForm from './sources/Dokan/components/SingupForm/SingupForm.json';
 
 export const ThemesJson: {
@@ -26,11 +27,11 @@ export const ThemesJson: {
 		pages: [
 			{
 				name: 'home',
-				title: 'Home Page',
-				label: 'Home Page',
+				title: 'Home',
+				label: 'Home',
 				thumbnail: '',
 				slug: '/',
-				type: 1,
+				type: 1, // type 1 is home page type
 				widgets: [
 					Navigation,
 					HeroSection,
@@ -40,21 +41,30 @@ export const ThemesJson: {
 			},
 			{
 				name: 'login',
-				title: 'Login Page',
-				label: 'Login Page',
+				title: 'Login',
+				label: 'Login',
 				thumbnail: '',
 				slug: '/singin',
-				type: 5,
+				type: 5, // type 5 is authentication page type
 				widgets: [Navigation, LoginForm],
 			},
 			{
 				name: 'singup',
-				title: 'Sing Up Page',
+				title: 'Sing Up',
 				label: 'Sing Up Page',
 				thumbnail: '',
 				slug: '/singup',
-				type: 6,
+				type: 5, // type 5 is authentication page type
 				widgets: [Navigation, SingupForm],
+			},
+			{
+				name: 'profile',
+				title: 'Pofile',
+				label: 'Profile',
+				thumbnail: '',
+				slug: '/profile',
+				type: 6, // type 6 is profile page type
+				widgets: [Navigation, ProfileCard],
 			},
 		],
 	},
