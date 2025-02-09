@@ -60,4 +60,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     // svg icons routes
     Route::resource('svg-icons', SvgIconController::class);
+
+    // Theme Widgets
+    Route::get('widget-types', [WidgetTypeController::class, 'index'] );
 });

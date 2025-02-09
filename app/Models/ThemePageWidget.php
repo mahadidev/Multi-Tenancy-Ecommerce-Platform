@@ -15,6 +15,7 @@ class ThemePageWidget extends Model
         'inputs',
         'thumbnail',
         'is_editable',
+        'widget_type_id',
     ];
 
     protected $casts = [
@@ -28,4 +29,7 @@ class ThemePageWidget extends Model
         'updated_at',
     ];
     
+    public function widgetType(){
+        return $this->belongsTo(WidgetType::class, 'widget_type_id');
+    }
 }
