@@ -78,6 +78,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('customers', [CustomerController::class, 'index']);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
+
+    // Store Menus Routes
+    Route::apiResource('store-menus', StoreMenuController::class);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
@@ -122,7 +125,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::get('cart/items', [CartController::class, 'getCartItems']);
     Route::put('cart/update/items', [CartController::class, 'updateCartItem']);
     Route::delete('cart/delete/items', [CartController::class, 'deleteCartItem']);
-    
+
     // Order Placement for a user
     Route::post('/place-order', [OrderController::class, 'placeOrder']);
 });
