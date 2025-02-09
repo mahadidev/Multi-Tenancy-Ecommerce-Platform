@@ -10,6 +10,7 @@ class StoreMenu extends Model
         'store_id',
         'label',
         'name',
+        'visibility',
     ];
 
     public function scopeAuthorized($query)
