@@ -1,21 +1,22 @@
 import useCart from "@seller/hooks/useCart";
 import useCustomer from "@seller/hooks/useCustomer";
+import useOrders from "@seller/hooks/useOrders";
 import useProduct from "@seller/hooks/useProduct";
 import { CustomerType } from "@type/customersType";
 import { ProductType } from "@type/productType";
 import { Button, Card, Label, Select, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { HiMinus, HiPlus } from "react-icons/hi";
+import { HiMinus, HiOutlineTrash, HiPlus } from "react-icons/hi";
 
 export default function CreateOrderPage() {
-    const [selectedCustomer, setSelectCustomer] = useState<string>();
-    const [selectedProduct, setSelectProduct] = useState<string>();
+    const [selectedCustomer, setSelectCustomer] = useState<number | null>(null);
+    const [selectedProduct, setSelectProduct] = useState<number | null>(null);
 
     const { products: storeProducts } = useProduct();
     const { customers } = useCustomer();
-    const { cartItems, fetchCartItems, addToCart } = useCart();
-
-    console.log({ customers, storeProducts, cartItems });
+    const { placeOrder } = useOrders();
+    const { cartItems, fetchCartItems, addToCart, updateCart, removeCartItem } =
+        useCart();
 
     useEffect(() => {
         fetchCartItems.submit({
@@ -39,8 +40,12 @@ export default function CreateOrderPage() {
                     <Select
                         id="user_id"
                         name="user_id"
-                        value={selectedCustomer}
-                        onChange={(e) => setSelectCustomer(e?.target?.value)}
+                        value={selectedCustomer!}
+                        onChange={(e) =>
+                            setSelectCustomer(
+                                parseInt(e?.target?.value as string)
+                            )
+                        }
                         required
                     >
                         <option value={0}>Select a Customer</option>
@@ -56,8 +61,12 @@ export default function CreateOrderPage() {
                     <Select
                         id="product_id"
                         name="product_id"
-                        value={selectedProduct}
-                        onChange={(e) => setSelectProduct(e?.target?.value)}
+                        value={selectedProduct!}
+                        onChange={(e) =>
+                            setSelectProduct(
+                                parseInt(e?.target?.value as string)
+                            )
+                        }
                         required
                     >
                         <option value={0}>Select a Product</option>
@@ -70,7 +79,8 @@ export default function CreateOrderPage() {
                 </div>
                 <div className="flex flex-col justify-end gap-2">
                     <Button
-                        color="green"
+                        color="primary"
+                        disabled={!selectedCustomer || !selectedProduct}
                         onClick={() =>
                             addToCart.submit({
                                 formData: {
@@ -80,6 +90,7 @@ export default function CreateOrderPage() {
                                 },
                             })
                         }
+                        isProcessing={addToCart.isLoading}
                     >
                         Add to Cart
                     </Button>
@@ -104,6 +115,7 @@ export default function CreateOrderPage() {
                             <Table.HeadCell className="text-gray-900 dark:text-gray-300">
                                 Total
                             </Table.HeadCell>
+                            <Table.HeadCell className="text-gray-900 dark:text-gray-300"></Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y dark:divide-gray-700">
                             {cartItems.map((item, index) => (
@@ -117,8 +129,16 @@ export default function CreateOrderPage() {
                                     <Table.Cell className="flex items-center space-x-2">
                                         <Button
                                             size="xs"
-                                            color="gray"
-                                            disabled={item?.qty <= 0}
+                                            color="primary"
+                                            disabled={item?.qty <= 1}
+                                            onClick={() =>
+                                                updateCart.submit({
+                                                    formData: {
+                                                        cart_id: item?.id!,
+                                                        qty: item?.qty - 1!,
+                                                    },
+                                                })
+                                            }
                                         >
                                             <HiMinus />
                                         </Button>
@@ -126,9 +146,16 @@ export default function CreateOrderPage() {
                                             {item?.qty}
                                         </span>
                                         <Button
+                                            color="primary"
                                             size="xs"
-                                            color="gray"
-                                            // onClick={increaseQty}
+                                            onClick={() =>
+                                                updateCart.submit({
+                                                    formData: {
+                                                        cart_id: item?.id!,
+                                                        qty: item?.qty + 1!,
+                                                    },
+                                                })
+                                            }
                                         >
                                             <HiPlus />
                                         </Button>
@@ -139,6 +166,21 @@ export default function CreateOrderPage() {
                                     <Table.Cell className="text-gray-900 dark:text-gray-300">
                                         {(item?.qty * item?.price).toFixed(2)}{" "}
                                         BDT
+                                    </Table.Cell>
+                                    <Table.Cell className="text-gray-900 dark:text-gray-300">
+                                        <Button
+                                            color="red"
+                                            size="sm"
+                                            onClick={() =>
+                                                removeCartItem.submit({
+                                                    formData: {
+                                                        cart_id: item?.id!,
+                                                    },
+                                                })
+                                            }
+                                        >
+                                            <HiOutlineTrash size={18} />
+                                        </Button>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}
@@ -160,8 +202,44 @@ export default function CreateOrderPage() {
                             </Card>
                         </>
                     )}
+                    <div className="flex justify-end items-center m-2">
+                        <Button
+                            color="primary"
+                            size="lg"
+                            onClick={() =>
+                                placeOrder.submit({
+                                    formData: getOrderCustomerDetails(
+                                        customers,
+                                        selectedCustomer!
+                                    )!,
+                                })
+                            }
+                            isProcessing={placeOrder.isLoading}
+                            disabled={!cartItems.length}
+                        >
+                            Place Order
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
+
+const getOrderCustomerDetails = (
+    customers: CustomerType[],
+    customerId: number
+) => {
+    const customer = customers?.find(
+        (customer: CustomerType) => customer?.id === customerId
+    );
+
+    return {
+        name: customer?.name!,
+        phone: customer?.phone || "017*******",
+        email: customer?.email!,
+        address: customer?.address || "N/A",
+        user_id: customerId,
+        payment_method: "cash",
+    };
+};

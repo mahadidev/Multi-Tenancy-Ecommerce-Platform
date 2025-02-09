@@ -5,7 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const NotificationsPage: React.FC = () => {
-    const { notifications } = useNotification();
+    const { notifications, singleNotification } = useNotification();
 
     return (
         <div className="dark:text-white flex justify-center">
@@ -21,6 +21,13 @@ const NotificationsPage: React.FC = () => {
                                 to="#"
                                 className="flex rounded-lg my-5 px-4 py-3 bg-gray-100 dark:bg-gray-700"
                                 key={idx}
+                                onClick={() =>
+                                    singleNotification.submit({
+                                        formData: {
+                                            id: notification.id,
+                                        },
+                                    })
+                                }
                             >
                                 <div className="shrink-0">
                                     <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
@@ -44,7 +51,15 @@ const NotificationsPage: React.FC = () => {
                                         : &quot;{notification?.message}
                                     </div>
                                     <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
-                                        {notification?.read_at}
+                                        {notification?.read_at
+                                            ? new Date(
+                                                  notification?.read_at
+                                              ).toDateString() +
+                                              " " +
+                                              new Date(
+                                                  notification?.read_at
+                                              ).toLocaleTimeString()
+                                            : null}
                                     </div>
                                 </div>
                             </Link>

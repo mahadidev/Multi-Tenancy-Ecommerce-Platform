@@ -1,12 +1,15 @@
 import {
+    PlaceOrderPayloadType,
     useFetchOrdersQuery,
+    usePlaceOrderMutation,
     useUpdateOrderStatusMutation,
 } from "@seller/store/reducers/orderApi";
 import { OrderType } from "@type/orderType";
 import { useAppSelector } from "../store/store";
+import useToast from "./useToast";
 
 const useOrders = () => {
-    // const { toaster } = useToast(); // for showing toast messages
+    const { toaster } = useToast(); // for showing toast messages
 
     useFetchOrdersQuery(); // orders query
 
@@ -39,6 +42,40 @@ const useOrders = () => {
         });
     };
 
+    // place order
+    const [
+        handlePlaceOrder,
+        {
+            isLoading: isPlaceOrderLoading,
+            isError: isPlaceOrderError,
+            error: placeOrderError,
+            data: placeOrderData,
+        },
+    ] = usePlaceOrderMutation();
+    const placeOrder = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: PlaceOrderPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handlePlaceOrder(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+                toaster({
+                    text: "Order placed successfully",
+                    status: "success",
+                });
+            } else {
+                toaster({
+                    text: "Failed to place order",
+                    status: "error",
+                });
+            }
+        });
+    };
     // return from here
     return {
         orders,
@@ -49,6 +86,13 @@ const useOrders = () => {
             isError: isUpdateOrderStatusError,
             error: updateOrderStatusError,
             data: updateOrderStatusData,
+        },
+        placeOrder: {
+            submit: placeOrder,
+            isLoading: isPlaceOrderLoading,
+            isError: isPlaceOrderError,
+            error: placeOrderError,
+            data: placeOrderData,
         },
     };
 };

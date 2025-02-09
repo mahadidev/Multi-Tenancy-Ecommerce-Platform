@@ -14,14 +14,17 @@ export interface FetchCartItemsPayloadType {
 }
 
 export interface AddToCartPayloadType {
-    user_id: string;
-    product_id: string;
+    user_id: string | number;
+    product_id: string | number;
     qty: string | number;
 }
 
-export interface UpdateCartPayloadType {
-    cart_id: string;
-    qty: string;
+export interface UpdateCartPayloadType extends CartIdType {
+    qty: string | number;
+}
+
+export interface CartIdType {
+    cart_id: string | number;
 }
 
 export const cartApi = createApi({
@@ -61,6 +64,19 @@ export const cartApi = createApi({
             transformErrorResponse: (error: any) => error.data,
         }),
 
+        // remove from cart
+        removeCartItem: builder.mutation<ApiResponseType, CartIdType>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/cart/delete/items`,
+                    method: "post",
+                    body: formData,
+                    apiMethod: "DELETE",
+                }),
+            invalidatesTags: ["CartItems"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
         // update cart
         updateCart: builder.mutation<ApiResponseType, UpdateCartPayloadType>({
             query: (formData) =>
@@ -80,4 +96,5 @@ export const {
     useFetchCartItemsQuery,
     useAddToCartMutation,
     useUpdateCartMutation,
+    useRemoveCartItemMutation,
 } = cartApi;

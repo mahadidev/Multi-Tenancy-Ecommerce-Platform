@@ -1,9 +1,11 @@
 import {
     AddToCartPayloadType,
     cartApi,
+    CartIdType,
     FetchCartItemsPayloadType,
     UpdateCartPayloadType,
     useAddToCartMutation,
+    useRemoveCartItemMutation,
     useUpdateCartMutation,
 } from "@seller/store/reducers/cartApi";
 import { useAppSelector } from "@seller/store/store";
@@ -78,6 +80,37 @@ const useCart = () => {
         });
     };
 
+    // remove cart item
+    const [
+        handleRemoveCartItem,
+        {
+            isLoading: isRemoveCartItemLoading,
+            isError: isRemoveCartItemError,
+            error: removeCartItemError,
+            data: removeCartItemData,
+        },
+    ] = useRemoveCartItemMutation();
+    const removeCartItem = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: CartIdType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleRemoveCartItem(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            } else {
+                toaster({
+                    text: "Failed remove cart",
+                    status: "error",
+                });
+            }
+        });
+    };
+
     // fetch cart items
     const [
         handleFetchCartItems,
@@ -113,12 +146,21 @@ const useCart = () => {
             error: addToCartError,
             data: addToCartData,
         },
+
         updateCart: {
             submit: updateCart,
             isLoading: isUpdateCartLoading,
             isError: isUpdateCartError,
             error: updateCartError,
             data: updateCartData,
+        },
+
+        removeCartItem: {
+            submit: removeCartItem,
+            isLoading: isRemoveCartItemLoading,
+            isError: isRemoveCartItemError,
+            error: removeCartItemError,
+            data: removeCartItemData,
         },
 
         fetchCartItems: {

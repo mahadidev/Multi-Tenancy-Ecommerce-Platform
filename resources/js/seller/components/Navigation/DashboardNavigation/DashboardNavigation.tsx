@@ -133,7 +133,7 @@ export function DashboardNavigation() {
 }
 
 export function NotificationBellDropdown() {
-    const { notifications } = useNotification();
+    const { notifications, singleNotification } = useNotification();
     return (
         <Dropdown
             className="rounded"
@@ -159,6 +159,13 @@ export function NotificationBellDropdown() {
                                 to="#"
                                 className="flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
                                 key={idx}
+                                onClick={() =>
+                                    singleNotification.submit({
+                                        formData: {
+                                            id: notification.id,
+                                        },
+                                    })
+                                }
                             >
                                 <div className="shrink-0">
                                     <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
@@ -182,7 +189,15 @@ export function NotificationBellDropdown() {
                                         : &quot;{notification?.message}
                                     </div>
                                     <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
-                                        {notification?.read_at}
+                                        {notification?.read_at
+                                            ? new Date(
+                                                  notification?.read_at
+                                              ).toDateString() +
+                                              " " +
+                                              new Date(
+                                                  notification?.read_at
+                                              ).toLocaleTimeString()
+                                            : null}
                                     </div>
                                 </div>
                             </Link>
