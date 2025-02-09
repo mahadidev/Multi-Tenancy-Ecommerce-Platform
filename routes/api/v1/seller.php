@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
@@ -78,12 +77,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::resource('customers', CustomerController::class);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
-
-    // Store Menus Routes
-    Route::resource('store-menus', StoreMenuController::class);
-
-    // Store Menu Items Routes
-    Route::resource('store-menu-items', StoreMenuItemController::class);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
@@ -131,4 +124,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Order Placement for a user
     Route::post('/place-order', [OrderController::class, 'placeOrder']);
+
+    // Store Menus Routes
+    Route::resource('store-menus', StoreMenuController::class);
+
+    // Store Menu Items Routes
+    Route::resource('store-menu-items', StoreMenuItemController::class);
 });

@@ -26,9 +26,9 @@ class NotificationController extends Controller
         ], 200);
     }
 
-    public function view(Request $request)
+    public function view(Request $request, $id)
     {
-        $notification = Notification::where('id', $request->id)->first();
+        $notification = Notification::where('id', $id)->first();
 
         if(!$notification) {
             return response()->json([
@@ -49,7 +49,10 @@ class NotificationController extends Controller
 
     public function markAllAsRead(Request $request)
     {
-        $request->user()->unreadNotifications()->update(['read_at' => now()]);
+        $request->user()
+        ->notifications()
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
 
         return response()->json([
             'status' => 200,
