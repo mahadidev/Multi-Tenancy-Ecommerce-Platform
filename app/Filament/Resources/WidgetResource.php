@@ -33,6 +33,11 @@ class WidgetResource extends Resource
     public static function getNavigationSort(): ?int
     {
         return 4;
+    }   
+    
+    public static function canAccess(): bool
+    {
+        return false;
     }
 
     public static function form(Form $form): Form
