@@ -57,4 +57,7 @@ class Theme extends Model
         return $query->where('is_active', 1);
     }
 
+    public function widgets(){
+        return $this->belongsTo(ThemeWidget::class, 'theme_id');
+    }
 }

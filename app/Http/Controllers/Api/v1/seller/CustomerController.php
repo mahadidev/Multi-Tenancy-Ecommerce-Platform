@@ -11,7 +11,8 @@ use App\Http\Resources\CustomerResource;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class CustomerController extends Controller
 {
@@ -56,6 +57,145 @@ class CustomerController extends Controller
         return response()->json($response, 200);
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'nullable|string',
+            'password' => 'nullable|string',
+            'address' => 'nullable|string',
+            'image' => 'nullable|string',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if (is_array($user->store_id) && in_array(authStore(), $user->store_id)) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Customer already exists in this store',
+                ], 400);
+            } else {
+                if (!$user->hasRole('user')) {
+                    $roleName = $request->input('role', 'user');
+                    $role = Role::firstOrCreate(['name' => $roleName]);
+                    $user->assignRole($role->name);
+                }
+                $storeIds = $user->store_id ?? [];
+                $storeIds[] = authStore();
+                $user->update([
+                    'store_id' => $storeIds,
+                    'address' => $request->address,
+                    'image' => $request->image,
+                    'phone' => $request->phone,
+                ]);
+            }
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password) ?? Hash::make('123'), // Default password is 123
+                'store_id' => [authStore()],
+                'address' => $request->address,
+                'image' => $request->image,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Customer created successfully',
+            'date' => [
+                'customer' => new CustomerResource($user),
+            ]
+        ], 200);
+    }
+
+    public function show($id)
+    {
+        $customer = User::whereJsonContains('store_id', authStore())->find($id);
+
+        if (!$customer) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Customer not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'customer' => new CustomerResource($customer),
+            ],
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'nullable|string',
+            'password' => 'nullable|string',
+            'address' => 'nullable|string',
+            'image' => 'nullable|string',
+        ]);
+
+        $customer = User::whereJsonContains('store_id', authStore())->find($id);
+
+        if (!$customer) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Customer not found',
+            ], 404);
+        }
+
+        $customer->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password) ?? $customer->password,
+            'address' => $request->address,
+            'image' => $request->image,
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Customer updated successfully',
+            'data' => [
+                'customer' => new CustomerResource($customer),
+            ],
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $customer = User::whereJsonContains('store_id', authStore())->find($id);
+
+        if (!$customer) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Customer not found',
+            ], 404);
+        }
+
+
+        // Get the current store_id array
+        $storeIds = $customer->store_id;
+
+        // Remove the authenticated store ID from the array
+        $updatedStoreIds = array_diff($storeIds, [authStore()]);
+
+        // Update the customer's store_id field
+        $customer->store_id = array_values($updatedStoreIds); // Re-index the array
+        $customer->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Customer deleted successfully',
+        ], 200);
+    }
+
     public function pdf(Request $request)
     {
         $customers = User::whereJsonContains('store_id', authStore())->get();
@@ -72,8 +212,7 @@ class CustomerController extends Controller
         try {
             $fileName = 'customers_' . now()->format('Ymd_His') . '.xlsx';
 
-            return Excel::download(new CustomersExport, $fileName); 
-            
+            return Excel::download(new CustomersExport, $fileName);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 500,

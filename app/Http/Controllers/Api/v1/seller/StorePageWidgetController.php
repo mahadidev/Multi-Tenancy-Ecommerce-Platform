@@ -94,6 +94,7 @@ class StorePageWidgetController extends Controller
             'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
             'is_editable' => 'nullable|boolean',
+            'widget_type_id' => 'nullable|exists:widget_types,id',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
@@ -125,6 +126,7 @@ class StorePageWidgetController extends Controller
             'label' => $request->label,
             'serial' => $request->serial,
             'is_editable' => $request->is_editable ?? 1,
+            'widget_type_id' => $request->widget_type_id ?? null
         ];
         if ($request->serial) {
             $widget["serial"] = $request->serial;
@@ -180,6 +182,7 @@ class StorePageWidgetController extends Controller
             'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
             'is_editable' => 'nullable|boolean',
+            'widget_type_id' => 'nullable|exists:widget_types,id',
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
@@ -220,6 +223,7 @@ class StorePageWidgetController extends Controller
             'label' => $request->label,
             'serial' => $request->serial ?? $pageWidget->serial,
             'is_editable' => $request->is_editable,
+            'widget_type_id' => $request->widget_type_id ?  $request->widget_type_id : $pageWidget->widget_type_id,
         ]);
 
         if ($request->has('inputs')) {
