@@ -12,12 +12,13 @@ class StoreMenuController extends Controller
 {
     public function index(Request $request)
     {
+        // return $request;
         $search = $request->input('search'); // Search keyword
         $sort = $request->input('sort'); // Sort order
         $perPage = $request->input('per_page'); // Items per page
 
         $menus = StoreMenu::query()
-            ->where('store_id', authStore()->id)
+            ->authorized()
             ->when($search, function ($query, $search) {
                 $query->where('label', 'like', '%' . $search . '%')
                     ->orWhere('name', 'like', '%' . $search . '%');
@@ -64,11 +65,28 @@ class StoreMenuController extends Controller
         $validatedData = $request->validate([
             'label' => 'required|string',
             'name' => 'required|string',
+            'items' => 'nullable|array',
+            'items.*.label' => 'required|string',
+            'items.*.href' => 'required|string',
+            'items.*.visibility' => 'sometimes|in:user,guest,all',
         ]);
 
-        $validatedData['store_id'] = authStore()->id;
+        $validatedData['store_id'] = authStore();
 
         $menu = StoreMenu::create($validatedData);
+
+        if($request->has('items')){
+            foreach ($request->items as $item) {
+                $itemsDate = [
+                    'label' => $item['label'],
+                    'href' => $item['href'],
+                    'visibility' => $item['visibility'] ?? 'all',
+                    'store_menu_id' => $menu->id,
+                ];
+
+                $menu->items()->create($itemsDate);
+            }
+        }
 
         return response()->json([
             'status' => 200,
@@ -77,9 +95,9 @@ class StoreMenuController extends Controller
         ], 200);
     }
 
-    public function view(Request $request, $id)
+    public function show(Request $request, $id)
     {
-        $menu = StoreMenu::where('store_id', authStore()->id)->find($id);
+        $menu = StoreMenu::authorized()->find($id);
 
         if (!$menu) {
             return response()->json([
@@ -98,7 +116,7 @@ class StoreMenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $menu = StoreMenu::where('store_id', authStore()->id)->find($id);
+        $menu = StoreMenu::authorized()->find($id);
 
         if (!$menu) {
             return response()->json([
@@ -110,11 +128,30 @@ class StoreMenuController extends Controller
         $validatedData = $request->validate([
             'label' => 'sometimes|required|string',
             'name' => 'sometimes|required|string',
+            'items' => 'nullable|array',
+            'items.*.label' => 'required|string',
+            'items.*.href' => 'required|string',
+            'items.*.visibility' => 'sometimes|in:user,guest,all',
         ]);
 
-        $validatedData['store_id'] = authStore()->id;
+        $validatedData['store_id'] = authStore();
 
         $menu->update($validatedData);
+
+        if($request->has('items')){
+            $menu->items()->delete();
+
+            foreach ($request->items as $item) {
+                $itemsDate = [
+                    'label' => $item['label'],
+                    'href' => $item['href'],
+                    'visibility' => $item['visibility'] ?? 'all',
+                    'store_menu_id' => $menu->id,
+                ];
+
+                $menu->items()->create($itemsDate);
+            }
+        }
 
         return response()->json([
             'status' => 200,
@@ -125,7 +162,7 @@ class StoreMenuController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $menu = StoreMenu::where('store_id', authStore()->id)->find($id);
+        $menu = StoreMenu::authorized()->find($id);
 
         if (!$menu) {
             return response()->json([

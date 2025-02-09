@@ -80,7 +80,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 
     // Store Menus Routes
-    Route::apiResource('store-menus', StoreMenuController::class);
+    Route::resource('store-menus', StoreMenuController::class);
+
+    // Store Menu Items Routes
+    Route::resource('store-menu-items', StoreMenuItemController::class);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {

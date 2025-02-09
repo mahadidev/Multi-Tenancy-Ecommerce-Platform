@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('store_menu_items', function (Blueprint $table) {
             $table->id();
+            $table->string('label')->nullable(false);
+            $table->string('href')->nullable(false);
+            $table->unsignedBigInteger('store_menu_id');
+            $table->enum('visibility', ['user', 'guest', 'all'])->default('all');
             $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('store_menu_id')
+                ->references('id')
+                ->on('store_menus')
+                ->onDelete('cascade');
         });
     }
 

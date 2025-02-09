@@ -21,6 +21,7 @@ class StoreMenuResource extends JsonResource
             'name' => $this->name,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+            'items' => $this->items ? StoreMenuItemResource::collection($this->items) : [],
         ];
     }
 }

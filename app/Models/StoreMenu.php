@@ -12,10 +12,19 @@ class StoreMenu extends Model
         'name',
     ];
 
+    public function scopeAuthorized($query)
+    {
+        return $query->where('store_id', authStore());
+    }
+
     public function store()
     {
         return $this->belongsTo(Store::class);
     }
 
-    
+    // Relationship with StoreMenuItems
+    public function items()
+    {
+        return $this->hasMany(StoreMenuItem::class);
+    }
 }
