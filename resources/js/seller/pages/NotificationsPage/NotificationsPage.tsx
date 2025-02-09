@@ -53,7 +53,7 @@ const NotificationsPage: React.FC = () => {
 
                     {notifications?.length === 0 && (
                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                            No notifications found.
+                            No notifications to show.
                         </div>
                     )}
                 </div>

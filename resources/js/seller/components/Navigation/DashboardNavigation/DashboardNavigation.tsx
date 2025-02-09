@@ -191,7 +191,7 @@ export function NotificationBellDropdown() {
 
                 {notifications?.length === 0 && (
                     <div className="text-sm text-gray-500 dark:text-gray-400 p-5">
-                        No notifications found.
+                        No notifications to show.
                     </div>
                 )}
                 {notifications?.length !== 0 && (

@@ -6,6 +6,7 @@ import { authApi } from "./reducers/authApi";
 import { blogApi } from "./reducers/blogApi";
 import { brandApi } from "./reducers/brandApi";
 import { categoryApi } from "./reducers/categoryApi";
+import { customerApi } from "./reducers/customerApi";
 import { dashboardAnalyticsApi } from "./reducers/dashboardAnalyticsApi";
 import { fileApi } from "./reducers/fileApi";
 import { notificationApi } from "./reducers/notificationApi";
@@ -19,6 +20,7 @@ import AuthSlice from "./slices/authSlice";
 import blogSlice from "./slices/blogSlice";
 import brandSlice from "./slices/brandSlice";
 import categorySlice from "./slices/categorySlice";
+import customerSlice from "./slices/customerSlice";
 import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
 import notificationSlice from "./slices/notificationSlice";
@@ -47,6 +49,7 @@ const authPersistConfig = {
         "brandApi",
         "socialMediaApi",
         "notificationApi",
+        "customerApi",
     ],
     storage,
     version: 0,
@@ -70,6 +73,8 @@ const persistedReducer = persistReducer(
         socialMedia: socialMediaSlice,
         widget: widgetSlice,
         notification: notificationSlice,
+        customer: customerSlice,
+        [customerApi.reducerPath]: categoryApi.reducer,
         [dashboardAnalyticsApi.reducerPath]: dashboardAnalyticsApi.reducer,
         [notificationApi.reducerPath]: notificationApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
@@ -95,6 +100,7 @@ export const store = configureStore({
         }).concat([
             authApi.middleware,
             orderApi.middleware,
+            customerApi.middleware,
             notificationApi.middleware,
             dashboardAnalyticsApi.middleware,
             fileApi.middleware,
