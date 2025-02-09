@@ -97,6 +97,7 @@ class StorePageWidgetController extends Controller
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
+            'inputs.*.serial' => 'nullable|numeric',
             'inputs.*.placeholder' => 'nullable|string',
             'inputs.*.value' => 'nullable|string',
             'inputs.*.required' => 'nullable|boolean',
@@ -122,6 +123,7 @@ class StorePageWidgetController extends Controller
         $widget = [
             'name' => $request->name,
             'label' => $request->label,
+            'serial' => $request->serial,
             'is_editable' => $request->is_editable ?? 1,
         ];
         if ($request->serial) {
@@ -132,11 +134,12 @@ class StorePageWidgetController extends Controller
         if ($request->has('inputs')) {
             $pageWidget->widgetInputs()->delete();
 
-            foreach ($request->inputs as $input) {
+            foreach ($request->inputs as $key => $input) {
                 $pageWidgetInput = StorePageWidgetInput::create([
                     'widget_id' => $pageWidget->id,
                     'name' => $input['name'],
                     'label' => $input['label'],
+                    'serial' => $input['serial'] ?? $key + 1,
                     'placeholder' => $input['placeholder'] ?? null,
                     'value' => $input['value'] ?? null,
                     'required' => $input['required'] ?? null,
@@ -180,6 +183,7 @@ class StorePageWidgetController extends Controller
             'inputs' => 'nullable|array',
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
+            'inputs.*.serial' => 'nullable|numeric',
             'inputs.*.placeholder' => 'nullable|string',
             'inputs.*.value' => 'nullable|string',
             'inputs.*.required' => 'required|boolean',
@@ -221,11 +225,12 @@ class StorePageWidgetController extends Controller
         if ($request->has('inputs')) {
             $pageWidget->widgetInputs()->delete();
 
-            foreach ($request->inputs as $input) {
+            foreach ($request->inputs as $key => $input) {
                 $pageWidgetInput = StorePageWidgetInput::create([
                     'widget_id' => $pageWidget->id,
                     'name' => $input['name'],
                     'label' => $input['label'],
+                    'serial' => isset($input['serial']) ? $input['serial'] : ($key + 1),
                     'placeholder' => $input['placeholder'],
                     'value' => $input['value'],
                     'required' => $input['required'],

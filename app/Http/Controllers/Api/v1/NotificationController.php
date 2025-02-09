@@ -26,9 +26,9 @@ class NotificationController extends Controller
         ], 200);
     }
 
-    public function view(Request $request, $id)
+    public function view(Request $request)
     {
-        $notification = Notification::find('id', $id);
+        $notification = Notification::where('id', $request->id)->first();
 
         if(!$notification) {
             return response()->json([
