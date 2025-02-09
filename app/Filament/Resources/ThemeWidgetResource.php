@@ -54,9 +54,11 @@ class ThemeWidgetResource extends Resource
                             ->placeholder('Enter widget label')
                             ->nullable(),
 
-                        Forms\Components\Textarea::make('input')
-                            ->label('Input')
-                            ->placeholder('Enter input details')
+                        Forms\Components\Textarea::make("inputs")
+                            ->label("Inputs Array")
+                            ->placeholder("ex. []")
+                            ->rows(10)
+                            ->placeholder('enter inputs array in json')
                             ->nullable(),
 
                         Forms\Components\Toggle::make('is_editable')

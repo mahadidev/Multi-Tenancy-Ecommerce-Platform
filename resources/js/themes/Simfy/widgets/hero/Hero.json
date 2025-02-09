@@ -2,7 +2,7 @@
 	"id": 1,
 	"name": "hero",
 	"label": "Hero Section",
-    "type": "widget",
+    "type": "section",
 	"inputs": [
 		{
 			"id": 1,

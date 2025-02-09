@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             BlogSeeder::class,
             ThemeSeeder::class,
             WidgetTypeSeeder::class,
+            SvgIconSeeder::class,
         ]);
     }
 }

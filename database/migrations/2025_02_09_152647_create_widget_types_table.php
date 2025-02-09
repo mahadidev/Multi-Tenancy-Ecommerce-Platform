@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('widget_types', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->string('label');
+            $table->string('type')->unique();
+            $table->string('label')->unique();
             $table->timestamps();
         });
     }

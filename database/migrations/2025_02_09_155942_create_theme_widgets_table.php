@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('theme_widgets', function (Blueprint $table) {
             $table->id();
-            
+
             $table->unsignedBigInteger('theme_id');
             $table->foreign('theme_id')->references('id')->on('themes')->onDelete('cascade');
 
@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('label')->nullable();
-            $table->longText('input')->nullable();
+            $table->longText('inputs')->nullable();
             $table->boolean('is_editable')->nullable()->default(true);
             $table->string('thumbnail')->nullable();
             $table->timestamps();

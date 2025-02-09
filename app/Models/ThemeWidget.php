@@ -11,7 +11,7 @@ class ThemeWidget extends Model
         'widget_type_id',
         'name',
         'label',
-        'input',
+        'inputs',
         'is_editable',
         'thumbnail',
     ];
