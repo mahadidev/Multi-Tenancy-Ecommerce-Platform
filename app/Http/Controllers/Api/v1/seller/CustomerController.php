@@ -12,7 +12,6 @@ use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-use Pest\ArchPresets\Custom;
 use Spatie\Permission\Models\Role;
 
 class CustomerController extends Controller
