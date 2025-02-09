@@ -49,7 +49,10 @@ class NotificationController extends Controller
 
     public function markAllAsRead(Request $request)
     {
-        $request->user()->unreadNotifications()->update(['read_at' => now()]);
+        $request->user()
+        ->notifications()
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
 
         return response()->json([
             'status' => 200,
