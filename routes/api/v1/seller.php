@@ -75,7 +75,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
 
     // customer routes
-    Route::get('customers', [CustomerController::class, 'index']);
+    Route::resource('customers', CustomerController::class);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 
