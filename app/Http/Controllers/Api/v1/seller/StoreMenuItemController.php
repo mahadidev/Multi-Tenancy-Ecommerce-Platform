@@ -17,11 +17,19 @@ class StoreMenuItemController extends Controller
         $perPage = $request->input('per_page'); // Items per page
 
         $menuItems = StoreMenuItem::query()
+            ->where('store_menu_id', $request->store_menu_id)
             ->when($search, function ($query, $search) {
                 $query->where('label', 'like', '%' . $search . '%')
                       ->orWhere('href', 'like', '%' . $search . '%');
             })
             ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+
+        if (!$menuItems) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Store menu items not found.',
+            ], 404);
+        }
 
         // Paginate or get all results based on the presence of `per_page`
         $paginated = $perPage ? $menuItems->paginate($perPage) : $menuItems->get();
@@ -69,9 +77,9 @@ class StoreMenuItemController extends Controller
         ], 200);
     }
 
-    public function view(Request $request, $id)
+    public function show(Request $request, $id)
     {
-        $menuItem = StoreMenuItem::find($id);
+        $menuItem = StoreMenuItem::where('store_menu_id', $request->store_menu_id)->find($id); 
 
         if (!$menuItem) {
             return response()->json([
@@ -90,7 +98,14 @@ class StoreMenuItemController extends Controller
 
     public function update(Request $request, $id)
     {
-        $menuItem = StoreMenuItem::find($id);
+        $validatedData = $request->validate([
+            'label' => 'sometimes|required|string',
+            'href' => 'sometimes|required|string',
+            'store_menu_id' => 'sometimes|required|exists:store_menus,id',
+            'visibility' => 'sometimes|in:user,guest,all',
+        ]);
+
+        $menuItem = StoreMenuItem::where('store_menu_id', $request->store_menu_id)->find($id);
 
         if (!$menuItem) {
             return response()->json([
@@ -98,13 +113,6 @@ class StoreMenuItemController extends Controller
                 'message' => 'Store menu item not found.',
             ], 404);
         }
-
-        $validatedData = $request->validate([
-            'label' => 'sometimes|required|string',
-            'href' => 'sometimes|required|string',
-            'store_menu_id' => 'sometimes|required|exists:store_menus,id',
-            'visibility' => 'sometimes|in:user,guest,all',
-        ]);
 
         $menuItem->update($validatedData);
 
@@ -117,7 +125,7 @@ class StoreMenuItemController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $menuItem = StoreMenuItem::find($id);
+        $menuItem = StoreMenuItem::where('store_menu_id', $request->store_menu_id)->find($id);
 
         if (!$menuItem) {
             return response()->json([

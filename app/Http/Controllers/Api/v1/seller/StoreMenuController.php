@@ -116,15 +116,6 @@ class StoreMenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $menu = StoreMenu::authorized()->find($id);
-
-        if (!$menu) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Store menu not found.',
-            ], 404);
-        }
-
         $validatedData = $request->validate([
             'label' => 'sometimes|required|string',
             'name' => 'sometimes|required|string',
@@ -133,6 +124,15 @@ class StoreMenuController extends Controller
             'items.*.href' => 'required|string',
             'items.*.visibility' => 'sometimes|in:user,guest,all',
         ]);
+        
+        $menu = StoreMenu::authorized()->find($id);
+
+        if (!$menu) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Store menu not found.',
+            ], 404);
+        }
 
         $validatedData['store_id'] = authStore();
 
