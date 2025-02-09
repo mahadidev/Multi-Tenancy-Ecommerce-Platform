@@ -4,12 +4,13 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { authApi } from './reducers/authApi';
 import { storeApi } from './reducers/storeApi';
+import { userApi } from "./reducers/userApi";
 import authSlice from './slices/authSlice';
 import storeSlice from './slices/storeSlice';
 
 const authPersistConfig = {
 	key: 'site',
-	blacklist: ['storeApi'],
+	blacklist: ['storeApi', 'authApi', 'userApi'],
 	storage,
 	version: 0,
 };
@@ -21,6 +22,7 @@ const persistedReducer = persistReducer(
 		auth: authSlice,
 		[storeApi.reducerPath]: storeApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
+		[userApi.reducerPath]: userApi.reducer
 	})
 );
 
@@ -29,7 +31,7 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware({
 			serializableCheck: false,
-		}).concat([storeApi.middleware, authApi.middleware]);
+		}).concat([storeApi.middleware, authApi.middleware, userApi.middleware]);
 	},
 });
 

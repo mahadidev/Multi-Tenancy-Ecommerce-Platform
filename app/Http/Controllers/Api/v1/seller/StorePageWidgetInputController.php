@@ -59,6 +59,7 @@ class StorePageWidgetInputController extends Controller
         $request->validate([
             'name' => 'required|string',
             'label' => 'required|string',
+            'serial' => 'required|numeric',
             'placeholder' => 'nullable|string',
             'value' => 'nullable|string',
             'required' => 'required|boolean',
@@ -122,6 +123,7 @@ class StorePageWidgetInputController extends Controller
         $request->validate([
             'name' => 'required|string',
             'label' => 'required|string',
+            'serial' => 'required|numeric',
             'placeholder' => 'nullable|string',
             'value' => 'nullable|string',
             'required' => 'required|boolean',

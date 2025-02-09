@@ -5,5 +5,5 @@ module.exports = {
 		'./resources/js/themes/sources/dokan/**/*.{ts,tsx,mdx}',
 		flowbite.content(),
 	],
-	plugins: [],
+	plugins: [flowbite.plugin()],
 };

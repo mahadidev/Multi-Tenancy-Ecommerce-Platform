@@ -1,40 +1,913 @@
 import { StoreType } from "@type/storeType";
-import { dummyCategories } from "./dummyCategories";
-import { dummyProducts } from "./dummyProducts";
 
 export const dummyStore: StoreType | any = {
-	id: 3,
-	name: 'Kacha Bazar',
-	slug: 'kacha-bazar',
-	domain: 'https://chologori-builder.test.com/stores/kacha-bazar',
-	email: null,
-	phone: null,
-	location: null,
-	status: 1,
-	type: 'e-commerce',
-	description: null,
-	currency: 'BDT',
-	logo: 'https://cholgori-com-1.vercel.app/images/logo.svg',
-	dark_logo: null,
-	primary_color: '#ffc100',
-	secondary_color: '#fbcfe8',
-	theme_id: 1,
-	settings: null,
-	categories: dummyCategories,
-	featuredProducts: dummyProducts.slice(0, 5),
-	social_media: [
-		{
-			id: 1,
-			name: 'facebook',
-			label: 'Facebook',
-			username: 'chologori',
-			url: 'https://www.facebook.com/',
-			store_id: 3,
-			created_at: '24 Jan, 2025 | 02:22 AM',
-			updated_at: '24 Jan, 2025 | 02:22 AM',
-		},
-	],
-	created_at: '22 Jan, 2025 | 01:01 PM',
-	updated_at: '22 Jan, 2025 | 01:01 PM',
-	theme: null,
-};
+    "id": 1,
+    "name": "Goody Bro",
+    "slug": "goody-bro",
+    "domain": "https:\/\/chologori-builder.test\/sites\/goody-bro",
+    "email": null,
+    "phone": null,
+    "location": null,
+    "status": 1,
+    "type": null,
+    "description": null,
+    "currency": "BDT",
+    "logo": "http:\/\/chologori-builder.test\/storage\/seeders\/stores\/goddybro-logo.png",
+    "dark_logo": null,
+    "primary_color": "#ffc100",
+    "secondary_color": "#fbcfe8",
+    "theme_id": 1,
+    "theme": null,
+    "settings": null,
+    "social_media": [],
+    "categories": [
+        {
+            "id": 1,
+            "store_id": 1,
+            "name": "Electronics",
+            "slug": "electronics",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 2,
+            "store_id": 1,
+            "name": "Clothing",
+            "slug": "clothing",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 3,
+            "store_id": 1,
+            "name": "Home & Kitchen",
+            "slug": "home-kitchen",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 4,
+            "store_id": 1,
+            "name": "Beauty & Personal Care",
+            "slug": "beauty-personal-care",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 5,
+            "store_id": 1,
+            "name": "Sports & Outdoors",
+            "slug": "sports-outdoors",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 6,
+            "store_id": 1,
+            "name": "Toys & Games",
+            "slug": "toys-games",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 7,
+            "store_id": 1,
+            "name": "Books",
+            "slug": "books",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 8,
+            "store_id": 1,
+            "name": "Health & Wellness",
+            "slug": "health-wellness",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 9,
+            "store_id": 1,
+            "name": "Automotive",
+            "slug": "automotive",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 10,
+            "store_id": 1,
+            "name": "Pet Supplies",
+            "slug": "pet-supplies",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 11,
+            "store_id": 1,
+            "name": "Baby Products",
+            "slug": "baby-products",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 12,
+            "store_id": 1,
+            "name": "Jewelry & Watches",
+            "slug": "jewelry-watches",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 13,
+            "store_id": 1,
+            "name": "Office Supplies",
+            "slug": "office-supplies",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 14,
+            "store_id": 1,
+            "name": "Groceries",
+            "slug": "groceries",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 15,
+            "store_id": 1,
+            "name": "Travel & Luggage",
+            "slug": "travel-luggage",
+            "type": "product",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 16,
+            "store_id": 1,
+            "name": "Technology",
+            "slug": "technology",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 17,
+            "store_id": 1,
+            "name": "Fashion",
+            "slug": "fashion",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 18,
+            "store_id": 1,
+            "name": "Food & Recipes",
+            "slug": "food-recipes",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 19,
+            "store_id": 1,
+            "name": "Health & Fitness",
+            "slug": "health-fitness",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 20,
+            "store_id": 1,
+            "name": "Travel & Adventure",
+            "slug": "travel-adventure",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 21,
+            "store_id": 1,
+            "name": "Parenting & Family",
+            "slug": "parenting-family",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 22,
+            "store_id": 1,
+            "name": "Personal Development",
+            "slug": "personal-development",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 23,
+            "store_id": 1,
+            "name": "Finance & Investing",
+            "slug": "finance-investing",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 24,
+            "store_id": 1,
+            "name": "DIY & Crafts",
+            "slug": "diy-crafts",
+            "type": "post",
+            "has_parent": null,
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        }
+    ],
+    "brands": [
+        {
+            "id": 1,
+            "store_id": 1,
+            "name": "Apple",
+            "slug": "apple",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/apple.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 2,
+            "store_id": 1,
+            "name": "Samsung",
+            "slug": "samsung",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/samsung.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 3,
+            "store_id": 1,
+            "name": "Nike",
+            "slug": "nike",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/nike.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 4,
+            "store_id": 1,
+            "name": "Adidas",
+            "slug": "adidas",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/adidas.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 5,
+            "store_id": 1,
+            "name": "Sony",
+            "slug": "sony",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/sony.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 6,
+            "store_id": 1,
+            "name": "Microsoft",
+            "slug": "microsoft",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/microsoft.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 7,
+            "store_id": 1,
+            "name": "Gucci",
+            "slug": "gucci",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/gucci.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 8,
+            "store_id": 1,
+            "name": "Puma",
+            "slug": "puma",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/puma.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 9,
+            "store_id": 1,
+            "name": "L'Or\u00e9al",
+            "slug": "loreal",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/loreal.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 10,
+            "store_id": 1,
+            "name": "Coca-Cola",
+            "slug": "coca-cola",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/coca-cola.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 11,
+            "store_id": 1,
+            "name": "Tesla",
+            "slug": "tesla",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/tesla.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 12,
+            "store_id": 1,
+            "name": "Toyota",
+            "slug": "toyota",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/toyota.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 13,
+            "store_id": 1,
+            "name": "Chanel",
+            "slug": "chanel",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/chanel.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 14,
+            "store_id": 1,
+            "name": "Intel",
+            "slug": "intel",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/intel.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 15,
+            "store_id": 1,
+            "name": "Dell",
+            "slug": "dell",
+            "image": "http:\/\/chologori-builder.test\/storage\/seeders\/brands\/dell.jpg",
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        }
+    ],
+    "pages": [
+        {
+            "id": 1,
+            "name": "home",
+            "slug": "\/",
+            "title": "Home Page",
+            "is_active": 1,
+            "type": {
+                "id": 1,
+                "type": "home",
+                "label": "Home",
+                "created_at": "08 Feb, 2025 | 05:41 PM",
+                "updated_at": "08 Feb, 2025 | 05:41 PM"
+            },
+            "widgets": [
+                {
+                    "id": 1,
+                    "store_page_id": 1,
+                    "name": "navigation",
+                    "label": "Navigation",
+                    "serial": 1,
+                    "is_editable": true,
+                    "inputs": [
+                        {
+                            "id": 1,
+                            "name": "menu",
+                            "label": "Navigation Menu",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 1,
+                            "items": [
+                                {
+                                    "id": 1,
+                                    "name": "label",
+                                    "label": "Label",
+                                    "placeholder": "Enter item label",
+                                    "value": "About",
+                                    "required": 1,
+                                    "widget_input_id": 1,
+                                    "type": "text",
+                                    "widget_id": 1,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "href",
+                                    "label": "Href",
+                                    "placeholder": "Enter item href",
+                                    "value": "\/about",
+                                    "required": 0,
+                                    "widget_input_id": 1,
+                                    "type": "text",
+                                    "widget_id": 1,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        },
+                        {
+                            "id": 2,
+                            "name": "quick_links",
+                            "label": "Qucik Links",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 1,
+                            "items": [
+                                {
+                                    "id": 3,
+                                    "name": "label",
+                                    "label": "Label",
+                                    "placeholder": "Enter item label",
+                                    "value": "Login",
+                                    "required": 1,
+                                    "widget_input_id": 2,
+                                    "type": "text",
+                                    "widget_id": 2,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 4,
+                                    "name": "href",
+                                    "label": "Href",
+                                    "placeholder": "Enter item href",
+                                    "value": "\/login",
+                                    "required": 0,
+                                    "widget_input_id": 2,
+                                    "type": "text",
+                                    "widget_id": 2,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        }
+                    ],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                },
+                {
+                    "id": 2,
+                    "store_page_id": 1,
+                    "name": "hero",
+                    "label": "Hero Section",
+                    "serial": 2,
+                    "is_editable": true,
+                    "inputs": [
+                        {
+                            "id": 3,
+                            "name": "slide",
+                            "label": "slide",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 2,
+                            "items": [
+                                {
+                                    "id": 5,
+                                    "name": "image",
+                                    "label": "Image",
+                                    "placeholder": "Enter your image url",
+                                    "value": "https:\/\/cholgori-com-1.vercel.app\/_next\/image?url=%2Fimages%2Fhero_banner_2.jpg&w=1920&q=75",
+                                    "required": 1,
+                                    "widget_input_id": 3,
+                                    "type": "image",
+                                    "widget_id": 3,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 6,
+                                    "name": "bg-color",
+                                    "label": "Background Color",
+                                    "placeholder": "Enter background Color Code",
+                                    "value": "#ffc100",
+                                    "required": 0,
+                                    "widget_input_id": 3,
+                                    "type": "color",
+                                    "widget_id": 3,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        }
+                    ],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                },
+                {
+                    "id": 3,
+                    "store_page_id": 1,
+                    "name": "offers",
+                    "label": "Offers",
+                    "serial": 3,
+                    "is_editable": true,
+                    "inputs": [
+                        {
+                            "id": 4,
+                            "name": "title",
+                            "label": "Title",
+                            "placeholder": "Enter offer section title",
+                            "value": "What we love to do",
+                            "required": 1,
+                            "type": "text",
+                            "widget_id": 3,
+                            "items": [],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        },
+                        {
+                            "id": 5,
+                            "name": "offer_box",
+                            "label": "Offer Box",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 1,
+                            "type": "array",
+                            "widget_id": 3,
+                            "items": [
+                                {
+                                    "id": 7,
+                                    "name": "title",
+                                    "label": "Title",
+                                    "placeholder": "Enter offer title",
+                                    "value": "Free Return",
+                                    "required": 1,
+                                    "widget_input_id": 5,
+                                    "type": "text",
+                                    "widget_id": 5,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 8,
+                                    "name": "description",
+                                    "label": "Description",
+                                    "placeholder": "Enter offer description",
+                                    "value": "Refund in 365 days",
+                                    "required": 1,
+                                    "widget_input_id": 5,
+                                    "type": "text",
+                                    "widget_id": 5,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 9,
+                                    "name": "icon",
+                                    "label": "SVG Icon",
+                                    "placeholder": null,
+                                    "value": "<svg stroke=\"currentColor\" fill=\"none\" strokeWidth=\"2\" viewBox=\"0 0 24 24\" strokeLinecap=\"round\" strokeLinejoin=\"round\" height=\"1em\" width=\"1em\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\"><desc><\/desc><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"><\/path><circle cx=\"7\" cy=\"17\" r=\"2\"><\/circle><circle cx=\"17\" cy=\"17\" r=\"2\"><\/circle><path d=\"M5 17h-2v-11a1 1 0 0 1 1 -1h9v6h-5l2 2m0 -4l-2 2\"><\/path><line x1=\"9\" y1=\"17\" x2=\"15\" y2=\"17\"><\/line><path d=\"M13 6h5l3 5v6h-2\"><\/path><\/svg>",
+                                    "required": 1,
+                                    "widget_input_id": 5,
+                                    "type": "textarea",
+                                    "widget_id": 5,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        }
+                    ],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                },
+                {
+                    "id": 4,
+                    "store_page_id": 1,
+                    "name": "featuredProducts",
+                    "label": "Featured Products",
+                    "serial": 4,
+                    "is_editable": true,
+                    "inputs": [
+                        {
+                            "id": 6,
+                            "name": "title",
+                            "label": "Section Title",
+                            "placeholder": "Enter offer section title",
+                            "value": "Featured Products",
+                            "required": 1,
+                            "type": "text",
+                            "widget_id": 4,
+                            "items": [],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        }
+                    ],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                }
+            ],
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 2,
+            "name": "login",
+            "slug": "\/singin",
+            "title": "Login Page",
+            "is_active": 1,
+            "type": {
+                "id": 5,
+                "type": "signin",
+                "label": "Sing In",
+                "created_at": "08 Feb, 2025 | 05:41 PM",
+                "updated_at": "08 Feb, 2025 | 05:41 PM"
+            },
+            "widgets": [
+                {
+                    "id": 5,
+                    "store_page_id": 2,
+                    "name": "navigation",
+                    "label": "Navigation",
+                    "serial": 1,
+                    "is_editable": true,
+                    "inputs": [
+                        {
+                            "id": 7,
+                            "name": "menu",
+                            "label": "Navigation Menu",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 5,
+                            "items": [
+                                {
+                                    "id": 10,
+                                    "name": "label",
+                                    "label": "Label",
+                                    "placeholder": "Enter item label",
+                                    "value": "About",
+                                    "required": 1,
+                                    "widget_input_id": 7,
+                                    "type": "text",
+                                    "widget_id": 7,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 11,
+                                    "name": "href",
+                                    "label": "Href",
+                                    "placeholder": "Enter item href",
+                                    "value": "\/about",
+                                    "required": 0,
+                                    "widget_input_id": 7,
+                                    "type": "text",
+                                    "widget_id": 7,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        },
+                        {
+                            "id": 8,
+                            "name": "quick_links",
+                            "label": "Qucik Links",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 5,
+                            "items": [
+                                {
+                                    "id": 12,
+                                    "name": "label",
+                                    "label": "Label",
+                                    "placeholder": "Enter item label",
+                                    "value": "Login",
+                                    "required": 1,
+                                    "widget_input_id": 8,
+                                    "type": "text",
+                                    "widget_id": 8,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 13,
+                                    "name": "href",
+                                    "label": "Href",
+                                    "placeholder": "Enter item href",
+                                    "value": "\/login",
+                                    "required": 0,
+                                    "widget_input_id": 8,
+                                    "type": "text",
+                                    "widget_id": 8,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        }
+                    ],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                },
+                {
+                    "id": 6,
+                    "store_page_id": 2,
+                    "name": "loginForm",
+                    "label": "Login Form",
+                    "serial": 2,
+                    "is_editable": true,
+                    "inputs": [],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                }
+            ],
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        },
+        {
+            "id": 3,
+            "name": "singup",
+            "slug": "\/singup",
+            "title": "Sing Up Page",
+            "is_active": 1,
+            "type": {
+                "id": 6,
+                "type": "singup",
+                "label": "Sing Up",
+                "created_at": "08 Feb, 2025 | 05:41 PM",
+                "updated_at": "08 Feb, 2025 | 05:41 PM"
+            },
+            "widgets": [
+                {
+                    "id": 7,
+                    "store_page_id": 3,
+                    "name": "navigation",
+                    "label": "Navigation",
+                    "serial": 1,
+                    "is_editable": true,
+                    "inputs": [
+                        {
+                            "id": 9,
+                            "name": "menu",
+                            "label": "Navigation Menu",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 7,
+                            "items": [
+                                {
+                                    "id": 14,
+                                    "name": "label",
+                                    "label": "Label",
+                                    "placeholder": "Enter item label",
+                                    "value": "About",
+                                    "required": 1,
+                                    "widget_input_id": 9,
+                                    "type": "text",
+                                    "widget_id": 9,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 15,
+                                    "name": "href",
+                                    "label": "Href",
+                                    "placeholder": "Enter item href",
+                                    "value": "\/about",
+                                    "required": 0,
+                                    "widget_input_id": 9,
+                                    "type": "text",
+                                    "widget_id": 9,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        },
+                        {
+                            "id": 10,
+                            "name": "quick_links",
+                            "label": "Qucik Links",
+                            "placeholder": null,
+                            "value": null,
+                            "required": 0,
+                            "type": "array",
+                            "widget_id": 7,
+                            "items": [
+                                {
+                                    "id": 16,
+                                    "name": "label",
+                                    "label": "Label",
+                                    "placeholder": "Enter item label",
+                                    "value": "Login",
+                                    "required": 1,
+                                    "widget_input_id": 10,
+                                    "type": "text",
+                                    "widget_id": 10,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                },
+                                {
+                                    "id": 17,
+                                    "name": "href",
+                                    "label": "Href",
+                                    "placeholder": "Enter item href",
+                                    "value": "\/login",
+                                    "required": 0,
+                                    "widget_input_id": 10,
+                                    "type": "text",
+                                    "widget_id": 10,
+                                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                                }
+                            ],
+                            "created_at": "08 Feb, 2025 | 05:41 PM",
+                            "updated_at": "08 Feb, 2025 | 05:41 PM"
+                        }
+                    ],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                },
+                {
+                    "id": 8,
+                    "store_page_id": 3,
+                    "name": "singupForm",
+                    "label": "Singup Form",
+                    "serial": 2,
+                    "is_editable": true,
+                    "inputs": [],
+                    "created_at": "08 Feb, 2025 | 05:41 PM",
+                    "updated_at": "08 Feb, 2025 | 05:41 PM"
+                }
+            ],
+            "created_at": "08 Feb, 2025 | 05:41 PM",
+            "updated_at": "08 Feb, 2025 | 05:41 PM"
+        }
+    ],
+    "created_at": "08 Feb, 2025 | 05:41 PM",
+    "updated_at": "08 Feb, 2025 | 05:41 PM"
+}

@@ -1,16 +1,54 @@
 import { GLOBAL_APP_API_URL } from '@helper/global_env';
-import { fetchBaseQuery } from '@reduxjs/toolkit/query';
+import { FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query';
+import { clearAuth } from './slices/authSlice';
+import { RootState } from './store';
 
 export const baseQuery = fetchBaseQuery({
-	baseUrl: GLOBAL_APP_API_URL ,
+	baseUrl: GLOBAL_APP_API_URL,
+
 	prepareHeaders: (
-		headers: Headers
+		headers: Headers,
+		api: {
+			getState: () => RootState | any;
+			arg: string | FetchArgs;
+			extra: unknown;
+			endpoint: string;
+			type: 'query' | 'mutation';
+		}
 	) => {
 		headers.set('accept', 'application/json');
+
+		const state: RootState = api.getState();
+		let accessToken = state.auth.accessToken;
+
+		if (!accessToken) {
+			const localStrData = JSON.parse(
+				localStorage.getItem('persist:site') || '{}'
+			);
+			accessToken = localStrData.auth.accessToken;
+		}
+
+		if (accessToken) {
+			headers.set('authorization', `Bearer ${accessToken}`);
+		}
 
 		return headers;
 	},
 });
+
+const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
+	const result = await baseQuery(args, api, extraOptions);
+
+	if (result.error && result.error.status === 401) {
+		api.dispatch(clearAuth());
+
+		// if (window) {
+		// 	window.location.href = `/login`;
+		// }
+	}
+
+	return result;
+};
 
 export const createRequest = ({
 	url,
@@ -37,3 +75,5 @@ export const createRequest = ({
 		body,
 	};
 };
+
+export default baseQueryWithReAuth;

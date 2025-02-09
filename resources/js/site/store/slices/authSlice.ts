@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserType } from "@type/authType";
+import { UserProfileType, UserType } from "@type/authType";
 
 const initialState: {
     user: UserType | null;
     accessToken: string | null;
+    userProfileData: UserProfileType | null;
 } = {
     user: null,
     accessToken: null,
+    userProfileData: null,
 };
 
 const authSlice = createSlice({
@@ -29,20 +31,16 @@ const authSlice = createSlice({
             state.user = action.payload.user;
             state.accessToken = action.payload.accessToken;
         },
+        setUserProfile: (state, action: PayloadAction<UserProfileType>) => {
+            state.userProfileData = action.payload;
+        },
         clearAuth: (state) => {
             state.accessToken = null;
+            state.userProfileData = null;
             state.user = null;
-        },
-        setLoggedInUser: (
-            state,
-            action: PayloadAction<{
-                loggedInUser: any;
-            }>
-        ) => {
-            state.user = action.payload.loggedInUser;
         },
     },
 });
-export const { setUser, removeUser, setAuth, clearAuth, setLoggedInUser } =
+export const { setUser, removeUser, setAuth, clearAuth, setUserProfile } =
     authSlice.actions;
 export default authSlice.reducer;

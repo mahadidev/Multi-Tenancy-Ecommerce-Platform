@@ -15,7 +15,7 @@
     @vite(['resources/js/themes/index.tsx'])
 </head>
 
-<body>
+<body class="light">
     <div id="{{ $slug }}"></div>
 </body>
 </html>

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             ProductSeeder::class,
             BlogSeeder::class,
+            ThemeSeeder::class,
         ]);
     }
 }

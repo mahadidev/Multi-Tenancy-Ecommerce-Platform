@@ -170,19 +170,13 @@ class AuthController extends Controller
         ]);
 
         if (!$request->has('store_id')) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Store ID is not found',
-            ]);
+            return $this->errorResponse('Store ID is not found', 404);
         }
 
         $store = Store::find($request->input('store_id'));
 
         if (!$store) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Invalid store id',
-            ]);
+            return $this->errorResponse('Invalid store id', 404);
         }
 
         // Find the user by email and add the store in the user table
@@ -194,19 +188,13 @@ class AuthController extends Controller
 
             $statusCode = !$user || !Hash::check($request->password, $user->password) ? 401 : 403;
 
-            return response()->json([
-                'status' => $statusCode,
-                'message' => $message,
-            ]);
+            return $this->errorResponse($message, $statusCode);
         }
 
         // Check if 'store_id' is null or if the store ID doesn't exist in the array for users table
         $storeId = $store->id;
         if (is_null($user->store_id) || !in_array($storeId, $user->store_id)) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'This store is not associated with the user, please sign-up',
-            ]);
+            return $this->errorResponse('This store is not associated with the user, please sign-up', 404);
         }
 
         // Generate a Sanctum token

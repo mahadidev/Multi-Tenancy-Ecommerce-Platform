@@ -47,7 +47,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         // Notification routes
         Route::get('notifications', [NotificationController::class, 'index']);
-        Route::get('notifications/{id}', [NotificationController::class, 'view']);
+        Route::get('notification', [NotificationController::class, 'view']);
         Route::get('notifications/mark/all-read', [NotificationController::class, 'markAllAsRead']);
     });
 
@@ -57,4 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/auth/facebook', [SocialLoginController::class, 'redirectToFacebook']);
     Route::get('/auth/facebook/callback', [SocialLoginController::class, 'UserHandleFacebookCallback']);
+
+    // svg icons routes
+    Route::resource('svg-icons', SvgIconController::class);
 });
