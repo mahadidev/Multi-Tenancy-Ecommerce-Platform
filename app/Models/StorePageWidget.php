@@ -11,7 +11,9 @@ class StorePageWidget extends Model
         'name',
         'label',
         'serial',
-        'is_editable'
+        'is_editable',
+        'widget_type_id',
+
     ];
 
     protected $casts = [
@@ -30,5 +32,9 @@ class StorePageWidget extends Model
 
     public function widgetInputs(){
         return $this->hasMany(StorePageWidgetInput::class, 'widget_id');
+    }
+
+    public function widgetType(){
+        return $this->belongsTo(WidgetType::class, 'widget_type_id');
     }
 }
