@@ -6,29 +6,27 @@ import { FC } from 'react';
 
 const Page: FC<PageType> = function (page) {
 	const { store } = useStore();
-    const {auth} = useHook()
+    const hooks = useHook();
 
 	return (
 		<>
 			{page.widgets
-					.slice()
-					.sort(function (widgetA, widgetB) {
-						return widgetA.serial - widgetB.serial;
-					})
-					.map((widget) => (
-						<>
-							{store && store.theme && (
-								<GetComponent
-									store={store}
-									widget={widget}
-									theme={store.theme}
-                                    hooks={{
-                                        auth: auth
-                                    }}
-								/>
-							)}
-						</>
-					))}
+				.slice()
+				.sort(function (widgetA, widgetB) {
+					return widgetA.serial - widgetB.serial;
+				})
+				.map((widget) => (
+					<>
+						{store && store.theme && (
+							<GetComponent
+								store={store}
+								widget={widget}
+								theme={store.theme}
+								hooks={hooks}
+							/>
+						)}
+					</>
+				))}
 		</>
 	);
 };

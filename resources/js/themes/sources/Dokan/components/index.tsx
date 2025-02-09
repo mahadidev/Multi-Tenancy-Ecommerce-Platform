@@ -7,6 +7,7 @@ import HeroSection from './HeroSection/HeroSection';
 import LoginForm from './LoginForm/LoginForm';
 import AppNavigation from './Navigations/AppNavigation/Navigation';
 import OffersSection from './OffersSection/OffersSection';
+import ProfileCard from './ProfileCard.tsx/ProfileCard';
 import SingupForm from './SingupForm/SingupForm';
 
 
@@ -22,6 +23,7 @@ export const Component: FC<{
 		featuredProducts: <FeaturedProductsSection {...props} />,
 		loginForm: <LoginForm {...props} />,
 		singupForm: <SingupForm {...props} />,
+		profileCard: <ProfileCard {...props} />,
 	};
 
 	useEffect(() => {

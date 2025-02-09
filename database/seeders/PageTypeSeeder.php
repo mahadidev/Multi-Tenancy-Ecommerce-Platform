@@ -31,12 +31,12 @@ class PageTypeSeeder extends Seeder
                 'label' => 'Products',
             ],
             [
-                'type' => 'signin',
-                'label' => 'Sing In',
+                'type' => 'authentication',
+                'label' => 'Authentication',
             ],
             [
-                'type' => 'singup',
-                'label' => 'Sing Up',
+                'type' => 'profile',
+                'label' => 'Profile',
             ],
         ];
 
