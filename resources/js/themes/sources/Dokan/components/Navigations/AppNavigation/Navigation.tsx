@@ -1,18 +1,14 @@
-import { StoreType } from "@type/storeType";
-import { WidgetType } from "@type/widgetType";
+import { ThemeComponentPropsType } from "@type/themeComponentType";
 import { FC } from "react";
 import AppNavigationMenubar from "./AppNavigationMenubar";
 import AppNavigationNavbar from "./AppNavigationNavbar";
 
 
-const AppNavigation: FC<{
-	widget: WidgetType;
-	store: StoreType;
-}> = function ({ widget, store }) {
+const AppNavigation: FC<ThemeComponentPropsType> = function (props) {
 	return (
 		<>
-			<AppNavigationNavbar widget={widget} store={store} />
-			<AppNavigationMenubar widget={widget} store={store} />
+			<AppNavigationNavbar {...props} />
+			<AppNavigationMenubar {...props} />
 		</>
 	);
 };

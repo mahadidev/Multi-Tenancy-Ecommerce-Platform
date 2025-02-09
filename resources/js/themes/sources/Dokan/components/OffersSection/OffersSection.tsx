@@ -12,7 +12,7 @@ const OffersSection: FC<{
 				<h1 className="text-center text-2xl mb-4 text-gray-800">
 					{widget.inputs.find((input) => input.name === 'title')?.value}
 				</h1>
-				<div className="container hidden sm:!grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 last:border-r-0 flex-wrap">
+				<div className="container mx-auto hidden sm:!grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 last:border-r-0 flex-wrap">
 					{widget.inputs
 						.slice()
 						.sort(function (inputA, inputB) {
@@ -26,7 +26,7 @@ const OffersSection: FC<{
 										className="bg-white flex gap-4 px-4 py-6 group"
 									>
 										<span
-											className="flex items-center text-4xl text-gray-700 group-hover:text-primary transition-all"
+											className="flex items-center text-4xl text-gray-700 group-hover:text-[var(--primary-color)] transition-all"
 											dangerouslySetInnerHTML={{
 												__html: `${
 													input.items.find((item) => item.name === 'icon')

@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { themeApi } from './reducers/themeApi';
-import storeSlice from "./slices/storeSlice";
+import storeSlice from './slices/storeSlice';
 import themeSlice from "./slices/themeSlice";
+import uiSlice from "./slices/uiSlice";
 
 
 const authPersistConfig = {
 	key: 'themes',
-	blacklist: [
-        "themeApi"
-	],
+	blacklist: ['themeApi', 'authApi', 'cartApi'],
 	storage,
 	version: 0,
 };
@@ -20,7 +19,8 @@ const persistedReducer = persistReducer(
 	authPersistConfig,
 	combineReducers({
 		theme: themeSlice,
-        store: storeSlice,
+		store: storeSlice,
+		ui: uiSlice,
 		[themeApi.reducerPath]: themeApi.reducer,
 	})
 );
@@ -31,7 +31,7 @@ export const store = configureStore({
 		return getDefaultMiddleware({
 			serializableCheck: false,
 		}).concat([
-            themeApi.middleware
+			themeApi.middleware,
 		]);
 	},
 });

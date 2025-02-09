@@ -14,7 +14,7 @@ const EditorLayout: FC = function () {
 		<BaseLayout>
 			<SidebarProvider initialCollapsed={sidebar.desktop.isCollapsed}>
 				<EditorNavigation />
-				<div className="mt-10 flex items-start">
+				<div className="mt-10 flex items-start dark">
 					<EditorSidebar />
 					<div
 						id="main-content"

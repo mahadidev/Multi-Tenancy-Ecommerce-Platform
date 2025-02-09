@@ -1,5 +1,6 @@
 import { CategoryType } from "./categoryType";
 import { PageType } from "./pageType";
+import { ProductType } from "./productType";
 import { ThemeType } from "./themeType";
 
 
@@ -29,6 +30,7 @@ export interface StoreType {
     theme: null | ThemeType;
 	settings: SettingsType | null;
 	social_media: SocialMediaType[];
+    featuredProducts?: ProductType[];
 	created_at: string;
 	updated_at: string;
 }
