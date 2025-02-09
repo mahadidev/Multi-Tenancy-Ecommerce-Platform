@@ -5,7 +5,9 @@ import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
 import { blogApi } from "./reducers/blogApi";
 import { brandApi } from "./reducers/brandApi";
+import { cartApi } from "./reducers/cartApi";
 import { categoryApi } from "./reducers/categoryApi";
+import { customerApi } from "./reducers/customerApi";
 import { dashboardAnalyticsApi } from "./reducers/dashboardAnalyticsApi";
 import { fileApi } from "./reducers/fileApi";
 import { notificationApi } from "./reducers/notificationApi";
@@ -18,10 +20,11 @@ import { themeApi } from "./reducers/themeApi";
 import AuthSlice from "./slices/authSlice";
 import blogSlice from "./slices/blogSlice";
 import brandSlice from "./slices/brandSlice";
+import CartSlice from "./slices/cartSlice";
 import categorySlice from "./slices/categorySlice";
+import customerSlice from "./slices/customerSlice";
 import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
-import NotificationDataSlice from "./slices/notificationsDataSlice";
 import notificationSlice from "./slices/notificationSlice";
 import OrderSlice from "./slices/orderSlice";
 import pageSlice from "./slices/pageSlice";
@@ -35,6 +38,7 @@ import widgetSlice from "./slices/widgetSlice";
 const authPersistConfig = {
     key: "seller",
     blacklist: [
+        "cartApi",
         "orderApi",
         "authApi",
         "dashboardAnalyticsApi",
@@ -47,8 +51,8 @@ const authPersistConfig = {
         "blogApi",
         "brandApi",
         "socialMediaApi",
-        "notification",
         "notificationApi",
+        "customerApi",
     ],
     storage,
     version: 0,
@@ -59,7 +63,7 @@ const persistedReducer = persistReducer(
     combineReducers({
         auth: AuthSlice,
         order: OrderSlice,
-        notificationsData: NotificationDataSlice,
+        cart: CartSlice,
         analytics: DashboardAnalyticsSlice,
         store: storeSlice,
         file: fileSlice,
@@ -73,6 +77,10 @@ const persistedReducer = persistReducer(
         socialMedia: socialMediaSlice,
         widget: widgetSlice,
         notification: notificationSlice,
+        customer: customerSlice,
+        [cartApi.reducerPath]: cartApi.reducer,
+        [customerApi.reducerPath]: categoryApi.reducer,
+        [dashboardAnalyticsApi.reducerPath]: dashboardAnalyticsApi.reducer,
         [notificationApi.reducerPath]: notificationApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [orderApi.reducerPath]: orderApi.reducer,
@@ -96,7 +104,9 @@ export const store = configureStore({
             serializableCheck: false,
         }).concat([
             authApi.middleware,
+            cartApi.middleware,
             orderApi.middleware,
+            customerApi.middleware,
             notificationApi.middleware,
             dashboardAnalyticsApi.middleware,
             fileApi.middleware,

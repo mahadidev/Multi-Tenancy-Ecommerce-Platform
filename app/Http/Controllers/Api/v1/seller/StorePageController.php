@@ -70,6 +70,7 @@ class StorePageController extends Controller
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
             'widgets.*.is_editable' => 'nullable|boolean',
+            'widgets.*.widget_type_id' => 'nullable|exists:widget_types,id',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -99,7 +100,7 @@ class StorePageController extends Controller
                     'label' => $widget['label'],
                     'serial' =>  $widget['serial'] ?? ($key + 1),
                     'is_editable' => $widget['is_editable'] ?? true,
-
+                    'widget_type_id' => $request->widget_type_id ?? null
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($storePageWidgetData);
@@ -208,6 +209,7 @@ class StorePageController extends Controller
             'widgets.*.label' => 'required|string',
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
+            'widgets.*.widget_type_id' => 'nullable|exists:widget_types,id',
             'widgets.*.is_editable' => 'nullable|boolean',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.name' => 'required|string',
@@ -240,6 +242,7 @@ class StorePageController extends Controller
                     'label' => $widget['label'],
                     'serial' => isset($widget['serial']) ? $widget['serial'] : ($key + 1),
                     'is_editable' => $widget['is_editable'] ?? true,
+                    'widget_type_id' => $request->widget_type_id ?? null,
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);
