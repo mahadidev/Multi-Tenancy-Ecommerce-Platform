@@ -43,18 +43,19 @@ class SellerAccountSeeder extends Seeder
 
         $store = Store::updateOrCreate(
             [
-                'owner_id' => $user->id,
-                'domain' => 'goody-bro',
+                'owner_id' => $user->id, // Search criteria
+                'domain' => 'goody-bro', // Search criteria
+            ],
+            [
+                // Data to update or create
                 'slug' => 'goody-bro',
                 'primary_color' => "#ffc100",
                 'secondary_color' => "#fbcfe8",
                 'logo' => "seeders/stores/goddybro-logo.png",
-            ],
-            [
                 'name' => 'Goody Bro',
                 'currency' => 'BDT',
                 'status' => 1,
-            ],
+            ]
         );
 
         $theme = Theme::with('pages.page_widgets')->first();
