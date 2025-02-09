@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import { authApi } from "./reducers/authApi";
 import { blogApi } from "./reducers/blogApi";
 import { brandApi } from "./reducers/brandApi";
+import { cartApi } from "./reducers/cartApi";
 import { categoryApi } from "./reducers/categoryApi";
 import { customerApi } from "./reducers/customerApi";
 import { dashboardAnalyticsApi } from "./reducers/dashboardAnalyticsApi";
@@ -19,6 +20,7 @@ import { themeApi } from "./reducers/themeApi";
 import AuthSlice from "./slices/authSlice";
 import blogSlice from "./slices/blogSlice";
 import brandSlice from "./slices/brandSlice";
+import CartSlice from "./slices/cartSlice";
 import categorySlice from "./slices/categorySlice";
 import customerSlice from "./slices/customerSlice";
 import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
@@ -36,6 +38,7 @@ import widgetSlice from "./slices/widgetSlice";
 const authPersistConfig = {
     key: "seller",
     blacklist: [
+        "cartApi",
         "orderApi",
         "authApi",
         "dashboardAnalyticsApi",
@@ -60,6 +63,7 @@ const persistedReducer = persistReducer(
     combineReducers({
         auth: AuthSlice,
         order: OrderSlice,
+        cart: CartSlice,
         analytics: DashboardAnalyticsSlice,
         store: storeSlice,
         file: fileSlice,
@@ -74,6 +78,7 @@ const persistedReducer = persistReducer(
         widget: widgetSlice,
         notification: notificationSlice,
         customer: customerSlice,
+        [cartApi.reducerPath]: cartApi.reducer,
         [customerApi.reducerPath]: categoryApi.reducer,
         [dashboardAnalyticsApi.reducerPath]: dashboardAnalyticsApi.reducer,
         [notificationApi.reducerPath]: notificationApi.reducer,
@@ -99,6 +104,7 @@ export const store = configureStore({
             serializableCheck: false,
         }).concat([
             authApi.middleware,
+            cartApi.middleware,
             orderApi.middleware,
             customerApi.middleware,
             notificationApi.middleware,
