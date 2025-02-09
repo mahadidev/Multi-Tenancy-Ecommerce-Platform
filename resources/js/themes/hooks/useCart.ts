@@ -1,6 +1,7 @@
 import { useAppSelector } from "@themes/store/store";
 
 const useCart = () => {
+    // @ts-ignore
     const { cartItems } = useAppSelector((state) => state.cart);
 
     const onAddCart = (cartItem: {
