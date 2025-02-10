@@ -12,6 +12,7 @@ class StorePage extends Model
         'type',
         'slug',
         'title',
+        'layout_id',
         'store_id',
         'is_active'
     ];
@@ -36,4 +37,8 @@ class StorePage extends Model
         return $query->where('store_id', authStore());
     }
 
+    public function layout()
+    {
+        return $this->belongsTo(ThemeWidget::class, 'layout_id');
+    }
 }

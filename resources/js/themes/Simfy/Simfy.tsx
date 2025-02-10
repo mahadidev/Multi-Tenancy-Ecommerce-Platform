@@ -34,6 +34,7 @@ export const SimfySeeder: ThemeType | any = {
 			label: 'Home',
 			slug: '/',
 			title: 'Home Page',
+            layout_id: 1,
 			is_active: 1,
 			type: 'home',
 			thumbnail: null,

@@ -12,6 +12,7 @@ class StorePageWidget extends Model
         'label',
         'serial',
         'is_editable',
+        "layout_id",
         'widget_type_id',
 
     ];
@@ -36,5 +37,9 @@ class StorePageWidget extends Model
 
     public function widgetType(){
         return $this->belongsTo(WidgetType::class, 'widget_type_id');
+    }
+
+    public function layout(){
+        return $this->belongsTo(ThemeWidget::class, 'layout_id');
     }
 }

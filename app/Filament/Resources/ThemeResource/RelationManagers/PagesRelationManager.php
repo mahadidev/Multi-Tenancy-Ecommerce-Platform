@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ThemeResource\RelationManagers;
 
 use App\Models\PageType;
+use App\Models\ThemeWidget;
 use App\Models\WidgetType;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -29,6 +30,11 @@ class PagesRelationManager extends RelationManager
                 Forms\Components\Select::make('type')
                     ->label('Page Type')
                     ->options(PageType::all()->pluck('type', 'id')) // Fetch widget types from the database
+                    ->searchable()
+                    ->required(),
+                Forms\Components\Select::make('layout_id')
+                    ->label('Layout')
+                    ->options(ThemeWidget::all()->pluck('label', 'id')) // Fetch widget types from the database
                     ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('slug')
