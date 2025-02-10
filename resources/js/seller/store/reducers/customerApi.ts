@@ -1,12 +1,16 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
-import { CustomerDataType } from "@type/customersType";
+import { CustomerDataType, CustomerType } from "@type/customersType";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { setCustomers } from "../slices/customerSlice";
 
 export interface CustomerFetchResponseType extends ApiResponseType {
     data: CustomerDataType;
+}
+
+export interface CustomerIdType {
+    id: number;
 }
 
 export const customerApi = createApi({
@@ -33,7 +37,49 @@ export const customerApi = createApi({
                 });
             },
         }),
+
+        // create customer
+        createCustomer: builder.mutation<ApiResponseType, CustomerType>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/customers`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["Customers"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // update customer
+        updateCustomer: builder.mutation<ApiResponseType, CustomerType>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/customers/${formData.id}`,
+                    method: "post",
+                    apiMethod: "PUT",
+                    body: formData,
+                }),
+            invalidatesTags: ["Customers"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // delete customer
+        deleteCustomer: builder.mutation<ApiResponseType, CustomerIdType>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/customers/${formData.id}`,
+                    method: "delete",
+                    body: formData,
+                }),
+            invalidatesTags: ["Customers"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
     }),
 });
 
-export const { useFetchCustomersQuery } = customerApi;
+export const {
+    useFetchCustomersQuery,
+    useCreateCustomerMutation,
+    useUpdateCustomerMutation,
+    useDeleteCustomerMutation,
+} = customerApi;

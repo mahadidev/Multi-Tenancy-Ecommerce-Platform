@@ -2,6 +2,9 @@ import { DataTable } from "@seller/components";
 import useCustomer from "@seller/hooks/useCustomer";
 import { CustomerType } from "@type/customersType";
 import { Table } from "flowbite-react";
+import CreateCustomerModal from "./CreateCustomerModal";
+import DeleteCustomerModal from "./DeleteCustomerModal";
+import EditCustomerModal from "./EditCustomerModal";
 
 const CustomersTable = () => {
     // customers
@@ -61,6 +64,16 @@ const CustomersTable = () => {
                         ),
                         sortable: true,
                     },
+                    {
+                        render: (row: CustomerType) => (
+                            <Table.Cell>
+                                <div className="flex items-center gap-x-3 whitespace-nowrap">
+                                    <EditCustomerModal customer={row} />
+                                    <DeleteCustomerModal customer={row} />
+                                </div>
+                            </Table.Cell>
+                        ),
+                    },
                 ]}
                 search={{
                     placeholder: "Search for customer...",
@@ -71,6 +84,9 @@ const CustomersTable = () => {
                         "address",
                         "created_at",
                     ],
+                }}
+                head={{
+                    render: (_data: CustomerType[]) => <CreateCustomerModal />,
                 }}
                 data={customers!}
                 exportable={true}
