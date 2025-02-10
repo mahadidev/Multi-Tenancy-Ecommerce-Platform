@@ -165,6 +165,20 @@ class StoreController extends Controller
             'description' => $request->description ?? null,
         ]);
 
+        if($store->theme->widgets){
+            $store->widgets()->delete();
+            foreach ($store->theme->widgets as $widget) {
+                $store->widgets()->create([
+                    'widget_type_id' => $widget->widget_type_id,
+                    'name' => $widget->name,
+                    'label' => $widget->label,
+                    'inputs' => $widget->inputs,
+                    'is_editable' => $widget->is_editable,
+                    'thumbnail' => $widget->thumbnail,
+                ]);
+            }
+        }
+
         if ($request->social_media) {
             foreach ($request->social_media as $social_media) {
 
@@ -264,6 +278,20 @@ class StoreController extends Controller
             'type' => $request->type ?? $store->type,
             'description' => $request->description ?? $store->description,
         ]);
+
+        if($store->theme->widgets){
+            $store->widgets()->delete();
+            foreach ($store->theme->widgets as $widget) {
+                $store->widgets()->create([
+                    'widget_type_id' => $widget->widget_type_id,
+                    'name' => $widget->name,
+                    'label' => $widget->label,
+                    'inputs' => $widget->inputs,
+                    'is_editable' => $widget->is_editable,
+                    'thumbnail' => $widget->thumbnail,
+                ]);
+            }
+        }
 
         if ($request->social_media) {
 
