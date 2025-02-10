@@ -20,7 +20,7 @@ class StoreMenuItemController extends Controller
             ->where('store_menu_id', $request->store_menu_id)
             ->when($search, function ($query, $search) {
                 $query->where('label', 'like', '%' . $search . '%')
-                      ->orWhere('href', 'like', '%' . $search . '%');
+                    ->orWhere('href', 'like', '%' . $search . '%');
             })
             ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
@@ -79,7 +79,7 @@ class StoreMenuItemController extends Controller
 
     public function show(Request $request, $id)
     {
-        $menuItem = StoreMenuItem::where('store_menu_id', $request->store_menu_id)->find($id); 
+        $menuItem = StoreMenuItem::where('store_menu_id', $request->store_menu_id)->find($id);
 
         if (!$menuItem) {
             return response()->json([
