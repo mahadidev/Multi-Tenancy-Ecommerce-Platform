@@ -26,7 +26,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('theme_pages', function (Blueprint $table) {
-            //
+              // Drop the foreign key first
+              $table->dropForeign(['layout_id']);
+
+              // Then drop the column
+              $table->dropColumn('layout_id');
         });
     }
 };
