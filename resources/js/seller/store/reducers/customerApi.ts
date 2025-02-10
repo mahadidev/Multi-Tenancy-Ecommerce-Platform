@@ -9,6 +9,10 @@ export interface CustomerFetchResponseType extends ApiResponseType {
     data: CustomerDataType;
 }
 
+export interface CustomerIdType {
+    id: number;
+}
+
 export const customerApi = createApi({
     reducerPath: "customerApi",
     baseQuery: baseQueryWithReAuth,
@@ -45,13 +49,26 @@ export const customerApi = createApi({
             invalidatesTags: ["Customers"],
             transformErrorResponse: (error: any) => error.data,
         }),
+
         // update customer
         updateCustomer: builder.mutation<ApiResponseType, CustomerType>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/customers`,
+                    url: `${PREFIX}/customers/${formData.id}`,
                     method: "post",
                     apiMethod: "PUT",
+                    body: formData,
+                }),
+            invalidatesTags: ["Customers"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // delete customer
+        deleteCustomer: builder.mutation<ApiResponseType, CustomerIdType>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/customers/${formData.id}`,
+                    method: "delete",
                     body: formData,
                 }),
             invalidatesTags: ["Customers"],
@@ -62,6 +79,7 @@ export const customerApi = createApi({
 
 export const {
     useFetchCustomersQuery,
-    useUpdateCustomerMutation,
     useCreateCustomerMutation,
+    useUpdateCustomerMutation,
+    useDeleteCustomerMutation,
 } = customerApi;
