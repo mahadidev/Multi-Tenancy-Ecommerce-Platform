@@ -25,7 +25,7 @@ class StoreMenuController extends Controller
             })
             ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
-        if(!$menus){
+        if (!$menus) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Store menu not found.',
@@ -75,7 +75,7 @@ class StoreMenuController extends Controller
 
         $menu = StoreMenu::create($validatedData);
 
-        if($request->has('items')){
+        if ($request->has('items')) {
             foreach ($request->items as $item) {
                 $itemsDate = [
                     'label' => $item['label'],
@@ -124,7 +124,7 @@ class StoreMenuController extends Controller
             'items.*.href' => 'required|string',
             'items.*.visibility' => 'sometimes|in:user,guest,all',
         ]);
-        
+
         $menu = StoreMenu::authorized()->find($id);
 
         if (!$menu) {
@@ -138,7 +138,7 @@ class StoreMenuController extends Controller
 
         $menu->update($validatedData);
 
-        if($request->has('items')){
+        if ($request->has('items')) {
             $menu->items()->delete();
 
             foreach ($request->items as $item) {
