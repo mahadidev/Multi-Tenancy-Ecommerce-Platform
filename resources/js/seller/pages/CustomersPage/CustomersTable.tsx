@@ -1,17 +1,11 @@
 import { DataTable } from "@seller/components";
 import useCustomer from "@seller/hooks/useCustomer";
-import useOrders from "@seller/hooks/useOrders";
 import { CustomerType } from "@type/customersType";
 import { Table } from "flowbite-react";
 
 const CustomersTable = () => {
-    // get the orders
-    const { orders } = useOrders();
-
     // customers
     const { customers } = useCustomer();
-
-    console.log({ customers });
 
     return (
         <>
