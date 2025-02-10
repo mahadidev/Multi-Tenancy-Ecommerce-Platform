@@ -63,6 +63,21 @@ class SellerAccountSeeder extends Seeder
 
         if ($theme) {
             $store->update(['theme_id' => $theme->id]);
+
+            if($theme->widgets){
+                $store->widgets()->delete();
+                foreach ($theme->widgets as $widget) {
+                    $store->widgets()->create([
+                        'widget_type_id' => $widget->widget_type_id,
+                        'name' => $widget->name,
+                        'label' => $widget->label,
+                        'inputs' => $widget->inputs,
+                        'is_editable' => $widget->is_editable,
+                        'thumbnail' => $widget->thumbnail,
+                    ]);
+                }
+            }
+
             $pages = $themeData->pages;
 
             if ($pages) {
