@@ -148,12 +148,16 @@
         .email-button {
             display: inline-block;
             background: #4CAF50;
-            color: #fff;
+            color: #fff !important;
             padding: 12px 20px;
             text-decoration: none;
             border-radius: 6px;
             margin: 20px 0;
             font-weight: bold;
+        }
+
+        .email-button:visited {
+            color: #fff !important;
         }
 
         .footer {

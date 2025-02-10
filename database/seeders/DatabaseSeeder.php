@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             ProductSeeder::class,
             BlogSeeder::class,
-            ThemeSeeder::class,
             StoreMenusSeeder::class,
             WidgetTypeSeeder::class,
             SvgIconSeeder::class,

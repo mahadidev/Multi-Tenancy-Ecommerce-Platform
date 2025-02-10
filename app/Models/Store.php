@@ -133,4 +133,8 @@ class Store extends Model
             ->distinct('ip_address')
             ->count();
     }
+
+    public function widgets(){
+        return $this->hasMany(StoreWidget::class, 'store_id');
+    }
 }
