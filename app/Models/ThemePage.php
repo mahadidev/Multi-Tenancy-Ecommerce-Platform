@@ -13,6 +13,7 @@ class ThemePage extends Model
         "type",
         "slug",
         "title",
+        "layout_id",
         "thumbnail",
     ];
 
@@ -30,5 +31,10 @@ class ThemePage extends Model
     public function type()
     {
         return $this->belongsTo(PageType::class, 'type');
+    }
+
+    public function layout()
+    {
+        return $this->belongsTo(ThemeWidget::class, 'layout_id');
     }
 }

@@ -21,6 +21,6 @@ class ThemeWidget extends Model
     }
 
     public function widgetType(){
-        return $this->belongsTo(WidgetType::class, 'theme_id');
+        return $this->belongsTo(WidgetType::class, 'widget_type_id');
     }
 }

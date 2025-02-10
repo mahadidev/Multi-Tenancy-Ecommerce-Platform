@@ -26,7 +26,7 @@ class WidgetTypeSeeder extends Seeder
 
 
         foreach($widgetTypes as $item){
-            WidgetType::updateorCreate([
+            WidgetType::insertOrIgnore([
                 'type' => $item['type'],
                 'label' => $item['label'],
             ]);

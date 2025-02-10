@@ -16,14 +16,14 @@
         "id": 1,
         "name": "navigation",
         "label": "Navigation",
-        "type": "layout",
+        "type": "layout-widget",
         "inputs": []
       },
       {
         "id": 1,
         "name": "footer",
         "label": "Footer",
-        "type": "layout",
+        "type": "layout-widget",
         "inputs": []
       }
     ],
@@ -34,6 +34,7 @@
         "label": "Home",
         "slug": "/",
         "title": "Home Page",
+        "layout_id": 1,
         "is_active": 1,
         "type": "home",
         "thumbnail": null,

@@ -2,6 +2,6 @@
 	"id": 1,
 	"name": "navigation",
 	"label": "Navigation",
-	"type": "layout",
+	"type": "layout-widget",
 	"inputs": []
 }
