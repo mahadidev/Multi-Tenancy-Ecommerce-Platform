@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ThemeResource\RelationManagers;
 
+use App\Models\PageType;
+use App\Models\WidgetType;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -24,8 +26,11 @@ class PagesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('type')
-                    ->maxLength(255),
+                Forms\Components\Select::make('type')
+                    ->label('Page Type')
+                    ->options(PageType::all()->pluck('type', 'id')) // Fetch widget types from the database
+                    ->searchable()
+                    ->required(),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255)
@@ -45,6 +50,11 @@ class PagesRelationManager extends RelationManager
                     ->schema([
                         Forms\Components\TextInput::make('name')->label('Name')->placeholder('e.g. heroSection')->required()->hint('e.g., Header, Navbar, Contact Form'),
                         Forms\Components\TextInput::make('label')->label('Label')->placeholder('e.g. Hero Section')->required(),
+                        Forms\Components\Select::make('widget_type_id')
+                            ->label('Widget Type')
+                            ->options(WidgetType::all()->pluck('type', 'id')) // Fetch widget types from the database
+                            ->searchable()
+                            ->required(),
                         Forms\Components\Textarea::make("inputs")
                             ->label("Inputs Array")
                             ->placeholder("ex. []")

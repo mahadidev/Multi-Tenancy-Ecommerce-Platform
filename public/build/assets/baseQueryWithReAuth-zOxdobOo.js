@@ -1,1 +1,0 @@
-import{h as a,G as c}from"./index-DFx8soi_.js";const o=a({baseUrl:c,prepareHeaders:e=>(e.set("accept","application/json"),e)}),p=({url:e,method:r="GET",body:s,apiMethod:t})=>t?{url:e,method:r,body:{...s,_method:t}}:{url:e,method:r,body:s};export{o as b,p as c};

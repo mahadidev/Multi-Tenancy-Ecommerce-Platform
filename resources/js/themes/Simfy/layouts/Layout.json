@@ -1,0 +1,7 @@
+{
+	"id": 1,
+	"name": "layout",
+	"label": "Layout",
+    "type": "layout",
+	"inputs": []
+}

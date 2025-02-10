@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { USER_PREFIX } from '@site/site_env';
-import { baseQuery, createRequest } from '@themes/store/baseQueryWithReAuth';
+import { baseQuery, createRequest } from '../baseQueryWithReAuth';
 
 export const cartApi = createApi({
 	reducerPath: 'cartApi',
@@ -16,7 +16,7 @@ export const cartApi = createApi({
 	],
 	endpoints: (builder) => ({
 		login: builder.mutation<any, any>({
-			query: (formData) =>
+			query: (formData: any) =>
 				createRequest({
 					url: `${USER_PREFIX}/login`,
 					method: 'post',
@@ -24,16 +24,6 @@ export const cartApi = createApi({
 				}),
 			invalidatesTags: ['User'],
 			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, {  queryFulfilled }) {
-				await queryFulfilled.then(() => {
-					// dispatch(
-					// 	setAuth({
-					// 		user: response.data.data.user,
-					// 		accessToken: response.data.data.access_token,
-					// 	})
-					// );
-				});
-			},
 		}),
 	}),
 });

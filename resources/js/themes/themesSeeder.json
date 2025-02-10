@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "name": "Simfy",
+    "slug": "simfy",
+    "thumbnail": null,
+    "widgets": [
+      {
+        "id": 1,
+        "name": "layout",
+        "label": "Layout",
+        "type": "layout",
+        "inputs": []
+      },
+      {
+        "id": 1,
+        "name": "navigation",
+        "label": "Navigation",
+        "type": "layout",
+        "inputs": []
+      },
+      {
+        "id": 1,
+        "name": "footer",
+        "label": "Footer",
+        "type": "layout",
+        "inputs": []
+      }
+    ],
+    "pages": [
+      {
+        "id": 0,
+        "name": "home",
+        "label": "Home",
+        "slug": "/",
+        "title": "Home Page",
+        "is_active": 1,
+        "type": "home",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "hero",
+            "label": "Hero Section",
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "title",
+                "label": "Title",
+                "type": "text",
+                "value": "YOUR_WIDGET_TITLE"
+              },
+              {
+                "id": 2,
+                "name": "description",
+                "label": "Descriptio",
+                "type": "text",
+                "value": "YOUR_WIDGET_DESCRIPTION"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

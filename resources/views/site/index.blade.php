@@ -12,7 +12,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('images/logo-icon.png') }}">
 
     @viteReactRefresh
-    @vite(['resources/js/site/index.tsx', 'resources/js/themes/index.tsx',])
+    @vite(['resources/js/site/index.tsx'])
 </head>
 
 <body>

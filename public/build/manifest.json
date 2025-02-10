@@ -1,32 +1,17 @@
 {
-  "_baseQueryWithReAuth-zOxdobOo.js": {
-    "file": "assets/baseQueryWithReAuth-zOxdobOo.js",
-    "name": "baseQueryWithReAuth",
-    "imports": [
-      "_index-DFx8soi_.js"
-    ]
-  },
   "_chunk-K6AXKMTT-DJhFqiHr.js": {
     "file": "assets/chunk-K6AXKMTT-DJhFqiHr.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_getComponent-BxBKJttK.js": {
-    "file": "assets/getComponent-BxBKJttK.js",
-    "name": "getComponent",
-    "imports": [
-      "_chunk-K6AXKMTT-DJhFqiHr.js",
-      "_index-DFx8soi_.js"
-    ]
-  },
-  "_index-DFx8soi_.js": {
-    "file": "assets/index-DFx8soi_.js",
-    "name": "index",
+  "_registeredTheme--geBQf1w.js": {
+    "file": "assets/registeredTheme--geBQf1w.js",
+    "name": "registeredTheme",
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-B79eeVkt.css",
+    "file": "assets/app-DgQBqBIm.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -61,43 +46,42 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-CQnx5-61.js",
+    "file": "assets/index-CovahjCL.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-      "_index-DFx8soi_.js",
-      "_getComponent-BxBKJttK.js"
+      "_registeredTheme--geBQf1w.js"
     ],
     "css": [
-      "assets/index-2cd5Xtk4.css"
+      "assets/index-BP82TtRE.css"
     ]
   },
   "resources/js/site/index.tsx": {
-    "file": "assets/index-BUxHlgnR.js",
+    "file": "assets/index-qKwq2v2N.js",
     "name": "index",
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-      "_index-DFx8soi_.js",
-      "_baseQueryWithReAuth-zOxdobOo.js",
-      "_getComponent-BxBKJttK.js"
+      "_registeredTheme--geBQf1w.js"
+    ],
+    "css": [
+      "assets/index-CiqFE7_a.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-DgOGrHIO.js",
+    "file": "assets/index-Cr7XRbvN.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-      "_index-DFx8soi_.js",
-      "_baseQueryWithReAuth-zOxdobOo.js"
+      "_registeredTheme--geBQf1w.js"
     ],
     "css": [
-      "assets/index-tc35l8mq.css"
+      "assets/index-CiqFE7_a.css"
     ]
   }
 }
