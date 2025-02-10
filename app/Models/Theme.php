@@ -58,6 +58,6 @@ class Theme extends Model
     }
 
     public function widgets(){
-        return $this->belongsTo(ThemeWidget::class, 'theme_id');
+        return $this->hasMany(ThemeWidget::class);
     }
 }

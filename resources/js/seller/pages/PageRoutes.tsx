@@ -26,6 +26,7 @@ import OnboardMiddleware from "../middleware/onboardMiddleware";
 import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
+import CustomersPage from "./CustomersPage/CustomersPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
@@ -44,9 +45,15 @@ export const PagesRoute: FC = function () {
                             {/* Orders Pages */}
                             <Route path="/orders" element={<OrdersPage />} />
 
+                            {/* Orders Pages */}
+                            <Route
+                                path="/customers"
+                                element={<CustomersPage />}
+                            />
+
                             {/* Ocreate orders Pages */}
                             <Route
-                                path="/orders/create-order"
+                                path="/orders/create"
                                 element={<CreateOrderPage />}
                             />
 

@@ -58,11 +58,26 @@ class SellerAccountSeeder extends Seeder
             ]
         );
 
-        $theme = Theme::with('pages.page_widgets')->first();
+        $theme = Theme::with('pages.page_widgets')->with("widgets")->first();
         $themeData = new \App\Http\Resources\ThemeResource($theme);
 
         if ($theme) {
             $store->update(['theme_id' => $theme->id]);
+
+            if($theme->widgets){
+                $store->widgets()->delete();
+                foreach ($theme->widgets as $widget) {
+                    $store->widgets()->create([
+                        'widget_type_id' => $widget->widget_type_id,
+                        'name' => $widget->name,
+                        'label' => $widget->label,
+                        'inputs' => $widget->inputs,
+                        'is_editable' => $widget->is_editable,
+                        'thumbnail' => $widget->thumbnail,
+                    ]);
+                }
+            }
+
             $pages = $themeData->pages;
 
             if ($pages) {

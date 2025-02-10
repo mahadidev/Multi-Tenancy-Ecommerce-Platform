@@ -2,7 +2,9 @@ import { DataTable } from "@seller/components";
 import StatusBadge from "@seller/components/Badge/StatusBadge";
 import useOrders from "@seller/hooks/useOrders";
 import { OrderType } from "@type/orderType";
-import { Table } from "flowbite-react";
+import { Button, Table } from "flowbite-react";
+import { HiPlus } from "react-icons/hi";
+import { Link } from "react-router-dom";
 import OrderInfoModal from "./OrderInfoModal";
 import UpdateOrderStatusModal from "./UpdateOrderStatusModal";
 
@@ -78,6 +80,22 @@ const OrdersTable = () => {
                 search={{
                     placeholder: "Search for order...",
                     columns: ["order_uuid", "user_name", "total", "created_at"],
+                }}
+                head={{
+                    render: () => (
+                        <Button
+                            as={Link}
+                            to={`/orders/create`}
+                            size="md"
+                            color="primary"
+                            className="p-0"
+                        >
+                            <div className="flex items-center gap-x-2">
+                                <HiPlus className="h-5 w-5" />
+                                Create Order
+                            </div>
+                        </Button>
+                    ),
                 }}
                 data={orders!}
                 exportable={true}

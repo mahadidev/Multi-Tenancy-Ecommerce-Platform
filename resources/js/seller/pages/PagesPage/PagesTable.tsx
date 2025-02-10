@@ -9,12 +9,7 @@ import DeletePageModal from "./DeletePageModal";
 
 const PagesTable = () => {
     const { pages } = usePage();
-    // <Table.HeadCell>ID</Table.HeadCell>
-    // 			<Table.HeadCell>Title</Table.HeadCell>
-    // 			<Table.HeadCell>Type</Table.HeadCell>
-    // 			<Table.HeadCell>Name</Table.HeadCell>
-    // 			<Table.HeadCell>Last Update</Table.HeadCell>
-    // 			<Table.HeadCell>Created At</Table.HeadCell>
+
     return (
         <>
             <DataTable
@@ -93,7 +88,7 @@ const PagesTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for brand...",
+                    placeholder: "Search for pages...",
                     columns: ["title", "name", "created_at", "last_update"],
                 }}
                 data={pages}
@@ -101,7 +96,7 @@ const PagesTable = () => {
                     render: (_data: PageType[]) => <CreatePageModal />,
                 }}
                 exportable={true}
-                filename="brands"
+                filename="pages"
             />
         </>
     );

@@ -28,7 +28,7 @@ class OrderController extends Controller
         }
 
         // Start with a query builder instead of getting collection
-        $ordersQuery = $store->orders();
+        $ordersQuery = $store->orders()->latest();
 
         // Apply sorting if provided
         if ($sort) {
