@@ -3,12 +3,14 @@ export interface CustomerDataType {
 }
 
 export interface CustomerType {
-    id: number;
+    id?: number;
     name: string;
     email: string;
-    phone: null;
-    image: null;
-    address: null;
-    created_at: string;
-    updated_at: string;
+    phone: string;
+    image?: string;
+    address: string;
+    password?: string;
+    confirm_password?: string;
+    created_at?: string;
+    updated_at?: string;
 }
