@@ -92,7 +92,21 @@ class OrderController extends Controller
 
         $order = Order::authorized()->find($id);
 
+        if(!$order){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid order Id',
+            ]);
+        }
+
         $store = Store::find($order->store_id);
+
+        if (!$store) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid store Id',
+            ]);
+        }
 
         $appUrl = config('app.url');
 
