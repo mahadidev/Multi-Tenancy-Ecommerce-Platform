@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('theme_pages', function (Blueprint $table) {
-            $table->unsignedBigInteger('layout_id')->nullable()->after('id');
-            $table->foreign('layout_id')
-                ->references('id')
-                ->on('theme_widgets')
-                ->onDelete('cascade');
+            $table->dropUnique(['slug']); // Remove the unique constraint
         });
     }
 
@@ -26,11 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('theme_pages', function (Blueprint $table) {
-              // Drop the foreign key first
-              $table->dropForeign(['layout_id']);
-
-              // Then drop the column
-              $table->dropColumn('layout_id');
+            $table->unique('slug'); // Add the unique constraint back
         });
     }
 };
