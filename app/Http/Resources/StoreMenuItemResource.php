@@ -19,7 +19,6 @@ class StoreMenuItemResource extends JsonResource
             'label' => $this->label,
             'href' => $this->href,
             'store_menu_id' => $this->store_menu_id,
-            'visibility' => $this->visibility,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

@@ -65,22 +65,26 @@ class StoreMenuController extends Controller
         $validatedData = $request->validate([
             'label' => 'required|string',
             'name' => 'required|string',
+            'visibility' => 'required|in:user,guest,all',
             'items' => 'nullable|array',
             'items.*.label' => 'required|string',
             'items.*.href' => 'required|string',
-            'items.*.visibility' => 'sometimes|in:user,guest,all',
         ]);
 
         $validatedData['store_id'] = authStore();
 
-        $menu = StoreMenu::create($validatedData);
+        $menu = StoreMenu::create([
+            'store_id' => $validatedData['store_id'],
+            'label' => $validatedData['label'],
+            'name' => $validatedData['name'],
+            'visibility' => $validatedData['visibility'] ?? 'all',
+        ]);
 
         if ($request->has('items')) {
             foreach ($request->items as $item) {
                 $itemsDate = [
                     'label' => $item['label'],
                     'href' => $item['href'],
-                    'visibility' => $item['visibility'] ?? 'all',
                     'store_menu_id' => $menu->id,
                 ];
 
@@ -119,10 +123,10 @@ class StoreMenuController extends Controller
         $validatedData = $request->validate([
             'label' => 'sometimes|required|string',
             'name' => 'sometimes|required|string',
+            'visibility' => 'sometimes|required|in:user,guest,all',
             'items' => 'nullable|array',
             'items.*.label' => 'required|string',
             'items.*.href' => 'required|string',
-            'items.*.visibility' => 'sometimes|in:user,guest,all',
         ]);
 
         $menu = StoreMenu::authorized()->find($id);
@@ -136,7 +140,12 @@ class StoreMenuController extends Controller
 
         $validatedData['store_id'] = authStore();
 
-        $menu->update($validatedData);
+        $menu->update([
+            'store_id' => $validatedData['store_id'],
+            'label' => $validatedData['label'],
+            'name' => $validatedData['name'],
+            'visibility' => $validatedData['visibility'] ?? $menu->visibility,
+        ]);
 
         if ($request->has('items')) {
             $menu->items()->delete();
@@ -145,7 +154,6 @@ class StoreMenuController extends Controller
                 $itemsDate = [
                     'label' => $item['label'],
                     'href' => $item['href'],
-                    'visibility' => $item['visibility'] ?? 'all',
                     'store_menu_id' => $menu->id,
                 ];
 

@@ -65,7 +65,6 @@ class StoreMenuItemController extends Controller
             'label' => 'required|string',
             'href' => 'required|string',
             'store_menu_id' => 'required|exists:store_menus,id',
-            'visibility' => 'sometimes|in:user,guest,all',
         ]);
 
         $menuItem = StoreMenuItem::create($validatedData);
@@ -102,7 +101,6 @@ class StoreMenuItemController extends Controller
             'label' => 'sometimes|required|string',
             'href' => 'sometimes|required|string',
             'store_menu_id' => 'sometimes|required|exists:store_menus,id',
-            'visibility' => 'sometimes|in:user,guest,all',
         ]);
 
         $menuItem = StoreMenuItem::where('store_menu_id', $request->store_menu_id)->find($id);
