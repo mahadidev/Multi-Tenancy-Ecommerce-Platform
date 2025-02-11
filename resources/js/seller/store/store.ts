@@ -32,7 +32,7 @@ import OrderSlice from "./slices/orderSlice";
 import pageSlice from "./slices/pageSlice";
 import productSlice from "./slices/productSlice";
 import socialMediaSlice from "./slices/socialMediaSlice";
-import storeSlice from "./slices/storeSlice";
+import StoreSlice from "./slices/storeSlice";
 import themeSlice from "./slices/themeSlice";
 import uiSlice from "./slices/uiSlice";
 import widgetSlice from "./slices/widgetSlice";
@@ -69,7 +69,7 @@ const persistedReducer = persistReducer(
         menu: MenuSlice,
         cart: CartSlice,
         analytics: DashboardAnalyticsSlice,
-        store: storeSlice,
+        store: StoreSlice,
         file: fileSlice,
         theme: themeSlice,
         ui: uiSlice,

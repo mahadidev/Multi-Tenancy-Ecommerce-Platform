@@ -3,10 +3,12 @@ import { StoreType, StoreTypesType } from "@type/storeType";
 
 const initialState: {
     store: StoreType | null;
+    currentStore: StoreType | null;
     stores: StoreType[] | null;
     storeTypes: StoreTypesType[];
 } = {
     store: null,
+    currentStore: null,
     stores: [],
     storeTypes: [],
 };
@@ -27,10 +29,12 @@ const storeSlice = createSlice({
         setAuthStore: (
             state,
             action: PayloadAction<{
-                store: StoreType;
+                currentStore: StoreType;
                 stores: StoreType[];
+                store: StoreType;
             }>
         ) => {
+            state.currentStore = action.payload.currentStore;
             state.store = action.payload.store;
             state.stores = action.payload.stores;
         },

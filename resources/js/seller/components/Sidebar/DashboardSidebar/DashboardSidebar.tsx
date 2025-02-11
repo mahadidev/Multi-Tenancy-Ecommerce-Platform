@@ -290,15 +290,16 @@ const pages: SidebarItem[] = [
 
 const externalPages: SidebarItem[] = [
     {
-        href: RoutePath.StorePagesPage.index(),
-        icon: MdCollectionsBookmark,
-        label: "Pages",
-    },
-    {
         href: RoutePath.StoresPage.index(),
         icon: MdStore,
         label: "Stores",
     },
+    {
+        href: RoutePath.StorePagesPage.index(),
+        icon: MdCollectionsBookmark,
+        label: "Pages",
+    },
+
     {
         icon: FaPaintBrush,
         label: "Appearance",

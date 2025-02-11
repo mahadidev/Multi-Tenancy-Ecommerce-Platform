@@ -68,6 +68,7 @@ export const storeApi = createApi({
                     dispatch(
                         setAuthStore({
                             stores: response.data.data.stores,
+                            currentStore: response.data.data.current_store,
                             store: response.data.data.current_store,
                         })
                     );

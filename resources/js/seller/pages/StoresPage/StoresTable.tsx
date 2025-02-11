@@ -1,10 +1,11 @@
 import { DataTable } from "@seller/components";
+import StatusBadge from "@seller/components/Badge/StatusBadge";
 import useStore from "@seller/hooks/useStore";
-import { BrandType } from "@type/brandType";
-import { Table } from "flowbite-react";
+import { StoreType } from "@type/storeType";
+import { Button, Table } from "flowbite-react";
 
 const StoresTable = () => {
-    const { stores } = useStore();
+    const { stores, currentStore, switchStore } = useStore();
     return (
         <>
             <DataTable
@@ -12,7 +13,7 @@ const StoresTable = () => {
                     {
                         label: "Name",
                         key: "name",
-                        render: (row: BrandType) => (
+                        render: (row: StoreType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                                 {row.name}
                             </Table.Cell>
@@ -22,7 +23,7 @@ const StoresTable = () => {
                     {
                         label: "Slug",
                         key: "slug",
-                        render: (row: BrandType) => (
+                        render: (row: StoreType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                                 {row.slug}
                             </Table.Cell>
@@ -30,34 +31,65 @@ const StoresTable = () => {
                         sortable: true,
                     },
                     {
+                        label: "Email",
+                        key: "email",
+                        render: (row: StoreType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row.email || "N/A"}
+                            </Table.Cell>
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        label: "Phone",
+                        key: "phone",
+                        render: (row: StoreType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row.phone || "N/A"}
+                            </Table.Cell>
+                        ),
+                        sortable: true,
+                    },
+                    {
                         label: "Created At",
                         key: "created_at",
-                        render: (row: BrandType) => (
+                        render: (row: StoreType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                                 {row.created_at}
                             </Table.Cell>
                         ),
                         sortable: true,
                     },
-                    // {
-                    //     render: (row: BrandType) => (
-                    //         <Table.Cell>
-                    //             <div className="flex items-center gap-x-3 whitespace-nowrap">
-                    //                 <EditBrandModal brand={row} />
-                    //                 <DeleteBrandModal brand={row} />
-                    //             </div>
-                    //         </Table.Cell>
-                    //     ),
-                    // },
+                    {
+                        render: (row: StoreType) => (
+                            <Table.Cell>
+                                {currentStore?.id === row?.id ? (
+                                    <StatusBadge status="Selected" />
+                                ) : (
+                                    <Button
+                                        color="primary"
+                                        onClick={() =>
+                                            switchStore.submit({
+                                                formData: {
+                                                    store_id: row?.id,
+                                                },
+                                            })
+                                        }
+                                        isProcessing={switchStore.isLoading}
+                                        disabled={switchStore.isLoading}
+                                    >
+                                        Switch
+                                    </Button>
+                                )}
+                            </Table.Cell>
+                        ),
+                    },
                 ]}
                 search={{
                     placeholder: "Search for store...",
                     columns: ["name", "slug", "created_at"],
                 }}
                 data={stores!}
-                // head={{
-                //     render: (_data: BrandType[]) => <CreateBrandModal />,
-                // }}
                 exportable={true}
                 filename="stores"
             />

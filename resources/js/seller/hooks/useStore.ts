@@ -20,7 +20,7 @@ const useStore = () => {
     const { toaster } = useToast();
 
     // select store
-    const { store, stores, storeTypes } = useAppSelector(
+    const { store, stores, storeTypes, currentStore } = useAppSelector(
         (state) => state.store
     );
 
@@ -206,6 +206,7 @@ const useStore = () => {
         store,
         stores,
         storeTypes,
+        currentStore,
         create: {
             submit: create,
             isLoading: isCreateLoading,
