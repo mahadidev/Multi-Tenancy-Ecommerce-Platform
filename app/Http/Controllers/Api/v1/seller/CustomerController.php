@@ -62,7 +62,7 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|alpha_num',
             'password' => 'nullable|string',
             'address' => 'nullable|string',
             'image' => 'nullable|string',
