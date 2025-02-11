@@ -31,6 +31,7 @@ class StoreResource extends JsonResource
             "dark_logo" => $this->dark_logo_image,
             'primary_color' => $this->primary_color,
             'secondary_color' => $this->secondary_color,
+            'store_type' => $this->storeType ? StoreTypeResource::make($this->storeType) : null,
             'theme_id' => $this->theme_id,
             "theme" => $this->theme_id ? new ThemeResource(Theme::where(["id" => $this->theme_id])->first()) : null,
             'settings' => $this->settings !== "null" ? $this->settings : null,
