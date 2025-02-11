@@ -8,6 +8,7 @@ import { HiPlus } from "react-icons/hi";
 const CreateMenuModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const { create } = useMenu();
+    const [items, setItems] = useState<ItemType[]>([]);
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
@@ -125,6 +126,91 @@ const CreateMenuModal: FC = function () {
                                 </Select>
                             </div>
                         </div>
+
+                        <div className="col-span-full flex flex-col gap-2.5">
+                            <Label>Add new Items</Label>
+                            {items?.map((item: ItemType, idx: number) => (
+                                <div
+                                    key={idx}
+                                    className="p-2.5 dark:bg-[#374050] bg-[#F9FAFB] rounded-md grid grid-cols-2 gap-2.5"
+                                >
+                                    <div className="flex flex-col gap-2.5">
+                                        <Label htmlFor="label">Label</Label>
+                                        <div>
+                                            <TextInput
+                                                id="label"
+                                                name="label"
+                                                placeholder="Item Label"
+                                                value={item["label"]}
+                                                onChange={(
+                                                    event: React.ChangeEvent<HTMLInputElement>
+                                                ) => {
+                                                    setItems((prevItems) => {
+                                                        const updatedItems = [
+                                                            ...prevItems,
+                                                        ];
+                                                        // @ts-ignore
+                                                        updatedItems[idx] = {
+                                                            ...updatedItems[
+                                                                idx
+                                                            ],
+                                                            label: event?.target!
+                                                                ?.value,
+                                                        };
+                                                        return updatedItems;
+                                                    });
+                                                }}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-2.5">
+                                        <Label htmlFor="href">Item Href</Label>
+                                        <div>
+                                            <TextInput
+                                                id="href"
+                                                name="href"
+                                                placeholder="Href"
+                                                value={item["href"]}
+                                                onChange={(
+                                                    event: React.ChangeEvent<HTMLInputElement>
+                                                ) => {
+                                                    setItems((prevItems) => {
+                                                        const updatedItems = [
+                                                            ...prevItems,
+                                                        ];
+                                                        // @ts-ignore
+                                                        updatedItems[idx] = {
+                                                            ...updatedItems[
+                                                                idx
+                                                            ],
+                                                            href: event?.target!
+                                                                ?.value,
+                                                        };
+                                                        return updatedItems;
+                                                    });
+                                                }}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="flex gap-2.5 items-end">
+                                <Button
+                                    className="w-full"
+                                    color="gray"
+                                    onClick={() => {
+                                        setItems((prevItems: ItemType[]) => [
+                                            ...prevItems, // spread operator to copy the previous items
+                                            { label: "", href: "" }, // add a new item with empty values for label and href
+                                        ]);
+                                    }}
+                                >
+                                    Add Item
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -132,7 +218,7 @@ const CreateMenuModal: FC = function () {
                         color="primary"
                         onClick={() => {
                             create.submit({
-                                formData: formState,
+                                formData: { ...formState, items },
                                 onSuccess: () => {
                                     setOpen(false);
                                 },
@@ -173,4 +259,9 @@ export const Visibility_Types: VisibilityType[] = [
 interface VisibilityType {
     value: string;
     label: string;
+}
+
+interface ItemType {
+    label: string;
+    href: string;
 }
