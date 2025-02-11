@@ -70,6 +70,9 @@ export const RoutePath = {
     ThemesPage: {
         index: () => "/themes",
     },
+    MenusPage: {
+        index: () => "/menus",
+    },
     BlogsPage: {
         index: () => "/blogs",
         categories: () => `/blogs/categories`,

@@ -27,6 +27,7 @@ import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
 import CustomersPage from "./CustomersPage/CustomersPage";
+import MenusPage from "./MenusPage/MenusPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
@@ -96,6 +97,9 @@ export const PagesRoute: FC = function () {
 
                             {/* Themes Pages */}
                             <Route path="themes" element={<ThemesPage />} />
+
+                            {/* Menus page */}
+                            <Route path="menus" element={<MenusPage />} />
 
                             {/* Seller account pages */}
                             <Route

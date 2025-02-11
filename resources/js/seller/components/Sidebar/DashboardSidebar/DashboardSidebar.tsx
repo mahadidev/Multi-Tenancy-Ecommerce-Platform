@@ -299,6 +299,7 @@ const externalPages: SidebarItem[] = [
         label: "Appearance",
         items: [
             { href: RoutePath.ThemesPage.index(), label: "Themes" },
+            { href: RoutePath.MenusPage.index(), label: "Menus" },
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],

@@ -216,7 +216,13 @@ const EditCustomerModal: FC<PropsType> = function (props) {
                         color="primary"
                         onClick={() => {
                             update.submit({
-                                formData: formState,
+                                formData: {
+                                    id: props?.customer?.id,
+                                    name: formState["name"],
+                                    email: formState["email"],
+                                    phone: formState["phone"].toString(),
+                                    address: formState["address"],
+                                },
                                 onSuccess: () => {
                                     setOpen(false);
                                 },
