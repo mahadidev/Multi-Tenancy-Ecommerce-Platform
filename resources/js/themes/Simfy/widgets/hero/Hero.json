@@ -2,6 +2,7 @@
 	"id": 1,
 	"name": "hero",
 	"label": "Hero Section",
+    "serial": 1,
     "type": "section",
 	"inputs": [
 		{

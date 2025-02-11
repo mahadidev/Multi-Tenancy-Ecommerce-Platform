@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->string('type')->nullable()->after('settings');
+            $table->string('type')->default("e-commerce")->after('settings');
             $table->longText('description')->nullable()->after('type');
         });
     }
