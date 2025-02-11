@@ -151,9 +151,6 @@ class OnBoardingController extends Controller
             'theme_id' => $request->theme_id,
         ]);
 
-        // Send welcome email after theme selection
-        $store->sendWelcomeEmail();
-
         return response()->json([
             'status' => 200,
             'message' => 'store theme selected successfully',

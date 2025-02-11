@@ -32,6 +32,8 @@ class Store extends Model
             if (empty($data->slug)) {
                 $data->slug = Str::slug($data->name); // Generate slug from name
             }
+
+            $data->sendWelcomeEmail();
         });
 
         // Automatically update the slug when updating
@@ -178,7 +180,7 @@ class Store extends Model
 
                 // Get domain
                 $domain = null;
-                if($appUrl == 'http://127.0.0.1:8000') {
+                if(env('APP_URL') == 'http://127.0.0.1:8000') {
                     $domain = 'http://127.0.0.1:8000/seller';
                 } else {
                     $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/seller';
