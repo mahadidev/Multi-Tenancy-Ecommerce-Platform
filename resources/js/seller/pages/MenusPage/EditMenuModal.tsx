@@ -1,20 +1,33 @@
 import useForm from "@seller/hooks/useForm";
 import useMenu from "@seller/hooks/useMenu";
+import { MenuType } from "@type/menuType";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
-import { HiPlus } from "react-icons/hi";
+import { FiEdit } from "react-icons/fi";
 
-const CreateMenuModal: FC = function () {
+interface Props {
+    menu: MenuType;
+}
+const EditMenuModal: FC<Props> = ({ menu }) => {
     const [isOpen, setOpen] = useState(false);
-    const { create } = useMenu();
+    const { update } = useMenu();
     const [items, setItems] = useState<ItemType[]>([]);
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
-        formValidationError: create.error,
+        formValidationError: update.error,
     });
 
+    useEffect(() => {
+        if (menu.items) {
+            setItems(menu.items);
+        }
+        setFormState({
+            ...menu,
+            items: items,
+        });
+    }, [menu]);
     return (
         <>
             <Button
@@ -23,12 +36,12 @@ const CreateMenuModal: FC = function () {
                 onClick={() => setOpen(true)}
             >
                 <div className="flex items-center gap-x-3">
-                    <HiPlus className="text-xl" />
-                    Create Menu
+                    <FiEdit className="text-xl" />
+                    Edit Menu
                 </div>
             </Button>
             <Modal onClose={() => setOpen(false)} show={isOpen} size="4xl">
-                <Modal.Header>Create a new Menu</Modal.Header>
+                <Modal.Header>Edit Menu</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-4">
                         <div className="flex flex-col gap-2">
@@ -55,7 +68,7 @@ const CreateMenuModal: FC = function () {
                                     required
                                 />
                             </div>
-                        </div>{" "}
+                        </div>
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
                             <div>
@@ -127,6 +140,7 @@ const CreateMenuModal: FC = function () {
                                 </Select>
                             </div>
                         </div>
+
                         <div className="col-span-full flex flex-col gap-2.5">
                             <Label>Add new Items</Label>
                             {items?.map((item: ItemType, idx: number) => (
@@ -256,29 +270,29 @@ const CreateMenuModal: FC = function () {
                     <Button
                         color="primary"
                         onClick={() => {
-                            create.submit({
-                                formData: { ...formState, items },
+                            update.submit({
+                                formData: { id: menu?.id, ...formState, items },
                                 onSuccess: () => {
                                     setOpen(false);
                                 },
                             });
                             setFormState({});
                         }}
-                        isProcessing={create.isLoading}
-                        disabled={create.isLoading}
-                        processingLabel="Creating"
+                        isProcessing={update.isLoading}
+                        disabled={update.isLoading}
+                        processingLabel="Saving..."
                         processingSpinner={
                             <AiOutlineLoading className="animate-spin" />
                         }
                     >
-                        Create
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>
         </>
     );
 };
-export default CreateMenuModal;
+export default EditMenuModal;
 
 export const Visibility_Types: VisibilityType[] = [
     {

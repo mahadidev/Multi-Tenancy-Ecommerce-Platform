@@ -59,7 +59,7 @@ export const menuApi = createApi({
         updateMenu: builder.mutation<ApiResponseType, MenuType>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/store-menu/${formData.id}`,
+                    url: `${PREFIX}/store-menus/${formData.id}`,
                     method: "post",
                     body: formData,
                     apiMethod: "PUT",

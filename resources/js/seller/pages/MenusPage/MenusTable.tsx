@@ -4,6 +4,7 @@ import { MenuType } from "@type/menuType";
 import { Table } from "flowbite-react";
 import CreateMenuModal from "./CreateMenuModal";
 import DeleteMenuModal from "./DeleteMenuModal";
+import EditMenuModal from "./EditMenuModal";
 
 const MenusTable = () => {
     const { menus } = useMenu();
@@ -56,6 +57,7 @@ const MenusTable = () => {
                         render: (row: MenuType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
+                                    <EditMenuModal menu={row} />
                                     <DeleteMenuModal menu={row} />
                                 </div>
                             </Table.Cell>
