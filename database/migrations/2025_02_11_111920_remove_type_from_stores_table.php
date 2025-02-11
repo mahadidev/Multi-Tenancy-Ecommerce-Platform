@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->string('type')->default("e-commerce")->after('settings');
-            $table->longText('description')->nullable()->after('type');
+            $table->dropColumn('type');
         });
     }
 
@@ -22,14 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
-            // Drop the foreign key constraint referencing `stores`
-            $table->dropForeign(['store_id']);
-        });
-
         Schema::table('stores', function (Blueprint $table) {
-            // Drop the `type` and `description` columns from `stores`
-            $table->dropColumn(['type', 'description']);
+            $table->string('type')->nullable();
         });
     }
 };

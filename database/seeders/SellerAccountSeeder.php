@@ -9,6 +9,7 @@ use App\Models\StorePage;
 use App\Models\StorePageWidget;
 use App\Models\StorePageWidgetInput;
 use App\Models\StorePageWidgetInputItem;
+use App\Models\StoreType;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -55,6 +56,7 @@ class SellerAccountSeeder extends Seeder
                 'name' => 'Goody Bro',
                 'currency' => 'BDT',
                 'status' => 1,
+                'store_type_id' => StoreType::first()->id,
             ]
         );
 
@@ -68,6 +70,7 @@ class SellerAccountSeeder extends Seeder
                 $store->widgets()->delete();
                 foreach ($theme->widgets as $widget) {
                     $store->widgets()->create([
+                        'store_id' => $store->id,
                         'widget_type_id' => $widget->widget_type_id,
                         'name' => $widget->name,
                         'label' => $widget->label,
@@ -92,6 +95,7 @@ class SellerAccountSeeder extends Seeder
                                 'type' => $page['type'],
                                 'slug' => $page['slug'],
                                 'title' => $page['title'],
+                                'layout_id' => $page['layout_id'],
                                 'is_active' => true,
                             ],
                         );
@@ -106,6 +110,7 @@ class SellerAccountSeeder extends Seeder
                                     [
                                         'label' => $widget['label'] ?? null,
                                         'serial' => $key + 1,
+                                        'widget_type_id' => $widget->widget_type_id,
                                     ]
                                 );
 

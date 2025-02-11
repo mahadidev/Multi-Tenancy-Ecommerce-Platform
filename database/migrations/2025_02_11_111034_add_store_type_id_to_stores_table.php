@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->string('type')->default("e-commerce")->after('settings');
-            $table->longText('description')->nullable()->after('type');
+            $table->foreignId('store_type_id')
+            ->nullable()
+            ->after('id')
+            ->constrained()
+            ->cascadeOnUpdate()
+            ->cascadeOnDelete();
         });
     }
 
@@ -22,14 +26,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
-            // Drop the foreign key constraint referencing `stores`
-            $table->dropForeign(['store_id']);
-        });
-
         Schema::table('stores', function (Blueprint $table) {
-            // Drop the `type` and `description` columns from `stores`
-            $table->dropColumn(['type', 'description']);
+            $table->dropForeign(['store_type_id']);
+            $table->dropColumn('store_type_id');
         });
     }
 };

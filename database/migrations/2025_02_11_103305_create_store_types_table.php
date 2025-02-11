@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('store_pages', function (Blueprint $table) {
+        Schema::create('store_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
-            $table->string('name');
-            $table->string('slug')->nullable();
-            $table->string('title')->nullable();
-            $table->boolean('is_active')->default(false);
+            $table->string('label');
+            $table->string('type');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('store_pages');
+        Schema::dropIfExists('store_types');
     }
 };
