@@ -101,6 +101,7 @@ class ThemeSeeder extends Seeder
                             'label' => $widget->label,
                             'widget_type_id' => $widget->widget_type_id,
                             'inputs' => json_encode($widget->inputs),
+                            "serial" => $widget->serial ?? 0,
                         ]
                     );
                 }
