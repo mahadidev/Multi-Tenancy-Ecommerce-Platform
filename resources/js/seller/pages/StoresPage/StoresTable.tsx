@@ -3,6 +3,8 @@ import StatusBadge from "@seller/components/Badge/StatusBadge";
 import useStore from "@seller/hooks/useStore";
 import { StoreType } from "@type/storeType";
 import { Button, Table } from "flowbite-react";
+import { HiPlus } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const StoresTable = () => {
     const { stores, currentStore, switchStore } = useStore();
@@ -88,6 +90,22 @@ const StoresTable = () => {
                 search={{
                     placeholder: "Search for store...",
                     columns: ["name", "slug", "created_at"],
+                }}
+                head={{
+                    render: (_data: StoreType[]) => (
+                        <Button
+                            as={Link}
+                            to={`/stores/create`}
+                            size="sm"
+                            color="primary"
+                            className="p-0"
+                        >
+                            <div className="flex items-center gap-x-2">
+                                <HiPlus className="h-5 w-5" />
+                                Create Store
+                            </div>
+                        </Button>
+                    ),
                 }}
                 data={stores!}
                 exportable={true}

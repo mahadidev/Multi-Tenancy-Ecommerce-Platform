@@ -31,6 +31,7 @@ import MenusPage from "./MenusPage/MenusPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
+import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
 
 // routes
@@ -115,6 +116,10 @@ export const PagesRoute: FC = function () {
                             />
                             {/* Stores page */}
                             <Route path="stores" element={<StoresPage />} />
+                            <Route
+                                path="stores/create"
+                                element={<CreateStorePage />}
+                            />
                         </Route>
 
                         {/* Editor Layout */}
