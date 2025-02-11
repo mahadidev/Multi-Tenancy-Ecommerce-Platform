@@ -318,7 +318,11 @@ class AuthController extends Controller
 
         // Mail::to($user->email)->send(new VerifyEmail($verificationUrl));
         try {
-            Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName));
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
+                Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName));
+            } else {
+                Log::info('Please set APP_ENV to production to send emails');
+            }
         } catch (\Throwable $th) {
             //throw $th;
             Log::info('Error sending verification email: ' . $th->getMessage());
