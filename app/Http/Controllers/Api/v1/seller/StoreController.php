@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\StoreSession;
 use App\Models\StoreSocialMedia;
+use App\Models\StoreType;
 use App\Services\StoreService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -136,8 +137,9 @@ class StoreController extends Controller
             'dark_logo' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
-            "theme_id" => "nullable|exists:themes,id",
+            'theme_id' => 'nullable|exists:themes,id',
             'description' => 'nullable|string',
+            'store_type_id' => 'nullable|exists:store_types,id',
             'social_media' => 'nullable|array',
             'social_media.*.name' => 'required_with:social_media|string',
             'social_media.*.username' => 'required_with:social_media|string',
@@ -161,8 +163,8 @@ class StoreController extends Controller
             'dark_logo' => $request->dark_logo ?? null,
             'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null,
-            'type' => $request->type ?? null,
             'description' => $request->description ?? null,
+            'store_type_id' => $request->store_type_id ? $request->store_type_id : StoreType::first()->id,
         ]);
 
         if($store->theme->widgets){
@@ -241,6 +243,7 @@ class StoreController extends Controller
             "theme_id" => "nullable",
             'type' => 'nullable|string',
             'description' => 'nullable|string',
+            'store_type_id' => 'nullable|exists:store_types,id',
             'social_media' => 'nullable|array',
             'social_media.*.name' => 'required_with:social_media|string',
             'social_media.*.username' => 'required_with:social_media|string',
@@ -275,7 +278,7 @@ class StoreController extends Controller
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
             'theme_id' => $theme_id,
             'settings' => $request->settings ? $request->settings : $store->settings,
-            'type' => $request->type ?? $store->type,
+            'store_type_id' => $request->store_type_id ? $request->store_type_id :  $store->store_type_id,
             'description' => $request->description ?? $store->description,
         ]);
 

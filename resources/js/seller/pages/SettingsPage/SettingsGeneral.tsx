@@ -2,11 +2,19 @@ import { ColorInput } from "@seller/components";
 import useForm from "@seller/hooks/useForm";
 import useStore from "@seller/hooks/useStore";
 import useString from "@seller/hooks/useString";
-import { Button, Card, Label, Textarea, TextInput } from "flowbite-react";
+import { StoreTypesType } from "@type/storeType";
+import {
+    Button,
+    Card,
+    Label,
+    Select,
+    Textarea,
+    TextInput,
+} from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const SettingsGeneral = () => {
-    const { store, update } = useStore();
+    const { store, storeTypes, update } = useStore();
     const { getSlug } = useString();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
@@ -14,6 +22,7 @@ const SettingsGeneral = () => {
             id: store?.id,
             name: store?.name,
             slug: store?.slug,
+            store_type_id: store?.store_type?.id,
             phone: store?.phone,
             description: store?.description,
             email: store?.email,
@@ -81,6 +90,47 @@ const SettingsGeneral = () => {
                                 required
                             />
                         </div>
+                        <div className="col-span-6 grid grid-cols-1 gap-y-2">
+                            <Label htmlFor="store_type_id">Store Types</Label>
+
+                            <Select
+                                id="store_type_id"
+                                name="store_type_id"
+                                value={formState["store_type_id"]}
+                                color={
+                                    formErrors["store_type_id"]
+                                        ? "failure"
+                                        : "gray"
+                                }
+                                helperText={
+                                    formErrors["store_type_id"]
+                                        ? formErrors["store_type_id"][0]
+                                        : false
+                                }
+                                onChange={(
+                                    event: React.ChangeEvent<HTMLSelectElement>
+                                ) => {
+                                    if (event.target.value === "0") {
+                                        event.target.value = "null";
+                                    }
+                                    handleChange(event);
+                                }}
+                                required
+                            >
+                                <option value={0}>Select a Store Type</option>
+                                {storeTypes?.map(
+                                    (
+                                        storeType: StoreTypesType,
+                                        idx: number
+                                    ) => (
+                                        <option value={storeType?.id} key={idx}>
+                                            {storeType?.label}
+                                        </option>
+                                    )
+                                )}
+                            </Select>
+                        </div>
+
                         <div className="col-span-full grid grid-cols-1 gap-y-2 ">
                             <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
                                 <Label htmlFor="store-description">

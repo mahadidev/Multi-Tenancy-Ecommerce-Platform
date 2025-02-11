@@ -63,4 +63,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     // Theme Widgets
     Route::get('widget-types', [WidgetTypeController::class, 'index'] );
+
+    // Store Types
+    Route::get('store-types', [StoreTypeController::class, 'index']);
+    
 });
