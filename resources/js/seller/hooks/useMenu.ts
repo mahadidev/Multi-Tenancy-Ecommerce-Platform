@@ -125,7 +125,7 @@ const useMenu = () => {
 
     return {
         menus,
-        addMenu: {
+        create: {
             submit: addMenu,
             isLoading: isAddMenuLoading,
             isError: isAddMenuError,
@@ -133,7 +133,7 @@ const useMenu = () => {
             data: addMenuData,
         },
 
-        updateMenu: {
+        update: {
             submit: updateMenu,
             isLoading: isUpdateMenuLoading,
             isError: isUpdateMenuError,
@@ -141,7 +141,7 @@ const useMenu = () => {
             data: updateMenuData,
         },
 
-        removeMenu: {
+        delete: {
             submit: removeMenu,
             isLoading: isRemoveMenuLoading,
             isError: isRemoveMenuError,

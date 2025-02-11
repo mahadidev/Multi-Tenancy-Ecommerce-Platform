@@ -3,6 +3,7 @@ import useMenu from "@seller/hooks/useMenu";
 import { MenuType } from "@type/menuType";
 import { Table } from "flowbite-react";
 import CreateMenuModal from "./CreateMenuModal";
+import DeleteMenuModal from "./DeleteMenuModal";
 
 const MenusTable = () => {
     const { menus } = useMenu();
@@ -55,8 +56,7 @@ const MenusTable = () => {
                         render: (row: MenuType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                    {/* <EditBrandModal brand={row} />
-                                    <DeleteBrandModal brand={row} /> */}
+                                    <DeleteMenuModal menu={row} />
                                 </div>
                             </Table.Cell>
                         ),
@@ -64,7 +64,7 @@ const MenusTable = () => {
                 ]}
                 search={{
                     placeholder: "Search for menu...",
-                    columns: ["name", "slug", "created_at"],
+                    columns: ["name", "label", "visibility", "created_at"],
                 }}
                 data={menus}
                 head={{
