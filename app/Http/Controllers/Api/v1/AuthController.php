@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Mail\ResetPasswordMail;
+use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 
 class AuthController extends Controller
 {
@@ -180,7 +183,7 @@ class AuthController extends Controller
         }
 
         // Find the user by email and add the store in the user table
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->where('email_verified_at', '!=', null)->first();
 
         // Check if user exists, password matches, and the user has the 'user' role
         if (!$user || !Hash::check($request->password, $user->password) || !$user->hasRole('user')) {
@@ -244,10 +247,9 @@ class AuthController extends Controller
             return $this->handleExistingUserRegistration($existingUser, $storeId, $request);
         }
 
-        // Create new user
-        $user = $this->createNewUser($request, $storeId);
+        return $this->createNewUser($request, $storeId);
 
-        return $this->generateSuccessResponse($user, $request, $storeId);
+        // return $this->generateSuccessResponse($user, $request, $storeId);
     }
 
     private function validateRegistrationRequest(Request $request)
@@ -276,20 +278,52 @@ class AuthController extends Controller
             ->first();
     }
 
-    private function createNewUser(Request $request, int $storeId): User
+    private function createNewUser(Request $request, int $storeId)
     {
+        $verificationCode = Str::random(40); // Generate a random verification code
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'store_id' => [$storeId],
+            'verification_code' => $verificationCode, // Store the verification code
+            'email_verified_at' => null, // Ensure the email is not verified yet
         ]);
 
         $roleName = $request->input('role', 'user');
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
 
-        return $user;
+        // Send verification email
+        $this->sendVerificationEmail($user, $storeId);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Signup successful, verification email sent, please verify your email',
+            'data' => [
+                'user' => $user,
+            ],
+        ]);
+
+        // return $user;
+    }
+
+    private function sendVerificationEmail(User $user, int $storeId)
+    {
+        $userName = $user->name;
+        $store = Store::find($storeId);
+        $storeName = $store->name;
+        $verificationUrl = url("/verify-email/{$user->verification_code}");
+
+        // Mail::to($user->email)->send(new VerifyEmail($verificationUrl));
+        try {
+            Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName));
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::info('Error sending verification email: ' . $th->getMessage());
+            return $this->errorResponse('Error sending verification email', 500);
+        }
     }
 
     private function handleExistingUserRegistration(User $user, int $storeId, Request $request)
@@ -386,7 +420,7 @@ class AuthController extends Controller
         $token = Password::createToken($user);
 
         // Create the reset URL
-        $resetUrl = url('/'.$stackHolder.'/reset-password?email=' . urlencode($user->email) . '&token=' . $token);
+        $resetUrl = url('/' . $stackHolder . '/reset-password?email=' . urlencode($user->email) . '&token=' . $token);
 
         // Send the email
         try {
@@ -454,5 +488,25 @@ class AuthController extends Controller
             ],
             200,
         );
+    }
+
+    public function verifyEmail($code)
+    {
+        $user = User::where('verification_code', $code)->first();
+
+        if (!$user) {
+            return $this->errorResponse('Invalid verification code', 404);
+        }
+
+        if ($user->email_verified_at) {
+            return $this->errorResponse('Email already verified', 400);
+        }
+
+        $user->update([
+            'email_verified_at' => now(),
+            'verification_code' => null, // Clear the verification code
+        ]);
+
+        return $this->generateSuccessResponse($user, request(), $user->store_id[0]);
     }
 }
