@@ -41,7 +41,7 @@ const getBadgeStyle = (status: string) => {
             return "bg-[#0ea5e9] text-white dark:bg-[#0ea5e9] dark:text-white";
 
         default:
-            return "bg-yellow-100 text-yellow-800";
+            return "bg-orange-500 !text-lg text-black";
     }
 };
 

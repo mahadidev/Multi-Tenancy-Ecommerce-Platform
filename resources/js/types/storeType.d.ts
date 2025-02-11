@@ -6,37 +6,49 @@ import { ProductType } from "./productType";
 import { ThemeType } from "./themeType";
 import { WidgetType } from "./widgetType";
 
-
 export interface SettingsType {
-	social_media?: SocialMediaType[];
+    social_media?: SocialMediaType[];
 }
 
 export interface StoreType {
-	id: number;
-	name: string;
-	slug: string;
-	domain: string;
-	email: string | null;
-	phone: string | null;
-	location: string | null;
-	status: 1 | 0;
-	type: string;
-	description: string | null;
-	currency: string;
-	logo: string;
-	dark_logo: string | null;
-	primary_color: null | string;
-	secondary_color: null | string;
-	theme_id: number;
-	categories: CategoryType[];
-	pages: PageType[];
-	theme: null | ThemeType;
-	settings: SettingsType | null;
-	social_media: SocialMediaType[];
-	featuredProducts?: ProductType[];
-	brands: BrandType[];
-	widgets: WidgetType[];
-	menus: MenuType[];
-	created_at: string;
-	updated_at: string;
+    id: number;
+    name: string;
+    slug: string;
+    domain: string;
+    email: string | null;
+    phone: string | null;
+    location: string | null;
+    status: 1 | 0;
+    type: string;
+    store_type: StoreTypesType;
+    description: string | null;
+    currency: string;
+    logo: string;
+    dark_logo: string | null;
+    primary_color: null | string;
+    secondary_color: null | string;
+    theme_id: number;
+    categories: CategoryType[];
+    pages: PageType[];
+    theme: null | ThemeType;
+    settings: SettingsType | null;
+    social_media: SocialMediaType[];
+    featuredProducts?: ProductType[];
+    brands: BrandType[];
+    widgets: WidgetType[];
+    menus: MenuType[];
+    created_at: string;
+    updated_at: string;
+}
+
+export interface StoreTypeData {
+    store_types: StoreTypesType[];
+}
+
+export interface StoreTypesType {
+    id: number;
+    label: string;
+    type: string;
+    created_at: string;
+    updated_at: string;
 }
