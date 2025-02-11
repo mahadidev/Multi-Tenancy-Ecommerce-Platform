@@ -2,6 +2,7 @@ import { RoutePath } from "@seller/seller_env";
 import { Breadcrumb } from "flowbite-react";
 import React from "react";
 import { HiHome } from "react-icons/hi";
+import StoresTable from "./StoresTable";
 
 const StoresPage: React.FC = () => {
     return (
@@ -26,7 +27,7 @@ const StoresPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-            {/* <StoresTable /> */}
+            <StoresTable />
         </>
     );
 };
