@@ -11,7 +11,7 @@ import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from "react";
 import { useEffect, useState } from "react";
 import { FaBlogger, FaPaintBrush } from "react-icons/fa";
 import { HiChartPie, HiCog, HiSearch, HiShoppingBag } from "react-icons/hi";
-import { MdCollectionsBookmark } from "react-icons/md";
+import { MdCollectionsBookmark, MdStore } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
@@ -291,15 +291,22 @@ const pages: SidebarItem[] = [
 
 const externalPages: SidebarItem[] = [
     {
+        href: RoutePath.StoresPage.index(),
+        icon: MdStore,
+        label: "Stores",
+    },
+    {
         href: RoutePath.StorePagesPage.index(),
         icon: MdCollectionsBookmark,
         label: "Pages",
     },
+
     {
         icon: FaPaintBrush,
         label: "Appearance",
         items: [
             { href: RoutePath.ThemesPage.index(), label: "Themes" },
+            { href: RoutePath.MenusPage.index(), label: "Menus" },
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],

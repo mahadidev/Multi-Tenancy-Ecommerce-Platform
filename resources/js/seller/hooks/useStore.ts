@@ -4,6 +4,7 @@ import {
     UpdateStorePayloadType,
     useCreateStoreMutation,
     useFetchStoresQuery,
+    useFetchStoreTypesQuery,
     useSwitchStoreMutation,
     useUpdateStoreMutation,
 } from "@seller/store/reducers/storeApi";
@@ -11,14 +12,17 @@ import { useAppSelector } from "@seller/store/store";
 import useToast from "./useToast";
 
 const useStore = () => {
-    // fetch stores
+    // fetch stores and types
     useFetchStoresQuery();
+    useFetchStoreTypesQuery();
 
     // show toast message
     const { toaster } = useToast();
 
     // select store
-    const { store, stores } = useAppSelector((state) => state.store);
+    const { store, stores, storeTypes, currentStore } = useAppSelector(
+        (state) => state.store
+    );
 
     // create store
     const [
@@ -201,6 +205,8 @@ const useStore = () => {
     return {
         store,
         stores,
+        storeTypes,
+        currentStore,
         create: {
             submit: create,
             isLoading: isCreateLoading,

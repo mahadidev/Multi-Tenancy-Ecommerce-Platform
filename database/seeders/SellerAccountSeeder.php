@@ -9,6 +9,7 @@ use App\Models\StorePage;
 use App\Models\StorePageWidget;
 use App\Models\StorePageWidgetInput;
 use App\Models\StorePageWidgetInputItem;
+use App\Models\StoreType;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -55,6 +56,7 @@ class SellerAccountSeeder extends Seeder
                 'name' => 'Goody Bro',
                 'currency' => 'BDT',
                 'status' => 1,
+                'store_type_id' => StoreType::first()->id,
             ]
         );
 

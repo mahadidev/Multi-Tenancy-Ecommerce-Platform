@@ -60,6 +60,9 @@ export const RoutePath = {
         edit: (pageId: number) => `/pages/${pageId}`,
         editUrl: (pageId: number) => BASE_URL + PREFIX + `/pages/${pageId}`,
     },
+    StoresPage: {
+        index: () => "/stores",
+    },
     ProductsPage: {
         index: () => "/products",
         edit: (productId: number) => `/products/${productId}`,
@@ -69,6 +72,9 @@ export const RoutePath = {
     },
     ThemesPage: {
         index: () => "/themes",
+    },
+    MenusPage: {
+        index: () => "/menus",
     },
     BlogsPage: {
         index: () => "/blogs",
