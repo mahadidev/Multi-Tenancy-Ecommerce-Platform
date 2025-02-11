@@ -13,7 +13,7 @@ class Store extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'type', 'description'];
+    protected $fillable = ['store_type_id','owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'description'];
     protected $casts = [
         'settings' => 'json',
         // 'settings' => 'array',
@@ -136,5 +136,10 @@ class Store extends Model
 
     public function widgets(){
         return $this->hasMany(StoreWidget::class, 'store_id');
+    }
+
+    public function storeType()
+    {
+        return $this->belongsTo(StoreType::class, 'store_type_id');
     }
 }

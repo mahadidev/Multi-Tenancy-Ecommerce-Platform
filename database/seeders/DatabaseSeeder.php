@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             UserSeeder::class,
+            StoreTypeSeeder::class,
             PageTypeSeeder::class,
             ThemeSeeder::class,
             SellerAccountSeeder::class,
@@ -26,7 +27,6 @@ class DatabaseSeeder extends Seeder
             StoreMenusSeeder::class,
             WidgetTypeSeeder::class,
             SvgIconSeeder::class,
-            StoreTypeSeeder::class,
         ]);
     }
 }
