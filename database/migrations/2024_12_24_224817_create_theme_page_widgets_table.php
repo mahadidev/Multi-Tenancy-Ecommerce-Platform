@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('theme_page_id');
             $table->string('name');
             $table->string('label')->nullable();
-            $table->integer('serial')->default(1)->after('label');
+            $table->integer('serial')->default(1);
             $table->longText("inputs")->nullable();
             $table->timestamps();
 
