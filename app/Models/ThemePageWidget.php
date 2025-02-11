@@ -13,6 +13,7 @@ class ThemePageWidget extends Model
         'type',
         'value',
         'inputs',
+        "serial",
         'thumbnail',
         'is_editable',
         'widget_type_id',
@@ -28,7 +29,7 @@ class ThemePageWidget extends Model
         'created_at',
         'updated_at',
     ];
-    
+
     public function widgetType(){
         return $this->belongsTo(WidgetType::class, 'widget_type_id');
     }

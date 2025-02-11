@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\PageType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Storage;
 
-class StorePagesResource extends JsonResource
+class ThemeWidgetResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,18 +15,15 @@ class StorePagesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $layout = $this->layout;
-        $layout->store_id = $this->id;
-
         return [
             'id' => $this->id,
+            'theme_id' => $this->theme_id,
             'name' => $this->name,
-            'slug' => $this->slug,
-            'title' => $this->title,
-            'layout' => $this->layout ? new StoreWidgetResource($layout) : null,
-            'is_active' => $this->is_active,
-            'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
-            'widgets' => $this->widgets ? StorePageWidgetsResource::collection($this->widgets) : [],
+            'label' => $this->label,
+            'serial' => $this->serial ?? 0,
+            'is_editable' => $this->is_editable === 1 ? true : false,
+            'type' => $this->widgetType ? WidgetTypeResource::make($this->widgetType) : null,
+            'inputs' => $this->widgetInputs ? StorePageWidgetInputsResource::collection($this->widgetInputs) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
