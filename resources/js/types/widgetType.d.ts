@@ -15,6 +15,8 @@ export interface WidgetInputItemType {
 		| 'tel'
 		| 'array'
 		| 'color';
+	created_at: string;
+	updated_at: string;
 }
 export interface WidgetInputType {
 	id: number;
@@ -22,6 +24,8 @@ export interface WidgetInputType {
 	label: string;
 	placeholder?: string;
 	value?: string;
+	serial: number;
+	widget_id?: number;
 	required?: boolean;
 	type:
 		| 'text'
@@ -33,11 +37,26 @@ export interface WidgetInputType {
 		| 'array'
 		| 'color';
 	items?: WidgetInputItemType[];
+	created_at: string;
+	updated_at: string;
+}
+
+export interface WidgetTypeType {
+	id: number;
+	type: 'layout' | 'section' | 'layout-widget';
+	label: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface WidgetType {
 	id: number;
-	store_page_id: number;
+	store_page_id?: number;
+	theme_id?: number;
+	store_id?: number;
+	theme_page_id?: number;
+	is_editable: boolean;
+	type: WidgetTypeType;
 	name: string;
 	label: string;
 	serial: number;

@@ -1,7 +1,10 @@
+import { BrandType } from "./brandType";
 import { CategoryType } from "./categoryType";
+import { MenuType } from "./menuType";
 import { PageType } from "./pageType";
 import { ProductType } from "./productType";
 import { ThemeType } from "./themeType";
+import { WidgetType } from "./widgetType";
 
 
 export interface SettingsType {
@@ -25,12 +28,15 @@ export interface StoreType {
 	primary_color: null | string;
 	secondary_color: null | string;
 	theme_id: number;
-    categories: CategoryType[];
-    pages: PageType[];
-    theme: null | ThemeType;
+	categories: CategoryType[];
+	pages: PageType[];
+	theme: null | ThemeType;
 	settings: SettingsType | null;
 	social_media: SocialMediaType[];
-    featuredProducts?: ProductType[];
+	featuredProducts?: ProductType[];
+	brands: BrandType[];
+	widgets: WidgetType[];
+	menus: MenuType[];
 	created_at: string;
 	updated_at: string;
 }
