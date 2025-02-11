@@ -1,3 +1,4 @@
+import { GLOBAL_APP_URL } from "@helper/global_env";
 import useStore from "@seller/hooks/useStore";
 import { RoutePath } from "@seller/seller_env";
 import {
@@ -244,7 +245,7 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
                 <Button
                     color="primary"
                     as="a"
-                    href={store.domain}
+                    href={`${GLOBAL_APP_URL}/sites/${store.slug}`}
                     target="_blank"
                 >
                     Visit Site
