@@ -31,6 +31,7 @@ import MenusPage from "./MenusPage/MenusPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
+import StoresPage from "./StoresPage/StoresPage";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -112,6 +113,8 @@ export const PagesRoute: FC = function () {
                                 path="notifications"
                                 element={<NotificationsPage />}
                             />
+                            {/* Stores page */}
+                            <Route path="stores" element={<StoresPage />} />
                         </Route>
 
                         {/* Editor Layout */}
