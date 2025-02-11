@@ -3,6 +3,7 @@ import useMenu from "@seller/hooks/useMenu";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
+import { FaTrash } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
 
 const CreateMenuModal: FC = function () {
@@ -26,7 +27,7 @@ const CreateMenuModal: FC = function () {
                     Create Menu
                 </div>
             </Button>
-            <Modal onClose={() => setOpen(false)} show={isOpen}>
+            <Modal onClose={() => setOpen(false)} show={isOpen} size="4xl">
                 <Modal.Header>Create a new Menu</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-4">
@@ -132,66 +133,105 @@ const CreateMenuModal: FC = function () {
                             {items?.map((item: ItemType, idx: number) => (
                                 <div
                                     key={idx}
-                                    className="p-2.5 dark:bg-[#374050] bg-[#F9FAFB] rounded-md grid grid-cols-2 gap-2.5"
+                                    className="p-2.5 rounded-md dark:bg-[#374050] bg-[#F9FAFB] "
                                 >
-                                    <div className="flex flex-col gap-2.5">
-                                        <Label htmlFor="label">Label</Label>
-                                        <div>
-                                            <TextInput
-                                                id="label"
-                                                name="label"
-                                                placeholder="Item Label"
-                                                value={item["label"]}
-                                                onChange={(
-                                                    event: React.ChangeEvent<HTMLInputElement>
-                                                ) => {
-                                                    setItems((prevItems) => {
+                                    <div className="flex justify-between mb-2 items-center">
+                                        <Label className="text-xl">
+                                            Item {idx + 1}
+                                        </Label>
+                                        <Button
+                                            size="sm"
+                                            color="red"
+                                            onClick={() =>
+                                                setItems(
+                                                    (prevItems: ItemType[]) => {
                                                         const updatedItems = [
                                                             ...prevItems,
                                                         ];
-                                                        // @ts-ignore
-                                                        updatedItems[idx] = {
-                                                            ...updatedItems[
-                                                                idx
-                                                            ],
-                                                            label: event?.target!
-                                                                ?.value,
-                                                        };
+                                                        updatedItems.splice(
+                                                            idx,
+                                                            1
+                                                        );
                                                         return updatedItems;
-                                                    });
-                                                }}
-                                                required
-                                            />
-                                        </div>
+                                                    }
+                                                )
+                                            }
+                                        >
+                                            <FaTrash />
+                                        </Button>
                                     </div>
-                                    <div className="flex flex-col gap-2.5">
-                                        <Label htmlFor="href">Item Href</Label>
-                                        <div>
-                                            <TextInput
-                                                id="href"
-                                                name="href"
-                                                placeholder="Href"
-                                                value={item["href"]}
-                                                onChange={(
-                                                    event: React.ChangeEvent<HTMLInputElement>
-                                                ) => {
-                                                    setItems((prevItems) => {
-                                                        const updatedItems = [
-                                                            ...prevItems,
-                                                        ];
-                                                        // @ts-ignore
-                                                        updatedItems[idx] = {
-                                                            ...updatedItems[
-                                                                idx
-                                                            ],
-                                                            href: event?.target!
-                                                                ?.value,
-                                                        };
-                                                        return updatedItems;
-                                                    });
-                                                }}
-                                                required
-                                            />
+                                    <div className="grid grid-cols-2 gap-2.5">
+                                        <div className="flex flex-col gap-2.5">
+                                            <Label htmlFor="label">Label</Label>
+                                            <div>
+                                                <TextInput
+                                                    id="label"
+                                                    name="label"
+                                                    placeholder="Item Label"
+                                                    value={item["label"]}
+                                                    onChange={(
+                                                        event: React.ChangeEvent<HTMLInputElement>
+                                                    ) => {
+                                                        setItems(
+                                                            (prevItems) => {
+                                                                const updatedItems =
+                                                                    [
+                                                                        ...prevItems,
+                                                                    ];
+                                                                // @ts-ignore
+                                                                updatedItems[
+                                                                    idx
+                                                                ] = {
+                                                                    ...updatedItems[
+                                                                        idx
+                                                                    ],
+                                                                    label: event?.target!
+                                                                        ?.value,
+                                                                };
+                                                                return updatedItems;
+                                                            }
+                                                        );
+                                                    }}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-2.5">
+                                            <Label htmlFor="href">
+                                                Item Href
+                                            </Label>
+                                            <div>
+                                                <TextInput
+                                                    id="href"
+                                                    name="href"
+                                                    placeholder="Href"
+                                                    value={item["href"]}
+                                                    onChange={(
+                                                        event: React.ChangeEvent<HTMLInputElement>
+                                                    ) => {
+                                                        setItems(
+                                                            (prevItems) => {
+                                                                const updatedItems =
+                                                                    [
+                                                                        ...prevItems,
+                                                                    ];
+                                                                // @ts-ignore
+                                                                updatedItems[
+                                                                    idx
+                                                                ] = {
+                                                                    ...updatedItems[
+                                                                        idx
+                                                                    ],
+                                                                    href: event?.target!
+                                                                        ?.value,
+                                                                };
+                                                                return updatedItems;
+                                                            }
+                                                        );
+                                                    }}
+                                                    required
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
