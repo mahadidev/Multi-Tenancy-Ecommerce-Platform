@@ -513,15 +513,14 @@ class AuthController extends Controller
 
     public function verifyEmail(Request $request)
     {
-        $code = $request->code;
-        $user = User::where('verification_code', $code)->first();
+        $request->validate([
+            'token' => 'required',
+        ]);
+
+        $user = User::where('verification_code', $request->token)->first();
 
         if (!$user) {
             return $this->errorResponse('Invalid verification code', 404);
-        }
-
-        if ($user->email_verified_at) {
-            return $this->errorResponse('Email already verified', 400);
         }
 
         $user->update([

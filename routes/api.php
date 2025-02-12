@@ -43,7 +43,7 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     // User Account - Verify Email
-    Route::get('/verify-email', [AuthController::class, 'verifyEmail']);
+    Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
     
     // Theme Routes
     Route::get('themes', [ThemeController::class, 'getThemes']);
