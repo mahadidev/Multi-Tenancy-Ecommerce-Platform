@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 const StoresTable = () => {
     const { stores, currentStore, switchStore } = useStore();
+
     return (
         <>
             <DataTable

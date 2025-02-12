@@ -109,35 +109,6 @@ const CreateCustomerModal: FC = function () {
                             </div>
                         </div>{" "}
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="confirm_password">
-                                Confirm Password
-                            </Label>
-                            <div>
-                                <PasswordInput
-                                    id="confirm_password"
-                                    name="confirm_password"
-                                    placeholder="••••••••"
-                                    value={formState["confirm_password"]}
-                                    color={
-                                        formErrors["confirm_password"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["confirm_password"]
-                                            ? formErrors["confirm_password"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
                             <Label htmlFor="phone">Phone</Label>
                             <div>
                                 <TextInput
@@ -203,10 +174,7 @@ const CreateCustomerModal: FC = function () {
                                     name: formState["name"],
                                     email: formState["email"],
                                     password: formState["password"].toString(),
-                                    confirm_password:
-                                        formState[
-                                            "confirm_password"
-                                        ].toString(),
+
                                     phone: formState["phone"].toString(),
                                     address: formState["address"],
                                 },

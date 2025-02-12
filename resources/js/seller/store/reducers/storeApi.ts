@@ -50,79 +50,79 @@ export interface SwitchStorePayloadType {
 }
 
 export const storeApi = createApi({
-    reducerPath: "storeApi",
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ["Stores"],
-    endpoints: (builder) => ({
-        fetchStores: builder.query<StoresFetchResponseType, void>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/store`,
-                    method: "get",
-                    body: formData,
-                }),
-            providesTags: ["Stores"],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(
-                        setAuthStore({
-                            stores: response.data.data.stores,
-                            currentStore: response.data.data.current_store,
-                            store: response.data.data.current_store,
-                        })
-                    );
-                    dispatch(setTheme(response.data.data.current_store.theme));
-                });
-            },
-        }),
-        fetchStoreTypes: builder.query<StoreTypesResponseType, void>({
-            query: (formData) =>
-                createRequest({
-                    url: `${API_URL}/store-types`,
-                    method: "get",
-                    body: formData,
-                }),
-            providesTags: ["Stores"],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setStoreTypes(response.data.data.store_types));
-                });
-            },
-        }),
-        createStore: builder.mutation<ApiResponseType, CreateStorePayloadType>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/store`,
-                    method: "post",
-                    body: formData,
-                }),
-            invalidatesTags: ["Stores"],
-            transformErrorResponse: (error: any) => error.data,
-        }),
-        updateStore: builder.mutation<ApiResponseType, UpdateStorePayloadType>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/store/${formData.id}`,
-                    method: "post",
-                    body: formData,
-                    apiMethod: "PUT",
-                }),
-            invalidatesTags: ["Stores"],
-            transformErrorResponse: (error: any) => error.data,
-        }),
-        switchStore: builder.mutation<ApiResponseType, SwitchStorePayloadType>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/switch-store`,
-                    method: "post",
-                    body: formData,
-                }),
-            invalidatesTags: ["Stores"],
-            transformErrorResponse: (error: any) => error.data,
-        }),
-    }),
+	reducerPath: 'storeApi',
+	baseQuery: baseQueryWithReAuth,
+	tagTypes: ['Stores', 'Types'],
+	endpoints: (builder) => ({
+		fetchStores: builder.query<StoresFetchResponseType, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Stores'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(
+						setAuthStore({
+							stores: response.data.data.stores,
+							currentStore: response.data.data.current_store,
+							store: response.data.data.current_store,
+						})
+					);
+					dispatch(setTheme(response.data.data.current_store.theme));
+				});
+			},
+		}),
+		fetchStoreTypes: builder.query<StoreTypesResponseType, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${API_URL}/store-types`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Types'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setStoreTypes(response.data.data.store_types));
+				});
+			},
+		}),
+		createStore: builder.mutation<ApiResponseType, CreateStorePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Stores'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		updateStore: builder.mutation<ApiResponseType, UpdateStorePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store/${formData.id}`,
+					method: 'post',
+					body: formData,
+					apiMethod: 'PUT',
+				}),
+			invalidatesTags: ['Stores'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+		switchStore: builder.mutation<ApiResponseType, SwitchStorePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/switch-store`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Stores'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+	}),
 });
 
 export const {

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('store_menu_items', function (Blueprint $table) {
-            $table->dropColumn('visibility');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('verification_code')->nullable()->after('image'); // Add verification_code field
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('store_menu_items', function (Blueprint $table) {
-            $table->enum('visibility', ['user', 'guest', 'all'])->default('all')->after('store_menu_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('verification_code'); // Drop verification_code field
         });
     }
 };

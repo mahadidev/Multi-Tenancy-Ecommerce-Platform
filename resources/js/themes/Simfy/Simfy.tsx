@@ -7,8 +7,8 @@ import Layout from './layouts/Layout';
 import Widget from './widgets/Widget';
 
 // import layout json
+import AppLayoutJson from './layouts/appLayout/AppLayout.json';
 import FooterJson from './layouts/footer/Footer.json';
-import LayoutJson from './layouts/Layout.json';
 import NavigationJson from './layouts/navigation/Navigation.json';
 
 // import widget json
@@ -26,7 +26,7 @@ export const SimfySeeder: ThemeType | any = {
 	name: Simfy.name,
 	slug: Simfy.name.toLowerCase().replaceAll(' ', '-'),
 	thumbnail: null,
-	widgets: [LayoutJson, NavigationJson, FooterJson],
+	widgets: [AppLayoutJson, NavigationJson, FooterJson],
 	pages: [
 		{
 			id: 0,
@@ -34,7 +34,7 @@ export const SimfySeeder: ThemeType | any = {
 			label: 'Home',
 			slug: '/',
 			title: 'Home Page',
-            layout_id: 1,
+			layout_id: 1,
 			is_active: 1,
 			type: 'home',
 			thumbnail: null,

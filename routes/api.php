@@ -34,6 +34,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
+    // User Account - Verify Email
+    Route::get('/verify-email/{code}', [AuthController::class, 'verifyEmail'])->name('verify.email');
+
     // Theme Routes
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
