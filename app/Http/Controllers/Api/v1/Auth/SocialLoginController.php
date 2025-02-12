@@ -19,10 +19,10 @@ class SocialLoginController extends Controller
 {
     public function redirectToGoogle(Request $request)
     {
-        $loginType = $request->query('login_type', 'seller'); // Default to seller if not specified
+        $loginType = $request->query('login_type', 'seller'); // Default to 'seller' if not specified
         $storeId = $request->query('store_id');
 
-        return Socialite::driver('google')
+        $authUrl = Socialite::driver('google')
             ->stateless()
             ->with([
                 'login_type' => $loginType,
@@ -32,15 +32,24 @@ class SocialLoginController extends Controller
                     'store_id' => $storeId
                 ]))
             ])
-            ->redirect();
+            ->redirect()
+            ->getTargetUrl(); // Gets the Google OAuth URL instead of redirecting
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'auth_url' => $authUrl
+            ]
+        ]);
     }
+
 
     public function redirectToFacebook(Request $request)
     {
         $loginType = $request->query('login_type', 'seller');
         $storeId = $request->query('store_id');
 
-        return Socialite::driver('facebook')
+        $authUrl = Socialite::driver('facebook')
             ->stateless()
             ->with([
                 'login_type' => $loginType,
@@ -50,7 +59,15 @@ class SocialLoginController extends Controller
                     'store_id' => $storeId
                 ]))
             ])
-            ->redirect();
+            ->redirect()
+            ->getTargetUrl(); // Gets the Google OAuth URL instead of redirecting
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'auth_url' => $authUrl
+            ]
+        ]);
     }
 
     public function UserHandleGoogleCallback(Request $request)
