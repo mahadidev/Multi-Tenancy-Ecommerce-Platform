@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'verified']], function () {
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
 
@@ -72,7 +72,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'verified']
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 });
 
-Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store', 'verified']], function () {
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
     // Brand Routes
     Route::resource('/brand', BrandController::class);
     Route::get('/brand/generate/pdf', [BrandController::class, 'pdf']);
