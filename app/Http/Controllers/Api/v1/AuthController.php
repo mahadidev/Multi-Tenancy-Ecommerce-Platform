@@ -314,7 +314,7 @@ class AuthController extends Controller
         $userName = $user->name;
         $store = Store::find($storeId);
         $storeName = $store->name;
-        $verificationUrl = url("/verify-email/{$user->verification_code}");
+        $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
 
         // Mail::to($user->email)->send(new VerifyEmail($verificationUrl));
         try {
