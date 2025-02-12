@@ -82,33 +82,6 @@ const CreateCustomerModal: FC = function () {
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="password">Password</Label>
-                            <div>
-                                <PasswordInput
-                                    id="password"
-                                    name="password"
-                                    placeholder="••••••••"
-                                    value={formState["password"]}
-                                    color={
-                                        formErrors["password"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["password"]
-                                            ? formErrors["password"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>{" "}
-                        <div className="flex flex-col gap-2">
                             <Label htmlFor="phone">Phone</Label>
                             <div>
                                 <TextInput
@@ -160,6 +133,33 @@ const CreateCustomerModal: FC = function () {
                                 />
                             </div>
                         </div>
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="password">Password</Label>
+                            <div>
+                                <PasswordInput
+                                    id="password"
+                                    name="password"
+                                    placeholder="••••••••"
+                                    value={formState["password"]}
+                                    color={
+                                        formErrors["password"]
+                                            ? "failure"
+                                            : "gray"
+                                    }
+                                    helperText={
+                                        formErrors["password"]
+                                            ? formErrors["password"][0]
+                                            : false
+                                    }
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        handleChange(event);
+                                    }}
+                                    required
+                                />
+                            </div>
+                        </div>{" "}
                     </div>
                     {formErrors["message"] && (
                         <ErrorMessage>{formErrors["message"]}</ErrorMessage>

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ErrorMessage } from "@seller/components";
+import PasswordInput from "@seller/components/Form/PasswordInput/PasswordInput";
 import useCustomer from "@seller/hooks/useCustomer";
 import useForm from "@seller/hooks/useForm";
 import { CustomerType } from "@type/customersType";
@@ -206,6 +207,33 @@ const EditCustomerModal: FC<PropsType> = function (props) {
                                 />
                             </div>
                         </div>
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="password">Password</Label>
+                            <div>
+                                <PasswordInput
+                                    id="password"
+                                    name="password"
+                                    placeholder="••••••••"
+                                    value={formState["password"]}
+                                    color={
+                                        formErrors["password"]
+                                            ? "failure"
+                                            : "gray"
+                                    }
+                                    helperText={
+                                        formErrors["password"]
+                                            ? formErrors["password"][0]
+                                            : false
+                                    }
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        handleChange(event);
+                                    }}
+                                    required
+                                />
+                            </div>
+                        </div>
                     </div>
                     {formErrors["message"] && (
                         <ErrorMessage>{formErrors["message"]}</ErrorMessage>
@@ -221,6 +249,7 @@ const EditCustomerModal: FC<PropsType> = function (props) {
                                     name: formState["name"],
                                     email: formState["email"],
                                     phone: formState["phone"].toString(),
+                                    password: formState["password"].toString(),
                                     address: formState["address"],
                                 },
                                 onSuccess: () => {

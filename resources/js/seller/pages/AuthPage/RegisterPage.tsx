@@ -91,6 +91,7 @@ const RegisterPage: FC = function () {
                                         : false
                                 }
                                 onChange={handleChange}
+                                autoComplete="off"
                             />
                         </div>
                         <div className="flex flex-col gap-y-2">

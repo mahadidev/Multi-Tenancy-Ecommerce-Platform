@@ -52,6 +52,7 @@ const ForgotPassword: React.FC = () => {
                                         : false
                                 }
                                 onChange={handleChange}
+                                autoComplete="off"
                             />
                         </div>
 
