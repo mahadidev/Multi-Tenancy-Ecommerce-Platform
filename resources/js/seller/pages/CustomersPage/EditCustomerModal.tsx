@@ -30,7 +30,7 @@ const EditCustomerModal: FC<PropsType> = function (props) {
             setFormState(props.customer);
         }
     }, [props.customer]);
-
+    console.log(props.customer);
     return (
         <>
             <Button
