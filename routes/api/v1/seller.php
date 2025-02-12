@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'verified']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
 
@@ -36,7 +36,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::resource('/contact', ContactController::class);
 
     // Logout Route
-    Route::get('logout', [AuthController::class, 'logout']);
+    // Route::get('logout', [AuthController::class, 'logout']);
 
     // Store Pages Route
     Route::get('stores/page', [StorePageController::class, 'index']);
@@ -72,7 +72,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
 });
 
-Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store', 'verified']], function () {
     // Brand Routes
     Route::resource('/brand', BrandController::class);
     Route::get('/brand/generate/pdf', [BrandController::class, 'pdf']);
@@ -123,4 +123,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Store Menu Items Routes
     Route::resource('store-menu-items', StoreMenuItemController::class);
+});
+
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('logout', [AuthController::class, 'logout']);
 });

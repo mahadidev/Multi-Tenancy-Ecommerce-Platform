@@ -129,6 +129,8 @@ class AuthController extends Controller
 
     public function sellerRegister(Request $request)
     {
+        $verificationCode = Str::random(40); // Generate a random verification code
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|email|unique:users,email',
@@ -140,6 +142,8 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'verification_code' => $verificationCode, // Store the verification code
+            'email_verified_at' => null, // Ensure the email is not verified yet
         ]);
 
         // Assign role to the seller
@@ -147,20 +151,8 @@ class AuthController extends Controller
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(
-            [
-                'status' => 200,
-                'message' => 'singup success',
-                'data' => [
-                    'token_type' => 'Bearer',
-                    'access_token' => $token,
-                    'user' => new UserResource($user),
-                ],
-            ],
-            200,
-        );
+        // Send verification email
+        return $this->sendVerificationEmail($user);
     }
 
     // User or Customer authentication functions
@@ -248,8 +240,6 @@ class AuthController extends Controller
         }
 
         return $this->createNewUser($request, $storeId);
-
-        // return $this->generateSuccessResponse($user, $request, $storeId);
     }
 
     private function validateRegistrationRequest(Request $request)
@@ -271,10 +261,10 @@ class AuthController extends Controller
     private function findUserInDifferentStore(string $email, int $storeId)
     {
         return User::where('email', $email)
-            // ->whereHas('roles', function ($query) {
-            //     $query->where('name', 'user'); // Check if the user has the role of 'user'
-            // })
-            ->whereJsonDoesntContain('store_id', $storeId)
+            ->where(function ($query) use ($storeId) {
+            $query->whereJsonDoesntContain('store_id', $storeId)
+                  ->orWhereNull('store_id');
+            })
             ->first();
     }
 
@@ -309,17 +299,20 @@ class AuthController extends Controller
         // return $user;
     }
 
-    private function sendVerificationEmail(User $user, int $storeId)
+    private function sendVerificationEmail(User $user, int $storeId = null)
     {
         $userName = $user->name;
-        $store = Store::find($storeId);
-        $storeName = $store->name;
+        if (!is_null($storeId)) {
+            $store = Store::find($storeId);
+            $storeName = $store->name;
+        }
+
         $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
 
         // Mail::to($user->email)->send(new VerifyEmail($verificationUrl));
         try {
             if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
-                Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName));
+                Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName ?? null));
             } else {
                 Log::info('Please set APP_ENV to production to send emails');
             }
@@ -346,11 +339,13 @@ class AuthController extends Controller
         return $this->generateSuccessResponse($user, $request, $storeId);
     }
 
-    private function generateSuccessResponse(User $user, Request $request, int $storeId)
+    private function generateSuccessResponse(User $user, Request $request, int $storeId = null)
     {
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $this->storeSessionData($request, $storeId);
+        if ($storeId) {
+            $this->storeSessionData($request, $storeId);
+        }
 
         return response()->json(
             [
@@ -359,7 +354,7 @@ class AuthController extends Controller
                 'data' => [
                     'token_type' => 'Bearer',
                     'access_token' => $token,
-                    'user' => $user,
+                    'user' => new UserResource($user),
                 ],
             ],
             200,
@@ -511,6 +506,6 @@ class AuthController extends Controller
             'verification_code' => null, // Clear the verification code
         ]);
 
-        return $this->generateSuccessResponse($user, request(), $user->store_id[0]);
+        return $this->generateSuccessResponse($user, request(), $user->store_id[0] ?? null);
     }
 }

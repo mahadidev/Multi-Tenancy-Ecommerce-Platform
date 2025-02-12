@@ -1,7 +1,7 @@
 @component('mail::message')
 # Hello {{ $userName }},
 
-You have successfully registered on {{ $storeName }}. Please click the button below to verify your email address.
+You have successfully registered on {{ $storeName ?? 'Cholo Gori' }}. Please click the button below to verify your email address.
 
 @component('mail::button', ['url' => $verificationUrl])
 Verify Email Address
@@ -10,7 +10,7 @@ Verify Email Address
 If you did not create an account, no further action is required.
 
 Thanks,<br>
-{{ $storeName }}
+{{ $storeName ?? 'Cholo Gori' }}
 
 @endcomponent
 
