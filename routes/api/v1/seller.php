@@ -73,6 +73,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'verified']
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store', 'verified']], function () {
+
     // Brand Routes
     Route::resource('/brand', BrandController::class);
     Route::get('/brand/generate/pdf', [BrandController::class, 'pdf']);
@@ -123,6 +124,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store', 'v
 
     // Store Menu Items Routes
     Route::resource('store-menu-items', StoreMenuItemController::class);
+
+    // role & permission Routes
+    Route::resource('store-roles', RolePermissionController::class);
+    Route::resource('store-permissions', RolePermissionController::class);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
