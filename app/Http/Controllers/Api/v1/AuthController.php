@@ -152,10 +152,16 @@ class AuthController extends Controller
         $user->assignRole($role->name);
 
         // Send verification email
-        return $this->sendVerificationEmail($user);
-    }
+        $this->sendVerificationEmail($user);
 
-    // User or Customer authentication functions
+        return response()->json([
+            'status' => 200,
+            'message' => 'Signup successful, verification email sent, please verify your email',
+            'data' => [
+                'user' => $user,
+            ],
+        ]);
+    }
 
     public function userLogin(Request $request)
     {
