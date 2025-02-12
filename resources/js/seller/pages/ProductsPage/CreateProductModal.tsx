@@ -166,9 +166,7 @@ const CreateProductModal: FC = function () {
                                     }}
                                     required
                                 >
-                                    <option value={0}>
-                                        Select a Parent Category
-                                    </option>
+                                    <option value={0}>Select a Category</option>
                                     {productCategories?.map(
                                         (category: CategoryType) => (
                                             <option

@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { PREFIX } from "@seller/seller_env";
+import { API_URL, PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
 import { UserProfileType, UserType } from "@type/authType";
 import { StoreType } from "@type/storeType";
@@ -62,6 +62,60 @@ export const authApi = createApi({
                     body: formData,
                 }),
             invalidatesTags: ["User"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(
+                        setAuth({
+                            user: response.data.data.user,
+                            accessToken: response.data.data.access_token,
+                        })
+                    );
+                    dispatch(
+                        setAuthStore({
+                            store: response.data.data.logged_store,
+                            currentStore: response.data.data.logged_store,
+                            stores: response.data.data.stores,
+                        })
+                    );
+                });
+            },
+        }),
+        loginWithFacebook: builder.query<LoginResponseType, void>({
+            query: (formData) =>
+                createRequest({
+                    url: `${API_URL}/auth/facebook?login_type=seller`,
+                    method: "get",
+                    body: formData,
+                }),
+            providesTags: ["User"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(
+                        setAuth({
+                            user: response.data.data.user,
+                            accessToken: response.data.data.access_token,
+                        })
+                    );
+                    dispatch(
+                        setAuthStore({
+                            store: response.data.data.logged_store,
+                            currentStore: response.data.data.logged_store,
+                            stores: response.data.data.stores,
+                        })
+                    );
+                });
+            },
+        }),
+        loginWithGoogle: builder.query<LoginResponseType, void>({
+            query: (formData) =>
+                createRequest({
+                    url: `${API_URL}/auth/google?login_type=seller`,
+                    method: "get",
+                    body: formData,
+                }),
+            providesTags: ["User"],
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
@@ -232,6 +286,8 @@ export const {
     useUpdateUserMutation,
     useForgotPasswordRequestMutation,
     useResetPasswordMutation,
+    useLoginWithFacebookQuery,
+    useLoginWithGoogleQuery,
 } = authApi;
 
 export interface UserUpdatePasswordPayloadType {

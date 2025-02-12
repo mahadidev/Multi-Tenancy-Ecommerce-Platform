@@ -1,5 +1,6 @@
 import { RoutePath } from "@seller/seller_env";
 import {
+    authApi,
     LoginPayloadType,
     PasswordForgotRequestPayloadType,
     RegisterPayloadType,
@@ -51,6 +52,48 @@ const useAuth = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
+            }
+        });
+    };
+
+    // login with facebook
+    const [
+        handleLoginWithFacebook,
+        {
+            isLoading: isLoginWithFacebookLoading,
+            isError: isLoginWithFacebookError,
+            error: loginWithFacebookError,
+            data: loginWithFacebookData,
+        },
+    ] = authApi.endpoints.loginWithFacebook.useLazyQuery();
+    const loginWithFacebook = () => {
+        handleLoginWithFacebook().then((response) => {
+            if (response.data?.status === 200) {
+                toaster({
+                    text: "Login successful with Facebook",
+                    status: "success",
+                });
+            }
+        });
+    };
+
+    // login with google
+    const [
+        handleLoginWithGoogle,
+        {
+            isLoading: isLoginWithGoogleLoading,
+            isError: isLoginWithGoogleError,
+            error: loginWithGoogleError,
+            data: loginWithGoogleData,
+        },
+    ] = authApi.endpoints.loginWithGoogle.useLazyQuery();
+    const loginWithGoogle = () => {
+        handleLoginWithGoogle().then((response) => {
+            if (response.data?.status === 200) {
+                toaster({
+                    text: "Login successful with Google",
+                    status: "success",
+                });
             }
         });
     };
@@ -225,6 +268,20 @@ const useAuth = () => {
             isError: isLoginError,
             error: loginError,
             data: loginData,
+        },
+        loginWithFacebook: {
+            submit: loginWithFacebook,
+            isLoading: isLoginWithFacebookLoading,
+            isError: isLoginWithFacebookError,
+            error: loginWithFacebookError,
+            data: loginWithFacebookData,
+        },
+        loginWithGoogle: {
+            submit: loginWithGoogle,
+            isLoading: isLoginWithGoogleLoading,
+            isError: isLoginWithGoogleError,
+            error: loginWithGoogleError,
+            data: loginWithGoogleData,
         },
         register: {
             submit: register,
