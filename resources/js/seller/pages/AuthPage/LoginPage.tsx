@@ -6,6 +6,7 @@ import { BASE_IMAGE_URL, BASE_URL, RoutePath } from "@seller/seller_env";
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
+import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import { Link, useSearchParams } from "react-router-dom";
 
 const LoginPage: FC = function () {
@@ -153,6 +154,19 @@ const LoginPage: FC = function () {
                                 Create account
                             </Link>
                         </p>
+                        <div className="flex flex-row items-center gap-5 p-4">
+                            {/* Facebook Login Button */}
+                            <Button color="blue">
+                                <FaFacebookF size={25} /> &nbsp;&nbsp; Login
+                                With Facebook
+                            </Button>
+
+                            {/* Google Login Button */}
+                            <Button color="red">
+                                <FaGoogle size={25} /> &nbsp;&nbsp; Login With
+                                Google
+                            </Button>
+                        </div>
                     </div>
                 </Card>
             </div>
