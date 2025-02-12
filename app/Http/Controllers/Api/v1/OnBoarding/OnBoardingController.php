@@ -10,6 +10,8 @@ use App\Models\StoreSession;
 use Spatie\Permission\Models\Role;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\StoreResource;
+// use Illuminate\Container\Attributes\Log;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
 class OnBoardingController extends Controller
@@ -105,11 +107,11 @@ class OnBoardingController extends Controller
 
         $store = Store::find($store_id);
 
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store id'
-            ],404);
+            ], 404);
         }
 
         $store->update([
@@ -138,13 +140,13 @@ class OnBoardingController extends Controller
 
         $store = Store::find($store_id);
 
-        if(!$store){
+        if (!$store) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Invalid store id'
-            ],404);
+            ], 404);
         }
-        
+
         $store->update([
             'theme_id' => $request->theme_id,
         ]);
