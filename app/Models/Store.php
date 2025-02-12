@@ -33,7 +33,12 @@ class Store extends Model
                 $data->slug = Str::slug($data->name); // Generate slug from name
             }
 
-            $data->sendWelcomeEmail();
+            // Send welcome email with error handling
+            try {
+                $data->sendWelcomeEmail();
+            } catch (\Exception $e) {
+                Log::error('Error sending welcome email: ' . $e->getMessage());
+            }
         });
 
         // Automatically update the slug when updating
