@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StoreMenuItem extends Model
 {
-    protected $fillable = ['label', 'href', 'store_menu_id'];
+    protected $fillable = ['label', 'href', 'store_menu_id', "visibility"];
 
     // Relationship with StoreMenu
     public function storeMenu()

@@ -18,15 +18,15 @@ class StorePageWidgetInputsResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'label' => $this->label,
-            'serial' => $this->serial,
+            'serial' => $this->serial ?? 0,
             'placeholder' => $this->placeholder ?? "",
             'value' => $this->value,
-            'required' => $this->required === 0 ? false : true,
+            'required' => isset($this->required) && $this->required === 0 ? false : true,
             'type' => $this->type,
-            'widget_id' => $this->widget_id,
-            'items' => $this->items ? StorePageWidgetInputItemsResource::collection($this->items) : [],
-            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
-            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+            'widget_id' => $this->widget_id ?? 0,
+            'items' => isset($this->items) && $this->items ? StorePageWidgetInputItemsResource::collection($this->items) : [],
+            'created_at' => isset($this->created_at) ? date('d M, Y | h:i A', strtotime($this->created_at)) : "",
+            'updated_at' => isset($this->updated_at) ? date('d M, Y | h:i A', strtotime($this->updated_at)) : "",
         ];
     }
 }

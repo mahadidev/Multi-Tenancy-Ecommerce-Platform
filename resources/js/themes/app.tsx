@@ -14,22 +14,23 @@ const App = () => {
 			<BrowserRouter basename={`/themes/${THEME_SLUG}`}>
 				{theme && store ? (
 					<Routes>
-						<Route
-							path="/"
-							element={
-								registerdTheme[theme.name]?.layout({
-									store: store,
-								}) ?? <h1>{theme.name} theme is not registered propertly.</h1>
-							}
-						>
-							{theme.pages.map((page) => (
+						{theme.pages.map((page) => (
+							<>
 								<Route
-									path={page.slug}
-									index
-									element={<Page store={store} page={page} theme={theme} />}
-								/>
-							))}
-						</Route>
+									path="/"
+									element={registerdTheme[theme.slug]?.layout({
+										store: store,
+										layout: page.layout,
+									})}
+								>
+									<Route
+										path={page.slug}
+										index
+										element={<Page store={store} page={page} theme={theme} />}
+									/>
+								</Route>
+							</>
+						))}
 					</Routes>
 				) : (
 					<>
