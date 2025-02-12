@@ -202,7 +202,7 @@ class Store extends Model
             }
         } catch (\Exception $e) {
             Log::error('Error sending welcome email: ' . $e->getMessage());
-            return response()->json(['status' => 500, 'message' => 'Error sending welcome email'], 500);
+            // return response()->json(['status' => 500, 'message' => 'Error sending welcome email'], 500);
         }
     }
 }
