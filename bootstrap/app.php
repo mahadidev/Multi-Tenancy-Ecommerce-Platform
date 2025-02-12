@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(LogRequests::class);
         $middleware->alias([
             'store' => StoreMiddleware::class,
+            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
         $middleware->api(prepend: [
             \Illuminate\Session\Middleware\StartSession::class,

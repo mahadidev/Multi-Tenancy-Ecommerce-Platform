@@ -20,11 +20,11 @@ class VerifyEmail extends Mailable
     public $userName;
     public $storeName;
 
-    public function __construct($verificationUrl, $userName, $storeName)
+    public function __construct($verificationUrl, $userName, $storeName = null)
     {
         $this->verificationUrl = $verificationUrl;
         $this->userName = $userName;
-        $this->storeName = $storeName;
+        $this->storeName = $storeName ?? null;
     }
 
     public function build()
@@ -34,7 +34,7 @@ class VerifyEmail extends Mailable
             ->with([
                 'verificationUrl' => $this->verificationUrl,
                 'userName' => $this->userName,
-                'storeName' => $this->storeName,
+                'storeName' => $this->storeName ?? null,
             ]);
     }
 }
