@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmail;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -124,7 +125,7 @@ class AuthController extends Controller
         }
 
         // Return the token and user details
-        return response()->json($response);
+        return response()->json($response, 200);
     }
 
     public function sellerRegister(Request $request)
@@ -154,13 +155,20 @@ class AuthController extends Controller
         // Send verification email
         $this->sendVerificationEmail($user);
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Signup successful, verification email sent, please verify your email',
-            'data' => [
-                'user' => $user,
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(
+            [
+                'status' => 200,
+                'message' => 'Signup successful, verification email sent, please verify your email',
+                'data' => [
+                    'token_type' => 'Bearer',
+                    'access_token' => $token,
+                    'user' => new UserResource($user),
+                ],
             ],
-        ]);
+            200,
+        );
     }
 
     public function userLogin(Request $request)
@@ -223,7 +231,7 @@ class AuthController extends Controller
                     'domain' => $store->domain,
                 ],
             ],
-        ]);
+        ], 200);
     }
 
     public function userRegister(Request $request)
@@ -291,6 +299,9 @@ class AuthController extends Controller
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
 
+        if ($storeId) {
+            $this->storeSessionData($request, $storeId);
+        }
         // Send verification email
         $this->sendVerificationEmail($user, $storeId);
 
@@ -298,11 +309,9 @@ class AuthController extends Controller
             'status' => 200,
             'message' => 'Signup successful, verification email sent, please verify your email',
             'data' => [
-                'user' => $user,
+                'user' => new UserResource($user)
             ],
-        ]);
-
-        // return $user;
+        ], 200);
     }
 
     private function sendVerificationEmail(User $user, int $storeId = null)
@@ -311,11 +320,14 @@ class AuthController extends Controller
         if (!is_null($storeId)) {
             $store = Store::find($storeId);
             $storeName = $store->name;
+            // $verificationUrl = url("user/verify-email?token={$user->verification_code}");
+            $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
+        }
+        else {
+            $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
+            // $verificationUrl = route('verify-email', $user->verification_code);
         }
 
-        $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
-
-        // Mail::to($user->email)->send(new VerifyEmail($verificationUrl));
         try {
             if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
                 Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName ?? null));
@@ -514,4 +526,35 @@ class AuthController extends Controller
 
         return $this->generateSuccessResponse($user, request(), $user->store_id[0] ?? null);
     }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $user = auth()->user();
+
+        $verification_code = Str::random(40);
+        $user->update(['verification_code' => $verification_code]);
+
+        if (!$user) {
+            return $this->errorResponse('User not authenticated', 401);
+        }
+
+        if ($user->email_verified_at) {
+            return $this->errorResponse('Email already verified', 400);
+        }
+
+        if($request->login_type == 'user') {
+            // get store id from the site store id session
+            $store_id = session()->get('site_store_id');
+            $this->sendVerificationEmail($user, $store_id);
+        }
+        else{
+            $this->sendVerificationEmail($user);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Verification email sent successfully',
+        ]);
+    }
 }
+
