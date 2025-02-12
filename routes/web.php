@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\Api\v1\site\OrderController;
-use App\Http\Controllers\Api\v1\AuthController;
 
 Route::get('/', function () {
     return view("welcome");
@@ -23,7 +22,6 @@ Route::prefix('/seller')->group(function () {
     Route::any('/{any}', function () {
         return view("seller.seller");
     })->where('any', '.*');
-    // Route::get('/verify-email?token={code}', [AuthController::class, 'verifyEmail'])->name('verify-email');
 });
 
 Route::prefix("/sites")->group(function () {

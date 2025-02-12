@@ -276,8 +276,8 @@ class AuthController extends Controller
     {
         return User::where('email', $email)
             ->where(function ($query) use ($storeId) {
-            $query->whereJsonDoesntContain('store_id', $storeId)
-                  ->orWhereNull('store_id');
+                $query->whereJsonDoesntContain('store_id', $storeId)
+                    ->orWhereNull('store_id');
             })
             ->first();
     }
@@ -312,33 +312,6 @@ class AuthController extends Controller
                 'user' => new UserResource($user)
             ],
         ], 200);
-    }
-
-    private function sendVerificationEmail(User $user, int $storeId = null)
-    {
-        $userName = $user->name;
-        if (!is_null($storeId)) {
-            $store = Store::find($storeId);
-            $storeName = $store->name;
-            // $verificationUrl = url("seller/verify-email?token={$user->verification_code}");
-            $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
-        }
-        else {
-            $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
-            // $verificationUrl = route('verify-email', $user->verification_code);
-        }
-
-        try {
-            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
-                Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName ?? null));
-            } else {
-                Log::info('Please set APP_ENV to production to send emails');
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
-            Log::info('Error sending verification email: ' . $th->getMessage());
-            return $this->errorResponse('Error sending verification email', 500);
-        }
     }
 
     private function handleExistingUserRegistration(User $user, int $storeId, Request $request)
@@ -507,8 +480,40 @@ class AuthController extends Controller
         );
     }
 
-    public function verifyEmail($code)
+    private function sendVerificationEmail(User $user, int $storeId = null)
     {
+        $userName = $user->name;
+        if (!is_null($storeId)) {
+            $store = Store::find($storeId);
+            $storeName = $store->name;
+            $verificationUrl = url('/user/verify-email?token=' . $user->verification_code);
+            // $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
+        } else {
+            // $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
+            $verificationUrl = url('/seller/verify-email?token=' . $user->verification_code);
+        }
+
+        try {
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
+
+                Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName ?? null));
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Verification email sent successfully',
+                ], 200);
+            } else {
+                Log::info('Please set APP_ENV to production to send emails');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::info('Error sending verification email: ' . $th->getMessage());
+            return $this->errorResponse('Error sending verification email', 500);
+        }
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $code = $request->code;
         $user = User::where('verification_code', $code)->first();
 
         if (!$user) {
@@ -524,7 +529,10 @@ class AuthController extends Controller
             'verification_code' => null, // Clear the verification code
         ]);
 
-        return $this->generateSuccessResponse($user, request(), $user->store_id[0] ?? null);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Email verified successfully',
+        ], 200);
     }
 
     public function resendVerificationEmail(Request $request)
@@ -542,19 +550,17 @@ class AuthController extends Controller
             return $this->errorResponse('Email already verified', 400);
         }
 
-        if($request->login_type == 'user') {
+        if ($request->login_type == 'user') {
             // get store id from the site store id session
             $store_id = session()->get('site_store_id');
             $this->sendVerificationEmail($user, $store_id);
-        }
-        else{
+        } else {
             $this->sendVerificationEmail($user);
         }
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Verification email sent successfully',
         ]);
     }
 }
-
