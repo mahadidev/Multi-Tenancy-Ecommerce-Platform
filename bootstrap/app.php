@@ -26,7 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\StartSession::class,
         ]);
         // Default middleware
-        $middleware->web([
+        $middleware->api([
             \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
