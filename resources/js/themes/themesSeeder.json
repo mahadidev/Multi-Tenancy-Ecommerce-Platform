@@ -7,8 +7,8 @@
     "widgets": [
       {
         "id": 1,
-        "name": "layout",
-        "label": "Layout",
+        "name": "appLayout",
+        "label": "App Layout",
         "type": "layout",
         "inputs": []
       },

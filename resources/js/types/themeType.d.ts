@@ -22,4 +22,5 @@ export interface ThemeWidgetPropsType {
 export interface ThemeLayoutPropsType {
 	store: StoreType;
 	hooks?: ThemeHooksType;
+	layout: WidgetType;
 }
