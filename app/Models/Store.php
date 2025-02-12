@@ -34,11 +34,7 @@ class Store extends Model
             }
 
             // Send welcome email with error handling
-            try {
-                $data->sendWelcomeEmail();
-            } catch (\Exception $e) {
-                Log::error('Error sending welcome email: ' . $e->getMessage());
-            }
+            $data->sendWelcomeEmail();
         });
 
         // Automatically update the slug when updating
