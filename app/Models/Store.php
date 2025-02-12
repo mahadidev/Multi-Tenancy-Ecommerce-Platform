@@ -110,6 +110,16 @@ class Store extends Model
         return $this->hasMany(StoreMenu::class);
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function featured_products()
+    {
+        return $this->hasMany(Product::class)->take(5);
+    }
+
     public function uniqueVisitorsToday()
     {
         return DB::table('store_visitors')

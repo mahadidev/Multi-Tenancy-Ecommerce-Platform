@@ -1,0 +1,26 @@
+{
+	"id": 1,
+	"name": "introduction",
+	"label": "Introduction",
+	"serial": 2,
+	"type": "section",
+	"inputs": [
+		{
+			"id": 1,
+			"name": "aboutUs",
+			"label": "About Us",
+			"type": "textarea",
+			"value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+			"placeholder": "Enter Company Introduction",
+			"required": true
+		},
+		{
+			"id": 1,
+			"name": "groupPhoto",
+			"label": "Group Photo",
+			"type": "image",
+			"value": "https://placehold.co/400",
+			"placeholder": "Group Photo"
+		}
+	]
+}

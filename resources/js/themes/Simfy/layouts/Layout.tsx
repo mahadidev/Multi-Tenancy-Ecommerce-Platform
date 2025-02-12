@@ -11,7 +11,6 @@ const Layout: FC<ThemeLayoutPropsType> = (props) => {
 
 	return (
 		<>
-        <h1>Hi</h1>
 			{layouts[props.layout.name] ?? (
 				<h1>{props.layout.name} Layout not found</h1>
 			)}

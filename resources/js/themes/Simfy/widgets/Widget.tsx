@@ -1,12 +1,16 @@
 import { ThemeWidgetPropsType } from '@type/themeType';
 import React, { FC } from 'react';
+import FeaturedProducts from './featuredProducts/FeaturedProducts';
 import Hero from './hero/Hero';
+import Introduction from './introduction/Introduction';
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
 	const widgets: {
 		[Key: string]: React.ReactNode;
 	} = {
 		hero: <Hero {...props} />,
+        featuredProducts: <FeaturedProducts {...props} />,
+        introduction: <Introduction {...props} />
 	};
 
 	return (
