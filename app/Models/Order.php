@@ -79,14 +79,23 @@ class Order extends Model
                 // For customer notification
                 $customer = User::find($this->user_id);
                 if ($customer) {
-                    $customer->notify(new OrderConfirmationNotification($this, $store, true));
+                    try {
+                        $customer->notify(new OrderConfirmationNotification($this, $store, true));
+                    } catch (\Exception $e) {
+                        Log::error('Failed to send order confirmation notification: ' . $e->getMessage());
+                    }
+                    
                 }
 
                 // Notify seller
                 $seller = $store->owner;
                 // log::info('seller: ' . $seller);
                 if ($seller) {
-                    $seller->notify(new OrderConfirmationNotification($this, $store, false));
+                    try {
+                        $seller->notify(new OrderConfirmationNotification($this, $store, false));
+                    } catch (\Exception $e) {
+                        Log::error('Failed to send order confirmation notification: ' . $e->getMessage());
+                    }
                 }
             } else {
                 Log::info('Order notification disabled in local, change APP_ENV to production to enable');

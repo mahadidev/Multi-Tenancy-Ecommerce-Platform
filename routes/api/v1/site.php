@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\v1\seller\ContactController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+Route::group(['middleware' => ['auth:sanctum' , 'verified']], function () {
     // cart route
     Route::post('/add-to-cart', [CartController::class, 'addToCart']);
     Route::get('/cart-items', [CartController::class, 'cartItems']);
