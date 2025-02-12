@@ -75,6 +75,7 @@ export const authApi = createApi({
                         setAuthStore({
                             store: response.data.data.logged_store,
                             stores: response.data.data.stores,
+                            currentStore: response.data.data.logged_store,
                         })
                     );
                 });
