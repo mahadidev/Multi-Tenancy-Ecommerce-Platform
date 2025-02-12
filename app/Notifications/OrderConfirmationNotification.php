@@ -104,6 +104,7 @@ class OrderConfirmationNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
+            'module' => 'order',
             'order_id' => $this->order->id,
             'order_uuid' => $this->order->uuid,
             'store_id' => $this->store->id,

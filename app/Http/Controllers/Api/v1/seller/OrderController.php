@@ -135,7 +135,7 @@ class OrderController extends Controller
         ]);
 
         try {
-            if (env('APP_ENV') == 'production') {
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
                 // Send email to the user
                 Mail::to($order->user->email)->send(new OrderStatusUpdated($order, $store, $logoUrl));
             }
