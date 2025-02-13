@@ -1,9 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import useStore from './_helper/hooks/useStore';
 import useTheme from './_helper/hooks/useTheme';
 import { THEME_SLUG } from './_helper/theme_env';
 import Page from './page';
-import { registerdTheme } from './registeredTheme';
+import { registeredTheme } from './registeredTheme';
 
 const App = () => {
 	const { fetchTheme, theme } = useTheme();
@@ -17,16 +17,25 @@ const App = () => {
 						{theme.pages.map((page) => (
 							<>
 								<Route
+									key={page.id}
 									path="/"
-									element={registerdTheme[theme.slug]?.layout({
-										store: store,
-										layout: page.layout,
-									})}
+									element={
+										<>
+											{page.layout ? registeredTheme[theme.name] ? (
+												registeredTheme[theme.name]?.layout({
+													store: store,
+													layout: page.layout,
+												})
+											) : (
+												<h1>Layout not found.</h1>
+											) : <Outlet />}
+										</>
+									}
 								>
 									<Route
-										path={page.slug}
+										path={page.type.type === 'home' ? '/' : page.slug}
 										index
-										element={<Page store={store} page={page} theme={theme} />}
+										element={<Page store={store} theme={theme} page={page} />}
 									/>
 								</Route>
 							</>

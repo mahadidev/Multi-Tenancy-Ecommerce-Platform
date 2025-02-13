@@ -65,8 +65,8 @@ function DesktopSidebar() {
 			id="sidebar"
 			theme={{
 				root: {
-					base: 'bg-gray-900',
-					inner: 'bg-gray-900 px-2.5',
+					base: 'h-full bg-gray-900',
+					inner: 'bg-gray-900 px-2.5 h-full overflow-y-auto overflow-x-hidden',
 				},
 			}}
 		>

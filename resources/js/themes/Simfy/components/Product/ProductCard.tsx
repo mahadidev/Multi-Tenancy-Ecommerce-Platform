@@ -1,25 +1,21 @@
-import { GLOBAL_APP_URL } from '@helper/global_env';
-import useStore from '@seller/hooks/useStore';
-import useTheme from '@seller/hooks/useTheme';
-import { Button, Card } from 'flowbite-react';
-import { FC } from 'react';
-import { AiOutlineLoading } from 'react-icons/ai';
+import { ProductType } from "@type/productType";
+import { Card } from "flowbite-react";
+import { FC } from "react";
 
-const ThemesPage: FC = function () {
-	const { themes } = useTheme();
-	const { deactiveTheme, activeTheme, store } = useStore();
-
+const ProductCard: FC<{
+	product: ProductType;
+}> = ({product}) => {
 	return (
-		<div className="p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-			{themes.map((theme) => (
+		<section className="py-6">
+			<div className="container">
 				<Card
 					className="max-w-sm"
 					imgAlt="Apple Watch Series 7 in colors pink, silver, and black"
-					imgSrc={`${GLOBAL_APP_URL}/images/placeholder/theme-thumbnail.png`}
+					imgSrc="/images/products/apple-watch.png"
 				>
 					<a href="#">
 						<h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-							{theme.name}
+							{product.name}
 						</h5>
 					</a>
 					<div className="mb-5 mt-2.5 flex items-center">
@@ -68,44 +64,19 @@ const ThemesPage: FC = function () {
 						</span>
 					</div>
 					<div className="flex items-center justify-between">
-						<Button
-							color="gray"
-							href={`${GLOBAL_APP_URL}/themes/${theme.slug}`}
-							target="_blank"
+						<span className="text-3xl font-bold text-gray-900 dark:text-white">
+							$599
+						</span>
+						<a
+							href="#"
+							className="rounded-lg bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
 						>
-							Preview
-						</Button>
-						{store?.theme_id === theme.id ? (
-							<Button
-								color="gray"
-								onClick={() => deactiveTheme.submit({})}
-								processingLabel="Deactivating"
-								processingSpinner={<AiOutlineLoading className="animate-spin" />}
-								isProcessing={deactiveTheme.isLoading}
-							>
-								Deactive
-							</Button>
-						) : (
-							<Button
-								color="primary"
-								onClick={() =>
-									activeTheme.submit({
-										formData: {
-											theme_id: theme.id,
-										},
-									})
-								}
-								processingLabel="Activating"
-								processingSpinner={<AiOutlineLoading className="animate-spin" />}
-								isProcessing={activeTheme.isLoading}
-							>
-								Active
-							</Button>
-						)}
+							Add to cart
+						</a>
 					</div>
 				</Card>
-			))}
-		</div>
+			</div>
+		</section>
 	);
 };
-export default ThemesPage;
+export default ProductCard

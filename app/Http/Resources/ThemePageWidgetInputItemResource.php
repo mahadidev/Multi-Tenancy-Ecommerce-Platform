@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class StorePageWidgetInputItemsResource extends JsonResource
+class ThemePageWidgetInputItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,13 +18,10 @@ class StorePageWidgetInputItemsResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'label' => $this->label,
-            'placeholder' => $this->placeholder,
+            'placeholder' => $this->placeholder ?? "",
             'value' => $this->value,
             'required' => isset($this->required) && $this->required === 0 ? false : true,
-            "widget_input_id" => $this->widget_input_id,
             'type' => $this->type,
-            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
-            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
     }
 }

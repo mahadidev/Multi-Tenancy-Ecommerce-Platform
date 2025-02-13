@@ -1,0 +1,21 @@
+{
+	"id": 1,
+	"name": "featuredProducts",
+	"label": "Featured Products",
+	"inputs": [
+		{
+			"id": 1,
+			"name": "title",
+			"label": "Title",
+			"type": "text",
+			"value": "YOUR_WIDGET_TITLE"
+		},
+		{
+			"id": 1,
+			"name": "products_qty",
+			"label": "Featured Products QTY",
+			"type": "number",
+			"value": "5"
+		}
+	]
+}

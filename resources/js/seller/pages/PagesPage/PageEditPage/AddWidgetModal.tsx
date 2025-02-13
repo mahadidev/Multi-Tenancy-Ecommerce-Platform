@@ -1,13 +1,16 @@
 import { GLOBAL_APP_URL } from '@helper/global_env';
 import useTheme from '@seller/hooks/useTheme';
 import useWidget from '@seller/hooks/useWidget';
-import { Button, Modal } from 'flowbite-react';
+import { Button, Modal, Select } from 'flowbite-react';
 import { FC, useState } from 'react';
 
 const AddWidgetModal: FC = function () {
 	const [openModal, setOpenModal] = useState(false);
 	const { theme } = useTheme();
 	const { onAddWidget } = useWidget();
+	const [selectedPageId, setSelectedPageId] = useState<number>(
+		theme?.pages[0]?.id ?? 1
+	);
 
 	return (
 		<div className="p-4">
@@ -32,35 +35,48 @@ const AddWidgetModal: FC = function () {
 			<Modal show={openModal} onClose={() => setOpenModal(false)} size="6xl">
 				<Modal.Header>Select a widget</Modal.Header>
 				<Modal.Body>
+					<div className="flex flex-col gap-2.5 mb-6">
+						<Select
+							onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+								setSelectedPageId(parseInt(event.target.value))
+							}
+						>
+							{theme?.pages.map((page) => (
+								<option value={page.id}>{page.type.label}</option>
+							))}
+						</Select>
+					</div>
 					<div className="grid grid-cols-3 gap-6">
-						{theme?.widgets.map((widget) => (
-							<div className="space-y-4" key={widget.id}>
-								<img
-									src={`${GLOBAL_APP_URL}/images/placeholder/theme-thumbnail.png`}
-									className="rounded-t-md"
-								/>
+						{theme?.pages
+							.find((page) => page.id === selectedPageId)
+							?.widgets.map((widget) => (
+								<div className="space-y-4" key={widget.id}>
+									<img
+										src={`${GLOBAL_APP_URL}/images/placeholder/theme-thumbnail.png`}
+										className="rounded-t-md"
+									/>
 
-								<div className="flex flex-wrap justify-between gap-4">
-									<h2 className="text-xl font-medium text-gray-800 dark:text-white">
-										{widget.name}
-									</h2>
-									<Button
-										onClick={() =>
-											onAddWidget({
-												widget: widget,
-                                                onSuccess: () => {
-                                                    setOpenModal(false)
-                                                }
-											})
-										}
-										color="primary"
-										size="sm"
-									>
-										Insert
-									</Button>
+									<div className="flex flex-wrap justify-between gap-4">
+										<h2 className="text-xl font-medium text-gray-800 dark:text-white">
+											{widget.name}
+										</h2>
+										<Button
+											onClick={() =>
+												onAddWidget({
+													widget: widget,
+													onSuccess: () => {
+														setOpenModal(false);
+													},
+												})
+											}
+											color="primary"
+											size="sm"
+										>
+											Insert
+										</Button>
+									</div>
 								</div>
-							</div>
-						))}
+							))}
 					</div>
 				</Modal.Body>
 			</Modal>
