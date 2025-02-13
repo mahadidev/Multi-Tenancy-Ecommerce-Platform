@@ -14,6 +14,8 @@ import {
     UserUpdatePasswordPayloadType,
     useUpdateUserMutation,
     useUpdateUserPasswordMutation,
+    useVerifySocialMediaAuthenticationMutation,
+    VerifySocialMediaAuthenticationPayload,
 } from "@seller/store/reducers/authApi";
 import { UserProfileType } from "@type/authType";
 import { useNavigate } from "react-router-dom";
@@ -68,10 +70,9 @@ const useAuth = () => {
     const loginWithFacebook = () => {
         handleLoginWithFacebook().then((response) => {
             if (response.data?.status === 200) {
-                toaster({
-                    text: "Login successful with Facebook",
-                    status: "success",
-                });
+                const url = response?.data?.data?.auth_url;
+                const validUrl = decodeURIComponent(url);
+                window.open(validUrl, "_blank");
             }
         });
     };
@@ -87,16 +88,38 @@ const useAuth = () => {
         },
     ] = authApi.endpoints.loginWithGoogle.useLazyQuery();
     const loginWithGoogle = () => {
-        handleLoginWithGoogle().then((response: any) => {
+        handleLoginWithGoogle().then((response) => {
             if (response.data?.status === 200) {
-                // toaster({
-                //     text: "Login successful with Google",
-                //     status: "success",
-                // });
                 const url = response?.data?.data?.auth_url;
                 const validUrl = decodeURIComponent(url);
                 window.open(validUrl, "_blank");
-                //  console.log({ validUrl, response: response.data });
+            }
+        });
+    };
+
+    // verify social media authentication
+    const [
+        handleVerifySocialMediaAuthentication,
+        {
+            isLoading: isVerifySocialMediaAuthenticationLoading,
+            isError: isVerifySocialMediaAuthenticationError,
+            error: verifySocialMediaAuthenticationError,
+            data: verifySocialMediaAuthenticationData,
+        },
+    ] = useVerifySocialMediaAuthenticationMutation();
+
+    const verifySocialMediaAuthentication = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: VerifySocialMediaAuthenticationPayload;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleVerifySocialMediaAuthentication(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
             }
         });
     };
@@ -292,6 +315,13 @@ const useAuth = () => {
             isError: isRegisterError,
             error: registerError,
             data: registerData,
+        },
+        verifySocialMediaAuthentication: {
+            submit: verifySocialMediaAuthentication,
+            isLoading: isVerifySocialMediaAuthenticationLoading,
+            isError: isVerifySocialMediaAuthenticationError,
+            error: verifySocialMediaAuthenticationError,
+            data: verifySocialMediaAuthenticationData,
         },
         logOut: {
             submit: logOut,

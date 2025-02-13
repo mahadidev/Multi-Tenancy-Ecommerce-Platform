@@ -41,6 +41,12 @@ export interface UserResponseType extends ApiResponseType {
     };
 }
 
+export interface VerifySocialMediaAuthenticationPayload {
+    token: string;
+    user_id: string;
+    store_id?: string;
+}
+
 export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery: baseQuery,
@@ -81,7 +87,9 @@ export const authApi = createApi({
                 });
             },
         }),
-        loginWithFacebook: builder.query<LoginResponseType, void>({
+
+        // login with facebook
+        loginWithFacebook: builder.query<any, void>({
             query: (formData) =>
                 createRequest({
                     url: `${API_URL}/auth/facebook?login_type=seller`,
@@ -89,6 +97,33 @@ export const authApi = createApi({
                     body: formData,
                 }),
             providesTags: ["User"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // login with google
+        loginWithGoogle: builder.query<any, void>({
+            query: (formData) =>
+                createRequest({
+                    url: `${API_URL}/auth/google?login_type=seller`,
+                    method: "get",
+                    body: formData,
+                }),
+            providesTags: ["User"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // verify social media authentication
+        verifySocialMediaAuthentication: builder.mutation<
+            ApiResponseType,
+            VerifySocialMediaAuthenticationPayload
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `${API_URL}/auth/social-login-check`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["User"],
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
@@ -98,33 +133,6 @@ export const authApi = createApi({
                             accessToken: response.data.data.access_token,
                         })
                     );
-                    dispatch(
-                        setAuthStore({
-                            store: response.data.data.logged_store,
-                            currentStore: response.data.data.logged_store,
-                            stores: response.data.data.stores,
-                        })
-                    );
-                });
-            },
-        }),
-        loginWithGoogle: builder.query<LoginResponseType, void>({
-            query: (formData) =>
-                createRequest({
-                    url: `${API_URL}/auth/google?login_type=seller`,
-                    method: "get",
-                    body: formData,
-                }),
-            providesTags: ["User"],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    // dispatch(
-                    //     setAuth({
-                    //         user: response.data.data.user,
-                    //         accessToken: response.data.data.access_token,
-                    //     })
-                    // );
                     // dispatch(
                     //     setAuthStore({
                     //         store: response.data.data.logged_store,
@@ -288,6 +296,7 @@ export const {
     useResetPasswordMutation,
     useLoginWithFacebookQuery,
     useLoginWithGoogleQuery,
+    useVerifySocialMediaAuthenticationMutation,
 } = authApi;
 
 export interface UserUpdatePasswordPayloadType {

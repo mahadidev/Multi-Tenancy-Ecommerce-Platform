@@ -9,7 +9,8 @@ export interface NotificationType {
     notifiable_id: number;
     title: string;
     message: string;
-    read_at: null;
+    read_at: Date;
+    data: NotificationDataType;
 }
 
 export interface NotificationsResponseType {
@@ -18,4 +19,16 @@ export interface NotificationsResponseType {
 
 export interface NotificationsType {
     notifications: Notification[];
+}
+
+export interface NotificationDataType {
+    module: string;
+    order_id: number;
+    order_uuid: string;
+    store_id: number;
+    store_name: string;
+    title: string;
+    message: string;
+    amount: number;
+    status: string;
 }
