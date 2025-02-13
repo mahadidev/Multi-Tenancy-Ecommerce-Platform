@@ -124,9 +124,12 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Store Menu Items Routes
     Route::resource('store-menu-items', StoreMenuItemController::class);
 
-    // role & permission Routes
-    Route::resource('store-roles', RolePermissionController::class);
-    Route::resource('store-permissions', RolePermissionController::class);
+    // Seller role & permission Routes
+    Route::resource('store-roles', StoreRoleController::class);
+    Route::resource('store-permissions', StorePermissionController::class);
+
+    // Sub-admin role-permission assign
+    // do it here
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
