@@ -12,10 +12,12 @@ import FooterJson from './layouts/footer/Footer.json';
 import NavigationJson from './layouts/navigation/Navigation.json';
 
 // import widget json
+import { RegisteredThemeType } from '@themes/registeredTheme';
 import HeroJson from "./widgets/hero/Hero.json";
+import IntroductionJson from './widgets/introduction/Introduction.json';
 
 
-export const Simfy = {
+export const Simfy: RegisteredThemeType = {
 	name: 'Simfy',
 	widget: (props: ThemeWidgetPropsType) => <Widget {...props} />,
 	layout: (props: ThemeLayoutPropsType) => <Layout {...props} />,
@@ -34,11 +36,11 @@ export const SimfySeeder: ThemeType | any = {
 			label: 'Home',
 			slug: '/',
 			title: 'Home Page',
-			layout_id: 1,
+			layout: AppLayoutJson,
 			is_active: 1,
 			type: 'home',
 			thumbnail: null,
-			widgets: [HeroJson],
+			widgets: [HeroJson, IntroductionJson],
 		},
 	],
 };

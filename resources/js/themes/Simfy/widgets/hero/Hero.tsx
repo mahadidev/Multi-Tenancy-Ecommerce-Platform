@@ -1,7 +1,7 @@
 import { ThemeWidgetPropsType } from '@type/themeType';
 import { FC } from 'react';
 
-const Hero: FC<ThemeWidgetPropsType> = ({ widget }) => {
+const HeroSection: FC<ThemeWidgetPropsType> = ({ widget }) => {
 	return (
 		<section className="py-4 bg-gray-400">
 			<div className="container mx-auto">
@@ -11,15 +11,8 @@ const Hero: FC<ThemeWidgetPropsType> = ({ widget }) => {
 						{widget.inputs.find((input) => input.name === 'title')?.value}
 					</h1>
 				)}
-
-				{/* description  */}
-				{widget.inputs.find((input) => input.name === 'description') && (
-					<p className='text-base mt-5'>
-						{widget.inputs.find((input) => input.name === 'description')?.value}
-					</p>
-				)}
 			</div>
 		</section>
 	);
 };
-export default Hero;
+export default HeroSection;

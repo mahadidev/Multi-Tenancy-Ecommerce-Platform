@@ -17,7 +17,7 @@ class OrderStatusUpdated extends Mailable
 
     public $order;
     public $store;
-    public $logoUrl;    
+    public $logoUrl;
 
     /**
      * Create a new message instance.
@@ -39,4 +39,5 @@ class OrderStatusUpdated extends Mailable
                 'logoUrl' => $this->logoUrl,
             ]);
     }
+
 }

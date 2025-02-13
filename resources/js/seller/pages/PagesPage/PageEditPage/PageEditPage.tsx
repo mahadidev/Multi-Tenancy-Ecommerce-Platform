@@ -3,7 +3,7 @@ import usePage from '@seller/hooks/usePage';
 import useStore from '@seller/hooks/useStore';
 import useTheme from '@seller/hooks/useTheme';
 import useWidget from '@seller/hooks/useWidget';
-import { registerdTheme } from '@themes/registeredTheme';
+import { registeredTheme } from '@themes/registeredTheme';
 import { Button } from 'flowbite-react';
 import { useEffect } from 'react';
 import { IoMdMove } from 'react-icons/io';
@@ -44,7 +44,7 @@ const PageEditPage = () => {
 						.map((widget) => (
 							<div className="w-full h-max relative" key={widget.id}>
 								{store && theme &&
-									registerdTheme[theme.name]?.widget({
+									registeredTheme[theme.name]?.widget({
                                         widget: widget,
                                         store: store
                                     })
