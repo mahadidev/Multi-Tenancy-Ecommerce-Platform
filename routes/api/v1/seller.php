@@ -127,6 +127,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     // Seller role & permission Routes
     Route::resource('store-roles', StoreRoleController::class);
     Route::resource('store-permissions', StorePermissionController::class);
+    Route::post('store-assign-role-permissions', [StoreAssignRolePermissionsController::class, 'assignPermissions']);
+    Route::post('store-revoke-all-permissions', [StoreAssignRolePermissionsController::class, 'revokeAllPermissions']);
 
     // Sub-admin role-permission assign
     // do it here
