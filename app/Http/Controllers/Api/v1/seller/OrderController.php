@@ -9,7 +9,9 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Log;
 use App\Mail\OrderStatusUpdated;
 use App\Models\Store;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\OrderNotification;
 
 class OrderController extends Controller
 {
@@ -134,10 +136,12 @@ class OrderController extends Controller
             'status' => $request->status,
         ]);
 
+        $customer = User::find($order->user_id);
+
         try {
             if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
                 // Send email to the user
-                Mail::to($order->user->email)->send(new OrderStatusUpdated($order, $store, $logoUrl));
+                $customer->notify(new OrderNotification($order, $store, $logoUrl));
             }
         } catch (\Exception $e) {
             Log::error('Order update failed: ' . $e->getMessage());
