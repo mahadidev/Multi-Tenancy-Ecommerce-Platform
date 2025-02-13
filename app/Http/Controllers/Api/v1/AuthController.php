@@ -487,9 +487,7 @@ class AuthController extends Controller
             $store = Store::find($storeId);
             $storeName = $store->name;
             $verificationUrl = url('/user/verify-email?token=' . $user->verification_code);
-            // $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
         } else {
-            // $verificationUrl = url("api/v1/verify-email/{$user->verification_code}");
             $verificationUrl = url('/seller/verify-email?token=' . $user->verification_code);
         }
 
