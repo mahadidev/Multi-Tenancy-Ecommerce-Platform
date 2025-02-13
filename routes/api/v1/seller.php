@@ -133,5 +133,5 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
-    Route::get('logout', [AuthController::class, 'logout']);
+    Route::get('logout', [\App\Http\Controllers\Api\v1\AuthController::class, 'logout']);
 });
