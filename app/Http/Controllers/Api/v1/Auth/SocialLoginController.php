@@ -40,7 +40,7 @@ class SocialLoginController extends Controller
             'data' => [
                 'auth_url' => $authUrl
             ]
-        ]);
+        ], 200);
     }
 
 
@@ -67,7 +67,7 @@ class SocialLoginController extends Controller
             'data' => [
                 'auth_url' => $authUrl
             ]
-        ]);
+        ], 200);
     }
 
     public function UserHandleGoogleCallback(Request $request)
@@ -148,20 +148,7 @@ class SocialLoginController extends Controller
         session(['site_store_id' => $store->id]);
         $request->attributes->set('site_store_id', $store->id);
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Login successful',
-            'data' => [
-                'token_type' => 'Bearer',
-                'access_token' => $token,
-                'user' => new UserResource($user),
-                'store' => [
-                    'id' => $store->id,
-                    'name' => $store->name,
-                    'domain' => $store->domain,
-                ]
-            ],
-        ]);
+        return redirect()->to(url('/user/social-media?token=' . $token . '&user_id=' . $user->id . '&store_id=' . $store->id));
     }
 
     private function sellerSocialLogin($socialUser, Request $request)
@@ -184,6 +171,21 @@ class SocialLoginController extends Controller
         // Generate API token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        return redirect()->to(url('/seller/social-media?token=' . $token . '&user_id=' . $user->id));
+    }
+
+    public function socialMediaLogin(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'store_id' => 'nullable|exists:stores,id',
+        ]);
+
+        $token = $request->input('token');
+        $user = User::find($request->input('user_id'));
+        $store = $request->input('store_id') ? Store::find($request->input('store_id')) : null;
+
         return response()->json([
             'status' => 200,
             'message' => 'Login successful',
@@ -191,7 +193,8 @@ class SocialLoginController extends Controller
                 'token_type' => 'Bearer',
                 'access_token' => $token,
                 'user' => new UserResource($user),
+                'store' => $store ? new StoreResource($store) : null,
             ],
-        ]);
+        ], 200);
     }
 }
