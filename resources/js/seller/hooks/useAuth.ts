@@ -21,9 +21,8 @@ import { useAppSelector } from "../store/store";
 import useToast from "./useToast";
 
 const useAuth = () => {
-    const navigate = useNavigate(); // for routing
-
     const { toaster } = useToast(); // for showing toast messages
+    const navigate = useNavigate();
 
     useFetchUserQuery(); // user query
 
@@ -88,12 +87,16 @@ const useAuth = () => {
         },
     ] = authApi.endpoints.loginWithGoogle.useLazyQuery();
     const loginWithGoogle = () => {
-        handleLoginWithGoogle().then((response) => {
+        handleLoginWithGoogle().then((response: any) => {
             if (response.data?.status === 200) {
-                toaster({
-                    text: "Login successful with Google",
-                    status: "success",
-                });
+                // toaster({
+                //     text: "Login successful with Google",
+                //     status: "success",
+                // });
+                const url = response?.data?.data?.auth_url;
+                const validUrl = decodeURIComponent(url);
+                window.open(validUrl, "_blank");
+                //  console.log({ validUrl, response: response.data });
             }
         });
     };

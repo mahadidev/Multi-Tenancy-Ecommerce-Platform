@@ -119,19 +119,19 @@ export const authApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    dispatch(
-                        setAuth({
-                            user: response.data.data.user,
-                            accessToken: response.data.data.access_token,
-                        })
-                    );
-                    dispatch(
-                        setAuthStore({
-                            store: response.data.data.logged_store,
-                            currentStore: response.data.data.logged_store,
-                            stores: response.data.data.stores,
-                        })
-                    );
+                    // dispatch(
+                    //     setAuth({
+                    //         user: response.data.data.user,
+                    //         accessToken: response.data.data.access_token,
+                    //     })
+                    // );
+                    // dispatch(
+                    //     setAuthStore({
+                    //         store: response.data.data.logged_store,
+                    //         currentStore: response.data.data.logged_store,
+                    //         stores: response.data.data.stores,
+                    //     })
+                    // );
                 });
             },
         }),
