@@ -36,7 +36,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::resource('/contact', ContactController::class);
 
     // Logout Route
-    Route::get('logout', [AuthController::class, 'logout']);
+    // Route::get('logout', [AuthController::class, 'logout']);
 
     // Store Pages Route
     Route::get('stores/page', [StorePageController::class, 'index']);
@@ -123,4 +123,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Store Menu Items Routes
     Route::resource('store-menu-items', StoreMenuItemController::class);
+});
+
+Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('logout', [AuthController::class, 'logout']);
 });

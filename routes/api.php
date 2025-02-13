@@ -22,18 +22,29 @@ Route::group(['prefix' => 'v1'], function () {
     // Include the onboarding routes
     require __DIR__ . '/api/v1/onboarding.php';
 
-    // Seller Routes
-    Route::post('seller/login', [AuthController::class, 'sellerLogin']);
-    Route::post('seller/register', [AuthController::class, 'sellerRegister']);
-
-    // User Routes
-    Route::post('user/login', [AuthController::class, 'userLogin']);
-    Route::post('user/register', [AuthController::class, 'userRegister']);
-
     // User Account - Forgot Password
     Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
+    Route::group(['prefix' => 'seller'], function () {
+        Route::post('login', [AuthController::class, 'sellerLogin']);
+        Route::post('register', [AuthController::class, 'sellerRegister']);
+        Route::group(['middleware' => ['auth:sanctum']], function () {
+            Route::get('resend-verification-email', [AuthController::class, 'resendVerificationEmail']);
+        });
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::post('login', [AuthController::class, 'sellerLogin']);
+        Route::post('register', [AuthController::class, 'sellerRegister']);
+        Route::group(['middleware' => ['auth:sanctum']], function () {
+            Route::get('resend-verification-email', [AuthController::class, 'resendVerificationEmail']);
+        });
+    });
+
+    // User Account - Verify Email
+    Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
+    
     // Theme Routes
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
@@ -62,9 +73,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('svg-icons', SvgIconController::class);
 
     // Theme Widgets
-    Route::get('widget-types', [WidgetTypeController::class, 'index'] );
+    Route::get('widget-types', [WidgetTypeController::class, 'index']);
 
     // Store Types
     Route::get('store-types', [StoreTypeController::class, 'index']);
-    
 });

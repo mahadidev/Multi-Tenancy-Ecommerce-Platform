@@ -32,6 +32,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         'image',
         'address',
         'password',
+        'verification_code',
         'email_verified_at',
         'store_id',
     ];

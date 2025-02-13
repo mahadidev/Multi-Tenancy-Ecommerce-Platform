@@ -8,12 +8,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Mail\WelcomeSellerMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 
 class Store extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['store_type_id','owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'description'];
+    protected $fillable = ['store_type_id', 'owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'description'];
     protected $casts = [
         'settings' => 'json',
         // 'settings' => 'array',
@@ -28,6 +32,9 @@ class Store extends Model
             if (empty($data->slug)) {
                 $data->slug = Str::slug($data->name); // Generate slug from name
             }
+
+            // Send welcome email with error handling
+            $data->sendWelcomeEmail();
         });
 
         // Automatically update the slug when updating
@@ -57,7 +64,12 @@ class Store extends Model
     public function domain()
     {
         // $domain = 'https://' . $this->domain . '.' . parse_url(env('APP_URL'), PHP_URL_HOST) . '.com';
-        $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/sites/' . $this->domain;
+        // $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/sites/' . $this->domain;
+        if (env('APP_URL') == 'http://127.0.0.1:8000') {
+            $domain = 'http://127.0.0.1:8000/sites/' . $this->domain;
+        } else {
+            $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/sites/' . $this->domain;
+        }
 
         return $domain;
     }
@@ -83,7 +95,8 @@ class Store extends Model
         return $this->belongsTo(Theme::class);
     }
 
-    public function pages(){
+    public function pages()
+    {
         return $this->hasMany(StorePage::class, 'store_id');
     }
 
@@ -97,11 +110,13 @@ class Store extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function brands(){
+    public function brands()
+    {
         return $this->hasMany(Brand::class);
     }
 
-    public function categories(){
+    public function categories()
+    {
         return $this->hasMany(Category::class);
     }
 
@@ -144,12 +159,56 @@ class Store extends Model
             ->count();
     }
 
-    public function widgets(){
+    public function widgets()
+    {
         return $this->hasMany(StoreWidget::class, 'store_id');
     }
 
     public function storeType()
     {
         return $this->belongsTo(StoreType::class, 'store_type_id');
+    }
+
+    public function sendWelcomeEmail()
+    {
+        try {
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
+                $user = $this->owner;
+                $appUrl = config('app.url');
+
+                // Ensure we have a trailing slash
+                if (!str_ends_with($appUrl, '/')) {
+                    $appUrl .= '/';
+                }
+
+                // Get store logo URL
+                $logoUrl = null;
+                if ($this->logo) {
+                    $logoUrl = $appUrl . 'storage/' . $this->logo;
+                } else {
+                    $logoUrl = $appUrl . 'images/logo-text.png';
+                }
+
+                // Get domain
+                $domain = null;
+                if(env('APP_URL') == 'http://127.0.0.1:8000') {
+                    $domain = 'http://127.0.0.1:8000/seller';
+                } else {
+                    $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/seller';
+                }
+
+                if ($user && $user->email) {
+                    Mail::to($user->email)->send(new WelcomeSellerMail($this, $logoUrl, $domain));
+                    return true;
+                } else {
+                    Log::info('User email not found');
+                }
+            } else {
+                Log::info('Please set APP_ENV to production to send emails');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error sending welcome email: ' . $e->getMessage());
+            // return response()->json(['status' => 500, 'message' => 'Error sending welcome email'], 500);
+        }
     }
 }

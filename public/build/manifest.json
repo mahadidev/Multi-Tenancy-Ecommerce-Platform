@@ -5,13 +5,10 @@
   },
   "_registeredTheme-1x7rdDXe.js": {
     "file": "assets/registeredTheme-1x7rdDXe.js",
-    "name": "registeredTheme",
-    "imports": [
-      "_chunk-K6AXKMTT-DJhFqiHr.js"
-    ]
-  },
+  "_registeredTheme-C3hmuSvp.js": {
+    "file": "assets/registeredTheme-C3hmuSvp.js",
   "resources/css/app.css": {
-    "file": "assets/app-BLlAhWwS.css",
+    "file": "assets/app-C6FVIaMt.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -46,13 +43,11 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-DX8-NmDX.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-      "_registeredTheme-1x7rdDXe.js"
     ],
     "css": [
       "assets/index-DI4Xio69.css"
@@ -66,19 +61,18 @@
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
       "_registeredTheme-1x7rdDXe.js"
+      "_registeredTheme-C3hmuSvp.js"
     ],
     "css": [
       "assets/index-BGygEieP.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-CtLzhXBJ.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-      "_registeredTheme-1x7rdDXe.js"
     ],
     "css": [
       "assets/index-BGygEieP.css"

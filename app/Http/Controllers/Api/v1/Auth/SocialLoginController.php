@@ -19,27 +19,63 @@ class SocialLoginController extends Controller
 {
     public function redirectToGoogle(Request $request)
     {
+        $loginType = $request->query('login_type', 'seller'); // Default to 'seller' if not specified
         $storeId = $request->query('store_id');
-        session(['store_id' => $storeId]); // Store store_id in session
-        return Socialite::driver('google')
+
+        $authUrl = Socialite::driver('google')
             ->stateless()
-            ->redirect();
+            ->with([
+                'login_type' => $loginType,
+                'store_id' => $storeId,
+                'state' => base64_encode(json_encode([
+                    'login_type' => $loginType,
+                    'store_id' => $storeId
+                ]))
+            ])
+            ->redirect()
+            ->getTargetUrl(); // Gets the Google OAuth URL instead of redirecting
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'auth_url' => $authUrl
+            ]
+        ]);
     }
+
 
     public function redirectToFacebook(Request $request)
     {
+        $loginType = $request->query('login_type', 'seller');
         $storeId = $request->query('store_id');
-        session(['store_id' => $storeId]); // Store store_id in session
-        return Socialite::driver('facebook')
+
+        $authUrl = Socialite::driver('facebook')
             ->stateless()
-            ->redirect();
+            ->with([
+                'login_type' => $loginType,
+                'store_id' => $storeId,
+                'state' => base64_encode(json_encode([
+                    'login_type' => $loginType,
+                    'store_id' => $storeId
+                ]))
+            ])
+            ->redirect()
+            ->getTargetUrl(); // Gets the Google OAuth URL instead of redirecting
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'auth_url' => $authUrl
+            ]
+        ]);
     }
 
     public function UserHandleGoogleCallback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
-            return $this->handleSocialLogin($googleUser, $request);
+            $state = json_decode(base64_decode($request->input('state')), true);
+            return $this->handleSocialLogin($googleUser, $request, $state);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to login with Google'], 500);
         }
@@ -49,15 +85,28 @@ class SocialLoginController extends Controller
     {
         try {
             $facebookUser = Socialite::driver('facebook')->stateless()->user();
-            return $this->handleSocialLogin($facebookUser, $request);
+            $state = json_decode(base64_decode($request->input('state')), true);
+            return $this->handleSocialLogin($facebookUser, $request, $state);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to login with Facebook'], 500);
         }
     }
 
-    private function handleSocialLogin($socialUser, Request $request)
+    private function handleSocialLogin($socialUser, Request $request, array $state)
     {
-        $store = Store::find(session('store_id'));
+        $loginType = $state['login_type'] ?? 'seller';
+        $storeId = $state['store_id'] ?? null;
+
+        if ($loginType === 'user' && $storeId) {
+            return $this->userSocialLogin($socialUser, $request, $storeId);
+        } else {
+            return $this->sellerSocialLogin($socialUser, $request);
+        }
+    }
+
+    private function userSocialLogin($socialUser, Request $request, $storeId)
+    {
+        $store = Store::find($storeId);
 
         if (!$store) {
             return response()->json(['status' => 404, 'message' => 'Invalid store ID']);
@@ -78,6 +127,7 @@ class SocialLoginController extends Controller
                 'email' => $socialUser->getEmail(),
                 'password' => Hash::make(Str::random(24)),
                 'store_id' => [$store->id],
+                'email_verified_at' => now(),
             ]);
 
             // Assign role (default to 'user')
@@ -104,11 +154,7 @@ class SocialLoginController extends Controller
             'data' => [
                 'token_type' => 'Bearer',
                 'access_token' => $token,
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                ],
+                'user' => new UserResource($user),
                 'store' => [
                     'id' => $store->id,
                     'name' => $store->name,
@@ -118,109 +164,34 @@ class SocialLoginController extends Controller
         ]);
     }
 
+    private function sellerSocialLogin($socialUser, Request $request)
+    {
+        $user = User::where('email', $socialUser->getEmail())->first();
 
-    // public function sellerHandleGoogleCallback(Request $request)
-    // {
-    //     try {
-    //         $googleUser = Socialite::driver('google')->stateless()->user();
+        if (!$user) {
+            $user = User::create([
+                'name' => $socialUser->getName(),
+                'email' => $socialUser->getEmail(),
+                'password' => Hash::make(Str::random(24)),
+                'email_verified_at' => now(),
+            ]);
+        }
+        // Assign role to the seller
+        $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
+        $role = Role::firstOrCreate(['name' => $roleName]);
+        $user->assignRole($role->name);
 
-    //         // Check if the user already exists
-    //         $user = User::where('email', $googleUser->getEmail())->first();
+        // Generate API token
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-    //         if ($user) {
-    //             // update or create store_id in the Store Session table
-    //             $storeSession = $user->storeSession()->first();
-    //             $store = null;
-
-    //             if ($storeSession) {
-    //                 // remove previous store id from session
-    //                 $request->session()->forget('store_id');
-    //                 if (session()->has('store_id')) {
-    //                     session()->forget('store_id');
-    //                 }
-
-    //                 // store the store id in session
-    //                 session(['store_id' => $storeSession->id]);
-
-    //                 // Also set it in the request attributes
-    //                 $request->attributes->set('store_id', $storeSession->store_id);
-
-    //                 // find the store
-    //                 $store = Store::find($storeSession->store_id);
-    //             }
-
-    //             if (!$storeSession) {
-    //                 $store = Store::where('owner_id', $user->id)->first();
-
-    //                 if ($store) {
-    //                     StoreSession::updateOrCreate(
-    //                         [
-    //                             'user_id' => $user->id,
-    //                         ],
-    //                         [
-    //                             'store_id' => $store->id,
-    //                         ],
-    //                     );
-
-    //                     $request->session()->forget('store_id');
-    //                     if (session()->has('store_id')) {
-    //                         session()->forget('store_id');
-    //                     }
-
-    //                     // store the store id in session
-    //                     session(['store_id' => $store->id]);
-
-    //                     // Also set it in the request attributes
-    //                     $request->attributes->set('store_id', $store->id);
-    //                 }
-    //             }
-    //         }
-
-    //         if (!$user) {
-    //             // Create a new user
-    //             $user = User::create([
-    //                 'name' => $googleUser->getName(),
-    //                 'email' => $googleUser->getEmail(),
-    //                 'password' => Hash::make(Str::random(24)), // Random password
-    //             ]);
-
-    //             // Assign role to the seller
-    //             $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
-    //             $role = Role::firstOrCreate(['name' => $roleName]);
-    //             $user->assignRole($role->name);
-    //         }
-
-    //         // Generate an API token for the user
-    //         // $token = $user->createToken('API Token')->plainTextToken;
-    //         $token = $user->createToken('auth_token')->plainTextToken;
-
-    //         $response = [
-    //             'status' => 200,
-    //             'message' => 'login success',
-    //             'data' => [
-    //                 'token_type' => 'Bearer',
-    //                 'access_token' => $token,
-    //                 'user' => new UserResource($user),
-    //                 'membership' => null,
-    //             ],
-    //         ];
-
-    //         if ($store) {
-    //             $response['data']['logged_store'] = new StoreResource($store);
-    //         }
-
-    //         // return all stores
-    //         $stores = Store::where(['owner_id' => $user->id])->get();
-    //         if ($stores) {
-    //             $response['data']['stores'] = StoreResource::collection($stores);
-    //         }
-
-    //         // Return the token and user details
-    //         return response()->json($response, 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['message' => 'Unable to login with Google'], 500);
-    //     }
-    // }
-
+        return response()->json([
+            'status' => 200,
+            'message' => 'Login successful',
+            'data' => [
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'user' => new UserResource($user),
+            ],
+        ]);
+    }
 }
-
