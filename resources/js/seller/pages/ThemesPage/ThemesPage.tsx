@@ -10,7 +10,7 @@ const ThemesPage: FC = function () {
 	const { deactiveTheme, activeTheme, store } = useStore();
 
 	return (
-		<div className="p-4">
+		<div className="p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 			{themes.map((theme) => (
 				<Card
 					className="max-w-sm"

@@ -22,7 +22,7 @@ class ThemePageWidgetResource extends JsonResource
             'serial' => $this->serial,
             'is_editable' => $this->is_editable === 1 ? true : false,
             'type' => $this->widgetType ? WidgetTypeResource::make($this->widgetType) : null,
-            'inputs' => $this->inputs ? StorePageWidgetInputsResource::collection(json_decode($this->inputs)) : [],
+            'inputs' => $this->inputs ? ThemePageWidgetInputResource::collection(json_decode($this->inputs)) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

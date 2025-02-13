@@ -18,7 +18,7 @@ const PageEditor = () => {
     }, [page]);
 
     return (
-			<>
+			<div className="flex flex-col gap-4 py-2.5">
 				<div className="space-y-2">
 					<Label htmlFor="title">Page Title</Label>
 					<TextInput
@@ -49,7 +49,7 @@ const PageEditor = () => {
 						required
 					/>
 				</div>
-			</>
+			</div>
 		);
 };
 export default PageEditor;
