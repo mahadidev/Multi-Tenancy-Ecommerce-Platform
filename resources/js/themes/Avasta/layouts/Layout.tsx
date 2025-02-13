@@ -1,13 +1,10 @@
 import { ThemeLayoutPropsType } from '@type/themeType';
 import React, { FC } from 'react';
-import AppLayout from './appLayout/AppLayout';
 
 const Layout: FC<ThemeLayoutPropsType> = (props) => {
 	const layouts: {
 		[Key: string]: React.ReactNode;
-	} = {
-		appLayout: <AppLayout {...props} />,
-	};
+	} = {};
 
 	return (
 		<>

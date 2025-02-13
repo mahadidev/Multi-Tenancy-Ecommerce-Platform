@@ -66,11 +66,24 @@ class ThemeSeeder extends Seeder
                     $page->type = $createdPageType->id;
                 }
 
+                // layout
+                $page->layout_id = $page->layout_id ?? null;
+                if(isset($page->layout)){
+                    // check type exist else create
+                    if (ThemeWidget::where(["theme_id" => $theme->id, "name" => $page->layout->name])->first()) {
+                        $page->layout_id = ThemeWidget::where(["theme_id" => $theme->id, "name" => $page->layout->name])->first()->id;
+                    } else {
+                        $firstLayout = ThemeWidget::where(["theme_id" => $theme->id])->first()->id ?? null;
+
+                        $page->layout_id = $firstLayout->id;
+                    }
+                }
+
                 $newThemePage = ThemePage::updateOrCreate(
                     [
                         'slug' => $page->slug,  // Assuming these two fields should uniquely identify a page
                         'theme_id' => $newTheme->id,
-                        'layout_id' => $page->layout_id,
+                        "layout_id" => $page->layout_id
                     ],
                     [
                         'name' => $page->name,

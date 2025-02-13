@@ -17,7 +17,7 @@ export interface PageType {
 	is_active: 0 | 1;
 	widgets: WidgetType[];
 	type: PageTypeType;
-	layout: WidgetType;
+	layout: WidgetType | null;
 	created_at: string;
 	updated_at: string;
 }
