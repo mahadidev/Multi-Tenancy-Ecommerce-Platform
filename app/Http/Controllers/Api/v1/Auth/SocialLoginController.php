@@ -135,8 +135,6 @@ class SocialLoginController extends Controller
             $user->assignRole($role->name);
         }
 
-        // Generate API token
-        // $token = $user->createToken('auth_token')->plainTextToken;
         $token = Str::random(40); // Generate a random token
         $user->update(['remember_token' => $token]);
 
@@ -156,7 +154,6 @@ class SocialLoginController extends Controller
     private function sellerSocialLogin($socialUser, Request $request)
     {
         $user = User::where('email', $socialUser->getEmail())->first();
-        $token = Str::random(40); // Generate a random token
 
         if (!$user) {
             $user = User::create([
@@ -164,9 +161,11 @@ class SocialLoginController extends Controller
                 'email' => $socialUser->getEmail(),
                 'password' => Hash::make(Str::random(24)),
                 'email_verified_at' => now(),
-                'remember_token' => $token,
             ]);
         }
+
+        $token = Str::random(40); // Generate a random token
+        $user->update(['remember_token' => $token]);
         // Assign role to the seller
         $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
         $role = Role::firstOrCreate(['name' => $roleName]);
@@ -189,14 +188,15 @@ class SocialLoginController extends Controller
         
         if (!$user) {
             return response()->json([
-                'status' => 401,
+                'status' => 404,
                 'message' => 'Unauthorized'
-            ], 401);
+            ], 404);
         }
 
         $user->update([
             'remember_token' => null
         ]);
+
         $access_token = $user->createToken('auth_token')->plainTextToken;
         $store = $request->input('store_id') ? Store::find($request->input('store_id')) : null;
 
