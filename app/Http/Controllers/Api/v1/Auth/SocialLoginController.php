@@ -135,8 +135,8 @@ class SocialLoginController extends Controller
             $user->assignRole($role->name);
         }
 
-        // Generate API token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = Str::random(40); // Generate a random token
+        $user->update(['remember_token' => $token]);
 
         // Store store_id in session
         session(['site_store_id' => $store->id]);
@@ -163,13 +163,13 @@ class SocialLoginController extends Controller
                 'email_verified_at' => now(),
             ]);
         }
+
+        $token = Str::random(40); // Generate a random token
+        $user->update(['remember_token' => $token]);
         // Assign role to the seller
         $roleName = $request->input('role', 'seller'); // Default to 'seller' if no role is provided
         $role = Role::firstOrCreate(['name' => $roleName]);
         $user->assignRole($role->name);
-
-        // Generate API token
-        $token = $user->createToken('auth_token')->plainTextToken;
 
         return redirect()->to(url('/seller/social-media?token=' . $token . '&user_id=' . $user->id));
     }
@@ -182,8 +182,22 @@ class SocialLoginController extends Controller
             'store_id' => 'nullable|exists:stores,id',
         ]);
 
-        $token = $request->input('token');
-        $user = User::find($request->input('user_id'));
+        $user = User::where('id', $request->input('user_id'))
+            ->where('remember_token', $request->input('token'))
+            ->first();
+        
+        if (!$user) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Unauthorized'
+            ], 404);
+        }
+
+        $user->update([
+            'remember_token' => null
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
         $store = $request->input('store_id') ? Store::find($request->input('store_id')) : null;
 
         return response()->json([
@@ -191,7 +205,7 @@ class SocialLoginController extends Controller
             'message' => 'Login successful',
             'data' => [
                 'token_type' => 'Bearer',
-                'access_token' => $token,
+                'access_token' => $access_token,
                 'user' => new UserResource($user),
                 'store' => $store ? new StoreResource($store) : null,
             ],
