@@ -1,7 +1,7 @@
 import { DataTable } from "@seller/components";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType, RoleType } from "@type/rolePermissionsType";
-import { Table } from "flowbite-react";
+import { Button, Table } from "flowbite-react";
 
 const RolePermissionsTable = () => {
     const { roles } = useRolePermission();
@@ -52,16 +52,24 @@ const RolePermissionsTable = () => {
                         ),
                         sortable: true,
                     },
-                    // {
-                    //     render: (row: BrandType) => (
-                    //         <Table.Cell>
-                    //             <div className="flex items-center gap-x-3 whitespace-nowrap">
-                    //                 <EditBrandModal brand={row} />
-                    //                 <DeleteBrandModal brand={row} />
-                    //             </div>
-                    //         </Table.Cell>
-                    //     ),
-                    // },
+                    {
+                        render: () => (
+                            <Table.Cell>
+                                <div className="flex items-center gap-x-3 whitespace-nowrap">
+                                    <Button color="primary" className="p-0">
+                                        <div className="flex items-center gap-x-3">
+                                            Assign Permission
+                                        </div>
+                                    </Button>
+                                    <Button color="red" className="p-0">
+                                        <div className="flex items-center gap-x-3">
+                                            Revoke Permission
+                                        </div>
+                                    </Button>
+                                </div>
+                            </Table.Cell>
+                        ),
+                    },
                 ]}
                 search={{
                     placeholder: "Search for role permissions...",

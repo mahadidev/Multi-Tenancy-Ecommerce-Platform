@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useBrand from "@seller/hooks/useBrand";
 import useForm from "@seller/hooks/useForm";
+import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType } from "@type/rolePermissionsType";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
@@ -13,9 +13,9 @@ interface PropsType {
 
 const EditPermissionModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const { update } = useBrand();
+    const { updatePermission } = useRolePermission();
     const { handleChange, formState, formErrors, setFormState } = useForm({
-        formValidationError: update.error,
+        formValidationError: updatePermission.error,
         default: {
             ...props.permission,
         },
@@ -76,15 +76,15 @@ const EditPermissionModal: FC<PropsType> = function (props) {
                     <Button
                         color="primary"
                         onClick={() => {
-                            update.submit({
+                            updatePermission.submit({
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
                                 },
                             });
                         }}
-                        isProcessing={update.isLoading}
-                        disabled={update.isLoading}
+                        isProcessing={updatePermission.isLoading}
+                        disabled={updatePermission.isLoading}
                         processingLabel="Saving"
                         processingSpinner={
                             <AiOutlineLoading className="animate-spin" />

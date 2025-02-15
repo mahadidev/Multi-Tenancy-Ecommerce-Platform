@@ -1,4 +1,4 @@
-import useBrand from "@seller/hooks/useBrand";
+import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType } from "@type/rolePermissionsType";
 import { Button, Modal } from "flowbite-react";
 import { FC, useState } from "react";
@@ -11,7 +11,7 @@ interface PropsType {
 
 const DeletePermissionModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const { delete: deleteBrand } = useBrand();
+    const { deletePermission } = useRolePermission();
     return (
         <>
             <Button
@@ -41,7 +41,7 @@ const DeletePermissionModal: FC<PropsType> = function (props) {
                                 color="gray"
                                 theme={{ base: "px-0" }}
                                 onClick={() => {
-                                    deleteBrand.submit({
+                                    deletePermission.submit({
                                         formData: {
                                             id: props.permission.id,
                                         },
@@ -50,8 +50,8 @@ const DeletePermissionModal: FC<PropsType> = function (props) {
                                         },
                                     });
                                 }}
-                                isProcessing={deleteBrand.isLoading}
-                                disabled={deleteBrand.isLoading}
+                                isProcessing={deletePermission.isLoading}
+                                disabled={deletePermission.isLoading}
                                 processingLabel="Deleting"
                                 processingSpinner={
                                     <AiOutlineLoading className="animate-spin" />

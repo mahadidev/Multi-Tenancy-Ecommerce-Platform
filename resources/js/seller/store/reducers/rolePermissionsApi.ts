@@ -77,6 +77,64 @@ export const rolePermissionApi = createApi({
             invalidatesTags: ["Permissions"],
             transformErrorResponse: (error: any) => error.data,
         }),
+
+        // role update
+        updateRole: builder.mutation<
+            ApiResponseType,
+            { id: number; name: string }
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/store-roles/${formData?.id}`,
+                    method: "post",
+                    apiMethod: "PUT",
+                    body: formData,
+                }),
+            invalidatesTags: ["Roles"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // permission update
+        updatePermission: builder.mutation<
+            ApiResponseType,
+            { id: number; name: string }
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/store-permissions/${formData.id}`,
+                    method: "post",
+                    apiMethod: "PUT",
+                    body: formData,
+                }),
+            invalidatesTags: ["Permissions"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // permission delete
+        deleteRole: builder.mutation<ApiResponseType, { id: number }>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/store-roles/${formData.id}`,
+                    method: "delete",
+                    apiMethod: "DELETE",
+                    body: formData,
+                }),
+            invalidatesTags: ["Roles"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // permission delete
+        deletePermission: builder.mutation<ApiResponseType, { id: number }>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/store-permissions/${formData.id}`,
+                    method: "delete",
+                    apiMethod: "DELETE",
+                    body: formData,
+                }),
+            invalidatesTags: ["Permissions"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
     }),
 });
 
@@ -85,4 +143,8 @@ export const {
     useFetchPermissionsQuery,
     useCreateRoleMutation,
     useCreatePermissionMutation,
+    useUpdateRoleMutation,
+    useUpdatePermissionMutation,
+    useDeleteRoleMutation,
+    useDeletePermissionMutation,
 } = rolePermissionApi;
