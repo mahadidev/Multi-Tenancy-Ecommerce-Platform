@@ -1,10 +1,11 @@
 import { DataTable } from "@seller/components";
-import useBrand from "@seller/hooks/useBrand";
-import { BrandType } from "@type/brandType";
+import useRolePermission from "@seller/hooks/useRolePermissions";
+import { PermissionType, RoleType } from "@type/rolePermissionsType";
 import { Table } from "flowbite-react";
 
 const RolePermissionsTable = () => {
-    const { brands } = useBrand();
+    const { roles } = useRolePermission();
+
     return (
         <>
             <DataTable
@@ -12,7 +13,7 @@ const RolePermissionsTable = () => {
                     {
                         label: "Name",
                         key: "name",
-                        render: (row: BrandType) => (
+                        render: (row: RoleType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                                 {row.name}
                             </Table.Cell>
@@ -20,11 +21,23 @@ const RolePermissionsTable = () => {
                         sortable: true,
                     },
                     {
-                        label: "Slug",
-                        key: "slug",
-                        render: (row: BrandType) => (
+                        label: "Permissions",
+                        key: "permissions",
+                        render: (row: RoleType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.slug}
+                                {row?.permissions?.map(
+                                    (
+                                        permission: PermissionType,
+                                        idx: number
+                                    ) => (
+                                        <div
+                                            key={idx}
+                                            className="p-2 dark:bg-gray-700 my-2 rounded-lg"
+                                        >
+                                            {permission?.name}
+                                        </div>
+                                    )
+                                )}
                             </Table.Cell>
                         ),
                         sortable: true,
@@ -32,7 +45,7 @@ const RolePermissionsTable = () => {
                     {
                         label: "Created At",
                         key: "created_at",
-                        render: (row: BrandType) => (
+                        render: (row: RoleType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                                 {row.created_at}
                             </Table.Cell>
@@ -51,15 +64,15 @@ const RolePermissionsTable = () => {
                     // },
                 ]}
                 search={{
-                    placeholder: "Search for brand...",
-                    columns: ["name", "slug", "created_at"],
+                    placeholder: "Search for role permissions...",
+                    columns: ["name", "created_at"],
                 }}
-                data={brands}
+                data={roles}
                 // head={{
                 //     render: (_data: BrandType[]) => <CreateBrandModal />,
                 // }}
                 exportable={true}
-                filename="brands"
+                filename="roles"
             />
         </>
     );
