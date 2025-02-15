@@ -11,7 +11,10 @@ import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from "react";
 import { useEffect, useState } from "react";
 import { FaBlogger, FaPaintBrush, FaUsers } from "react-icons/fa";
 import { HiChartPie, HiCog, HiSearch, HiShoppingBag } from "react-icons/hi";
-import { MdCollectionsBookmark } from "react-icons/md";
+import {
+    MdCollectionsBookmark,
+    MdOutlineAccessTimeFilled,
+} from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
@@ -256,38 +259,38 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
 }
 
 const pages: SidebarItem[] = [
-	{
-		href: RoutePath.DashboardPage.index(),
-		icon: HiChartPie,
-		label: 'Dashboard',
-	},
-	{
-		icon: HiShoppingBag,
-		label: 'E-commerce',
-		items: [
-			{ href: RoutePath.CategoriesPage.index(), label: 'Category' },
-			{ href: RoutePath.BrandsPage.index(), label: 'Brand' },
+    {
+        href: RoutePath.DashboardPage.index(),
+        icon: HiChartPie,
+        label: "Dashboard",
+    },
+    {
+        icon: HiShoppingBag,
+        label: "E-commerce",
+        items: [
+            { href: RoutePath.CategoriesPage.index(), label: "Category" },
+            { href: RoutePath.BrandsPage.index(), label: "Brand" },
 
-			{ href: RoutePath.ProductsPage.index(), label: 'Products' },
-			{
-				href: RoutePath.OrdersPage.index(),
-				label: 'Orders',
-			},
-		],
-	},
-	{
-		href: RoutePath.CustomersPage.index(),
-		icon: FaUsers,
-		label: 'Customers',
-	},
-	{
-		icon: FaBlogger,
-		label: 'Blogs',
-		items: [
-			{ href: RoutePath.BlogsPage.categories(), label: 'Category' },
-			{ href: RoutePath.BlogsPage.index(), label: 'Blogs' },
-		],
-	},
+            { href: RoutePath.ProductsPage.index(), label: "Products" },
+            {
+                href: RoutePath.OrdersPage.index(),
+                label: "Orders",
+            },
+        ],
+    },
+    {
+        href: RoutePath.CustomersPage.index(),
+        icon: FaUsers,
+        label: "Customers",
+    },
+    {
+        icon: FaBlogger,
+        label: "Blogs",
+        items: [
+            { href: RoutePath.BlogsPage.categories(), label: "Category" },
+            { href: RoutePath.BlogsPage.index(), label: "Blogs" },
+        ],
+    },
 ];
 
 const externalPages: SidebarItem[] = [
@@ -311,6 +314,11 @@ const externalPages: SidebarItem[] = [
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],
+    },
+    {
+        href: RoutePath.AccessManagementPage.index(),
+        icon: MdOutlineAccessTimeFilled,
+        label: "Access Management",
     },
     {
         href: RoutePath.SettingsPage.index(),
