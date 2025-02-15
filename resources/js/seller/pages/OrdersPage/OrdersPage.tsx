@@ -37,9 +37,6 @@ const OrdersPage: FC = function () {
                     </div>
                 </div>
             </div>
-            {/* {productCategoriesMeta && (
-                <CategoriesTablePagination meta={productCategoriesMeta} />
-            )} */}
         </>
     );
 };

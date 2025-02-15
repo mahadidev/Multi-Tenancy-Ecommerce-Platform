@@ -12,7 +12,21 @@ const useNotification = () => {
     // select notifications
     const { notifications } = useAppSelector((state) => state.notification);
 
-    // fetch cart items
+    // fetch notifications
+    const [
+        handleRefetchNotifications,
+        {
+            isLoading: isRefetchNotificationsLoading,
+            isError: isRefetchNotificationsError,
+            error: reFetchNotificationsError,
+            data: reFetchNotificationsData,
+        },
+    ] = notificationApi.endpoints.fetchNotifications.useLazyQuery();
+    const reFetchNotifications = () => {
+        handleRefetchNotifications().then(() => {});
+    };
+
+    // fetch notification items
     const [
         handleFetchSingleNotification,
         {
@@ -46,6 +60,13 @@ const useNotification = () => {
             isError: isFetchSingleNotificationError,
             error: fetchSingleNotificationError,
             data: fetchSingleNotificationData,
+        },
+        reFetchNotifications: {
+            submit: reFetchNotifications,
+            isLoading: isRefetchNotificationsLoading,
+            isError: isRefetchNotificationsError,
+            error: reFetchNotificationsError,
+            data: reFetchNotificationsData,
         },
     };
 };

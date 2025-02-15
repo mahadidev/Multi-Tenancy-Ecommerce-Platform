@@ -1,5 +1,6 @@
 import useCart from "@seller/hooks/useCart";
 import useCustomer from "@seller/hooks/useCustomer";
+import useNotification from "@seller/hooks/useNotification";
 import useOrders from "@seller/hooks/useOrders";
 import useProduct from "@seller/hooks/useProduct";
 import { CustomerType } from "@type/customersType";
@@ -11,6 +12,7 @@ import { HiMinus, HiOutlineTrash, HiPlus } from "react-icons/hi";
 export default function CreateOrderPage() {
     const [selectedCustomer, setSelectCustomer] = useState<number | null>(null);
     const [selectedProduct, setSelectProduct] = useState<number | null>(null);
+    const { reFetchNotifications } = useNotification();
 
     const { products: storeProducts } = useProduct();
     const { customers } = useCustomer();
@@ -206,14 +208,15 @@ export default function CreateOrderPage() {
                         <Button
                             color="primary"
                             size="lg"
-                            onClick={() =>
+                            onClick={() => {
                                 placeOrder.submit({
                                     formData: getOrderCustomerDetails(
                                         customers,
                                         selectedCustomer!
                                     )!,
-                                })
-                            }
+                                });
+                                reFetchNotifications.submit();
+                            }}
                             isProcessing={placeOrder.isLoading}
                             disabled={!cartItems.length}
                         >

@@ -7,6 +7,7 @@ import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link, useSearchParams } from "react-router-dom";
+import SocialLogin from "./SocialLogin";
 
 const LoginPage: FC = function () {
     const [searchParams] = useSearchParams();
@@ -78,6 +79,7 @@ const LoginPage: FC = function () {
                                         : false
                                 }
                                 onChange={handleChange}
+                                autoComplete="off"
                             />
                         </div>
                         <div className="flex flex-col gap-y-2">
@@ -152,6 +154,8 @@ const LoginPage: FC = function () {
                                 Create account
                             </Link>
                         </p>
+
+                        <SocialLogin />
                     </div>
                 </Card>
             </div>

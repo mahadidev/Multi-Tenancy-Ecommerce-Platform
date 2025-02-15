@@ -6,7 +6,11 @@ const PasswordInput: FC<any> = (props) => {
     const [type, setType] = useState<string>("password");
     return (
         <div className="relative">
-            <TextInput className="w-full h-full z-10" {...{ ...props, type }} />
+            <TextInput
+                className="w-full h-full z-10"
+                {...{ ...props, type }}
+                autoComplete="off"
+            />
             <div className="absolute h-max right-2 top-0 bottom-0 my-auto">
                 <button
                     onClick={() =>

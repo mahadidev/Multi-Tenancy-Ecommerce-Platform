@@ -1,5 +1,6 @@
 import { RoutePath } from "@seller/seller_env";
 import {
+    authApi,
     LoginPayloadType,
     PasswordForgotRequestPayloadType,
     RegisterPayloadType,
@@ -13,6 +14,8 @@ import {
     UserUpdatePasswordPayloadType,
     useUpdateUserMutation,
     useUpdateUserPasswordMutation,
+    useVerifySocialMediaAuthenticationMutation,
+    VerifySocialMediaAuthenticationPayload,
 } from "@seller/store/reducers/authApi";
 import { UserProfileType } from "@type/authType";
 import { useNavigate } from "react-router-dom";
@@ -20,9 +23,8 @@ import { useAppSelector } from "../store/store";
 import useToast from "./useToast";
 
 const useAuth = () => {
-    const navigate = useNavigate(); // for routing
-
     const { toaster } = useToast(); // for showing toast messages
+    const navigate = useNavigate();
 
     useFetchUserQuery(); // user query
 
@@ -47,6 +49,73 @@ const useAuth = () => {
         onSuccess?: CallableFunction;
     }) => {
         handleLogin(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            }
+        });
+    };
+
+    // login with facebook
+    const [
+        handleLoginWithFacebook,
+        {
+            isLoading: isLoginWithFacebookLoading,
+            isError: isLoginWithFacebookError,
+            error: loginWithFacebookError,
+            data: loginWithFacebookData,
+        },
+    ] = authApi.endpoints.loginWithFacebook.useLazyQuery();
+    const loginWithFacebook = () => {
+        handleLoginWithFacebook().then((response) => {
+            if (response.data?.status === 200) {
+                const url = response?.data?.data?.auth_url;
+                const validUrl = decodeURIComponent(url);
+                window.open(validUrl, "_blank");
+            }
+        });
+    };
+
+    // login with google
+    const [
+        handleLoginWithGoogle,
+        {
+            isLoading: isLoginWithGoogleLoading,
+            isError: isLoginWithGoogleError,
+            error: loginWithGoogleError,
+            data: loginWithGoogleData,
+        },
+    ] = authApi.endpoints.loginWithGoogle.useLazyQuery();
+    const loginWithGoogle = () => {
+        handleLoginWithGoogle().then((response) => {
+            if (response.data?.status === 200) {
+                const url = response?.data?.data?.auth_url;
+                const validUrl = decodeURIComponent(url);
+                window.open(validUrl, "_blank");
+            }
+        });
+    };
+
+    // verify social media authentication
+    const [
+        handleVerifySocialMediaAuthentication,
+        {
+            isLoading: isVerifySocialMediaAuthenticationLoading,
+            isError: isVerifySocialMediaAuthenticationError,
+            error: verifySocialMediaAuthenticationError,
+            data: verifySocialMediaAuthenticationData,
+        },
+    ] = useVerifySocialMediaAuthenticationMutation();
+
+    const verifySocialMediaAuthentication = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: VerifySocialMediaAuthenticationPayload;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleVerifySocialMediaAuthentication(formData).then((response) => {
             if (response.data?.status === 200) {
                 if (onSuccess) {
                     onSuccess(response.data.data);
@@ -226,12 +295,33 @@ const useAuth = () => {
             error: loginError,
             data: loginData,
         },
+        loginWithFacebook: {
+            submit: loginWithFacebook,
+            isLoading: isLoginWithFacebookLoading,
+            isError: isLoginWithFacebookError,
+            error: loginWithFacebookError,
+            data: loginWithFacebookData,
+        },
+        loginWithGoogle: {
+            submit: loginWithGoogle,
+            isLoading: isLoginWithGoogleLoading,
+            isError: isLoginWithGoogleError,
+            error: loginWithGoogleError,
+            data: loginWithGoogleData,
+        },
         register: {
             submit: register,
             isLoading: isRegisterLoading,
             isError: isRegisterError,
             error: registerError,
             data: registerData,
+        },
+        verifySocialMediaAuthentication: {
+            submit: verifySocialMediaAuthentication,
+            isLoading: isVerifySocialMediaAuthenticationLoading,
+            isError: isVerifySocialMediaAuthenticationError,
+            error: verifySocialMediaAuthenticationError,
+            data: verifySocialMediaAuthenticationData,
         },
         logOut: {
             submit: logOut,
