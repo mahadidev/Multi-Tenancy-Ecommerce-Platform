@@ -1,3 +1,4 @@
+import { getRedirectUrl } from "@seller/components/Navigation/DashboardNavigation/DashboardNavigation";
 import useNotification from "@seller/hooks/useNotification";
 import { NotificationType } from "@type/notification";
 import { Card } from "flowbite-react";
@@ -18,7 +19,7 @@ const NotificationsPage: React.FC = () => {
                     {notifications?.map(
                         (notification: NotificationType, idx: number) => (
                             <Link
-                                to="#"
+                                to={`${getRedirectUrl(notification)}`}
                                 className="flex rounded-lg my-5 px-4 py-3 bg-gray-100 dark:bg-gray-700"
                                 key={idx}
                                 onClick={() =>

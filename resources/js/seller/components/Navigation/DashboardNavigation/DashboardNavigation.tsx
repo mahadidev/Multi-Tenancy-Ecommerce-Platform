@@ -156,7 +156,7 @@ export function NotificationBellDropdown() {
                         ?.slice(0, 10)
                         ?.map((notification: NotificationType, idx: number) => (
                             <Link
-                                to="#"
+                                to={`${getRedirectUrl(notification)}`}
                                 className="flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
                                 key={idx}
                                 onClick={() =>
@@ -182,7 +182,6 @@ export function NotificationBellDropdown() {
                                 </div>
                                 <div className="w-full pl-3">
                                     <div className="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                        {/* New message from&nbsp; */}
                                         <span className="font-semibold text-gray-900 dark:text-white">
                                             {notification?.title}
                                         </span>
@@ -413,3 +412,16 @@ export function UserDropdown() {
         </Dropdown>
     );
 }
+
+// redirect to the targeted location after clicking on the notification
+export const getRedirectUrl = (notification: NotificationType) => {
+    switch (notification?.data?.module) {
+        case "order":
+            return `${RoutePath.OrdersPage.index()}?orderUID=${
+                notification?.data?.order_uuid
+            }`;
+
+        default:
+            return "#";
+    }
+};
