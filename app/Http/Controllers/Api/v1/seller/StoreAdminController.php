@@ -16,23 +16,28 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Store;
 use Illuminate\Support\Str;
 
-class AdminController extends Controller
+class StoreAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::whereHas('storeSession') // Ensures the user has a store session
-            ->with(['roles:name', 'storeSession']) // Load roles and store sessions
+        $users = User::with(['roles:name', 'storeSession']) 
+            ->whereHas('roles', function ($q) {
+                $q->where('name', '!=', 'seller');
+            }) 
+            ->whereHas('storeSession', function ($q) {
+                $q->where('store_id', authStore());
+            }) 
             ->latest()
             ->get();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Seller admins retrieved successfully',
+            'message' => 'Store Admins retrieved successfully',
             'data' => [
-                'users' => UserResource::collection($users)
+                'store_admins' => UserResource::collection($users)
             ]
         ], 200);
     }
@@ -48,24 +53,23 @@ class AdminController extends Controller
             'role_id' => 'required|exists:roles,id',
             'phone' => 'nullable|numeric',
             'address' => 'nullable|string',
-            'image' => 'nullable|string',
         ]);
 
         $store_id = authStore();
 
         if (!$store_id) {
             return response()->json([
-                'status' => 403,
+                'status' => 404,
                 'message' => 'Unauthorized, store not found'
-            ], 403);
+            ], 404);
         }
 
         $role = Role::findById($request->role_id, 'web');
         if ($role->store_id != $store_id) {
             return response()->json([
-                'status' => 403,
+                'status' => 404,
                 'message' => 'Unauthorized, role not found'
-            ], 403);
+            ], 404);
         }
 
         $verificationCode = Str::random(40); // Generate a random verification code
@@ -75,9 +79,9 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make('123'),
             'verification_code' => $verificationCode,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'image' => $request->image,
+            'phone' => $request->phone ?? null,
+            'address' => $request->address ?? null,
+            'image' => $request->image ?? null,
             'email_verified_at' => null,
         ]);
 
@@ -94,12 +98,12 @@ class AdminController extends Controller
         $this->sendWelcomeEmail($user, $store, $role);
 
         return response()->json([
-            'status' => 201,
-            'message' => 'User created successfully, and assigned to store',
+            'status' => 200,
+            'message' => 'Store Admin created successfully, and assigned to store',
             'data' => [
-                'user' => new UserResource($user)
+                'store_admin' => new UserResource($user)
             ]
-        ], 201);
+        ], 200);
     }
 
     public function sendWelcomeEmail($user, $store, $role)
@@ -135,14 +139,13 @@ class AdminController extends Controller
                     Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->url, $store->name));
                     return true;
                 } else {
-                    Log::info('User email not found');
+                    Log::info('Store Admin email not found');
                 }
             } else {
                 Log::info('Please set APP_ENV to production to send emails');
             }
         } catch (\Exception $e) {
             Log::error('Error sending welcome email: ' . $e->getMessage());
-            // return response()->json(['status' => 500, 'message' => 'Error sending welcome email'], 500);
         }
     }
 
@@ -151,21 +154,28 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::whereHas('storeSession') // Ensures the user has a store session
-            ->with(['roles:name', 'storeSession']) // Load roles and store sessions
+        $user = User::with(['roles:name', 'storeSession'])
+            ->whereHas('roles', function ($q) {
+                $q->where('name', '!=', 'seller');
+            }) 
+            ->whereHas('storeSession', function ($q) {
+                $q->where('store_id', authStore());
+            }) 
             ->find($id);
 
         if (!$user) {
             return response()->json([
                 'status' => 404,
-                'message' => 'User not found'
+                'message' => 'Store Admin not found'
             ], 404);
         }
 
         return response()->json([
             'status' => 200,
-            'message' => 'Seller admin retrieved successfully',
-            'data' => new UserResource($user)
+            'message' => 'Store Admin retrieved successfully',
+            'data' => [
+                'store_admin' => new UserResource($user)
+            ]
         ], 200);
     }
 
@@ -182,7 +192,6 @@ class AdminController extends Controller
             'role_id' => 'required|exists:roles,id',
             'phone' => 'nullable|numeric',
             'address' => 'nullable|string',
-            'image' => 'nullable|string',
         ]);
 
         $user = User::find($id);
@@ -190,10 +199,10 @@ class AdminController extends Controller
         if (!$user) {
             return response()->json([
                 'status' => 404,
-                'message' => 'User not found'
+                'message' => 'Store Admin not found'
             ], 404);
         }
-        
+
         $role = Role::findById($request->role_id, 'web');
         if ($role->store_id != authStore()) {
             return response()->json([
@@ -208,15 +217,16 @@ class AdminController extends Controller
             'password' => $request->password ? Hash::make($request->password) : $user->password,
             'phone' => $request->phone ?? null,
             'address' => $request->address ?? null,
-            'image' => $request->image ?? null,
         ]);
 
         $user->syncRoles([$role]);
 
         return response()->json([
             'status' => 200,
-            'message' => 'User updated successfully',
-            'data' => new UserResource($user)
+            'message' => 'Store Admin updated successfully',
+            'data' => [
+                'store_admin' => new UserResource($user)
+            ]
         ], 200);
     }
 
@@ -228,27 +238,26 @@ class AdminController extends Controller
         $store_id = authStore();
         if (!$store_id) {
             return response()->json([
-                'status' => 403,
+                'status' => 404,
                 'message' => 'Unauthorized, store not found'
-            ], 403);
+            ], 404);
         }
 
         $user = User::find($id);
         if (!$user) {
             return response()->json([
                 'status' => 404,
-                'message' => 'User not found'
+                'message' => 'Store Admin not found'
             ], 404);
         }
 
         if ($user->storeSession()->where('store_id', '!=', $store_id)->count() == 0) {
             if (is_null($user->store_id)) {
                 $user->delete();
-            }
-            else {
+            } else {
                 return response()->json([
                     'status' => 403,
-                    'message' => 'User cannot be deleted. User is assigned to another store as a customer'
+                    'message' => 'Store Admin cannot be deleted. Store Admin is assigned to another store as a customer'
                 ], 403);
             }
         } else {
@@ -257,7 +266,7 @@ class AdminController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'User removed from store'
+            'message' => 'Store Admin removed from the store'
         ], 200);
     }
 }
