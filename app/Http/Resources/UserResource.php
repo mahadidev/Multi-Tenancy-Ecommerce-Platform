@@ -40,6 +40,16 @@ class UserResource extends JsonResource
                     ];
                 })
             ),
+
+            // Include store session store name if available
+            'store_session' => $this->when(
+                $this->storeSession,
+                [
+                    'store_id' => $this->storeSession->store_id,
+                    'store_name' => $this->storeSession->store ? $this->storeSession->store->name : null,  // Assuming StoreSession has a 'store' relationship
+                    'store_domain' => $this->storeSession->store ? $this->storeSession->store->domain : null,  // Assuming StoreSession has a 'store' relationship
+                ]
+            ),
         ];
     }
 }
