@@ -13,7 +13,7 @@ interface PropsType {
 const AssignPermissionsToRoleModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const { assignPermission, permissions } = useRolePermission();
-    const { handleChange, formState, formErrors, setFormState } = useForm({
+    const { formState, setFormState } = useForm({
         formValidationError: assignPermission.error,
         default: {
             permissions:

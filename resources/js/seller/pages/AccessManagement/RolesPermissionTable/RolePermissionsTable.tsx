@@ -1,12 +1,12 @@
 import { DataTable } from "@seller/components";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType, RoleType } from "@type/rolePermissionsType";
-import { Button, Table } from "flowbite-react";
-import RevokeRolePermissionModal from "./RevokeRolePermissionModal";
+import { Table } from "flowbite-react";
 import AssignPermissionsToRoleModal from "./AssignPermissionsToRoleModal";
+import RevokeRolePermissionModal from "./RevokeRolePermissionModal";
 
 const RolePermissionsTable = () => {
-    const { roles, assignPermission, revokePermission } = useRolePermission();
+    const { roles } = useRolePermission();
 
     return (
         <>
