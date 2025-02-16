@@ -70,6 +70,9 @@ export const RoutePath = {
     AccessManagementPage: {
         index: () => "/access-management",
     },
+    StoreAdminPage: {
+        index: () => "/store-admin",
+    },
     SettingsPage: {
         index: () => "/settings",
     },

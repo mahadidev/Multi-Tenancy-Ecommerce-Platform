@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import useForm from "@seller/hooks/useForm";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType } from "@type/rolePermissionsType";

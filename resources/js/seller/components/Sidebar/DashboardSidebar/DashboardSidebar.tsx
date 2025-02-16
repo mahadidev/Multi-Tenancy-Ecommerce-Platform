@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { FaBlogger, FaPaintBrush, FaUsers } from "react-icons/fa";
 import { HiChartPie, HiCog, HiSearch, HiShoppingBag } from "react-icons/hi";
 import {
+    MdAdminPanelSettings,
     MdCollectionsBookmark,
     MdOutlineAccessTimeFilled,
 } from "react-icons/md";
@@ -314,6 +315,11 @@ const externalPages: SidebarItem[] = [
             // { href: "/e-commerce/billing", label: "Billing" },
             // { href: "/e-commerce/invoice", label: "Invoice" },
         ],
+    },
+    {
+        href: RoutePath.StoreAdminPage.index(),
+        icon: MdAdminPanelSettings,
+        label: "Store Admin",
     },
     {
         href: RoutePath.AccessManagementPage.index(),
