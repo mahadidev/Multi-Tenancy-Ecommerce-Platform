@@ -1,5 +1,4 @@
 import { DataTable } from "@seller/components";
-import useBrand from "@seller/hooks/useBrand";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 
 import { PermissionType } from "@type/rolePermissionsType";
@@ -9,7 +8,6 @@ import DeletePermissionModal from "./DeletePermissionModal";
 import EditPermissionModal from "./EditPermissionModal";
 
 const PermissionsTable = () => {
-    const { brands } = useBrand();
     const { permissions } = useRolePermission();
 
     console.log({ permissions });
