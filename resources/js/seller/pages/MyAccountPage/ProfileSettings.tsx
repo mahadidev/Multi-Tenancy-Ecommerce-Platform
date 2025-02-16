@@ -14,9 +14,11 @@ import {
 import React from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiHome } from "react-icons/hi";
+import { Navigate } from "react-router-dom";
 
 const ProfileSettingsPage: React.FC = () => {
     const { userProfileData: user, update, updatePassword } = useAuth();
+    const { logOut } = useAuth();
 
     // update profile information form
     const {
@@ -310,7 +312,7 @@ const ProfileSettingsPage: React.FC = () => {
                                 </ErrorMessage>
                             </div>
                         )}
-                        <div className="col-span-12">
+                        <div className="col-span-12 flex items-center justify-between">
                             <Button
                                 color="blue"
                                 isProcessing={updatePassword.isLoading}
@@ -333,7 +335,22 @@ const ProfileSettingsPage: React.FC = () => {
                                 }
                             >
                                 Change
-                            </Button>
+                            </Button>{" "}
+                            <p
+                                // to={`/forgot-password`}
+                                className="text-right cursor-pointer text-sm text-primary-700 hover:underline dark:text-light-500"
+                                onClick={() =>
+                                    logOut.submit({
+                                        onSuccess: () => (
+                                            <Navigate
+                                                to={RoutePath.ForgotPasswordPage.index()}
+                                            />
+                                        ),
+                                    })
+                                }
+                            >
+                                Lost Password?
+                            </p>
                         </div>
                     </div>
                 </form>
