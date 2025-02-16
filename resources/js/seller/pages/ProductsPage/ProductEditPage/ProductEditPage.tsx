@@ -218,7 +218,7 @@ const ProductEditPage = () => {
                                         id="discount_amount"
                                         name="discount_amount"
                                         type="number"
-                                        placeholder="Enter discount_amount"
+                                        placeholder="Enter discount amount"
                                         value={formState["discount_amount"]}
                                         onChange={handleChange}
                                         required
@@ -243,7 +243,7 @@ const ProductEditPage = () => {
                                     <Textarea
                                         id="short_description"
                                         name="short_description"
-                                        placeholder="Enter product short_description"
+                                        placeholder="Enter product short description"
                                         rows={5}
                                         value={formState["short_description"]}
                                         onChange={handleChange}
