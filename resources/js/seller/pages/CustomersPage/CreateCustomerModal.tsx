@@ -52,7 +52,6 @@ const CreateCustomerModal: FC = function () {
                                     ) => {
                                         handleChange(event);
                                     }}
-                                    required
                                 />
                             </div>
                         </div>
@@ -77,7 +76,6 @@ const CreateCustomerModal: FC = function () {
                                     ) => {
                                         handleChange(event);
                                     }}
-                                    required
                                 />
                             </div>
                         </div>
@@ -102,7 +100,6 @@ const CreateCustomerModal: FC = function () {
                                     ) => {
                                         handleChange(event);
                                     }}
-                                    required
                                 />
                             </div>
                         </div>
@@ -129,7 +126,6 @@ const CreateCustomerModal: FC = function () {
                                     ) => {
                                         handleChange(event);
                                     }}
-                                    required
                                 />
                             </div>
                         </div>
@@ -156,7 +152,6 @@ const CreateCustomerModal: FC = function () {
                                     ) => {
                                         handleChange(event);
                                     }}
-                                    required
                                 />
                             </div>
                         </div>{" "}
@@ -173,9 +168,9 @@ const CreateCustomerModal: FC = function () {
                                 formData: {
                                     name: formState["name"],
                                     email: formState["email"],
-                                    password: formState["password"].toString(),
+                                    password: formState["password"]?.toString(),
 
-                                    phone: formState["phone"].toString(),
+                                    phone: formState["phone"]?.toString(),
                                     address: formState["address"],
                                 },
                                 onSuccess: () => {
