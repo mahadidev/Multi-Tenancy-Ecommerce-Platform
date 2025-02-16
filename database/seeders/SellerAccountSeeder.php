@@ -34,6 +34,7 @@ class SellerAccountSeeder extends Seeder
                 // Data to update or create
                 'name' => 'Chologori-Team',
                 'password' => Hash::make('123'), // Default password
+                'email_verified_at' => now(),
             ],
         );
 

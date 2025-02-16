@@ -201,28 +201,30 @@ class ProductService
         ]);
 
         // Handle variants if present
-        if (!empty($validatedData['variants'])) {
+        if ($request->has('variants')) {
            
             $product->variants()->delete();
 
             // Add new variants
-            foreach ($validatedData['variants'] as $variant) {
-                $productVariant = ProductVariant::create([
-                    'product_id' => $product->id,
-                    'label' => $variant['label'],
-                    'slug' => $variant['slug'],
-                ]);
-
-                // Add options for the variant
-                foreach ($variant['options'] as $option) {
-                    $productVariantOption = ProductVariantOption::create([
-                        'variant_id' => $productVariant->id,
-                        'label' => $option['label'] ?? null,
-                        'slug' => $option['slug'] ?? null,
-                        'code' => $option['code'] ?? null,
-                        'price' => $option['price'] ?? 0,
-                        'qty_stock' => $option['qty_stock'] ?? 0,
+            if(!empty($validatedData['variants'])){
+                foreach ($validatedData['variants'] as $variant) {
+                    $productVariant = ProductVariant::create([
+                        'product_id' => $product->id,
+                        'label' => $variant['label'],
+                        'slug' => $variant['slug'],
                     ]);
+    
+                    // Add options for the variant
+                    foreach ($variant['options'] as $option) {
+                        $productVariantOption = ProductVariantOption::create([
+                            'variant_id' => $productVariant->id,
+                            'label' => $option['label'] ?? null,
+                            'slug' => $option['slug'] ?? null,
+                            'code' => $option['code'] ?? null,
+                            'price' => $option['price'] ?? 0,
+                            'qty_stock' => $option['qty_stock'] ?? 0,
+                        ]);
+                    }
                 }
             }
         }
