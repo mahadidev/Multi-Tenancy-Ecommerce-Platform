@@ -3,7 +3,7 @@ import { Breadcrumb } from "flowbite-react";
 import React from "react";
 import { HiHome } from "react-icons/hi";
 import PermissionsTable from "./PermissionsTable/PermissionsTable";
-import RolePermissionsTable from "./RolePermissionsTable";
+import RolePermissionsTable from "./RolesPermissionTable/RolePermissionsTable";
 import RolesTable from "./RolesTable/RolesTable";
 
 const AccessManagement: React.FC = () => {

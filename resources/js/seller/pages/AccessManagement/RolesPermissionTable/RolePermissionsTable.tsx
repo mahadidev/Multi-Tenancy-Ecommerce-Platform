@@ -2,9 +2,10 @@ import { DataTable } from "@seller/components";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType, RoleType } from "@type/rolePermissionsType";
 import { Button, Table } from "flowbite-react";
+import RevokeRolePermissionModal from "./RevokeRolePermissionModal";
 
 const RolePermissionsTable = () => {
-    const { roles } = useRolePermission();
+    const { roles, assignPermission, revokePermission } = useRolePermission();
 
     return (
         <>
@@ -53,7 +54,7 @@ const RolePermissionsTable = () => {
                         sortable: true,
                     },
                     {
-                        render: () => (
+                        render: (row: RoleType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
                                     <Button color="primary" className="p-0">
@@ -61,11 +62,7 @@ const RolePermissionsTable = () => {
                                             Assign Permission
                                         </div>
                                     </Button>
-                                    <Button color="red" className="p-0">
-                                        <div className="flex items-center gap-x-3">
-                                            Revoke Permission
-                                        </div>
-                                    </Button>
+                                    <RevokeRolePermissionModal role={row} />
                                 </div>
                             </Table.Cell>
                         ),
