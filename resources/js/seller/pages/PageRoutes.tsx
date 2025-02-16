@@ -23,7 +23,7 @@ import { AuthLayout, DashboardLayout, EditorLayout } from "../components";
 import DashboardMiddleware from "../middleware/dashboardMiddleware";
 import GuestMiddleware from "../middleware/guestMiddleware";
 import OnboardMiddleware from "../middleware/onboardMiddleware";
-import AccessManagement from "./AccessManagement/AccessManagement";
+import AccessManagementPage from "./AccessManagement/AccessManagement";
 import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
@@ -33,6 +33,7 @@ import MenusPage from "./MenusPage/MenusPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
+import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
 
@@ -99,10 +100,15 @@ export const PagesRoute: FC = function () {
                             {/* Settings Pages */}
                             <Route path="settings" element={<SettingsPage />} />
 
-                            {/* Settings Pages */}
+                            {/* Access Management Pages */}
                             <Route
                                 path="access-management"
-                                element={<AccessManagement />}
+                                element={<AccessManagementPage />}
+                            />
+                            {/* Store Admin Pages */}
+                            <Route
+                                path="store-admin"
+                                element={<StoreAdminPage />}
                             />
 
                             {/* Themes Pages */}

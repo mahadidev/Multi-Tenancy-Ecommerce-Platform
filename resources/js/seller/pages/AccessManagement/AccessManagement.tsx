@@ -6,7 +6,7 @@ import PermissionsTable from "./PermissionsTable/PermissionsTable";
 import RolePermissionsTable from "./RolesPermissionTable/RolePermissionsTable";
 import RolesTable from "./RolesTable/RolesTable";
 
-const AccessManagement: React.FC = () => {
+const AccessManagementPage: React.FC = () => {
     return (
         <>
             <div className="block items-center justify-between bg-white p-4 sm:flex dark:bg-gray-800">
@@ -63,4 +63,4 @@ const AccessManagement: React.FC = () => {
     );
 };
 
-export default AccessManagement;
+export default AccessManagementPage;

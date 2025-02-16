@@ -218,7 +218,7 @@ const ProductEditPage = () => {
                                         id="discount_amount"
                                         name="discount_amount"
                                         type="number"
-                                        placeholder="Enter discount_amount"
+                                        placeholder="Enter discount amount"
                                         value={formState["discount_amount"]}
                                         onChange={handleChange}
                                         required
@@ -243,7 +243,7 @@ const ProductEditPage = () => {
                                     <Textarea
                                         id="short_description"
                                         name="short_description"
-                                        placeholder="Enter product short_description"
+                                        placeholder="Enter product short description"
                                         rows={5}
                                         value={formState["short_description"]}
                                         onChange={handleChange}
@@ -266,7 +266,7 @@ const ProductEditPage = () => {
                                     <Label>Variants</Label>
                                     {product?.variants?.map((variant) => (
                                         <div
-                                            className="dark:bg-[#374151] bg-[#F9FAFB] p-2.5 rounded-md"
+                                            className="dark:bg-[#374151] bg-[#F9FAFB] p-2.5 rounded-md  border border-solid border-slate-300"
                                             key={variant.id}
                                         >
                                             <div className="flex justify-between gap-2.5 dark:text-white">
