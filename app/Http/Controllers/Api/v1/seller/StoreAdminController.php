@@ -24,9 +24,7 @@ class StoreAdminController extends Controller
     public function index()
     {
         $users = User::with(['roles:name', 'storeSession']) 
-            ->whereHas('roles', function ($q) {
-                $q->where('name', '!=', 'seller');
-            }) 
+            ->where('id', '!=', auth()->id()) // Exclude the current logged-in user
             ->whereHas('storeSession', function ($q) {
                 $q->where('store_id', authStore());
             }) 
