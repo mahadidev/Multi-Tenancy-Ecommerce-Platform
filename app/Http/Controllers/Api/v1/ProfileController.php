@@ -36,7 +36,7 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'nullable|email|unique:users,email,' . $user->id, 
             'phone' => [
                 'nullable',
                 'string',
@@ -49,7 +49,6 @@ class ProfileController extends Controller
 
         $user->update([
             'name' => $validated['name'],
-            'email' => $validated['email'],
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'image' => $validated['image'] ?? $user->image,
