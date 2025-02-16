@@ -37,11 +37,31 @@ const OrdersTable = () => {
                         sortable: false,
                     },
                     {
+                        label: "Customer Email",
+                        key: "user_email",
+                        render: (row: OrderType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row?.user?.email}
+                            </Table.Cell>
+                        ),
+                        sortable: false,
+                    },
+                    {
                         label: "Total",
                         key: "total",
                         render: (row: OrderType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                                 {row?.total ?? 0.0}BDT
+                            </Table.Cell>
+                        ),
+                        sortable: true,
+                    },
+                    {
+                        label: "Payment Method",
+                        key: "payment_method",
+                        render: (row: OrderType) => (
+                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                                {row?.payment_method}
                             </Table.Cell>
                         ),
                         sortable: true,
@@ -79,7 +99,13 @@ const OrdersTable = () => {
                 ]}
                 search={{
                     placeholder: "Search for order...",
-                    columns: ["order_uuid", "user_name", "total", "created_at"],
+                    columns: [
+                        "order_uuid",
+                        "user_name",
+                        "user_email",
+                        "total",
+                        "created_at",
+                    ],
                 }}
                 head={{
                     render: () => (

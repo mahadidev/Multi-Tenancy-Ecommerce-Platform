@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { HiMinus, HiOutlineTrash, HiPlus } from "react-icons/hi";
 
 export default function CreateOrderPage() {
+    const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
     const [selectedCustomer, setSelectCustomer] = useState<number | null>(null);
     const [selectedProduct, setSelectProduct] = useState<number | null>(null);
     const { reFetchNotifications } = useNotification();
@@ -204,16 +205,35 @@ export default function CreateOrderPage() {
                             </Card>
                         </>
                     )}
-                    <div className="flex justify-end items-center m-2">
+                    <div className="flex justify-end items-center mt-4 gap-5">
+                        <div className="flex flex-col gap-2">
+                            <Select
+                                id="payment_method"
+                                name="payment_method"
+                                value={paymentMethod!}
+                                onChange={(e) =>
+                                    setPaymentMethod(e?.target?.value as any)
+                                }
+                                required
+                                className="w-[150px]"
+                                disabled={!cartItems.length}
+                            >
+                                <option value={"cash"}>cash</option>
+                                <option value={"card"}>card</option>
+                            </Select>
+                        </div>{" "}
                         <Button
                             color="primary"
-                            size="lg"
+                            size="md"
                             onClick={() => {
                                 placeOrder.submit({
-                                    formData: getOrderCustomerDetails(
-                                        customers,
-                                        selectedCustomer!
-                                    )!,
+                                    formData: {
+                                        ...getOrderCustomerDetails(
+                                            customers,
+                                            selectedCustomer!
+                                        )!,
+                                        payment_method: paymentMethod,
+                                    },
                                 });
                                 reFetchNotifications.submit();
                             }}
@@ -243,6 +263,5 @@ const getOrderCustomerDetails = (
         email: customer?.email!,
         address: customer?.address || "N/A",
         user_id: customerId,
-        payment_method: "cash",
     };
 };
