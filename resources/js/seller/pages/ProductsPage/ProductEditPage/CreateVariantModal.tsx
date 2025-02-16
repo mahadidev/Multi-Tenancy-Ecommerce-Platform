@@ -19,9 +19,9 @@ const CreateVariantModal: FC = function () {
     return (
         <>
             <Button
-                color="gray"
+                color="primary"
                 size="xs"
-                className="p-0"
+                className="p-2"
                 onClick={() => setOpen(true)}
             >
                 <div className="flex items-center gap-x-3">

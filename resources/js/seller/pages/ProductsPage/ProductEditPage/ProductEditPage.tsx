@@ -266,7 +266,7 @@ const ProductEditPage = () => {
                                     <Label>Variants</Label>
                                     {product?.variants?.map((variant) => (
                                         <div
-                                            className="dark:bg-[#374151] bg-[#F9FAFB] p-2.5 rounded-md"
+                                            className="dark:bg-[#374151] bg-[#F9FAFB] p-2.5 rounded-md  border border-solid border-slate-300"
                                             key={variant.id}
                                         >
                                             <div className="flex justify-between gap-2.5 dark:text-white">
