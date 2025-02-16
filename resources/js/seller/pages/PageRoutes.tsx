@@ -23,6 +23,7 @@ import { AuthLayout, DashboardLayout, EditorLayout } from "../components";
 import DashboardMiddleware from "../middleware/dashboardMiddleware";
 import GuestMiddleware from "../middleware/guestMiddleware";
 import OnboardMiddleware from "../middleware/onboardMiddleware";
+import AccessManagement from "./AccessManagement/AccessManagement";
 import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
@@ -97,6 +98,12 @@ export const PagesRoute: FC = function () {
 
                             {/* Settings Pages */}
                             <Route path="settings" element={<SettingsPage />} />
+
+                            {/* Settings Pages */}
+                            <Route
+                                path="access-management"
+                                element={<AccessManagement />}
+                            />
 
                             {/* Themes Pages */}
                             <Route path="themes" element={<ThemesPage />} />
