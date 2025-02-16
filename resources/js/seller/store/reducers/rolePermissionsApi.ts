@@ -15,6 +15,14 @@ export interface PermissionFetchResponseType extends ApiResponseType {
     data: PermissionResponseDataType;
 }
 
+export interface RoleIdPayloadType {
+    role_id: number;
+}
+
+export interface AssignPermissionToRolePayloadType extends RoleIdPayloadType {
+    permission_ids: number[];
+}
+
 export const rolePermissionApi = createApi({
     reducerPath: "rolePermissionsApi",
     baseQuery: baseQueryWithReAuth,
@@ -110,6 +118,33 @@ export const rolePermissionApi = createApi({
             transformErrorResponse: (error: any) => error.data,
         }),
 
+        // assign permission
+        assignPermissionToRole: builder.mutation<
+            ApiResponseType,
+            AssignPermissionToRolePayloadType
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/store-assign-role-permissions`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["Roles"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // revoke permissions
+        revokePermission: builder.mutation<ApiResponseType, RoleIdPayloadType>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/store-revoke-all-permissions`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["Roles"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
         // permission delete
         deleteRole: builder.mutation<ApiResponseType, { id: number }>({
             query: (formData) =>
@@ -147,4 +182,6 @@ export const {
     useUpdatePermissionMutation,
     useDeleteRoleMutation,
     useDeletePermissionMutation,
+    useAssignPermissionToRoleMutation,
+    useRevokePermissionMutation,
 } = rolePermissionApi;

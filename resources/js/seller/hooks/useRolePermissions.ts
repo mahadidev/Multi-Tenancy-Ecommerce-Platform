@@ -1,10 +1,14 @@
 import {
+    AssignPermissionToRolePayloadType,
+    RoleIdPayloadType,
+    useAssignPermissionToRoleMutation,
     useCreatePermissionMutation,
     useCreateRoleMutation,
     useDeletePermissionMutation,
     useDeleteRoleMutation,
     useFetchPermissionsQuery,
     useFetchRolesQuery,
+    useRevokePermissionMutation,
     useUpdatePermissionMutation,
     useUpdateRoleMutation,
 } from "@seller/store/reducers/rolePermissionsApi";
@@ -171,6 +175,78 @@ const useRolePermission = () => {
         });
     };
 
+    // assign permission
+    const [
+        handleAssignPermission,
+        {
+            isLoading: isAssignPermissionLoading,
+            isError: isAssignPermissionError,
+            error: assignPermissionError,
+            data: assignPermissionData,
+        },
+    ] = useAssignPermissionToRoleMutation();
+    const assignPermission = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: AssignPermissionToRolePayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleAssignPermission(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+
+                toaster({
+                    text: "Permission assigned successfully.",
+                    status: "success",
+                });
+            } else {
+                toaster({
+                    text: "Failed to assign permission",
+                    status: "error",
+                });
+            }
+        });
+    };
+
+    // revoke permission
+    const [
+        handleRevokePermission,
+        {
+            isLoading: isRevokePermissionLoading,
+            isError: isRevokePermissionError,
+            error: revokePermissionError,
+            data: revokePermissionData,
+        },
+    ] = useRevokePermissionMutation();
+    const revokePermission = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: RoleIdPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleRevokePermission(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+
+                toaster({
+                    text: "Permission revoked successfully.",
+                    status: "success",
+                });
+            } else {
+                toaster({
+                    text: "Failed to revoke permission",
+                    status: "error",
+                });
+            }
+        });
+    };
+
     // delete role
     const [
         handleDeleteRole,
@@ -287,6 +363,21 @@ const useRolePermission = () => {
             isError: isDeletePermissionError,
             error: deletePermissionError,
             data: deletePermissionData,
+        },
+
+        assignPermission: {
+            submit: assignPermission,
+            isLoading: isAssignPermissionLoading,
+            isError: isAssignPermissionError,
+            error: assignPermissionError,
+            data: assignPermissionData,
+        },
+        revokePermission: {
+            submit: revokePermission,
+            isLoading: isRevokePermissionLoading,
+            isError: isRevokePermissionError,
+            error: revokePermissionError,
+            data: revokePermissionData,
         },
     };
 };
