@@ -30,7 +30,6 @@ const EditCustomerModal: FC<PropsType> = function (props) {
             setFormState(props.customer);
         }
     }, [props.customer]);
-    console.log(props.customer);
     return (
         <>
             <Button
@@ -248,8 +247,8 @@ const EditCustomerModal: FC<PropsType> = function (props) {
                                     id: props?.customer?.id,
                                     name: formState["name"],
                                     email: formState["email"],
-                                    phone: formState["phone"].toString(),
-                                    password: formState["password"].toString(),
+                                    phone: formState["phone"]?.toString(),
+                                    password: formState["password"]?.toString(),
                                     address: formState["address"],
                                 },
                                 onSuccess: () => {
