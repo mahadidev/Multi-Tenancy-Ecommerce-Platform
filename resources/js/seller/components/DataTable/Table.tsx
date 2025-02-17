@@ -174,14 +174,16 @@ const DataTable: FC<PropsType> = (props) => {
                                 </Table.Head>
                                 <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
                                     <>
-                                        {paginate.currentData.map(
+                                        {paginate?.currentData?.map(
                                             (row: any, idx) => (
                                                 <Table.Row
                                                     key={row.id}
                                                     className="hover:bg-gray-100 dark:hover:bg-gray-700"
                                                 >
                                                     <td className="!text-center font-bold dark:text-white">
-                                                        {idx + 1}
+                                                        {paginate?.indexOfFirstRow +
+                                                            idx +
+                                                            1}
                                                     </td>
                                                     {columns.map(
                                                         (column, idx) => (
