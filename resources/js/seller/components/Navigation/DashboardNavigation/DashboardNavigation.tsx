@@ -38,7 +38,7 @@ import {
     HiViewGrid,
     HiX,
 } from "react-icons/hi";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export function DashboardNavigation() {
     const sidebar = useAppSelector((state) => state.ui.sidebar);
@@ -133,7 +133,10 @@ export function DashboardNavigation() {
 }
 
 export function NotificationBellDropdown() {
-    const { notifications, singleNotification } = useNotification();
+    const { notifications, singleNotification, reFetchNotifications } =
+        useNotification();
+    const navigate = useNavigate();
+
     return (
         <Dropdown
             className="rounded"
@@ -157,17 +160,24 @@ export function NotificationBellDropdown() {
                     {notifications
                         ?.slice(0, 10)
                         ?.map((notification: NotificationType, idx: number) => (
-                            <Link
-                                to={`${getRedirectUrl(notification)}`}
-                                className="flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+                            <div
                                 key={idx}
                                 onClick={() =>
                                     singleNotification.submit({
                                         formData: {
                                             id: notification.id,
                                         },
+                                        onSuccess: () => {
+                                            navigate(
+                                                `${getRedirectUrl(
+                                                    notification
+                                                )}`
+                                            );
+                                            reFetchNotifications.submit();
+                                        },
                                     })
                                 }
+                                className="cursor-pointer flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
                             >
                                 <div className="shrink-0 relative">
                                     <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
@@ -201,7 +211,7 @@ export function NotificationBellDropdown() {
                                             : null}
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                 </div>
 

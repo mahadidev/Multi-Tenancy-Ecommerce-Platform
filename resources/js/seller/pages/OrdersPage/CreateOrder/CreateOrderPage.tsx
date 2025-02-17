@@ -8,12 +8,14 @@ import { ProductType } from "@type/productType";
 import { Button, Card, Label, Select, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiMinus, HiOutlineTrash, HiPlus } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateOrderPage() {
     const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
     const [selectedCustomer, setSelectCustomer] = useState<number | null>(null);
     const [selectedProduct, setSelectProduct] = useState<number | null>(null);
     const { reFetchNotifications } = useNotification();
+    const navigate = useNavigate(); // navigate
 
     const { products: storeProducts } = useProduct();
     const { customers } = useCustomer();
@@ -234,8 +236,11 @@ export default function CreateOrderPage() {
                                         )!,
                                         payment_method: paymentMethod,
                                     },
+                                    onSuccess: () => {
+                                        reFetchNotifications.submit();
+                                        navigate(`/orders`);
+                                    },
                                 });
-                                reFetchNotifications.submit();
                             }}
                             isProcessing={placeOrder.isLoading}
                             disabled={!cartItems.length}
