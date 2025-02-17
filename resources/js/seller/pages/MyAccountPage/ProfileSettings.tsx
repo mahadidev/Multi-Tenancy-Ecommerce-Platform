@@ -343,7 +343,7 @@ const ProfileSettingsPage: React.FC = () => {
                                     logOut.submit({
                                         onSuccess: () => (
                                             <Navigate
-                                                to={RoutePath.ForgotPasswordPage.index()}
+                                                to={`${RoutePath.LoginPage.index()}?isShouldRedirect=true`}
                                             />
                                         ),
                                     })

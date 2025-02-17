@@ -47,6 +47,10 @@ export interface VerifySocialMediaAuthenticationPayload {
     store_id?: string;
 }
 
+export interface EmailVerificationPayloadType {
+    token: string;
+}
+
 export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery: baseQuery,
@@ -142,6 +146,20 @@ export const authApi = createApi({
                     // );
                 });
             },
+        }),
+        // email verification
+        emailVerification: builder.mutation<
+            ApiResponseType,
+            EmailVerificationPayloadType
+        >({
+            query: (formData) =>
+                createRequest({
+                    url: `${API_URL}/verify-email`,
+                    method: "post",
+                    body: formData,
+                }),
+            invalidatesTags: ["User"],
+            transformErrorResponse: (error: any) => error.data,
         }),
         register: builder.mutation<ApiResponseType, RegisterPayloadType>({
             query: (formData) =>
@@ -297,6 +315,7 @@ export const {
     useLoginWithFacebookQuery,
     useLoginWithGoogleQuery,
     useVerifySocialMediaAuthenticationMutation,
+    useEmailVerificationMutation,
 } = authApi;
 
 export interface UserUpdatePasswordPayloadType {

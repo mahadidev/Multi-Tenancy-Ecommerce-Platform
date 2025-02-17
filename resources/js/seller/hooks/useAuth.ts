@@ -1,10 +1,12 @@
 import { RoutePath } from "@seller/seller_env";
 import {
     authApi,
+    EmailVerificationPayloadType,
     LoginPayloadType,
     PasswordForgotRequestPayloadType,
     RegisterPayloadType,
     ResetPasswordPayloadType,
+    useEmailVerificationMutation,
     useFetchUserQuery,
     useForgotPasswordRequestMutation,
     useLoginMutation,
@@ -120,6 +122,44 @@ const useAuth = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
+            }
+        });
+    };
+
+    //email verification
+    const [
+        handleEmailVerification,
+        {
+            isLoading: isEmailVerificationLoading,
+            isError: isEmailVerificationError,
+            error: emailVerificationError,
+            data: emailVerificationData,
+        },
+    ] = useEmailVerificationMutation();
+
+    const emailVerification = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: EmailVerificationPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleEmailVerification(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+                toaster({
+                    text: "Email is verified successfully",
+                    status: "success",
+                });
+                navigate("/onboard/store");
+            } else {
+                toaster({
+                    text: "Verification failed",
+                    status: "error",
+                });
+                navigate("/login");
             }
         });
     };
@@ -322,6 +362,13 @@ const useAuth = () => {
             isError: isVerifySocialMediaAuthenticationError,
             error: verifySocialMediaAuthenticationError,
             data: verifySocialMediaAuthenticationData,
+        },
+        emailVerification: {
+            submit: emailVerification,
+            isLoading: isEmailVerificationLoading,
+            isError: isEmailVerificationError,
+            error: emailVerificationError,
+            data: emailVerificationData,
         },
         logOut: {
             submit: logOut,
