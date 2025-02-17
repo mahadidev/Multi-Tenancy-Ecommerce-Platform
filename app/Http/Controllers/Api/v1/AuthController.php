@@ -44,14 +44,14 @@ class AuthController extends Controller
         }
 
         // Check if the user has the role of 'seller'
-        if (!$user->hasRole('seller')) {
-            return response()->json(
-                [
-                    'message' => 'Unauthorized. Only sellers can log in.',
-                ],
-                403,
-            );
-        }
+        // if (!$user->hasRole('seller')) {
+        //     return response()->json(
+        //         [
+        //             'message' => 'Unauthorized. Only sellers can log in.',
+        //         ],
+        //         403,
+        //     );
+        // }
 
         // update or create store_id in the Store Session table
         $storeSession = $user->storeSession()->first();

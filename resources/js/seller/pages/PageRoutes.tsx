@@ -24,6 +24,7 @@ import DashboardMiddleware from "../middleware/dashboardMiddleware";
 import GuestMiddleware from "../middleware/guestMiddleware";
 import OnboardMiddleware from "../middleware/onboardMiddleware";
 import AccessManagementPage from "./AccessManagement/AccessManagement";
+import EmailVerificationPage from "./AuthPage/EmailVerificationPage";
 import ForgotPassword from "./AuthPage/ForgotPassword";
 import ForgotPasswordSuccess from "./AuthPage/ForgotPasswordSuccess";
 import ResetPassword from "./AuthPage/ResetPassword";
@@ -160,6 +161,10 @@ export const PagesRoute: FC = function () {
                         <Route path="/" element={<AuthLayout />}>
                             <Route path="login" element={<LoginPage />} />
                             <Route path="register" element={<RegisterPage />} />
+                            <Route
+                                path="verify-email"
+                                element={<EmailVerificationPage />}
+                            />
                             <Route
                                 path="social-media"
                                 element={<SocialMediaPage />}
