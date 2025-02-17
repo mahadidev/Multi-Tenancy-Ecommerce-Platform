@@ -8,6 +8,7 @@ use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use App\Models\StorePage;
 use App\Models\StorePageWidget;
+use App\Models\ThemeWidget;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -89,6 +90,8 @@ class StorePageController extends Controller
             'widgets.*.inputs.*.items.*.type' => 'required|string',
         ]);
         $validatedData["store_id"] = authStore();
+        $validatedData["layout_id"] = $request->layout_id ?? (ThemeWidget::where('appLayout', 'default')->first()->id ?? null);
+
 
 
         $storePage = StorePage::authorized()->create($validatedData);
