@@ -1,5 +1,6 @@
 import useCart from "@seller/hooks/useCart";
 import useCustomer from "@seller/hooks/useCustomer";
+import useNotification from "@seller/hooks/useNotification";
 import useOrders from "@seller/hooks/useOrders";
 import useProduct from "@seller/hooks/useProduct";
 import { CustomerType } from "@type/customersType";
@@ -7,10 +8,14 @@ import { ProductType } from "@type/productType";
 import { Button, Card, Label, Select, Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiMinus, HiOutlineTrash, HiPlus } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateOrderPage() {
+    const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
     const [selectedCustomer, setSelectCustomer] = useState<number | null>(null);
     const [selectedProduct, setSelectProduct] = useState<number | null>(null);
+    const { reFetchNotifications } = useNotification();
+    const navigate = useNavigate(); // navigate
 
     const { products: storeProducts } = useProduct();
     const { customers } = useCustomer();
@@ -202,18 +207,41 @@ export default function CreateOrderPage() {
                             </Card>
                         </>
                     )}
-                    <div className="flex justify-end items-center m-2">
+                    <div className="flex justify-end items-center mt-4 gap-5">
+                        <div className="flex flex-col gap-2">
+                            <Select
+                                id="payment_method"
+                                name="payment_method"
+                                value={paymentMethod!}
+                                onChange={(e) =>
+                                    setPaymentMethod(e?.target?.value as any)
+                                }
+                                required
+                                className="w-[150px]"
+                                disabled={!cartItems.length}
+                            >
+                                <option value={"cash"}>cash</option>
+                                <option value={"card"}>card</option>
+                            </Select>
+                        </div>{" "}
                         <Button
                             color="primary"
-                            size="lg"
-                            onClick={() =>
+                            size="md"
+                            onClick={() => {
                                 placeOrder.submit({
-                                    formData: getOrderCustomerDetails(
-                                        customers,
-                                        selectedCustomer!
-                                    )!,
-                                })
-                            }
+                                    formData: {
+                                        ...getOrderCustomerDetails(
+                                            customers,
+                                            selectedCustomer!
+                                        )!,
+                                        payment_method: paymentMethod,
+                                    },
+                                    onSuccess: () => {
+                                        reFetchNotifications.submit();
+                                        navigate(`/orders`);
+                                    },
+                                });
+                            }}
                             isProcessing={placeOrder.isLoading}
                             disabled={!cartItems.length}
                         >
@@ -240,6 +268,5 @@ const getOrderCustomerDetails = (
         email: customer?.email!,
         address: customer?.address || "N/A",
         user_id: customerId,
-        payment_method: "cash",
     };
 };

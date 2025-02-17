@@ -59,7 +59,7 @@ const DashboardPage: FC = function () {
                     <AnalyticsChart series={orderAnalyticsDataSeries} />
                 </Card>
 
-                <Card className="rounded-lg dark:bg-gray-800 h-[580px]">
+                <Card className="rounded-lg dark:bg-gray-800">
                     <div className="flex items-center mb-4">
                         <div className="shrink-0">
                             <span className="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">

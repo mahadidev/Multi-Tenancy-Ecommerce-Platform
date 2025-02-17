@@ -40,6 +40,16 @@ class UserResource extends JsonResource
                     ];
                 })
             ),
+
+            // Include 'store_session' only if the user_id is exists in the store_session table
+            'store_session' => $this->when(
+                !is_null($this->storeSession),
+                fn() => [
+                    'store_id' => $this->storeSession->store_id,
+                    'store_name' => optional($this->storeSession->store)->name,
+                    'store_domain' => optional($this->storeSession->store)->domain,
+                ]
+            ),
         ];
     }
 }

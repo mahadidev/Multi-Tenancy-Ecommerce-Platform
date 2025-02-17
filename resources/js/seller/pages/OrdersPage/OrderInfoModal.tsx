@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { OrderType } from "@type/orderType";
 import { Button, Modal } from "flowbite-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { HiEye } from "react-icons/hi";
+import { useSearchParams } from "react-router-dom";
 import OrderSummary from "./OrderSummary";
 
 interface PropsType {
@@ -11,6 +12,15 @@ interface PropsType {
 
 const OrderInfoModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
+
+    const [searchParams] = useSearchParams(); // get search params
+
+    const orderUID = searchParams.get("orderUID"); // order uid
+
+    // show the modal
+    useEffect(() => {
+        props?.order?.order_uuid === orderUID ? setOpen(true) : setOpen(false);
+    }, [orderUID]);
 
     return (
         <>

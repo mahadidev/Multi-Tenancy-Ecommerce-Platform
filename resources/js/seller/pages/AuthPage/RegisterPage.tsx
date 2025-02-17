@@ -7,6 +7,7 @@ import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import SocialLogin from "./SocialLogin";
 
 const RegisterPage: FC = function () {
     const { register } = useAuth();
@@ -91,6 +92,7 @@ const RegisterPage: FC = function () {
                                         : false
                                 }
                                 onChange={handleChange}
+                                autoComplete="off"
                             />
                         </div>
                         <div className="flex flex-col gap-y-2">
@@ -180,6 +182,8 @@ const RegisterPage: FC = function () {
                                 Login here
                             </Link>
                         </p>
+
+                        <SocialLogin />
                     </div>
                 </Card>
             </div>

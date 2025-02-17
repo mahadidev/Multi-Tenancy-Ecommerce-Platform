@@ -67,6 +67,12 @@ export const RoutePath = {
         index: () => "/products",
         edit: (productId: number) => `/products/${productId}`,
     },
+    AccessManagementPage: {
+        index: () => "/access-management",
+    },
+    StoreAdminPage: {
+        index: () => "/store-admin",
+    },
     SettingsPage: {
         index: () => "/settings",
     },

@@ -38,7 +38,7 @@ import {
     HiViewGrid,
     HiX,
 } from "react-icons/hi";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export function DashboardNavigation() {
     const sidebar = useAppSelector((state) => state.ui.sidebar);
@@ -133,7 +133,10 @@ export function DashboardNavigation() {
 }
 
 export function NotificationBellDropdown() {
-    const { notifications, singleNotification } = useNotification();
+    const { notifications, singleNotification, reFetchNotifications } =
+        useNotification();
+    const navigate = useNavigate();
+
     return (
         <Dropdown
             className="rounded"
@@ -151,23 +154,32 @@ export function NotificationBellDropdown() {
                 <div className="block rounded-t-xl bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     Notifications
                 </div>
-                <div>
+                <div className="max-h-[600px] overflow-y-auto">
+                    {" "}
+                    {/* Added max-height and overflow-y */}
                     {notifications
                         ?.slice(0, 10)
                         ?.map((notification: NotificationType, idx: number) => (
-                            <Link
-                                to="#"
-                                className="flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+                            <div
                                 key={idx}
                                 onClick={() =>
                                     singleNotification.submit({
                                         formData: {
                                             id: notification.id,
                                         },
+                                        onSuccess: () => {
+                                            navigate(
+                                                `${getRedirectUrl(
+                                                    notification
+                                                )}`
+                                            );
+                                            reFetchNotifications.submit();
+                                        },
                                     })
                                 }
+                                className="cursor-pointer flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
                             >
-                                <div className="shrink-0">
+                                <div className="shrink-0 relative">
                                     <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
                                         <svg
                                             className="h-3 w-3 text-white"
@@ -182,7 +194,6 @@ export function NotificationBellDropdown() {
                                 </div>
                                 <div className="w-full pl-3">
                                     <div className="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                        {/* New message from&nbsp; */}
                                         <span className="font-semibold text-gray-900 dark:text-white">
                                             {notification?.title}
                                         </span>
@@ -200,7 +211,7 @@ export function NotificationBellDropdown() {
                                             : null}
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                 </div>
 
@@ -413,3 +424,16 @@ export function UserDropdown() {
         </Dropdown>
     );
 }
+
+// redirect to the targeted location after clicking on the notification
+export const getRedirectUrl = (notification: NotificationType) => {
+    switch (notification?.data?.module) {
+        case "order":
+            return `${RoutePath.OrdersPage.index()}?orderUID=${
+                notification?.data?.order_uuid
+            }`;
+
+        default:
+            return "#";
+    }
+};

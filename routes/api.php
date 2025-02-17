@@ -62,12 +62,15 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('notifications/mark/all-read', [NotificationController::class, 'markAllAsRead']);
     });
 
-    // Social Login Routes
+    // Google Login Routes
     Route::get('/auth/google', [SocialLoginController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [SocialLoginController::class, 'UserHandleGoogleCallback']);
 
+    // Facebook Login Routes
     Route::get('/auth/facebook', [SocialLoginController::class, 'redirectToFacebook']);
     Route::get('/auth/facebook/callback', [SocialLoginController::class, 'UserHandleFacebookCallback']);
+
+    Route::post('/auth/social-login-check', [SocialLoginController::class, 'socialMediaLogin'])->name('auth.social.login');
 
     // svg icons routes
     Route::resource('svg-icons', SvgIconController::class);

@@ -19,9 +19,9 @@ const CreateVariantModal: FC = function () {
     return (
         <>
             <Button
-                color="gray"
+                color="primary"
                 size="xs"
-                className="p-0"
+                className="p-2"
                 onClick={() => setOpen(true)}
             >
                 <div className="flex items-center gap-x-3">
@@ -211,7 +211,11 @@ const CreateVariantModal: FC = function () {
                                 <div className="flex gap-2.5 items-end">
                                     <Button
                                         className="w-full"
-                                        color="gray"
+                                        color="teal"
+                                        disabled={
+                                            !formState["option_label"] ||
+                                            !formState["option_qty_stock"]
+                                        }
                                         onClick={() => {
                                             setOptions((prev) => [
                                                 ...prev,
@@ -275,7 +279,7 @@ const CreateVariantModal: FC = function () {
                             });
                         }}
                         isProcessing={create.isLoading}
-                        disabled={!formState["label"]}
+                        disabled={!formState["label"] || !options?.length}
                         processingLabel="Creating"
                         processingSpinner={
                             <AiOutlineLoading className="animate-spin" />

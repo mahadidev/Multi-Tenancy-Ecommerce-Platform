@@ -123,8 +123,19 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Store Menu Items Routes
     Route::resource('store-menu-items', StoreMenuItemController::class);
+
+    // Seller role & permission Routes
+    Route::resource('store-roles', StoreRoleController::class);
+    Route::resource('store-permissions', StorePermissionController::class);
+
+    // Sub-admin role-permission assign
+    Route::post('store-assign-role-permissions', [StoreAssignRolePermissionsController::class, 'assignPermissions']);
+    Route::post('store-revoke-all-permissions', [StoreAssignRolePermissionsController::class, 'revokeAllPermissions']);
+
+    // Seller Admin Routes
+    Route::resource('store-admin', StoreAdminController::class);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
-    Route::get('logout', [AuthController::class, 'logout']);
+    Route::get('logout', [\App\Http\Controllers\Api\v1\AuthController::class, 'logout']);
 });

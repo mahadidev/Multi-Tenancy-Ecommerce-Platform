@@ -1,12 +1,10 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @config "./tailwind.config.js";
-
 
 /* chart styles */
 .apexcharts-tooltip {
@@ -207,4 +205,29 @@
 .ql-editor {
     height: 150px;
     border-radius: 5px;
+}
+
+/* Custom scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 4px; /* Adjust this value to make the scrollbar thinner */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+    border-radius: 2px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Thumb color */
+    border-radius: 2px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Thumb color on hover */
+}
+
+/* Custom scrollbar for Firefox */
+.scrollbar-container {
+    scrollbar-width: thin; /* Firefox's thinnest option */
+    scrollbar-color: #888 #f1f1f1; /* Thumb and track color */
 }
