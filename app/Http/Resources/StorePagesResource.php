@@ -16,7 +16,7 @@ class StorePagesResource extends JsonResource
     public function toArray(Request $request): array
     {
         $layout = $this->layout;
-        $layout->store_id = $this->id;
+        $layout->store_id = $this->id ?? authStore();
 
         return [
             'id' => $this->id,
