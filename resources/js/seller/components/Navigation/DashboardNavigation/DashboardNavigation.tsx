@@ -151,7 +151,9 @@ export function NotificationBellDropdown() {
                 <div className="block rounded-t-xl bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     Notifications
                 </div>
-                <div>
+                <div className="max-h-[600px] overflow-y-auto">
+                    {" "}
+                    {/* Added max-height and overflow-y */}
                     {notifications
                         ?.slice(0, 10)
                         ?.map((notification: NotificationType, idx: number) => (
@@ -167,7 +169,7 @@ export function NotificationBellDropdown() {
                                     })
                                 }
                             >
-                                <div className="shrink-0">
+                                <div className="shrink-0 relative">
                                     <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
                                         <svg
                                             className="h-3 w-3 text-white"
