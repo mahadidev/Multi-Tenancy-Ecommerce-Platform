@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Exports\CustomersExport;
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Store;
 use App\Http\Resources\CustomerResource;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Mail\WelcomeCustomerMail;
@@ -18,9 +18,18 @@ use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CustomerController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('permission:view_customer', ['only' => ['index', 'show', 'pdf', 'excel']]);
+    //     $this->middleware('permission:create_customer', ['only' => ['store']]);
+    //     $this->middleware('permission:edit_customer', ['only' => ['update']]);
+    //     $this->middleware('permission:delete_customer', ['only' => ['destroy']]);
+    // }
+
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
@@ -153,7 +162,7 @@ class CustomerController extends Controller
 
                 if ($user && $user->email) {
                     Mail::to($user->email)->send(new WelcomeCustomerMail($user, $store, $logoUrl, $domain, $password));
-                    if($user->email_verified_at == null) {
+                    if ($user->email_verified_at == null) {
                         Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->name, $store->name));
                     }
                     return true;
