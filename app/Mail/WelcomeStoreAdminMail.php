@@ -21,14 +21,16 @@ class WelcomeStoreAdminMail extends Mailable
     public $role;
     public $logoUrl;
     public $domain;
+    public $password;
 
-    public function __construct($user, $store, $role, $logoUrl, $domain)
+    public function __construct($user, $store, $role, $logoUrl, $domain, $password)
     {
         $this->user = $user;
         $this->store = $store;
         $this->role = $role;
         $this->logoUrl = $logoUrl;
         $this->domain = $domain;
+        $this->password = $password;
     }
    
     /**

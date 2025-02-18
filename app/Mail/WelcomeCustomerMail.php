@@ -20,13 +20,15 @@ class WelcomeCustomerMail extends Mailable
     public $store;
     public $logoUrl;
     public $domain;
+    public $password;
 
-    public function __construct($user, $store, $logoUrl, $domain)
+    public function __construct($user, $store, $logoUrl, $domain, $password)
     {
         $this->user = $user;
         $this->store = $store;
         $this->logoUrl = $logoUrl;
         $this->domain = $domain;
+        $this->password = $password;
     }
    
     /**
