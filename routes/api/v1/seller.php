@@ -35,9 +35,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     // Contact Routes
     Route::resource('/contact', ContactController::class);
 
-    // Logout Route
-    // Route::get('logout', [AuthController::class, 'logout']);
-
     // Store Pages Route
     Route::get('stores/page', [StorePageController::class, 'index']);
     Route::post('stores/page', [StorePageController::class, 'store']);

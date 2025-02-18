@@ -17,34 +17,11 @@ class RolePermissionSeeder extends Seeder
         // Define roles
         $roles = [
             'super-admin'=>[
-                'super_access'
+                'view_dashboard',
             ],
             'admin' => [
                 // Dashboard and general permissions
                 'view_dashboard',
-
-                // User management permissions
-                'edit_user',
-                'delete_user',
-                'create_user',
-
-                // Vendor management permissions
-                'view_vendor',
-                'edit_vendor',
-                'delete_vendor',
-                'create_vendor',
-
-                // Company management permissions
-                'view_company',
-                'edit_company',
-                'delete_company',
-                'create_company',
-
-                // Product management permissions
-                'view_product',
-                'edit_product',
-                'delete_product',
-                'create_product',
             ],
             'user' => [
                 // Dashboard and general permissions
@@ -57,28 +34,96 @@ class RolePermissionSeeder extends Seeder
                 // Dashboard and general permissions
                 'view_dashboard',
 
-                // Vendor-related permissions
-                'view_vendor',
-                'edit_vendor',
-                'create_vendor',
+                // e-commerce permissions
+                'view_category',
+                'create_category',
+                'edit_category',
+                'delete_category',
 
-                // Product-related permissions
-                'view_product',
-                'create_product',
-            ],
+                // Brand-related permissions
+                'view_brand',
+                'create_brand',
+                'edit_brand',
+                'delete_brand',
 
-            'store-owner' => [
-                // Dashboard and general permissions
-                'view_dashboard',
-
-                // Product-related permissions
+                // product-related permissions
                 'view_product',
                 'create_product',
                 'edit_product',
+                'delete_product',
 
-                // Company management permissions
-                'view_company',
-                'edit_company',
+                // Order-related permissions
+                'view_order',
+                'edit_order',
+                'delete_order',
+                'create_order',
+
+                // Customer-related permissions
+                'view_customer',
+                'edit_customer',
+                'delete_customer',
+                'create_customer',
+
+                // Store-related permissions
+                'view_store',
+                'edit_store',
+                'delete_store',
+                'create_store',
+
+                // Store Page permissions
+                'view_store_page',
+                'edit_store_page',
+                'delete_store_page',
+                'create_store_page',
+
+                // Store Page Widget permissions
+                'view_store_page_widget',
+                'edit_store_page_widget',
+                'delete_store_page_widget',
+                'create_store_page_widget',
+                
+                // Store Page Widget Input permissions
+                'view_store_page_widget_input',
+                'edit_store_page_widget_input',
+                'delete_store_page_widget_input',
+                'create_store_page_widget_input',
+
+                // Store Page Widget Input Item permissions
+                'view_store_page_widget_input_item',
+                'edit_store_page_widget_input_item',
+                'delete_store_page_widget_input_item',
+                'create_store_page_widget_input_item',
+
+                // Store Blog permissions
+                'view_store_blog',
+                'edit_store_blog',
+                'delete_store_blog',
+                'create_store_blog',
+
+                // Store Blog Category permissions
+                'view_store_blog_category',
+                'edit_store_blog_category',
+                'delete_store_blog_category',
+                'create_store_blog_category',
+
+                // Store Menu permissions
+                'view_store_menu',
+                'edit_store_menu',
+                'delete_store_menu',
+                'create_store_menu',
+
+                // Store Admin permissions
+                'view_store_admin',
+                'edit_store_admin',
+                'delete_store_admin',
+                'create_store_admin',
+
+                // Store Access Management permissions
+                'view_store_access_management',
+                'edit_store_access_management',
+                'delete_store_access_management',
+                'create_store_access_management',
+
             ],
         ];
 
