@@ -1,5 +1,5 @@
 @component('mail::message')
-# Hello {{ $userName }},
+# Hello {{ $userName ?? 'User' }},
 
 You have successfully registered on {{ $storeName ?? 'Cholo Gori' }}. Please click the button below to verify your email address.
 

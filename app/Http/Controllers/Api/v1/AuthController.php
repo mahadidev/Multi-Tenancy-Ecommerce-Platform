@@ -483,7 +483,6 @@ class AuthController extends Controller
 
         try {
             if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
-
                 Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName ?? null));
                 return response()->json([
                     'status' => 200,

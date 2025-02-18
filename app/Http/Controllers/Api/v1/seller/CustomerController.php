@@ -17,6 +17,7 @@ use App\Mail\WelcomeCustomerMail;
 use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
@@ -65,7 +66,7 @@ class CustomerController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'nullable|numeric',
             'password' => 'nullable|string',
             'address' => 'nullable|string',
@@ -89,12 +90,13 @@ class CustomerController extends Controller
                 $storeIds[] = authStore();
                 $user->update([
                     'store_id' => $storeIds,
-                    'address' => $request->address,
-                    'image' => $request->image,
-                    'phone' => $request->phone,
+                    // 'address' => $request->address,
+                    // 'image' => $request->image,
+                    // 'phone' => $request->phone,
                 ]);
             }
         } else {
+            $verificationCode = Str::random(40); // Generate a random verification code
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -103,6 +105,8 @@ class CustomerController extends Controller
                 'store_id' => [authStore()],
                 'address' => $request->address,
                 'image' => $request->image,
+                'verification_code' => $verificationCode,
+                'email_verified_at' => null,
             ]);
         }
 
@@ -147,7 +151,9 @@ class CustomerController extends Controller
 
                 if ($user && $user->email) {
                     Mail::to($user->email)->send(new WelcomeCustomerMail($user, $store, $logoUrl, $domain));
-                    Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->url, $store->name));
+                    if($user->email_verified_at == null) {
+                        Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->name, $store->name));
+                    }
                     return true;
                 } else {
                     Log::info('Customer email not found');
