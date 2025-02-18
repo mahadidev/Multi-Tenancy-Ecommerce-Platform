@@ -9,7 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Mail\WelcomeSellerAdmin;
+use App\Mail\WelcomeStoreAdminMail;
 use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -136,7 +136,7 @@ class StoreAdminController extends Controller
                 $verificationUrl = url('/seller/verify-email?token=' . $user->verification_code);
 
                 if ($user && $user->email) {
-                    Mail::to($user->email)->send(new WelcomeSellerAdmin($user, $store, $role, $logoUrl, $domain));
+                    Mail::to($user->email)->send(new WelcomeStoreAdminMail($user, $store, $role, $logoUrl, $domain));
                     Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->url, $store->name));
                     return true;
                 } else {

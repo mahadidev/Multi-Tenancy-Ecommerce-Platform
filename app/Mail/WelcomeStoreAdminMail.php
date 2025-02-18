@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class WelcomeSellerAdmin extends Mailable
+class WelcomeStoreAdminMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -37,6 +37,6 @@ class WelcomeSellerAdmin extends Mailable
     public function build()
     {
         return $this->subject("Welcome to {$this->store->name} as a {$this->role->name}")
-                    ->view('emails.welcome-seller-admin');
+                    ->view('emails.welcome-store-admin');
     }
 }

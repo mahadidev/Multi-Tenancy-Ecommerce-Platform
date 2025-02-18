@@ -13,6 +13,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Mail\WelcomeCustomerMail;
+use App\Mail\VerifyEmail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -102,6 +106,8 @@ class CustomerController extends Controller
             ]);
         }
 
+        $this->sendWelcomeEmail($user, Store::find(authStore()));
+
         return response()->json([
             'status' => 200,
             'message' => 'Customer created successfully',
@@ -109,6 +115,49 @@ class CustomerController extends Controller
                 'customer' => new CustomerResource($user),
             ]
         ], 200);
+    }
+
+    public function sendWelcomeEmail($user, $store)
+    {
+        try {
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
+                $appUrl = config('app.url');
+
+                // Ensure we have a trailing slash
+                if (!str_ends_with($appUrl, '/')) {
+                    $appUrl .= '/';
+                }
+
+                // Get store logo URL
+                $logoUrl = null;
+                if ($store->logo) {
+                    $logoUrl = $appUrl . 'storage/' . $store->logo;
+                } else {
+                    $logoUrl = $appUrl . 'images/logo-text.png';
+                }
+
+                // Get domain
+                $domain = null;
+                if (env('APP_URL') == 'http://127.0.0.1:8000') {
+                    $domain = 'http://127.0.0.1:8000/site/login';
+                } else {
+                    $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/site/login';
+                }
+                $verificationUrl = url('/site/verify-email?token=' . $user->verification_code);
+
+                if ($user && $user->email) {
+                    Mail::to($user->email)->send(new WelcomeCustomerMail($user, $store, $logoUrl, $domain));
+                    Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->url, $store->name));
+                    return true;
+                } else {
+                    Log::info('Customer email not found');
+                }
+            } else {
+                Log::info('Please set APP_ENV to production to send emails');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error sending welcome email: ' . $e->getMessage());
+        }
     }
 
     public function show($id)
