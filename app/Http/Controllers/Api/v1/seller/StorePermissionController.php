@@ -11,7 +11,7 @@ class StorePermissionController extends Controller
 {
     public function index(Request $request){
         
-        $permissions = Permission::where('store_id', authStore())->latest()->get();
+        $permissions = Permission::latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -49,7 +49,7 @@ class StorePermissionController extends Controller
             'name' => 'required|string',
         ]);
 
-        $permission = Permission::where('store_id', authStore())->find($id);
+        $permission = Permission::find($id);
 
         if(!$permission){
             return response()->json([
@@ -73,7 +73,7 @@ class StorePermissionController extends Controller
 
     public function show(Request $request, $id){
 
-        $permission = Permission::where('store_id', authStore())->find($id);
+        $permission = Permission::find($id);
 
         if(!$permission){
             return response()->json([
@@ -92,7 +92,7 @@ class StorePermissionController extends Controller
 
     public function destroy(Request $request, $id){
 
-        $permission = Permission::where('store_id', authStore())->find($id);
+        $permission = Permission::find($id);
 
         if(!$permission){
             return response()->json([

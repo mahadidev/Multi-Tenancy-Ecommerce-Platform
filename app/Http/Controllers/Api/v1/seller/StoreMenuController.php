@@ -68,7 +68,7 @@ class StoreMenuController extends Controller
             'visibility' => 'required|in:user,guest,all',
             'items' => 'nullable|array',
             'items.*.label' => 'required|string',
-            'items.*.href' => 'required|string',
+            'items.*.href' => 'required|url',
         ]);
 
         $validatedData['store_id'] = authStore();
@@ -95,7 +95,9 @@ class StoreMenuController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store menu created successfully.',
-            'data' => new StoreMenuResource($menu),
+            'data' => [
+                'menu' => new StoreMenuResource($menu),
+            ],
         ], 200);
     }
 
@@ -126,7 +128,7 @@ class StoreMenuController extends Controller
             'visibility' => 'sometimes|required|in:user,guest,all',
             'items' => 'nullable|array',
             'items.*.label' => 'required|string',
-            'items.*.href' => 'required|string',
+            'items.*.href' => 'required|url',
         ]);
 
         $menu = StoreMenu::authorized()->find($id);
@@ -164,7 +166,9 @@ class StoreMenuController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store menu updated successfully.',
-            'data' => new StoreMenuResource($menu),
+            'data' => [
+                'menu' => new StoreMenuResource($menu),
+            ],
         ], 200);
     }
 

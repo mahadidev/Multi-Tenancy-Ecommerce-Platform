@@ -63,7 +63,7 @@ class StoreMenuItemController extends Controller
     {
         $validatedData = $request->validate([
             'label' => 'required|string',
-            'href' => 'required|string',
+            'href' => 'required|url',
             'store_menu_id' => 'required|exists:store_menus,id',
         ]);
 
@@ -72,7 +72,9 @@ class StoreMenuItemController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store menu item created successfully.',
-            'data' => new StoreMenuItemResource($menuItem),
+            'data' => [
+                'menu_item' => StoreMenuItemResource::make($menuItem),
+            ]
         ], 200);
     }
 
@@ -99,7 +101,7 @@ class StoreMenuItemController extends Controller
     {
         $validatedData = $request->validate([
             'label' => 'sometimes|required|string',
-            'href' => 'sometimes|required|string',
+            'href' => 'sometimes|required|url',
             'store_menu_id' => 'sometimes|required|exists:store_menus,id',
         ]);
 
@@ -117,7 +119,9 @@ class StoreMenuItemController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Store menu item updated successfully.',
-            'data' => new StoreMenuItemResource($menuItem),
+           'data' => [
+                'menu_item' => StoreMenuItemResource::make($menuItem),
+            ]
         ], 200);
     }
 

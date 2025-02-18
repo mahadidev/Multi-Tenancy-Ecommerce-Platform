@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::table('roles', function (Blueprint $table) {
             $table->foreignId('store_id')->nullable()->constrained()->onDelete('cascade');
         });
-
-        Schema::table('permissions', function (Blueprint $table) {
-            $table->foreignId('store_id')->nullable()->constrained()->onDelete('cascade');
-        });
     }
 
     /**
@@ -26,11 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('roles', function (Blueprint $table) {
-            $table->dropForeign(['store_id']);
-            $table->dropColumn('store_id');
-        });
-
-        Schema::table('permissions', function (Blueprint $table) {
             $table->dropForeign(['store_id']);
             $table->dropColumn('store_id');
         });
