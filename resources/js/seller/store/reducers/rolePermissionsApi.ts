@@ -74,18 +74,6 @@ export const rolePermissionApi = createApi({
             transformErrorResponse: (error: any) => error.data,
         }),
 
-        // permission create
-        createPermission: builder.mutation<ApiResponseType, { name: string }>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/store-permissions`,
-                    method: "post",
-                    body: formData,
-                }),
-            invalidatesTags: ["Permissions"],
-            transformErrorResponse: (error: any) => error.data,
-        }),
-
         // role update
         updateRole: builder.mutation<
             ApiResponseType,
@@ -99,22 +87,6 @@ export const rolePermissionApi = createApi({
                     body: formData,
                 }),
             invalidatesTags: ["Roles"],
-            transformErrorResponse: (error: any) => error.data,
-        }),
-
-        // permission update
-        updatePermission: builder.mutation<
-            ApiResponseType,
-            { id: number; name: string }
-        >({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/store-permissions/${formData.id}`,
-                    method: "post",
-                    apiMethod: "PUT",
-                    body: formData,
-                }),
-            invalidatesTags: ["Permissions"],
             transformErrorResponse: (error: any) => error.data,
         }),
 
@@ -145,7 +117,7 @@ export const rolePermissionApi = createApi({
             transformErrorResponse: (error: any) => error.data,
         }),
 
-        // permission delete
+        // role delete
         deleteRole: builder.mutation<ApiResponseType, { id: number }>({
             query: (formData) =>
                 createRequest({
@@ -157,19 +129,6 @@ export const rolePermissionApi = createApi({
             invalidatesTags: ["Roles"],
             transformErrorResponse: (error: any) => error.data,
         }),
-
-        // permission delete
-        deletePermission: builder.mutation<ApiResponseType, { id: number }>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/store-permissions/${formData.id}`,
-                    method: "delete",
-                    apiMethod: "DELETE",
-                    body: formData,
-                }),
-            invalidatesTags: ["Permissions"],
-            transformErrorResponse: (error: any) => error.data,
-        }),
     }),
 });
 
@@ -177,11 +136,8 @@ export const {
     useFetchRolesQuery,
     useFetchPermissionsQuery,
     useCreateRoleMutation,
-    useCreatePermissionMutation,
     useUpdateRoleMutation,
-    useUpdatePermissionMutation,
     useDeleteRoleMutation,
-    useDeletePermissionMutation,
     useAssignPermissionToRoleMutation,
     useRevokePermissionMutation,
 } = rolePermissionApi;

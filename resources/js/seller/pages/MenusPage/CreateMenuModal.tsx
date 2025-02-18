@@ -168,6 +168,18 @@ const CreateMenuModal: FC = function () {
                                                     name="label"
                                                     placeholder="Item Label"
                                                     value={item["label"]}
+                                                    color={
+                                                        formErrors["label"]
+                                                            ? "failure"
+                                                            : "gray"
+                                                    }
+                                                    helperText={
+                                                        formErrors["label"]
+                                                            ? formErrors[
+                                                                  "label"
+                                                              ][0]
+                                                            : false
+                                                    }
                                                     onChange={(
                                                         event: React.ChangeEvent<HTMLInputElement>
                                                     ) => {
@@ -205,6 +217,22 @@ const CreateMenuModal: FC = function () {
                                                     name="href"
                                                     placeholder="Href"
                                                     value={item["href"]}
+                                                    color={
+                                                        formErrors[
+                                                            `items.${idx}.href`
+                                                        ]
+                                                            ? "failure"
+                                                            : "gray"
+                                                    }
+                                                    helperText={
+                                                        formErrors[
+                                                            `items.${idx}.href`
+                                                        ]
+                                                            ? formErrors[
+                                                                  `items.${idx}.href`
+                                                              ][0]
+                                                            : false
+                                                    }
                                                     onChange={(
                                                         event: React.ChangeEvent<HTMLInputElement>
                                                     ) => {

@@ -34,16 +34,7 @@ const CustomersTable = () => {
                         ),
                         sortable: true,
                     },
-                    {
-                        label: "Address",
-                        key: "address",
-                        render: (row: CustomerType) => (
-                            <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row?.address || "N/A"}
-                            </Table.Cell>
-                        ),
-                        sortable: true,
-                    },
+
                     {
                         label: "Phone",
                         key: "phone",

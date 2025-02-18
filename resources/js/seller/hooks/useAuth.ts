@@ -74,7 +74,7 @@ const useAuth = () => {
             if (response.data?.status === 200) {
                 const url = response?.data?.data?.auth_url;
                 const validUrl = decodeURIComponent(url);
-                window.open(validUrl, "_blank");
+                window.location.href = validUrl; // Redirects the current page
             }
         });
     };
@@ -94,7 +94,7 @@ const useAuth = () => {
             if (response.data?.status === 200) {
                 const url = response?.data?.data?.auth_url;
                 const validUrl = decodeURIComponent(url);
-                window.open(validUrl, "_blank");
+                window.location.href = validUrl; // Redirects the current page
             }
         });
     };
