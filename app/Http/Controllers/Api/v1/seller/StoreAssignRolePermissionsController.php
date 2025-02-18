@@ -27,9 +27,7 @@ class StoreAssignRolePermissionsController extends Controller
             ], 404);
         }
 
-        $permissions = Permission::whereIn('id', $request->permission_ids)
-            ->where('store_id', authStore())
-            ->get();
+        $permissions = Permission::whereIn('id', $request->permission_ids)->get();
 
         if ($permissions->isEmpty()) {
             return response()->json([

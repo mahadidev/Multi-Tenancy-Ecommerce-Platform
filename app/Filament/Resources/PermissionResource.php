@@ -12,7 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Tables\Columns\TextColumn; 
 class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
@@ -43,6 +43,9 @@ class PermissionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
+                TextColumn::make('created_at')
+                ->label('Created At')
+                ->dateTime('d M, Y'),
             ])
             ->filters([
                 //

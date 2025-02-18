@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('theme_id');
             $table->string("name");
-            $table->string("slug")->unique();
+            $table->string("slug");
             $table->string("title");
             $table->timestamps();
 
