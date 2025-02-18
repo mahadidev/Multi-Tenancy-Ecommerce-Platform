@@ -288,9 +288,9 @@ const CreateMenuModal: FC = function () {
                                 formData: { ...formState, items },
                                 onSuccess: () => {
                                     setOpen(false);
+                                    setFormState({});
                                 },
                             });
-                            setFormState({});
                         }}
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}

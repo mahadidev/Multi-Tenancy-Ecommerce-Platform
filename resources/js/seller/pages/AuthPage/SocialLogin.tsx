@@ -26,7 +26,9 @@ const SocialLogin = () => {
                     onClick={() => loginWithGoogle.submit()}
                     className="login-with-google-btn"
                 >
-                    Sign in with Google
+                    {loginWithGoogle?.isLoading
+                        ? "Login inprogress..."
+                        : "Sign in with Google"}
                 </button>
             </div>
         </div>
