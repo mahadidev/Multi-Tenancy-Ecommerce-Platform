@@ -20,6 +20,9 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role' => $this->roles->pluck('name'),
 
+            // email_verified is null if the user email is not verified
+            'email_verified_at' => $this->email_verified_at ? date('d M, Y | h:i A', strtotime($this->email_verified_at)) : null,
+
             // Include 'registered_store_id' only if the user has the 'user' role
             'registered_store_id' => $this->when(
                 $this->roles->pluck('name')->contains('user'),
