@@ -13,21 +13,26 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('owner_id');
+            $table->foreignId('store_type_id')->references('id')->on('store_types')->onDelete('cascade');
+            $table->foreignId('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->string('domain')->unique();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->text('location')->nullable();
+            $table->string('currency')->default('BDT'); 
+            $table->string('logo')->nullable(); 
+            $table->string('dark_logo')->nullable();
+            $table->unsignedBigInteger('theme_id')->nullable();
+            $table->string('primary_color')->nullable();
+            $table->string('secondary_color')->nullable();
+            $table->json('settings')->nullable();
+            $table->longText('description')->nullable();
             $table->tinyInteger('status')->default(1);
+           
             $table->softDeletes();
             $table->timestamps();
-
-            // Adding foreign key constraints with cascading behavior
-            $table->foreign('owner_id')
-            ->references('id')->on('users')
-            ->onDelete('cascade'); // Cascade on delete
         });
     }
 

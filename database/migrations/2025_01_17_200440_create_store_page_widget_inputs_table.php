@@ -14,12 +14,14 @@ return new class extends Migration {
             $table->id();
             $table->string("name");
             $table->string("label");
+            $table->integer('serial')->default(1);
             $table->string("placeholder")->nullable();
             $table->string("value")->nullable();
             $table->boolean("required")->default(0)->nullable();
             $table->string("type")->nullable();
             $table->foreignId('widget_id')->constrained('store_page_widgets')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 

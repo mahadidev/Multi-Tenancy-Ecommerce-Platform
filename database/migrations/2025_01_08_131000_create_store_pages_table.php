@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('store_pages', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('layout_id')->nullable();
             $table->foreignId('store_id')->constrained('stores')->onDelete('cascade');
             $table->string('name');
+            $table->string('type')->nullable();
             $table->string('slug')->nullable();
             $table->string('title')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamps();
+
+            $table->foreign('layout_id')
+                ->references('id')
+                ->on('theme_widgets')
+                ->onDelete('cascade');
         });
     }
 

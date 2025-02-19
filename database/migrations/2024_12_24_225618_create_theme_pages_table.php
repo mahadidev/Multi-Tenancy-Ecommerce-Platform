@@ -12,16 +12,19 @@ return new class extends Migration {
     {
         Schema::create('theme_pages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('theme_id');
+            $table->unsignedBigInteger('layout_id')->nullable();
+            $table->foreignId('theme_id')->nullable()->constrained('themes')->onDelete('cascade');
             $table->string("name");
+            $table->string('label')->nullable();
+            $table->string('type')->nullable(); 
             $table->string("slug");
             $table->string("title");
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
 
-
-            // Foreign key constraint
-            $table->foreign('theme_id')
-                ->references('id')->on('themes')
+            $table->foreign('layout_id')
+                ->references('id')
+                ->on('theme_widgets')
                 ->onDelete('cascade');
         });
     }

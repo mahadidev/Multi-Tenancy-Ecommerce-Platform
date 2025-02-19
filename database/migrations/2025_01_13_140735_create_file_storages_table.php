@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('type')->comment('image, pdf');
             $table->longText('location');
+            $table->string('width')->nullable();
+            $table->string('height')->nullable();
+            $table->string('alternate_text')->nullable();
+            $table->string('tags')->nullable();
             $table->timestamps();
         });
     }

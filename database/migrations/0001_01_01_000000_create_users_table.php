@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->json('store_id')->nullable();
+            $table->string('verification_code')->nullable(); // Add verification_code field
             $table->rememberToken();
             $table->timestamps();
         });
