@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('widget_input_items', function (Blueprint $table) {
+            $table->id();
+            $table->string("name");
+            $table->string("label");
+            $table->string("placeholder")->nullable();
+            $table->text("value")->nullable();
+            $table->boolean("required")->default(0)->nullable();
+            $table->string("type");
+            $table->foreignId('widget_input_id')->constrained('widget_inputs')->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('widget_input_items');
+    }
+};

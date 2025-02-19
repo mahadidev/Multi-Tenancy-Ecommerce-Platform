@@ -67,6 +67,21 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::resource('customers', CustomerController::class);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);
     Route::get('customers/generate/excel', [CustomerController::class, 'excel']);
+
+
+    //------------------------------------------------ New module routes ------------------------------------------------
+
+    // WidgetInputType Routes
+    Route::resource('widget-input-type', WidgetInputTypeController::class);
+
+    Route::get('stores/widgets/{pageWidgetId}/inputs', [WidgetInputTypeController::class, 'index']);
+    Route::get('stores/widgets/{pageWidgetId}/inputs/{id}', [WidgetInputTypeController::class, 'show']);
+    Route::post('stores/widgets/{pageWidgetId}/inputs/store', [WidgetInputTypeController::class, 'store']);
+    Route::post('stores/widgets/{pageWidgetId}/inputs/update/{id}', [WidgetInputTypeController::class, 'update']);
+    Route::delete('stores/widgets/{pageWidgetId}/inputs/delete/{id}', [WidgetInputTypeController::class, 'destroy']);
+
+    // Route::resource('widget-input', WidgetInputController::class);
+
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], function () {

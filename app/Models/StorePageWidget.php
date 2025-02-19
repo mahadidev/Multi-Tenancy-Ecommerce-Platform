@@ -32,8 +32,12 @@ class StorePageWidget extends Model
     }
 
     public function widgetInputs(){
-        return $this->hasMany(StorePageWidgetInput::class, 'widget_id');
+        return $this->hasMany(WidgetInput::class, 'widget_id');
     }
+    
+    // public function widgetInputs(){
+    //     return $this->hasMany(StorePageWidgetInput::class, 'widget_id');
+    // }
 
     public function widgetType(){
         return $this->belongsTo(WidgetType::class, 'widget_type_id');
