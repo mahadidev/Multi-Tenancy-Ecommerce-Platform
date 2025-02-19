@@ -14,28 +14,27 @@ class WidgetInputTypeSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            ['label' => 'Text', 'value' => 'text'],
-            ['label' => 'Textarea', 'value' => 'textarea'],
-            ['label' => 'Number', 'value' => 'number'],
-            ['label' => 'Email', 'value' => 'email'],
-            ['label' => 'Password', 'value' => 'password'],
-            ['label' => 'Checkbox', 'value' => 'checkbox'],
-            ['label' => 'Radio', 'value' => 'radio'],
-            ['label' => 'Select', 'value' => 'select'],
-            ['label' => 'Multi Select', 'value' => 'multi_select'],
-            ['label' => 'Date', 'value' => 'date'],
-            ['label' => 'DateTime', 'value' => 'datetime'],
-            ['label' => 'Time', 'value' => 'time'],
-            ['label' => 'File', 'value' => 'file'],
-            ['label' => 'Image', 'value' => 'image'],
-            ['label' => 'Color', 'value' => 'color'],
-            ['label' => 'Toggle', 'value' => 'toggle'],
+            ["type" => "text", "label" => "Text"], // id 1
+            ["type" => "email", "label" => "Email"], // id 2
+            ["type" => "image", "label" => "Image"], // id 3
+            ["type" => "number", "label" => "Number"], // id 4
+            ["type" => "textarea", "label" => "Textarea"], // id 5
+            ["type" => "select", "label" => "Select"], // id 6
+            ["type" => "array", "label" => "Array"], // id 7
+            ["type" => "checkbox", "label" => "Checkbox"], // id 8
+            ["type" => "radio", "label" => "Radio"], // id 9
+            ["type" => "multi_select", "label" => "Multi Select"], // id 10
+            ["type" => "date", "label" => "Date"], // id 11
+            ["type" => "datetime", "label" => "DateTime"], // id 12
+            ["type" => "time", "label" => "Time"], // id 13
+            ["type" => "color", "label" => "Color"], // id 14
+            ["type" => "toggle", "label" => "Toggle"] // id 15
         ];
 
         foreach ($types as $type) {
             WidgetInputType::updateOrCreate(
-                ['value' => $type['value']], // Check if 'value' exists
-                ['label' => $type['label']]  // Update or insert
+                ['value' => $type['type']], // Check if 'value' exists
+                ['label' => $type['type']]  // Update or insert
             );
         }
     }

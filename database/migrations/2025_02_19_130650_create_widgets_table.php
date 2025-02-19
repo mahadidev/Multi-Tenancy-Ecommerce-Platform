@@ -16,7 +16,7 @@ return new class extends Migration
             $table->morphs('ref'); // Creates `ref_id` (bigInteger) and `ref_type` (string)
             $table->string('name');
             $table->string('label');
-            $table->integer('serial')->unique(); // Unique sorting field
+            $table->integer('serial'); // Unique sorting field
             $table->foreignId('type_id')->constrained('widget_types')->onDelete('cascade'); // Foreign key reference
             $table->timestamps();
         });
