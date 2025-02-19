@@ -100,6 +100,7 @@ const CreateCustomerModal: FC = function () {
                                     ) => {
                                         handleChange(event);
                                     }}
+                                    type="tel"
                                 />
                             </div>
                         </div>

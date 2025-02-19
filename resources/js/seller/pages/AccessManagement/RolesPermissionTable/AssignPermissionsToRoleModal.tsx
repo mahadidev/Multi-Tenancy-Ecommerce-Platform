@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import useForm from "@seller/hooks/useForm";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import { PermissionType, RoleType } from "@type/rolePermissionsType";
@@ -12,6 +11,7 @@ interface PropsType {
 
 const AssignPermissionsToRoleModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
+    const [selectAll, setSelectAll] = useState(false); // New state for 'select all' checkbox
     const { assignPermission, permissions } = useRolePermission();
     const { formState, setFormState } = useForm({
         formValidationError: assignPermission.error,
@@ -23,18 +23,21 @@ const AssignPermissionsToRoleModal: FC<PropsType> = function (props) {
         },
     });
 
-    // reload data
+    // Reload data when role changes
     useEffect(() => {
         if (props.role) {
-            setFormState({
-                permissions:
-                    props?.role?.permissions?.map(
-                        (permission: PermissionType) => permission?.id
-                    ) || [],
-            });
-        }
-    }, [props.role]);
+            const updatedPermissions =
+                props?.role?.permissions?.map(
+                    (permission: PermissionType) => permission?.id
+                ) || [];
+            setFormState({ permissions: updatedPermissions });
 
+            // Update 'selectAll' state based on permissions
+            setSelectAll(updatedPermissions.length === permissions.length);
+        }
+    }, [props.role, permissions]);
+
+    // Handle the change for a single permission
     const handlePermissionChange = (
         permissionId: number,
         isChecked: boolean
@@ -48,6 +51,23 @@ const AssignPermissionsToRoleModal: FC<PropsType> = function (props) {
         setFormState({
             ...formState,
             permissions: updatedPermissions,
+        });
+
+        // Update 'selectAll' state if all permissions are checked
+        setSelectAll(updatedPermissions.length === permissions.length);
+    };
+
+    // Handle the 'select all' checkbox change
+    const handleSelectAllChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const isChecked = event.target.checked;
+        setSelectAll(isChecked);
+        setFormState({
+            ...formState,
+            permissions: isChecked
+                ? permissions.map((permission) => permission?.id)
+                : [],
         });
     };
 
@@ -67,11 +87,23 @@ const AssignPermissionsToRoleModal: FC<PropsType> = function (props) {
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6">
                         <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="select-all"
+                                    checked={selectAll}
+                                    onChange={handleSelectAllChange}
+                                />
+                                <Label htmlFor={"select-all"}>
+                                    Select All Permissions
+                                </Label>
+                            </div>
                             <div className="flex flex-col gap-2">
                                 {permissions?.map((permission) => (
-                                    <div>
+                                    <div
+                                        key={permission?.id}
+                                        className="flex items-center gap-2"
+                                    >
                                         <Checkbox
-                                            key={permission?.id}
                                             id={permission?.name}
                                             name={permission?.name}
                                             checked={formState?.permissions?.includes(
@@ -84,8 +116,9 @@ const AssignPermissionsToRoleModal: FC<PropsType> = function (props) {
                                                 )
                                             }
                                         />
-                                        &nbsp;&nbsp;{" "}
-                                        <Label>{permission?.name}</Label>
+                                        <Label htmlFor={permission?.name}>
+                                            {permission?.name}
+                                        </Label>
                                     </div>
                                 ))}
                             </div>

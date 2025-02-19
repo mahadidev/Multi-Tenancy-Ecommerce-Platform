@@ -10,7 +10,7 @@ const CreatePageModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
     const { create, pageTypes } = usePage();
 
-    const { handleChange, formState, formErrors } = useForm({
+    const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
     });
 
@@ -124,13 +124,16 @@ const CreatePageModal: FC = function () {
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
+                                    setFormState({});
                                 },
                             });
                         }}
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Create
                     </Button>
