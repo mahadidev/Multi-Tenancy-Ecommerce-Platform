@@ -13,6 +13,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -180,7 +181,7 @@
             }
         }
 
-        
+
         .store-info-line {
             display: flex;
             align-items: center;
@@ -205,6 +206,7 @@
         .store-info-value {
             color: #1e293b;
         }
+
         .page-footer {
             position: fixed;
             bottom: -40px;
@@ -238,26 +240,30 @@
     <div class="watermark"></div>
     <div class="container">
         <div class="header">
-            <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
-            alt="{{ config('app.name') }}" class="logo">
-            
-                <div class="store-info-line">
-                    <div class="store-info-item">
-                        <i class="fas fa-store"></i>
-                        @if ($store->domain)
-                            <a href="{{ $store->domain }}" target="_blank" class="store-info-value"
-                                style="text-decoration: none;">{{ $store->domain }}</a>
-                        @endif
-                        @if ($store->email)
-                            |
-                            <span class="store-info-value">{{ $store->email }}</span>
-                        @endif
-                        @if ($store->phone)
-                            |
-                            <span class="store-info-value">{{ $store->phone }}</span>
-                        @endif
-                    </div>
+            @if ($store->logo)
+                <img src="{{ $store->logo ? base_path('public/storage/' . $store->logo) : base_path('public/images/logo-text.png') }}"
+                    alt="{{ config('app.name') }}" class="logo">
+            @else
+                <h1>{{ $store->name }}</h1>
+            @endif
+
+            <div class="store-info-line">
+                <div class="store-info-item">
+                    <i class="fas fa-store"></i>
+                    @if ($store->domain)
+                        <a href="{{ $store->domain }}" target="_blank" class="store-info-value"
+                            style="text-decoration: none;">{{ $store->domain }}</a>
+                    @endif
+                    @if ($store->email)
+                        |
+                        <span class="store-info-value">{{ $store->email }}</span>
+                    @endif
+                    @if ($store->phone)
+                        |
+                        <span class="store-info-value">{{ $store->phone }}</span>
+                    @endif
                 </div>
+            </div>
             <h1>{{ $isCustomer ? 'Order Confirmation' : 'New Order Notification' }}</h1>
         </div>
 
@@ -318,10 +324,10 @@
                     <span class="info-value">{{ $order->payment_method }}</span>
                 </div>
                 @if ($order->notes)
-                <div class="info-row">
-                    <span class="info-label">Notes :</span>
-                    <span class="info-value">{{ $order->notes }}</span>
-                </div>
+                    <div class="info-row">
+                        <span class="info-label">Notes :</span>
+                        <span class="info-value">{{ $order->notes }}</span>
+                    </div>
                 @endif
                 <!-- More details -->
             </div>

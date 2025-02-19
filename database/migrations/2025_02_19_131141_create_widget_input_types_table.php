@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('request_logs', function (Blueprint $table) {
+        Schema::create('widget_input_types', function (Blueprint $table) {
             $table->id();
-            $table->string('method');
-            $table->text('url');
-            $table->text('headers')->nullable();
-            $table->text('body')->nullable();
-            $table->string('ip');
+            $table->string('label');
+            $table->longText('value');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('request_logs');
+        Schema::dropIfExists('widget_input_types');
     }
 };

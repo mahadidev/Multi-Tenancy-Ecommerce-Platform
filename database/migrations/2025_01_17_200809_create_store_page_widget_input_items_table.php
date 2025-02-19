@@ -15,11 +15,12 @@ return new class extends Migration {
             $table->string("name");
             $table->string("label");
             $table->string("placeholder")->nullable();
-            $table->string("value")->nullable();
+            $table->text("value")->nullable();
             $table->boolean("required")->default(0)->nullable();
             $table->string("type");
             $table->foreignId('widget_input_id')->constrained('store_page_widget_inputs')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 
