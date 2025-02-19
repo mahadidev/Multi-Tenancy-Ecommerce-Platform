@@ -9,7 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Mail\WelcomeSellerAdmin;
+use App\Mail\WelcomeStoreAdminMail;
 use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -23,11 +23,14 @@ class StoreAdminController extends Controller
      */
     public function index()
     {
-        $users = User::with(['roles:name', 'storeSession']) 
-            ->where('id', '!=', auth()->id()) // Exclude the current logged-in user
+        $users = User::with(['roles:name', 'storeSession'])
+            // ->where('id', '!=', auth()->id()) // Exclude the current logged-in user
+            ->whereHas('roles', function ($q) {
+                $q->where('name', '!=', 'seller');
+            })
             ->whereHas('storeSession', function ($q) {
                 $q->where('store_id', authStore());
-            }) 
+            })
             ->latest()
             ->get();
 
@@ -47,12 +50,13 @@ class StoreAdminController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|string|email|unique:users,email',
+            'email' => 'required|string|email',
             'role_id' => 'required|exists:roles,id',
             'phone' => 'nullable|numeric',
             'address' => 'nullable|string',
         ]);
 
+        $password = false;
         $store_id = authStore();
 
         if (!$store_id) {
@@ -72,18 +76,32 @@ class StoreAdminController extends Controller
 
         $verificationCode = Str::random(40); // Generate a random verification code
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make('123'),
-            'verification_code' => $verificationCode,
-            'phone' => $request->phone ?? null,
-            'address' => $request->address ?? null,
-            'image' => $request->image ?? null,
-            'email_verified_at' => null,
-        ]);
+        $user = User::where('email', $request->email)->first();
 
-        $user->assignRole($role);
+        if ($user) {
+            if ($user->storeSession()->where('store_id', $store_id)->first()) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Store Admin already exists in this store',
+                ], 400);
+            }
+            $password = true;
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make('123'),
+                'verification_code' => $verificationCode,
+                'phone' => $request->phone ?? null,
+                'address' => $request->address ?? null,
+                'image' => $request->image ?? null,
+                'email_verified_at' => null,
+            ]);
+        }
+
+        if (!$user->hasRole($role->name)) {
+            $user->assignRole($role->name);
+        }
 
         StoreSession::create([
             'user_id' => $user->id,
@@ -93,7 +111,7 @@ class StoreAdminController extends Controller
         // Fetch the store and role details
         $store = Store::find($store_id);
 
-        $this->sendWelcomeEmail($user, $store, $role);
+        $this->sendWelcomeEmail($user, $store, $role, $password);
 
         return response()->json([
             'status' => 200,
@@ -103,8 +121,73 @@ class StoreAdminController extends Controller
             ]
         ], 200);
     }
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|string|email|unique:users,email',
+    //         'role_id' => 'required|exists:roles,id',
+    //         'phone' => 'nullable|numeric',
+    //         'address' => 'nullable|string',
+    //     ]);
 
-    public function sendWelcomeEmail($user, $store, $role)
+    //     $store_id = authStore();
+
+    //     if (!$store_id) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'Unauthorized, store not found'
+    //         ], 404);
+    //     }
+
+    //     $role = Role::findById($request->role_id);
+    //     if(!$role){
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'Role not found'
+    //         ], 404);
+    //     }
+    //     if ($role->store_id != $store_id) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'Unauthorized, role not found'
+    //         ], 404);
+    //     }
+
+    //     $verificationCode = Str::random(40); // Generate a random verification code
+
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'password' => Hash::make('123'),
+    //         'verification_code' => $verificationCode,
+    //         'phone' => $request->phone ?? null,
+    //         'address' => $request->address ?? null,
+    //         'image' => $request->image ?? null,
+    //         'email_verified_at' => null,
+    //     ]);
+
+    //     $user->assignRole($role);
+
+    //     StoreSession::create([
+    //         'user_id' => $user->id,
+    //         'store_id' => $store_id
+    //     ]);
+
+    //     // Fetch the store and role details
+    //     $store = Store::find($store_id);
+
+    //     $this->sendWelcomeEmail($user, $store, $role);
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'message' => 'Store Admin created successfully, and assigned to store',
+    //         'data' => [
+    //             'store_admin' => new UserResource($user)
+    //         ]
+    //     ], 200);
+    // }
+    public function sendWelcomeEmail($user, $store, $role, $password = false)
     {
         try {
             if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
@@ -133,8 +216,10 @@ class StoreAdminController extends Controller
                 $verificationUrl = url('/seller/verify-email?token=' . $user->verification_code);
 
                 if ($user && $user->email) {
-                    Mail::to($user->email)->send(new WelcomeSellerAdmin($user, $store, $role, $logoUrl, $domain));
-                    Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->url, $store->name));
+                    Mail::to($user->email)->send(new WelcomeStoreAdminMail($user, $store, $role, $logoUrl, $domain, $password));
+                    if ($user->email_verified_at == null) {
+                        Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->name, $store->name));
+                    }
                     return true;
                 } else {
                     Log::info('Store Admin email not found');
@@ -155,10 +240,10 @@ class StoreAdminController extends Controller
         $user = User::with(['roles:name', 'storeSession'])
             ->whereHas('roles', function ($q) {
                 $q->where('name', '!=', 'seller');
-            }) 
+            })
             ->whereHas('storeSession', function ($q) {
                 $q->where('store_id', authStore());
-            }) 
+            })
             ->find($id);
 
         if (!$user) {

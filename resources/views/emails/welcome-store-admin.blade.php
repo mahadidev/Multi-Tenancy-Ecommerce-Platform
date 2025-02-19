@@ -39,14 +39,21 @@
                                 <tr>
                                     <td style="font-size: 16px; color: #666; padding-top: 10px;">
                                         <strong>Email:</strong> {{ $user->email }} <br>
-                                        <strong>Password:</strong> 123 (default)
+                                        @if ($password != true)
+                                            <strong>Password:</strong> 123 (default)
+                                        @else
+                                            <strong>Password:</strong> Use the password which is set for others account.
+                                        @endif
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="padding-top: 10px; font-size: 14px; color: #ff0000;">
-                                        <em>Note: Please change your password after logging in for security reasons.</em>
-                                    </td>
-                                </tr>
+                                @if ($password != true)
+                                    <tr>
+                                        <td style="padding-top: 10px; font-size: 14px; color: #ff0000;">
+                                            <em>Note: Please change your password after logging in for security
+                                                reasons.</em>
+                                        </td>
+                                    </tr>
+                                @endif
                             </table>
 
                             <!-- Statistics Grid -->
