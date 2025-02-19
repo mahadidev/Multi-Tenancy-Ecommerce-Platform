@@ -58,7 +58,5 @@ class WidgetInput extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    public function items(){
-        return $this->hasMany(WidgetInputItem::class, 'widget_input_id');
-    }
+  
 }

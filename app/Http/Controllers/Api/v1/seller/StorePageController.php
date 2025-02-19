@@ -75,10 +75,11 @@ class StorePageController extends Controller
             'widgets.*.label' => 'required|string',
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
-            'widgets.*.is_editable' => 'nullable|boolean',
+            'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.widget_type_id' => 'nullable|exists:widget_types,id',
 
             'widgets.*.inputs' => 'nullable|array',
+            'widgets.*.inputs.*.parent_id' => 'nullable|exists:widget_inputs,id',
             'widgets.*.inputs.*.widget_input_type_id' => ['required_if:widgets.*.inputs,!=,null', 'exists:widget_input_types,id'],
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -86,14 +87,8 @@ class StorePageController extends Controller
             'widgets.*.inputs.*.value' => 'nullable|string',
             'widgets.*.inputs.*.options' => 'nullable|array',
             'widgets.*.inputs.*.required' => 'nullable|boolean',
-
-            'widgets.*.inputs.*.items' => 'nullable|array',
-            'widgets.*.inputs.*.items.*.name' => 'required|string',
-            'widgets.*.inputs.*.items.*.label' => 'required|string',
-            'widgets.*.inputs.*.items.*.placeholder' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.required' => 'required|boolean',
-            'widgets.*.inputs.*.items.*.type' => 'required|string',
+            'widgets.*.inputs.*.serial' => 'nullable|boolean',
+           
         ]);
 
         $validatedData['store_id'] = authStore();
@@ -127,22 +122,6 @@ class StorePageController extends Controller
                         ];
 
                         $storePageWidgetInput = $storePageWidget->widgetInputs()->create($inputData);
-
-                        // Create the items for the input
-                        if (isset($input['items'])) {
-                            foreach ($input['items'] as $item) {
-                                $itemData = [
-                                    'name' => $item['name'],
-                                    'label' => $item['label'],
-                                    'placeholder' => $item['placeholder'],
-                                    'value' => $item['value'],
-                                    'required' => $item['required'],
-                                    'type' => $item['type'],
-                                ];
-
-                                $storePageWidgetInput->items()->create($itemData);
-                            }
-                        }
                     }
                 }
             }
@@ -153,7 +132,7 @@ class StorePageController extends Controller
                 'status' => 200,
                 'message' => 'Store page created successfully.',
                 'data' => [
-                    'store_page' => StorePagesResource::make($storePage->load('widgets.widgetInputs.items')),
+                    'store_page' => StorePagesResource::make($storePage->load('widgets.widgetInputs')),
                 ],
             ],
             200,
@@ -219,10 +198,11 @@ class StorePageController extends Controller
             'widgets.*.label' => 'required|string',
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
+            'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.widget_type_id' => 'nullable|exists:widget_types,id',
-            'widgets.*.is_editable' => 'nullable|boolean',
 
             'widgets.*.inputs' => 'nullable|array',
+            'widgets.*.inputs.*.parent_id' => 'nullable|exists:widget_inputs,id',
             'widgets.*.inputs.*.widget_input_type_id' => 'nullable|exists:widget_input_types,id',
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
@@ -230,14 +210,6 @@ class StorePageController extends Controller
             'widgets.*.inputs.*.value' => 'nullable|string',
             'widgets.*.inputs.*.required' => 'nullable|boolean',
             'widgets.*.inputs.*.options' => 'nullable|array',
-
-            'widgets.*.inputs.*.items' => 'nullable|array',
-            'widgets.*.inputs.*.items.*.name' => 'required|string',
-            'widgets.*.inputs.*.items.*.label' => 'required|string',
-            'widgets.*.inputs.*.items.*.placeholder' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.value' => 'nullable|string',
-            'widgets.*.inputs.*.items.*.required' => 'required|boolean',
-            'widgets.*.inputs.*.items.*.type' => 'required|string',
 
         ]);
 
@@ -276,25 +248,6 @@ class StorePageController extends Controller
                         ];
 
                         $storePageWidgetInput = $storePageWidget->widgetInputs()->create($inputData);
-
-                        // Create the items for the input
-                        if (isset($input['items'])) {
-                           
-                            $storePageWidgetInput->items()->delete();
-                           
-                            foreach ($input['items'] as $item) {
-                                $itemData = [
-                                    'name' => $item['name'],
-                                    'label' => $item['label'],
-                                    'placeholder' => $item['placeholder'],
-                                    'value' => $item['value'],
-                                    'required' => $item['required'],
-                                    'type' => $item['type'],
-                                ];
-
-                                $storePageWidgetInput->items()->create($itemData);
-                            }
-                        }
                     }
                 }
             }
@@ -305,7 +258,7 @@ class StorePageController extends Controller
             [
                 'status' => 200,
                 'message' => 'Store page updated successfully.',
-                'data' => new StorePagesResource($storePage->load('widgets.widgetInputs.items')),
+                'data' => new StorePagesResource($storePage->load('widgets.widgetInputs')),
             ],
             200,
         );
