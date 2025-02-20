@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StorePagesResource;
-use App\Http\Resources\StoreResource;
 use App\Models\StorePage;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 class StorePageController extends Controller
 {
     public function index(Request $request)
@@ -94,7 +93,27 @@ class StorePageController extends Controller
         $validatedData['store_id'] = authStore();
         $validatedData["type"] = $validatedData["page_type_id"];
 
-        $storePage = StorePage::authorized()->create($validatedData);
+
+        $slug = $validatedData['slug'] ?? Str::slug($validatedData['name']); // Generate slug from name
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // Check if slug already exists in the `store_pages` table
+        while (StorePage::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        // $storePage = StorePage::authorized()->create($validatedData);
+        $storePage = StorePage::create([
+            'store_id' =>  $validatedData['store_id'],
+            'name' => $validatedData['name'],
+            'slug' => $slug, // Use unique slug
+            'type' => $validatedData['page_type_id'],
+            'title' => $validatedData['title'],
+            'layout_id' => $validatedData['layout_id'],
+            'is_active' => $validatedData['is_active'],
+        ]);
 
         // Create the widgets for the store page if they exist
         if ($request->has('widgets')) {
@@ -200,8 +219,8 @@ class StorePageController extends Controller
 
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string',
-            'slug' => 'nullable|string|max:25|unique:store_pages,slug',
+            'name' => 'nullable|string',
+            'slug' => 'nullable|string|max:25',
             'page_type_id' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
             'layout_id' => 'nullable|exists:theme_widgets,id',
@@ -237,6 +256,26 @@ class StorePageController extends Controller
 
         $validatedData["type"] = $validatedData["page_type_id"];
 
+         // Get the existing slug from the database
+        $slug = $storePage->slug;
+
+        // If a new slug is provided, check for uniqueness
+        if (!empty($validatedData['slug'])) {
+            $newSlug = Str::slug($validatedData['slug']);
+            $originalSlug = $newSlug;
+            $counter = 1;
+
+            // Ensure slug uniqueness (excluding the current store page)
+            while (StorePage::where('slug', $newSlug)->where('id', '!=', $storePage->id)->exists()) {
+                $newSlug = $originalSlug . '-' . $counter;
+                $counter++;
+            }
+
+            $slug = $newSlug;
+        }
+
+        $validatedData['slug'] = $slug;
+        
         // Update the store page's basic details
         $storePage->update($validatedData);
 
