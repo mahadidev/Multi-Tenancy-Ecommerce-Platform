@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             StoreTypeSeeder::class,
             PageTypeSeeder::class,
-            ThemeSeeder::class,
+            // ThemeSeeder::class,
             SellerAccountSeeder::class,
             CategorySeeder::class,
             BrandSeeder::class,

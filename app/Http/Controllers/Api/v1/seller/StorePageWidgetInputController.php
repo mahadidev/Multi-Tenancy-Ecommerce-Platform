@@ -67,7 +67,6 @@ class StorePageWidgetInputController extends Controller
             'options' => 'nullable|array',
             'required' => 'nullable|boolean',
 
-
             'child' => 'nullable|array',
             'child.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
             'child.*.name' => 'required|string',
@@ -156,6 +155,15 @@ class StorePageWidgetInputController extends Controller
             'value' => 'nullable|string',
             'options' => 'nullable|array',
             'required' => 'nullable|boolean',
+
+            'child' => 'nullable|array',
+            'child.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
+            'child.*.name' => 'required|string',
+            'child.*.label' => 'required|string',
+            'child.*.placeholder' => 'nullable|string',
+            'child.*.value' => 'nullable|string',
+            'child.*.options' => 'nullable|array',
+            'child.*.required' => 'nullable|boolean',
         ]);
 
         $pageWidget = Widget::find($pageWidgetId);
@@ -180,6 +188,24 @@ class StorePageWidgetInputController extends Controller
             'options' => isset($validateData['options']) ? json_encode($validateData['options']) : $pageWidgetInput->options,
             'required' => isset($validateData['required']) ? $validateData['required'] : $pageWidgetInput->required,
         ]);
+
+        //add child here if exists
+        if(isset($validateData['child'])){
+            foreach ($validateData['child'] as $key2 => $childInput) {
+                $inputData = [
+                    'parent_id' => $pageWidgetInput->id,
+                    'type_id' => $childInput['input_type_id'],
+                    'name' => $childInput['name'],
+                    'label' => $childInput['label'],
+                    'placeholder' => $childInput['placeholder'] ?? null,
+                    'value' => $childInput['value'] ?? null,
+                    'options' => isset($childInput['options']) ? json_encode($childInput['options']) : null,
+                    'required' => $childInput['required'] ?? false,
+                ];
+
+                $storePageWidgetInputChild = $pageWidget->widgetInputs()->create($inputData);
+            }
+        }
 
         return response()->json([
             'status' => 200,
