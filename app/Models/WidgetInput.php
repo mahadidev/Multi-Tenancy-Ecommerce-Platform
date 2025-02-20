@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Http\Resources\WidgetInputResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use function Laravel\Prompts\select;
 
 class WidgetInput extends Model
 {
@@ -53,10 +55,10 @@ class WidgetInput extends Model
     /**
      * Get child inputs.
      */
-    public function children(): HasMany
+    public function child()
     {
         return $this->hasMany(self::class, 'parent_id');
     }
 
-  
+
 }
