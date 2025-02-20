@@ -5,6 +5,7 @@ import { Table } from "flowbite-react";
 import CreateRoleModal from "./CreateRoleModal";
 import DeleteRoleModal from "./DeleteRoleModal";
 import EditRoleModal from "./EditRoleModal";
+import ResetPermissionsModal from "./ResetPermissionsModal";
 
 const RolesTable = () => {
     const { roles } = useRolePermission();
@@ -33,11 +34,13 @@ const RolesTable = () => {
                         ),
                         sortable: true,
                     },
+
                     {
                         render: (row: RoleType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
                                     <EditRoleModal role={row} />
+                                    <ResetPermissionsModal role={row} />
                                     <DeleteRoleModal role={row} />
                                 </div>
                             </Table.Cell>

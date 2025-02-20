@@ -14,12 +14,7 @@ const DeleteRoleModal: FC<PropsType> = function (props) {
     const { deleteRole } = useRolePermission();
     return (
         <>
-            <Button
-                size="sm"
-                color="gray"
-                className="p-0"
-                onClick={() => setOpen(true)}
-            >
+            <Button color="gray" className="p-0" onClick={() => setOpen(true)}>
                 <div className="flex items-center gap-x-2">
                     <HiTrash className="h-5 w-5" />
                     Delete Role

@@ -1,18 +1,62 @@
 import useForm from "@seller/hooks/useForm";
 import useRolePermission from "@seller/hooks/useRolePermissions";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
 
 const CreateRoleModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
-    const { createRole } = useRolePermission();
+    const [selectAll, setSelectAll] = useState(false); // state for 'select all' checkbox
+    const { createRole, assignPermission, permissions } = useRolePermission();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: createRole.error,
     });
 
+    const {
+        formState: permissionFormState,
+        setFormState: setPermissionFormState,
+    } = useForm({
+        formValidationError: assignPermission.error,
+        default: {
+            permissions: [],
+        },
+    });
+
+    // Handle the change for a single permission
+    const handlePermissionChange = (
+        permissionId: number,
+        isChecked: boolean
+    ) => {
+        const updatedPermissions = isChecked
+            ? [...permissionFormState?.permissions, permissionId]
+            : permissionFormState?.permissions?.filter(
+                  (permission: any) => permission !== permissionId
+              );
+
+        setPermissionFormState({
+            ...permissionFormState,
+            permissions: updatedPermissions,
+        });
+
+        // Update 'selectAll' state if all permissions are checked
+        setSelectAll(updatedPermissions.length === permissions.length);
+    };
+
+    // Handle the 'select all' checkbox change
+    const handleSelectAllChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const isChecked = event.target.checked;
+        setSelectAll(isChecked);
+        setPermissionFormState({
+            ...permissionFormState,
+            permissions: isChecked
+                ? permissions.map((permission) => permission?.id)
+                : [],
+        });
+    };
     return (
         <>
             <Button
@@ -53,6 +97,47 @@ const CreateRoleModal: FC = function () {
                                     required
                                 />
                             </div>
+                        </div>{" "}
+                        <div className="flex flex-col gap-2">
+                            {" "}
+                            <Label htmlFor="permissions">
+                                Assign Permissions
+                            </Label>
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="select-all"
+                                    checked={selectAll}
+                                    onChange={handleSelectAllChange}
+                                />
+                                <Label htmlFor={"select-all"}>
+                                    Select All Permissions
+                                </Label>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                {permissions?.map((permission) => (
+                                    <div
+                                        key={permission?.id}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <Checkbox
+                                            id={permission?.name}
+                                            name={permission?.name}
+                                            checked={permissionFormState?.permissions?.includes(
+                                                permission?.id
+                                            )}
+                                            onChange={(event) =>
+                                                handlePermissionChange(
+                                                    permission?.id,
+                                                    event.target.checked
+                                                )
+                                            }
+                                        />
+                                        <Label htmlFor={permission?.name}>
+                                            {permission?.name}
+                                        </Label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </Modal.Body>
@@ -64,14 +149,29 @@ const CreateRoleModal: FC = function () {
                                 formData: {
                                     name: formState["name"],
                                 },
-                                onSuccess: () => {
+                                onSuccess: (res: any) => {
                                     setOpen(false);
+
+                                    assignPermission.submit({
+                                        formData: {
+                                            permission_ids:
+                                                permissionFormState?.permissions,
+                                            role_id: res?.role?.id,
+                                        },
+                                        onSuccess: () => {
+                                            setOpen(false);
+                                        },
+                                    });
+                                    setFormState({});
                                 },
                             });
-                            setFormState({});
                         }}
-                        isProcessing={createRole.isLoading}
-                        disabled={createRole.isLoading}
+                        isProcessing={
+                            createRole.isLoading || assignPermission.isLoading
+                        }
+                        disabled={
+                            createRole.isLoading || assignPermission.isLoading
+                        }
                         processingLabel="Creating"
                         processingSpinner={
                             <AiOutlineLoading className="animate-spin" />

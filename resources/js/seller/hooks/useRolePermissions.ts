@@ -121,11 +121,6 @@ const useRolePermission = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
-
-                toaster({
-                    text: "Permission assigned successfully.",
-                    status: "success",
-                });
             } else {
                 toaster({
                     text: "Failed to assign permission",
