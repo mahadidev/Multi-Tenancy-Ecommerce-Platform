@@ -17,17 +17,17 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UserSeeder::class,
             StoreTypeSeeder::class,
+            WidgetTypeSeeder::class,
+            WidgetInputTypeSeeder::class,
             PageTypeSeeder::class,
             // ThemeSeeder::class,
-            SellerAccountSeeder::class,
+            // SellerAccountSeeder::class,
             CategorySeeder::class,
             BrandSeeder::class,
             ProductSeeder::class,
             BlogSeeder::class,
             StoreMenusSeeder::class,
-            WidgetTypeSeeder::class,
             SvgIconSeeder::class,
-            WidgetInputTypeSeeder::class,
         ]);
     }
 }
