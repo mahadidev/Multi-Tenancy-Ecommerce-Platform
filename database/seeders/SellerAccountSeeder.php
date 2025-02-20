@@ -71,7 +71,7 @@ class SellerAccountSeeder extends Seeder
                 'user_id' => $user->id,
             ]);   
 
-        // $theme = Theme::with('pages.page_widgets')->with("widgets")->first();
+        // $theme = Theme::with('widgets','pages.layout')->with("")->first();
         // $themeData = new \App\Http\Resources\ThemeResource($theme);
 
         // if ($theme) {

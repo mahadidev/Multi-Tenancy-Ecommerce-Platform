@@ -34,7 +34,7 @@ class ThemePage extends Model
 
     public function page_widgets()
     {
-        return $this->hasMany(ThemePageWidget::class);
+        return $this->morphMany(Widget::class, 'ref');
     }
 
     public function type()

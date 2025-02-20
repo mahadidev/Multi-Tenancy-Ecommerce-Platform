@@ -22,8 +22,9 @@ class ThemeResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'thumbnail' => $this->thumbnail_image,
-            'widgets' => $this->widgets ? ThemeWidgetResource::collection($this->widgets) : [],
+            'is_active' => $this->is_active,
             'pages' => $this->pages ? ThemePageResource::collection($this->pages) : [],
+            'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
 
         ];
     }
