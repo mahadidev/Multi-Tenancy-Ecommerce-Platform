@@ -34,7 +34,7 @@ class WidgetInputTypeSeeder extends Seeder
         foreach ($types as $type) {
             WidgetInputType::updateOrCreate(
                 ['value' => $type['type']], // Check if 'value' exists
-                ['label' => $type['type']]  // Update or insert
+                ['label' => $type['label']]  // Update or insert
             );
         }
     }

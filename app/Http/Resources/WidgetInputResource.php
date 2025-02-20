@@ -25,7 +25,7 @@ class WidgetInputResource extends JsonResource
             'options' => isset($this->options) ? json_decode($this->options) : [],
             'widget_id' => $this->widget_id,
             'parent_id' => $this->parent_id,
-            "child" => WidgetInputResource::collection($this->child),
+            "child" => $this->child ? WidgetInputResource::collection($this->child) : [],
             'type' => $this->type ? WidgetInputTypeResource::make($this->type)  : [],
             'created_at' => isset($this->created_at) ? date('d M, Y | h:i A', strtotime($this->created_at)) : "",
             'updated_at' => isset($this->updated_at) ? date('d M, Y | h:i A', strtotime($this->updated_at)) : "",
