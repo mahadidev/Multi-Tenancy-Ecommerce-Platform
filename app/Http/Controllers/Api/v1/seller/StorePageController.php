@@ -110,6 +110,7 @@ class StorePageController extends Controller
                     'label' => $widget['label'],
                     'type_id' => $widget['widget_type_id'] ?? 3,
                     'serial' => isset($widget['serial']) ? $widget['serial'] : $key + 1,
+                    'thumbnail' => $widget['thumbnail'] ?? null,
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);
@@ -255,6 +256,7 @@ class StorePageController extends Controller
                     'label' => $widget['label'],
                     'type_id' => $widget['widget_type_id'] ?? null,
                     'serial' => isset($widget['serial']) ? $widget['serial'] : $key + 1,
+                    'thumbnail' => $widget['thumbnail'] ?? null,
                 ];
 
                 $storePageWidget = $storePage->widgets()->create($widgetData);

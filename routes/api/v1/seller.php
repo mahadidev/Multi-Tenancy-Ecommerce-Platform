@@ -57,11 +57,11 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::delete('stores/pages/widgets/{pageWidgetId}/inputs/delete/{id}', [StorePageWidgetInputController::class, 'destroy']);
 
     // Store Page Widget Input Items Routes
-    Route::get('stores/pages/widgets/inputs/{inputId}/items', [StorePageWidgetInputItemController::class, 'index']);
-    Route::get('stores/pages/widgets/inputs/{inputId}/items/{id}', [StorePageWidgetInputItemController::class, 'show']);
-    Route::post('stores/pages/widgets/inputs/{inputId}/items/store', [StorePageWidgetInputItemController::class, 'store']);
-    Route::post('stores/pages/widgets/inputs/{inputId}/items/update/{id}', [StorePageWidgetInputItemController::class, 'update']);
-    Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
+    // Route::get('stores/pages/widgets/inputs/{inputId}/items', [StorePageWidgetInputItemController::class, 'index']);
+    // Route::get('stores/pages/widgets/inputs/{inputId}/items/{id}', [StorePageWidgetInputItemController::class, 'show']);
+    // Route::post('stores/pages/widgets/inputs/{inputId}/items/store', [StorePageWidgetInputItemController::class, 'store']);
+    // Route::post('stores/pages/widgets/inputs/{inputId}/items/update/{id}', [StorePageWidgetInputItemController::class, 'update']);
+    // Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
 
     // customer routes
     Route::resource('customers', CustomerController::class);
@@ -73,13 +73,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
 
     // WidgetInputType Routes
     Route::resource('widget-input-type', WidgetInputTypeController::class);
-
-    // Route::get('stores/widgets/{pageWidgetId}/inputs', [WidgetInputTypeController::class, 'index']);
-    // Route::get('stores/widgets/{pageWidgetId}/inputs/{id}', [WidgetInputTypeController::class, 'show']);
-    // Route::post('stores/widgets/{pageWidgetId}/inputs/store', [WidgetInputTypeController::class, 'store']);
-    // Route::post('stores/widgets/{pageWidgetId}/inputs/update/{id}', [WidgetInputTypeController::class, 'update']);
-    // Route::delete('stores/widgets/{pageWidgetId}/inputs/delete/{id}', [WidgetInputTypeController::class, 'destroy']);
-
     // Route::resource('widget-input', WidgetInputController::class);
 
 });

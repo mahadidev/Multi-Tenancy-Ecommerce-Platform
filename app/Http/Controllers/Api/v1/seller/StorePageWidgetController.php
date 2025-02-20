@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\StorePage;
 use App\Models\StorePageWidgetInput;
 use App\Models\StorePageWidgetInputItem;
-use App\Http\Resources\StorePageWidgetsResource;
+use App\Http\Resources\WidgetResource;
 
 class StorePageWidgetController extends Controller
 {
@@ -37,7 +37,7 @@ class StorePageWidgetController extends Controller
         $response = [
             'status' => 200,
             'data' => [
-                'widgets' => StorePageWidgetsResource::collection($paginated),
+                'widgets' => WidgetResource::collection($paginated),
             ],
         ];
 
@@ -81,95 +81,98 @@ class StorePageWidgetController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget' => new StorePageWidgetsResource($widget),
+                'widget' => new WidgetResource($widget),
             ],
         ], 200);
     }
 
     public function store(Request $request, $pageId)
     {
-        $validatedData = $request->validate([
+        $widget = $request->validate([
             'name' => 'required|string',
             'label' => 'required|string',
             'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
-            'is_editable' => 'nullable|boolean',
-            'widget_type_id' => 'nullable|exists:widget_types,id',
+            'widget_type_id' => 'required|exists:widget_types,id',
+
             'inputs' => 'nullable|array',
+            'inputs.*.parent_id' => 'nullable|exists:widget_inputs,id',
+            'inputs.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
-            'inputs.*.serial' => 'nullable|numeric',
             'inputs.*.placeholder' => 'nullable|string',
             'inputs.*.value' => 'nullable|string',
+            'inputs.*.options' => 'nullable|array',
             'inputs.*.required' => 'nullable|boolean',
-            'inputs.*.type' => 'required|string',
-            'inputs.*.items' => 'nullable|array',
-            'inputs.*.items.*.name' => 'required|string',
-            'inputs.*.items.*.label' => 'required|string',
-            'inputs.*.items.*.placeholder' => 'nullable|string',
-            'inputs.*.items.*.value' => 'nullable|string',
-            'inputs.*.items.*.required' => 'required|boolean',
-            'inputs.*.items.*.type' => 'required|string',
+
+
+            'inputs.child' => 'nullable|array',
+            'inputs.*.child.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
+            'inputs.*.child.*.name' => 'required|string',
+            'inputs.*.child.*.label' => 'required|string',
+            'inputs.*.child.*.placeholder' => 'nullable|string',
+            'inputs.*.child.*.value' => 'nullable|string',
+            'inputs.*.child.*.options' => 'nullable|array',
+            'inputs.*.child.*.required' => 'nullable|boolean',
         ]);
 
-        $storePage = StorePage::where('id', $pageId)->first();
+        $storePage = StorePage::authorized()->where('id', $pageId)->first();
 
         if (!$storePage) {
             return response()->json([
                 'status' => 404,
-                'message' => 'Page not found',
+                'message' => 'Store Page not found',
             ], 404);
         }
 
-        $widget = [
-            'name' => $request->name,
-            'label' => $request->label,
-            'serial' => $request->serial,
-            'is_editable' => $request->is_editable ?? 1,
-            'widget_type_id' => $request->widget_type_id ?? null
+        $widgetData = [
+            'name' => $widget['name'],
+            'label' => $widget['label'],
+            'type_id' => $widget['widget_type_id'] ?? 3,
+            'thumbnail' => $widget['thumbnail'] ?? null,
         ];
-        if ($request->serial) {
-            $widget["serial"] = $request->serial;
-        }
-        $pageWidget = $storePage->widgets()->create($widget);
 
-        if ($request->has('inputs')) {
-            $pageWidget->widgetInputs()->delete();
+        $storePageWidget = $storePage->widgets()->create($widgetData);
 
-            foreach ($request->inputs as $key => $input) {
-                $pageWidgetInput = StorePageWidgetInput::create([
-                    'widget_id' => $pageWidget->id,
+        // Create the inputs for the widget
+        if (isset($widget['inputs'])) {
+            foreach ($widget['inputs'] as $key2 => $input) {
+                $inputData = [
+                    'parent_id' => isset($input['parent_id']) ? $input['parent_id'] : null,
+                    'type_id' => $input['input_type_id'],
                     'name' => $input['name'],
                     'label' => $input['label'],
-                    'serial' => $input['serial'] ?? $key + 1,
                     'placeholder' => $input['placeholder'] ?? null,
                     'value' => $input['value'] ?? null,
-                    'required' => $input['required'] ?? null,
-                    'type' => $input['type'],
-                ]);
+                    'options' => isset($input['options']) ?  json_encode($input['options']) : null,
+                    'required' => $input['required'] ?? false,
+                ];
 
-                if (isset($input['items'])) {
-                    $pageWidgetInput->items()->delete();
+                $storePageWidgetInput = $storePageWidget->widgetInputs()->create($inputData);
 
-                    foreach ($input['items'] as $item) {
-                        StorePageWidgetInputItem::create([
-                            'widget_input_id' => $pageWidgetInput->id,
-                            'name' => $item['name'],
-                            'label' => $item['label'],
-                            'placeholder' => $item['placeholder'] ?? null,
-                            'value' => $item['value'],
-                            'required' => $item['required'],
-                            'type' => $item['type'] ?? "text",
-                        ]);
+                if(isset($input['child'])){
+                    foreach ($input['child'] as $key2 => $childInput) {
+                        $inputData = [
+                            'parent_id' => $storePageWidgetInput->id,
+                            'type_id' => $childInput['input_type_id'],
+                            'name' => $childInput['name'],
+                            'label' => $childInput['label'],
+                            'placeholder' => $childInput['placeholder'] ?? null,
+                            'value' => $childInput['value'] ?? null,
+                            'options' => isset($childInput['options']) ? json_encode($childInput['options']) : null,
+                            'required' => $childInput['required'] ?? false,
+                        ];
+
+                        $storePageWidgetInputChild = $storePageWidget->widgetInputs()->create($inputData);
                     }
                 }
             }
         }
-
+     
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget' => new StorePageWidgetsResource($pageWidget),
+                'widget' => new WidgetResource($storePageWidget),
             ],
         ], 200);
     }
@@ -177,30 +180,34 @@ class StorePageWidgetController extends Controller
     public function update(Request $request, $pageId, $widgetId)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string',
-            'label' => 'required|string',
+            'name' => 'nullable|string',
+            'label' => 'nullable|string',
             'serial' => 'nullable|numeric',
             'thumbnail' => 'nullable|string',
-            'is_editable' => 'nullable|boolean',
             'widget_type_id' => 'nullable|exists:widget_types,id',
+
             'inputs' => 'nullable|array',
+            'inputs.*.parent_id' => 'nullable|exists:widget_inputs,id',
+            'inputs.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
             'inputs.*.name' => 'required|string',
             'inputs.*.label' => 'required|string',
-            'inputs.*.serial' => 'nullable|numeric',
             'inputs.*.placeholder' => 'nullable|string',
             'inputs.*.value' => 'nullable|string',
-            'inputs.*.required' => 'required|boolean',
-            'inputs.*.type' => 'required|string',
-            'inputs.*.items' => 'nullable|array',
-            'inputs.*.items.*.name' => 'required|string',
-            'inputs.*.items.*.label' => 'required|string',
-            'inputs.*.items.*.placeholder' => 'nullable|string',
-            'inputs.*.items.*.value' => 'nullable|string',
-            'inputs.*.items.*.required' => 'required|boolean',
-            'inputs.*.items.*.type' => 'required|string',
+            'inputs.*.options' => 'nullable|array',
+            'inputs.*.required' => 'nullable|boolean',
+
+
+            'inputs.child' => 'nullable|array',
+            'inputs.*.child.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
+            'inputs.*.child.*.name' => 'required|string',
+            'inputs.*.child.*.label' => 'required|string',
+            'inputs.*.child.*.placeholder' => 'nullable|string',
+            'inputs.*.child.*.value' => 'nullable|string',
+            'inputs.*.child.*.options' => 'nullable|array',
+            'inputs.*.child.*.required' => 'nullable|boolean',
         ]);
 
-        $storePage = StorePage::where('id', $pageId)->first();
+        $storePage = StorePage::authorized()->where('id', $pageId)->first();
 
         if (!$storePage) {
             return response()->json([
@@ -219,50 +226,55 @@ class StorePageWidgetController extends Controller
         }
 
         $pageWidget->update([
-            'name' => $request->name,
-            'label' => $request->label,
-            'serial' => $request->serial ?? $pageWidget->serial,
-            'is_editable' => $request->is_editable,
-            'widget_type_id' => $request->widget_type_id ?  $request->widget_type_id : $pageWidget->widget_type_id,
+            'name' => isset($validatedData['name']) ? $validatedData['name'] : $pageWidget->name,
+            'label' => isset($validatedData['label']) ? $validatedData['label'] : $pageWidget->label,
+            'serial' => isset($validatedData['serial']) ? $validatedData['serial'] : $pageWidget->serial,
+            'thumbnail' => isset($validatedData['thumbnail']) ? $validatedData['thumbnail'] : $pageWidget->thumbnail,
+            'type_id' => isset($validatedData['widget_type_id']) ? $validatedData['widget_type_id'] : $pageWidget->type_id,
         ]);
 
-        if ($request->has('inputs')) {
+        if (isset($validatedData['inputs'])) {
+
             $pageWidget->widgetInputs()->delete();
 
-            foreach ($request->inputs as $key => $input) {
-                $pageWidgetInput = StorePageWidgetInput::create([
-                    'widget_id' => $pageWidget->id,
+            foreach ($validatedData['inputs'] as $key2 => $input) {
+                $inputData = [
+                    'parent_id' => isset($input['parent_id']) ? $input['parent_id'] : null,
+                    'type_id' => $input['input_type_id'],
                     'name' => $input['name'],
                     'label' => $input['label'],
-                    'serial' => isset($input['serial']) ? $input['serial'] : ($key + 1),
-                    'placeholder' => $input['placeholder'],
-                    'value' => $input['value'],
-                    'required' => $input['required'],
-                    'type' => $input['type'],
-                ]);
+                    'placeholder' => $input['placeholder'] ?? null,
+                    'value' => $input['value'] ?? null,
+                    'options' => isset($input['options']) ?  json_encode($input['options']) : null,
+                    'required' => $input['required'] ?? false,
+                ];
 
-                if (isset($input['items'])) {
-                    $pageWidgetInput->items()->delete();
+                $storePageWidgetInput = $pageWidget->widgetInputs()->create($inputData);
 
-                    foreach ($input['items'] as $item) {
-                        StorePageWidgetInputItem::create([
-                            'widget_input_id' => $pageWidgetInput->id,
-                            'name' => $item['name'],
-                            'label' => $item['label'],
-                            'placeholder' => $input['placeholder'],
-                            'value' => $input['value'],
-                            'required' => $input['required'],
-                            'type' => $input['type'],
-                        ]);
+                if(isset($input['child'])){
+                    foreach ($input['child'] as $key3 => $childInput) {
+                        $inputData = [
+                            'parent_id' => $storePageWidgetInput->id,
+                            'type_id' => $childInput['input_type_id'],
+                            'name' => $childInput['name'],
+                            'label' => $childInput['label'],
+                            'placeholder' => $childInput['placeholder'] ?? null,
+                            'value' => $childInput['value'] ?? null,
+                            'options' => isset($childInput['options']) ? json_encode($childInput['options']) : null,
+                            'required' => $childInput['required'] ?? false,
+                        ];
+
+                        $storePageWidgetInputChild = $pageWidget->widgetInputs()->create($inputData);
                     }
                 }
             }
         }
+     
 
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget' => new StorePageWidgetsResource($pageWidget),
+                'widget' => new WidgetResource($pageWidget),
             ],
         ], 200);
     }
