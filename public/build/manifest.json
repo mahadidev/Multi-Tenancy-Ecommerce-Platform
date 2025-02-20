@@ -11,7 +11,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-BKJ5YXMt.css",
+    "file": "assets/app-B79eeVkt.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -46,7 +46,7 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-Bq_RY2Kb.js",
+    "file": "assets/index-BjReyexg.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
@@ -55,7 +55,7 @@
       "_registeredTheme-DfT8xnrn.js"
     ],
     "css": [
-      "assets/index-CZRQiiOm.css"
+      "assets/index-w8qghvPX.css"
     ]
   },
   "resources/js/site/index.tsx": {

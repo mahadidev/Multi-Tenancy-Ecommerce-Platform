@@ -19,8 +19,9 @@ import {
     Textarea,
     TextInput,
 } from "flowbite-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa";
 import { HiHome } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import CreateVariantModal from "./CreateVariantModal";
@@ -31,6 +32,7 @@ const ProductEditPage = () => {
     const { update, product, fetchProduct, removeVariant } = useProduct();
     const { brands } = useBrand();
     const { getSlug } = useString();
+    const [attachments, setAttachments] = useState<string[]>([""]);
     const { handleChange, formState, formErrors, setFormState } = useForm({
         default: {
             id: product?.id || "",
@@ -45,6 +47,7 @@ const ProductEditPage = () => {
             description: product?.description,
             short_description: product?.short_description,
             variants: product?.variants,
+            attachments: product?.attachments || [],
         },
     });
     const { toaster } = useToast();
@@ -61,6 +64,7 @@ const ProductEditPage = () => {
 
     useEffect(() => {
         if (product) {
+            setAttachments(product?.attachments || []);
             setFormState({
                 id: product?.id || "",
                 name: product?.name || "",
@@ -74,6 +78,7 @@ const ProductEditPage = () => {
                 description: product?.description,
                 short_description: product?.short_description,
                 variants: product?.variants,
+                attachments: product?.attachments || [],
             });
         }
     }, [product]);
@@ -365,6 +370,68 @@ const ProductEditPage = () => {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="flex flex-col gap-2 col-span-full">
+                                    <Label htmlFor="thumbnail">Images</Label>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {" "}
+                                        {attachments?.map((_, idx: number) => (
+                                            <div key={idx} className="relative">
+                                                <FileInput
+                                                    id={`attachment-${idx}`}
+                                                    name="attachments"
+                                                    placeholder="Click to upload image"
+                                                    value={attachments[idx]}
+                                                    onChange={(
+                                                        event: React.ChangeEvent<HTMLInputElement>
+                                                    ) => {
+                                                        setAttachments(
+                                                            attachments.map(
+                                                                (item, i) =>
+                                                                    i === idx
+                                                                        ? event
+                                                                              ?.target
+                                                                              ?.value
+                                                                        : item
+                                                            )
+                                                        );
+                                                    }}
+                                                    required
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setAttachments(
+                                                            attachments.filter(
+                                                                (_, i) =>
+                                                                    i !== idx
+                                                            )
+                                                        );
+                                                    }}
+                                                    className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[99999999]"
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="w-[200px]">
+                                        <Button
+                                            size="sm"
+                                            color="primary"
+                                            onClick={() =>
+                                                setAttachments(
+                                                    (prev: string[]) => [
+                                                        ...prev,
+                                                        "",
+                                                    ]
+                                                )
+                                            }
+                                        >
+                                            <FaPlus /> &nbsp;&nbsp; Add image
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -378,6 +445,7 @@ const ProductEditPage = () => {
                                 formData: {
                                     ...formState,
                                     variants: product?.variants,
+                                    attachments,
                                 },
                                 onSuccess: () => {
                                     toaster({
