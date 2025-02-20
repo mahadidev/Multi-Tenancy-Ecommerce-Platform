@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api\v1\seller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\StorePage;
-use App\Models\StorePageWidgetInput;
-use App\Models\StorePageWidgetInputItem;
 use App\Http\Resources\WidgetResource;
 
 class StorePageWidgetController extends Controller

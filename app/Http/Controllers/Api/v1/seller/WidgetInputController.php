@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\StorePageWidget;
+use App\Models\Widget;
 use App\Http\Resources\WidgetInputResource;
 
 class WidgetInputController extends Controller
@@ -14,7 +15,7 @@ class WidgetInputController extends Controller
         $sort = $request->input('sort'); // Sort order, 
         $perPage = $request->input('per_page'); // Items per page, 
 
-        $pageWidget = StorePageWidget::with('widgetInputs')->find($pageWidgetId);
+        $pageWidget = Widget::with('widgetInputs')->find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);
@@ -72,7 +73,7 @@ class WidgetInputController extends Controller
             'items.*.type' => 'required|string',
         ]);
 
-        $pageWidget = StorePageWidget::find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
@@ -97,7 +98,7 @@ class WidgetInputController extends Controller
 
     public function show(Request $request, $pageWidgetId, $id)
     {
-        $pageWidget = StorePageWidget::with('widgetInputs')->find($pageWidgetId);
+        $pageWidget = Widget::with('widgetInputs')->find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
@@ -136,7 +137,7 @@ class WidgetInputController extends Controller
             'items.*.type' => 'required|string',
         ]);
 
-        $pageWidget = StorePageWidget::find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
@@ -167,7 +168,7 @@ class WidgetInputController extends Controller
 
     public function destroy(Request $request, $pageWidgetId, $id)
     {
-        $pageWidget = StorePageWidget::find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);

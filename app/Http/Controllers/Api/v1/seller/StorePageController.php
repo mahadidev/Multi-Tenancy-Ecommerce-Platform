@@ -5,14 +5,8 @@ namespace App\Http\Controllers\Api\v1\seller;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StorePagesResource;
 use App\Http\Resources\StoreResource;
-use App\Models\Store;
 use App\Models\StorePage;
-use App\Models\StorePageWidget;
-use App\Models\ThemeWidget;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class StorePageController extends Controller
 {

@@ -56,13 +56,6 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     Route::post('stores/pages/widgets/{pageWidgetId}/inputs/update/{id}', [StorePageWidgetInputController::class, 'update']);
     Route::delete('stores/pages/widgets/{pageWidgetId}/inputs/delete/{id}', [StorePageWidgetInputController::class, 'destroy']);
 
-    // Store Page Widget Input Items Routes
-    // Route::get('stores/pages/widgets/inputs/{inputId}/items', [StorePageWidgetInputItemController::class, 'index']);
-    // Route::get('stores/pages/widgets/inputs/{inputId}/items/{id}', [StorePageWidgetInputItemController::class, 'show']);
-    // Route::post('stores/pages/widgets/inputs/{inputId}/items/store', [StorePageWidgetInputItemController::class, 'store']);
-    // Route::post('stores/pages/widgets/inputs/{inputId}/items/update/{id}', [StorePageWidgetInputItemController::class, 'update']);
-    // Route::delete('stores/pages/widgets/inputs/{inputId}/items/delete/{id}', [StorePageWidgetInputItemController::class, 'destroy']);
-
     // customer routes
     Route::resource('customers', CustomerController::class);
     Route::get('customers/generate/pdf', [CustomerController::class, 'pdf']);

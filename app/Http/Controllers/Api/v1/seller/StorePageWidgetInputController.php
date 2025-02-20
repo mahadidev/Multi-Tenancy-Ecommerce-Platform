@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StorePageWidgetInputsResource;
-use App\Models\StorePageWidget;
+use App\Http\Resources\WidgetInputResource;
+use App\Models\Widget;
+use App\Models\WidgetInput;
 use Illuminate\Http\Request;
 
 class StorePageWidgetInputController extends Controller
@@ -15,7 +16,7 @@ class StorePageWidgetInputController extends Controller
         $sort = $request->input('sort'); // Sort order, 
         $perPage = $request->input('per_page'); // Items per page, 
 
-        $pageWidget = StorePageWidget::with('widgetInputs')->find($pageWidgetId);
+        $pageWidget = Widget::with('widgetInputs')->find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);
@@ -33,7 +34,7 @@ class StorePageWidgetInputController extends Controller
         $response = [
             'status' => 200,
             'data' => [
-                'widget_inputs' => StorePageWidgetInputsResource::collection($paginated),
+                'widget_inputs' => WidgetInputResource::collection($paginated),
             ],
         ];
 
@@ -56,88 +57,108 @@ class StorePageWidgetInputController extends Controller
 
     public function store(Request $request,  $pageWidgetId)
     {
-        $request->validate([
+        $validateData =$request->validate([
+            'parent_id' => 'nullable|exists:widget_inputs,id',
+            'input_type_id' => ['required', 'exists:widget_input_types,id'],
             'name' => 'required|string',
             'label' => 'required|string',
-            'serial' => 'required|numeric',
             'placeholder' => 'nullable|string',
             'value' => 'nullable|string',
-            'required' => 'required|boolean',
-            'type' => 'nullable|string',
-            'items' => 'nullable|array',
-            'items.*.name' => 'required|string',
-            'items.*.label' => 'required|string',
-            'items.*.placeholder' => 'nullable|string',
-            'items.*.value' => 'nullable|string',
-            'items.*.required' => 'required|boolean',
-            'items.*.type' => 'required|string',
+            'options' => 'nullable|array',
+            'required' => 'nullable|boolean',
+
+
+            'child' => 'nullable|array',
+            'child.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
+            'child.*.name' => 'required|string',
+            'child.*.label' => 'required|string',
+            'child.*.placeholder' => 'nullable|string',
+            'child.*.value' => 'nullable|string',
+            'child.*.options' => 'nullable|array',
+            'child.*.required' => 'nullable|boolean',
         ]);
 
-        $pageWidget = StorePageWidget::find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
         }
 
-        $pageWidgetInput =  $pageWidget->widgetInputs()->create($request->all());
+        $inputData = [
+            'parent_id' => isset($validateData['parent_id']) ? $validateData['parent_id'] : null,
+            'type_id' => $validateData['input_type_id'],
+            'name' => $validateData['name'],
+            'label' => $validateData['label'],
+            'placeholder' => $validateData['placeholder'] ?? null,
+            'value' => $validateData['value'] ?? null,
+            'options' => isset($validateData['options']) ?  json_encode($validateData['options']) : null,
+            'required' => $validateData['required'] ?? false,
+        ];
 
-        if ($request->has('items')) {
+        $storePageWidgetInput = $pageWidget->widgetInputs()->create($inputData);
 
-            $pageWidgetInput->items()->delete();
-            $pageWidgetInput->items()->createMany($request->items);
+        if(isset($validateData['child'])){
+            foreach ($validateData['child'] as $key2 => $childInput) {
+                $inputData = [
+                    'parent_id' => $storePageWidgetInput->id,
+                    'type_id' => $childInput['input_type_id'],
+                    'name' => $childInput['name'],
+                    'label' => $childInput['label'],
+                    'placeholder' => $childInput['placeholder'] ?? null,
+                    'value' => $childInput['value'] ?? null,
+                    'options' => isset($childInput['options']) ? json_encode($childInput['options']) : null,
+                    'required' => $childInput['required'] ?? false,
+                ];
+
+                $storePageWidgetInputChild = $pageWidget->widgetInputs()->create($inputData);
+            }
         }
 
         return response()->json([
             'status' => 200,
             'message' => 'Page Widget Input created successfully',
             'data' => [
-                'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput)      
+                'widget_input' => new WidgetInputResource($storePageWidgetInput)      
             ]
         ], 200);
     }
 
     public function show(Request $request, $pageWidgetId, $id)
     {
-        $pageWidget = StorePageWidget::with('widgetInputs')->find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
-            return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
+            return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);
         }
 
-        $pageWidgetInput = $pageWidget->widgetInputs()->find($id);
+        $pageWidgetInput = WidgetInput::find($id);
 
         if (!$pageWidgetInput) {
-            return response()->json([ 'status' => 404 ,'message' => 'Widget Input not found']);
+            return response()->json([ 'status' => 404 ,'message' => 'Widget Input not found'], 404);
         }
 
         return response()->json([
             'status' => 200,
             'data' => [
-                'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput) 
+                'widget_input' => new WidgetInputResource($pageWidgetInput) 
             ]
         ], 200);
     }
 
     public function update(Request $request, $pageWidgetId, $id)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'label' => 'required|string',
-            'serial' => 'required|numeric',
+        $validateData =$request->validate([
+            'parent_id' => 'nullable|exists:widget_inputs,id',
+            'input_type_id' => ['nullable', 'exists:widget_input_types,id'],
+            'name' => 'nullable|string',
+            'label' => 'nullable|string',
             'placeholder' => 'nullable|string',
             'value' => 'nullable|string',
-            'required' => 'required|boolean',
-            'type' => 'nullable|string',
-            'items' => 'nullable|array',
-            'items.*.name' => 'required|string',
-            'items.*.label' => 'required|string',
-            'items.*.placeholder' => 'nullable|string',
-            'items.*.value' => 'nullable|string',
-            'items.*.required' => 'required|boolean',
-            'items.*.type' => 'required|string',
+            'options' => 'nullable|array',
+            'required' => 'nullable|boolean',
         ]);
 
-        $pageWidget = StorePageWidget::find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found']);
@@ -149,26 +170,29 @@ class StorePageWidgetInputController extends Controller
             return response()->json([ 'status' => 404 ,'message' => 'Widget Input not found']);
         }
 
-        $pageWidgetInput->update($request->all());
+        $pageWidgetInput->update([
+            'parent_id' => isset($validateData['parent_id']) ? $validateData['parent_id'] : $pageWidgetInput->parent_id,
+            'type_id' => isset($validateData['input_type_id']) ? $validateData['input_type_id'] : $pageWidgetInput->type_id,
+            'name' => isset($validateData['name']) ? $validateData['name'] : $pageWidgetInput->name,
+            'label' => isset($validateData['label']) ? $validateData['label'] : $pageWidgetInput->label,
+            'placeholder' => isset($validateData['placeholder']) ? $validateData['placeholder'] : $pageWidgetInput->placeholder,
+            'value' => isset($validateData['value']) ? $validateData['value'] : $pageWidgetInput->value,
+            'options' => isset($validateData['options']) ? json_encode($validateData['options']) : $pageWidgetInput->options,
+            'required' => isset($validateData['required']) ? $validateData['required'] : $pageWidgetInput->required,
+        ]);
 
-        if ($request->has('items')) {
-
-            $pageWidgetInput->items()->delete();
-            $pageWidgetInput->items()->createMany($request->items);
-        }
-        
         return response()->json([
             'status' => 200,
             'message' => 'Page Widget Input updated successfully',
             'data' => [
-                'widget_input' => new StorePageWidgetInputsResource($pageWidgetInput) 
+                'widget_input' => new WidgetInputResource($pageWidgetInput) 
             ]
         ]);
     }
 
     public function destroy(Request $request, $pageWidgetId, $id)
     {
-        $pageWidget = StorePageWidget::find($pageWidgetId);
+        $pageWidget = Widget::find($pageWidgetId);
 
         if (!$pageWidget) {
             return response()->json([ 'status' => 404 ,'message' => 'Widget not found'], 404);
