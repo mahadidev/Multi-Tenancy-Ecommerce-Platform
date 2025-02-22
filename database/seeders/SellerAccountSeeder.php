@@ -10,6 +10,7 @@ use App\Models\StorePageWidget;
 use App\Models\StorePageWidgetInput;
 use App\Models\StorePageWidgetInputItem;
 use App\Models\StoreType;
+use App\Models\StoreSession;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -60,6 +61,15 @@ class SellerAccountSeeder extends Seeder
                 'store_type_id' => StoreType::first()->id,
             ]
         );
+
+        // Create a new store session
+        StoreSession::updateOrCreate(
+            [
+                'store_id' => $store->id, // Search criteria
+            ],
+            [
+                'user_id' => $user->id,
+            ]);   
 
         $theme = Theme::with('pages.page_widgets')->with("widgets")->first();
         $themeData = new \App\Http\Resources\ThemeResource($theme);
