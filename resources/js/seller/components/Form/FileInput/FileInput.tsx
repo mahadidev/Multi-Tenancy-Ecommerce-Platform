@@ -162,6 +162,12 @@ const FileInput: FC<
                                         selectedFile={selectedFile}
                                         setSelectedFile={setSelectedFile}
                                         files={files}
+                                        onUploaded={(
+                                            uploadedImage: FileType
+                                        ) => {
+                                            setActiveTab("gallery");
+                                            setSelectedFile(uploadedImage);
+                                        }}
                                     />
                                 )}
                             </>

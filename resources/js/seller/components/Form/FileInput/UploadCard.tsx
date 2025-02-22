@@ -92,11 +92,7 @@ const UploadCard: FC<PropsType> = function (props) {
                     </label>
                 </div>
             </FileUploader>
-            {/* <img
-                        style={{ width: "100%", display: "block" }}
-                        src={file.url}
-                        key={index}
-                    /> */}
+
             <div className="grid grid-cols-2">
                 <ImageCropper
                     image={image!}
@@ -104,14 +100,6 @@ const UploadCard: FC<PropsType> = function (props) {
                 />
             </div>
 
-            {/* <div className="absolute w-full h-full top-0 left-0 right-0 bg-gray-900/75 flex justify-center items-center p-5">
-                                <div className="w-full text-center dark:text-white overflow-hidden ">
-                                    <h2 className="w-max block">{image.name}</h2>
-                                    <p>
-                                        {image.width}px * {image.height}px
-                                    </p>
-                                </div>
-                            </div> */}
             {upload.error && "message" in upload.error && (
                 <ErrorMessage>{upload.error.message}</ErrorMessage>
             )}
