@@ -6,6 +6,7 @@ import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
 import { FileInput } from "../../components";
 
@@ -17,6 +18,7 @@ const CreateProductModal: FC = function () {
         formValidationError: create.error,
     });
     const { getSlug } = useString();
+    const [attachments, setAttachments] = useState<string[]>([""]);
 
     return (
         <>
@@ -207,6 +209,62 @@ const CreateProductModal: FC = function () {
                                 />
                             </div>
                         </div>
+                        <div className="flex flex-col gap-2 col-span-full">
+                            <Label htmlFor="thumbnail">Images</Label>
+                            <div className="grid grid-cols-2 gap-2">
+                                {" "}
+                                {attachments?.map((_, idx: number) => (
+                                    <div key={idx} className="relative">
+                                        <FileInput
+                                            id={`attachment-${idx}`}
+                                            name="attachments"
+                                            placeholder="Click to upload image"
+                                            value={attachments[idx]}
+                                            onChange={(
+                                                event: React.ChangeEvent<HTMLInputElement>
+                                            ) => {
+                                                setAttachments(
+                                                    attachments.map((item, i) =>
+                                                        i === idx
+                                                            ? event?.target
+                                                                  ?.value
+                                                            : item
+                                                    )
+                                                );
+                                            }}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setAttachments(
+                                                    attachments.filter(
+                                                        (_, i) => i !== idx
+                                                    )
+                                                );
+                                            }}
+                                            className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[99999999]"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="grid grid-cols-2">
+                                <Button
+                                    size="sm"
+                                    color="primary"
+                                    onClick={() =>
+                                        setAttachments((prev: string[]) => [
+                                            ...prev,
+                                            "",
+                                        ])
+                                    }
+                                >
+                                    <FaPlus /> &nbsp;&nbsp; Add image
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -214,7 +272,10 @@ const CreateProductModal: FC = function () {
                         color="primary"
                         onClick={() => {
                             create.submit({
-                                formData: formState,
+                                formData: {
+                                    ...formState,
+                                    attachments,
+                                },
                                 onSuccess: () => {
                                     setOpen(false);
                                     setFormState({});

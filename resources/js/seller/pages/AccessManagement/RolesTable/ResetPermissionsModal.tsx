@@ -9,14 +9,14 @@ interface PropsType {
     role: RoleType;
 }
 
-const RevokeRolePermissionModal: FC<PropsType> = function (props) {
+const ResetPermissionsModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const { revokePermission } = useRolePermission();
     return (
         <>
             <Button color="red" className="p-0" onClick={() => setOpen(true)}>
                 <div className="flex items-center gap-x-3">
-                    Revoke Permission
+                    Reset Permissions
                 </div>
             </Button>
 
@@ -72,4 +72,4 @@ const RevokeRolePermissionModal: FC<PropsType> = function (props) {
         </>
     );
 };
-export default RevokeRolePermissionModal;
+export default ResetPermissionsModal;
