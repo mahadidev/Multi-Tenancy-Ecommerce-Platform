@@ -124,10 +124,23 @@ class AuthController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'email' => 'required|string|email|unique:users,email',
+            'email' => 'required|string|email',
             'password' => 'required',
             'confirm_password' => 'required|same:password',
         ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            // Check if the user hase store session
+            $storeSession = $user->storeSession()->count();
+            if ($storeSession > 0) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Email already registered, please register with a different email',
+                ], 400);
+            }
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -483,7 +496,6 @@ class AuthController extends Controller
 
         try {
             if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
-
                 Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $userName, $storeName ?? null));
                 return response()->json([
                     'status' => 200,

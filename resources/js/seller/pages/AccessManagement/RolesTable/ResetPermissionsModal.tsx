@@ -1,30 +1,25 @@
 import useRolePermission from "@seller/hooks/useRolePermissions";
-import { PermissionType } from "@type/rolePermissionsType";
+import { RoleType } from "@type/rolePermissionsType";
 import { Button, Modal } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { HiOutlineExclamationCircle, HiTrash } from "react-icons/hi";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 interface PropsType {
-    permission: PermissionType;
+    role: RoleType;
 }
 
-const DeletePermissionModal: FC<PropsType> = function (props) {
+const ResetPermissionsModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const { deletePermission } = useRolePermission();
+    const { revokePermission } = useRolePermission();
     return (
         <>
-            <Button
-                size="sm"
-                color="gray"
-                className="p-0"
-                onClick={() => setOpen(true)}
-            >
-                <div className="flex items-center gap-x-2">
-                    <HiTrash className="h-5 w-5" />
-                    Delete Permission
+            <Button color="red" className="p-0" onClick={() => setOpen(true)}>
+                <div className="flex items-center gap-x-3">
+                    Reset Permissions
                 </div>
             </Button>
+
             <Modal onClose={() => setOpen(false)} show={isOpen} size="md">
                 <Modal.Header className="border-none p-2">
                     <span className="sr-only">Delete Permission</span>
@@ -33,26 +28,26 @@ const DeletePermissionModal: FC<PropsType> = function (props) {
                     <div className="flex flex-col items-center gap-y-6 text-center">
                         <HiOutlineExclamationCircle className="mx-auto h-20 w-20 text-red-600" />
                         <p className="text-xl font-normal text-gray-500 dark:text-gray-400">
-                            Are you sure you want to delete this{" "}
-                            {props.permission.name}?
+                            Are you sure you want to revoke permissions of this{" "}
+                            {props.role.name}?
                         </p>
                         <div className="flex items-center gap-x-3">
                             <Button
                                 color="gray"
                                 theme={{ base: "px-0" }}
                                 onClick={() => {
-                                    deletePermission.submit({
+                                    revokePermission.submit({
                                         formData: {
-                                            id: props.permission.id,
+                                            role_id: props?.role?.id,
                                         },
                                         onSuccess: () => {
                                             setOpen(false);
                                         },
                                     });
                                 }}
-                                isProcessing={deletePermission.isLoading}
-                                disabled={deletePermission.isLoading}
-                                processingLabel="Deleting"
+                                isProcessing={revokePermission.isLoading}
+                                disabled={revokePermission.isLoading}
+                                processingLabel="Revoking"
                                 processingSpinner={
                                     <AiOutlineLoading className="animate-spin" />
                                 }
@@ -77,4 +72,4 @@ const DeletePermissionModal: FC<PropsType> = function (props) {
         </>
     );
 };
-export default DeletePermissionModal;
+export default ResetPermissionsModal;

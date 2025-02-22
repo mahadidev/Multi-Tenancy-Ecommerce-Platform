@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class WelcomeSellerAdmin extends Mailable
+class WelcomeCustomerMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,25 +18,25 @@ class WelcomeSellerAdmin extends Mailable
      */
     public $user;
     public $store;
-    public $role;
     public $logoUrl;
     public $domain;
+    public $password;
 
-    public function __construct($user, $store, $role, $logoUrl, $domain)
+    public function __construct($user, $store, $logoUrl, $domain, $password)
     {
         $this->user = $user;
         $this->store = $store;
-        $this->role = $role;
         $this->logoUrl = $logoUrl;
         $this->domain = $domain;
+        $this->password = $password;
     }
    
     /**
      * Get the message envelope.
-     */
+     */ 
     public function build()
     {
-        return $this->subject("Welcome to {$this->store->name} as a {$this->role->name}")
-                    ->view('emails.welcome-seller-admin');
+        return $this->subject("Welcome to the {$this->store->name}")
+                    ->view('emails.welcome-customer');
     }
 }

@@ -6,6 +6,8 @@ use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\ProductVariantOption;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -143,3 +145,4 @@ class ProductController extends Controller
     }
 
 }
+

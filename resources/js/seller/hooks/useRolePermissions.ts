@@ -2,18 +2,14 @@ import {
     AssignPermissionToRolePayloadType,
     RoleIdPayloadType,
     useAssignPermissionToRoleMutation,
-    useCreatePermissionMutation,
     useCreateRoleMutation,
-    useDeletePermissionMutation,
     useDeleteRoleMutation,
     useFetchPermissionsQuery,
     useFetchRolesQuery,
     useRevokePermissionMutation,
-    useUpdatePermissionMutation,
     useUpdateRoleMutation,
 } from "@seller/store/reducers/rolePermissionsApi";
 import { useAppSelector } from "@seller/store/store";
-import { PermissionType } from "@type/rolePermissionsType";
 import useToast from "./useToast";
 
 const useRolePermission = () => {
@@ -67,42 +63,6 @@ const useRolePermission = () => {
         });
     };
 
-    // create permission
-    const [
-        handleCreatePermission,
-        {
-            isLoading: isCreatePermissionLoading,
-            isError: isCreatePermissionError,
-            error: createPermissionError,
-            data: createPermissionData,
-        },
-    ] = useCreatePermissionMutation();
-    const createPermission = ({
-        formData,
-        onSuccess,
-    }: {
-        formData: PermissionType;
-        onSuccess?: CallableFunction;
-    }) => {
-        handleCreatePermission(formData).then((response) => {
-            if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess(response.data.data);
-                }
-
-                toaster({
-                    text: "Permission created successfully.",
-                    status: "success",
-                });
-            } else {
-                toaster({
-                    text: "Failed to create permission",
-                    status: "error",
-                });
-            }
-        });
-    };
-
     // update role
     const [
         handleUpdateRole,
@@ -139,42 +99,6 @@ const useRolePermission = () => {
         });
     };
 
-    // update permission
-    const [
-        handleUpdatePermission,
-        {
-            isLoading: isUpdatePermissionLoading,
-            isError: isUpdatePermissionError,
-            error: updatePermissionError,
-            data: updatePermissionData,
-        },
-    ] = useUpdatePermissionMutation();
-    const updatePermission = ({
-        formData,
-        onSuccess,
-    }: {
-        formData: { name: string; id: number };
-        onSuccess?: CallableFunction;
-    }) => {
-        handleUpdatePermission(formData).then((response) => {
-            if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess(response.data.data);
-                }
-
-                toaster({
-                    text: "Permission updated successfully.",
-                    status: "success",
-                });
-            } else {
-                toaster({
-                    text: "Failed to update permission",
-                    status: "error",
-                });
-            }
-        });
-    };
-
     // assign permission
     const [
         handleAssignPermission,
@@ -197,11 +121,6 @@ const useRolePermission = () => {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
-
-                toaster({
-                    text: "Permission assigned successfully.",
-                    status: "success",
-                });
             } else {
                 toaster({
                     text: "Failed to assign permission",
@@ -283,42 +202,6 @@ const useRolePermission = () => {
         });
     };
 
-    // delete permission
-    const [
-        handleDeletePermission,
-        {
-            isLoading: isDeletePermissionLoading,
-            isError: isDeletePermissionError,
-            error: deletePermissionError,
-            data: deletePermissionData,
-        },
-    ] = useDeletePermissionMutation();
-    const deletePermission = ({
-        formData,
-        onSuccess,
-    }: {
-        formData: { id: number };
-        onSuccess?: CallableFunction;
-    }) => {
-        handleDeletePermission(formData).then((response) => {
-            if (response.data?.status === 200) {
-                if (onSuccess) {
-                    onSuccess(response.data.data);
-                }
-
-                toaster({
-                    text: "Permission deleted successfully.",
-                    status: "success",
-                });
-            } else {
-                toaster({
-                    text: "Failed to delete permission",
-                    status: "error",
-                });
-            }
-        });
-    };
-
     return {
         roles,
         permissions,
@@ -343,28 +226,6 @@ const useRolePermission = () => {
             error: deleteRoleError,
             data: deleteRoleData,
         },
-        createPermission: {
-            submit: createPermission,
-            isLoading: isCreatePermissionLoading,
-            isError: isCreatePermissionError,
-            error: createPermissionError,
-            data: createPermissionData,
-        },
-        updatePermission: {
-            submit: updatePermission,
-            isLoading: isUpdatePermissionLoading,
-            isError: isUpdatePermissionError,
-            error: updatePermissionError,
-            data: updatePermissionData,
-        },
-        deletePermission: {
-            submit: deletePermission,
-            isLoading: isDeletePermissionLoading,
-            isError: isDeletePermissionError,
-            error: deletePermissionError,
-            data: deletePermissionData,
-        },
-
         assignPermission: {
             submit: assignPermission,
             isLoading: isAssignPermissionLoading,

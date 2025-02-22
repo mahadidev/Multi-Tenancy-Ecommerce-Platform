@@ -3,19 +3,33 @@
 namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Exports\CustomersExport;
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Store;
 use App\Http\Resources\CustomerResource;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Mail\WelcomeCustomerMail;
+use App\Mail\VerifyEmail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CustomerController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('permission:view_customer', ['only' => ['index', 'show', 'pdf', 'excel']]);
+    //     $this->middleware('permission:create_customer', ['only' => ['store']]);
+    //     $this->middleware('permission:edit_customer', ['only' => ['update']]);
+    //     $this->middleware('permission:delete_customer', ['only' => ['destroy']]);
+    // }
+
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
@@ -68,6 +82,7 @@ class CustomerController extends Controller
             'image' => 'nullable|string',
         ]);
 
+        $password = false;
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if (is_array($user->store_id) && in_array(authStore(), $user->store_id)) {
@@ -83,14 +98,16 @@ class CustomerController extends Controller
                 }
                 $storeIds = $user->store_id ?? [];
                 $storeIds[] = authStore();
+                $password = true;
                 $user->update([
                     'store_id' => $storeIds,
-                    'address' => $request->address,
-                    'image' => $request->image,
-                    'phone' => $request->phone,
+                    // 'address' => $request->address,
+                    // 'image' => $request->image,
+                    // 'phone' => $request->phone,
                 ]);
             }
         } else {
+            $verificationCode = Str::random(40); // Generate a random verification code
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -99,8 +116,12 @@ class CustomerController extends Controller
                 'store_id' => [authStore()],
                 'address' => $request->address,
                 'image' => $request->image,
+                'verification_code' => $verificationCode,
+                'email_verified_at' => null,
             ]);
         }
+
+        $this->sendWelcomeEmail($user, Store::find(authStore()), $password);
 
         return response()->json([
             'status' => 200,
@@ -109,6 +130,51 @@ class CustomerController extends Controller
                 'customer' => new CustomerResource($user),
             ]
         ], 200);
+    }
+
+    public function sendWelcomeEmail($user, $store, $password = false)
+    {
+        try {
+            if (env('APP_ENV') == 'production' || env('APP_ENV') == 'local') {
+                $appUrl = config('app.url');
+
+                // Ensure we have a trailing slash
+                if (!str_ends_with($appUrl, '/')) {
+                    $appUrl .= '/';
+                }
+
+                // Get store logo URL
+                $logoUrl = null;
+                if ($store->logo) {
+                    $logoUrl = $appUrl . 'storage/' . $store->logo;
+                } else {
+                    $logoUrl = $appUrl . 'images/logo-text.png';
+                }
+
+                // Get domain
+                $domain = null;
+                if (env('APP_URL') == 'http://127.0.0.1:8000') {
+                    $domain = 'http://127.0.0.1:8000/site/login';
+                } else {
+                    $domain = 'https://' . parse_url(env('APP_URL'), PHP_URL_HOST) . '/site/login';
+                }
+                $verificationUrl = url('/site/verify-email?token=' . $user->verification_code);
+
+                if ($user && $user->email) {
+                    Mail::to($user->email)->send(new WelcomeCustomerMail($user, $store, $logoUrl, $domain, $password));
+                    if ($user->email_verified_at == null) {
+                        Mail::to($user->email)->send(new VerifyEmail($verificationUrl, $user->name, $store->name));
+                    }
+                    return true;
+                } else {
+                    Log::info('Customer email not found');
+                }
+            } else {
+                Log::info('Please set APP_ENV to production to send emails');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error sending welcome email: ' . $e->getMessage());
+        }
     }
 
     public function show($id)

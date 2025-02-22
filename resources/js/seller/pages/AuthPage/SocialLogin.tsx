@@ -1,9 +1,7 @@
 import useAuth from "@seller/hooks/useAuth";
-import { Button } from "flowbite-react";
-import { FaFacebookF, FaGoogle } from "react-icons/fa";
 
 const SocialLogin = () => {
-    const { loginWithFacebook, loginWithGoogle } = useAuth();
+    const { loginWithGoogle } = useAuth();
     return (
         <div className="flex flex-col items-center w-full max-w-sm mx-auto">
             <div className="flex items-center w-full mb-4">
@@ -13,22 +11,25 @@ const SocialLogin = () => {
                 </span>
                 <hr className="flex-grow border-gray-300 dark:border-gray-600" />
             </div>
-            <div className="flex space-x-4">
-                <Button
-                    color="blue"
-                    className="!rounded-full !w-16 !h-16"
+            <div className="flex ">
+                {/* <button
+                    type="button"
                     onClick={() => loginWithFacebook.submit()}
+                    className="login-with-google-btn"
+                    disabled
                 >
-                    <FaFacebookF size={20} />
-                </Button>
+                    Sign in with Facebook
+                </button> */}
 
-                <Button
-                    color="light"
-                    className="!rounded-full !w-16 !h-16"
+                <button
+                    type="button"
                     onClick={() => loginWithGoogle.submit()}
+                    className="login-with-google-btn"
                 >
-                    <FaGoogle size={20} />
-                </Button>
+                    {loginWithGoogle?.isLoading
+                        ? "Login inprogress..."
+                        : "Sign in with Google"}
+                </button>
             </div>
         </div>
     );
