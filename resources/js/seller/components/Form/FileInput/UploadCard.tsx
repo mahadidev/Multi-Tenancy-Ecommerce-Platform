@@ -1,4 +1,6 @@
-import { FC } from "react";
+import { ImageCropper } from "@seller/components/ImageCropper/ImageCropper";
+import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
+import { FC, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import useFile from "../../../hooks/useFile";
 import ErrorMessage from "../../Error/ErrorMessage";
@@ -9,22 +11,37 @@ interface PropsType {
 
 const UploadCard: FC<PropsType> = function (props) {
     const { upload } = useFile();
+    const [image, setImage] = useState<string>();
 
-    const handleChange = (file: any) => {
+    // handle image selection
+    const handleChangeFile = (file: File) => {
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setImage(imageUrl);
+        }
+    };
+
+    // handle upload file
+    const onUploadFileToServer = (
+        croppedFile: any,
+        alternate_text: string,
+        tags: string
+    ) => {
         upload.submit({
             formData: {
-                file: file,
+                file: croppedFile,
                 type: "image",
-                alternate_text: "Brand Logo",
-                tags: "Logo,Tags,Brand",
+                alternate_text,
+                tags,
             },
             onSuccess: props.onUploaded,
         });
     };
     return (
-        <div>
+        <div className="relative">
+            <LoadingOverlay isLoading={upload.isLoading} />
             <FileUploader
-                handleChange={handleChange}
+                handleChange={handleChangeFile}
                 name="file"
                 types={["JPG", "PNG", "GIF"]}
             >
@@ -75,7 +92,26 @@ const UploadCard: FC<PropsType> = function (props) {
                     </label>
                 </div>
             </FileUploader>
+            {/* <img
+                        style={{ width: "100%", display: "block" }}
+                        src={file.url}
+                        key={index}
+                    /> */}
+            <div className="grid grid-cols-2">
+                <ImageCropper
+                    image={image!}
+                    onUploadFileToServer={onUploadFileToServer}
+                />
+            </div>
 
+            {/* <div className="absolute w-full h-full top-0 left-0 right-0 bg-gray-900/75 flex justify-center items-center p-5">
+                                <div className="w-full text-center dark:text-white overflow-hidden ">
+                                    <h2 className="w-max block">{image.name}</h2>
+                                    <p>
+                                        {image.width}px * {image.height}px
+                                    </p>
+                                </div>
+                            </div> */}
             {upload.error && "message" in upload.error && (
                 <ErrorMessage>{upload.error.message}</ErrorMessage>
             )}

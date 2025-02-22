@@ -84,7 +84,7 @@ const ProductEditPage = () => {
     }, [product]);
 
     return (
-        <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 relative">
             <div className="mb-4">
                 <Breadcrumb className="mb-5">
                     <Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
@@ -436,7 +436,10 @@ const ProductEditPage = () => {
                         </div>
                     </div>
                 </div>
-                <LoadingOverlay isLoading={fetchProduct.isLoading} />
+                <LoadingOverlay
+                    isLoading={fetchProduct.isLoading}
+                    position="fixed"
+                />
                 <div className="flex justify-end mt-6">
                     <Button
                         color="primary"
