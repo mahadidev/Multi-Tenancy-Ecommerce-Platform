@@ -1,16 +1,11 @@
-import useProduct from "@seller/hooks/useProduct";
 import { RoutePath } from "@seller/seller_env";
-import { useFetchProductsQuery } from "@seller/store/reducers/productApi";
 import { Breadcrumb } from "flowbite-react";
 import { FC } from "react";
 import { HiHome } from "react-icons/hi";
 import ProductsTable from "./ProductsTable";
-import ProductsTablePagination from "./ProductsTablePagination";
 
 const ProductsPage: FC = function () {
-    // fetch Products
-    useFetchProductsQuery();
-    const { meta } = useProduct();
+    // const { meta } = useProduct();
 
     return (
         <>
@@ -44,7 +39,7 @@ const ProductsPage: FC = function () {
                 </div>
             </div>
 
-            {meta && <ProductsTablePagination meta={meta} />}
+            {/* {meta && <ProductsTablePagination meta={meta} />} */}
         </>
     );
 };

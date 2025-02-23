@@ -9,10 +9,7 @@ import DeleteProductModal from "./DeleteProductModal";
 
 const ProductsTable = () => {
     const { products } = useProduct();
-    // Name
-    // SKU
-    // Category
-    // Price
+
     return (
         <>
             <DataTable

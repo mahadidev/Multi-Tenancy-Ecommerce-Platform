@@ -13,21 +13,19 @@ interface Props {
 const EditMenuModal: FC<Props> = ({ menu }) => {
     const [isOpen, setOpen] = useState(false);
     const { update } = useMenu();
-    const [items, setItems] = useState<ItemType[]>([]);
+    const [items, setItems] = useState<ItemType[]>(menu.items || []);
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
     });
 
     useEffect(() => {
-        if (menu.items) {
-            setItems(menu.items);
-        }
         setFormState({
             ...menu,
-            items: items,
+            items,
         });
     }, [menu]);
+
     return (
         <>
             <Button
@@ -45,108 +43,61 @@ const EditMenuModal: FC<Props> = ({ menu }) => {
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="slug">Label</Label>
-                            <div>
-                                <TextInput
-                                    id="label"
-                                    name="label"
-                                    placeholder="Menu label"
-                                    value={formState["label"]}
-                                    color={
-                                        formErrors["label"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["label"]
-                                            ? formErrors["label"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
+                            <Label htmlFor="label">Label</Label>
+                            <TextInput
+                                id="label"
+                                name="label"
+                                placeholder="Menu label"
+                                value={formState["label"]}
+                                color={formErrors["label"] ? "failure" : "gray"}
+                                helperText={formErrors["label"]?.[0] || ""}
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Name</Label>
-                            <div>
-                                <TextInput
-                                    id="name"
-                                    name="name"
-                                    placeholder="Menu name"
-                                    value={formState["name"]}
-                                    color={
-                                        formErrors["name"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["name"]
-                                            ? formErrors["name"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
+                            <TextInput
+                                id="name"
+                                name="name"
+                                placeholder="Menu name"
+                                value={formState["name"]}
+                                color={formErrors["name"] ? "failure" : "gray"}
+                                helperText={formErrors["name"]?.[0] || ""}
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="slug">Visibility</Label>
-                            <div>
-                                <Select
-                                    id="visibility"
-                                    name="visibility"
-                                    value={formState["visibility"]}
-                                    color={
-                                        formErrors["visibility"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["visibility"]
-                                            ? formErrors["visibility"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLSelectElement>
-                                    ) => {
-                                        if (event.target.value === "0") {
-                                            event.target.value = "null";
-                                        }
-                                        handleChange(event);
-                                    }}
-                                    required
-                                >
-                                    <option value={0}>
-                                        Select a Visibility
+                            <Label htmlFor="visibility">Visibility</Label>
+                            <Select
+                                id="visibility"
+                                name="visibility"
+                                value={formState["visibility"]}
+                                color={
+                                    formErrors["visibility"]
+                                        ? "failure"
+                                        : "gray"
+                                }
+                                helperText={formErrors["visibility"]?.[0] || ""}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value={""}>Select a Visibility</option>
+                                {Visibility_Types.map((visibility, idx) => (
+                                    <option value={visibility.value} key={idx}>
+                                        {visibility.label}
                                     </option>
-                                    {Visibility_Types?.map(
-                                        (
-                                            visibility: VisibilityType,
-                                            idx: number
-                                        ) => (
-                                            <option
-                                                value={visibility?.value}
-                                                key={idx}
-                                            >
-                                                {visibility?.label}
-                                            </option>
-                                        )
-                                    )}
-                                </Select>
-                            </div>
+                                ))}
+                            </Select>
                         </div>
 
                         <div className="col-span-full flex flex-col gap-2.5">
                             <Label>Add new Items</Label>
-                            {items?.map((item: ItemType, idx: number) => (
+                            {items.map((item, idx) => (
                                 <div
                                     key={idx}
-                                    className="p-2.5 rounded-md dark:bg-[#374050] bg-[#F9FAFB] "
+                                    className="p-2.5 rounded-md bg-gray-100 dark:bg-gray-700"
                                 >
                                     <div className="flex justify-between mb-2 items-center">
                                         <Label className="text-xl">
@@ -157,16 +108,9 @@ const EditMenuModal: FC<Props> = ({ menu }) => {
                                             color="red"
                                             onClick={() =>
                                                 setItems(
-                                                    (prevItems: ItemType[]) => {
-                                                        const updatedItems = [
-                                                            ...prevItems,
-                                                        ];
-                                                        updatedItems.splice(
-                                                            idx,
-                                                            1
-                                                        );
-                                                        return updatedItems;
-                                                    }
+                                                    items.filter(
+                                                        (_, i) => i !== idx
+                                                    )
                                                 )
                                             }
                                         >
@@ -176,93 +120,83 @@ const EditMenuModal: FC<Props> = ({ menu }) => {
                                     <div className="grid grid-cols-2 gap-2.5">
                                         <div className="flex flex-col gap-2.5">
                                             <Label htmlFor="label">Label</Label>
-                                            <div>
-                                                <TextInput
-                                                    id="label"
-                                                    name="label"
-                                                    placeholder="Item Label"
-                                                    value={item["label"]}
-                                                    onChange={(
-                                                        event: React.ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        setItems(
-                                                            (prevItems) => {
-                                                                const updatedItems =
-                                                                    [
-                                                                        ...prevItems,
-                                                                    ];
-                                                                // @ts-ignore
-                                                                updatedItems[
-                                                                    idx
-                                                                ] = {
-                                                                    ...updatedItems[
-                                                                        idx
-                                                                    ],
-                                                                    label: event?.target!
-                                                                        ?.value,
-                                                                };
-                                                                return updatedItems;
-                                                            }
-                                                        );
-                                                    }}
-                                                    required
-                                                />
-                                            </div>
+                                            <TextInput
+                                                name="label"
+                                                placeholder="Item Label"
+                                                value={item.label}
+                                                color={
+                                                    formErrors[
+                                                        `items.${idx}.label`
+                                                    ]
+                                                        ? "failure"
+                                                        : "gray"
+                                                }
+                                                helperText={
+                                                    formErrors[
+                                                        `items.${idx}.label`
+                                                    ]?.[0] || ""
+                                                }
+                                                onChange={(e) => {
+                                                    const updatedItems = [
+                                                        ...items,
+                                                    ];
+                                                    updatedItems[idx] = {
+                                                        ...item,
+                                                        label: e.target.value,
+                                                    };
+                                                    setItems(updatedItems);
+                                                }}
+                                                required
+                                            />
                                         </div>
                                         <div className="flex flex-col gap-2.5">
                                             <Label htmlFor="href">
                                                 Item Href
                                             </Label>
-                                            <div>
-                                                <TextInput
-                                                    id="href"
-                                                    name="href"
-                                                    placeholder="Href"
-                                                    value={item["href"]}
-                                                    onChange={(
-                                                        event: React.ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        setItems(
-                                                            (prevItems) => {
-                                                                const updatedItems =
-                                                                    [
-                                                                        ...prevItems,
-                                                                    ];
-                                                                // @ts-ignore
-                                                                updatedItems[
-                                                                    idx
-                                                                ] = {
-                                                                    ...updatedItems[
-                                                                        idx
-                                                                    ],
-                                                                    href: event?.target!
-                                                                        ?.value,
-                                                                };
-                                                                return updatedItems;
-                                                            }
-                                                        );
-                                                    }}
-                                                    required
-                                                />
-                                            </div>
+                                            <TextInput
+                                                name="href"
+                                                placeholder="Href"
+                                                value={item.href}
+                                                color={
+                                                    formErrors[
+                                                        `items.${idx}.href`
+                                                    ]
+                                                        ? "failure"
+                                                        : "gray"
+                                                }
+                                                helperText={
+                                                    formErrors[
+                                                        `items.${idx}.href`
+                                                    ]?.[0] || ""
+                                                }
+                                                onChange={(e) => {
+                                                    const updatedItems = [
+                                                        ...items,
+                                                    ];
+                                                    updatedItems[idx] = {
+                                                        ...item,
+                                                        href: e.target.value,
+                                                    };
+                                                    setItems(updatedItems);
+                                                }}
+                                                required
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             ))}
-                            <div className="flex gap-2.5 items-end">
-                                <Button
-                                    className="w-full"
-                                    color="gray"
-                                    onClick={() => {
-                                        setItems((prevItems: ItemType[]) => [
-                                            ...prevItems, // spread operator to copy the previous items
-                                            { label: "", href: "" }, // add a new item with empty values for label and href
-                                        ]);
-                                    }}
-                                >
-                                    Add Item
-                                </Button>
-                            </div>
+                            <Button
+                                className="w-full"
+                                color="gray"
+                                onClick={() =>
+                                    setItems([
+                                        ...items,
+                                        { label: "", href: "" },
+                                    ])
+                                }
+                            >
+                                Add Item
+                            </Button>
                         </div>
                     </div>
                 </Modal.Body>
@@ -271,12 +205,12 @@ const EditMenuModal: FC<Props> = ({ menu }) => {
                         color="primary"
                         onClick={() => {
                             update.submit({
-                                formData: { id: menu?.id, ...formState, items },
+                                formData: { id: menu.id, ...formState, items },
                                 onSuccess: () => {
                                     setOpen(false);
+                                    setFormState({});
                                 },
                             });
-                            setFormState({});
                         }}
                         isProcessing={update.isLoading}
                         disabled={update.isLoading}
@@ -295,18 +229,9 @@ const EditMenuModal: FC<Props> = ({ menu }) => {
 export default EditMenuModal;
 
 export const Visibility_Types: VisibilityType[] = [
-    {
-        value: "all",
-        label: "All",
-    },
-    {
-        value: "guest",
-        label: "Guest",
-    },
-    {
-        value: "user",
-        label: "User",
-    },
+    { value: "all", label: "All" },
+    { value: "guest", label: "Guest" },
+    { value: "user", label: "User" },
 ];
 
 interface VisibilityType {
