@@ -12,7 +12,6 @@ import SocialLogin from "./SocialLogin";
 const LoginPage: FC = function () {
     const [searchParams] = useSearchParams();
     const guidAlertMessage = searchParams.get("guidAlertMessage");
-
     const { login } = useAuth();
     const { formState, formErrors, handleChange } = useForm({
         default: {
