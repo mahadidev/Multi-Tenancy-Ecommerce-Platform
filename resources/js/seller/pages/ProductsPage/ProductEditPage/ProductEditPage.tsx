@@ -373,7 +373,7 @@ const ProductEditPage = () => {
 
                                 <div className="flex flex-col gap-2 col-span-full">
                                     <Label htmlFor="thumbnail">Images</Label>
-                                    <div className="grid grid-cols-4 gap-2">
+                                    <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-2">
                                         {" "}
                                         {attachments?.map((_, idx: number) => (
                                             <div key={idx} className="relative">
@@ -408,7 +408,7 @@ const ProductEditPage = () => {
                                                             )
                                                         );
                                                     }}
-                                                    className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[99999999]"
+                                                    className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[50]"
                                                 >
                                                     Remove
                                                 </button>
