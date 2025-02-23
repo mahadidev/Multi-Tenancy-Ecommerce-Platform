@@ -20,7 +20,7 @@ class StorePagesResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'title' => $this->title,
-            'layout' => $this->layout ? new ThemeWidgetResource($this->layout) : null,
+            'layout' => $this->layout ? new WidgetResource($this->layout) : null,
             'is_active' => $this->is_active,
             'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
             'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],

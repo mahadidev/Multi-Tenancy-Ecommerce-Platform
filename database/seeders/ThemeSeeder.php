@@ -5,8 +5,6 @@ namespace Database\Seeders;
 use App\Models\PageType;
 use App\Models\Theme;
 use App\Models\ThemePage;
-use App\Models\ThemePageWidget;
-use App\Models\ThemeWidget;
 use App\Models\Widget;
 use App\Models\WidgetInput;
 use App\Models\WidgetType;

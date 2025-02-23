@@ -60,7 +60,7 @@ class StorePageController extends Controller
             'slug' => 'nullable|string|max:25|unique:store_pages,slug',
             'page_type_id' => 'required|exists:page_types,id',
             'title' => 'nullable|string',
-            'layout_id' => 'nullable|exists:theme_widgets,id',
+            'layout_id' => 'nullable|exists:widgets,id',
             'is_active' => 'nullable|boolean',
 
             'widgets' => 'nullable|array',
@@ -221,9 +221,9 @@ class StorePageController extends Controller
         $validatedData = $request->validate([
             'name' => 'nullable|string',
             'slug' => 'nullable|string|max:25',
-            'page_type_id' => 'required|exists:page_types,id',
+            'page_type_id' => 'nullable|exists:page_types,id',
             'title' => 'nullable|string',
-            'layout_id' => 'nullable|exists:theme_widgets,id',
+            'layout_id' => 'nullable|exists:widgets,id',
             'is_active' => 'nullable|boolean',
 
             'widgets' => 'nullable|array',

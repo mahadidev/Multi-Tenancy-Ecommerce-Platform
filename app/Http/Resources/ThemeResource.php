@@ -25,7 +25,6 @@ class ThemeResource extends JsonResource
             'is_active' => $this->is_active,
             'pages' => $this->pages ? ThemePageResource::collection($this->pages) : [],
             'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
-
         ];
     }
 }

@@ -39,6 +39,6 @@ class StorePage extends Model
 
     public function layout()
     {
-        return $this->belongsTo(ThemeWidget::class, 'layout_id');
+        return $this->belongsTo(Widget::class, 'layout_id');
     }
 }
