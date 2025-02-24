@@ -10,6 +10,7 @@ const PasswordInput: FC<any> = (props) => {
                 className="w-full h-full z-10"
                 {...{ ...props, type }}
                 autoComplete="off"
+                type="password"
             />
             <div className="absolute h-max right-2 top-0 bottom-0 my-auto">
                 <button
