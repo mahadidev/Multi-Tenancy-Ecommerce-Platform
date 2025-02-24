@@ -12,14 +12,14 @@ import { CategoryType } from "@type/categoryType";
 import { Button, Label, Select, Textarea, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import ImageUploader from "./ImageUploader";
 import ProductVariantTable from "./ProductVariantTable";
 
 const ProductEditPage = () => {
     const { id } = useParams();
     const { productCategories } = useCategory();
-    const { update, product, fetchProduct, removeVariant } = useProduct();
+    const { update, product, fetchProduct } = useProduct();
     const { brands } = useBrand();
     const { getSlug } = useString();
     const [attachments, setAttachments] = useState<string[]>([""]);
@@ -347,67 +347,10 @@ const ProductEditPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col gap-2 col-span-full">
-                                    <Label htmlFor="thumbnail">Images</Label>
-                                    <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                                        {" "}
-                                        {attachments?.map((_, idx: number) => (
-                                            <div key={idx} className="relative">
-                                                <FileInput
-                                                    id={`attachment-${idx}`}
-                                                    name="attachments"
-                                                    placeholder="Click to upload image"
-                                                    value={attachments[idx]}
-                                                    onChange={(
-                                                        event: React.ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        setAttachments(
-                                                            attachments.map(
-                                                                (item, i) =>
-                                                                    i === idx
-                                                                        ? event
-                                                                              ?.target
-                                                                              ?.value
-                                                                        : item
-                                                            )
-                                                        );
-                                                    }}
-                                                    required
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setAttachments(
-                                                            attachments.filter(
-                                                                (_, i) =>
-                                                                    i !== idx
-                                                            )
-                                                        );
-                                                    }}
-                                                    className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[50]"
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="w-[200px]">
-                                        <Button
-                                            size="sm"
-                                            color="primary"
-                                            onClick={() =>
-                                                setAttachments(
-                                                    (prev: string[]) => [
-                                                        ...prev,
-                                                        "",
-                                                    ]
-                                                )
-                                            }
-                                        >
-                                            <FaPlus /> &nbsp;&nbsp; Add image
-                                        </Button>
-                                    </div>
-                                </div>
+                                <ImageUploader
+                                    attachments={attachments}
+                                    setAttachments={setAttachments}
+                                />
                             </div>
                         </div>
                     </div>
