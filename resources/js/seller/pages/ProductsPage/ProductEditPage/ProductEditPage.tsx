@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FileInput } from "@seller/components";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
 import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
@@ -10,19 +9,12 @@ import useString from "@seller/hooks/useString";
 import useToast from "@seller/hooks/useToast";
 import { BrandType } from "@type/brandType";
 import { CategoryType } from "@type/categoryType";
-import {
-    Button,
-    Label,
-    Select,
-    Table,
-    Textarea,
-    TextInput,
-} from "flowbite-react";
+import { Button, Label, Select, Textarea, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import CreateVariantModal from "./CreateVariantModal";
+import ProductVariantTable from "./ProductVariantTable";
 
 const ProductEditPage = () => {
     const { id } = useParams();
@@ -86,7 +78,7 @@ const ProductEditPage = () => {
             <PageBreadCrumb title="Edit Product" items={["Product", "Edit"]} />
 
             <section className="p-4">
-                <div className="">
+                <div>
                     <div>
                         <div className="flex flex-col gap-6">
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
@@ -249,7 +241,7 @@ const ProductEditPage = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="flex flex-col gap-2 col-span-full">
+                                {/* <div className="flex flex-col gap-2 col-span-full">
                                     <Label>Variants</Label>
                                     {product?.variants?.map((variant) => (
                                         <div
@@ -316,7 +308,9 @@ const ProductEditPage = () => {
                                         </div>
                                     ))}
                                     <CreateVariantModal />
-                                </div>
+                                </div> */}
+
+                                <ProductVariantTable product={product!} />
                                 <div className="flex flex-col gap-6 col-span-full">
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="thumbnail">
