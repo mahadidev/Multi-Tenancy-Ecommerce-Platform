@@ -4,12 +4,12 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 // Adjust the imports according to your setup.
 
-type ImageUploaderProps = {
+type MultipleImageUploaderProps = {
     attachments: string[];
     setAttachments: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({
+const MultipleImageUploader: React.FC<MultipleImageUploaderProps> = ({
     attachments,
     setAttachments,
 }) => {
@@ -62,4 +62,4 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     );
 };
 
-export default ImageUploader;
+export default MultipleImageUploader;
