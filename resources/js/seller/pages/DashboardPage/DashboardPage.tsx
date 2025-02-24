@@ -26,8 +26,8 @@ const DashboardPage: FC = () => {
         <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 <StatCard
-                    title="New products this week"
-                    value="2,340"
+                    title="2,340"
+                    tagline="New products this week"
                     percentage="14.6%"
                     className="xl:col-span-2 h-[580px]"
                 >
@@ -36,7 +36,7 @@ const DashboardPage: FC = () => {
 
                 <StatCard
                     title="Customers Activity"
-                    value="Order report of customers"
+                    tagline="Order report of customers"
                     percentage="14.6%"
                 >
                     <OverviewChart series={overviewChartData} />

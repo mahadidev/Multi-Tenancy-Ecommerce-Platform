@@ -3,7 +3,7 @@ import { FC } from "react";
 
 interface StatCardProps {
     title: string;
-    value: string;
+    tagline: string;
     percentage: string;
     className?: string;
     children: React.ReactNode;
@@ -11,7 +11,7 @@ interface StatCardProps {
 
 export const StatCard: FC<StatCardProps> = ({
     title,
-    value,
+    tagline,
     percentage,
     className = "",
     children,
@@ -19,12 +19,12 @@ export const StatCard: FC<StatCardProps> = ({
     <Card className={`rounded-lg dark:bg-gray-800 ${className}`}>
         <div className="flex items-center mb-4">
             <div>
-                <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {value}
-                </span>
-                <h3 className="text-base font-normal text-gray-600 dark:text-gray-400">
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
                     {title}
                 </h3>
+                <span className="text-base font-normal text-gray-600 dark:text-gray-400">
+                    {tagline}
+                </span>
             </div>
             <div className="ml-5 flex flex-1 justify-end text-base font-bold text-green-500 dark:text-green-400">
                 {percentage}

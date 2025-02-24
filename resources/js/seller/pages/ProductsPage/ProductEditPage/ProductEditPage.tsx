@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FileInput } from "@seller/components";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
+import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
 import useBrand from "@seller/hooks/useBrand";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useProduct from "@seller/hooks/useProduct";
 import useString from "@seller/hooks/useString";
 import useToast from "@seller/hooks/useToast";
-import { RoutePath } from "@seller/seller_env";
 import { BrandType } from "@type/brandType";
 import { CategoryType } from "@type/categoryType";
 import {
-    Breadcrumb,
     Button,
     Label,
     Select,
@@ -22,7 +21,6 @@ import {
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa";
-import { HiHome } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import CreateVariantModal from "./CreateVariantModal";
 
@@ -84,26 +82,10 @@ const ProductEditPage = () => {
     }, [product]);
 
     return (
-        <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 relative">
-            <div className="mb-4">
-                <Breadcrumb className="mb-5">
-                    <Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
-                        <div className="flex items-center gap-x-3">
-                            <HiHome className="text-xl" />
-                            <span>Dashboard</span>
-                        </div>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item href={"/seller/products"}>
-                        Product
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Edit</Breadcrumb.Item>
-                </Breadcrumb>
-                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-                    Edit Product
-                </h1>
-            </div>
+        <div className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 relative">
+            <PageBreadCrumb title="Edit Product" items={["Product", "Edit"]} />
 
-            <section>
+            <section className="p-4">
                 <div className="">
                     <div>
                         <div className="flex flex-col gap-6">
