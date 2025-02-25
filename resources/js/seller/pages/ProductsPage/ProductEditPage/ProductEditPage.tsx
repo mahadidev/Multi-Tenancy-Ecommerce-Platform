@@ -1,6 +1,7 @@
 import { FileInput } from "@seller/components";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
 import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
+import RenderInput from "@seller/components/RenderInput/RenderInput";
 import useBrand from "@seller/hooks/useBrand";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
@@ -9,7 +10,7 @@ import useString from "@seller/hooks/useString";
 import useToast from "@seller/hooks/useToast";
 import { BrandType } from "@type/brandType";
 import { CategoryType } from "@type/categoryType";
-import { Button, Label, Select, Textarea, TextInput } from "flowbite-react";
+import { Button, Label, Select, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useParams } from "react-router-dom";
@@ -82,53 +83,34 @@ const ProductEditPage = () => {
                     <div>
                         <div className="flex flex-col gap-6">
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
-                                <div className="flex flex-col col-span-full gap-2">
-                                    <Label htmlFor="name">Name</Label>
-                                    <TextInput
-                                        id="name"
-                                        name="name"
-                                        placeholder="Product name"
-                                        value={formState["name"]}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setFormState((prev: any) => ({
-                                                ...prev,
-                                                slug: getSlug(e.target.value),
-                                            }));
-                                        }}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="slug">Slug</Label>
-                                    <TextInput
-                                        id="slug"
-                                        name="slug"
-                                        placeholder="Product slug"
-                                        value={formState["slug"]}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setFormState((prev: any) => ({
-                                                ...prev,
-                                                slug: getSlug(e.target.value),
-                                            }));
-                                        }}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="sku">SKU</Label>
-                                    <TextInput
-                                        id="sku"
-                                        name="sku"
-                                        placeholder="Product sku"
-                                        value={formState["sku"]}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                        }}
-                                        required
-                                    />
-                                </div>
+                                <RenderInput
+                                    id="name"
+                                    label="Product Name"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={(event) => {
+                                        handleChange(event);
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            slug: getSlug(event.target.value),
+                                        }));
+                                    }}
+                                />
+                                <RenderInput
+                                    id="slug"
+                                    label="Product Slug"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                />
+                                <RenderInput
+                                    id="sku"
+                                    label="Product sku"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                />
+
                                 <div className="flex flex-col gap-2">
                                     <Label htmlFor="category_id">
                                         Category
@@ -177,44 +159,32 @@ const ProductEditPage = () => {
                                         ))}
                                     </Select>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="price">Price</Label>
-                                    <TextInput
-                                        id="price"
-                                        name="price"
-                                        type="number"
-                                        placeholder="Enter price"
-                                        value={formState["price"]}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="discount_amount">
-                                        Discount amount
-                                    </Label>
-                                    <TextInput
-                                        id="discount_amount"
-                                        name="discount_amount"
-                                        type="number"
-                                        placeholder="Enter discount amount"
-                                        value={formState["discount_amount"]}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="stock">Stock</Label>
-                                    <TextInput
-                                        id="stock"
-                                        name="stock"
-                                        type="number"
-                                        placeholder="Enter stock"
-                                        value={formState["stock"]}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
+                                <RenderInput
+                                    id="price"
+                                    label="Product Price"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                    type="number"
+                                />
+                                <RenderInput
+                                    id="discount_amount"
+                                    label="Discount Amount"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                    type="number"
+                                />
+
+                                <RenderInput
+                                    id="stock"
+                                    label="Stock Quantity"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                    type="number"
+                                />
+
                                 <div className="flex flex-col gap-2 col-span-full">
                                     <Label htmlFor="short_description">
                                         Sort Description

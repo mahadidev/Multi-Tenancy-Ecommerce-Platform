@@ -5,7 +5,7 @@ import React, { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const GeneralSettings: FC = () => {
-    const { userProfileData: user, update, updatePassword } = useAuth();
+    const { userProfileData: user, update } = useAuth();
 
     // update profile information form
     const {

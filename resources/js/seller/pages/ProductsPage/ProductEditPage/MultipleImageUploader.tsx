@@ -7,16 +7,18 @@ import { FaPlus } from "react-icons/fa";
 type MultipleImageUploaderProps = {
     attachments: string[];
     setAttachments: React.Dispatch<React.SetStateAction<string[]>>;
+    gridStyle?: string;
 };
 
 const MultipleImageUploader: React.FC<MultipleImageUploaderProps> = ({
     attachments,
     setAttachments,
+    gridStyle = "grid lg:grid-cols-3 xl:grid-cols-4 gap-2",
 }) => {
     return (
         <div className="flex flex-col gap-2 col-span-full">
             <Label htmlFor="thumbnail">Images</Label>
-            <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-2">
+            <div className={gridStyle}>
                 {attachments?.map((_, idx: number) => (
                     <div key={idx} className="relative">
                         <FileInput
