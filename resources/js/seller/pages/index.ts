@@ -8,7 +8,7 @@ export { default as LoginPage } from "./AuthPage/LoginPage";
 export { default as RegisterPage } from "./AuthPage/RegisterPage";
 
 // seller accounts pages
-export { default as ProfileSettingsPage } from "./MyAccountPage/ProfileSettings";
+export { default as ProfileSettingsPage } from "./MyAccountPage/ProfileSettings/ProfileSettings";
 
 // products pages
 export { default as ProductEditPage } from "./ProductsPage/ProductEditPage/ProductEditPage";

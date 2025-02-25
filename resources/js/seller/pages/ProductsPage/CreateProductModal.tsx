@@ -1,14 +1,15 @@
+import RenderInput from "@seller/components/RenderInput/RenderInput";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useProduct from "@seller/hooks/useProduct";
 import useString from "@seller/hooks/useString";
 import { CategoryType } from "@type/categoryType";
-import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
+import { Button, Label, Modal, Select } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { FaPlus } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
 import { FileInput } from "../../components";
+import MultipleImageUploader from "./ProductEditPage/MultipleImageUploader";
 
 const CreateProductModal: FC = function () {
     const [isOpen, setOpen] = useState(false);
@@ -36,111 +37,41 @@ const CreateProductModal: FC = function () {
                 <Modal.Header>Create a new Product</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Name</Label>
-                            <div>
-                                <TextInput
-                                    id="name"
-                                    name="name"
-                                    placeholder="Product name"
-                                    value={formState["name"]}
-                                    color={
-                                        formErrors["name"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["name"]
-                                            ? formErrors["name"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-
-                                        setFormState((prev: any) => ({
-                                            ...prev,
-                                            slug: getSlug(event.target.value),
-                                        }));
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="slug">Slug</Label>
-                            <div>
-                                <TextInput
-                                    id="slug"
-                                    name="slug"
-                                    placeholder="Product slug"
-                                    value={formState["slug"]}
-                                    color={
-                                        formErrors["slug"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["slug"]
-                                            ? formErrors["slug"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="sku">SKU</Label>
-                            <div>
-                                <TextInput
-                                    id="sku"
-                                    name="sku"
-                                    placeholder="Product sku"
-                                    value={formState["sku"]}
-                                    color={
-                                        formErrors["sku"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["sku"]
-                                            ? formErrors["sku"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="price">Price</Label>
-                            <div>
-                                <TextInput
-                                    id="price"
-                                    name="price"
-                                    placeholder="Product price"
-                                    value={formState["price"]}
-                                    color={
-                                        formErrors["price"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["price"]
-                                            ? formErrors["price"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
+                        <RenderInput
+                            id="name"
+                            label="Product Name"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={(event) => {
+                                handleChange(event);
+                                setFormState((prev: any) => ({
+                                    ...prev,
+                                    slug: getSlug(event.target.value),
+                                }));
+                            }}
+                        />
+                        <RenderInput
+                            id="slug"
+                            label="Product Slug"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                        />
+                        <RenderInput
+                            id="sku"
+                            label="Product sku"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                        />
+                        <RenderInput
+                            id="price"
+                            label="Product Price"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            type="number"
+                        />
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="category_id">Category</Label>
                             <div>
@@ -209,62 +140,11 @@ const CreateProductModal: FC = function () {
                                 />
                             </div>
                         </div>
-                        <div className="flex flex-col gap-2 col-span-full">
-                            <Label htmlFor="thumbnail">Images</Label>
-                            <div className="grid grid-cols-2 gap-2">
-                                {" "}
-                                {attachments?.map((_, idx: number) => (
-                                    <div key={idx} className="relative">
-                                        <FileInput
-                                            id={`attachment-${idx}`}
-                                            name="attachments"
-                                            placeholder="Click to upload image"
-                                            value={attachments[idx]}
-                                            onChange={(
-                                                event: React.ChangeEvent<HTMLInputElement>
-                                            ) => {
-                                                setAttachments(
-                                                    attachments.map((item, i) =>
-                                                        i === idx
-                                                            ? event?.target
-                                                                  ?.value
-                                                            : item
-                                                    )
-                                                );
-                                            }}
-                                            required
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setAttachments(
-                                                    attachments.filter(
-                                                        (_, i) => i !== idx
-                                                    )
-                                                );
-                                            }}
-                                            className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[99999999]"
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="grid grid-cols-2">
-                                <Button
-                                    size="sm"
-                                    color="primary"
-                                    onClick={() =>
-                                        setAttachments((prev: string[]) => [
-                                            ...prev,
-                                            "",
-                                        ])
-                                    }
-                                >
-                                    <FaPlus /> &nbsp;&nbsp; Add image
-                                </Button>
-                            </div>
-                        </div>
+                        <MultipleImageUploader
+                            attachments={attachments}
+                            setAttachments={setAttachments}
+                            gridStyle="grid lg:grid-cols-1 xl:grid-cols-2 gap-2"
+                        />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
