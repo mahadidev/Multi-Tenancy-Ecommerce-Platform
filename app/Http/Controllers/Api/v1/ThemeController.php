@@ -11,8 +11,7 @@ class ThemeController extends Controller
 {
     public function getThemes(Request $request)
     {
-        $themes = Theme::with('pages.page_widgets')
-                        ->active()
+        $themes = Theme::with('widgets')->active()
                         ->latest()
                         ->get();
 
@@ -29,8 +28,7 @@ class ThemeController extends Controller
 
     public function getTheme(Request $request, $id)
     {
-        $theme = Theme::with('pages.page_widgets')
-            ->active()
+        $theme = Theme::with('widgets')->active()
             ->where(['id' => $id])
             ->orWhere(['slug' => $id])
             ->first();
