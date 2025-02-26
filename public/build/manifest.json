@@ -3,15 +3,15 @@
     "file": "assets/chunk-K6AXKMTT-DJhFqiHr.js",
     "name": "chunk-K6AXKMTT"
   },
-  "_registeredTheme-4vwcr1_W.js": {
-    "file": "assets/registeredTheme-4vwcr1_W.js",
+  "_registeredTheme-Ct7kUZ6P.js": {
+    "file": "assets/registeredTheme-Ct7kUZ6P.js",
     "name": "registeredTheme",
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js"
     ]
   },
   "resources/css/app.css": {
-  "file": "assets/app-BLlAhWwS.css",
+    "file": "assets/app-BLlAhWwS.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -46,53 +46,42 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-yA3_kz8t.js",
-
+    "file": "assets/index-D2ERAtnq.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-
-      "_registeredTheme-4vwcr1_W.js"
-
+      "_registeredTheme-Ct7kUZ6P.js"
     ],
     "css": [
       "assets/index-BAPYakM1.css"
     ]
   },
   "resources/js/site/index.tsx": {
-
-    "file": "assets/index-B8ZaLmAX.js",
-
+    "file": "assets/index-DXJkhWRh.js",
     "name": "index",
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-
-      "_registeredTheme-4vwcr1_W.js"
-
+      "_registeredTheme-Ct7kUZ6P.js"
     ],
     "css": [
-      "assets/index-CuXHCclS.css"
+      "assets/index-BGygEieP.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-
-    "file": "assets/index-BDg4CpBv.js",
-
+    "file": "assets/index-Tc-4SGSE.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_chunk-K6AXKMTT-DJhFqiHr.js",
-
-      "_registeredTheme-4vwcr1_W.js"
-
+      "_registeredTheme-Ct7kUZ6P.js"
     ],
     "css": [
-      "assets/index-CuXHCclS.css"
+      "assets/index-BGygEieP.css"
     ]
   }
 }

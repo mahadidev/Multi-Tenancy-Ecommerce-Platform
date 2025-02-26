@@ -19,7 +19,7 @@ class ThemeSeeder extends Seeder
      */
     public function run(): void
     {
-        $simfy_commerce = file_get_contents('resources/js/themes/themesSeeder-test.json');
+        $simfy_commerce = file_get_contents('resources/js/themes/themesSeeder.json');
         $themes = json_decode($simfy_commerce);
 
         foreach ($themes as $key => $theme) {
@@ -121,29 +121,27 @@ class ThemeSeeder extends Seeder
                     }
 
                     // NEED TO FIX while npm run build setup
-                    // $page->layout_id = $page->layout_id ?? null;
-                    // if(isset($page->layout)){
-                    //     // check type exist else create
+                    $page->layout_id = $page->layout_id ?? null;
+                    if(isset($page->layout)){
+                        // check type exist else create
+                        if (Widget::where([
+                            "ref_id" => $theme->id,
+                            "ref_type" => Theme::class,
+                            "name" => $page->layout->name
+                            ])->first()) {
+                            $page->layout_id = Widget::where(["ref_type" => Theme::class, "ref_id" => $theme->id, "name" => $page->layout->name])->first()->id;
+                        } else {
+                            $firstLayout = Widget::where(["theme_id" => $theme->id, "ref_type" => Theme::class, "type" => 1])->first()->id ?? null;
 
-                    //     if (Widget::where([
-                    //         "ref_id" => $theme->id,
-                    //         "ref_type" => ThemePage::class,
-                    //         "name" => $page->layout->name
-                    //         ])->first()) {
-
-                    //         $page->layout_id = Widget::where(["ref_type" =>ThemePage::class, "ref_id" => $theme->id, "name" => $page->layout->name])->first()->id;
-                    //     } else {
-                    //         $firstLayout = Widget::where(["theme_id" => $theme->id])->first()->id ?? null;
-
-                    //         $page->layout_id = $firstLayout->id;
-                    //     }
-                    // }
+                            $page->layout_id = $firstLayout;
+                        }
+                    }
 
                     $newThemePage = ThemePage::updateOrCreate(
                         [
                             'slug' => $page->slug, // Assuming these two fields should uniquely identify a page
                             'theme_id' => $newTheme->id,
-                            // "layout_id" => $page->layout_id
+                            "layout_id" => $page->layout_id
                         ],
                         [
                             'name' => $page->name,
@@ -156,7 +154,6 @@ class ThemeSeeder extends Seeder
 
                     if ($page->widgets) {
                         foreach ($page->widgets as $widget) {
-
                             // widget type if exist or create
                             if (WidgetType::where(['type' => $widget->type])->first()) {
                                 $widget->type_id = WidgetType::where(['type' => $widget->type])->first()->id;
@@ -208,7 +205,7 @@ class ThemeSeeder extends Seeder
                                         ],
                                     );
 
-                                    if ($input->child) {
+                                    if (isset($input->child)) {
                                         $themeWidgetChildInput = WidgetInput::updateorCreate([
                                             'widget_id' => $widgetData->id,
                                             'name' => $input->name,
@@ -232,7 +229,7 @@ class ThemeSeeder extends Seeder
                     }
                 }
             }
-          
+
         }
     }
 }
