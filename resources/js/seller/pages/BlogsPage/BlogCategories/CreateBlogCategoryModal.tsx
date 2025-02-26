@@ -1,8 +1,9 @@
+import RenderInput from "@seller/components/RenderInput/RenderInput";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
 
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
@@ -35,61 +36,26 @@ const CreateBlogCategoryModal: FC = function () {
                 <Modal.Header>Create a new blog category</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Name</Label>
-                            <div>
-                                <TextInput
-                                    id="name"
-                                    name="name"
-                                    placeholder="Category name"
-                                    value={formState["name"]}
-                                    color={
-                                        formErrors["name"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["name"]
-                                            ? formErrors["name"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                        setFormState((prev: any) => ({
-                                            ...prev,
-                                            slug: getSlug(event.target.value),
-                                        }));
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="slug">Slug</Label>
-                            <div>
-                                <TextInput
-                                    id="slug"
-                                    name="slug"
-                                    value={formState["slug"]}
-                                    color={
-                                        formErrors["slug"] ? "failure" : "gray"
-                                    }
-                                    placeholder="Category slug"
-                                    helperText={
-                                        formErrors["slug"]
-                                            ? formErrors["slug"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-
+                        <RenderInput
+                            id="name"
+                            label="Category Name"
+                            formErrors={formErrors}
+                            handleChange={(event) => {
+                                handleChange(event);
+                                setFormState((prev: any) => ({
+                                    ...prev,
+                                    slug: getSlug(event.target.value),
+                                }));
+                            }}
+                            formState={formState}
+                        />
+                        <RenderInput
+                            id="slug"
+                            label="Slug"
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            formState={formState}
+                        />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -107,7 +73,9 @@ const CreateBlogCategoryModal: FC = function () {
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
-                        processingSpinner={<AiOutlineLoading className="animate-spin" />}
+                        processingSpinner={
+                            <AiOutlineLoading className="animate-spin" />
+                        }
                     >
                         Create
                     </Button>

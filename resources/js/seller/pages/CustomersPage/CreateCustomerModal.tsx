@@ -1,19 +1,35 @@
 import { ErrorMessage } from "@seller/components";
 import PasswordInput from "@seller/components/Form/PasswordInput/PasswordInput";
+import RenderInput from "@seller/components/RenderInput/RenderInput";
 import useCustomer from "@seller/hooks/useCustomer";
 import useForm from "@seller/hooks/useForm";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Label, Modal } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
 
-const CreateCustomerModal: FC = function () {
+const CreateCustomerModal: FC = () => {
     const [isOpen, setOpen] = useState(false);
     const { create } = useCustomer();
-
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
     });
+
+    const handleSubmit = () => {
+        create.submit({
+            formData: {
+                name: formState["name"],
+                email: formState["email"],
+                password: formState["password"]?.toString(),
+                phone: formState["phone"]?.toString(),
+                address: formState["address"],
+            },
+            onSuccess: () => {
+                setOpen(false);
+                setFormState({});
+            },
+        });
+    };
 
     return (
         <>
@@ -27,159 +43,63 @@ const CreateCustomerModal: FC = function () {
                     Create Customer
                 </div>
             </Button>
-            <Modal onClose={() => setOpen(false)} show={isOpen}>
+
+            <Modal show={isOpen} onClose={() => setOpen(false)}>
                 <Modal.Header>Create a new Customer</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Name</Label>
-                            <div>
-                                <TextInput
-                                    id="name"
-                                    name="name"
-                                    placeholder="Customer name"
-                                    value={formState["name"]}
-                                    color={
-                                        formErrors["name"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["name"]
-                                            ? formErrors["name"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <div>
-                                <TextInput
-                                    id="email"
-                                    name="email"
-                                    placeholder="Customer email"
-                                    value={formState["email"]}
-                                    color={
-                                        formErrors["email"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["email"]
-                                            ? formErrors["email"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="phone">Phone</Label>
-                            <div>
-                                <TextInput
-                                    id="phone"
-                                    name="phone"
-                                    placeholder="Customer Phone"
-                                    value={formState["phone"]}
-                                    color={
-                                        formErrors["phone"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["phone"]
-                                            ? formErrors["phone"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    type="tel"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="phone">Address</Label>
-                            <div>
-                                <TextInput
-                                    id="address"
-                                    name="address"
-                                    placeholder="Address"
-                                    value={formState["address"]}
-                                    color={
-                                        formErrors["address"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["address"]
-                                            ? formErrors["address"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                />
-                            </div>
-                        </div>
+                        <RenderInput
+                            id="name"
+                            label="Name"
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            formState={formState}
+                        />
+                        <RenderInput
+                            id="email"
+                            label="Email"
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            formState={formState}
+                        />{" "}
+                        <RenderInput
+                            id="phone"
+                            label="Phone"
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            formState={formState}
+                        />
+                        <RenderInput
+                            id="address"
+                            label="Address"
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            formState={formState}
+                        />
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="password">Password</Label>
-                            <div>
-                                <PasswordInput
-                                    id="password"
-                                    name="password"
-                                    placeholder="••••••••"
-                                    value={formState["password"]}
-                                    color={
-                                        formErrors["password"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["password"]
-                                            ? formErrors["password"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                />
-                            </div>
-                        </div>{" "}
+                            <PasswordInput
+                                id="password"
+                                name="password"
+                                placeholder="••••••••"
+                                value={formState["password"] || ""}
+                                color={
+                                    formErrors["password"] ? "failure" : "gray"
+                                }
+                                helperText={formErrors["password"]?.[0] || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
                     {formErrors["message"] && (
                         <ErrorMessage>{formErrors["message"]}</ErrorMessage>
                     )}
                 </Modal.Body>
+
                 <Modal.Footer>
                     <Button
                         color="primary"
-                        onClick={() => {
-                            create.submit({
-                                formData: {
-                                    name: formState["name"],
-                                    email: formState["email"],
-                                    password: formState["password"]?.toString(),
-
-                                    phone: formState["phone"]?.toString(),
-                                    address: formState["address"],
-                                },
-                                onSuccess: () => {
-                                    setOpen(false);
-                                    setFormState({});
-                                },
-                            });
-                        }}
+                        onClick={handleSubmit}
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
                         processingLabel="Creating"
@@ -194,4 +114,5 @@ const CreateCustomerModal: FC = function () {
         </>
     );
 };
+
 export default CreateCustomerModal;
