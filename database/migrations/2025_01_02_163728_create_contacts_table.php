@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id'); // Add the `store_id` column after `id`
             $table->string('name');
             $table->string('email');
+            $table->string('phone')->nullable();
             $table->string('subject')->nullable();
             $table->text('message');
             $table->timestamps();

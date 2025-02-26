@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('brands', function (Blueprint $table) {
+        Schema::create('widgets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->string('slug')->nullable();
+            $table->morphs('ref'); // Creates `ref_id` (bigInteger) and `ref_type` (string)
             $table->string('name');
-            $table->string('image')->nullable();
+            $table->string('label');
+            $table->integer('serial'); // Unique sorting field
+            $table->foreignId('type_id')->constrained('widget_types')->onDelete('cascade'); // Foreign key reference
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('widgets');
     }
 };

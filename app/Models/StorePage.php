@@ -29,9 +29,9 @@ class StorePage extends Model
 
     public function widgets()
     {
-        return $this->hasMany(StorePageWidget::class, 'store_page_id');
+        return $this->morphMany(Widget::class, 'ref');
     }
-
+    
     public function scopeAuthorized($query)
     {
         return $query->where('store_id', authStore());
@@ -39,6 +39,6 @@ class StorePage extends Model
 
     public function layout()
     {
-        return $this->belongsTo(ThemeWidget::class, 'layout_id');
+        return $this->belongsTo(Widget::class, 'layout_id');
     }
 }

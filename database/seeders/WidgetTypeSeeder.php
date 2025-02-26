@@ -14,14 +14,9 @@ class WidgetTypeSeeder extends Seeder
     public function run(): void
     {
         $widgetTypes = [
-            [
-                'type' => 'section',
-                'label' => 'Section'
-            ],
-            [
-                'type' => 'layout',
-                'label' => 'Layout'
-            ],
+            ["type" => "layout", "label" => "Layout"], // id 1
+            ["type" => "partial", "label" => "Partial"], // id 2
+            ["type" => "section", "label" => "Section"] // id 3
         ];
 
 

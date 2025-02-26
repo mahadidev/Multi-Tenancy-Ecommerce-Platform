@@ -80,4 +80,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     // Store Types
     Route::get('store-types', [StoreTypeController::class, 'index']);
+
+    // Widget Routes
+    Route::get('widgets/{id?}', [WidgetController::class, 'index']);
+
 });

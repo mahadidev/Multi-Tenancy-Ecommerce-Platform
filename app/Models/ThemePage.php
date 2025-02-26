@@ -22,10 +22,19 @@ class ThemePage extends Model
         'updated_at',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Delete related widgets when deleting a theme
+        static::deleting(function ($data) {
+            $data->widgets()->delete(); // Delete related widgets
+        });
+    }
 
     public function page_widgets()
     {
-        return $this->hasMany(ThemePageWidget::class);
+        return $this->morphMany(Widget::class, 'ref');
     }
 
     public function type()
@@ -35,6 +44,6 @@ class ThemePage extends Model
 
     public function layout()
     {
-        return $this->belongsTo(ThemeWidget::class, 'layout_id');
+        return $this->morphMany(Widget::class, 'ref');
     }
 }

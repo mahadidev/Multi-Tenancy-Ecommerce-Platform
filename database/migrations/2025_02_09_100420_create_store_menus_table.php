@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->string('label');
             $table->string('name');
+            $table->enum('visibility', ['user', 'guest', 'all'])->default('all');
             $table->timestamps();
 
              // Add a foreign key constraint

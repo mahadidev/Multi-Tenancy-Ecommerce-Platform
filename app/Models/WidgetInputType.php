@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WidgetType extends Model
+class WidgetInputType extends Model
 {
     protected $fillable = [
-        'type', 'label'
+        'label',
+        'value',
     ];
-
 }

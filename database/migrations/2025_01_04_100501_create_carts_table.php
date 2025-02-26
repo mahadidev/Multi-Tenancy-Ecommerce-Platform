@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('store_id')->constrained('stores')->onDelete('cascade'); 
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
-            $table->foreignId('product_id')->nullable()->constrained('products');
+            $table->foreignId('product_id')->nullable()->references('id')->on('products')->onDelete('cascade');
+
             $table->string('session_id')->nullable();
 
             $table->string('item');
