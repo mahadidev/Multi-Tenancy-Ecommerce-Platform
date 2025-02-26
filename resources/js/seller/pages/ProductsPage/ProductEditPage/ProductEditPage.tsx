@@ -1,7 +1,7 @@
 import { FileInput } from "@seller/components";
+import FormInput from "@seller/components/FormInput/FormInput";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
 import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
-import RenderInput from "@seller/components/RenderInput/RenderInput";
 import useBrand from "@seller/hooks/useBrand";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
@@ -83,7 +83,7 @@ const ProductEditPage = () => {
                     <div>
                         <div className="flex flex-col gap-6">
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
-                                <RenderInput
+                                <FormInput
                                     id="name"
                                     label="Product Name"
                                     formState={formState}
@@ -96,14 +96,14 @@ const ProductEditPage = () => {
                                         }));
                                     }}
                                 />
-                                <RenderInput
+                                <FormInput
                                     id="slug"
                                     label="Product Slug"
                                     formState={formState}
                                     formErrors={formErrors}
                                     handleChange={handleChange}
                                 />
-                                <RenderInput
+                                <FormInput
                                     id="sku"
                                     label="Product sku"
                                     formState={formState}
@@ -159,7 +159,7 @@ const ProductEditPage = () => {
                                         ))}
                                     </Select>
                                 </div>
-                                <RenderInput
+                                <FormInput
                                     id="price"
                                     label="Product Price"
                                     formState={formState}
@@ -167,7 +167,7 @@ const ProductEditPage = () => {
                                     handleChange={handleChange}
                                     type="number"
                                 />
-                                <RenderInput
+                                <FormInput
                                     id="discount_amount"
                                     label="Discount Amount"
                                     formState={formState}
@@ -176,7 +176,7 @@ const ProductEditPage = () => {
                                     type="number"
                                 />
 
-                                <RenderInput
+                                <FormInput
                                     id="stock"
                                     label="Stock Quantity"
                                     formState={formState}

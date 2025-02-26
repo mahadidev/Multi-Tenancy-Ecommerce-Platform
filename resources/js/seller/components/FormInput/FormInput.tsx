@@ -1,7 +1,7 @@
 import { Label, TextInput } from "flowbite-react";
 import { ChangeEventHandler, FC } from "react";
 
-interface RenderInputProps {
+interface FormInputProps {
     id: string;
     label: string;
     type?: string;
@@ -9,7 +9,7 @@ interface RenderInputProps {
     formErrors: any;
     handleChange: ChangeEventHandler<HTMLInputElement>;
 }
-const RenderInput: FC<RenderInputProps> = ({
+const FormInput: FC<FormInputProps> = ({
     id,
     label,
     type = "text",
@@ -35,4 +35,4 @@ const RenderInput: FC<RenderInputProps> = ({
     );
 };
 
-export default RenderInput;
+export default FormInput;

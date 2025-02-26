@@ -1,6 +1,6 @@
 import { ErrorMessage } from "@seller/components";
 import PasswordInput from "@seller/components/Form/PasswordInput/PasswordInput";
-import RenderInput from "@seller/components/RenderInput/RenderInput";
+import FormInput from "@seller/components/FormInput/FormInput";
 import useCustomer from "@seller/hooks/useCustomer";
 import useForm from "@seller/hooks/useForm";
 import { Button, Label, Modal } from "flowbite-react";
@@ -48,28 +48,28 @@ const CreateCustomerModal: FC = () => {
                 <Modal.Header>Create a new Customer</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <RenderInput
+                        <FormInput
                             id="name"
                             label="Name"
                             formErrors={formErrors}
                             handleChange={handleChange}
                             formState={formState}
                         />
-                        <RenderInput
+                        <FormInput
                             id="email"
                             label="Email"
                             formErrors={formErrors}
                             handleChange={handleChange}
                             formState={formState}
                         />{" "}
-                        <RenderInput
+                        <FormInput
                             id="phone"
                             label="Phone"
                             formErrors={formErrors}
                             handleChange={handleChange}
                             formState={formState}
                         />
-                        <RenderInput
+                        <FormInput
                             id="address"
                             label="Address"
                             formErrors={formErrors}

@@ -1,4 +1,4 @@
-import RenderInput from "@seller/components/RenderInput/RenderInput";
+import FormInput from "@seller/components/FormInput/FormInput";
 import useBrand from "@seller/hooks/useBrand";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
@@ -32,7 +32,7 @@ const CreateBrandModal: FC = function () {
                 <Modal.Header>Create a new Brand</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <RenderInput
+                        <FormInput
                             id="name"
                             label="Brand Name"
                             formState={formState}
@@ -45,7 +45,7 @@ const CreateBrandModal: FC = function () {
                                 }));
                             }}
                         />
-                        <RenderInput
+                        <FormInput
                             id="slug"
                             label="Brand Slug"
                             formState={formState}
