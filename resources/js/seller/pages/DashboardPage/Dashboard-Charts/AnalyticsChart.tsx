@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Chart from "react-apexcharts";
 
 interface AnalyticsChartProps {
-    series: any[];
+    series: { name: string; data: number[] }[];
 }
 
 const AnalyticsChart: React.FC<AnalyticsChartProps> = ({ series }) => {
-    const options = {
+    const options: ApexCharts.ApexOptions = {
         chart: {
             type: "bar",
             foreColor: "#6B7280",
@@ -28,6 +27,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({ series }) => {
                 "Feb",
                 "Mar",
                 "Apr",
+                "May",
                 "Jun",
                 "Jul",
                 "Aug",
@@ -38,24 +38,16 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({ series }) => {
             ],
         },
         yaxis: {
-            title: {
-                text: "Order Count",
-            },
+            title: { text: "Order Count" },
         },
         fill: { opacity: 1 },
-        tooltip: { y: { formatter: (val: any) => `${val}` } },
+        tooltip: {
+            y: { formatter: (val) => `${val}` },
+        },
         colors: ["#007bff", "#ff7f50"], // Blue and Orange
     };
 
-    return (
-        <Chart
-            // @ts-ignore
-            options={options!}
-            series={series}
-            type="bar"
-            height={450}
-        />
-    );
+    return <Chart options={options} series={series} type="bar" height={450} />;
 };
 
 export default AnalyticsChart;

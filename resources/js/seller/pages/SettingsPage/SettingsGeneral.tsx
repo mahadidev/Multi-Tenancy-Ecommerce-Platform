@@ -1,16 +1,10 @@
 import { ColorInput } from "@seller/components";
+import FormInput from "@seller/components/FormInput/FormInput";
 import useForm from "@seller/hooks/useForm";
 import useStore from "@seller/hooks/useStore";
 import useString from "@seller/hooks/useString";
 import { StoreTypesType } from "@type/storeType";
-import {
-    Button,
-    Card,
-    Label,
-    Select,
-    Textarea,
-    TextInput,
-} from "flowbite-react";
+import { Button, Card, Label, Select, Textarea } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 
 const SettingsGeneral = () => {
@@ -41,53 +35,27 @@ const SettingsGeneral = () => {
                 <form action="#">
                     <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
-                            <Label htmlFor="store-name">Store Name</Label>
-
-                            <TextInput
-                                name="name"
-                                id="store-name"
-                                placeholder="Store name"
-                                type="text"
-                                value={formState["name"]}
-                                color={formErrors["name"] ? "failure" : "gray"}
-                                helperText={
-                                    formErrors["name"]
-                                        ? formErrors["name"][0]
-                                        : false
-                                }
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
+                            <FormInput
+                                id="name"
+                                label="Store Name"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={(event) => {
                                     handleChange(event);
                                     setFormState((prev: any) => ({
                                         ...prev,
                                         slug: getSlug(event.target.value),
                                     }));
                                 }}
-                                required
                             />
                         </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
-                            <Label htmlFor="store-slug">Slug</Label>
-
-                            <TextInput
-                                name="slug"
-                                id="store-slug"
-                                placeholder="Store slug"
-                                type="text"
-                                value={formState["slug"]}
-                                color={formErrors["slug"] ? "failure" : "gray"}
-                                helperText={
-                                    formErrors["slug"]
-                                        ? formErrors["slug"][0]
-                                        : false
-                                }
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    handleChange(event);
-                                }}
-                                required
+                            <FormInput
+                                id="slug"
+                                label="Store Slug"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={handleChange}
                             />
                         </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2">
@@ -162,49 +130,21 @@ const SettingsGeneral = () => {
                             </div>
                         </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
-                            <Label htmlFor="store-phone">Phone</Label>
-
-                            <TextInput
-                                name="phone"
-                                id="store-phone"
-                                placeholder="Store phone number"
-                                type="tel"
-                                value={formState["phone"]}
-                                color={formErrors["phone"] ? "failure" : "gray"}
-                                helperText={
-                                    formErrors["phone"]
-                                        ? formErrors["phone"][0]
-                                        : false
-                                }
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    handleChange(event);
-                                }}
-                                required
+                            <FormInput
+                                id="phone"
+                                label="Store phone number"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={handleChange}
                             />
                         </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
-                            <Label htmlFor="store-email">Email</Label>
-
-                            <TextInput
-                                name="email"
-                                id="store-email"
-                                placeholder="Store email address"
-                                type="email"
-                                value={formState["email"]}
-                                color={formErrors["email"] ? "failure" : "gray"}
-                                helperText={
-                                    formErrors["email"]
-                                        ? formErrors["email"][0]
-                                        : false
-                                }
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    handleChange(event);
-                                }}
-                                required
+                            <FormInput
+                                id="email"
+                                label="Store email address"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={handleChange}
                             />
                         </div>
                         <div className="col-span-full grid grid-cols-1 gap-y-2 ">

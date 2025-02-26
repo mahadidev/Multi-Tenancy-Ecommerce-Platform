@@ -121,10 +121,6 @@ const StoreStepOne: FC<PropsType> = function (props) {
                         processingSpinner={
                             <AiOutlineLoading className="h-6 w-6 animate-spin" />
                         }
-                        // disabled={
-                        //     !props.formState["name"] ||
-                        //     !props.formState["domain"]
-                        // }
                     >
                         Next: Store branding
                     </Button>

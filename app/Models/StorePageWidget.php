@@ -32,14 +32,18 @@ class StorePageWidget extends Model
     }
 
     public function widgetInputs(){
-        return $this->hasMany(StorePageWidgetInput::class, 'widget_id');
+        return $this->hasMany(WidgetInput::class, 'widget_id');
     }
+    
+    // public function widgetInputs(){
+    //     return $this->hasMany(StorePageWidgetInput::class, 'widget_id');
+    // }
 
     public function widgetType(){
         return $this->belongsTo(WidgetType::class, 'widget_type_id');
     }
 
     public function layout(){
-        return $this->belongsTo(ThemeWidget::class, 'layout_id');
+        return $this->belongsTo(Widget::class, 'layout_id');
     }
 }

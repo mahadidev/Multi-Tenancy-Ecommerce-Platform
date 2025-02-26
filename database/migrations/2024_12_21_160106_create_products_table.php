@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('store_id');
-            $table->unsignedBigInteger('category_id');
+            $table->foreignId('store_id')->references('id')->on('stores')->onDelete('cascade');
+            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->references('id')->on('categories')->onDelete('cascade');
+    
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->string('sku')->nullable(); // Stock keeping unit
+            $table->text('short_description')->nullable();
             $table->text('description')->nullable();
             $table->text('thumbnail')->nullable();
             $table->json('attachments')->nullable();
@@ -27,15 +30,14 @@ return new class extends Migration
             $table->boolean('has_variants')->default(false);
             $table->boolean('has_in_stocks')->default(true); // Nullable for products with variants
             $table->boolean('status')->default(true); // 'true', 'false'
+            $table->boolean('is_trending')->default(false);
+            $table->boolean('has_discount')->default(false);
+            $table->dateTime('discount_to')->nullable();
+            $table->string('discount_type',)->nullable()->comment('flat/percentage');
+            $table->decimal('discount_amount',)->nullable();
             $table->timestamps();
 
-            // Foreign key constraint
-            $table->foreign('store_id')
-                ->references('id')->on('stores')
-                ->onDelete('cascade');
-            $table->foreign('category_id')
-                ->references('id')->on('categories')
-                ->onDelete('cascade');
+          
         });
     }
 
