@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ErrorMessage, FileInput } from "@seller/components";
+import FormInput from "@seller/components/FormInput/FormInput";
 import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
-import RenderInput from "@seller/components/RenderInput/RenderInput";
 import QuillRichTextEditor from "@seller/components/TextEditor/QuillRichTextEditor";
 import useBlog from "@seller/hooks/useBlog";
 import useCategory from "@seller/hooks/useCategory";
@@ -34,7 +34,7 @@ const BlogCreatePage = () => {
                             <div className="flex gap-6 w-full">
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
                                     <div className="flex flex-col col-span-2 gap-2">
-                                        <RenderInput
+                                        <FormInput
                                             id="title"
                                             label="Blog Title"
                                             formErrors={formErrors}

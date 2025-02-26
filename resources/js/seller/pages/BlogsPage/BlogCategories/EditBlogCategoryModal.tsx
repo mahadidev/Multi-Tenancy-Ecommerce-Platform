@@ -1,4 +1,4 @@
-import RenderInput from "@seller/components/RenderInput/RenderInput";
+import FormInput from "@seller/components/FormInput/FormInput";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useString from "@seller/hooks/useString";
@@ -48,7 +48,7 @@ const EditBlogCategoryModal: FC<PropsType> = function ({ category }) {
                 <Modal.Header>Edit Category</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <RenderInput
+                        <FormInput
                             id="name"
                             label="Category Name"
                             formErrors={formErrors}
@@ -61,7 +61,7 @@ const EditBlogCategoryModal: FC<PropsType> = function ({ category }) {
                             }}
                             formState={formState}
                         />
-                        <RenderInput
+                        <FormInput
                             id="slug"
                             label="Slug"
                             formErrors={formErrors}

@@ -1,7 +1,8 @@
+import FormInput from "@seller/components/FormInput/FormInput";
 import useForm from "@seller/hooks/useForm";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import { RoleType } from "@type/rolePermissionsType";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Label, Modal } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
@@ -71,15 +72,12 @@ const EditRoleModal: FC<PropsType> = ({ role }) => {
                     <div className="grid gap-6">
                         <div>
                             <Label htmlFor="name">Name</Label>
-                            <TextInput
+                            <FormInput
                                 id="name"
-                                name="name"
-                                placeholder="Role name"
-                                value={formState.name}
-                                color={formErrors.name ? "failure" : "gray"}
-                                helperText={formErrors.name?.[0] || ""}
-                                onChange={handleChange}
-                                required
+                                label="Name"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={handleChange}
                             />
                         </div>
                         <AssignPermissions

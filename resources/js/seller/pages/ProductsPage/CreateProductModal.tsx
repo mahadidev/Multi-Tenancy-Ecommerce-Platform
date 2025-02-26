@@ -1,4 +1,4 @@
-import RenderInput from "@seller/components/RenderInput/RenderInput";
+import FormInput from "@seller/components/FormInput/FormInput";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useProduct from "@seller/hooks/useProduct";
@@ -37,7 +37,7 @@ const CreateProductModal: FC = function () {
                 <Modal.Header>Create a new Product</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <RenderInput
+                        <FormInput
                             id="name"
                             label="Product Name"
                             formState={formState}
@@ -50,21 +50,21 @@ const CreateProductModal: FC = function () {
                                 }));
                             }}
                         />
-                        <RenderInput
+                        <FormInput
                             id="slug"
                             label="Product Slug"
                             formState={formState}
                             formErrors={formErrors}
                             handleChange={handleChange}
                         />
-                        <RenderInput
+                        <FormInput
                             id="sku"
                             label="Product sku"
                             formState={formState}
                             formErrors={formErrors}
                             handleChange={handleChange}
                         />
-                        <RenderInput
+                        <FormInput
                             id="price"
                             label="Product Price"
                             formState={formState}

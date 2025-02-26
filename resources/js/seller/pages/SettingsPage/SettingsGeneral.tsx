@@ -1,5 +1,5 @@
 import { ColorInput } from "@seller/components";
-import RenderInput from "@seller/components/RenderInput/RenderInput";
+import FormInput from "@seller/components/FormInput/FormInput";
 import useForm from "@seller/hooks/useForm";
 import useStore from "@seller/hooks/useStore";
 import useString from "@seller/hooks/useString";
@@ -34,27 +34,30 @@ const SettingsGeneral = () => {
                 </h3>
                 <form action="#">
                     <div className="grid grid-cols-6 gap-6">
-                        <RenderInput
-                            id="name"
-                            label="Store Name"
-                            formState={formState}
-                            formErrors={formErrors}
-                            handleChange={(event) => {
-                                handleChange(event);
-                                setFormState((prev: any) => ({
-                                    ...prev,
-                                    slug: getSlug(event.target.value),
-                                }));
-                            }}
-                        />
-
-                        <RenderInput
-                            id="slug"
-                            label="Store Slug"
-                            formState={formState}
-                            formErrors={formErrors}
-                            handleChange={handleChange}
-                        />
+                        <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
+                            <FormInput
+                                id="name"
+                                label="Store Name"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={(event) => {
+                                    handleChange(event);
+                                    setFormState((prev: any) => ({
+                                        ...prev,
+                                        slug: getSlug(event.target.value),
+                                    }));
+                                }}
+                            />
+                        </div>
+                        <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
+                            <FormInput
+                                id="slug"
+                                label="Store Slug"
+                                formState={formState}
+                                formErrors={formErrors}
+                                handleChange={handleChange}
+                            />
+                        </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2">
                             <Label htmlFor="store_type_id">Store Types</Label>
 
@@ -127,7 +130,7 @@ const SettingsGeneral = () => {
                             </div>
                         </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
-                            <RenderInput
+                            <FormInput
                                 id="phone"
                                 label="Store phone number"
                                 formState={formState}
@@ -136,7 +139,7 @@ const SettingsGeneral = () => {
                             />
                         </div>
                         <div className="col-span-6 grid grid-cols-1 gap-y-2 sm:col-span-3">
-                            <RenderInput
+                            <FormInput
                                 id="email"
                                 label="Store email address"
                                 formState={formState}

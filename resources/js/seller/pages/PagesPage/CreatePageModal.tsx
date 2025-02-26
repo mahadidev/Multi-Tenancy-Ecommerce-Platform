@@ -1,7 +1,8 @@
+import FormInput from "@seller/components/FormInput/FormInput";
 import useForm from "@seller/hooks/useForm";
 import usePage from "@seller/hooks/usePage";
 import { PageTypeType } from "@type/pageType";
-import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
+import { Button, Label, Modal, Select } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
@@ -30,56 +31,21 @@ const CreatePageModal: FC = function () {
                 <Modal.Header>Create a new Page</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Name</Label>
-                            <div>
-                                <TextInput
-                                    id="name"
-                                    name="name"
-                                    placeholder="Page name"
-                                    value={formState["name"]}
-                                    color={
-                                        formErrors["name"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["name"]
-                                            ? formErrors["name"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="title">Title</Label>
-                            <div>
-                                <TextInput
-                                    id="title"
-                                    name="title"
-                                    placeholder="Page title"
-                                    value={formState["title"]}
-                                    color={
-                                        formErrors["title"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["title"]
-                                            ? formErrors["title"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
+                        <FormInput
+                            id="name"
+                            label="Name"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                        />
+
+                        <FormInput
+                            id="title"
+                            label="Page title"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                        />
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="type">Type</Label>
                             <div>
