@@ -44,7 +44,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     // User Account - Verify Email
     Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
-    
+
     // Theme Routes
     Route::get('themes', [ThemeController::class, 'getThemes']);
     Route::get('themes/{id}', [ThemeController::class, 'getTheme']);
@@ -54,6 +54,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         // File storage routes
+        Route::post("file-storage/update/{id}", [FileStorageController::class, "update"]);
         Route::resource('file-storage', FileStorageController::class);
 
         // Notification routes
