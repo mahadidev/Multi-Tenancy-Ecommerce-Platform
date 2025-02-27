@@ -63,10 +63,10 @@ export const fileApi = createApi({
                     data.append(key, formData[key]);
                 });
                 return createRequest({
-                    url: `/file-storage/${formData?.id}`,
+                    url: `/file-storage/update/${formData?.id}`,
                     method: "POST",
                     body: data,
-                    apiMethod: "PUT",
+                    // apiMethod: "PUT",
                 });
             },
             transformErrorResponse: (error: any) => error.data,

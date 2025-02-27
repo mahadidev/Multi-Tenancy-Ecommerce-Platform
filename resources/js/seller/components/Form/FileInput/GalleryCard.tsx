@@ -165,6 +165,8 @@ const GalleryCard: FC<PropsType> = function (props) {
                             props?.setSelectedFile(null);
                             setDoCrop(false);
                         }}
+                        meta={props?.selectedFile?.alternate_text}
+                        imageTags={props?.selectedFile?.tags}
                     />
                 </div>
             )}
