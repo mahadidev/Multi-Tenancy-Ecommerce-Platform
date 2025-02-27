@@ -15,7 +15,7 @@ interface PropsType {
 }
 
 const GalleryCard: FC<PropsType> = function (props) {
-    const { upload } = useFile();
+    const { updateFile } = useFile();
     const [isDoCrop, setDoCrop] = useState<boolean>(false);
     const [copied, setCopied] = useState(false);
 
@@ -25,12 +25,13 @@ const GalleryCard: FC<PropsType> = function (props) {
         alternate_text: string,
         tags: string
     ) => {
-        upload.submit({
+        updateFile.submit({
             formData: {
                 file: croppedFile,
                 type: "image",
                 alternate_text,
                 tags,
+                id: props?.selectedFile?.id,
             },
             onSuccess: (res: any) => {
                 props.onUploaded(res);
@@ -52,7 +53,7 @@ const GalleryCard: FC<PropsType> = function (props) {
                     isDoCrop && props?.selectedFile?.url && "hidden"
                 }`}
             >
-                <LoadingOverlay isLoading={upload.isLoading} />
+                <LoadingOverlay isLoading={updateFile.isLoading} />
                 <div
                     className={`grid gap-4 ${
                         props.selectedFile?.url && "grid-cols-3"
