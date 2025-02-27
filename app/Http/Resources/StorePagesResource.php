@@ -15,18 +15,15 @@ class StorePagesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // $layout = $this->layout;
-        // $layout->store_id = $this->id;
-
         return [
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
             'title' => $this->title,
-            'layout' => $this->layout ? new StoreWidgetResource($this->layout) : null,
+            'layout' => $this->layout ? new WidgetResource($this->layout) : null,
             'is_active' => $this->is_active,
             'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
-            'widgets' => $this->widgets ? StorePageWidgetsResource::collection($this->widgets) : [],
+            'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

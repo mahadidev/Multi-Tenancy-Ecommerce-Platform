@@ -1,3 +1,4 @@
+import NotificationCard from "@seller/components/Notification/NotificationCard";
 import { useMediaQuery } from "@seller/hooks/use-media-query";
 import useAuth from "@seller/hooks/useAuth";
 import useNotification from "@seller/hooks/useNotification";
@@ -38,7 +39,7 @@ import {
     HiViewGrid,
     HiX,
 } from "react-icons/hi";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export function DashboardNavigation() {
     const sidebar = useAppSelector((state) => state.ui.sidebar);
@@ -133,9 +134,7 @@ export function DashboardNavigation() {
 }
 
 export function NotificationBellDropdown() {
-    const { notifications, singleNotification, reFetchNotifications } =
-        useNotification();
-    const navigate = useNavigate();
+    const { notifications } = useNotification();
 
     return (
         <Dropdown
@@ -160,58 +159,10 @@ export function NotificationBellDropdown() {
                     {notifications
                         ?.slice(0, 10)
                         ?.map((notification: NotificationType, idx: number) => (
-                            <div
+                            <NotificationCard
                                 key={idx}
-                                onClick={() =>
-                                    singleNotification.submit({
-                                        formData: {
-                                            id: notification.id,
-                                        },
-                                        onSuccess: () => {
-                                            navigate(
-                                                `${getRedirectUrl(
-                                                    notification
-                                                )}`
-                                            );
-                                            reFetchNotifications.submit();
-                                        },
-                                    })
-                                }
-                                className="cursor-pointer flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
-                            >
-                                <div className="shrink-0 relative">
-                                    <div className="absolute -mt-5 ml-6 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-primary-700 dark:border-gray-700">
-                                        <svg
-                                            className="h-3 w-3 text-white"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z" />
-                                            <path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div className="w-full pl-3">
-                                    <div className="mb-1.5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                        <span className="font-semibold text-gray-900 dark:text-white">
-                                            {notification?.title}
-                                        </span>
-                                        : &quot;{notification?.message}
-                                    </div>
-                                    <div className="text-xs font-medium text-primary-700 dark:text-primary-400">
-                                        {notification?.read_at
-                                            ? new Date(
-                                                  notification?.read_at
-                                              ).toDateString() +
-                                              " " +
-                                              new Date(
-                                                  notification?.read_at
-                                              ).toLocaleTimeString()
-                                            : null}
-                                    </div>
-                                </div>
-                            </div>
+                                notification={notification}
+                            />
                         ))}
                 </div>
 
@@ -424,16 +375,3 @@ export function UserDropdown() {
         </Dropdown>
     );
 }
-
-// redirect to the targeted location after clicking on the notification
-export const getRedirectUrl = (notification: NotificationType) => {
-    switch (notification?.data?.module) {
-        case "order":
-            return `${RoutePath.OrdersPage.index()}?orderUID=${
-                notification?.data?.order_uuid
-            }`;
-
-        default:
-            return "#";
-    }
-};

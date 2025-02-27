@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UserSeeder::class,
             StoreTypeSeeder::class,
+            WidgetTypeSeeder::class,
+            WidgetInputTypeSeeder::class,
             PageTypeSeeder::class,
             ThemeSeeder::class,
             SellerAccountSeeder::class,
@@ -25,7 +27,6 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             BlogSeeder::class,
             StoreMenusSeeder::class,
-            WidgetTypeSeeder::class,
             SvgIconSeeder::class,
         ]);
     }

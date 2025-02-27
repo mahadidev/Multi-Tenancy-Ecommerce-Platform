@@ -13,6 +13,14 @@ export interface NotificationType {
     data: NotificationDataType;
 }
 
+export interface RedirectUrlType {
+    id: string;
+    title: string;
+    message: string;
+    read_at: Date;
+    data?: NotificationDataType;
+}
+
 export interface NotificationsResponseType {
     data: NotificationsResponse;
 }

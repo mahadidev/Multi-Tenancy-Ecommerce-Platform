@@ -10,7 +10,4 @@ class WidgetType extends Model
         'type', 'label'
     ];
 
-    public function themeWidgets(){
-        return $this->belongsTo(ThemeWidget::class, 'widget_type_id');
-    }
 }

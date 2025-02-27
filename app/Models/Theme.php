@@ -27,6 +27,11 @@ class Theme extends Model
                 $data->slug = Str::slug($data->name);  // Update slug based on new name
             }
         });
+
+        // Delete related widgets when deleting a theme
+        static::deleting(function ($theme) {
+            $theme->widgets()->delete(); // Delete related widgets
+        });
     }
 
     protected $hidden = [
@@ -57,7 +62,8 @@ class Theme extends Model
         return $query->where('is_active', 1);
     }
 
-    public function widgets(){
-        return $this->hasMany(ThemeWidget::class);
+    public function widgets()
+    {
+        return $this->morphMany(Widget::class, 'ref');
     }
 }

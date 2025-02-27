@@ -1,35 +1,26 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FileInput } from "@seller/components";
+import FormInput from "@seller/components/FormInput/FormInput";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
+import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
 import useBrand from "@seller/hooks/useBrand";
 import useCategory from "@seller/hooks/useCategory";
 import useForm from "@seller/hooks/useForm";
 import useProduct from "@seller/hooks/useProduct";
 import useString from "@seller/hooks/useString";
 import useToast from "@seller/hooks/useToast";
-import { RoutePath } from "@seller/seller_env";
 import { BrandType } from "@type/brandType";
 import { CategoryType } from "@type/categoryType";
-import {
-    Breadcrumb,
-    Button,
-    Label,
-    Select,
-    Table,
-    Textarea,
-    TextInput,
-} from "flowbite-react";
+import { Button, Label, Select, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { FaPlus } from "react-icons/fa";
-import { HiHome } from "react-icons/hi";
 import { useParams } from "react-router-dom";
-import CreateVariantModal from "./CreateVariantModal";
+import MultipleImageUploader from "./MultipleImageUploader";
+import ProductVariantTable from "./ProductVariantTable";
 
 const ProductEditPage = () => {
     const { id } = useParams();
     const { productCategories } = useCategory();
-    const { update, product, fetchProduct, removeVariant } = useProduct();
+    const { update, product, fetchProduct } = useProduct();
     const { brands } = useBrand();
     const { getSlug } = useString();
     const [attachments, setAttachments] = useState<string[]>([""]);
@@ -84,77 +75,42 @@ const ProductEditPage = () => {
     }, [product]);
 
     return (
-        <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 relative">
-            <div className="mb-4">
-                <Breadcrumb className="mb-5">
-                    <Breadcrumb.Item href={RoutePath.DashboardPage.index()}>
-                        <div className="flex items-center gap-x-3">
-                            <HiHome className="text-xl" />
-                            <span>Dashboard</span>
-                        </div>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item href={"/seller/products"}>
-                        Product
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Edit</Breadcrumb.Item>
-                </Breadcrumb>
-                <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-                    Edit Product
-                </h1>
-            </div>
+        <div className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 relative">
+            <PageBreadCrumb title="Edit Product" items={["Product", "Edit"]} />
 
-            <section>
-                <div className="">
+            <section className="p-4">
+                <div>
                     <div>
                         <div className="flex flex-col gap-6">
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
-                                <div className="flex flex-col col-span-full gap-2">
-                                    <Label htmlFor="name">Name</Label>
-                                    <TextInput
-                                        id="name"
-                                        name="name"
-                                        placeholder="Product name"
-                                        value={formState["name"]}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setFormState((prev: any) => ({
-                                                ...prev,
-                                                slug: getSlug(e.target.value),
-                                            }));
-                                        }}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="slug">Slug</Label>
-                                    <TextInput
-                                        id="slug"
-                                        name="slug"
-                                        placeholder="Product slug"
-                                        value={formState["slug"]}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setFormState((prev: any) => ({
-                                                ...prev,
-                                                slug: getSlug(e.target.value),
-                                            }));
-                                        }}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="sku">SKU</Label>
-                                    <TextInput
-                                        id="sku"
-                                        name="sku"
-                                        placeholder="Product sku"
-                                        value={formState["sku"]}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                        }}
-                                        required
-                                    />
-                                </div>
+                                <FormInput
+                                    id="name"
+                                    label="Product Name"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={(event) => {
+                                        handleChange(event);
+                                        setFormState((prev: any) => ({
+                                            ...prev,
+                                            slug: getSlug(event.target.value),
+                                        }));
+                                    }}
+                                />
+                                <FormInput
+                                    id="slug"
+                                    label="Product Slug"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                />
+                                <FormInput
+                                    id="sku"
+                                    label="Product sku"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                />
+
                                 <div className="flex flex-col gap-2">
                                     <Label htmlFor="category_id">
                                         Category
@@ -203,44 +159,32 @@ const ProductEditPage = () => {
                                         ))}
                                     </Select>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="price">Price</Label>
-                                    <TextInput
-                                        id="price"
-                                        name="price"
-                                        type="number"
-                                        placeholder="Enter price"
-                                        value={formState["price"]}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="discount_amount">
-                                        Discount amount
-                                    </Label>
-                                    <TextInput
-                                        id="discount_amount"
-                                        name="discount_amount"
-                                        type="number"
-                                        placeholder="Enter discount amount"
-                                        value={formState["discount_amount"]}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="stock">Stock</Label>
-                                    <TextInput
-                                        id="stock"
-                                        name="stock"
-                                        type="number"
-                                        placeholder="Enter stock"
-                                        value={formState["stock"]}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
+                                <FormInput
+                                    id="price"
+                                    label="Product Price"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                    type="number"
+                                />
+                                <FormInput
+                                    id="discount_amount"
+                                    label="Discount Amount"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                    type="number"
+                                />
+
+                                <FormInput
+                                    id="stock"
+                                    label="Stock Quantity"
+                                    formState={formState}
+                                    formErrors={formErrors}
+                                    handleChange={handleChange}
+                                    type="number"
+                                />
+
                                 <div className="flex flex-col gap-2 col-span-full">
                                     <Label htmlFor="short_description">
                                         Sort Description
@@ -267,74 +211,10 @@ const ProductEditPage = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="flex flex-col gap-2 col-span-full">
-                                    <Label>Variants</Label>
-                                    {product?.variants?.map((variant) => (
-                                        <div
-                                            className="dark:bg-[#374151] bg-[#F9FAFB] p-2.5 rounded-md  border border-solid border-slate-300"
-                                            key={variant.id}
-                                        >
-                                            <div className="flex justify-between gap-2.5 dark:text-white">
-                                                {variant.label}
 
-                                                <p
-                                                    className="cursor-pointer underline text-red-700"
-                                                    onClick={() =>
-                                                        removeVariant.submit({
-                                                            formData: variant,
-                                                        })
-                                                    }
-                                                >
-                                                    Remove
-                                                </p>
-                                            </div>
-                                            <div className="mt-2.5">
-                                                <Table>
-                                                    <Table.Head>
-                                                        <Table.HeadCell>
-                                                            Label
-                                                        </Table.HeadCell>
-                                                        <Table.HeadCell>
-                                                            Price
-                                                        </Table.HeadCell>
-                                                        <Table.HeadCell>
-                                                            Stock
-                                                        </Table.HeadCell>
-                                                    </Table.Head>
-                                                    <Table.Body>
-                                                        {variant.options.map(
-                                                            (option) => (
-                                                                <Table.Row
-                                                                    className="dark:text-white text-dark"
-                                                                    key={
-                                                                        option.id
-                                                                    }
-                                                                >
-                                                                    <Table.Cell>
-                                                                        {
-                                                                            option.label
-                                                                        }
-                                                                    </Table.Cell>
-                                                                    <Table.Cell>
-                                                                        {
-                                                                            option.price
-                                                                        }
-                                                                    </Table.Cell>
-                                                                    <Table.Cell>
-                                                                        {
-                                                                            option.qty_stock
-                                                                        }
-                                                                    </Table.Cell>
-                                                                </Table.Row>
-                                                            )
-                                                        )}
-                                                    </Table.Body>
-                                                </Table>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <CreateVariantModal />
-                                </div>
+                                {/* variants */}
+                                <ProductVariantTable product={product!} />
+
                                 <div className="flex flex-col gap-6 col-span-full">
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="thumbnail">
@@ -371,67 +251,11 @@ const ProductEditPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col gap-2 col-span-full">
-                                    <Label htmlFor="thumbnail">Images</Label>
-                                    <div className="grid grid-cols-4 gap-2">
-                                        {" "}
-                                        {attachments?.map((_, idx: number) => (
-                                            <div key={idx} className="relative">
-                                                <FileInput
-                                                    id={`attachment-${idx}`}
-                                                    name="attachments"
-                                                    placeholder="Click to upload image"
-                                                    value={attachments[idx]}
-                                                    onChange={(
-                                                        event: React.ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        setAttachments(
-                                                            attachments.map(
-                                                                (item, i) =>
-                                                                    i === idx
-                                                                        ? event
-                                                                              ?.target
-                                                                              ?.value
-                                                                        : item
-                                                            )
-                                                        );
-                                                    }}
-                                                    required
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setAttachments(
-                                                            attachments.filter(
-                                                                (_, i) =>
-                                                                    i !== idx
-                                                            )
-                                                        );
-                                                    }}
-                                                    className="bg-red-500 text-white px-2 py-1 rounded absolute bottom-2 right-2 z-[99999999]"
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="w-[200px]">
-                                        <Button
-                                            size="sm"
-                                            color="primary"
-                                            onClick={() =>
-                                                setAttachments(
-                                                    (prev: string[]) => [
-                                                        ...prev,
-                                                        "",
-                                                    ]
-                                                )
-                                            }
-                                        >
-                                            <FaPlus /> &nbsp;&nbsp; Add image
-                                        </Button>
-                                    </div>
-                                </div>
+                                {/* multiple image uploader */}
+                                <MultipleImageUploader
+                                    attachments={attachments}
+                                    setAttachments={setAttachments}
+                                />
                             </div>
                         </div>
                     </div>

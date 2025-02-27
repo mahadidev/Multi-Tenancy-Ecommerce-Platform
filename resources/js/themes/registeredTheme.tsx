@@ -1,5 +1,4 @@
 import { ThemeLayoutPropsType, ThemeWidgetPropsType } from "@type/themeType";
-import { Avasta } from "./Avasta/Avasta";
 import { Simfy } from "./Simfy/Simfy";
 
 export interface RegisteredThemeType {
@@ -14,5 +13,4 @@ export const registeredTheme: {
 } = {
 	Simfy: Simfy,
 	// register new theme
-    Avasta: Avasta
 };

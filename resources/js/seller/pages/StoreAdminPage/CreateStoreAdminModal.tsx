@@ -1,8 +1,9 @@
+import FormInput from "@seller/components/FormInput/FormInput";
 import useForm from "@seller/hooks/useForm";
 import useRolePermission from "@seller/hooks/useRolePermissions";
 import useStoreAdmin from "@seller/hooks/useStoreAdmin";
 import { RoleType } from "@type/rolePermissionsType";
-import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
+import { Button, Label, Modal, Select } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
@@ -32,108 +33,37 @@ const CreateStoreAdminModal: FC = function () {
                 <Modal.Header>Create a new Store Admin</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Name</Label>
-                            <div>
-                                <TextInput
-                                    id="name"
-                                    name="name"
-                                    placeholder="Admin name"
-                                    value={formState["name"]}
-                                    color={
-                                        formErrors["name"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["name"]
-                                            ? formErrors["name"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Email</Label>
-                            <div>
-                                <TextInput
-                                    id="email"
-                                    name="email"
-                                    placeholder="Admin email"
-                                    value={formState["email"]}
-                                    color={
-                                        formErrors["email"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["email"]
-                                            ? formErrors["email"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Phone</Label>
-                            <div>
-                                <TextInput
-                                    id="phone"
-                                    name="phone"
-                                    placeholder="Admin phone"
-                                    value={formState["phone"]}
-                                    color={
-                                        formErrors["phone"] ? "failure" : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["phone"]
-                                            ? formErrors["phone"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Address</Label>
-                            <div>
-                                <TextInput
-                                    id="address"
-                                    name="address"
-                                    placeholder="Admin address"
-                                    value={formState["address"]}
-                                    color={
-                                        formErrors["address"]
-                                            ? "failure"
-                                            : "gray"
-                                    }
-                                    helperText={
-                                        formErrors["address"]
-                                            ? formErrors["address"][0]
-                                            : false
-                                    }
-                                    onChange={(
-                                        event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        handleChange(event);
-                                    }}
-                                    required
-                                />
-                            </div>
-                        </div>
+                        <FormInput
+                            id="name"
+                            label="Name"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                        />
+                        <FormInput
+                            id="email"
+                            label="Admin Email"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            type="email"
+                        />
+                        <FormInput
+                            id="phone"
+                            label="Admin Phone"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            type="tel"
+                        />
+                        <FormInput
+                            id="address"
+                            label="Admin Address"
+                            formState={formState}
+                            formErrors={formErrors}
+                            handleChange={handleChange}
+                            type="tel"
+                        />
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Select Role</Label>
                             <Select
@@ -176,9 +106,9 @@ const CreateStoreAdminModal: FC = function () {
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
+                                    setFormState({});
                                 },
                             });
-                            setFormState({});
                         }}
                         isProcessing={create.isLoading}
                         disabled={create.isLoading}
