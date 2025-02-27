@@ -140,4 +140,67 @@ class FileStorageController extends Controller
         ], 200);
     }
 
+    public function update(Request $request, $id){
+
+        $existingFile = FileStorage::find($id);
+
+        if(!$existingFile){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Invalid File Id!',
+            ], 404);
+        }
+
+        $maxSize = 5048 * 1024; // 5MB in bytes
+        if ($request->file('file')->getSize() > $maxSize) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'File exceeds the maximum size allowed of 5MB.',
+            ], 400);
+        }
+
+        $request->validate([
+            'file' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:5120', // Updated max to 5120 KB (5MB)
+            'user_id' => 'nullable|exists:users,id',
+            "name" => "nullable|string",
+            "tags" => "nullable|string",
+            "alternate_text" => "nullable|string"
+        ]);
+
+        if (!$request->user_id) {
+            $request->user_id = auth()->user()->id;
+        }
+
+        $file = $request->file('file');
+        $uniqueName = uniqid() . '_' . time(); // Generate a unique name
+        $extension = $file->extension(); // Get the file extension
+        $fileName = $uniqueName . '.' . $extension; // Concatenate the unique name and the file extension
+        $filePath = $file->storeAs('file_storage', $fileName, 'public'); // Store file in the 'uploads' folder
+
+        // Get dimensions if the file is an image
+        $width = null;
+        $height = null;
+        if ($file->extension() !== 'pdf') {
+            $imagePath = storage_path('app/public/' . $filePath); // Full path to the stored file
+            [$width, $height] = getimagesize($imagePath); // Get width and height
+        }
+
+        // Save file details to the database
+        $existingFile->update([
+            'user_id' => $request->user_id,
+            'name' => $uniqueName,
+            'type' => $file->extension() === 'pdf' ? 'pdf' : 'image',
+            'location' => $filePath,
+            'width' => $width, // Save width
+            'height' => $height, // Save height
+            'alternate_text' => $request->alternate_text ?? null,
+            'tags' => $request->tags ?? null,
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'File updated successfully.',
+            'data' => new FileStorageResource($existingFile),
+        ], 200);
+    }
 }
