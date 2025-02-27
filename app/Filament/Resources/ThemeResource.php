@@ -38,8 +38,7 @@ class ThemeResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('thumbnail')
                     ->label('Thumbnail URL')
-                    ->columnSpanFull()
-                    ->required(),
+                    ->columnSpanFull(),
 
                 Forms\Components\Toggle::make('is_active')
                     ->label('Active')

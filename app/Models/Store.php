@@ -159,11 +159,6 @@ class Store extends Model
             ->count();
     }
 
-    public function widgets()
-    {
-        return $this->hasMany(StoreWidget::class, 'store_id');
-    }
-
     public function storeType()
     {
         return $this->belongsTo(StoreType::class, 'store_type_id');
