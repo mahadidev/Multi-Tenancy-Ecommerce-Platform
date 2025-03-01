@@ -1,25 +1,23 @@
-export interface WidgetInputItemType {
+export interface WidgetInputTypeType {
 	id: number;
-	name: string;
-	label: string;
-	placeholder?: string;
-	value: string;
-	widget_input_id: number;
-	required: boolean;
 	type:
+		| string
+		| 'array'
 		| 'text'
 		| 'image'
 		| 'file'
-		| 'textarea'
 		| 'email'
-		| 'tel'
-		| 'array'
-		| 'color';
+		| 'number'
+		| 'options';
+	label: string;
+
 	created_at: string;
 	updated_at: string;
 }
+
 export interface WidgetInputType {
 	id: number;
+	parent_id: null | number;
 	name: string;
 	label: string;
 	placeholder?: string;
@@ -27,16 +25,8 @@ export interface WidgetInputType {
 	serial: number;
 	widget_id?: number;
 	required?: boolean;
-	type:
-		| 'text'
-		| 'image'
-		| 'file'
-		| 'textarea'
-		| 'email'
-		| 'tel'
-		| 'array'
-		| 'color';
-	items?: WidgetInputItemType[];
+	type: WidgetInputTypeType;
+	child?: WidgetInputType[];
 	created_at: string;
 	updated_at: string;
 }

@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
+use App\Models\StorePage;
 use App\Models\Theme;
+use App\Models\ThemePage;
+use App\Models\Widget;
+use App\Models\WidgetInput;
 use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\StoreSession;
@@ -167,7 +171,7 @@ class StoreController extends Controller
             'store_type_id' => $request->store_type_id ? $request->store_type_id : StoreType::first()->id,
         ]);
 
-        if($store->theme->widgets){
+        if ($store->theme->widgets) {
             $store->widgets()->delete();
             foreach ($store->theme->widgets as $widget) {
                 $store->widgets()->create([
@@ -278,23 +282,9 @@ class StoreController extends Controller
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
             'theme_id' => $theme_id,
             'settings' => $request->settings ? $request->settings : $store->settings,
-            'store_type_id' => $request->store_type_id ? $request->store_type_id :  $store->store_type_id,
+            'store_type_id' => $request->store_type_id ? $request->store_type_id : $store->store_type_id,
             'description' => $request->description ?? $store->description,
         ]);
-
-        if($store->theme->widgets){
-            $store->widgets()->delete();
-            foreach ($store->theme->widgets as $widget) {
-                $store->widgets()->create([
-                    'widget_type_id' => $widget->widget_type_id,
-                    'name' => $widget->name,
-                    'label' => $widget->label,
-                    'inputs' => $widget->inputs,
-                    'is_editable' => $widget->is_editable,
-                    'thumbnail' => $widget->thumbnail,
-                ]);
-            }
-        }
 
         if ($request->social_media) {
 
@@ -328,6 +318,150 @@ class StoreController extends Controller
                 'store' => new StoreResource($store),
             ]
         ], 200);
+    }
+
+    public function switchTheme(Request $request, $id)
+    {
+        $store = Store::storeOwner()->findOrFail($id);
+        $store = Store::where(["id" => $store->id])->with("layouts","partials", "pages", "widgets")->first();
+
+        // Validate the incoming request data
+        $request->validate([
+            'theme_id' => 'nullable|exists:themes,id',
+            "import_demo" => "nullable|boolean"
+        ]);
+
+        if ($request->theme_id && Theme::where(["id" => $request->theme_id])->first()) {
+
+
+            // import demo
+            if ($request->import_demo) {
+                // delete old data
+                foreach ($store->pages as $page) {
+                    Widget::where(["ref_type" => StorePage::class, "ref_id" => $page->id])->delete();
+
+                    $page->delete();
+                }
+                Widget::where(["ref_type" => Store::class, "ref_id" => $store->id])->delete();
+
+                $theme = Theme::where(["id" => $request->theme_id])->with(["widgets", "layouts", "partials", "pages"])->first();
+
+
+                foreach ($theme->layouts as $widget) {
+                    Widget::create([
+                        "ref_type" => Store::class,
+                        "ref_id" => $store->id,
+                        'type_id' => $widget->type_id,
+                        'name' => $widget->name,
+                        'label' => $widget->label,
+                        'inputs' => $widget->inputs,
+                        'is_editable' => $widget->is_editable,
+                        'thumbnail' => $widget->thumbnail,
+                    ]);
+                }
+
+                // import partials
+                foreach ($theme->partials as $widget) {
+                    Widget::create([
+                        "ref_type" => Store::class,
+                        "ref_id" => $store->id,
+                        'type_id' => $widget->type_id,
+                        'name' => $widget->name,
+                        'label' => $widget->label,
+                        'inputs' => $widget->inputs,
+                        'is_editable' => $widget->is_editable,
+                        'thumbnail' => $widget->thumbnail,
+                    ]);
+                }
+
+
+                foreach ($theme->pages as $page) {
+                    // get layout id
+                    $theme_layout = Widget::where(["id" => $page->layout_id])->first();
+
+                    $page_layout = Widget::where(["ref_type" => Store::class, "ref_id" => $store->id, "type_id" => 1, "name" => $theme_layout->name])->first();
+
+                    $created_page = StorePage::create([
+                        'store_id' => $store->id,
+                        'name' => $page->name,
+                        'slug' => $page->slug, // Use unique slug
+                        'type' => $page->type,
+                        'title' => $page->title,
+                        'layout_id' => $page_layout->id,
+                        'is_active' => true,
+                    ]);
+
+                    $page = ThemePage::where(["id" => $page->id])->with("widgets")->with("layout")->first();
+
+                    foreach ($page->widgets as $widget) {
+                        $created_widget = Widget::create([
+                            "ref_type" => StorePage::class,
+                            "ref_id" => $created_page->id,
+                            'type_id' => $widget->type_id,
+                            'name' => $widget->name,
+                            'label' => $widget->label,
+                            'inputs' => $widget->inputs,
+                            'is_editable' => $widget->is_editable,
+                            'thumbnail' => $widget->thumbnail,
+                        ]);
+
+                        // widget input
+                        $inputs = WidgetInput::where(["widget_id" => $widget->id, "parent_id" => null])->with("child")->get();
+
+                        foreach ($inputs as $input) {
+                            $created_input = WidgetInput::create(
+                                [
+                                    'name' => $input->name,
+                                    'widget_id' => $created_widget->id,
+                                    'label' => $input->label,
+                                    'placeholder' => $input->placeholder,
+                                    'value' => $input->value,
+                                    'options' => $input->options,
+                                    'required' => $input->required,
+                                    'type_id' => $input->type_id,
+                                    'parent_id' => $input->parent_id,
+                                ],
+                            );
+
+                            if($input->child){
+                                foreach ($input->child as $childInput) {
+                                    $created_child_input = WidgetInput::create(
+                                        [
+                                            'name' => $childInput->name,
+                                            'widget_id' => $created_widget->id,
+                                            'label' => $childInput->label,
+                                            'placeholder' => $childInput->placeholder,
+                                            'value' => $childInput->value,
+                                            'options' => $childInput->options,
+                                            'required' => $childInput->required,
+                                            'type_id' => $childInput->type_id,
+                                            'parent_id' => $created_input->id,
+                                        ],
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $store->update(["theme_id" => $request->theme_id]);
+
+            // Return success response
+            return response()->json([
+                'status' => 200,
+                'message' => "Store theme has been activated",
+            ], 200);
+
+        } else {
+            // deactive theme
+            $store->update(["theme_id" => null]);
+
+            // Return success response
+            return response()->json([
+                'status' => 200,
+                'message' => 'Store theme has been deactived.',
+            ], 200);
+        }
     }
 
     public function destroy($id)

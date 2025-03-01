@@ -1,3 +1,4 @@
+import React from "react";
 import { PageType } from "./pageType";
 import { StoreType } from "./storeType";
 import { ThemeHooksType } from "./themeHooksType";
@@ -11,6 +12,9 @@ export interface ThemeType {
 	thumbnail: string | null;
 	widgets: WidgetType[];
 	pages: PageType[];
+	layouts: WidgetType[];
+	primary_color: string;
+	secondary_color: string;
 }
 
 export interface ThemeWidgetPropsType {
@@ -23,4 +27,5 @@ export interface ThemeLayoutPropsType {
 	store: StoreType;
 	hooks?: ThemeHooksType;
 	layout: WidgetType;
+    children?: React.ReactNode
 }

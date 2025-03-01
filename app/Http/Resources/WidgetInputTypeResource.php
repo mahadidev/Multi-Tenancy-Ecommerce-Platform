@@ -17,7 +17,7 @@ class WidgetInputTypeResource extends JsonResource
         return [
             'id' => $this->id,
             'label' => $this->label,
-            'value' => $this->value,
+            'type' => $this->value,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

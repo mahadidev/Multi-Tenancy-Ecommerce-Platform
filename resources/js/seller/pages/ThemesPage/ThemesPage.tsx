@@ -80,27 +80,35 @@ const ThemesPage: FC = function () {
 								color="gray"
 								onClick={() => deactiveTheme.submit({})}
 								processingLabel="Deactivating"
-								processingSpinner={<AiOutlineLoading className="animate-spin" />}
+								processingSpinner={
+									<AiOutlineLoading className="animate-spin" />
+								}
 								isProcessing={deactiveTheme.isLoading}
 							>
 								Deactive
 							</Button>
 						) : (
-							<Button
-								color="primary"
-								onClick={() =>
-									activeTheme.submit({
-										formData: {
-											theme_id: theme.id,
-										},
-									})
-								}
-								processingLabel="Activating"
-								processingSpinner={<AiOutlineLoading className="animate-spin" />}
-								isProcessing={activeTheme.isLoading}
-							>
-								Active
-							</Button>
+							<>
+								<Button
+									color="primary"
+									onClick={() =>
+										activeTheme.submit({
+											formData: {
+												store_id: store?.id ?? 0,
+												theme_id: theme.id,
+												import_demo: true,
+											},
+										})
+									}
+									processingLabel="Activating"
+									processingSpinner={
+										<AiOutlineLoading className="animate-spin" />
+									}
+									isProcessing={activeTheme.isLoading}
+								>
+									Active
+								</Button>
+							</>
 						)}
 					</div>
 				</Card>

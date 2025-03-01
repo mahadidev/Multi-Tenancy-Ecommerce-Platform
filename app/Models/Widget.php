@@ -18,19 +18,19 @@ class Widget extends Model
     protected static function boot()
     {
         parent::boot();
-    
+
         static::creating(function ($widget) {
             // Find the highest serial for the same `ref_type`
             $maxSerial = self::where('ref_type', $widget->ref_type)->max('serial');
             $widget->serial = $maxSerial ? $maxSerial + 1 : 1;
         });
-    
+
         static::updating(function ($widget) {
             if ($widget->isDirty('serial')) {
                 // If serial is changed, shift other widgets accordingly
                 $oldSerial = $widget->getOriginal('serial');
                 $newSerial = $widget->serial;
-    
+
                 if ($oldSerial < $newSerial) {
                     // Shift serials down if moving forward
                     self::where('ref_type', $widget->ref_type)
@@ -45,8 +45,8 @@ class Widget extends Model
             }
         });
     }
-    
-    
+
+
     /**
      * Get the parent model (store, store_page, theme, theme_page) of the widget.
      */
@@ -68,6 +68,6 @@ class Widget extends Model
      */
     public function widgetInputs()
     {
-        return $this->hasMany(WidgetInput::class, 'widget_id');
+        return $this->hasMany(WidgetInput::class, 'widget_id')->where(["parent_id" => null]);
     }
 }

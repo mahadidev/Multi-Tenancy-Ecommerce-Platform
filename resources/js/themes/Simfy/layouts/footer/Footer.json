@@ -2,6 +2,6 @@
 	"id": 1,
 	"name": "footer",
 	"label": "Footer",
-    "type": "layout-widget",
+    "type": "partial",
 	"inputs": []
 }

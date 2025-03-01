@@ -49,6 +49,12 @@ export interface SwitchStorePayloadType {
     store_id: number;
 }
 
+export interface SwitchThemePayloadType {
+    theme_id: number | null;
+    store_id: number;
+    import_demo: boolean;
+}
+
 export const storeApi = createApi({
 	reducerPath: 'storeApi',
 	baseQuery: baseQueryWithReAuth,
@@ -112,6 +118,16 @@ export const storeApi = createApi({
 			invalidatesTags: ['Stores'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
+		switchTheme: builder.mutation<ApiResponseType, SwitchThemePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/store/switch-theme/${formData.store_id}`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Stores'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
 		switchStore: builder.mutation<ApiResponseType, SwitchStorePayloadType>({
 			query: (formData) =>
 				createRequest({
@@ -131,4 +147,5 @@ export const {
     useCreateStoreMutation,
     useUpdateStoreMutation,
     useSwitchStoreMutation,
+    useSwitchThemeMutation
 } = storeApi;

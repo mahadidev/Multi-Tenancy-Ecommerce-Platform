@@ -23,6 +23,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
     // Store Update Route
     Route::post('/store/{id}', [StoreController::class, 'updateByPost']);
 
+    // store theme switch
+    Route::post("/store/switch-theme/{id}", [StoreController::class, "switchTheme"]);
+
     // Profile Route
     Route::get('profile', [ProfileController::class, 'profile']);
 

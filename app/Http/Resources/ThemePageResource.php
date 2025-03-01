@@ -27,9 +27,9 @@ class ThemePageResource extends JsonResource
             'layout' => $this->layout_id ? WidgetResource::make(Widget::find($this->layout_id)) : null,
             'is_active' => 1,
             'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
-            'widgets' => $this->page_widgets ? WidgetResource::collection($this->page_widgets) : [],
+            'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];
-    }   
+    }
 }

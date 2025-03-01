@@ -27,8 +27,8 @@ const WidgetArrayInput: FC<{ groupInputs: WidgetInputType[] }> = ({
 									<AiFillDelete />
 								</button>
 
-								{input.items &&
-									input.items
+								{input.child &&
+									input.child
 										.slice()
 										.sort(function (itemA, itemB) {
 											return itemA.id - itemB.id;
