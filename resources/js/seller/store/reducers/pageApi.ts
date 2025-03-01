@@ -20,13 +20,13 @@ export interface FetchPagePayloadType {
 export interface CreatePagePayloadType {
 	name: string;
 	title: string;
-	type: string;
+	page_type_id: string;
 }
 
 export interface UpdatePagePayloadType {
 	id: number;
 	name?: string;
-	type?: string | 'home' | 'about' | 'blog' | 'contact';
+	page_type_id?: number;
 	slug?: string;
 	title?: string;
 	is_active?: 0 | 1;

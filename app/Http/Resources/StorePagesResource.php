@@ -23,6 +23,7 @@ class StorePagesResource extends JsonResource
             'layout' => $this->layout ? new WidgetResource($this->layout) : null,
             'is_active' => $this->is_active,
             'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
+            "type_id" => $this->type,
             'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),

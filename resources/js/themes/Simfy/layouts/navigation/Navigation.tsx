@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Navigation:FC<ThemeLayoutPropsType> = ({store}) => {
   return (
-		<Navbar fluid rounded>
+		<Navbar fluid className="light">
 			<Navbar.Brand as={Link} to="/">
 				<img
 					src={store.logo}

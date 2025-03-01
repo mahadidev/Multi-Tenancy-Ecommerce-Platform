@@ -1,40 +1,37 @@
 import { ColorInput, FileInput } from '@seller/components';
 import useWidget from '@seller/hooks/useWidget';
-import { WidgetInputItemType, WidgetInputType } from '@type/widgetType';
+import { WidgetInputType } from '@type/widgetType';
 import { Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 
-const EditorInput: FC<WidgetInputType | WidgetInputItemType> = (
-	inputOrItem
+const EditorInput: FC<WidgetInputType> = (
+	input
 ) => {
 	const { onChangeInputOrItem } = useWidget();
 
 	const onChange = (event: React.ChangeEvent<HTMLInputElement | any>) => {
 		onChangeInputOrItem({
 			event: event,
-			inputOrItem: inputOrItem,
+			input: input,
 		});
 	};
 
 	return (
 		<div className="flex flex-col gap-1.5">
-			<Label
-				className="text-sm"
-				htmlFor={`${inputOrItem.name}${inputOrItem.id}`}
-			>
-				{inputOrItem.label}
+			<Label className="text-sm" htmlFor={`${input.name}${input.id}`}>
+				{input.label}
 			</Label>
 
-			{inputOrItem.type !== 'image' &&
-				inputOrItem.type !== 'file' &&
-				inputOrItem.type !== 'color' &&
-				inputOrItem.type !== 'array' && (
+			{input.type.type !== 'image' &&
+				input.type.type !== 'file' &&
+				input.type.type !== 'color' &&
+				input.type.type !== 'array' && (
 					<TextInput
-						id={`${inputOrItem.name}${inputOrItem.id}`}
-						name={inputOrItem.name}
-						placeholder={inputOrItem.placeholder}
-						value={inputOrItem.value}
-						required={inputOrItem.required}
+						id={`${input.name}${input.id}`}
+						name={input.name}
+						placeholder={input.placeholder}
+						value={input.value}
+						required={input.required}
 						onChange={onChange}
 						theme={{
 							field: {
@@ -46,13 +43,13 @@ const EditorInput: FC<WidgetInputType | WidgetInputItemType> = (
 					/>
 				)}
 
-			{inputOrItem.type == 'image' && (
+			{input.type.type == 'image' && (
 				<FileInput
-					{...inputOrItem}
+					{...input}
 					className="!h-28"
 					onChange={onChange}
 					valueType={'url'}
-					id={`${inputOrItem.name}${inputOrItem.id}`}
+					id={`${input.name}${input.id}`}
 					theme={{
 						field: {
 							input: {
@@ -63,11 +60,11 @@ const EditorInput: FC<WidgetInputType | WidgetInputItemType> = (
 				/>
 			)}
 
-			{inputOrItem.type == 'color' && (
+			{input.type.type == 'color' && (
 				<ColorInput
-					{...inputOrItem}
+					{...input}
 					onChange={onChange}
-					id={`${inputOrItem.name}${inputOrItem.id}`}
+					id={`${input.name}${input.id}`}
 					theme={{
 						field: {
 							input: {

@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import FeaturedProducts from './featuredProducts/FeaturedProducts';
 import Hero from './hero/Hero';
 import Introduction from './introduction/Introduction';
+import OffersSection from './offerSection/OfferSection';
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
 	const widgets: {
@@ -10,7 +11,8 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
 	} = {
 		hero: <Hero {...props} />,
         featuredProducts: <FeaturedProducts {...props} />,
-        introduction: <Introduction {...props} />
+        introduction: <Introduction {...props} />,
+        offersSection: <OffersSection {...props} />
 	};
 
 	return (

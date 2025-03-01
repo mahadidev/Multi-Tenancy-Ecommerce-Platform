@@ -1,6 +1,7 @@
 import flowbite from 'flowbite-react/tailwind';
 
 module.exports = {
+	darkMode: 'class',
 	content: [
 		'./resources/js/seller/**/*.{ts,tsx,mdx}',
 		'./resources/js/themes/sources/dokan/**/*.{ts,tsx,mdx}',
@@ -8,7 +9,7 @@ module.exports = {
 	],
 	theme: {
 		fontFamily: {
-            sans: ["Inter", "serif"],
+			sans: ['Inter', 'serif'],
 			myriad: ['myriad', 'system-ui'],
 			ibrand: ['ibrand', 'system-ui'],
 		},

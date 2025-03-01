@@ -8,7 +8,8 @@ const AppLayout: FC<ThemeLayoutPropsType> = (props) => {
 	return (
 		<main>
 			<Navigation {...props} />
-			<Outlet />
+			{Outlet && <Outlet />}
+            {props.children && props.children}
 			<Footer {...props} />
 		</main>
 	);

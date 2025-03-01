@@ -21,7 +21,7 @@ const WidgetEditor: FC = () => {
 					return inputA.id - inputB.id;
 				})
 				.map((input) => {
-					if (input.type === 'array') {
+					if (input.type.type === 'array') {
 						setWidgetInputsGroup((prev) => {
 							return {
 								...prev,
@@ -49,7 +49,7 @@ const WidgetEditor: FC = () => {
 						})
 						.map((input, inputIndex) => (
 							<div key={inputIndex}>
-								{input.type !== 'array' && <EditorInput {...input} />}
+								{input.type.type !== 'array' && <EditorInput {...input} />}
 							</div>
 						))}
 

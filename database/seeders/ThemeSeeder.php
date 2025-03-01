@@ -66,12 +66,10 @@ class ThemeSeeder extends Seeder
 
                     if ($widget->inputs) {
                         foreach ($widget->inputs as $input) {
-                            $themeWidgetInput = WidgetInput::updateorCreate(
+                            $created_input = WidgetInput::create(
                                 [
                                     'name' => $input->name,
                                     'widget_id' => $widgetData->id,
-                                ],
-                                [
                                     'label' => $input->label,
                                     'placeholder' => $input->placeholder ?? null,
                                     'value' => $input->value ?? null,
@@ -81,28 +79,29 @@ class ThemeSeeder extends Seeder
                                         WidgetInputType::where(['value' => $input->type])
                                             ->orwhere(['label' => $input->type])
                                             ->orwhere(['id' => $input->type])
-                                            ->first()->id ?? 1,
+                                            ->first()->id ?? WidgetInputType::create(["value" => $input->type, "label" => $input->type])->id,
                                     'parent_id' => $input->parent_id ?? null,
                                 ],
                             );
 
-                            if ($input->child) {
-                                $themeWidgetChildInput = WidgetInput::updateorCreate([
-                                    'widget_id' => $widgetData->id,
-                                    'name' => $input->name,
-                                ],[
-                                    'label' => $input->label,
-                                    'placeholder' => $input->placeholder ?? null,
-                                    'value' => $input->value ?? null,
-                                    'options' => isset($input->options) ? json_encode($input->options) : null,
-                                    'required' => $input->required ?? false,
-                                    'type_id' =>
-                                        WidgetInputType::where(['value' => $input->type])
-                                            ->orwhere(['label' => $input->type])
-                                            ->orwhere(['id' => $input->type])
-                                            ->first()->id ?? 1,
-                                    'parent_id' => $themeWidgetInput->id,
-                                ]);
+                            if (isset($input->child)) {
+                                foreach ($input->child as $child) {
+                                    $created_child_input = WidgetInput::create([
+                                        'widget_id' => $widgetData->id,
+                                        'name' => $child->name,
+                                        'label' => $child->label,
+                                        'placeholder' => $child->placeholder ?? null,
+                                        'value' => $child->value ?? null,
+                                        'options' => isset($child->options) ? json_encode($child->options) : null,
+                                        'required' => $child->required ?? false,
+                                        'type_id' =>
+                                            WidgetInputType::where(['value' => $child->type])
+                                                ->orwhere(['label' => $child->type])
+                                                ->orwhere(['id' => $child->type])
+                                                ->first()->id ?? WidgetInputType::create(["value" => $child->type, "label" => $child->type])->id,
+                                        'parent_id' => $created_input->id,
+                                    ]);
+                                }
                             }
                         }
                     }
@@ -185,12 +184,10 @@ class ThemeSeeder extends Seeder
 
                             if ($widget->inputs) {
                                 foreach ($widget->inputs as $input) {
-                                    $themeWidgetInput = WidgetInput::updateorCreate(
+                                    $created_page_input = WidgetInput::create(
                                         [
                                             'name' => $input->name,
                                             'widget_id' => $widgetData->id,
-                                        ],
-                                        [
                                             'label' => $input->label,
                                             'placeholder' => $input->placeholder ?? null,
                                             'value' => $input->value ?? null,
@@ -206,22 +203,23 @@ class ThemeSeeder extends Seeder
                                     );
 
                                     if (isset($input->child)) {
-                                        $themeWidgetChildInput = WidgetInput::updateorCreate([
-                                            'widget_id' => $widgetData->id,
-                                            'name' => $input->name,
-                                        ],[
-                                            'label' => $input->label,
-                                            'placeholder' => $input->placeholder ?? null,
-                                            'value' => $input->value ?? null,
-                                            'options' => isset($input->options) ? json_encode($input->options) : null,
-                                            'required' => $input->required ?? false,
-                                            'type_id' =>
-                                                WidgetInputType::where(['value' => $input->type])
-                                                    ->orwhere(['label' => $input->type])
-                                                    ->orwhere(['id' => $input->type])
-                                                    ->first()->id ?? 1,
-                                            'parent_id' => $themeWidgetInput->id,
-                                        ]);
+                                        foreach ($input->child as $child) {
+                                            $created_page_child_input = WidgetInput::create([
+                                                'widget_id' => $widgetData->id,
+                                                'name' => $child->name,
+                                                'label' => $child->label,
+                                                'placeholder' => $child->placeholder ?? null,
+                                                'value' => $child->value ?? null,
+                                                'options' => isset($child->options) ? json_encode($child->options) : null,
+                                                'required' => $child->required ?? false,
+                                                'type_id' =>
+                                                    WidgetInputType::where(['value' => $child->type])
+                                                        ->orwhere(['label' => $child->type])
+                                                        ->orwhere(['id' => $child->type])
+                                                        ->first()->id ?? 1,
+                                                'parent_id' => $created_page_input->id,
+                                            ]);
+                                        }
                                     }
                                 }
                             }

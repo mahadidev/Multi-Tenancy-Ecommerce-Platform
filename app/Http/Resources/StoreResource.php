@@ -41,6 +41,9 @@ class StoreResource extends JsonResource
             'brands' => $this->brands ? BrandResource::collection($this->brands) : [],
             'pages' => $this->pages ? StorePagesResource::collection($this->pages) : [],
             'menus' => $this->menus ? StoreMenuResource::collection($this->menus) : [],
+            'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
+            'partials' => $this->partials ? WidgetResource::collection($this->partials) : [],
+            "layouts" => $this->layouts ? WidgetResource::collection($this->layouts) : [],
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

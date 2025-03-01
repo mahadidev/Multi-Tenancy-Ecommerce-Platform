@@ -64,6 +64,16 @@ class Theme extends Model
 
     public function widgets()
     {
-        return $this->morphMany(Widget::class, 'ref');
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 3]); // return only section type widget
+    }
+
+    public function layouts()
+    {
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 1]); // return only layout type widget
+    }
+
+    public function partials()
+    {
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 2]); // return only layout type widget
     }
 }
