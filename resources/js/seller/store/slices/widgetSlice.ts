@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WidgetInputItemType, WidgetInputType, WidgetType } from '@type/widgetType';
+import { WidgetInputType, WidgetType } from '@type/widgetType';
 
 
 const initialState: {
 	widgets: WidgetType[];
 	widget: WidgetType | null;
 	input: WidgetInputType | null;
-	item: WidgetInputItemType | null;
+	item: WidgetInputType | null;
 } = {
 	widgets: [],
 	widget: null,
@@ -27,7 +27,7 @@ const widgetSlice = createSlice({
 		setInput: (state, action: PayloadAction<WidgetInputType>) => {
 			state.input = action.payload;
 		},
-		setItem: (state, action: PayloadAction<WidgetInputItemType>) => {
+		setItem: (state, action: PayloadAction<WidgetInputType>) => {
 			state.item = action.payload;
 		},
 		clearWidgets: (state) => {

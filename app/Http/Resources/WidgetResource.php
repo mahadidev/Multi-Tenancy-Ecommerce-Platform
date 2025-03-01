@@ -18,6 +18,7 @@ class WidgetResource extends JsonResource
             'id' => $this->id,
             'ref_id' => $this->ref_id, // Morph reference ID
             'ref_type' => $this->ref_type, // Morph reference type
+            'type_id' => $this->type_id,
             'name' => $this->name,
             'label' => $this->label,
             'serial' => $this->serial ?? 0,

@@ -1,5 +1,4 @@
 import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
-import usePage from "@seller/hooks/usePage";
 import { useFetchPagesQuery } from "@seller/store/reducers/pageApi";
 import { FC } from "react";
 import PagesTable from "./PagesTable";

@@ -32,9 +32,9 @@ class ThemePage extends Model
         });
     }
 
-    public function page_widgets()
+    public function widgets()
     {
-        return $this->morphMany(Widget::class, 'ref');
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 3]);
     }
 
     public function type()
@@ -44,6 +44,6 @@ class ThemePage extends Model
 
     public function layout()
     {
-        return $this->morphMany(Widget::class, 'ref');
+        return $this->belongsTo(Widget::class, 'layout_id');
     }
 }

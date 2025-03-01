@@ -15,6 +15,7 @@ import NavigationJson from './layouts/navigation/Navigation.json';
 import { RegisteredThemeType } from '@themes/registeredTheme';
 import HeroJson from "./widgets/hero/Hero.json";
 import IntroductionJson from './widgets/introduction/Introduction.json';
+import OfferSectionJson from './widgets/offerSection/OfferSection.json';
 
 
 export const Simfy: RegisteredThemeType = {
@@ -28,7 +29,7 @@ export const SimfySeeder: ThemeType | any = {
 	name: Simfy.name,
 	slug: Simfy.name.toLowerCase().replaceAll(' ', '-'),
 	thumbnail: null,
-	widgets: [AppLayoutJson, NavigationJson, FooterJson],
+	widgets: [AppLayoutJson, NavigationJson, FooterJson, OfferSectionJson],
 	pages: [
 		{
 			id: 0,
@@ -40,7 +41,7 @@ export const SimfySeeder: ThemeType | any = {
 			is_active: 1,
 			type: 'home',
 			thumbnail: null,
-			widgets: [HeroJson, IntroductionJson],
+			widgets: [HeroJson, IntroductionJson, OfferSectionJson],
 		},
 	],
 };

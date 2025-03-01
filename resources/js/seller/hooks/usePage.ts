@@ -160,12 +160,27 @@ const usePage = () => {
 	const savePage = ({ onSuccess }: { onSuccess?: CallableFunction }) => {
 		if (page) {
 			handleSavePage({
-				id: page.id,
-				name: page.name,
-				slug: page.slug,
-				title: page.title,
-				is_active: page.is_active,
-				widgets: widgets,
+				...page,
+				widgets: widgets.map((widget) => {
+					return {
+						...widget,
+						inputs: widget.inputs
+							.slice()
+							.sort(function (inputA, inputB) {
+								return inputA.id - inputB.id;
+							})
+							.map((input) => {
+								return {
+									...input,
+									child: input.child
+										? input.child.slice().sort(function (inputA, inputB) {
+												return inputA.id - inputB.id;
+										  })
+										: [],
+								};
+							}),
+					};
+				}),
 			}).then((response) => {
 				if (response.data?.status === 200) {
 					if (onSuccess) {

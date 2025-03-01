@@ -1,10 +1,6 @@
 import { setWidget, setWidgets } from '@seller/store/slices/widgetSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import {
-    WidgetInputItemType,
-    WidgetInputType,
-    WidgetType,
-} from '@type/widgetType';
+import { WidgetInputType, WidgetType } from '@type/widgetType';
 
 const useWidget = () => {
 	const { widgets, widget, input, item } = useAppSelector(
@@ -83,21 +79,21 @@ const useWidget = () => {
 										((findWidget.inputs &&
 											findWidget.inputs[findWidget.inputs.length - 1]?.id) ??
 											1) + 100,
-									items: input.items
+									child: input.child
 										?.slice()
 										.sort(function (itemA, itemB) {
 											return itemA.id - itemB.id;
 										})
-										.map((item, index: number) => {
+										.map((child, index: number) => {
 											return {
-												...item,
+												...child,
 												id:
-													((input.items &&
-														input.items[input.items.length - 1]?.id) ??
+													((input.child &&
+														input.child[input.child.length - 1]?.id) ??
 														1) +
 													100 +
 													index,
-												widget_input_id:
+												parent_id:
 													((findWidget.inputs &&
 														findWidget.inputs[findWidget.inputs.length - 1]
 															?.id) ??
@@ -130,7 +126,9 @@ const useWidget = () => {
 						{
 							...findWidget,
 							inputs: [
-								...findWidget.inputs.filter((filterInput) => filterInput.id !== input.id)
+								...findWidget.inputs.filter(
+									(filterInput) => filterInput.id !== input.id
+								),
 							],
 						},
 					])
@@ -140,30 +138,30 @@ const useWidget = () => {
 	};
 
 	// on change input item
-	const onChangeInputItem = ({
-		item,
+	const onChangeInputChild = ({
+		childInput,
 		event,
 	}: {
-		item: WidgetInputItemType;
+		childInput: WidgetInputType;
 		event: React.ChangeEvent<HTMLInputElement | any>;
 	}) => {
 		const findWidget = widgets.find(
 			(findWidget) => findWidget.id === widget?.id
 		);
 
-        console.log(findWidget)
-
 		if (findWidget) {
 			const filteredInputs: WidgetInputType[] = findWidget.inputs.filter(
-				(filterInputs) => filterInputs.id !== item.widget_input_id
+				(filterInputs) => filterInputs.id !== childInput.parent_id
 			);
 			const input: WidgetInputType | undefined = findWidget.inputs.find(
-				(findInput) => findInput.id === item.widget_input_id
+				(findInput) => findInput.id === childInput.parent_id
 			);
-			const filteredItems: WidgetInputItemType[] | undefined =
-				input && input.items?.filter((filterItem) => filterItem.id !== item.id);
 
-			if (input && filteredItems) {
+			const filteredChild: WidgetInputType[] | undefined =
+				input &&
+				input.child?.filter((filterItem) => filterItem.id !== childInput.id);
+
+			if (input && filteredChild) {
 				dispatch(
 					setWidgets([
 						...widgets.filter(
@@ -175,9 +173,9 @@ const useWidget = () => {
 								...filteredInputs,
 								{
 									...input,
-									items: [
-										...filteredItems,
-										{ ...item, value: event.target.value },
+									child: [
+										...filteredChild,
+										{ ...childInput, value: event.target.value },
 									],
 								},
 							],
@@ -225,19 +223,19 @@ const useWidget = () => {
 
 	// on change input or item
 	const onChangeInputOrItem = (props: {
-		inputOrItem: WidgetInputType | WidgetInputItemType;
+		input: WidgetInputType;
 		event: React.ChangeEvent<HTMLInputElement | any>;
 	}) => {
 		// check if input  is input or items
-		if ('widget_input_id' in props.inputOrItem) {
-			onChangeInputItem({
+		if (props.input.parent_id !== null) {
+			onChangeInputChild({
 				event: props.event,
-				item: props.inputOrItem,
+				childInput: props.input,
 			});
 		} else {
 			onChangeInput({
 				event: props.event,
-				input: props.inputOrItem,
+				input: props.input,
 			});
 		}
 	};
@@ -253,7 +251,7 @@ const useWidget = () => {
 		onSortWidget,
 		onEditWidget,
 		onAddArrayInput,
-        onDeleteArrayInput,
+		onDeleteArrayInput,
 		onDeleteWidget,
 		onChangeInputOrItem,
 	};

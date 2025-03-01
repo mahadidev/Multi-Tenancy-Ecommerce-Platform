@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StorePagesResource;
+use App\Models\Store;
 use App\Models\StorePage;
+use App\Models\Theme;
+use App\Models\Widget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class StorePageController extends Controller
@@ -104,6 +107,14 @@ class StorePageController extends Controller
             $counter++;
         }
 
+        // if not layout
+        if(!isset($validatedData["layout_id"])){
+            $theme = Store::where(["id" => authStore()])->first();
+
+            $validatedData["layout_id"] = Widget::where(["ref_type" => Theme::class, "ref_id" => $theme->id, "type_id" => 1])->first() ? Widget::where(["ref_type" => Theme::class, "ref_id" => $theme->id, "type_id" => 1])->first()->id : null;
+
+        }
+
         // $storePage = StorePage::authorized()->create($validatedData);
         $storePage = StorePage::create([
             'store_id' =>  $validatedData['store_id'],
@@ -112,7 +123,7 @@ class StorePageController extends Controller
             'type' => $validatedData['page_type_id'],
             'title' => $validatedData['title'],
             'layout_id' => $validatedData['layout_id'],
-            'is_active' => $validatedData['is_active'],
+            'is_active' => $validatedData['is_active'] ?? false,
         ]);
 
         // Create the widgets for the store page if they exist
@@ -221,7 +232,7 @@ class StorePageController extends Controller
         $validatedData = $request->validate([
             'name' => 'nullable|string',
             'slug' => 'nullable|string|max:25',
-            'page_type_id' => 'nullable|exists:page_types,id',
+            'type_id' => 'nullable|exists:page_types,id',
             'title' => 'nullable|string',
             'layout_id' => 'nullable|exists:widgets,id',
             'is_active' => 'nullable|boolean',
@@ -231,10 +242,10 @@ class StorePageController extends Controller
             'widgets.*.label' => 'required|string',
             'widgets.*.serial' => 'nullable|numeric',
             'widgets.*.thumbnail' => 'nullable|string',
-            'widgets.*.widget_type_id' => 'required|exists:widget_types,id',
+            'widgets.*.type_id' => 'required|exists:widget_types,id',
             'widgets.*.inputs' => 'nullable|array',
             'widgets.*.inputs.*.parent_id' => 'nullable|exists:widget_inputs,id',
-            'widgets.*.inputs.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
+            'widgets.*.inputs.*.type_id' => ['required', 'exists:widget_input_types,id'],
             'widgets.*.inputs.*.name' => 'required|string',
             'widgets.*.inputs.*.label' => 'required|string',
             'widgets.*.inputs.*.placeholder' => 'nullable|string',
@@ -244,7 +255,7 @@ class StorePageController extends Controller
 
 
             'widgets.*.inputs.child' => 'nullable|array',
-            'widgets.*.inputs.*.child.*.input_type_id' => ['required', 'exists:widget_input_types,id'],
+            'widgets.*.inputs.*.child.*.type_id' => ['required', 'exists:widget_input_types,id'],
             'widgets.*.inputs.*.child.*.name' => 'required|string',
             'widgets.*.inputs.*.child.*.label' => 'required|string',
             'widgets.*.inputs.*.child.*.placeholder' => 'nullable|string',
@@ -254,7 +265,7 @@ class StorePageController extends Controller
         ]);
 
 
-        $validatedData["type"] = $validatedData["page_type_id"];
+        $validatedData["type"] = $validatedData["type_id"];
 
          // Get the existing slug from the database
         $slug = $storePage->slug;
@@ -275,7 +286,7 @@ class StorePageController extends Controller
         }
 
         $validatedData['slug'] = $slug;
-        
+
         // Update the store page's basic details
         $storePage->update($validatedData);
 
@@ -287,7 +298,7 @@ class StorePageController extends Controller
                 $widgetData = [
                     'name' => $widget['name'],
                     'label' => $widget['label'],
-                    'type_id' => $widget['widget_type_id'] ?? null,
+                    'type_id' => $widget['type_id'] ?? null,
                     'serial' => isset($widget['serial']) ? $widget['serial'] : $key + 1,
                     'thumbnail' => $widget['thumbnail'] ?? null,
                 ];
@@ -302,7 +313,7 @@ class StorePageController extends Controller
                     foreach ($widget['inputs'] as $key2 => $input) {
                         $inputData = [
                             'parent_id' => isset($input['parent_id']) ? $input['parent_id'] : null,
-                            'type_id' => $input['input_type_id'],
+                            'type_id' => $input['type_id'],
                             'name' => $input['name'],
                             'label' => $input['label'],
                             'placeholder' => $input['placeholder'] ?? null,
@@ -317,7 +328,7 @@ class StorePageController extends Controller
                             foreach ($input['child'] as $key2 => $childInput) {
                                 $inputData = [
                                     'parent_id' => $storePageWidgetInput->id,
-                                    'type_id' => $childInput['input_type_id'],
+                                    'type_id' => $childInput['type_id'],
                                     'name' => $childInput['name'],
                                     'label' => $childInput['label'],
                                     'placeholder' => $childInput['placeholder'] ?? null,
