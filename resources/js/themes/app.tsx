@@ -1,4 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import useColor from './_helper/hooks/useColor';
 import useStore from './_helper/hooks/useStore';
 import useTheme from './_helper/hooks/useTheme';
 import { THEME_SLUG } from './_helper/theme_env';
@@ -8,6 +11,14 @@ import { registeredTheme } from './registeredTheme';
 const App = () => {
 	const { fetchTheme, theme } = useTheme();
 	const { store } = useStore();
+	const { setColorShade } = useColor();
+
+	useEffect(() => {
+		setColorShade({
+			name: 'primary',
+			color: theme?.primary_color ?? '#33b440',
+		});
+	}, [theme]);
 
 	return (
 		<>
@@ -21,14 +32,18 @@ const App = () => {
 									path="/"
 									element={
 										<>
-											{page.layout ? registeredTheme[theme.name] ? (
-												registeredTheme[theme.name]?.layout({
-													store: store,
-													layout: page.layout,
-												})
+											{page.layout ? (
+												registeredTheme[theme.name] ? (
+													registeredTheme[theme.name]?.layout({
+														store: store,
+														layout: page.layout,
+													})
+												) : (
+													<h1>Layout not found.</h1>
+												)
 											) : (
-												<h1>Layout not found.</h1>
-											) : <Outlet />}
+												<Outlet />
+											)}
 										</>
 									}
 								>
