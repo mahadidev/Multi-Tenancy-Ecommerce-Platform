@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import useStore from '@site/hooks/useStore';
+import useColor from '@themes/_helper/hooks/useColor';
 import { registeredTheme } from '@themes/registeredTheme';
 import { PageType } from '@type/pageType';
 import { FC, useEffect } from 'react';
@@ -8,10 +10,14 @@ import { SITE_SLUG } from './site_env';
 
 const App: FC = function () {
 	const { store, fetchStore } = useStore();
+    const {setColorShade} = useColor();
 
 	useEffect(() => {
 		if (store && store.theme) {
-			document.documentElement.style.setProperty("--store-primary-color", store.primary_color ?? store.theme.primary_color);
+			setColorShade({
+                name: "primary",
+                "color": store.primary_color ?? store.theme.primary_color
+            });
 		}
 	}, [store]);
 
