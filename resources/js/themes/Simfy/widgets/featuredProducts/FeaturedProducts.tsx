@@ -1,20 +1,15 @@
 import { ThemeWidgetPropsType } from '@type/themeType';
 import { FC } from 'react';
 
-const FeaturedProducts: FC<ThemeWidgetPropsType> = ({ widget }) => {
+const FeaturedProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
 	return (
 		<div>
-			{/* title */}
-			{widget.inputs.find((input) => input.name === 'title') && (
-				<h1>{widget.inputs.find((input) => input.name === 'title')?.value}</h1>
-			)}
 
-			{/* description */}
-			{widget.inputs.find((input) => input.name === 'description') && (
-				<p>
-					{widget.inputs.find((input) => input.name === 'description')?.value}
-				</p>
-			)}
+
+			<h1>
+				Product
+				{JSON.stringify(store.featuredProducts)}
+			</h1>
 		</div>
 	);
 };

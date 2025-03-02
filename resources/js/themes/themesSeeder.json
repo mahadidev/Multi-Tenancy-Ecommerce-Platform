@@ -17,7 +17,14 @@
         "name": "navigation",
         "label": "Navigation",
         "type": "partial",
-        "inputs": []
+        "inputs": [
+          {
+            "name": "is_fixed",
+            "label": "Navigation Fixed",
+            "type": "boolean",
+            "value": false
+          }
+        ]
       },
       {
         "id": 1,
