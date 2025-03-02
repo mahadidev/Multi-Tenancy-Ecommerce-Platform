@@ -4,10 +4,7 @@ const PricingSection = () => {
     return (
         <div className="my-5 container">
             <div className="relative w-max mx-auto">
-                <h1
-                    className="w-max text-center text-2xl lg:text-5xl text-primary font-medium lg:leading-[58px]"
-                    x-ref="heroText"
-                >
+                <h1 className="w-max text-center text-2xl lg:text-5xl text-primary font-medium lg:leading-[58px]">
                     Choose{" "}
                     <span className="relative after:w-full after:h-[4px] after:absolute after:-z-10 after:left-0 after:bottom-2 after:bg-primary-light after:rounded-full">
                         Your Right
