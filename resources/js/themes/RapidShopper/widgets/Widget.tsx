@@ -1,5 +1,8 @@
 import { ThemeWidgetPropsType } from "@type/themeType";
 import React, { FC } from "react";
+import BannersSection from "./banners/Banners";
+import FeaturedProducts from "./featuredProducts/FeaturedProducts";
+import FeaturesSection from "./features/FeaturesSection";
 import Hero from "./hero/Hero";
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
@@ -7,6 +10,9 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         [Key: string]: React.ReactNode;
     } = {
         hero: <Hero {...props} />,
+        featuresSection: <FeaturesSection {...props} />,
+        featuredProducts: <FeaturedProducts {...props} />,
+        bannersSection: <BannersSection {...props} />,
     };
 
     return (

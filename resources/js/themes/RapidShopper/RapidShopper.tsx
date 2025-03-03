@@ -12,6 +12,9 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 
 // import widget json
 import { RegisteredThemeType } from "@themes/registeredTheme";
+import BannerJson from "./widgets/banners/Banner.json";
+import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
+import FeaturesSectionJson from "./widgets/features/FeaturesSection.json";
 import HeroJson from "./widgets/hero/Hero.json";
 import Widget from "./widgets/Widget";
 
@@ -40,9 +43,9 @@ export const RapidShopperSeeder: ThemeType | any = {
             thumbnail: null,
             widgets: [
                 HeroJson,
-                // IntroductionJson,
-                // OfferSectionJson,
-                // AboutUsSectionJson,
+                FeaturesSectionJson,
+                BannerJson,
+                FeaturedProductsJson,
             ],
         },
     ],

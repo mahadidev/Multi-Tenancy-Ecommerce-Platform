@@ -379,6 +379,211 @@
                 "value": "YOUR_WIDGET_TITLE"
               }
             ]
+          },
+          {
+            "id": 1,
+            "name": "featuresSection",
+            "label": "Features Section",
+            "serial": 1,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "features",
+                "label": "features",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Offer title 1",
+                    "placeholder": "Enter title"
+                  },
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Feature tagline d",
+                    "placeholder": "Enter feature tagline"
+                  },
+                  {
+                    "id": 1,
+                    "name": "icon",
+                    "label": "Icon",
+                    "type": "icon",
+                    "value": "icon"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "features",
+                "label": "features",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Offer title 2",
+                    "placeholder": "Enter title"
+                  },
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Feature tagline 2",
+                    "placeholder": "Enter feature tagline"
+                  },
+                  {
+                    "id": 1,
+                    "name": "icon",
+                    "label": "Icon",
+                    "type": "icon",
+                    "value": "<svg></svg>"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "features",
+                "label": "features",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Offer title 3",
+                    "placeholder": "Enter title"
+                  },
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Feature tagline 3",
+                    "placeholder": "Enter feature tagline"
+                  },
+                  {
+                    "id": 1,
+                    "name": "icon",
+                    "label": "Icon",
+                    "type": "icon",
+                    "value": "<svg></svg>"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "features",
+                "label": "features",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Offer title 4",
+                    "placeholder": "Enter title"
+                  },
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Feature tagline 4",
+                    "placeholder": "Enter feature tagline"
+                  },
+                  {
+                    "id": 1,
+                    "name": "icon",
+                    "label": "Icon",
+                    "type": "icon",
+                    "value": "<svg></svg>"
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "name": "features",
+                "label": "features",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Offer title 4",
+                    "placeholder": "Enter title"
+                  },
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Feature tagline 4",
+                    "placeholder": "Enter feature tagline"
+                  },
+                  {
+                    "id": 1,
+                    "name": "icon",
+                    "label": "Icon",
+                    "type": "icon",
+                    "value": "<svg></svg>"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 1,
+            "name": "bannersSection",
+            "label": "Banners Section",
+            "serial": 1,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "banner",
+                "label": "banner",
+                "type": "text",
+                "placeholder": "Enter banner url",
+                "value": "https://i.ibb.co.com/d0xxp4N2/promo-banner-2.webp"
+              },
+              {
+                "id": 2,
+                "name": "banner",
+                "label": "banner",
+                "type": "text",
+                "placeholder": "Enter banner url",
+                "value": "https://i.ibb.co.com/3yPSkV0h/promo-banner-3.webp"
+              },
+              {
+                "id": 3,
+                "name": "banner",
+                "label": "banner",
+                "type": "text",
+                "placeholder": "Enter banner url",
+                "value": "https://i.ibb.co.com/q3PBZbcP/promo-banner-1.webp"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "name": "featuredProducts",
+            "label": "Featured Products Section",
+            "serial": 2,
+            "type": "section",
+            "inputs": []
           }
         ]
       }
