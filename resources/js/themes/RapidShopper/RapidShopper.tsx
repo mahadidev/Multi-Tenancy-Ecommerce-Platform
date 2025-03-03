@@ -12,10 +12,7 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 
 // import widget json
 import { RegisteredThemeType } from "@themes/registeredTheme";
-import AboutUsSectionJson from "./widgets/aboutUs/AboutUs.json";
 import HeroJson from "./widgets/hero/Hero.json";
-import IntroductionJson from "./widgets/introduction/Introduction.json";
-import OfferSectionJson from "./widgets/offerSection/OfferSection.json";
 import Widget from "./widgets/Widget";
 
 export const RapidShopper: RegisteredThemeType = {
@@ -29,7 +26,7 @@ export const RapidShopperSeeder: ThemeType | any = {
     name: RapidShopper.name,
     slug: RapidShopper.name.toLowerCase().replaceAll(" ", "-"),
     thumbnail: null,
-    widgets: [AppLayoutJson, NavigationJson, FooterJson, OfferSectionJson],
+    widgets: [AppLayoutJson, NavigationJson, FooterJson],
     pages: [
         {
             id: 0,
@@ -43,22 +40,10 @@ export const RapidShopperSeeder: ThemeType | any = {
             thumbnail: null,
             widgets: [
                 HeroJson,
-                IntroductionJson,
-                OfferSectionJson,
-                AboutUsSectionJson,
+                // IntroductionJson,
+                // OfferSectionJson,
+                // AboutUsSectionJson,
             ],
-        },
-        {
-            id: 0,
-            name: "aboutus",
-            label: "About us",
-            slug: "/aboutus",
-            title: "About Us Page",
-            layout: AppLayoutJson,
-            is_active: 1,
-            type: "about",
-            thumbnail: null,
-            widgets: [AboutUsSectionJson],
         },
     ],
 };

@@ -8,7 +8,7 @@ import themeSlice from './slices/themeSlice';
 
 const authPersistConfig = {
 	key: 'themes',
-	blacklist: ['themeApi', 'theme'],
+	blacklist: ['themeApi', 'theme', 'storeSlice'],
 	storage,
 	version: 0,
 };
