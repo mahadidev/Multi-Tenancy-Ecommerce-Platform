@@ -1,4 +1,5 @@
 import { ThemeLayoutPropsType, ThemeWidgetPropsType } from "@type/themeType";
+import { BoroBazar } from "./BoroBazar/BoroBazar";
 import { RapidShopper } from "./RapidShopper/RapidShopper";
 import { Simfy } from "./Simfy/Simfy";
 
@@ -13,5 +14,6 @@ export const registeredTheme: {
 } = {
     Simfy: Simfy,
     RapidShopper: RapidShopper,
+    BoroBazar: BoroBazar,
     // register new theme
 };
