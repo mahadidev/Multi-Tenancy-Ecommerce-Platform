@@ -1,3 +1,4 @@
+import { MenuItemType, MenuType } from "@type/menuType";
 import { ThemeLayoutPropsType } from "@type/themeType";
 import { Dropdown, Navbar } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
@@ -5,7 +6,7 @@ import { FaGlobe, FaRegUserCircle } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 
-const Navigation: FC<ThemeLayoutPropsType> = () => {
+const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
     const [timeLeft, setTimeLeft] = useState(6 * 3600 + 13 * 60 + 6); // 6:13:06 in seconds
     const [showBanner, setShowBanner] = useState(true);
 
@@ -58,34 +59,22 @@ const Navigation: FC<ThemeLayoutPropsType> = () => {
             <div className="bg-white md:w-11/12 w-full flex items-center justify-between mx-auto">
                 <Navbar className="!w-full py-4">
                     <Navbar.Brand href="#" className="flex items-center gap-2">
-                        <img
-                            src="https://i.ibb.co.com/B5Tvrw6M/logo-026129ac.png"
-                            alt="logo"
-                        />
+                        <img src={store?.logo} alt="logo" />
                     </Navbar.Brand>
                     <Navbar.Collapse className="w-full flex flex-col md:flex-row md:items-center">
-                        <Dropdown label="Demos" inline>
-                            <Dropdown.Item>Demo 1</Dropdown.Item>
-                            <Dropdown.Item>Demo 2</Dropdown.Item>
-                        </Dropdown>
-                        <Dropdown label="Categories" inline>
-                            <Dropdown.Item>Category 1</Dropdown.Item>
-                            <Dropdown.Item>Category 2</Dropdown.Item>
-                        </Dropdown>
-                        <Dropdown label="Dietary" inline>
-                            <Dropdown.Item>Vegan</Dropdown.Item>
-                            <Dropdown.Item>Gluten-Free</Dropdown.Item>
-                        </Dropdown>
-                        <a href="#" className="block py-2 px-4 md:py-0">
-                            Search
-                        </a>
-                        <a href="#" className="block py-2 px-4 md:py-0">
-                            Shops
-                        </a>
-                        <Dropdown label="Pages" inline>
-                            <Dropdown.Item>About Us</Dropdown.Item>
-                            <Dropdown.Item>Contact</Dropdown.Item>
-                        </Dropdown>
+                        {store?.menus?.map((menu: MenuType, idx: number) => (
+                            <Dropdown key={idx} label={menu?.label} inline>
+                                {menu?.items?.map(
+                                    (item: MenuItemType, idx: number) => (
+                                        <a href={item?.href} key={idx}>
+                                            <Dropdown.Item>
+                                                {item?.label}
+                                            </Dropdown.Item>
+                                        </a>
+                                    )
+                                )}
+                            </Dropdown>
+                        ))}
                     </Navbar.Collapse>{" "}
                     <div className="flex md:order-2 items-center gap-4">
                         <FaRegUserCircle className="text-xl" />

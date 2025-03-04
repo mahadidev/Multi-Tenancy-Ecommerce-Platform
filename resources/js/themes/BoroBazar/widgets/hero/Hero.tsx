@@ -7,12 +7,7 @@ const HeroSection: FC<ThemeWidgetPropsType> = () => {
         <section className="px-4 lg:px-0">
             <div>
                 <div className="!rounded-none h-[500px]">
-                    <Carousel
-                        className="!rounded-none"
-                        slide={true}
-                        slideInterval={5}
-                        slot="2"
-                    >
+                    <Carousel>
                         <img
                             src="https://grabit-react-next.maraviyainfotech.com/assets/img/hero-bg/1.jpg"
                             alt="..."
