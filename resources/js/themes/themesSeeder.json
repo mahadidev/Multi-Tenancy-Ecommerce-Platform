@@ -675,6 +675,41 @@
             "inputs": []
           }
         ]
+      },
+      {
+        "id": 0,
+        "name": "shop",
+        "label": "Shop",
+        "slug": "/shop",
+        "title": "Shop Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "shope",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "pageBanner",
+            "label": "Page Banner",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          },
+          {
+            "id": 2,
+            "name": "featuredProducts",
+            "label": "Featured Products Section",
+            "serial": 2,
+            "type": "section",
+            "inputs": []
+          }
+        ]
       }
     ]
   }

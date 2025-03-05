@@ -1,13 +1,13 @@
 {
-  "_index.esm-iMshYMet.js": {
-    "file": "assets/index.esm-iMshYMet.js",
-    "name": "index.esm"
+  "_ToggleSwitch-DVr495eY.js": {
+    "file": "assets/ToggleSwitch-DVr495eY.js",
+    "name": "ToggleSwitch"
   },
-  "_registeredTheme-Dc-h6-ew.js": {
-    "file": "assets/registeredTheme-Dc-h6-ew.js",
+  "_registeredTheme-DUcYHfwR.js": {
+    "file": "assets/registeredTheme-DUcYHfwR.js",
     "name": "registeredTheme",
     "imports": [
-      "_index.esm-iMshYMet.js"
+      "_ToggleSwitch-DVr495eY.js"
     ]
   },
   "resources/css/app.css": {
@@ -34,12 +34,12 @@
     "src": "resources/js/frontend/assets/images/search-bg.jpg"
   },
   "resources/js/frontend/index.tsx": {
-    "file": "assets/index-4zlSHu0T.js",
+    "file": "assets/index-D7IvVmr1.js",
     "name": "index",
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index.esm-iMshYMet.js"
+      "_ToggleSwitch-DVr495eY.js"
     ],
     "css": [
       "assets/index-zlxiq_I2.css"
@@ -51,42 +51,42 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-yk0Yrk_N.js",
+    "file": "assets/index-D89gZtgU.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index.esm-iMshYMet.js",
-      "_registeredTheme-Dc-h6-ew.js"
+      "_ToggleSwitch-DVr495eY.js",
+      "_registeredTheme-DUcYHfwR.js"
     ],
     "css": [
       "assets/index-HfGY7rQ5.css"
     ]
   },
   "resources/js/site/index.tsx": {
-    "file": "assets/index-D7VIdwIx.js",
+    "file": "assets/index-D7jfAXMT.js",
     "name": "index",
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index.esm-iMshYMet.js",
-      "_registeredTheme-Dc-h6-ew.js"
+      "_ToggleSwitch-DVr495eY.js",
+      "_registeredTheme-DUcYHfwR.js"
     ],
     "css": [
-      "assets/index-CPybyms7.css"
+      "assets/index-7ewy5eni.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-DVnIeOeE.js",
+    "file": "assets/index-BNcYgZre.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
-      "_index.esm-iMshYMet.js",
-      "_registeredTheme-Dc-h6-ew.js"
+      "_ToggleSwitch-DVr495eY.js",
+      "_registeredTheme-DUcYHfwR.js"
     ],
     "css": [
-      "assets/index-CPybyms7.css"
+      "assets/index-7ewy5eni.css"
     ]
   }
 }

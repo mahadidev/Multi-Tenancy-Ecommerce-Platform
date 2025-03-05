@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import CategoriesList from "./categoriesList/CategoriesList";
 import FeaturedProducts from "./featuredProducts/FeaturedProducts";
 import Hero from "./hero/Hero";
+import PageBanner from "./pageBanner/PageBanner";
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
     const widgets: {
@@ -11,6 +12,7 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         hero: <Hero {...props} />,
         categoriesList: <CategoriesList {...props} />,
         featuredProducts: <FeaturedProducts {...props} />,
+        pageBanner: <PageBanner {...props} />,
     };
 
     return (

@@ -63,17 +63,35 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                     </Navbar.Brand>
                     <Navbar.Collapse className="w-full flex flex-col md:flex-row md:items-center">
                         {store?.menus?.map((menu: MenuType, idx: number) => (
-                            <Dropdown key={idx} label={menu?.label} inline>
-                                {menu?.items?.map(
-                                    (item: MenuItemType, idx: number) => (
-                                        <a href={item?.href} key={idx}>
-                                            <Dropdown.Item>
-                                                {item?.label}
-                                            </Dropdown.Item>
-                                        </a>
-                                    )
+                            <>
+                                {menu?.items?.length ? (
+                                    <Dropdown
+                                        key={idx}
+                                        label={menu?.label}
+                                        inline
+                                    >
+                                        {menu?.items?.map(
+                                            (
+                                                item: MenuItemType,
+                                                idx: number
+                                            ) => (
+                                                <a href={item?.href} key={idx}>
+                                                    <Dropdown.Item>
+                                                        {item?.label}
+                                                    </Dropdown.Item>
+                                                </a>
+                                            )
+                                        )}
+                                    </Dropdown>
+                                ) : (
+                                    <a
+                                        key={idx}
+                                        href={`/sites/${store?.slug}/${menu?.name}`}
+                                    >
+                                        {menu?.label}
+                                    </a>
                                 )}
-                            </Dropdown>
+                            </>
                         ))}
                     </Navbar.Collapse>{" "}
                     <div className="flex md:order-2 items-center gap-4">
