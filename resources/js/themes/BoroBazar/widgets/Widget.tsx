@@ -1,5 +1,6 @@
 import { ThemeWidgetPropsType } from "@type/themeType";
 import React, { FC } from "react";
+import AllProducts from "./allProducts/AllProducts";
 import CategoriesList from "./categoriesList/CategoriesList";
 import FeaturedProducts from "./featuredProducts/FeaturedProducts";
 import Hero from "./hero/Hero";
@@ -13,6 +14,7 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         categoriesList: <CategoriesList {...props} />,
         featuredProducts: <FeaturedProducts {...props} />,
         pageBanner: <PageBanner {...props} />,
+        allProducts: <AllProducts {...props} />,
     };
 
     return (

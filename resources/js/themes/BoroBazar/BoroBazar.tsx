@@ -13,6 +13,7 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 
 // import widget json
 import { RegisteredThemeType } from "@themes/registeredTheme";
+import AllProductsJson from "./widgets/allProducts/AllProducts.json";
 import CategoriesListJson from "./widgets/categoriesList/CategoriesList.json";
 import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
 import HeroJson from "./widgets/hero/Hero.json";
@@ -53,7 +54,7 @@ export const BoroBazarSeeder: ThemeType | any = {
             is_active: 1,
             type: "shope",
             thumbnail: null,
-            widgets: [PageBannerJson, FeaturedProductsJson],
+            widgets: [PageBannerJson, AllProductsJson],
         },
     ],
 };

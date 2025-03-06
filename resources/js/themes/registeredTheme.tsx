@@ -1,7 +1,7 @@
 import { ThemeLayoutPropsType, ThemeWidgetPropsType } from "@type/themeType";
-import { BoroBazar } from "./BoroBazar/BoroBazar";
 import { RapidShopper } from "./RapidShopper/RapidShopper";
 import { Simfy } from "./Simfy/Simfy";
+import { BoroBazar } from "./BoroBazar/BoroBazar";
 
 export interface RegisteredThemeType {
     name: string;

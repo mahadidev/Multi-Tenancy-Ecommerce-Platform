@@ -703,8 +703,8 @@
           },
           {
             "id": 2,
-            "name": "featuredProducts",
-            "label": "Featured Products Section",
+            "name": "allProducts",
+            "label": "All Products Section",
             "serial": 2,
             "type": "section",
             "inputs": []

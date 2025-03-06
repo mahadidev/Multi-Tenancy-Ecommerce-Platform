@@ -2,19 +2,17 @@ import { CategoryType } from "@type/categoryType";
 import { ThemeWidgetPropsType } from "@type/themeType";
 import { FC } from "react";
 import { FaCoffee } from "react-icons/fa";
+import SectionTitle from "../../components/SectionTitle/SectionTitle";
 
 const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
     return (
         <section className="w-full container px-4 lg:px-0 mx-auto my-3 lg:my-20 bg-white rounded-lg">
-            <div className="-mt-1.5 mb-5 xl:mb-6 text-center pb-2 lg:pb-3 xl:pb-4 3xl:pb-7">
-                <h2 className="text-brand-dark text-lg lg:text-xl xl:text-[22px] xl:leading-8 font-semibold font-manrope 3xl:text-[30px] 3xl:leading-9">
-                    What food you love to order{" "}
-                </h2>
-                <p className="text-brand-muted text-sm leading-7 lg:text-15px xl:text-base pb-0.5 mt-1.5 lg:mt-2.5 xl:mt-3">
-                    Here order your favorite foods from different categories
-                </p>
-            </div>
-            <div className="grid sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-5">
+            <SectionTitle
+                title="What food you love to order"
+                tagline="Here order your favorite foods from different categories"
+            />
+
+            <div className="grid sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5">
                 {store?.categories?.map(
                     (category: CategoryType, idx: number) => (
                         <a
