@@ -16,16 +16,20 @@ interface Props {
     ) => void;
     isShowMetaFields?: boolean;
     onBackToGallery: CallableFunction;
+    meta?: string;
+    imageTags?: string[];
 }
 export const ImageCropper: React.FC<Props> = ({
     image,
     onUploadFileToServer,
     isShowMetaFields = true,
     onBackToGallery,
+    meta,
+    imageTags,
 }) => {
     const cropperRef = useRef<CropperRef>(null);
-    const [altText, setAltText] = useState<string>("");
-    const [tags, setTags] = useState<string>("");
+    const [altText, setAltText] = useState<string>(meta || "");
+    const [tags, setTags] = useState<any>(imageTags || "");
     const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 
     // default image size

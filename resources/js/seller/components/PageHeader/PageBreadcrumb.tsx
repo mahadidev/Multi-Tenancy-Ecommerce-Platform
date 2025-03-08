@@ -4,7 +4,7 @@ import { FC } from "react";
 import { HiHome } from "react-icons/hi";
 
 interface PageBreadcrumbProps {
-    title: string;
+    title?: string;
     items: string[];
 }
 
@@ -21,8 +21,10 @@ export const PageBreadCrumb: FC<PageBreadcrumbProps> = ({ title, items }) => (
                 <Breadcrumb.Item key={idx}>{item}</Breadcrumb.Item>
             ))}
         </Breadcrumb>
-        <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            {title}
-        </h1>
+        {title && (
+            <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+                {title}
+            </h1>
+        )}
     </div>
 );

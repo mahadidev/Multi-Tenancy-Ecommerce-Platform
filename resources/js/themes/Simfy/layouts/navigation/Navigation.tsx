@@ -1,9 +1,10 @@
-import { MenuItemType } from '@type/menuType';
-import { ThemeLayoutPropsType } from '@type/themeType';
-import { FC } from 'react';
-import { Button } from '../../components/Component';
+import { MenuItemType } from "@type/menuType";
+import { ThemeLayoutPropsType } from "@type/themeType";
+import { FC } from "react";
+import { Button } from "../../components/Component";
 
 const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
+
 	return (
 		<header>
 			<nav className="bg-white border-gray-200 py-2.5">

@@ -1,0 +1,14 @@
+{
+	"id": 1,
+	"name": "navigation",
+	"label": "Navigation",
+	"type": "partial",
+	"inputs": [
+        {
+            "name": "is_fixed",
+            "label": "Navigation Fixed",
+            "type": "boolean",
+            "value": false
+        }
+    ]
+}
