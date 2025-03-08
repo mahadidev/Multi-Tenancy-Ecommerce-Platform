@@ -673,6 +673,22 @@
             "serial": 2,
             "type": "section",
             "inputs": []
+          },
+          {
+            "id": 1,
+            "name": "offerBanner",
+            "label": "Offer Banner",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          },
+          {
+            "id": 2,
+            "name": "latestProducts",
+            "label": "Latest Products Section",
+            "serial": 2,
+            "type": "section",
+            "inputs": []
           }
         ]
       },

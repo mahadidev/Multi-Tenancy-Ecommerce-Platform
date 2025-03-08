@@ -19,7 +19,7 @@ const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
         },
         tablet: {
             breakpoint: { max: 1024, min: 464 },
-            items: 4,
+            items: 2,
         },
         mobile: {
             breakpoint: { max: 464, min: 0 },
@@ -29,7 +29,7 @@ const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
     return (
         <section className="w-full container px-4 lg:px-0 mx-auto my-3 lg:my-20 bg-white rounded-lg">
             <SectionTitle
-                title="What food you love to order"
+                title="All Categories"
                 tagline="Here order your favorite foods from different categories"
             />
 
@@ -40,17 +40,17 @@ const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
                 responsive={responsive}
                 autoPlay={true}
                 autoPlaySpeed={4000}
-                customTransition="all 2"
-                transitionDuration={2000}
+                customTransition="all .5"
+                transitionDuration={0.5}
                 containerClass="carousel-container"
                 arrows={true}
-                itemClass="carousel-item-padding-40-px mx-3"
+                itemClass="carousel-item-padding-40-px mx-1"
             >
                 {store?.categories?.map(
                     (category: CategoryType, idx: number) => (
                         <a
                             key={idx}
-                            href="/shop-left-sidebar-col-3"
+                            href={`/sites/${store?.slug}/shop?category=${category?.slug}`}
                             className="hover:no-underline"
                         >
                             <div className="gi-cat-icon flex flex-col items-center hover:bg-gray-200 hover:duration-300 bg-gray-100 p-4 rounded-lg relative">

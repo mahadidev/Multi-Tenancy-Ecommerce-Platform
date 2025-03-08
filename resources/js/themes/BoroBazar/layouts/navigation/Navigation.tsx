@@ -24,7 +24,7 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
     };
 
     return (
-        <header className="px-4 md:px-0 w-full">
+        <header className="px-0 md:px-0 w-full">
             {showBanner && (
                 <div
                     className={`bg-[#02B290] text-white text-sm p-2 relative w-full px-4 md:px-12`}
