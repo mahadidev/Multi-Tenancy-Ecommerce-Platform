@@ -16,6 +16,8 @@ export interface UploadFilePayloadType {
     response_type?: string;
     alternate_text?: string;
     tags?: string;
+    user_id?: string;
+    id?: number;
 }
 
 export const fileApi = createApi({
@@ -44,7 +46,7 @@ export const fileApi = createApi({
                 Object.keys(formData).map((key: any) => {
                     data.append(key, formData[key]);
                 });
-
+                // console.log({ data });
                 return createRequest({
                     url: `/file-storage`,
                     method: "POST",
@@ -54,7 +56,27 @@ export const fileApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             invalidatesTags: ["Files"],
         }),
+        updateFile: builder.mutation<ApiResponseType, UploadFilePayloadType>({
+            query: (formData: UploadFilePayloadType | any) => {
+                const data = new FormData();
+                Object.keys(formData).map((key: any) => {
+                    data.append(key, formData[key]);
+                });
+                return createRequest({
+                    url: `/file-storage/update/${formData?.id}`,
+                    method: "POST",
+                    body: data,
+                    // apiMethod: "PUT",
+                });
+            },
+            transformErrorResponse: (error: any) => error.data,
+            invalidatesTags: ["Files"],
+        }),
     }),
 });
 
-export const { useFetchFilesQuery, useUploadFileMutation } = fileApi;
+export const {
+    useFetchFilesQuery,
+    useUploadFileMutation,
+    useUpdateFileMutation,
+} = fileApi;

@@ -133,6 +133,7 @@ const SettingsGeneral = () => {
                             <FormInput
                                 id="phone"
                                 label="Store phone number"
+                                type="tel"
                                 formState={formState}
                                 formErrors={formErrors}
                                 handleChange={handleChange}

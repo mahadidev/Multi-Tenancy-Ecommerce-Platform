@@ -1,6 +1,7 @@
 import {
     UploadFilePayloadType,
     useFetchFilesQuery,
+    useUpdateFileMutation,
     useUploadFileMutation,
 } from "@seller/store/reducers/fileApi";
 import { useAppSelector } from "@seller/store/store";
@@ -35,6 +36,31 @@ const useFile = () => {
         });
     };
 
+    const [
+        handelUpdateFile,
+        {
+            isLoading: isUpdateFileLoading,
+            isError: isUpdateFileError,
+            error: updateFileError,
+            data: updateFileData,
+        },
+    ] = useUpdateFileMutation();
+    const updateFile = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: UploadFilePayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handelUpdateFile(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            }
+        });
+    };
+
     return {
         upload: {
             submit: upload,
@@ -42,6 +68,13 @@ const useFile = () => {
             isError: isUploadError,
             error: uploadError,
             data: uploadData,
+        },
+        updateFile: {
+            submit: updateFile,
+            isLoading: isUpdateFileLoading,
+            isError: isUpdateFileError,
+            error: updateFileError,
+            data: updateFileData,
         },
         files: files,
     };

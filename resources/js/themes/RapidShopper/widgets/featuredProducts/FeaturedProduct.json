@@ -1,0 +1,8 @@
+{
+    "id": 2,
+    "name": "featuredProducts",
+    "label": "Featured Products Section",
+    "serial": 2,
+    "type": "section",
+    "inputs": []
+}

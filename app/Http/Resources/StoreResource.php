@@ -30,7 +30,7 @@ class StoreResource extends JsonResource
             'logo' => $this->logo_image,
             "dark_logo" => $this->dark_logo_image,
             'primary_color' => $this->primary_color,
-            "featured_products" => ProductResource::collection($this->featured_products),
+            "featuredProducts" => ProductResource::collection($this->featured_products),
             'secondary_color' => $this->secondary_color,
             'store_type' => $this->storeType ? StoreTypeResource::make($this->storeType) : null,
             'theme_id' => $this->theme_id,
