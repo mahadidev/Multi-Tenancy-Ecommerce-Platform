@@ -2,9 +2,30 @@ import { CategoryType } from "@type/categoryType";
 import { ThemeWidgetPropsType } from "@type/themeType";
 import { FC } from "react";
 import { FaCoffee } from "react-icons/fa";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import SectionTitle from "../../components/SectionTitle/SectionTitle";
 
 const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
+    const responsive = {
+        superLargeDesktop: {
+            // the naming can be any, depends on you.
+            breakpoint: { max: 4000, min: 3000 },
+            items: 8,
+        },
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 6,
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 464 },
+            items: 4,
+        },
+        mobile: {
+            breakpoint: { max: 464, min: 0 },
+            items: 2,
+        },
+    };
     return (
         <section className="w-full container px-4 lg:px-0 mx-auto my-3 lg:my-20 bg-white rounded-lg">
             <SectionTitle
@@ -12,7 +33,19 @@ const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
                 tagline="Here order your favorite foods from different categories"
             />
 
-            <div className="grid sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-5 mt-5">
+            <Carousel
+                swipeable={false}
+                draggable={false}
+                showDots={false}
+                responsive={responsive}
+                autoPlay={true}
+                autoPlaySpeed={4000}
+                customTransition="all 2"
+                transitionDuration={2000}
+                containerClass="carousel-container"
+                arrows={true}
+                itemClass="carousel-item-padding-40-px mx-3"
+            >
                 {store?.categories?.map(
                     (category: CategoryType, idx: number) => (
                         <a
@@ -38,7 +71,7 @@ const CategoriesList: FC<ThemeWidgetPropsType> = ({ store }) => {
                         </a>
                     )
                 )}
-            </div>
+            </Carousel>
         </section>
     );
 };
