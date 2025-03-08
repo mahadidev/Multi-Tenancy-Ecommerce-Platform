@@ -7,7 +7,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	to?: string;
 };
 
-export const Button: React.FC<ButtonProps> = ({ className, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ className, ...props }) => {
 	const variants = {
 		primary:
 			'text-white bg-[var(--primary-700)] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300',
@@ -59,3 +59,5 @@ export const Button: React.FC<ButtonProps> = ({ className, ...props }) => {
 		</>
 	);
 };
+
+export default Button;

@@ -4,7 +4,7 @@ module.exports = {
 	darkMode: 'class',
 	content: [
 		'./resources/js/seller/**/*.{ts,tsx,mdx}',
-		'./resources/js/themes/sources/dokan/**/*.{ts,tsx,mdx}',
+		'./resources/js/themes/**/*.{ts,tsx,mdx}',
 		flowbite.content(),
 	],
 	theme: {
