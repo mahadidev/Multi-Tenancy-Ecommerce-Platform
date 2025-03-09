@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { SubscriptionPlansApiResponseType } from "@type/subscriptionPlanType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
+import { setPlans } from "../slices/subscriptionPlanSlice";
 
 export const subscriptionPlanApi = createApi({
     reducerPath: "subscriptionPlanApi",
@@ -18,7 +19,7 @@ export const subscriptionPlanApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    console.log({ response });
+                    dispatch(setPlans(response?.data?.data?.subscriptions));
                 });
             },
         }),
