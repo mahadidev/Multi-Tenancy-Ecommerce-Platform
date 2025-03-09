@@ -1,7 +1,6 @@
 import { ProductType } from "@type/productType";
 import { FC } from "react";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import ProductQuickViewModal from "../ProductQuickView/ProductQuickViewModal";
+import ProductActionCard from "../ProductAction/ProductActionCard";
 
 interface ProductCardPropsType {
     product: ProductType;
@@ -10,16 +9,19 @@ interface ProductCardPropsType {
 const ProductCardListView: FC<ProductCardPropsType> = ({ product }) => {
     return (
         <article
-            className="grid grid-cols-2 gap-4 p-4 bg-white border rounded-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+            className="grid grid-cols-2 gap-4 p-4 bg-white border rounded-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
             title={product?.name}
         >
             {/* Product Image */}
-            <div className="relative overflow-hidden rounded-md group">
+            <div className="relative overflow-hidden rounded-md">
                 <img
                     src={product?.thumbnail}
                     alt={product?.name}
                     className="object-cover w-full h-[200px] transition-transform duration-200 ease-in-out transform group-hover:scale-105"
                 />
+                <div className="absolute hidden bottom-4 left-0 w-full mx-auto group-hover:block hover:duration-300">
+                    <ProductActionCard product={product} />
+                </div>
             </div>
 
             {/* Product Info */}
@@ -40,19 +42,8 @@ const ProductCardListView: FC<ProductCardPropsType> = ({ product }) => {
                 </div>{" "}
                 <p className="text-gray-600 text-sm my-2">
                     {product?.short_description ||
-                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat officiis fugiat aut at architecto cupiditate ea error est perspiciatis nobis. Inventore hic eius doloribus rerum"}
+                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat officiis fugiat aut"}
                 </p>
-                {/* Quick View & Add to Cart */}
-                <div className="flex items-center gap-2 mt-5">
-                    <button
-                        className="text-xl px-3 py-1 flex items-center gap-3 justify-center bg-[#02b290] hover:bg-[#4cb49f] hover:duration-300 text-white rounded-md focus:outline-none"
-                        aria-label="Add to Cart"
-                        onClick={() => alert(product?.name)}
-                    >
-                        <AiOutlineShoppingCart /> Add to Cart
-                    </button>
-                    <ProductQuickViewModal product={product} />
-                </div>
             </div>
         </article>
     );

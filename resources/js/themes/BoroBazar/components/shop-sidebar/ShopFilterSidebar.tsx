@@ -8,13 +8,18 @@ import {
     Checkbox,
     Label,
 } from "flowbite-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 interface ShopFilterSidebarPropsType {
     store: StoreType;
+    onChangeProducts: CallableFunction;
 }
-const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({ store }) => {
+const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({
+    store,
+    onChangeProducts,
+}) => {
     const [price, setPrice] = useState(250);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
     const weights = [
         "2kg",
@@ -48,6 +53,25 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({ store }) => {
         "Strawberry",
     ];
 
+    const handleCategoriesFiltering = (categoryName: string) => {
+        setSelectedCategories((prevCategories) =>
+            prevCategories.includes(categoryName)
+                ? prevCategories.filter((c) => c !== categoryName)
+                : [...prevCategories, categoryName]
+        );
+    };
+
+    // Update filtered products whenever selectedCategories changes
+    useEffect(() => {
+        const filteredProducts = selectedCategories.length
+            ? store?.featuredProducts?.filter((product) =>
+                  selectedCategories.includes(product?.category?.name)
+              )
+            : store?.featuredProducts; // Return all products if no category is selected
+
+        onChangeProducts(filteredProducts);
+    }, [selectedCategories, store?.featuredProducts]); // Also react to store updates
+
     return (
         <div className="w-full p-4 bg-white border rounded-lg shadow-md">
             <Accordion>
@@ -66,6 +90,11 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({ store }) => {
                                             id={category?.name}
                                             name={category?.name}
                                             color="gray"
+                                            onClick={() =>
+                                                handleCategoriesFiltering(
+                                                    category?.name
+                                                )
+                                            }
                                         />
                                         {category?.name}
                                     </Label>

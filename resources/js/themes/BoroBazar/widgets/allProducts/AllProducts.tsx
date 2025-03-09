@@ -1,4 +1,3 @@
-import ProductCardListView from "@themes/BoroBazar/components/Product/ProductCard/ProductCardListView";
 import { ProductType } from "@type/productType";
 import { ThemeWidgetPropsType } from "@type/themeType";
 import { Select } from "flowbite-react";
@@ -6,12 +5,14 @@ import { FC, useState } from "react";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { HiOutlineViewGrid } from "react-icons/hi";
 import ProductCard from "../../components/Product/ProductCard/ProductCard";
+import ProductCardListView from "../../components/Product/ProductCard/ProductCardListView";
 import SectionTitle from "../../components/SectionTitle/SectionTitle";
 import ShopFilterSidebar from "../../components/shop-sidebar/ShopFilterSidebar";
 
 const AllProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
     const [view, setView] = useState<"grid" | "list">("grid");
     const [sort, setSort] = useState("");
+    const [products, setProducts] = useState<ProductType[]>([]);
 
     return (
         <section className="w-full container px-4 lg:px-0 mx-auto my-20 bg-white rounded-lg">
@@ -19,13 +20,16 @@ const AllProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
                 <div className="lg:w-3/12">
                     <SectionTitle title="Filter Products" />
                     <div>
-                        <ShopFilterSidebar store={store} />
+                        <ShopFilterSidebar
+                            store={store}
+                            onChangeProducts={setProducts}
+                        />
                     </div>
                 </div>
 
                 <div className="lg:w-9/12 ">
                     <SectionTitle title="All Products" />
-                    <div className="flex justify-between items-center w-full p-4 bg-white border rounded-lg shadow-md mb-5">
+                    <div className="flex justify-between items-center w-full p-3 bg-white shadow-sm border rounded-lg mb-5">
                         {/* Grid/List Toggle Buttons */}
                         <div className="flex gap-2">
                             <button
@@ -78,25 +82,18 @@ const AllProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
                     >
                         {view === "grid" ? (
                             <>
-                                {store?.featuredProducts?.map(
-                                    (product: ProductType, idx) => (
-                                        <ProductCard
-                                            key={idx}
-                                            product={product}
-                                        />
-                                    )
-                                )}
+                                {products?.map((product: ProductType, idx) => (
+                                    <ProductCard key={idx} product={product} />
+                                ))}
                             </>
                         ) : (
                             <>
-                                {store?.featuredProducts?.map(
-                                    (product: ProductType, idx) => (
-                                        <ProductCardListView
-                                            key={idx}
-                                            product={product}
-                                        />
-                                    )
-                                )}
+                                {products?.map((product: ProductType, idx) => (
+                                    <ProductCardListView
+                                        key={idx}
+                                        product={product}
+                                    />
+                                ))}
                             </>
                         )}
                     </div>

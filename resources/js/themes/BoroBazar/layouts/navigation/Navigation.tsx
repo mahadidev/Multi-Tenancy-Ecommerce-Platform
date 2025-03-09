@@ -2,7 +2,7 @@ import { MenuItemType, MenuType } from "@type/menuType";
 import { ThemeLayoutPropsType } from "@type/themeType";
 import { Dropdown, Navbar } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
-import { FaGlobe, FaRegUserCircle } from "react-icons/fa";
+import { FaGlobe } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 
@@ -27,14 +27,17 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
         <header className="px-0 md:px-0 w-full">
             {showBanner && (
                 <div
-                    className={`bg-[#02B290] text-white text-sm p-2 relative w-full px-4 md:px-12`}
+                    className={`bg-[#02B290] hidden md:block text-white text-sm p-2 relative w-full px-4 md:px-12`}
                 >
                     {" "}
-                    <div className="md:w-11/12 w-full mx-auto flex items-center justify-center">
-                        <span className="flex justify-center items-center gap-2 text-center text-xs md:text-sm font-semibold">
-                            📦 Claim your online <strong>FREE Delivery</strong>{" "}
-                            or Shipping today! Expires in
-                            <div className="flex gap-3 items-center">
+                    <div className="md:w-11/12 w-full mx-auto md:flex items-center justify-center">
+                        <div className="grid md:flex justify-center items-center gap-2 text-center text-xs md:text-sm font-semibold">
+                            <div>
+                                📦 Claim your online{" "}
+                                <strong>FREE Delivery</strong> or Shipping
+                                today! Expires in
+                            </div>
+                            <div className="flex gap-3 justify-center items-center">
                                 {" "}
                                 <span className="bg-white text-black px-2 py-1 rounded">
                                     {formatTime(timeLeft).hours}
@@ -46,7 +49,7 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                                     {formatTime(timeLeft).seconds}
                                 </span>
                             </div>
-                        </span>
+                        </div>
                         <button
                             onClick={() => setShowBanner(false)}
                             className="absolute right-4"
@@ -61,41 +64,59 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                     <Navbar.Brand href="#" className="flex items-center gap-2">
                         <img src={store?.logo} alt="logo" />
                     </Navbar.Brand>
-                    <Navbar.Collapse className="w-full flex flex-col md:flex-row md:items-center">
-                        {store?.menus?.map((menu: MenuType, idx: number) => (
+                    <Navbar.Collapse className="w-full flex flex-col md:flex-row md:items-center gap-2">
+                        {store?.menus?.map((menu: MenuType) => (
                             <>
-                                {menu?.items?.length ? (
-                                    <Dropdown
-                                        key={idx}
-                                        label={menu?.label}
-                                        inline
-                                    >
+                                {menu?.name === "main" && (
+                                    <>
                                         {menu?.items?.map(
                                             (
                                                 item: MenuItemType,
                                                 idx: number
                                             ) => (
-                                                <a href={item?.href} key={idx}>
-                                                    <Dropdown.Item>
-                                                        {item?.label}
-                                                    </Dropdown.Item>
+                                                <a key={idx} href={item?.href}>
+                                                    {item?.label}
                                                 </a>
                                             )
                                         )}
-                                    </Dropdown>
-                                ) : (
-                                    <a
-                                        key={idx}
-                                        href={`/sites/${store?.slug}/${menu?.name}`}
-                                    >
-                                        {menu?.label}
-                                    </a>
+                                    </>
                                 )}
                             </>
                         ))}
                     </Navbar.Collapse>{" "}
-                    <div className="flex md:order-2 items-center gap-4">
-                        <FaRegUserCircle className="text-xl" />
+                    <div className="flex flex-col md:flex-row md:items-center md:gap-2">
+                        {store?.menus?.map((menu: MenuType) => (
+                            <>
+                                {/* {menu?.name === "user" && (
+                                    <>
+                                        {menu?.items?.map(
+                                            (
+                                                item: MenuItemType,
+                                                idx: number
+                                            ) => (
+                                                <a key={idx} href={item?.href}>
+                                                    {item?.label}
+                                                </a>
+                                            )
+                                        )}
+                                    </>
+                                )} */}
+                                {menu?.name === "guest" && (
+                                    <>
+                                        {menu?.items?.map(
+                                            (
+                                                item: MenuItemType,
+                                                idx: number
+                                            ) => (
+                                                <a key={idx} href={item?.href}>
+                                                    {item?.label}
+                                                </a>
+                                            )
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        ))}
                         <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
                         <Dropdown
                             label={<FaGlobe className="text-xl" />}

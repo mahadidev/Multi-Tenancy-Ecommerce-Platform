@@ -9,7 +9,7 @@ interface ProductCardPropsType {
 const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
     return (
         <article
-            className="flex flex-col group overflow-hidden rounded-md cursor-pointer transition-all duration-300 shadow-sm relative h-full bg-white shadow-card hover:shadow-cardHover border"
+            className="flex flex-col group overflow-hidden rounded-md cursor-pointer transition-all duration-300 shadow-sm border hover:shadow-md relative h-full bg-white"
             title="Lay's Bar-B-Que Potato Chips"
         >
             {/* Product Image */}
@@ -17,9 +17,9 @@ const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
                 <img
                     src={product?.thumbnail}
                     alt="Lay's Bar-B-Que Potato Chips"
-                    className="bg-fill-thumbnail object-cover group-hover:scale-110"
+                    className="bg-fill-thumbnail object-cover"
                 />{" "}
-                <div className="absolute bottom-4 left-0 w-full mx-auto duration-300">
+                <div className="absolute hidden bottom-4 left-0 w-full mx-auto group-hover:block hover:duration-300">
                     <ProductActionCard product={product} />
                 </div>
             </div>
