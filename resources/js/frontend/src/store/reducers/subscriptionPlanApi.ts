@@ -4,18 +4,18 @@ import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { setPlans } from "../slices/subscriptionPlanSlice";
 
 export const subscriptionPlanApi = createApi({
-    reducerPath: "subscriptionPlanApi",
+    reducerPath: "subscriptionPlansApi",
     baseQuery: baseQuery,
-    tagTypes: ["SubscriptionPlans"],
+    tagTypes: ["Subscription"],
     endpoints: (builder) => ({
         fetchPlans: builder.query<SubscriptionPlansApiResponseType, void>({
             query: (formData) =>
                 createRequest({
-                    url: `http://127.0.0.1:8000/api/v1/subscription-plans`,
+                    url: `/subscription-plans`,
                     method: "get",
                     body: formData,
                 }),
-            providesTags: ["SubscriptionPlans"],
+            providesTags: ["Subscription"],
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {

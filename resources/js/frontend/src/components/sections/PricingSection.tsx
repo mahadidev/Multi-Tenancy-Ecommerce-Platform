@@ -5,6 +5,10 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 const PricingSection = () => {
     const { plans } = usePlans();
 
+    // useEffect(() => {
+    //     fetchPlans.submit();
+    // }, []);
+
     return (
         <div className="my-5 container">
             <div className="relative w-max mx-auto">

@@ -1,8 +1,7 @@
-import { GLOBAL_APP_API_URL } from "@helper/global_env";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 export const baseQuery = fetchBaseQuery({
-    baseUrl: GLOBAL_APP_API_URL,
+    baseUrl: "http://127.0.0.1:8000/api/v1",
 
     prepareHeaders: (
         headers: Headers

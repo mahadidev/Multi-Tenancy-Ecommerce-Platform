@@ -651,10 +651,117 @@
             "inputs": [
               {
                 "id": 1,
-                "name": "title",
-                "label": "Title",
-                "type": "text",
-                "value": "YOUR_WIDGET_TITLE"
+                "name": "slider_1",
+                "label": "Slider 1",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "First slider tagline",
+                    "placeholder": "Enter tagline"
+                  },
+                  {
+                    "id": 2,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "First Slider Title",
+                    "placeholder": "Enter first slider title"
+                  },
+                  {
+                    "id": 3,
+                    "name": "btnText",
+                    "label": "Button Label",
+                    "type": "text",
+                    "value": "Shop Now"
+                  },
+                  {
+                    "id": 4,
+                    "name": "sliderImage",
+                    "label": "Image URL",
+                    "type": "text",
+                    "value": "https://i.ibb.co.com/h1FyLTm1/qafuoal7vim22vfuq6jq.webp"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "slider_2",
+                "label": "Slider 2",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Second slider tagline",
+                    "placeholder": "Enter tagline"
+                  },
+                  {
+                    "id": 2,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Second Slider Title",
+                    "placeholder": "Enter first slider title"
+                  },
+                  {
+                    "id": 3,
+                    "name": "btnText",
+                    "label": "Button Label",
+                    "type": "text",
+                    "value": "Shop Now"
+                  },
+                  {
+                    "id": 4,
+                    "name": "sliderImage",
+                    "label": "Image URL",
+                    "type": "text",
+                    "value": "https://i.ibb.co.com/Lz5LJmN5/u31nswluoqaioll4oiwz.webp"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "slider_3",
+                "label": "Slider 3",
+                "type": "array",
+                "child": [
+                  {
+                    "id": 1,
+                    "name": "tagline",
+                    "label": "Tagline",
+                    "type": "text",
+                    "value": "Third slider tagline",
+                    "placeholder": "Enter tagline"
+                  },
+                  {
+                    "id": 2,
+                    "name": "title",
+                    "label": "Title",
+                    "type": "text",
+                    "value": "Third Slider Title",
+                    "placeholder": "Enter third slider title"
+                  },
+                  {
+                    "id": 3,
+                    "name": "btnText",
+                    "label": "Button Label",
+                    "type": "text",
+                    "value": "Shop Now"
+                  },
+                  {
+                    "id": 4,
+                    "name": "sliderImage",
+                    "label": "Image URL",
+                    "type": "text",
+                    "value": "https://i.ibb.co.com/q3NGsG6s/uhs2vgt8ybzsq79amrww.webp"
+                  }
+                ]
               }
             ]
           },

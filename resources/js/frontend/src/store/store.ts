@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { subscriptionPlanApi } from "./reducers/subscriptionPlanApi";
-import subscriptionPlanSlice from "./slices/subscriptionPlanSlice";
+import SubscriptionPlanSlice from "./slices/subscriptionPlanSlice";
 
 const authPersistConfig = {
     key: "frontend",
@@ -15,7 +15,7 @@ const authPersistConfig = {
 const persistedReducer = persistReducer(
     authPersistConfig,
     combineReducers({
-        plans: subscriptionPlanSlice,
+        plans: SubscriptionPlanSlice,
         [subscriptionPlanApi.reducerPath]: subscriptionPlanApi.reducer,
     })
 );
