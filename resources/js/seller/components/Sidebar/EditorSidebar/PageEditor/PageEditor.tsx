@@ -3,6 +3,7 @@ import useForm from "@seller/hooks/useForm";
 import usePage from "@seller/hooks/usePage";
 import { Label, TextInput } from "flowbite-react";
 import { useEffect } from "react";
+import PartialEditor from "./PartialEditor";
 
 const PageEditor = () => {
     const { page, savePage, onChangePageInput } = usePage();
@@ -49,6 +50,8 @@ const PageEditor = () => {
 						required
 					/>
 				</div>
+
+                <PartialEditor />
 			</div>
 		);
 };
