@@ -85,4 +85,5 @@ Route::group(['prefix' => 'v1'], function () {
     // Widget Routes
     Route::get('widgets/{id?}', [WidgetController::class, 'index']);
 
+    
 });
