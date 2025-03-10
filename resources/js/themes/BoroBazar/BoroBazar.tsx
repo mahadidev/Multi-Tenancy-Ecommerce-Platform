@@ -5,7 +5,6 @@ import {
 } from "@type/themeType";
 import Layout from "./layouts/Layout";
 import Widget from "./widgets/Widget";
-
 // import layout json
 import AppLayoutJson from "./layouts/appLayout/AppLayout.json";
 import FooterJson from "./layouts/footer/Footer.json";
@@ -14,9 +13,11 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 // import widget json
 import { RegisteredThemeType } from "@themes/registeredTheme";
 import AllProductsJson from "./widgets/allProducts/AllProducts.json";
-import CategoriesListJson from "./widgets/categoriesList/CategoriesList.json";
 import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
 import HeroJson from "./widgets/hero/Hero.json";
+import LatestProductsJson from "./widgets/latestProducts/LatestProduct.json";
+import OfferBannerJson from "./widgets/offerBanner/OfferBanner.json";
+import FeaturesSectionJson from "./widgets/offerSection/OfferSection.json";
 import PageBannerJson from "./widgets/pageBanner/PageBanner.json";
 
 export const BoroBazar: RegisteredThemeType = {
@@ -42,7 +43,13 @@ export const BoroBazarSeeder: ThemeType | any = {
             is_active: 1,
             type: "home",
             thumbnail: null,
-            widgets: [HeroJson, CategoriesListJson, FeaturedProductsJson],
+            widgets: [
+                HeroJson,
+                FeaturesSectionJson,
+                FeaturedProductsJson,
+                OfferBannerJson,
+                LatestProductsJson,
+            ],
         },
         {
             id: 0,

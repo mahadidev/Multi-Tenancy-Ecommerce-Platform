@@ -1,0 +1,25 @@
+{
+    "id": 1,
+    "name": "offerBanner",
+    "label": "Offer Banner",
+    "serial": 1,
+    "type": "section",
+    "inputs": [
+        {
+            "id": 1,
+            "name": "offerBannerUrl",
+            "label": "Offer Banner URL",
+            "type": "text",
+            "value": "https://i.ibb.co.com/bZB0nq3/image.webp",
+            "placeholder": "Enter offer banner url"
+        },
+        {
+            "id": 1,
+            "name": "offerLink",
+            "label": "Offer link",
+            "type": "text",
+            "value": "https://i.ibb.co.com/bZB0nq3/image.webp",
+            "placeholder": "Enter offer link"
+        }
+    ]
+}

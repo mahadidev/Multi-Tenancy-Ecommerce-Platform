@@ -37,6 +37,7 @@ import OrdersPage from "./OrdersPage/OrdersPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
+import UpgradeSubscriptionPlan from "./SubscriptionPlan/UpgradeSubscriptionPlan";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -134,6 +135,10 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="stores/create"
                                 element={<CreateStorePage />}
+                            />
+                            <Route
+                                path="upgrade-plan"
+                                element={<UpgradeSubscriptionPlan />}
                             />
                         </Route>
 

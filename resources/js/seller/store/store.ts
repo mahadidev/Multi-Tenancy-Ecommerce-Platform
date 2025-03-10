@@ -19,6 +19,7 @@ import { rolePermissionApi } from "./reducers/rolePermissionsApi";
 import { socialMediaApi } from "./reducers/socialMediaApi";
 import { storeAdminApi } from "./reducers/storeAdminApi";
 import { storeApi } from "./reducers/storeApi";
+import { subscriptionPlanApi } from "./reducers/subscriptionPlanApi";
 import { themeApi } from "./reducers/themeApi";
 import AuthSlice from "./slices/authSlice";
 import blogSlice from "./slices/blogSlice";
@@ -37,6 +38,7 @@ import RolePermissionSlice from "./slices/rolePermissionsSlice";
 import socialMediaSlice from "./slices/socialMediaSlice";
 import StoreAdminSlice from "./slices/storeAdminSlice";
 import StoreSlice from "./slices/storeSlice";
+import SubscriptionPlanSlice from "./slices/subscriptionPlanSlice";
 import themeSlice from "./slices/themeSlice";
 import uiSlice from "./slices/uiSlice";
 import widgetSlice from "./slices/widgetSlice";
@@ -62,6 +64,7 @@ const authPersistConfig = {
         "socialMediaApi",
         "notificationApi",
         "customerApi",
+        "subscriptionPlansApi",
     ],
     storage,
     version: 0,
@@ -90,6 +93,8 @@ const persistedReducer = persistReducer(
         widget: widgetSlice,
         notification: notificationSlice,
         customer: customerSlice,
+        plans: SubscriptionPlanSlice,
+        [subscriptionPlanApi.reducerPath]: subscriptionPlanApi.reducer,
         [rolePermissionApi.reducerPath]: rolePermissionApi.reducer,
         [storeAdminApi.reducerPath]: storeAdminApi.reducer,
         [menuApi.reducerPath]: menuApi.reducer,
@@ -135,6 +140,7 @@ export const store = configureStore({
             blogApi.middleware,
             brandApi.middleware,
             socialMediaApi.middleware,
+            subscriptionPlanApi.middleware,
         ]);
     },
 });
