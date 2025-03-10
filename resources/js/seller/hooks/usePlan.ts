@@ -1,5 +1,5 @@
-import { useFetchPlansQuery } from "../store/reducers/subscriptionPlanApi";
-import { useAppSelector } from "../store/store";
+import { useFetchPlansQuery } from "@seller/store/reducers/subscriptionPlanApi";
+import { useAppSelector } from "@seller/store/store";
 
 const usePlans = () => {
     useFetchPlansQuery();

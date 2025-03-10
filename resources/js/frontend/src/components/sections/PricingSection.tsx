@@ -5,10 +5,6 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 const PricingSection = () => {
     const { plans } = usePlans();
 
-    // useEffect(() => {
-    //     fetchPlans.submit();
-    // }, []);
-
     return (
         <div className="my-5 container">
             <div className="relative w-max mx-auto">
@@ -22,8 +18,6 @@ const PricingSection = () => {
             </div>
             <br />
             <br />
-
-            {/* <pre>{JSON.stringify(plans, null, 2)}</pre> */}
 
             <div className="grid lg:grid-cols-3 gap-5">
                 {plans?.map((plan: SubscriptionType, idx: number) => (

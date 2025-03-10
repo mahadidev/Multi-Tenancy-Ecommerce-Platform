@@ -15,20 +15,6 @@ export const baseQuery = fetchBaseQuery({
     ) => {
         headers.set("accept", "application/json");
 
-        // const state: RootState = api.getState();
-        let accessToken = "";
-
-        if (!accessToken) {
-            const localStrData = JSON.parse(
-                localStorage.getItem("persist:site") || "{}"
-            );
-            accessToken = localStrData.auth.accessToken;
-        }
-
-        if (accessToken) {
-            headers.set("authorization", `Bearer ${accessToken}`);
-        }
-
         return headers;
     },
 });
