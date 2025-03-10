@@ -236,7 +236,7 @@ function SidebarItem({
             icon={icon}
             label={badge}
             className={twMerge(
-                href === "/upgrade-plan" && "bg-blue-600 text-white",
+                href === "/upgrade-plan" && "bg-blue-600 dark:text-white",
                 pathname === href && "bg-gray-100 dark:bg-gray-700"
             )}
         >

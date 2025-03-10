@@ -1,8 +1,7 @@
 import { MenuItemType, MenuType } from "@type/menuType";
 import { ThemeLayoutPropsType } from "@type/themeType";
-import { Dropdown, Navbar } from "flowbite-react";
+import { Navbar } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
-import { FaGlobe } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 
@@ -60,7 +59,7 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                 </div>
             )}
             <div className="bg-white md:w-11/12 w-full flex items-center justify-between mx-auto">
-                <Navbar className="!w-full py-4">
+                <Navbar className="!bg-white !w-full py-4">
                     <Navbar.Brand href="#" className="flex items-center gap-2">
                         <img src={store?.logo} alt="logo" />
                     </Navbar.Brand>
@@ -85,6 +84,8 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                         ))}
                     </Navbar.Collapse>{" "}
                     <div className="flex flex-col md:flex-row md:items-center md:gap-2">
+                        <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
+
                         {store?.menus?.map((menu: MenuType) => (
                             <>
                                 {/* {menu?.name === "user" && (
@@ -117,14 +118,6 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                                 )}
                             </>
                         ))}
-                        <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
-                        <Dropdown
-                            label={<FaGlobe className="text-xl" />}
-                            inline
-                        >
-                            <Dropdown.Item>English - EN</Dropdown.Item>
-                            <Dropdown.Item>Español - ES</Dropdown.Item>
-                        </Dropdown>
                         <Navbar.Toggle />
                     </div>
                 </Navbar>
