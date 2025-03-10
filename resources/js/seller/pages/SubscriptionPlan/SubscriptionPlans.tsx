@@ -54,9 +54,12 @@ const SubscriptionPlans = () => {
                                 Current Plan
                             </Button>
                         ) : (
-                            <button className="w-full px-4 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-primary-dark">
+                            <Button
+                                color="blue"
+                                className="w-full px-4 py-3 rounded-md text-white font-medium"
+                            >
                                 Select Now
-                            </button>
+                            </Button>
                         )}
                     </div>
                 </div>
