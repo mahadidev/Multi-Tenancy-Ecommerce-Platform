@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use UddoktaPay\LaravelSDK\UddoktaPay;
 use UddoktaPay\LaravelSDK\Requests\CheckoutRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class UddoktaPayController extends Controller
 {
@@ -28,19 +32,30 @@ class UddoktaPayController extends Controller
      */
     public function pay(Request $request)
     {
-        $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
+        $request->validate([
+            'name' => 'required|string|max:255',
             'email'     => 'required|email|max:255',
-            'amount'    => 'required|numeric|min:1',
+            'amount'    => 'required|numeric|min:100',
+        ]);
+
+        $payment = Payment::create([
+            'user_id' => Auth::id() ?? User::first()->id,
+            'transaction_id' =>Str::uuid()->toString(),
+            'amount' => $request->amount,
+            'name' => $request->name,
+            'email' => $request->email,
+            'status' => 'pending',
+            'payment_method' => 'online',
         ]);
 
         try {
+            
             $checkoutRequest = CheckoutRequest::make()
-                ->setFullName($validated['full_name'])
-                ->setEmail($validated['email'])
-                ->setAmount($validated['amount'])
-                ->addMetadata('order_id', uniqid())
-                ->setRedirectUrl(route('uddoktapay.success'))
+                ->setFullName($payment->name)
+                ->setEmail($payment->email)
+                ->setAmount($payment->amount)
+                ->addMetadata('transaction_id', $payment->transaction_id)
+                ->setRedirectUrl(env("APP_URL")."success") // need to test in server
                 ->setCancelUrl(route('uddoktapay.cancel'))
                 ->setWebhookUrl(route('uddoktapay.webhook'));
 
@@ -61,6 +76,7 @@ class UddoktaPayController extends Controller
      */
     public function success(Request $request)
     {
+        dd($request);
         $invoiceId = $request->input('invoice_id');
 
         try {

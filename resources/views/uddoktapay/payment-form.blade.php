@@ -25,8 +25,8 @@
         <form action="<?= route('uddoktapay.pay') ?>" method="POST">
             <?= csrf_field() ?>
             <div class="form-group">
-                <label for="full_name">Full Name:</label>
-                <input type="text" name="full_name" id="full_name" class="form-control" required>
+                <label for="name">Full Name:</label>
+                <input type="text" name="name" id="name" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>

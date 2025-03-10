@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            '/success','/cancel','/fail','/ipn'
+        ]);
         $middleware->append(Cors::class);
         $middleware->append(TrackStoreVisitor::class);
         $middleware->append(LogRequests::class);
