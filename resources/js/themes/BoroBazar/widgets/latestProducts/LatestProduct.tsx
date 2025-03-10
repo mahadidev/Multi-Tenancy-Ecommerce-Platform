@@ -6,7 +6,7 @@ import SectionTitle from "../../components/SectionTitle/SectionTitle";
 
 const LatestProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
     return (
-        <section className="w-full container px-4 lg:px-0 mx-auto my-3 lg:my-20 bg-white rounded-lg">
+        <section className="w-full container px-4 lg:px-0 mx-auto my-10 bg-white rounded-lg">
             <SectionTitle
                 title="Latest Products"
                 tagline="Our latest twenty products"
