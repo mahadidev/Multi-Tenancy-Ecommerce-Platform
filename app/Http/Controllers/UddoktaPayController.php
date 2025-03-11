@@ -16,7 +16,8 @@ class UddoktaPayController extends Controller
 
     public function __construct()
     {
-        $this->uddoktapay = UddoktaPay::make(env('UDDOKTAPAY_API_KEY'), env('UDDOKTAPAY_API_URL'));
+        $this->uddoktapay = UddoktaPay::make('982d381360a69d419689740d9f2e26ce36fb7a50', 'https://sandbox.uddoktapay.com/api/checkout-v2');
+        // $this->uddoktapay = UddoktaPay::make('QkC0IhDCE40qQDHAS6hERwXhy10jc4GWwPtdATAx', 'https://yeamin.paymently.io/api');
     }
 
     /**
@@ -55,7 +56,7 @@ class UddoktaPayController extends Controller
                 ->setEmail($payment->email)
                 ->setAmount($payment->amount)
                 ->addMetadata('transaction_id', $payment->transaction_id)
-                ->setRedirectUrl(env("APP_URL")."success") // need to test in server
+                ->setRedirectUrl(route('uddoktapay.success')) // need to test in server
                 ->setCancelUrl(route('uddoktapay.cancel'))
                 ->setWebhookUrl(route('uddoktapay.webhook'));
 
@@ -76,7 +77,6 @@ class UddoktaPayController extends Controller
      */
     public function success(Request $request)
     {
-        dd($request);
         $invoiceId = $request->input('invoice_id');
 
         try {
