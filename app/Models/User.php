@@ -131,5 +131,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     {
         return $query->whereJsonContains('store_id', authStore());
     }
-    
-}
+
+    public function payments(){
+        return $this->hasMany(Payment::class, 'user_id');
+    }
+}   

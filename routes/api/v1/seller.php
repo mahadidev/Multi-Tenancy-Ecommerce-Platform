@@ -135,6 +135,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Seller Admin Routes
     Route::resource('store-admin', StoreAdminController::class);
+
+    // store package routes
+    Route::post('package-subscription', [SubscriptionController::class, 'subscribePackage']);
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {

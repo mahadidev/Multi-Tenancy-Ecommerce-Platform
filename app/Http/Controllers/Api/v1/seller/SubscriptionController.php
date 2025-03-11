@@ -1,0 +1,150 @@
+<?php
+
+namespace App\Http\Controllers\Api\v1\seller;
+
+use App\Http\Controllers\Controller;
+use App\Models\Subscription;
+use App\Models\Payment;
+use Illuminate\Http\Request;
+use UddoktaPay\LaravelSDK\UddoktaPay;
+use UddoktaPay\LaravelSDK\Requests\CheckoutRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
+class SubscriptionController extends Controller
+{
+    protected $uddoktapay;
+
+    public function __construct()
+    {
+        $this->uddoktapay = UddoktaPay::make(env('UDDOKTAPAY_API_KEY', '982d381360a69d419689740d9f2e26ce36fb7a50'), env('UDDOKTAPAY_API_URL', 'https://sandbox.uddoktapay.com/api/checkout-v2'));
+    }
+
+    public function subscribePackage(Request $request)
+    {
+        $request->validate([
+            'package_id' => 'required|exists:subscriptions,id',
+            'amount' => 'required|numeric'
+        ]);
+
+        $package = Subscription::find($request->package_id);
+
+        if (!$package) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid subcription Id',
+            ]);
+        }
+
+        $user = auth()->user();
+
+        $payment = Payment::create([
+            'user_id' => $user->id,
+            'store_id' => authStore(),
+            'transaction_id' => Str::uuid()->toString(),
+            'amount' => $request->amount,
+            'name' => $user->name,
+            'email' => $user->email,
+            'status' => 'pending',
+            'payment_method' => 'online',
+        ]);
+
+        try {
+
+            $checkoutRequest = CheckoutRequest::make()
+                ->setFullName($payment->name)
+                ->setEmail($payment->email)
+                ->setAmount($payment->amount)
+                ->addMetadata('transaction_id', $payment->transaction_id)
+                ->setRedirectUrl(route('uddoktapay.success')) // need to test in server
+                ->setCancelUrl(route('uddoktapay.cancel'))
+                ->setWebhookUrl(route('uddoktapay.webhook'));
+
+            $response = $this->uddoktapay->checkout($checkoutRequest);
+
+            if ($response->failed()) {
+                return back()->withErrors(['error' => $response->message()]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => [
+                    'payment_url' => $response->paymentURL()
+                ]
+            ]);
+
+        } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
+            return back()->withErrors(['error' => 'Initialization Error: ' . $e->getMessage()]);
+        }
+       
+    }
+
+     /**
+     * Handle successful payment.
+     */
+    public function success(Request $request)
+    {
+        $invoiceId = $request->input('invoice_id');
+
+        try {
+
+            $response = $this->uddoktapay->verify($request);
+            $responseData = $response->toArray();
+            $payment = Payment::where('transaction_id', $responseData['metadata']['transaction_id'])->first();
+
+            if ($response->success()) {
+                if ($payment) {
+                    $payment->update([
+                        'status' => 'complete',
+                        'invoice_id' => $invoiceId,
+                    ]);
+                }
+
+                // Payment was successful; process accordingly.
+                return redirect()->to(url('seller/upgrade-plan') . '?status=success');
+
+            } else {
+                if ($payment) {
+                    $payment->update([
+                        'status' => 'failed',
+                        'invoice_id' => $invoiceId,
+                    ]);
+                }
+
+                // Payment verification failed.
+                return redirect()->to(url('seller/upgrade-plan') . '?status=failed');
+            }
+        } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
+            Log::info(['message' => 'Verification Error: ' . $e->getMessage()]);
+            return redirect()->to(url('seller/upgrade-plan') . '?status=error');
+        }
+    }
+
+    /**
+     * Handle canceled payment.
+     */
+    public function cancel()
+    {
+        // Handle payment cancellation.
+        return redirect()->to(url('seller/upgrade-plan') . '?status=canceled');
+    }
+
+    /**
+     * Handle IPN (Instant Payment Notification).
+     */
+    public function webhook(Request $request)
+    {
+        try {
+            $ipnResponse = $this->uddoktapay->executePayment();
+
+            if ($ipnResponse->isSuccessful()) {
+                // Process the IPN response.
+                // For example, update the order status in your database.
+            }
+
+            return response()->json(['status' => 'success']);
+        } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+}
