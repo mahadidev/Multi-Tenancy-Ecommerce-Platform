@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\Api\v1\site\OrderController;
+use App\Http\Controllers\UddoktaPayController;
+use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 
 Route::get('/', function () {
     return view("welcome");
@@ -47,14 +49,6 @@ Route::prefix("/themes")->group(function () {
 });
 
 
-//test
-Route::get('/test', function(){
-    // $theme = \App\Models\Theme::with('pages.page_widgets')->first();
-    // $data = new \App\Http\Resources\ThemeResource($theme);
-    // return $data->pages;
-
-    $theme = \App\Models\Theme::with('pages.page_widgets')->first();
-    $themeData = new \App\Http\Resources\ThemeResource($theme);
-    return $pages = $themeData->pages;
-
-});
+Route::get('success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
+Route::get('cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
+Route::post('webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');

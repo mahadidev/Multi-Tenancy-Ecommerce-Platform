@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2860fb449712cfd95004924846f84243",
+    "content-hash": "0c3fa78f82e7e2c0b56aaa19b57d3439",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9161,6 +9161,49 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.3.0"
             },
             "time": "2024-12-21T16:25:41+00:00"
+        },
+        {
+            "name": "uddoktapay/laravel-sdk",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/UddoktaPay/LaravelSDK.git",
+                "reference": "7697a0f261c6e423968fe8839267edc3d1eb9ccc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/UddoktaPay/LaravelSDK/zipball/7697a0f261c6e423968fe8839267edc3d1eb9ccc",
+                "reference": "7697a0f261c6e423968fe8839267edc3d1eb9ccc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.18"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "UddoktaPay\\LaravelSDK\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "UddoktaPay Team",
+                    "email": "info@uddoktapay.com"
+                }
+            ],
+            "description": "UddoktaPay offers a range of payment automation solutions for small entrepreneurs in Bangladesh.",
+            "support": {
+                "issues": "https://github.com/UddoktaPay/LaravelSDK/issues",
+                "source": "https://github.com/UddoktaPay/LaravelSDK/tree/2.1.0"
+            },
+            "time": "2025-01-31T13:21:55+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
