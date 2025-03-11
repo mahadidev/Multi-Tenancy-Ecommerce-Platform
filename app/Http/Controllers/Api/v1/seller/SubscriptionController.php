@@ -17,7 +17,13 @@ class SubscriptionController extends Controller
 
     public function __construct()
     {
-        $this->uddoktapay = UddoktaPay::make(env('UDDOKTAPAY_API_KEY', '982d381360a69d419689740d9f2e26ce36fb7a50'), env('UDDOKTAPAY_API_URL', 'https://sandbox.uddoktapay.com/api/checkout-v2'));
+        $sandbox = ['982d381360a69d419689740d9f2e26ce36fb7a50', 'https://sandbox.uddoktapay.com/api/checkout-v2'];
+        $realAPI = ['QkC0IhDCE40qQDHAS6hERwXhy10jc4GWwPtdATAx', 'https://yeamin.paymently.io/api'];
+
+        // $this->uddoktapay = UddoktaPay::make($realAPI[0], $realAPI[1]);
+
+        // $this->uddoktapay = UddoktaPay::make(env('UDDOKTAPAY_API_KEY', ''), env('UDDOKTAPAY_API_URL', ''));
+        $this->uddoktapay = UddoktaPay::make(env('UDDOKTAPAY_API_KEY', 'QkC0IhDCE40qQDHAS6hERwXhy10jc4GWwPtdATAx'), env('UDDOKTAPAY_API_URL', 'https://yeamin.paymently.io/api'));
     }
 
     public function subscribePackage(Request $request)
@@ -85,16 +91,18 @@ class SubscriptionController extends Controller
     public function success(Request $request)
     {
         $invoiceId = $request->input('invoice_id');
-
+       
         try {
 
             $response = $this->uddoktapay->verify($request);
+
             $responseData = $response->toArray();
             $payment = Payment::where('transaction_id', $responseData['metadata']['transaction_id'])->first();
 
-            if ($response->success()) {
+            if ($response) {
                 if ($payment) {
                     $payment->update([
+                        'transaction_id' => $responseData['transaction_id'],
                         'status' => 'complete',
                         'invoice_id' => $invoiceId,
                     ]);
@@ -106,6 +114,7 @@ class SubscriptionController extends Controller
             } else {
                 if ($payment) {
                     $payment->update([
+                        'transaction_id' => $responseData['transaction_id'],
                         'status' => 'failed',
                         'invoice_id' => $invoiceId,
                     ]);
@@ -114,10 +123,12 @@ class SubscriptionController extends Controller
                 // Payment verification failed.
                 return redirect()->to(url('seller/upgrade-plan') . '?status=failed');
             }
+           
         } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
             Log::info(['message' => 'Verification Error: ' . $e->getMessage()]);
             return redirect()->to(url('seller/upgrade-plan') . '?status=error');
         }
+            
     }
 
     /**
@@ -138,8 +149,7 @@ class SubscriptionController extends Controller
             $ipnResponse = $this->uddoktapay->executePayment();
 
             if ($ipnResponse->isSuccessful()) {
-                // Process the IPN response.
-                // For example, update the order status in your database.
+               Log::info($ipnResponse);
             }
 
             return response()->json(['status' => 'success']);
