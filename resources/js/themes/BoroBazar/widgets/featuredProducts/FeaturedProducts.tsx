@@ -6,7 +6,7 @@ import SectionTitle from "../../components/SectionTitle/SectionTitle";
 
 const FeaturedProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
     return (
-        <section className="w-full container px-4 lg:px-0 mx-auto my-3 lg:my-20 bg-white rounded-lg">
+        <section className="w-full container px-4 lg:px-0 mx-auto my-10 bg-white rounded-lg">
             <SectionTitle
                 title="Featured Products"
                 tagline="We provide best quality &amp; fresh grocery items near your
