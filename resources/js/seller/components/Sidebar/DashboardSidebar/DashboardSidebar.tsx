@@ -103,7 +103,16 @@ function DesktopSidebar() {
                                     {...item}
                                     pathname={pathname}
                                 />
-                            ))}
+                            ))}{" "}
+                            <br />{" "}
+                            <SidebarItem
+                                key={"subscription_plan"}
+                                {...{
+                                    href: RoutePath.UpgradePlanPage.index(),
+                                    label: "Upgrade Plan",
+                                }}
+                                pathname={pathname}
+                            />
                         </Sidebar.ItemGroup>
                     </Sidebar.Items>
                 </div>
@@ -227,6 +236,7 @@ function SidebarItem({
             icon={icon}
             label={badge}
             className={twMerge(
+                href === "/upgrade-plan" && "bg-blue-600 dark:text-white",
                 pathname === href && "bg-gray-100 dark:bg-gray-700"
             )}
         >
