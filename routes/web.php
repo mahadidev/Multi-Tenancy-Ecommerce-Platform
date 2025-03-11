@@ -6,6 +6,7 @@ use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\Api\v1\site\OrderController;
 use App\Http\Controllers\UddoktaPayController;
+use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 
 Route::get('/', function () {
     return view("welcome");
@@ -48,8 +49,7 @@ Route::prefix("/themes")->group(function () {
 });
 
 
-Route::get('pay', [UddoktaPayController::class, 'show'])->name('uddoktapay.payment-form');
-Route::post('pay', [UddoktaPayController::class, 'pay'])->name('uddoktapay.pay');
-Route::get('success', [UddoktaPayController::class, 'success'])->name('uddoktapay.success');
-Route::get('cancel', [UddoktaPayController::class, 'cancel'])->name('uddoktapay.cancel');
-Route::post('webhook', [UddoktaPayController::class, 'webhook'])->name('uddoktapay.webhook');
+// Route::get('pay', [UddoktaPayController::class, 'show'])->name('uddoktapay.payment-form');
+Route::get('success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
+Route::get('cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
+Route::post('webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');
