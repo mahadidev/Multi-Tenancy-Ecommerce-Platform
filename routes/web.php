@@ -49,7 +49,6 @@ Route::prefix("/themes")->group(function () {
 });
 
 
-// Route::get('pay', [UddoktaPayController::class, 'show'])->name('uddoktapay.payment-form');
 Route::get('success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
 Route::get('cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
 Route::post('webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');
