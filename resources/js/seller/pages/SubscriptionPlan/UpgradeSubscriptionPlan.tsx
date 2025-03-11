@@ -1,9 +1,16 @@
 import { PageBreadCrumb } from "@seller/components/PageHeader/PageBreadcrumb";
+import usePlans from "@seller/hooks/usePlan";
+import { SubscriptionType } from "@type/subscriptionPlanType";
 import { FC } from "react";
-import SubscriptionPlans from "./SubscriptionPlans";
+import { useSearchParams } from "react-router-dom";
+import SubscriptionPlan from "./SubscriptionPlan";
+import SubscriptionSuccessModal from "./SubscriptionSuccessModal";
 
 const UpgradeSubscriptionPlan: FC = function () {
-    // const { meta } = useProduct();
+    const { plans } = usePlans();
+    const [params] = useSearchParams();
+
+    const status = params.get("status");
 
     return (
         <>
@@ -13,14 +20,25 @@ const UpgradeSubscriptionPlan: FC = function () {
             <div className="flex flex-col">
                 <div className="overflow-x-auto">
                     <div className="inline-block min-w-full align-middle">
+                        {/* status */}
+
+                        <SubscriptionSuccessModal status={status!} />
+
                         <div className="overflow-hidden shadow">
-                            <SubscriptionPlans />
+                            <div className="grid lg:grid-cols-3 gap-5 p-4">
+                                {plans?.map(
+                                    (plan: SubscriptionType, idx: number) => (
+                                        <SubscriptionPlan
+                                            key={idx}
+                                            plan={plan}
+                                        />
+                                    )
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* {meta && <ProductsTablePagination meta={meta} />} */}
         </>
     );
 };
