@@ -27,6 +27,8 @@ return new class extends Migration
                 $table->dropForeign(['store_id']);
                 $table->dropColumn('store_id');
             }
+
+            return;
         });
     }
 };
