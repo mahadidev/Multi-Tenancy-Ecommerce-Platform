@@ -18,7 +18,7 @@ return new class extends PulseMigration
         Schema::create('pulse_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('timestamp');
-            $table->string('type', 191); // Limit string length for index
+            $table->string('type', 191)->charset('utf8'); // Use utf8 instead of utf8mb4
             $table->mediumText('key');
             match ($this->driver()) {
                 'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(md5(`key`))'),
@@ -35,7 +35,7 @@ return new class extends PulseMigration
         Schema::create('pulse_entries', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('timestamp');
-            $table->string('type', 191); // Limit string length for index
+            $table->string('type', 191)->charset('utf8'); // Use utf8 instead of utf8mb4
             $table->mediumText('key');
             match ($this->driver()) {
                 'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(md5(`key`))'),
@@ -54,14 +54,14 @@ return new class extends PulseMigration
             $table->id();
             $table->unsignedInteger('bucket');
             $table->unsignedMediumInteger('period');
-            $table->string('type', 191); // Limit string length for index
+            $table->string('type', 191)->charset('utf8'); // Use utf8 instead of utf8mb4
             $table->mediumText('key');
             match ($this->driver()) {
                 'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(md5(`key`))'),
                 'pgsql' => $table->uuid('key_hash')->storedAs('md5("key")::uuid'),
                 'sqlite' => $table->string('key_hash', 191), // Limit string length for index
             };
-            $table->string('aggregate', 191); // Limit string length for index
+            $table->string('aggregate', 191)->charset('utf8'); // Use utf8 instead of utf8mb4
             $table->decimal('value', 20, 2);
             $table->unsignedInteger('count')->nullable();
 
