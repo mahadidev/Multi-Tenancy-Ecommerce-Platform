@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Builder::defaultStringLength(191);
-        Schema::defaultStringLength(191);
+        Schema::defaultStringLength(125);
 
         $user = auth()->user();
         Gate::define('viewPulse', function ($user) {
