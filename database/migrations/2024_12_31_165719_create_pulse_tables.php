@@ -11,6 +11,8 @@ return new class extends PulseMigration
      */
     public function up(): void
     {
+        return;
+
         if (! $this->shouldRun()) {
             return;
         }
@@ -98,6 +100,8 @@ return new class extends PulseMigration
      */
     public function down(): void
     {
+        return;
+        
         Schema::dropIfExists('pulse_values');
         Schema::dropIfExists('pulse_entries');
         Schema::dropIfExists('pulse_aggregates');
