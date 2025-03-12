@@ -47,7 +47,13 @@ return new class extends PulseMigration
             $table->index('timestamp'); // For trimming...
             $table->index('type'); // For purging...
             $table->index('key_hash'); // For mapping...
-            $table->index(['timestamp', 'type', 'key_hash', 'value']); // For aggregate queries...
+            // Adjust the composite index with length limits on string columns
+            $table->index([
+                'timestamp',
+                'type' => 150,
+                'key_hash',
+                'value'
+            ]); // For aggregate queries...
         });
 
         Schema::create('pulse_aggregates', function (Blueprint $table) {
@@ -65,14 +71,25 @@ return new class extends PulseMigration
             $table->decimal('value', 20, 2);
             $table->unsignedInteger('count')->nullable();
 
-            $table->unique(['bucket', 'period', 'type', 'aggregate', 'key_hash']); // Force "on duplicate update"...
+            // Adjust the unique index with length limits
+            $table->unique([
+                'bucket',
+                'period',
+                'type' => 150,
+                'aggregate' => 150,
+                'key_hash'
+            ]); // Force "on duplicate update"...
+            
             $table->index(['period', 'bucket']); // For trimming...
             $table->index('type'); // For purging...
-            // $table->index(['period', 'type', 'aggregate', 'bucket']); // For aggregate queries...
-
-            $table->index(['period', 'type']);
-            $table->index(['type', 'aggregate']);
-            $table->index(['bucket', 'period']);
+            
+            // Fix the problematic index by specifying column lengths
+            $table->index([
+                'period',
+                'type' => 150,
+                'aggregate' => 150,
+                'bucket'
+            ]); // For aggregate queries...
         });
     }
 
