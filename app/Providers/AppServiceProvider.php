@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Schema\Builder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,8 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $user = auth()->user();
+        Builder::defaultStringLength(191);
 
+        $user = auth()->user();
         Gate::define('viewPulse', function ($user) {
             return $user->isAdmin();
         });
