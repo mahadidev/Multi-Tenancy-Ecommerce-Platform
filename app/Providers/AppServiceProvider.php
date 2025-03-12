@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Builder::defaultStringLength(191);
+        // Builder::defaultStringLength(191);
         Schema::defaultStringLength(191);
 
         $user = auth()->user();
