@@ -805,7 +805,7 @@
                 ]
               },
               {
-                "id": 2,
+                "id": 1,
                 "name": "features",
                 "label": "Features",
                 "type": "array",
@@ -837,7 +837,7 @@
                 ]
               },
               {
-                "id": 3,
+                "id": 1,
                 "name": "features",
                 "label": "Features",
                 "type": "array",
@@ -869,7 +869,7 @@
                 ]
               },
               {
-                "id": 4,
+                "id": 1,
                 "name": "features",
                 "label": "Features",
                 "type": "array",

@@ -1,7 +1,7 @@
 import { ThemeWidgetPropsType } from "@type/themeType";
 import { FC } from "react";
 
-const OffersSection: FC<ThemeWidgetPropsType> = ({ widget }) => {
+const FeaturesSection: FC<ThemeWidgetPropsType> = ({ widget }) => {
     return (
         <section className="py-4 my-5">
             <div className="container mx-auto">
@@ -54,7 +54,7 @@ const OffersSection: FC<ThemeWidgetPropsType> = ({ widget }) => {
         </section>
     );
 };
-export default OffersSection;
+export default FeaturesSection;
 
 // const services = [
 //     {

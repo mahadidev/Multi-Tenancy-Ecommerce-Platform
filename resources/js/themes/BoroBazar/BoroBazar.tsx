@@ -14,10 +14,10 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 import { RegisteredThemeType } from "@themes/registeredTheme";
 import AllProductsJson from "./widgets/allProducts/AllProducts.json";
 import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
+import FeaturesSectionJson from "./widgets/featuresSection/FeaturesSection.json";
 import HeroJson from "./widgets/hero/Hero.json";
 import LatestProductsJson from "./widgets/latestProducts/LatestProduct.json";
 import OfferBannerJson from "./widgets/offerBanner/OfferBanner.json";
-import FeaturesSectionJson from "./widgets/offerSection/OfferSection.json";
 import PageBannerJson from "./widgets/pageBanner/PageBanner.json";
 
 export const BoroBazar: RegisteredThemeType = {

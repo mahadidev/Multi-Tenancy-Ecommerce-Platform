@@ -2,10 +2,10 @@ import { ThemeWidgetPropsType } from "@type/themeType";
 import React, { FC } from "react";
 import AllProducts from "./allProducts/AllProducts";
 import FeaturedProducts from "./featuredProducts/FeaturedProducts";
+import FeaturesSection from "./featuresSection/FeaturesSection";
 import Hero from "./hero/Hero";
 import LatestProducts from "./latestProducts/LatestProduct";
 import OfferBanner from "./offerBanner/OfferBanner";
-import OffersSection from "./offerSection/OfferSection";
 import PageBanner from "./pageBanner/PageBanner";
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
@@ -13,7 +13,7 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         [Key: string]: React.ReactNode;
     } = {
         hero: <Hero {...props} />,
-        featuresSection: <OffersSection {...props} />,
+        featuresSection: <FeaturesSection {...props} />,
         featuredProducts: <FeaturedProducts {...props} />,
         offerBanner: <OfferBanner {...props} />,
         latestProducts: <LatestProducts {...props} />,
