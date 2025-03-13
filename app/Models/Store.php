@@ -147,7 +147,12 @@ class Store extends Model
 
     public function featured_products()
     {
-        return $this->hasMany(Product::class)->take(5);
+        return $this->hasMany(Product::class)->where('is_featured', true)->orderBy('id', 'desc');
+    }
+
+    public function trending_products()
+    {
+        return $this->hasMany(Product::class)->where('is_trending', true)->orderBy('id', 'desc');
     }
 
     public function uniqueVisitorsToday()

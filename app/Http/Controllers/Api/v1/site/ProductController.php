@@ -44,6 +44,33 @@ class ProductController extends Controller
         ]);
     }
 
+    public function productView(Request $request, $id){
+        $product = Product::active()->authorized()->where('id', $id)->first();
+
+        if (!$product) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Product not found',
+            ]);
+        }
+
+        $related_products = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->active()
+            ->authorized()
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'product' => ProductResource::make($product),
+                'related_products' => ProductResource::collection($related_products),
+            ],
+        ]);
+    }
+
     public function allCategoriesProducts(Request $request)
     {
         $categoriesWiseProducts = Category::with([

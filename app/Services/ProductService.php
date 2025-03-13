@@ -58,6 +58,7 @@ class ProductService
             'has_in_stocks' => 'nullable|boolean',
             'status' => 'nullable|boolean',
 
+            'is_featured' => 'nullable|boolean',
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
             'discount_to' => 'nullable|date',
@@ -98,6 +99,7 @@ class ProductService
             'has_variants' => $validatedData['has_variants'] ?? false,
             'has_in_stocks' => $validatedData['has_in_stocks'] ?? false,
             'status' => $validatedData['status'] ?? 1,
+            'is_featured' => $validatedData['is_featured'] ?? false,
             'is_trending' => $validatedData['is_trending'] ?? false,
             'has_discount' => $validatedData['has_discount'] ?? false,
             'discount_to' => $validatedData['discount_to'] ?? null,
@@ -105,7 +107,6 @@ class ProductService
             'discount_amount' => $validatedData['discount_amount'] ?? null,
         ]);
 
-        // return $product;
         // Handle variants if they exist
         if ($request->has('variants')) {
             foreach ($request->variants as $variant) {
@@ -130,8 +131,6 @@ class ProductService
                 }
             }
         }
-
-        // return $product;
 
         // Return the created product response
         return new ProductResource($product);
@@ -161,6 +160,7 @@ class ProductService
             'has_variants' => 'nullable|boolean',
             'has_in_stocks' => 'nullable|boolean',
             'status' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
             'discount_to' => 'nullable|date',
@@ -193,6 +193,7 @@ class ProductService
             'has_variants' => $validatedData['has_variants'] ?? $product->has_variants,
             'has_in_stocks' => $validatedData['has_in_stocks'] ?? $product->has_in_stocks,
             'status' => $validatedData['status'] ?? $product->status,
+            'is_featured' => $validatedData['is_featured'] ?? $product->is_trending,
             'is_trending' => $validatedData['is_trending'] ?? $product->is_trending,
             'has_discount' => $validatedData['has_discount'] ?? $product->has_discount,
             'discount_to' => $validatedData['discount_to'] ?? $product->discount_to,
@@ -286,6 +287,11 @@ class ProductService
         // 7. Category Filter - Essential for category-specific products
         if ($request->has('category_id')) {
             $query->where('category_id', $request->category_id);
+        }
+
+         // 8. featured Filter - Essential for category-specific products
+         if ($request->has('is_featured')) {
+            $query->where('is_featured', true);
         }
 
         // Essential Sorting
