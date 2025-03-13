@@ -44,6 +44,17 @@ class ProductController extends Controller
         ]);
     }
 
+    public function productView(Request $request, $id){
+        $product = Product::active()->authorized()->where('id', $id)->first();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'product' => ProductResource::make($product),
+            ],
+        ]);
+    }
+
     public function allCategoriesProducts(Request $request)
     {
         $categoriesWiseProducts = Category::with([

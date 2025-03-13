@@ -32,6 +32,7 @@ Route::get('/category', [ProductController::class, 'catgeories']);
 
 // products route
 Route::get('/products', [ProductController::class, 'products']);
+Route::get('/products/{id}', [ProductController::class, 'productView']);
 
 // all categories wise products route
 Route::get('/category/products', [ProductController::class, 'allCategoriesProducts']);
