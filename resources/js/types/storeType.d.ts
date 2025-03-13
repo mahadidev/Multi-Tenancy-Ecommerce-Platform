@@ -33,7 +33,9 @@ export interface StoreType {
     theme: null | ThemeType;
     settings: SettingsType | null;
     social_media: SocialMediaType[];
-    featuredProducts: ProductType[];
+    storeProducts: ProductType[];
+    featuredProducts: StoreProduct[];
+    trendingProducts: ProductType[];
     brands: BrandType[];
     widgets: WidgetType[];
     menus: MenuType[];

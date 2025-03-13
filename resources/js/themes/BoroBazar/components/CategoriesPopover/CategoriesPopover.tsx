@@ -10,8 +10,8 @@ export const CategoriesPopover: FC<{
     storeSlug: string;
 }> = ({ categories, storeSlug }) => {
     const content = (
-        <div className="w-64 text-sm text-gray-500 dark:text-gray-400 p-3 px-4">
-            <div className="border-b border-gray-200 my-2 dark:border-gray-600">
+        <div className="w-64 text-sm text-gray-500 dark:text-gray-400 py-2 px-4">
+            <div className="border-b border-gray-200 my-2 pb-2 dark:border-gray-600">
                 <h3 className="font-semibold text-gray-900 dark:text-white">
                     Product categories
                 </h3>
