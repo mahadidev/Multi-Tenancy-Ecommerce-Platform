@@ -11,8 +11,7 @@ class StoreController extends Controller
 {
     // show store 
     public function show(Request $request)
-    {
-        // $store = Store::active()->find($request->store_id);
+    {   
         $store = Store::active()
             ->when($request->has('domain'), function ($query) use ($request) {
                 return $query->where('domain', $request->domain);

@@ -27,6 +27,7 @@ class Product extends Model
         'status',
         'attachments',
         'is_trending',
+        'is_featured',
         'has_discount',
         'discount_to',
         'discount_type',
