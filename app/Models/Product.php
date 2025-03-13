@@ -126,7 +126,7 @@ class Product extends Model
                 if ($discountType === 'percentage') {
                     $discountedPrice = $price - ($price * ($discount / 100));
                     return number_format($discountedPrice, 2, '.', '');
-                } else {
+                } else if ($discountType === 'flat') {
                     $discountedPrice = $price - $discount;
                     return number_format($discountedPrice, 2, '.', '');
                 }   
