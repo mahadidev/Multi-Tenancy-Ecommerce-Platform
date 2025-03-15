@@ -3,8 +3,8 @@
     "file": "assets/index.esm-BAAY9ykk.js",
     "name": "index.esm"
   },
-  "_registeredTheme-CzV7UupL.js": {
-    "file": "assets/registeredTheme-CzV7UupL.js",
+  "_registeredTheme-B1BSEx6C.js": {
+    "file": "assets/registeredTheme-B1BSEx6C.js",
     "name": "registeredTheme",
     "imports": [
       "_index.esm-BAAY9ykk.js"
@@ -51,42 +51,42 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-u4P2TEsY.js",
+    "file": "assets/index-DGvkyxt9.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
       "_index.esm-BAAY9ykk.js",
-      "_registeredTheme-CzV7UupL.js"
+      "_registeredTheme-B1BSEx6C.js"
     ],
     "css": [
-      "assets/index-BucIYSw4.css"
+      "assets/index-DkSFmwpO.css"
     ]
   },
   "resources/js/site/index.tsx": {
-    "file": "assets/index-KPJtOMSX.js",
+    "file": "assets/index-BfTiiJmI.js",
     "name": "index",
     "src": "resources/js/site/index.tsx",
     "isEntry": true,
     "imports": [
       "_index.esm-BAAY9ykk.js",
-      "_registeredTheme-CzV7UupL.js"
+      "_registeredTheme-B1BSEx6C.js"
     ],
     "css": [
-      "assets/index-CMxD3Oh-.css"
+      "assets/index-CSpjh6Jk.css"
     ]
   },
   "resources/js/themes/index.tsx": {
-    "file": "assets/index-DOMtX_0H.js",
+    "file": "assets/index-DJhVs0BP.js",
     "name": "index",
     "src": "resources/js/themes/index.tsx",
     "isEntry": true,
     "imports": [
       "_index.esm-BAAY9ykk.js",
-      "_registeredTheme-CzV7UupL.js"
+      "_registeredTheme-B1BSEx6C.js"
     ],
     "css": [
-      "assets/index-CMxD3Oh-.css"
+      "assets/index-CSpjh6Jk.css"
     ]
   }
 }

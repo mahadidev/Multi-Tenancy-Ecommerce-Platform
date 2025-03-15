@@ -7,6 +7,7 @@ import Hero from "./hero/Hero";
 import LatestProducts from "./latestProducts/LatestProduct";
 import OfferBanner from "./offerBanner/OfferBanner";
 import PageBanner from "./pageBanner/PageBanner";
+import RegistrationPage from "./registration/Registration";
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
     const widgets: {
@@ -19,6 +20,7 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         latestProducts: <LatestProducts {...props} />,
         pageBanner: <PageBanner {...props} />,
         allProducts: <AllProducts {...props} />,
+        registration: <RegistrationPage {...props} />,
     };
 
     return (

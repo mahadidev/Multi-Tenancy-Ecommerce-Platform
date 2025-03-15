@@ -4,7 +4,7 @@ import { BsChevronRight } from "react-icons/bs";
 import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const PageBanner: FC<ThemeWidgetPropsType> = ({ widget, store }) => {
+const PageBanner: FC<ThemeWidgetPropsType> = ({ widget }) => {
     return (
         <section>
             {widget.inputs.find((input) => input.name === "bannerLink") && (

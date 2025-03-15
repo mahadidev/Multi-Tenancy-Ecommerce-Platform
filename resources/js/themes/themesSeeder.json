@@ -1019,7 +1019,7 @@
           "inputs": []
         },
         "is_active": 1,
-        "type": "shop",
+        "type": "single-products",
         "thumbnail": null,
         "widgets": [
           {
@@ -1060,6 +1060,26 @@
             "name": "allProducts",
             "label": "All Products Section",
             "serial": 2,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "registration",
+        "label": "Registration Page",
+        "slug": "/register",
+        "title": "Registration Page",
+        "is_active": 1,
+        "type": "register",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "registration",
+            "label": "Registration Page",
+            "serial": 1,
             "type": "section",
             "inputs": []
           }

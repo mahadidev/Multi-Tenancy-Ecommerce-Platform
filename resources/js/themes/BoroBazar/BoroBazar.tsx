@@ -19,6 +19,7 @@ import HeroJson from "./widgets/hero/Hero.json";
 import LatestProductsJson from "./widgets/latestProducts/LatestProduct.json";
 import OfferBannerJson from "./widgets/offerBanner/OfferBanner.json";
 import PageBannerJson from "./widgets/pageBanner/PageBanner.json";
+import RegistrationPageJson from "./widgets/registration/Registration.json";
 
 export const BoroBazar: RegisteredThemeType = {
     name: "BoroBazar",
@@ -74,6 +75,17 @@ export const BoroBazarSeeder: ThemeType | any = {
             type: "single-products",
             thumbnail: null,
             widgets: [PageBannerJson, AllProductsJson],
+        },
+        {
+            id: 3,
+            name: "registration",
+            label: "Registration Page",
+            slug: "/register",
+            title: "Registration Page",
+            is_active: 1,
+            type: "register",
+            thumbnail: null,
+            widgets: [RegistrationPageJson],
         },
     ],
 };
