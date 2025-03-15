@@ -1080,8 +1080,8 @@
         "title": "Registration Page",
         "layout": {
           "id": 1,
-          "name": "authLayout",
-          "label": "Auth Layout",
+          "name": "appLayout",
+          "label": "App Layout",
           "type": "layout",
           "inputs": []
         },
@@ -1093,6 +1093,33 @@
             "id": 1,
             "name": "registration",
             "label": "Registration Page",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "registration",
+        "label": "Login Page",
+        "slug": "/login",
+        "title": "Login Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "login",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "login",
+            "label": "Login Page",
             "serial": 1,
             "type": "section",
             "inputs": []

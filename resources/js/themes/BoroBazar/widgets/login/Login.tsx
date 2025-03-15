@@ -7,9 +7,13 @@ import SocialLogin from "../../components/Auth/SocialLogin";
 import PasswordInput from "../../components/Form/PasswordInput/PasswordInput";
 import useForm from "../../hooks/useForm";
 
-const Registration: FC<ThemeWidgetPropsType> = function () {
+const Login: FC<ThemeWidgetPropsType> = function () {
     // const { register } = useAuth();
     const { formState, formErrors, handleChange } = useForm({
+        default: {
+            email: "",
+            password: "",
+        },
         // formValidationError: register.error,
     });
 
@@ -32,26 +36,9 @@ const Registration: FC<ThemeWidgetPropsType> = function () {
                     }}
                 >
                     <h2 className="text-2xl font-bold text-gray-900 lg:text-3xl dark:text-white">
-                        Register Your Account
+                        Login
                     </h2>
                     <div className="mt-8 space-y-6">
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="email">Your name</Label>
-                            <TextInput
-                                id="name"
-                                name="name"
-                                placeholder="Doe Json"
-                                type="name"
-                                value={formState["name"]}
-                                color={formErrors["name"] ? "failure" : "gray"}
-                                helperText={
-                                    formErrors["name"]
-                                        ? formErrors["name"][0]
-                                        : false
-                                }
-                                onChange={handleChange}
-                            />
-                        </div>
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="email">Your email</Label>
                             <TextInput
@@ -89,40 +76,24 @@ const Registration: FC<ThemeWidgetPropsType> = function () {
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="confirmPassword">
-                                Confirm password
-                            </Label>
-                            <PasswordInput
-                                id="confirm_password"
-                                name="confirm_password"
-                                placeholder="••••••••"
-                                type="password"
-                                value={formState["confirm_password"]}
-                                color={
-                                    formErrors["confirm_password"]
-                                        ? "failure"
-                                        : "gray"
-                                }
-                                helperText={
-                                    formErrors["confirm_password"]
-                                        ? formErrors["confirm_password"][0]
-                                        : false
-                                }
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="flex items-center gap-x-3">
-                            <Checkbox id="acceptTerms" name="acceptTerms" />
-                            <Label htmlFor="acceptTerms">
-                                I accept the&nbsp;
-                                <Link
-                                    to={`/terms-conditions`}
-                                    className="text-primary-700 hover:underline dark:text-light-500"
-                                >
-                                    Terms and Conditions
-                                </Link>
-                            </Label>
+
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-x-3">
+                                <Checkbox
+                                    id="rememberMe"
+                                    name="rememberMe"
+                                    value={formState["rememberMe"]}
+                                    onChange={handleChange}
+                                    color="gray"
+                                />
+                                <Label htmlFor="rememberMe">Remember me</Label>
+                            </div>
+                            <Link
+                                to={`/forgot-password`}
+                                className="text-right text-sm text-primary-700 hover:underline dark:text-light-500"
+                            >
+                                Lost Password?
+                            </Link>
                         </div>
                         {/* {formErrors["message"] && (
                             <ErrorMessage>{formErrors["message"]}</ErrorMessage>
@@ -146,16 +117,16 @@ const Registration: FC<ThemeWidgetPropsType> = function () {
                                     <AiOutlineLoading className="h-6 w-6 animate-spin" />
                                 }
                             >
-                                Registration
+                                Login to your account
                             </Button>
                         </div>
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                            Already have an account?&nbsp;
+                        <p className="text-sm font-medium text-gray-500 dark:text-light-400">
+                            Not registered?&nbsp;
                             <Link
-                                to="/login"
+                                to={"register"}
                                 className="text-primary-700 hover:underline dark:text-light-500"
                             >
-                                Login here
+                                Registration
                             </Link>
                         </p>
 
@@ -167,4 +138,4 @@ const Registration: FC<ThemeWidgetPropsType> = function () {
     );
 };
 
-export default Registration;
+export default Login;

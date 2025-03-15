@@ -18,9 +18,10 @@ import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.jso
 import FeaturesSectionJson from "./widgets/featuresSection/FeaturesSection.json";
 import HeroJson from "./widgets/hero/Hero.json";
 import LatestProductsJson from "./widgets/latestProducts/LatestProduct.json";
+import LoginJson from "./widgets/login/Login.json";
 import OfferBannerJson from "./widgets/offerBanner/OfferBanner.json";
 import PageBannerJson from "./widgets/pageBanner/PageBanner.json";
-import RegistrationPageJson from "./widgets/registration/Registration.json";
+import RegistrationJson from "./widgets/registration/Registration.json";
 
 export const BoroBazar: RegisteredThemeType = {
     name: "BoroBazar",
@@ -83,11 +84,25 @@ export const BoroBazarSeeder: ThemeType | any = {
             label: "Registration Page",
             slug: "/register",
             title: "Registration Page",
-            layout: AuthLayoutJson,
+            // layout: AuthLayoutJson,
+            layout: AppLayoutJson,
             is_active: 1,
             type: "register",
             thumbnail: null,
-            widgets: [RegistrationPageJson],
+            widgets: [RegistrationJson],
+        },
+        {
+            id: 4,
+            name: "registration",
+            label: "Login Page",
+            slug: "/login",
+            title: "Login Page",
+            // layout: AuthLayoutJson,
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "login",
+            thumbnail: null,
+            widgets: [LoginJson],
         },
     ],
 };
