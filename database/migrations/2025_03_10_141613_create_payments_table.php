@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('store_id')->nullable()->constrained('stores')->cascadeOnDelete();
             $table->string('transaction_id')->nullable();
             $table->string('invoice_id')->nullable();
+            $table->morphs('payable'); // Allows linking to subscriptions, orders, etc.
             $table->string('name')->nullable();
             $table->string('email', 30)->nullable();
             $table->string('phone', 20)->nullable();
