@@ -10,7 +10,7 @@ use App\Models\Subscription;
 class SubscriptionController extends Controller
 {
     public function index(){
-        $plans = Subscription::get();
+        $plans = Subscription::visible()->get();
 
         return response()->json([
             'status' => 200,

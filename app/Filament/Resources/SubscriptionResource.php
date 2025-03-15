@@ -17,6 +17,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Forms\Components\Card;
+use Filament\Tables\Columns\ToggleColumn;
 
 class SubscriptionResource extends Resource
 {
@@ -65,6 +66,10 @@ class SubscriptionResource extends Resource
                         ->label('Is Trending')
                         ->helperText('Mark if this plan is featured or trending.')
                         ->columnSpan(1),
+                    Checkbox::make('is_visible')
+                        ->label('Is Visible')
+                        ->helperText('Mark if this plan is visible in site.')
+                        ->columnSpan(1),
                 ])
                 ->columns(2)
                 ->heading('Subscription Information')
@@ -107,9 +112,14 @@ class SubscriptionResource extends Resource
                 TextColumn::make('price_monthly')
                     ->label('Price per Month')
                     ->sortable(),
-                BooleanColumn::make('is_trend')
+                ToggleColumn::make('is_trend')
                     ->label('Is Trending')
                     ->sortable(),
+
+                ToggleColumn::make('is_visible') // Use ToggleColumn for visibility
+                    ->label('Is Visible')
+                    ->sortable(),
+    
             ])
             ->filters([
                 //
