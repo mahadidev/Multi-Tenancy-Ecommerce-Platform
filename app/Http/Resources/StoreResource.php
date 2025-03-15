@@ -45,7 +45,15 @@ class StoreResource extends JsonResource
             'menus' => $this->menus ? StoreMenuResource::collection($this->menus) : [],
             'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
             'partials' => $this->partials ? WidgetResource::collection($this->partials) : [],
-            "layouts" => $this->layouts ? WidgetResource::collection($this->layouts) : [],
+            'layouts' => $this->layouts ? WidgetResource::collection($this->layouts) : [],
+            'store_subscription_status' => $this->package_remaining_days == 0 ? 'Expired' : 'Active',
+            'store_subscription_plan' => ($this->package_remaining_days != 0 && $this->storeSubscription) ? [
+                'id' => $this->storeSubscription->id,
+                'start_date' => date('d M, Y | h:ia', strtotime($this->storeSubscription->start_date)),
+                'end_date' => date('d M, Y | h:ia', strtotime($this->storeSubscription->end_date)), 
+                'is_active' => $this->storeSubscription->is_active,
+                'package' => $this->storeSubscription->package ? SubscriptionResource::make($this->storeSubscription->package) : null,
+            ] : null,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
         ];

@@ -17,10 +17,21 @@ class Payment extends Model
         'amount',
         'status',
         'currency',
-        'payment_method'
+        'payment_method',
+        'payable_id', // Morphable relation ID
+        'payable_type', // Morphable relation Model Type
     ];
 
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function store(){
+        return $this->belongsTo(Store::class, 'store_id');
+    }
+
+    public function payable()
+    {
+        return $this->morphTo();
     }
 }

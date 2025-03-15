@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('price_monthly', 8, 2);
             $table->boolean('is_trend')->default(false);
+            $table->boolean('is_visible')->default(true);
+            $table->integer('trial_days')->nullable();
             $table->timestamps();
         });
     }
