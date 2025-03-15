@@ -1010,7 +1010,7 @@
         "name": "single-products",
         "label": "Single-Products",
         "slug": "/single-products",
-        "title": "Shop Page",
+        "title": "Single Products Page",
         "layout": {
           "id": 1,
           "name": "appLayout",

@@ -3,7 +3,7 @@ import { FC } from "react";
 
 const FeaturesSection: FC<ThemeWidgetPropsType> = ({ widget }) => {
     return (
-        <section className="py-4 my-5">
+        <section className="py-4 px-4 lg:px-0 my-5">
             <div className="container mx-auto">
                 {/* Offer Grid Box */}
                 {widget.inputs.find((input) => input.name === "features") && (

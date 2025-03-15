@@ -9,11 +9,14 @@ const PageBanner: FC<ThemeWidgetPropsType> = ({ widget, store }) => {
         <section>
             {widget.inputs.find((input) => input.name === "bannerLink") && (
                 <div
-                    className={`bg-[url(${
-                        widget?.inputs?.find(
-                            (input) => input.name === "bannerLink"
-                        )?.value
-                    })] h-[400px] w-full bg-no-repeat bg-cover flex items-center justify-center`}
+                    className={`h-[400px] w-full bg-no-repeat bg-cover flex items-center justify-center`}
+                    style={{
+                        backgroundImage: `url(${
+                            widget?.inputs?.find(
+                                (input) => input.name === "bannerLink"
+                            )?.value
+                        })`,
+                    }}
                 >
                     <div className="relative flex flex-col items-center justify-center w-full">
                         <h2 className="text-xl md:text-2xl lg:text-3xl 2xl:text-[40px] font-bold text-center text-brand-light">
@@ -27,13 +30,13 @@ const PageBanner: FC<ThemeWidgetPropsType> = ({ widget, store }) => {
                         </h2>
                         <div className="flex items-center">
                             <ol className="flex items-center w-full overflow-hidden">
-                                <li className="text-sm text-brand-muted px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 hover:text-brand-dark">
+                                <li className="text-[17px] text-brand-muted px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 hover:text-brand-dark">
                                     <Link
                                         className="inline-flex items-center"
-                                        to={`/sites/${store?.slug}`}
+                                        to={`/`}
                                     >
                                         <FaHome
-                                            className="mr-1.5 text-brand-dark text-[15px]"
+                                            className="mr-1.5 text-brand-dark text-[17px]"
                                             size={16}
                                         />{" "}
                                         Home
@@ -41,12 +44,12 @@ const PageBanner: FC<ThemeWidgetPropsType> = ({ widget, store }) => {
                                 </li>
                                 <li className="text-base text-brand-dark mt-[1px]">
                                     <BsChevronRight
-                                        className="text-brand-dark text-opacity-40 text-[15px]"
+                                        className="text-brand-dark text-opacity-40 text-[17px]"
                                         size={16}
                                     />
                                 </li>
                                 <li className="text-sm text-brand-muted px-2.5 transition duration-200 ease-in first:pl-0 last:pr-0 hover:text-brand-dark">
-                                    <p className="capitalize text-[15px]">
+                                    <p className="capitalize text-[17px]">
                                         {
                                             widget?.inputs?.find(
                                                 (input) =>
