@@ -61,6 +61,14 @@ class SubscriptionResource extends Resource
                         ->placeholder('Enter price')
                         ->helperText('The cost of this subscription per month.')
                         ->columnSpan(2),
+
+                    TextInput::make('trial_days')
+                        ->label('Package Trial Days')
+                        ->required()
+                        ->numeric()
+                        ->placeholder('Enter days')
+                        ->helperText('This is the duration of the trial period.')
+                        ->columnSpan(2),
                     
                     Checkbox::make('is_trend')
                         ->label('Is Trending')
@@ -111,6 +119,10 @@ class SubscriptionResource extends Resource
                     ->sortable(),
                 TextColumn::make('price_monthly')
                     ->label('Price per Month')
+                    ->sortable(),
+
+                TextColumn::make('trial_days')
+                    ->label('Trial days')
                     ->sortable(),
                 ToggleColumn::make('is_trend')
                     ->label('Is Trending')
