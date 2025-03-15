@@ -604,6 +604,13 @@
       },
       {
         "id": 1,
+        "name": "authLayout",
+        "label": "Auth Layout",
+        "type": "layout",
+        "inputs": []
+      },
+      {
+        "id": 1,
         "name": "navigation",
         "label": "Navigation",
         "type": "partial",
@@ -1071,6 +1078,13 @@
         "label": "Registration Page",
         "slug": "/register",
         "title": "Registration Page",
+        "layout": {
+          "id": 1,
+          "name": "authLayout",
+          "label": "Auth Layout",
+          "type": "layout",
+          "inputs": []
+        },
         "is_active": 1,
         "type": "register",
         "thumbnail": null,

@@ -12,6 +12,7 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 
 // import widget json
 import { RegisteredThemeType } from "@themes/registeredTheme";
+import AuthLayoutJson from "./layouts/authLayout/AuthLayout.json";
 import AllProductsJson from "./widgets/allProducts/AllProducts.json";
 import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
 import FeaturesSectionJson from "./widgets/featuresSection/FeaturesSection.json";
@@ -32,7 +33,7 @@ export const BoroBazarSeeder: ThemeType | any = {
     name: BoroBazar.name,
     slug: BoroBazar.name.toLowerCase().replaceAll(" ", "-"),
     thumbnail: null,
-    widgets: [AppLayoutJson, NavigationJson, FooterJson],
+    widgets: [AppLayoutJson, AuthLayoutJson, NavigationJson, FooterJson],
     pages: [
         {
             id: 0,
@@ -82,6 +83,7 @@ export const BoroBazarSeeder: ThemeType | any = {
             label: "Registration Page",
             slug: "/register",
             title: "Registration Page",
+            layout: AuthLayoutJson,
             is_active: 1,
             type: "register",
             thumbnail: null,
