@@ -17,6 +17,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BooleanColumn;
 use Filament\Forms\Components\Card;
+use Filament\Tables\Columns\ToggleColumn;
 
 class SubscriptionResource extends Resource
 {
@@ -60,10 +61,22 @@ class SubscriptionResource extends Resource
                         ->placeholder('Enter price')
                         ->helperText('The cost of this subscription per month.')
                         ->columnSpan(2),
+
+                    TextInput::make('trial_days')
+                        ->label('Package Trial Days')
+                        ->required()
+                        ->numeric()
+                        ->placeholder('Enter days')
+                        ->helperText('This is the duration of the trial period.')
+                        ->columnSpan(2),
                     
                     Checkbox::make('is_trend')
                         ->label('Is Trending')
                         ->helperText('Mark if this plan is featured or trending.')
+                        ->columnSpan(1),
+                    Checkbox::make('is_visible')
+                        ->label('Is Visible')
+                        ->helperText('Mark if this plan is visible in site.')
                         ->columnSpan(1),
                 ])
                 ->columns(2)
@@ -107,9 +120,18 @@ class SubscriptionResource extends Resource
                 TextColumn::make('price_monthly')
                     ->label('Price per Month')
                     ->sortable(),
-                BooleanColumn::make('is_trend')
+
+                TextColumn::make('trial_days')
+                    ->label('Trial days')
+                    ->sortable(),
+                ToggleColumn::make('is_trend')
                     ->label('Is Trending')
                     ->sortable(),
+
+                ToggleColumn::make('is_visible') // Use ToggleColumn for visibility
+                    ->label('Is Visible')
+                    ->sortable(),
+    
             ])
             ->filters([
                 //

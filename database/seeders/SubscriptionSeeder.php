@@ -16,6 +16,8 @@ class SubscriptionSeeder extends Seeder
                 'title' => 'Starter features',
                 'price_monthly' => 9.99,
                 'is_trend' => false,
+                'is_visible' => true,
+                'trial_days' => 30,
                 'features' => [
                     ['name' => '1 Website', 'is_available' => true],
                     ['name' => '1GB Storage', 'is_available' => true],
@@ -37,6 +39,8 @@ class SubscriptionSeeder extends Seeder
                 'title' => 'Pro features',
                 'price_monthly' => 19.99,
                 'is_trend' => true,
+                'is_visible' => true,
+                'trial_days' => 30,
                 'features' => [
                     ['name' => '5 Websites', 'is_available' => true],
                     ['name' => '10GB Storage', 'is_available' => true],
@@ -58,6 +62,8 @@ class SubscriptionSeeder extends Seeder
                 'title' => 'Business features',
                 'price_monthly' => 49.99,
                 'is_trend' => false,
+                'is_visible' => true,
+                'trial_days' => 30,
                 'features' => [
                     ['name' => 'Unlimited Websites', 'is_available' => true],
                     ['name' => '100GB Storage', 'is_available' => true],
@@ -76,6 +82,29 @@ class SubscriptionSeeder extends Seeder
                     ['name' => 'User Roles & Permissions', 'is_available' => true],
                 ],
             ],
+            [
+                'name' => 'Free Trial',
+                'title' => 'Trial features',
+                'price_monthly' => 0.00,
+                'is_trend' => false,
+                'is_visible' => false,
+                'trial_days' => 7,
+                'features' => [
+                    ['name' => '1 Website', 'is_available' => true],
+                    ['name' => '500MB Storage', 'is_available' => true],
+                    ['name' => 'Basic Templates', 'is_available' => true],
+                    ['name' => 'Custom Domain', 'is_available' => false],
+                    ['name' => 'E-commerce Features', 'is_available' => false],
+                    ['name' => 'Basic Security', 'is_available' => true],
+                    ['name' => 'Community Support', 'is_available' => true],
+                    ['name' => 'SEO Tools', 'is_available' => false],
+                    ['name' => 'Analytics Dashboard', 'is_available' => false],
+                    ['name' => 'API Access', 'is_available' => false],
+                    ['name' => 'Ad-Free Experience', 'is_available' => false],
+                    ['name' => 'Multilingual Support', 'is_available' => false],
+                    ['name' => 'User Roles & Permissions', 'is_available' => false],
+                ],
+            ],
         ];
 
         foreach ($subscriptions as $data) {
@@ -86,6 +115,8 @@ class SubscriptionSeeder extends Seeder
                     'title' => $data['title'],
                     'price_monthly' => $data['price_monthly'],
                     'is_trend' => $data['is_trend'],
+                    'is_visible' => $data['is_visible'],
+                    'trial_days' => $data['trial_days'],
                 ]
             );
 

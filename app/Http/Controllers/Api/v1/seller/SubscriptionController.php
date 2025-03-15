@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
 use App\Models\Payment;
+use App\Models\StoreSubscription;
 use Illuminate\Http\Request;
 use UddoktaPay\LaravelSDK\UddoktaPay;
 use UddoktaPay\LaravelSDK\Requests\CheckoutRequest;
@@ -50,6 +51,8 @@ class SubscriptionController extends Controller
             'email' => $user->email,
             'status' => 'pending',
             'payment_method' => 'online',
+            'payable_type' => Subscription::class,
+            'payable_id' => $package->id,
         ]);
 
         try {
@@ -90,9 +93,10 @@ class SubscriptionController extends Controller
         try {
 
             $response = $this->uddoktapay->verify($request);
-
+            $store = getStore();
             $responseData = $response->toArray();
             $payment = Payment::where('transaction_id', $responseData['metadata']['transaction_id'])->first();
+            $package = Subscription::find($payment->payable_id);
 
             if ($response->success()) {
                 if ($payment) {
@@ -101,7 +105,15 @@ class SubscriptionController extends Controller
                         'status' => 'complete',
                         'invoice_id' => $invoiceId,
                     ]);
+
+                    $store->storeSubscription()->update([
+                        'subscription_id' => $package->id,
+                        'start_date' => now(),
+                        'end_date' => now()->addDays($package->trial_days),
+                        'is_active' => true,
+                    ]);
                 }
+
 
                 return redirect()->to(url('seller/upgrade-plan') . '?status=success');
 
