@@ -17,6 +17,7 @@ class SubscriptionSeeder extends Seeder
                 'price_monthly' => 9.99,
                 'is_trend' => false,
                 'is_visible' => true,
+                'trial_days' => 30,
                 'features' => [
                     ['name' => '1 Website', 'is_available' => true],
                     ['name' => '1GB Storage', 'is_available' => true],
@@ -39,6 +40,7 @@ class SubscriptionSeeder extends Seeder
                 'price_monthly' => 19.99,
                 'is_trend' => true,
                 'is_visible' => true,
+                'trial_days' => 30,
                 'features' => [
                     ['name' => '5 Websites', 'is_available' => true],
                     ['name' => '10GB Storage', 'is_available' => true],
@@ -61,6 +63,7 @@ class SubscriptionSeeder extends Seeder
                 'price_monthly' => 49.99,
                 'is_trend' => false,
                 'is_visible' => true,
+                'trial_days' => 30,
                 'features' => [
                     ['name' => 'Unlimited Websites', 'is_available' => true],
                     ['name' => '100GB Storage', 'is_available' => true],
@@ -85,6 +88,7 @@ class SubscriptionSeeder extends Seeder
                 'price_monthly' => 0.00,
                 'is_trend' => false,
                 'is_visible' => false,
+                'trial_days' => 7,
                 'features' => [
                     ['name' => '1 Website', 'is_available' => true],
                     ['name' => '500MB Storage', 'is_available' => true],
@@ -112,6 +116,7 @@ class SubscriptionSeeder extends Seeder
                     'price_monthly' => $data['price_monthly'],
                     'is_trend' => $data['is_trend'],
                     'is_visible' => $data['is_visible'],
+                    'trial_days' => $data['trial_days'],
                 ]
             );
 

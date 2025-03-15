@@ -37,6 +37,23 @@ class Store extends Model
             $data->sendWelcomeEmail();
         });
 
+         // Set default trial period for the store
+        static::created(function ($data) {
+           
+             $package = Subscription::where('name', 'free-trial')->first();
+
+             if ($package) {
+                 $data->storeSubscription()->create([
+                     'user_id' => $data->owner_id,
+                     'subscription_id' => $package->id,
+                     'start_date' => now(),
+                     'end_date' => now()->addDays($package->trial_days),
+                     'is_active' => true,
+                 ]);
+             }
+ 
+        });
+
         // Automatically update the slug when updating
         static::updating(function ($data) {
             if ($data->isDirty('name')) {
@@ -44,6 +61,23 @@ class Store extends Model
                 $data->slug = Str::slug($data->name); // Update slug based on new name
             }
         });
+    }
+
+    public function storeSubscription()
+    {
+        return $this->hasOne(StoreSubscription::class, 'store_id');
+    }
+
+    public function getPackageRemainingDaysAttribute()
+    {
+        $subscription = $this->storeSubscription;
+        
+        if ($subscription && $subscription->end_date) {
+            $remainingDays = now()->diffInDays($subscription->end_date, false);
+            return $remainingDays > 0 ? $remainingDays : 0; // Return 0 if expired
+        }
+
+        return 0; // No subscription found
     }
 
     public function getLogoImageAttribute()
@@ -226,4 +260,6 @@ class Store extends Model
             // return response()->json(['status' => 500, 'message' => 'Error sending welcome email'], 500);
         }
     }
+
+    
 }

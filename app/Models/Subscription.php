@@ -12,7 +12,8 @@ class Subscription extends Model
         'title',
         'price_monthly',
         'is_trend',
-        'is_visible'
+        'is_visible',
+        'trial_days'
     ];
 
     public static function boot()

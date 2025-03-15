@@ -45,6 +45,3 @@ Route::post('/contact', [ContactController::class, 'store']);
 
 // order pdf download route
 Route::get('/orders-pdf/{uuid}/{isCustomer}', [OrderController::class, 'downloadOrderDetails']);
-
-
-
