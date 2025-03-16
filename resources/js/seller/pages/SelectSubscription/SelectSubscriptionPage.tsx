@@ -1,8 +1,9 @@
 import usePlans from "@seller/hooks/usePlan";
 import { SubscriptionType } from "@type/subscriptionPlanType";
+import { FC } from "react";
 import SubscriptionPlan from "../SubscriptionPlan/SubscriptionPlan";
 
-const SelectSubscriptionPage = () => {
+const SelectSubscriptionPage: FC = () => {
     const { plans } = usePlans();
     return (
         <div className="flex flex-col items-center h-screen justify-center !w-full">

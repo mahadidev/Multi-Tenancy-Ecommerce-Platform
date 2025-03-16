@@ -12,18 +12,10 @@ const OnboardMiddleware = () => {
                 <>
                     {/* if logged */}
 
-                    {store?.store_subscription_status === "Expired" ? (
-                        <Navigate to={RoutePath.SubscriptionPage.index()} />
+                    {store ? (
+                        <Navigate to={RoutePath.DashboardPage.index()} />
                     ) : (
-                        <>
-                            {store ? (
-                                <Navigate
-                                    to={RoutePath.DashboardPage.index()}
-                                />
-                            ) : (
-                                <Outlet />
-                            )}
-                        </>
+                        <Outlet />
                     )}
                 </>
             ) : (

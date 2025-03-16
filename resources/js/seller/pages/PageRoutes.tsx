@@ -179,10 +179,7 @@ export const PagesRoute: FC = function () {
                     </Route>
 
                     <Route path="/" element={<SubscriptionMiddleware />}>
-                        <Route
-                            path="/subscriptions"
-                            element={<SubscriptionLayout />}
-                        >
+                        <Route path="/" element={<SubscriptionLayout />}>
                             <Route
                                 path="select-subscriptions"
                                 element={<SelectSubscriptionPage />}
