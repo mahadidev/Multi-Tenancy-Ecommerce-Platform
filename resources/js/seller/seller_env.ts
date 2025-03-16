@@ -95,6 +95,6 @@ export const RoutePath = {
         index: () => "/upgrade-plan",
     },
     SubscriptionPage: {
-        index: () => "/select-subscriptions",
+        index: () => "/subscriptions/select-subscriptions",
     },
 };

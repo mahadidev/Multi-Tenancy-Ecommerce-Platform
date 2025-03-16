@@ -1,4 +1,5 @@
-import SubscriptionMiddleware from "@seller/middleware/SubscriptionMiddleware";
+import SubscriptionLayout from "@seller/components/Layout/SubscriptionLayout";
+import SubscriptionMiddleware from "@seller/middleware/subscriptionMiddleware";
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
@@ -35,6 +36,7 @@ import MenusPage from "./MenusPage/MenusPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
+import SelectSubscriptionPage from "./SelectSubscription/SelectSubscriptionPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
@@ -178,9 +180,14 @@ export const PagesRoute: FC = function () {
 
                     <Route path="/" element={<SubscriptionMiddleware />}>
                         <Route
-                            path="select-subscriptions"
-                            element={<UpgradeSubscriptionPlan />}
-                        />
+                            path="/subscriptions"
+                            element={<SubscriptionLayout />}
+                        >
+                            <Route
+                                path="select-subscriptions"
+                                element={<SelectSubscriptionPage />}
+                            />
+                        </Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

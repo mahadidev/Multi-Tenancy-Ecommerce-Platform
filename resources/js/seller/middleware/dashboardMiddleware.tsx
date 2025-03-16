@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 const DashboardMiddleware = () => {
     const { user, accessToken } = useAppSelector((state) => state.auth);
     const { store } = useAppSelector((state) => state.store);
-
+    console.log({ store });
     return (
         <>
             {user && accessToken ? (

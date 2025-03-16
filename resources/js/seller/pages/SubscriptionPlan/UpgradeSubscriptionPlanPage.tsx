@@ -4,7 +4,6 @@ import { SubscriptionType } from "@type/subscriptionPlanType";
 import { FC } from "react";
 import { useSearchParams } from "react-router-dom";
 import SubscriptionPlan from "./SubscriptionPlan";
-import SubscriptionSuccessModal from "./SubscriptionSuccessModal";
 
 const UpgradeSubscriptionPlan: FC = function () {
     const { plans } = usePlans();
@@ -22,7 +21,7 @@ const UpgradeSubscriptionPlan: FC = function () {
                     <div className="inline-block min-w-full align-middle">
                         {/* status */}
 
-                        <SubscriptionSuccessModal status={status!} />
+                        {/* <SubscriptionSuccessModal status={status!} /> */}
 
                         <div className="overflow-hidden shadow">
                             <div className="grid lg:grid-cols-3 gap-5 p-4">

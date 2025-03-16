@@ -16,7 +16,7 @@ const SubscriptionPlan: FC<{ plan: SubscriptionType }> = ({ plan }) => {
                 </div>
             ) : null}
             <div className="grid items-center justify-between">
-                <h2 className="text-2xl font-medium my-2 dark:text-white">
+                <h2 className="capitalize text-2xl font-medium my-2 dark:text-white">
                     {plan?.name}
                 </h2>
                 <h3 className="text-xl font-medium mb-2 dark:text-white">
