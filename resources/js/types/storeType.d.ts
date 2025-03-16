@@ -22,6 +22,7 @@ export interface StoreType {
     type: string;
     store_type: StoreTypesType;
     description: string | null;
+    store_subscription_status: string;
     currency: string;
     logo: string;
     dark_logo: string | null;

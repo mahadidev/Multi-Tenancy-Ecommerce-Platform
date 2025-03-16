@@ -1,3 +1,4 @@
+import SubscriptionMiddleware from "@seller/middleware/SubscriptionMiddleware";
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
@@ -37,7 +38,7 @@ import OrdersPage from "./OrdersPage/OrdersPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
-import UpgradeSubscriptionPlan from "./SubscriptionPlan/UpgradeSubscriptionPlan";
+import UpgradeSubscriptionPlan from "./SubscriptionPlan/UpgradeSubscriptionPlanPage";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -49,32 +50,26 @@ export const PagesRoute: FC = function () {
                         <Route path="/" element={<DashboardLayout />}>
                             {/* Dashboard Pages */}
                             <Route path="/" element={<DashboardPage />} />
-
                             {/* Orders Pages */}
                             <Route path="/orders" element={<OrdersPage />} />
-
                             {/* Orders Pages */}
                             <Route
                                 path="/customers"
                                 element={<CustomersPage />}
                             />
-
                             {/* Ocreate orders Pages */}
                             <Route
                                 path="/orders/create"
                                 element={<CreateOrderPage />}
                             />
-
                             {/* Store Pages */}
                             <Route path="pages" element={<PagesPage />} />
-
                             {/* Products Pages */}
                             <Route path="products" element={<ProductsPage />} />
                             <Route
                                 path="products/:id"
                                 element={<ProductEditPage />}
                             />
-
                             {/* Blogs Pages */}
                             <Route path="blogs" element={<BlogsPage />} />
                             <Route
@@ -89,19 +84,15 @@ export const PagesRoute: FC = function () {
                                 path="blogs/:id"
                                 element={<BlogEditPage />}
                             />
-
                             {/* Categories Pages */}
                             <Route
                                 path="categories"
                                 element={<CategoriesPage />}
                             />
-
                             {/* Brands Pages */}
                             <Route path="brands" element={<BrandsPage />} />
-
                             {/* Settings Pages */}
                             <Route path="settings" element={<SettingsPage />} />
-
                             {/* Access Management Pages */}
                             <Route
                                 path="access-management"
@@ -112,19 +103,15 @@ export const PagesRoute: FC = function () {
                                 path="store-admin"
                                 element={<StoreAdminPage />}
                             />
-
                             {/* Themes Pages */}
                             <Route path="themes" element={<ThemesPage />} />
-
                             {/* Menus page */}
                             <Route path="menus" element={<MenusPage />} />
-
                             {/* Seller account pages */}
                             <Route
                                 path="my-account/profile-settings"
                                 element={<ProfileSettingsPage />}
                             />
-
                             {/* Notifications page */}
                             <Route
                                 path="notifications"
@@ -135,7 +122,7 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="stores/create"
                                 element={<CreateStorePage />}
-                            />
+                            />{" "}
                             <Route
                                 path="upgrade-plan"
                                 element={<UpgradeSubscriptionPlan />}
@@ -185,8 +172,15 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="reset-password"
                                 element={<ResetPassword />}
-                            />
+                            />{" "}
                         </Route>
+                    </Route>
+
+                    <Route path="/" element={<SubscriptionMiddleware />}>
+                        <Route
+                            path="select-subscriptions"
+                            element={<UpgradeSubscriptionPlan />}
+                        />
                     </Route>
                 </Routes>
             </BrowserRouter>

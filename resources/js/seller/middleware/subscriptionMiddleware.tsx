@@ -2,10 +2,10 @@ import { RoutePath } from "@seller/seller_env";
 import { useAppSelector } from "@seller/store/store";
 import { Navigate, Outlet } from "react-router-dom";
 
-const GuestMiddleware = () => {
+const SubscriptionMiddleware = () => {
     const { user, accessToken } = useAppSelector((state) => state.auth);
     const { store } = useAppSelector((state) => state.store);
-
+    console.log("heloo");
     return (
         <>
             {user && accessToken ? (
@@ -14,17 +14,7 @@ const GuestMiddleware = () => {
                     {store?.store_subscription_status === "Expired" ? (
                         <Navigate to={RoutePath.SubscriptionPage.index()} />
                     ) : (
-                        <>
-                            {store ? (
-                                <Navigate
-                                    to={RoutePath.DashboardPage.index()}
-                                />
-                            ) : (
-                                <Navigate
-                                    to={RoutePath.Onboard.Store.index()}
-                                />
-                            )}
-                        </>
+                        <Navigate to={RoutePath.DashboardPage.index()} />
                     )}
                 </>
             ) : (
@@ -33,4 +23,4 @@ const GuestMiddleware = () => {
         </>
     );
 };
-export default GuestMiddleware;
+export default SubscriptionMiddleware;

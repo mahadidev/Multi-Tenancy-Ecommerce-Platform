@@ -24,6 +24,8 @@ export { default as BlogsPage } from "./BlogsPage/BlogsPage";
 export { default as PageEditPage } from "./PagesPage/PageEditPage/PageEditPage";
 export { default as PagesPage } from "./PagesPage/PagesPage";
 
+export { default as SubscriptionPage } from "./SubscriptionPlan/UpgradeSubscriptionPlanPage";
+
 // onboard pages
 export { default as StoreOnboardPage } from "./OnboardPage/StoreOnboardPage/StoreOnboardPage";
 
