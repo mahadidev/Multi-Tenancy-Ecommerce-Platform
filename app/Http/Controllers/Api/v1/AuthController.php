@@ -331,12 +331,19 @@ class AuthController extends Controller
         }
         $user->update(['store_id' => $storeIds]);
 
-        return $this->generateSuccessResponse($user, $request, $storeId);
+        if($user->email_verified_at) {
+            return $this->generateSuccessResponse($user, $request, $storeId);
+        }
+        else{
+            $verificationCode = Str::random(40); // Generate a random verification code
+            $user->update(['verification_code' => $verificationCode]);
+            return $this->sendVerificationEmail($user, $storeId);
+        }
     }
 
-    private function generateSuccessResponse(User $user, Request $request, int $storeId = null)
+    private function generateSuccessResponse(User $user, Request $request, $storeId = null)
     {
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // $token = $user->createToken('auth_token')->plainTextToken;
 
         if ($storeId) {
             $this->storeSessionData($request, $storeId);
@@ -345,10 +352,10 @@ class AuthController extends Controller
         return response()->json(
             [
                 'status' => 200,
-                'message' => 'Signup successful',
+                'message' => 'Signup successful, Please Login to continue',
                 'data' => [
-                    'token_type' => 'Bearer',
-                    'access_token' => $token,
+                    // 'token_type' => 'Bearer',
+                    // 'access_token' => $token,
                     'user' => new UserResource($user),
                 ],
             ],
