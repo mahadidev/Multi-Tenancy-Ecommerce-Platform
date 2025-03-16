@@ -35,8 +35,8 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::group(['prefix' => 'user'], function () {
-        Route::post('login', [AuthController::class, 'sellerLogin']);
-        Route::post('register', [AuthController::class, 'sellerRegister']);
+        Route::post('login', [AuthController::class, 'userLogin']);
+        Route::post('register', [AuthController::class, 'userRegister']);
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('resend-verification-email', [AuthController::class, 'resendVerificationEmail']);
         });
