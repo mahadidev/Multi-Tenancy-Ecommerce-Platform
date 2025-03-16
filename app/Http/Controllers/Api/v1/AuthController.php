@@ -239,6 +239,7 @@ class AuthController extends Controller
 
     public function userRegister(Request $request)
     {
+        // return $request->all();
         $this->validateRegistrationRequest($request);
 
         $storeId = (int) $request->store_id;
