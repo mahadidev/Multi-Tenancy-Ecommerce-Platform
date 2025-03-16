@@ -14,6 +14,7 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 import { RegisteredThemeType } from "@themes/registeredTheme";
 import AuthLayoutJson from "./layouts/authLayout/AuthLayout.json";
 import AllProductsJson from "./widgets/allProducts/AllProducts.json";
+import CartProductsJson from "./widgets/cartProducts/CartProducts.json";
 import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
 import FeaturesSectionJson from "./widgets/featuresSection/FeaturesSection.json";
 import HeroJson from "./widgets/hero/Hero.json";
@@ -103,6 +104,19 @@ export const BoroBazarSeeder: ThemeType | any = {
             type: "login",
             thumbnail: null,
             widgets: [LoginJson],
+        },
+        {
+            id: 5,
+            name: "cart",
+            label: "Cart Page",
+            slug: "/cart",
+            title: "Cart Page",
+            // layout: AuthLayoutJson,
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "cart",
+            thumbnail: null,
+            widgets: [PageBannerJson, CartProductsJson],
         },
     ],
 };
