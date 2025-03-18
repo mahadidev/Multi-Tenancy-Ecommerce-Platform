@@ -1,3 +1,5 @@
+import SubscriptionLayout from "@seller/components/Layout/SubscriptionLayout";
+import SubscriptionMiddleware from "@seller/middleware/subscriptionMiddleware";
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
@@ -34,10 +36,13 @@ import MenusPage from "./MenusPage/MenusPage";
 import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
+import SelectSubscriptionPage from "./SelectSubscription/SelectSubscriptionPage";
+import SubscriptionFailedPage from "./SelectSubscription/SubscriptionFailedPage";
+import SubscriptionSuccessPage from "./SelectSubscription/SubscriptionSuccessPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
-import UpgradeSubscriptionPlan from "./SubscriptionPlan/UpgradeSubscriptionPlan";
+import SubscriptionCancelledPage from "./SelectSubscription/SubscriptionCancelledPage";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -49,32 +54,26 @@ export const PagesRoute: FC = function () {
                         <Route path="/" element={<DashboardLayout />}>
                             {/* Dashboard Pages */}
                             <Route path="/" element={<DashboardPage />} />
-
                             {/* Orders Pages */}
                             <Route path="/orders" element={<OrdersPage />} />
-
                             {/* Orders Pages */}
                             <Route
                                 path="/customers"
                                 element={<CustomersPage />}
                             />
-
                             {/* Ocreate orders Pages */}
                             <Route
                                 path="/orders/create"
                                 element={<CreateOrderPage />}
                             />
-
                             {/* Store Pages */}
                             <Route path="pages" element={<PagesPage />} />
-
                             {/* Products Pages */}
                             <Route path="products" element={<ProductsPage />} />
                             <Route
                                 path="products/:id"
                                 element={<ProductEditPage />}
                             />
-
                             {/* Blogs Pages */}
                             <Route path="blogs" element={<BlogsPage />} />
                             <Route
@@ -89,19 +88,15 @@ export const PagesRoute: FC = function () {
                                 path="blogs/:id"
                                 element={<BlogEditPage />}
                             />
-
                             {/* Categories Pages */}
                             <Route
                                 path="categories"
                                 element={<CategoriesPage />}
                             />
-
                             {/* Brands Pages */}
                             <Route path="brands" element={<BrandsPage />} />
-
                             {/* Settings Pages */}
                             <Route path="settings" element={<SettingsPage />} />
-
                             {/* Access Management Pages */}
                             <Route
                                 path="access-management"
@@ -112,19 +107,15 @@ export const PagesRoute: FC = function () {
                                 path="store-admin"
                                 element={<StoreAdminPage />}
                             />
-
                             {/* Themes Pages */}
                             <Route path="themes" element={<ThemesPage />} />
-
                             {/* Menus page */}
                             <Route path="menus" element={<MenusPage />} />
-
                             {/* Seller account pages */}
                             <Route
                                 path="my-account/profile-settings"
                                 element={<ProfileSettingsPage />}
                             />
-
                             {/* Notifications page */}
                             <Route
                                 path="notifications"
@@ -135,11 +126,7 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="stores/create"
                                 element={<CreateStorePage />}
-                            />
-                            <Route
-                                path="upgrade-plan"
-                                element={<UpgradeSubscriptionPlan />}
-                            />
+                            />{" "}
                         </Route>
 
                         {/* Editor Layout */}
@@ -185,6 +172,27 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="reset-password"
                                 element={<ResetPassword />}
+                            />{" "}
+                        </Route>
+                    </Route>
+
+                    <Route path="/" element={<SubscriptionMiddleware />}>
+                        <Route path="/" element={<SubscriptionLayout />}>
+                            <Route
+                                path="select-subscriptions"
+                                element={<SelectSubscriptionPage />}
+                            />
+                            <Route
+                                path="subscription-success"
+                                element={<SubscriptionSuccessPage />}
+                            />
+                            <Route
+                                path="subscription-failed"
+                                element={<SubscriptionFailedPage />}
+                            />
+                            <Route
+                                path="subscription-cancelled"
+                                element={<SubscriptionCancelledPage />}
                             />
                         </Route>
                     </Route>

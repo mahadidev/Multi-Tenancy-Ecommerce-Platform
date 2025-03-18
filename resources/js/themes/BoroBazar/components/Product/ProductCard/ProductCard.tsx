@@ -1,5 +1,6 @@
 import { ProductType } from "@type/productType";
 import { FC } from "react";
+import PriceStack from "../PriceStack/PriceStack";
 import ProductActionCard from "../ProductAction/ProductActionCard";
 
 interface ProductCardPropsType {
@@ -27,13 +28,7 @@ const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             {/* Product Info */}
             <div className="flex bg-gray-50 flex-col px-3 md:px-4 lg:px-5 pb-5 lg:pb-6 lg:pt-1.5 h-full">
                 {/* Price */}
-                <div className="mb-1 lg:mb-1.5 -mx-1">
-                    <span className="inline-block mx-1 text-sm font-semibold sm:text-base lg:text-lg text-gray-800">
-                        {product?.discount_price
-                            ? `$${product?.discount_price} - $${product?.price}`
-                            : `$${product?.price}`}
-                    </span>
-                </div>
+                <PriceStack product={product} />
 
                 {/* Product Name */}
                 <h2 className="text-gray-900 text-sm sm:text-base lg:text-lg leading-5 sm:leading-6 mb-1.5">

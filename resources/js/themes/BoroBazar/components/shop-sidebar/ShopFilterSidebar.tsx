@@ -9,6 +9,7 @@ import {
     Label,
 } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface ShopFilterSidebarPropsType {
     store: StoreType;
@@ -20,6 +21,8 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({
 }) => {
     const [price, setPrice] = useState(250);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [searchParams] = useSearchParams();
+    const category_QR = searchParams.get("category");
 
     const weights = [
         "2kg",
@@ -53,24 +56,30 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({
         "Strawberry",
     ];
 
-    const handleCategoriesFiltering = (categoryName: string) => {
+    const handleCategoriesFiltering = (categorySlug: string) => {
         setSelectedCategories((prevCategories) =>
-            prevCategories.includes(categoryName)
-                ? prevCategories.filter((c) => c !== categoryName)
-                : [...prevCategories, categoryName]
+            prevCategories.includes(categorySlug)
+                ? prevCategories.filter((c) => c !== categorySlug)
+                : [...prevCategories, categorySlug]
         );
     };
+
+    useEffect(() => {
+        if (category_QR) {
+            setSelectedCategories([category_QR]);
+        }
+    }, [category_QR]);
 
     // Update filtered products whenever selectedCategories changes
     useEffect(() => {
         const filteredProducts = selectedCategories.length
-            ? store?.featuredProducts?.filter((product) =>
-                  selectedCategories.includes(product?.category?.name)
+            ? store?.storeProducts?.filter((product) =>
+                  selectedCategories.includes(product?.category?.slug)
               )
-            : store?.featuredProducts; // Return all products if no category is selected
+            : store?.storeProducts; // Return all products if no category is selected
 
         onChangeProducts(filteredProducts);
-    }, [selectedCategories, store?.featuredProducts]); // Also react to store updates
+    }, [selectedCategories, store?.storeProducts]); // Also react to store updates
 
     return (
         <div className="w-full p-4 bg-white border rounded-lg shadow-md">
@@ -92,9 +101,12 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({
                                             color="gray"
                                             onClick={() =>
                                                 handleCategoriesFiltering(
-                                                    category?.name
+                                                    category?.slug
                                                 )
                                             }
+                                            defaultChecked={Boolean(
+                                                category_QR! === category?.slug
+                                            )}
                                         />
                                         {category?.name}
                                     </Label>
