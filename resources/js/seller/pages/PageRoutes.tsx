@@ -37,10 +37,12 @@ import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
 import SelectSubscriptionPage from "./SelectSubscription/SelectSubscriptionPage";
+import SubscriptionFailedPage from "./SelectSubscription/SubscriptionFailedPage";
+import SubscriptionSuccessPage from "./SelectSubscription/SubscriptionSuccessPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
-import UpgradeSubscriptionPlan from "./SubscriptionPlan/UpgradeSubscriptionPlanPage";
+import SubscriptionCancelledPage from "./SelectSubscription/SubscriptionCancelledPage";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -125,10 +127,6 @@ export const PagesRoute: FC = function () {
                                 path="stores/create"
                                 element={<CreateStorePage />}
                             />{" "}
-                            <Route
-                                path="upgrade-plan"
-                                element={<UpgradeSubscriptionPlan />}
-                            />
                         </Route>
 
                         {/* Editor Layout */}
@@ -183,6 +181,18 @@ export const PagesRoute: FC = function () {
                             <Route
                                 path="select-subscriptions"
                                 element={<SelectSubscriptionPage />}
+                            />
+                            <Route
+                                path="subscription-success"
+                                element={<SubscriptionSuccessPage />}
+                            />
+                            <Route
+                                path="subscription-failed"
+                                element={<SubscriptionFailedPage />}
+                            />
+                            <Route
+                                path="subscription-cancelled"
+                                element={<SubscriptionCancelledPage />}
                             />
                         </Route>
                     </Route>

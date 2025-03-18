@@ -25,7 +25,6 @@ export { default as PageEditPage } from "./PagesPage/PageEditPage/PageEditPage";
 export { default as PagesPage } from "./PagesPage/PagesPage";
 
 export { default as SelectSubscriptionPage } from "./SelectSubscription/SelectSubscriptionPage";
-export { default as UpgradeSubscriptionPlanPage } from "./SubscriptionPlan/UpgradeSubscriptionPlanPage";
 
 // onboard pages
 export { default as StoreOnboardPage } from "./OnboardPage/StoreOnboardPage/StoreOnboardPage";

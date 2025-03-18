@@ -1,17 +1,22 @@
 import usePlans from "@seller/hooks/usePlan";
 import { SubscriptionType } from "@type/subscriptionPlanType";
 import { FC } from "react";
-import SubscriptionPlan from "../SubscriptionPlan/SubscriptionPlan";
+import { useSearchParams } from "react-router-dom";
+import SubscriptionPlan from "./SubscriptionPlan";
 
 const SelectSubscriptionPage: FC = () => {
     const { plans } = usePlans();
+
+    const [params] = useSearchParams();
+    const actionParam = params.get("action");
+
     return (
         <div className="flex flex-col items-center h-screen justify-center !w-full">
             <div className="relative mx-auto py-5 md:py-0 my-5">
-                <h1 className="w-max text-center text-3xl lg:text-5xl text-primary font-medium lg:leading-[58px]">
-                    Choose{" "}
+                <h1 className="w-max text-center text-3xl lg:text-5xl dark:text-white  font-medium lg:leading-[58px]">
+                    {actionParam === "upgrade" ? "Upgrade" : "Choose"}{" "}
                     <span className="relative after:w-full after:h-[4px] after:absolute after:-z-10 after:left-0 after:bottom-2 after:bg-primary-light after:rounded-full">
-                        Your Right
+                        Your {actionParam === "upgrade" ? "" : "Right"}
                     </span>{" "}
                     Plans
                 </h1>

@@ -98,7 +98,7 @@ class SubscriptionController extends Controller
             $payment = Payment::where('transaction_id', $responseData['metadata']['transaction_id'])->first();
             $package = Subscription::find($payment->payable_id);
 
-            if ($response->success()) {
+            if ($response->success() || $response->pending()) {
                 if ($payment) {
                     $payment->update([
                         'transaction_id' => $responseData['transaction_id'],
@@ -115,18 +115,7 @@ class SubscriptionController extends Controller
                 }
 
 
-                return redirect()->to(url('seller/upgrade-plan') . '?status=success');
-
-            } else if ($response->pending()) {
-                if ($payment) {
-                    $payment->update([
-                        'transaction_id' => $responseData['transaction_id'],
-                        'status' => 'pending',
-                        'invoice_id' => $invoiceId,
-                    ]);
-                }
-
-                return redirect()->to(url('seller/upgrade-plan') . '?status=success');
+                return redirect()->to(url('seller/subscription-success'));
 
             } else {
 
@@ -139,13 +128,14 @@ class SubscriptionController extends Controller
                 }
 
                 // Payment verification failed.
-                return redirect()->to(url('seller/upgrade-plan') . '?status=failed');
+                return redirect()->to(url('seller/subscription-failed'));
             }
 
           
         } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
             Log::info(['message' => 'Verification Error: ' . $e->getMessage()]);
-            return redirect()->to(url('seller/upgrade-plan') . '?status=error');
+            return redirect()->to(url('seller/subscription-cancelled'));
+
         }
     }
 
@@ -155,7 +145,7 @@ class SubscriptionController extends Controller
     public function cancel()
     {
         // Handle payment cancellation.
-        return redirect()->to(url('seller/upgrade-plan') . '?status=canceled');
+        return redirect()->to(url('seller/subscription-cancelled'));
     }
 
     /**

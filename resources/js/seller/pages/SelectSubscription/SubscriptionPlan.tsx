@@ -1,4 +1,5 @@
 import usePlans from "@seller/hooks/usePlan";
+import useStore from "@seller/hooks/useStore";
 import { SubscriptionType } from "@type/subscriptionPlanType";
 import { Button } from "flowbite-react";
 import { FC } from "react";
@@ -7,7 +8,8 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const SubscriptionPlan: FC<{ plan: SubscriptionType }> = ({ plan }) => {
     const { subscribePlan } = usePlans();
-
+    const { store } = useStore();
+    console.log(store?.store_subscription_plan?.package?.name === plan?.name);
     return (
         <div className="dark:bg-gray-800 bg-gray-100 flex flex-col p-5 rounded-xl shadow-md relative">
             {plan?.is_trend ? (
@@ -53,7 +55,11 @@ const SubscriptionPlan: FC<{ plan: SubscriptionType }> = ({ plan }) => {
                         })
                     }
                     isProcessing={subscribePlan.isLoading}
-                    disabled={subscribePlan.isLoading}
+                    disabled={
+                        subscribePlan.isLoading ||
+                        store?.store_subscription_plan?.package?.name ===
+                            plan?.name
+                    }
                     processingSpinner={
                         <AiOutlineLoading className="h-6 w-6 animate-spin" />
                     }

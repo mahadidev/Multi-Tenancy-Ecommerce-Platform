@@ -23,6 +23,7 @@ export interface StoreType {
     store_type: StoreTypesType;
     description: string | null;
     store_subscription_status: string;
+    store_subscription_plan: StoreSubscriptionPlanType;
     currency: string;
     logo: string;
     dark_logo: string | null;
@@ -42,6 +43,24 @@ export interface StoreType {
     menus: MenuType[];
     created_at: string;
     updated_at: string;
+}
+
+export interface StoreSubscriptionPlanType {
+    id: number;
+    start_date: string;
+    end_date: string;
+    is_active: number;
+    package: PackageType;
+}
+
+export interface PackageType {
+    id: number;
+    name: string;
+    title: string;
+    is_trend: number;
+    is_visible: number;
+    trial_days: number;
+    price_monthly: string;
 }
 
 export interface StoreTypeData {

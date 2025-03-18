@@ -91,10 +91,11 @@ export const RoutePath = {
     NotificationsPage: {
         index: () => "/notifications",
     },
-    UpgradePlanPage: {
-        index: () => "/upgrade-plan",
-    },
+
     SubscriptionPage: {
         index: () => "/select-subscriptions",
+    },
+    SubscriptionSuccessPage: {
+        index: () => "/subscriptions-success",
     },
 };

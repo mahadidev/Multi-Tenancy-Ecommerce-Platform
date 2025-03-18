@@ -1,3 +1,4 @@
+import useCart from "@seller/hooks/useCart";
 import { ProductType } from "@type/productType";
 import { FC } from "react";
 import PriceStack from "../PriceStack/PriceStack";
