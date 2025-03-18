@@ -604,6 +604,13 @@
       },
       {
         "id": 1,
+        "name": "authLayout",
+        "label": "Auth Layout",
+        "type": "layout",
+        "inputs": []
+      },
+      {
+        "id": 1,
         "name": "navigation",
         "label": "Navigation",
         "type": "partial",
@@ -805,7 +812,7 @@
                 ]
               },
               {
-                "id": 2,
+                "id": 1,
                 "name": "features",
                 "label": "Features",
                 "type": "array",
@@ -837,7 +844,7 @@
                 ]
               },
               {
-                "id": 3,
+                "id": 1,
                 "name": "features",
                 "label": "Features",
                 "type": "array",
@@ -869,7 +876,7 @@
                 ]
               },
               {
-                "id": 4,
+                "id": 1,
                 "name": "features",
                 "label": "Features",
                 "type": "array",
@@ -946,7 +953,7 @@
         ]
       },
       {
-        "id": 0,
+        "id": 1,
         "name": "shop",
         "label": "Shop",
         "slug": "/shop",
@@ -959,7 +966,7 @@
           "inputs": []
         },
         "is_active": 1,
-        "type": "shope",
+        "type": "shop",
         "thumbnail": null,
         "widgets": [
           {
@@ -972,17 +979,25 @@
               {
                 "id": 1,
                 "name": "pageName",
-                "label": "Page Name",
+                "label": "Current Page Title",
                 "type": "text",
-                "value": "Home Page",
+                "value": "Shop Page",
                 "placeholder": "Enter page name"
               },
               {
                 "id": 1,
-                "name": "banner",
+                "name": "currentPageBreadcrumbLabel",
+                "label": "Current Page Breadcrumb Label",
+                "type": "text",
+                "value": "Shop",
+                "placeholder": "Enter current page breadcrumb"
+              },
+              {
+                "id": 1,
+                "name": "bannerLink",
                 "label": "Banner link",
                 "type": "text",
-                "value": "Banner URL",
+                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
                 "placeholder": "Enter banner url"
               }
             ]
@@ -992,6 +1007,180 @@
             "name": "allProducts",
             "label": "All Products Section",
             "serial": 2,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "single-products",
+        "label": "Single-Products",
+        "slug": "/single-products",
+        "title": "Single Products Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "single-products",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "pageBanner",
+            "label": "Page Banner",
+            "serial": 1,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "pageName",
+                "label": "Current Page Title",
+                "type": "text",
+                "value": "Shop Page",
+                "placeholder": "Enter page name"
+              },
+              {
+                "id": 1,
+                "name": "currentPageBreadcrumbLabel",
+                "label": "Current Page Breadcrumb Label",
+                "type": "text",
+                "value": "Shop",
+                "placeholder": "Enter current page breadcrumb"
+              },
+              {
+                "id": 1,
+                "name": "bannerLink",
+                "label": "Banner link",
+                "type": "text",
+                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
+                "placeholder": "Enter banner url"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "name": "allProducts",
+            "label": "All Products Section",
+            "serial": 2,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "registration",
+        "label": "Registration Page",
+        "slug": "/register",
+        "title": "Registration Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "register",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "registration",
+            "label": "Registration Page",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "registration",
+        "label": "Login Page",
+        "slug": "/login",
+        "title": "Login Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "login",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "login",
+            "label": "Login Page",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "name": "cart",
+        "label": "Cart Page",
+        "slug": "/cart",
+        "title": "Cart Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "cart",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "pageBanner",
+            "label": "Page Banner",
+            "serial": 1,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "pageName",
+                "label": "Current Page Title",
+                "type": "text",
+                "value": "Shop Page",
+                "placeholder": "Enter page name"
+              },
+              {
+                "id": 1,
+                "name": "currentPageBreadcrumbLabel",
+                "label": "Current Page Breadcrumb Label",
+                "type": "text",
+                "value": "Shop",
+                "placeholder": "Enter current page breadcrumb"
+              },
+              {
+                "id": 1,
+                "name": "bannerLink",
+                "label": "Banner link",
+                "type": "text",
+                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
+                "placeholder": "Enter banner url"
+              }
+            ]
+          },
+          {
+            "id": 1,
+            "name": "cart",
+            "label": "Cart Page",
+            "serial": 1,
             "type": "section",
             "inputs": []
           }

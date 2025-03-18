@@ -19,7 +19,6 @@ export const subscriptionPlanApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    console.log({ responseFromRedux: response });
                     dispatch(setPlans(response?.data?.data?.subscriptions));
                 });
             },

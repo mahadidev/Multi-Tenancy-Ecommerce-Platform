@@ -4,6 +4,7 @@ import { Navbar } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
+import { CategoriesPopover } from "../../components/CategoriesPopover/CategoriesPopover";
 
 const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
     const [timeLeft, setTimeLeft] = useState(6 * 3600 + 13 * 60 + 6); // 6:13:06 in seconds
@@ -63,26 +64,7 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                     <Navbar.Brand href="#" className="flex items-center gap-2">
                         <img src={store?.logo} alt="logo" />
                     </Navbar.Brand>
-                    <Navbar.Collapse className="w-full flex flex-col md:flex-row md:items-center gap-2">
-                        {store?.menus?.map((menu: MenuType) => (
-                            <>
-                                {menu?.name === "main" && (
-                                    <>
-                                        {menu?.items?.map(
-                                            (
-                                                item: MenuItemType,
-                                                idx: number
-                                            ) => (
-                                                <a key={idx} href={item?.href}>
-                                                    {item?.label}
-                                                </a>
-                                            )
-                                        )}
-                                    </>
-                                )}
-                            </>
-                        ))}
-                    </Navbar.Collapse>{" "}
+
                     <div className="flex flex-col md:flex-row md:items-center md:gap-2">
                         <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
 
@@ -109,7 +91,11 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                                                 item: MenuItemType,
                                                 idx: number
                                             ) => (
-                                                <a key={idx} href={item?.href}>
+                                                <a
+                                                    className="font-semibold"
+                                                    key={idx}
+                                                    href={item?.href}
+                                                >
                                                     {item?.label}
                                                 </a>
                                             )
@@ -120,6 +106,34 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                         ))}
                         <Navbar.Toggle />
                     </div>
+                </Navbar>
+            </div>
+            <div className="my-3 border">
+                <Navbar>
+                    <CategoriesPopover
+                        categories={store?.categories}
+                        storeSlug={store?.slug}
+                    />
+                    <Navbar.Collapse className="w-full flex flex-col md:flex-row md:items-center gap-2">
+                        {store?.menus?.map((menu: MenuType) => (
+                            <>
+                                {menu?.name === "main" && (
+                                    <>
+                                        {menu?.items?.map(
+                                            (
+                                                item: MenuItemType,
+                                                idx: number
+                                            ) => (
+                                                <a key={idx} href={item?.href}>
+                                                    {item?.label}
+                                                </a>
+                                            )
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        ))}
+                    </Navbar.Collapse>
                 </Navbar>
             </div>
         </header>
