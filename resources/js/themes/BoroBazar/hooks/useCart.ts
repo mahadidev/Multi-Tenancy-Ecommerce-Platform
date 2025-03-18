@@ -20,22 +20,18 @@ export interface CartProductType {
 
 const useCart = () => {
     const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+    const authToken = "7|vRFnve8L4VZK6nCHkqm6sNnzrTKM1gvNfAjeTg9o65b35c49"; // Replace with actual token
+    const BASE_URL = "http://127.0.0.1:8000/api/v1";
 
     const fetchCartItems = async () => {
         try {
-            const authToken =
-                "4|7MeLXGFJmyJsWcPtt6pIiepqSrBYdEeH6tWbH5o9c2c8061f"; // Replace with actual token
-
-            const response = await fetch(
-                `https://ecommerce.test/api/v1/cart-items`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${authToken}`, // ✅ Added token here
-                    },
-                }
-            );
+            const response = await fetch(`${BASE_URL}/cart-items`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`, // ✅ Added token here
+                },
+            });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -50,23 +46,18 @@ const useCart = () => {
 
     const addToCart = async (product_id: number, qty: string) => {
         try {
-            const authToken =
-                "4|7MeLXGFJmyJsWcPtt6pIiepqSrBYdEeH6tWbH5o9c2c8061f"; // Replace with actual token
-
-            const response = await fetch(
-                `https://ecommerce.test/api/v1/add-to-cart`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${authToken}`, // ✅ Token added here
-                    },
-                    body: JSON.stringify({
-                        product_id,
-                        qty,
-                    }),
-                }
-            );
+            const response = await fetch(`${BASE_URL}/add-to-cart`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`, // ✅ Token added here
+                },
+                body: JSON.stringify({
+                    product_id,
+                    qty,
+                    session_store_id: 1,
+                }),
+            });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -80,6 +71,27 @@ const useCart = () => {
         }
     };
 
-    return { fetchCartItems, cartItems, addToCart };
+    const deleteCartItem = async (cart_id: number) => {
+        try {
+            const response = await fetch(`${BASE_URL}/cart-items/delete`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`, // ✅ Token added here
+                },
+                body: JSON.stringify({
+                    cart_id,
+                }),
+            });
+
+            if (response.ok) {
+                fetchCartItems();
+            }
+        } catch (error) {
+            console.error("Error deleting item to cart:", error);
+        }
+    };
+
+    return { fetchCartItems, cartItems, addToCart, deleteCartItem };
 };
 export default useCart;

@@ -2,30 +2,28 @@ import { CartItemType } from "@type/cartType";
 import { FC } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
+import useCart from "../../hooks/useCart";
 
 const CartTableBody: FC<{ cartProduct: CartItemType }> = ({ cartProduct }) => {
     // destructure product data
-    const { name, thumbnail, price, discount_price, has_discount } =
-        cartProduct?.product;
+    const { id, name, image } = cartProduct?.product;
 
-    const removeItem = () => {};
+    const { deleteCartItem } = useCart();
 
     return (
         <tr className="border">
-            <td className="p-2 flex items-center justify-center gap-4">
-                <img
-                    src={thumbnail}
-                    alt={name}
-                    className="w-12 h-12 object-cover"
-                />
-                <p className="font-semibold">{name}</p>
+            <td className="p-2 mx-auto !w-[350px]">
+                <div className="flex items-center justify-start gap-5">
+                    <img
+                        src={image}
+                        alt={name}
+                        className="w-[80px] h-[80px] object-cover"
+                    />
+                    <p className="font-semibold">{name}</p>
+                </div>
             </td>
             <td className="p-2 text-center font-semibold">
-                ৳{" "}
-                {(has_discount
-                    ? discount_price * cartProduct?.qty
-                    : price * cartProduct?.qty
-                ).toFixed(2)}
+                ৳ {(cartProduct?.price).toFixed(2)}
             </td>
             <td className="p-2 text-center">
                 <div className="flex items-center justify-center">
@@ -49,15 +47,11 @@ const CartTableBody: FC<{ cartProduct: CartItemType }> = ({ cartProduct }) => {
                 </div>
             </td>
             <td className="p-2 text-center font-semibold">
-                ৳{" "}
-                {(has_discount
-                    ? discount_price * cartProduct?.qty
-                    : price * cartProduct?.qty
-                ).toFixed(2)}
+                ৳ {(cartProduct?.total).toFixed(2)}
             </td>
             <td className="p-2 text-center">
                 <button
-                    onClick={() => removeItem()}
+                    onClick={() => deleteCartItem(id)}
                     className="bg-red-500 !text-white p-1 rounded-md"
                 >
                     <FaTimes />
