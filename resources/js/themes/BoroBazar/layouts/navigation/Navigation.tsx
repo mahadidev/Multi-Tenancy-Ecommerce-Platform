@@ -4,6 +4,7 @@ import { Navbar } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { CategoriesPopover } from "../../components/CategoriesPopover/CategoriesPopover";
 
 const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
@@ -66,7 +67,9 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                     </Navbar.Brand>
 
                     <div className="flex flex-col md:flex-row md:items-center md:gap-2">
-                        <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
+                        <Link to="/cart">
+                            <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
+                        </Link>
 
                         {store?.menus?.map((menu: MenuType) => (
                             <>

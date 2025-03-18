@@ -6,7 +6,6 @@ import useCart from "../../hooks/useCart";
 
 const CartProducts: FC<ThemeWidgetPropsType> = () => {
     const { cartItems, fetchCartItems } = useCart();
-    // console.log();
 
     useEffect(() => {
         fetchCartItems();
