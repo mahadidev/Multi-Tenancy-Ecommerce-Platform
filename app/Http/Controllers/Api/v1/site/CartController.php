@@ -20,6 +20,7 @@ class CartController extends Controller
             'qty' => 'required|numeric|min:1',
             'note' => 'nullable|string',
             'options' => 'nullable',
+            'session_store_id' => 'nullable|exists:stores,id',
         ]);
 
         // Get user_id
@@ -27,7 +28,7 @@ class CartController extends Controller
 
         if ($user_id) {
             // Check if store_id exists
-            $store_id = $response ? authStore() : session()->get('site_store_id');
+            $store_id = $response ? authStore() : (session()->get('site_store_id') || $request->session_store_id);
 
             if (!$store_id) {
                 // show error message
