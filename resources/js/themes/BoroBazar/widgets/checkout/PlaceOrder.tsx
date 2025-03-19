@@ -1,166 +1,180 @@
 import { ThemeWidgetPropsType } from "@type/themeType";
+import {
+    Button,
+    Card,
+    Label,
+    Select,
+    Textarea,
+    TextInput,
+} from "flowbite-react";
 import { FC } from "react";
+import useForm from "../../hooks/useForm";
 
 const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
+    const { formState, formErrors, handleChange } = useForm({
+        default: {
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            payment_method: "",
+            notes: "",
+        },
+    });
+
     return (
-        <div className="container mx-auto">
-            <div className="gi-checkout-wrap mb-8 pb-6">
-                <div className="gi-checkout-block gi-check-bill">
-                    <h3 className="gi-checkout-title">Billing Details</h3>
-                    <div className="gi-bl-block-content">
-                        <div className="gi-check-subtitle">
-                            Checkout Options
-                        </div>
-                        <span className="gi-bill-option">
-                            <span>
-                                <input
-                                    id="bill1"
-                                    disabled
-                                    type="radio"
-                                    value="use"
-                                    name="radio-group"
-                                />
-                                <label htmlFor="bill1">
-                                    I want to use an existing address
-                                </label>
-                            </span>
-                            <span>
-                                <input
-                                    id="bill2"
-                                    type="radio"
-                                    value="new"
-                                    defaultChecked
-                                    name="radio-group"
-                                />
-                                <label htmlFor="bill2">
-                                    I want to use new address
-                                </label>
-                            </span>
-                        </span>
-                        <div className="gi-check-bill-form">
-                            <form noValidate action="#" method="post">
-                                <span className="gi-bill-wrap gi-bill-half mt-3">
-                                    <label>First Name*</label>
-                                    <div>
-                                        <input
-                                            placeholder="Enter your first name"
-                                            required
-                                            className="form-control"
+        <section className="mt-10">
+            <div className="container mx-auto">
+                <div className="lg:flex gap-4 items center">
+                    <div className="lg:w-5/12"></div>
+                    <div className="lg:w-7/12">
+                        <Card>
+                            <h2 className="text-2xl font-bold my-3">
+                                Billing Details
+                            </h2>
+
+                            <div className="grid gap-3">
+                                <div className="grid lg:grid-cols-2 gap-2">
+                                    <div className="flex flex-col gap-y-2">
+                                        <Label htmlFor="name">Full Name</Label>
+                                        <TextInput
+                                            id="name"
+                                            name="name"
+                                            placeholder="Enter full name"
                                             type="text"
-                                            name="firstName"
+                                            value={formState["name"]}
+                                            color={
+                                                formErrors["name"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["name"]
+                                                    ? formErrors["name"][0]
+                                                    : false
+                                            }
+                                            onChange={handleChange}
                                         />
-                                        <div className="invalid-feedback">
-                                            Please Enter First Name.
-                                        </div>
                                     </div>
-                                </span>
-                                <span className="gi-bill-wrap gi-bill-half mt-3">
-                                    <label>Last Name*</label>
-                                    <div>
-                                        <input
-                                            placeholder="Enter your last name"
-                                            required
-                                            className="form-control"
-                                            type="text"
-                                            name="lastName"
+                                    <div className="flex flex-col gap-y-2">
+                                        <Label htmlFor="email">Email</Label>
+                                        <TextInput
+                                            id="email"
+                                            name="email"
+                                            placeholder="Enter your email address"
+                                            type="email"
+                                            value={formState["email"]}
+                                            color={
+                                                formErrors["email"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["email"]
+                                                    ? formErrors["email"][0]
+                                                    : false
+                                            }
+                                            onChange={handleChange}
                                         />
-                                        <div className="invalid-feedback">
-                                            Please Enter Last Name.
-                                        </div>
                                     </div>
-                                </span>
-                                <span className="gi-bill-wrap mt-3">
-                                    <label>Address</label>
-                                    <div>
-                                        <input
-                                            placeholder="Address Line 1"
-                                            required
-                                            className="form-control"
-                                            type="text"
-                                            name="address"
-                                        />
-                                        <div className="invalid-feedback">
-                                            Please Enter Address.
-                                        </div>
-                                    </div>
-                                </span>
-                                <div className="gi-bill-wrap gi-bill-half mt-3">
-                                    <label>Country</label>
-                                    <span className="gi-bl-select-inner">
-                                        <select
-                                            name="country"
-                                            required
-                                            className="gi-bill-select form-select form-select-sm"
-                                        >
-                                            <option value="" disabled selected>
-                                                Country
-                                            </option>
-                                            <option value="US">
-                                                United States
-                                            </option>
-                                            <option value="CA">Canada</option>
-                                            <option value="GB">
-                                                United Kingdom
-                                            </option>
-                                            {/* Add other countries as needed */}
-                                        </select>
-                                    </span>
                                 </div>
-                                <span className="gi-bill-wrap gi-bill-half mt-3">
-                                    <label>Region State</label>
-                                    <div className="gi-bl-select-inner">
-                                        <select
-                                            name="state"
-                                            required
-                                            className="gi-bill-select form-select form-select-sm"
-                                        >
-                                            <option value="" disabled selected>
-                                                Region/State
-                                            </option>
-                                        </select>
-                                    </div>
-                                </span>
-                                <span className="gi-bill-wrap gi-bill-half mt-3">
-                                    <label>City *</label>
-                                    <div className="gi-bl-select-inner">
-                                        <select
-                                            name="city"
-                                            required
-                                            className="gi-bill-select form-select form-select-sm"
-                                        >
-                                            <option value="" disabled selected>
-                                                City
-                                            </option>
-                                        </select>
-                                    </div>
-                                </span>
-                                <span className="gi-bill-wrap gi-bill-half mt-3">
-                                    <label>Post Code</label>
-                                    <div>
-                                        <input
-                                            pattern="^\d{5,6}$"
-                                            placeholder="Post Code"
-                                            required
-                                            className="form-control"
-                                            type="text"
-                                            name="postalCode"
+                                <div className="grid lg:grid-cols-2 gap-2">
+                                    <div className="flex flex-col gap-y-2">
+                                        <Label htmlFor="phone">
+                                            Phone Number
+                                        </Label>
+                                        <TextInput
+                                            id="phone"
+                                            name="phone"
+                                            placeholder="Enter your phone number"
+                                            type="tel"
+                                            value={formState["phone"]}
+                                            color={
+                                                formErrors["phone"]
+                                                    ? "failure"
+                                                    : "gray"
+                                            }
+                                            helperText={
+                                                formErrors["phone"]
+                                                    ? formErrors["phone"][0]
+                                                    : false
+                                            }
+                                            onChange={handleChange}
                                         />
-                                        <div className="invalid-feedback">
-                                            Please Enter 05-06 digit number.
-                                        </div>
                                     </div>
-                                </span>
-                                <span className="gi-check-order-btn">
-                                    <button type="submit" className="gi-btn-2">
-                                        Add
-                                    </button>
-                                </span>
-                            </form>
-                        </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <Label htmlFor="payment_method">
+                                            Payment Method
+                                        </Label>
+                                        <Select
+                                            id="payment_method"
+                                            name="payment_method"
+                                            value={formState["payment_method"]}
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option value={0}>
+                                                Select a payment method
+                                            </option>
+                                            <option value={"cash"}>Cash</option>
+                                            <option value={"card"}>Card</option>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-y-2">
+                                    <Label htmlFor="address">
+                                        Address Line
+                                    </Label>
+                                    <Textarea
+                                        id="address"
+                                        name="address"
+                                        placeholder="Enter your address"
+                                        value={formState["address"]}
+                                        color={
+                                            formErrors["address"]
+                                                ? "failure"
+                                                : "gray"
+                                        }
+                                        helperText={
+                                            formErrors["address"]
+                                                ? formErrors["address"][0]
+                                                : false
+                                        }
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-y-2">
+                                    <Label htmlFor="notes">Notes</Label>
+                                    <Textarea
+                                        id="notes"
+                                        name="notes"
+                                        placeholder="Enter your notes"
+                                        value={formState["notes"]}
+                                        color={
+                                            formErrors["notes"]
+                                                ? "failure"
+                                                : "gray"
+                                        }
+                                        helperText={
+                                            formErrors["notes"]
+                                                ? formErrors["notes"][0]
+                                                : false
+                                        }
+                                        onChange={handleChange}
+                                    />
+                                </div>
+
+                                <div className="flex flex-col gap-y-2">
+                                    <Button color="dark">Place Order</Button>
+                                </div>
+                            </div>
+                        </Card>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
