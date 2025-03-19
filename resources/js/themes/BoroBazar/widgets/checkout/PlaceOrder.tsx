@@ -7,10 +7,13 @@ import {
     Textarea,
     TextInput,
 } from "flowbite-react";
+import { useAtom } from "jotai";
 import { FC } from "react";
 import useForm from "../../hooks/useForm";
+import { cartAtom } from "../../store/cart.atom";
 
 const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
+    const [cartItems] = useAtom(cartAtom);
     const { formState, formErrors, handleChange } = useForm({
         default: {
             name: "",
@@ -26,8 +29,59 @@ const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
         <section className="mt-10">
             <div className="container mx-auto">
                 <div className="lg:flex gap-4 items center">
-                    <div className="lg:w-5/12"></div>
-                    <div className="lg:w-7/12">
+                    <div className="lg:w-4/12">
+                        {" "}
+                        <Card>
+                            <div>
+                                {cartItems?.map((item, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-2 my-2"
+                                    >
+                                        <div className="w-4/12">
+                                            <img
+                                                src={item?.product?.image}
+                                                alt={item?.product?.name}
+                                                width={"100%"}
+                                                height={"120px"}
+                                            />
+                                        </div>
+                                        <div className="w-8/12">
+                                            <h3 className="text-lg font-semibold">
+                                                {item?.product?.name}
+                                            </h3>
+                                            <p className="text-lg font-semibold">
+                                                Quantity: {item?.qty}
+                                            </p>
+                                            <p className="text-lg font-semibold">
+                                                Price: {item?.total}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                <div className="flex justify-between font-semibold">
+                                    <span className="text-left">Sub-Total</span>
+                                    <span className="text-right">$240.00</span>
+                                </div>
+                                <div className="flex justify-between font-semibold">
+                                    <span className="text-left">
+                                        Delivery Charges
+                                    </span>
+                                    <span className="text-right">$48.00</span>
+                                </div>
+
+                                <div className="flex justify-between font-bold mt-2">
+                                    <span className="text-left">
+                                        Total Amount
+                                    </span>
+                                    <span className="text-right">$288.00</span>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                    <div className="lg:w-8/12">
                         <Card>
                             <h2 className="text-2xl font-bold my-3">
                                 Billing Details
