@@ -15,6 +15,7 @@ import { RegisteredThemeType } from "@themes/registeredTheme";
 import AuthLayoutJson from "./layouts/authLayout/AuthLayout.json";
 import AllProductsJson from "./widgets/allProducts/AllProducts.json";
 import CartProductsJson from "./widgets/cartProducts/CartProducts.json";
+import PlaceOrderJson from "./widgets/checkout/PlaceOrder.json";
 import FeaturedProductsJson from "./widgets/featuredProducts/FeaturedProduct.json";
 import FeaturesSectionJson from "./widgets/featuresSection/FeaturesSection.json";
 import HeroJson from "./widgets/hero/Hero.json";
@@ -117,6 +118,18 @@ export const BoroBazarSeeder: ThemeType | any = {
             type: "cart",
             thumbnail: null,
             widgets: [PageBannerJson, CartProductsJson],
+        },
+        {
+            id: 6,
+            name: "checkout",
+            label: "Checkout Page",
+            slug: "/checkout",
+            title: "Checkout Page",
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "checkout",
+            thumbnail: null,
+            widgets: [PageBannerJson, PlaceOrderJson],
         },
     ],
 };

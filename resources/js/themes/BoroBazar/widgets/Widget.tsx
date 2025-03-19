@@ -2,6 +2,7 @@ import { ThemeWidgetPropsType } from "@type/themeType";
 import React, { FC } from "react";
 import AllProducts from "./allProducts/AllProducts";
 import CartProducts from "./cartProducts/CartProducts";
+import PlaceOrder from "./checkout/PlaceOrder";
 import FeaturedProducts from "./featuredProducts/FeaturedProducts";
 import FeaturesSection from "./featuresSection/FeaturesSection";
 import Hero from "./hero/Hero";
@@ -25,6 +26,7 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         registration: <Registration {...props} />,
         login: <Login {...props} />,
         cart: <CartProducts {...props} />,
+        placeOrder: <PlaceOrder {...props} />,
     };
 
     return (

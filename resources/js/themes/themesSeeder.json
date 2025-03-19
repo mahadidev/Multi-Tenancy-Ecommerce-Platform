@@ -1185,6 +1185,66 @@
             "inputs": []
           }
         ]
+      },
+      {
+        "id": 6,
+        "name": "checkout",
+        "label": "Checkout Page",
+        "slug": "/checkout",
+        "title": "Checkout Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "checkout",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "pageBanner",
+            "label": "Page Banner",
+            "serial": 1,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "pageName",
+                "label": "Current Page Title",
+                "type": "text",
+                "value": "Shop Page",
+                "placeholder": "Enter page name"
+              },
+              {
+                "id": 1,
+                "name": "currentPageBreadcrumbLabel",
+                "label": "Current Page Breadcrumb Label",
+                "type": "text",
+                "value": "Shop",
+                "placeholder": "Enter current page breadcrumb"
+              },
+              {
+                "id": 1,
+                "name": "bannerLink",
+                "label": "Banner link",
+                "type": "text",
+                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
+                "placeholder": "Enter banner url"
+              }
+            ]
+          },
+          {
+            "id": 1,
+            "name": "placeOrder",
+            "label": "Place Order Page",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
       }
     ]
   }
