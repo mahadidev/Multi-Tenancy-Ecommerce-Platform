@@ -1,5 +1,3 @@
-import { ProductType } from "./productType";
-
 export interface CartItemsDataType {
     cart_items: CartItemType[];
 }
@@ -10,5 +8,11 @@ export interface CartItemType {
     qty: number;
     price: number;
     total: number;
-    product: ProductType;
+    product: CartProductType;
+}
+export interface CartProductType {
+    id: number;
+    name: string;
+    price: string;
+    image: string;
 }

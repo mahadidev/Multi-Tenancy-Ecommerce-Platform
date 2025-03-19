@@ -2,64 +2,64 @@ import { CartItemType } from "@type/cartType";
 import { FC } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
-
+import useCart from "../../hooks/useCart";
 const CartTableBody: FC<{ cartProduct: CartItemType }> = ({ cartProduct }) => {
     // destructure product data
-    const { name, thumbnail, slug, price, discount_price, has_discount } =
-        cartProduct?.product;
+    const { name, image } = cartProduct?.product;
 
-    const updateQuantity = (id: number, amount: number) => {};
-
-    const removeItem = (id: number) => {};
+    const { deleteCartItem, updateCartItem } = useCart();
 
     return (
         <tr className="border">
-            <td className="p-2 flex items-center justify-center gap-4">
-                <img
-                    src={thumbnail}
-                    alt={name}
-                    className="w-12 h-12 object-cover"
-                />
-                <p className="font-semibold">{name}</p>
+            <td className="p-2 mx-auto !w-[350px]">
+                <div className="flex items-center justify-start gap-5">
+                    <img
+                        src={image}
+                        alt={name}
+                        className="w-[80px] h-[80px] object-cover"
+                    />
+                    <p className="font-semibold">{name}</p>
+                </div>
             </td>
             <td className="p-2 text-center font-semibold">
-                ৳{" "}
-                {(has_discount
-                    ? discount_price * cartProduct?.qty
-                    : price * cartProduct?.qty
-                ).toFixed(2)}
+                ৳ {(cartProduct?.price).toFixed(2)}
             </td>
             <td className="p-2 text-center">
                 <div className="flex items-center justify-center">
                     <button
-                        className="px-4 py-3 border bg-gray-200"
-                        // onClick={() => updateQuantity()}
+                        className="px-4 py-3 border bg-gray-200 hover:bg-gray-300 hover:duration-300 rounded-l-md"
+                        onClick={() =>
+                            updateCartItem(
+                                cartProduct?.id,
+                                cartProduct?.qty - 1
+                            )
+                        }
+                        disabled={cartProduct?.qty === 1}
                     >
                         <AiOutlineMinus />
                     </button>
-                    <input
-                        type="text"
-                        value={cartProduct.qty}
-                        className="w-12 text-center mx-2"
-                    />
+                    <span className="w-12 text-center border-none bg-gray-200 outline-none py-[9px]">
+                        {cartProduct.qty}
+                    </span>
                     <button
-                        className="px-4 py-3 border bg-gray-200"
-                        // onClick={() => updateQuantity(item.id, 1)}
+                        className="px-4 py-3 border bg-gray-200 hover:bg-gray-300 hover:duration-300 rounded-r-md"
+                        onClick={() =>
+                            updateCartItem(
+                                cartProduct?.id,
+                                cartProduct?.qty + 1
+                            )
+                        }
                     >
                         <AiOutlinePlus />
                     </button>
                 </div>
             </td>
             <td className="p-2 text-center font-semibold">
-                ৳{" "}
-                {(has_discount
-                    ? discount_price * cartProduct?.qty
-                    : price * cartProduct?.qty
-                ).toFixed(2)}
+                ৳ {(cartProduct?.total).toFixed(2)}
             </td>
             <td className="p-2 text-center">
                 <button
-                    onClick={() => removeItem(cartProduct.id)}
+                    onClick={() => deleteCartItem(cartProduct?.id)}
                     className="bg-red-500 !text-white p-1 rounded-md"
                 >
                     <FaTimes />

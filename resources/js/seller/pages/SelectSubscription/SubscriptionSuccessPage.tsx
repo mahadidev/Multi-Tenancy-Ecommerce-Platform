@@ -2,7 +2,7 @@ import { Card } from "flowbite-react";
 import { FC } from "react";
 import Confetti from "react-confetti";
 import { FaCheckCircle } from "react-icons/fa";
-import { useWindowSize } from 'react-use';
+import { useWindowSize } from "react-use";
 
 const SubscriptionSuccessPage: FC = () => {
     const { width, height } = useWindowSize();

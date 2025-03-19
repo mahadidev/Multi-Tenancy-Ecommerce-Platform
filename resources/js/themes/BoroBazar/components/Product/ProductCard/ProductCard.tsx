@@ -17,7 +17,7 @@ const ProductCard: FC<ProductCardPropsType> = ({ product }) => {
             <div className="mx-auto relative shrink-0 overflow-hidden w-full h-[180px]  md:h-[200px] transition-transform duration-200 flex flex-col justify-center ease-in-out transform group-hover:scale-105">
                 <img
                     src={product?.thumbnail}
-                    alt="Lay's Bar-B-Que Potato Chips"
+                    alt={product?.name}
                     className="bg-fill-thumbnail object-cover"
                 />{" "}
                 <div className="absolute hidden bottom-4 left-0 w-full mx-auto group-hover:block hover:duration-300">

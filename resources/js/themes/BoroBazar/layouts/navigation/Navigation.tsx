@@ -1,14 +1,24 @@
 import { MenuItemType, MenuType } from "@type/menuType";
 import { ThemeLayoutPropsType } from "@type/themeType";
 import { Navbar } from "flowbite-react";
+import { useAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { CategoriesPopover } from "../../components/CategoriesPopover/CategoriesPopover";
+import useCart from "../../hooks/useCart";
+import { cartAtom } from "../../store/cart.atom";
 
 const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
     const [timeLeft, setTimeLeft] = useState(6 * 3600 + 13 * 60 + 6); // 6:13:06 in seconds
     const [showBanner, setShowBanner] = useState(true);
+    const [cartItems] = useAtom(cartAtom);
+    const { fetchCartItems } = useCart();
+
+    useEffect(() => {
+        fetchCartItems();
+    }, []);
 
     useEffect(() => {
         if (timeLeft <= 0) return;
@@ -60,13 +70,29 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                 </div>
             )}
             <div className="bg-white md:w-11/12 w-full flex items-center justify-between mx-auto">
-                <Navbar className="!bg-white !w-full py-4">
+                <Navbar className="!bg-white !w-full py-6">
                     <Navbar.Brand href="#" className="flex items-center gap-2">
                         <img src={store?.logo} alt="logo" />
                     </Navbar.Brand>
 
-                    <div className="flex flex-col md:flex-row md:items-center md:gap-2">
-                        <HiOutlineShoppingBag className="text-2xl cursor-pointer" />
+                    <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+                        <Link to="/cart" className="relative">
+                            <button
+                                className="flex items-center justify-center shrink-0 h-auto focus:outline-none transform lg:flex"
+                                aria-label="cart-button"
+                            >
+                                <div className="relative flex items-center">
+                                    <HiOutlineShoppingBag className="text-2xl cursor-pointer" />{" "}
+                                    <span className="w-[20px] h-[20px] rounded-full flex items-center justify-center text-white absolute -top-4 left-2.5 right-2.5 text-[10px] font-bold bg-[#02B290]">
+                                        {cartItems.reduce(
+                                            (sum, item) => sum + item.qty,
+                                            0
+                                        )}
+                                    </span>
+                                </div>
+                                <span className="font-semibold ml-1">Cart</span>
+                            </button>
+                        </Link>
 
                         {store?.menus?.map((menu: MenuType) => (
                             <>
