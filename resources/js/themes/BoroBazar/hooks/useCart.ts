@@ -8,7 +8,7 @@ const useCart = () => {
     const [cartItems, setCartItems] = useAtom(cartAtom);
     const [isLoading, setLoading] = useState(false);
 
-    const authToken = "2|ydHfKP5ghI1VmcvIoaVvUM5a7XSugej0Ml86NSks5af1ece8"; // Replace with actual token
+    const authToken = "3|xJsDEG8kPGkvMkvGTSuWpDdpGJ78MYRBEoOHQKX007193ce0"; // Replace with actual token
     const BASE_URL = "http://127.0.0.1:8000/api/v1";
 
     const fetchCartItems = async () => {
@@ -110,6 +110,28 @@ const useCart = () => {
         }
     };
 
+    const placeOrder = async (payload: PlaceOrderPayloadType) => {
+        try {
+            const response = await fetch(`${BASE_URL}/place-order`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`, // ✅ Token added here
+                },
+                body: JSON.stringify({ ...payload, session_store_id: 1 }),
+            });
+
+            if (response.ok) {
+                fetchCartItems();
+            }
+
+            const data = await response.json();
+            return data; // Optionally return the response data
+        } catch (error) {
+            console.error("Error placing order:", error);
+        }
+    };
+
     return {
         fetchCartItems,
         isLoading,
@@ -117,6 +139,16 @@ const useCart = () => {
         addToCart,
         deleteCartItem,
         updateCartItem,
+        placeOrder,
     };
 };
 export default useCart;
+
+export interface PlaceOrderPayloadType {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    payment_method: string; // Limited to these values
+    notes?: string; // Nullable field
+}

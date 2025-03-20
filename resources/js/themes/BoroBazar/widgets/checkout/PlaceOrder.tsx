@@ -8,12 +8,20 @@ import {
     TextInput,
 } from "flowbite-react";
 import { useAtom } from "jotai";
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
+import useCart from "../../hooks/useCart";
 import useForm from "../../hooks/useForm";
 import { cartAtom } from "../../store/cart.atom";
 
 const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
     const [cartItems] = useAtom(cartAtom);
+    const { placeOrder, isLoading, fetchCartItems } = useCart();
+
+    useEffect(() => {
+        fetchCartItems();
+    }, []);
+
     const { formState, formErrors, handleChange } = useForm({
         default: {
             name: "",
@@ -30,56 +38,94 @@ const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
             <div className="container mx-auto">
                 <div className="lg:flex gap-4 items center">
                     <div className="lg:w-4/12">
-                        {" "}
-                        <Card>
-                            <div>
-                                {cartItems?.map((item, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center gap-2 my-2"
-                                    >
-                                        <div className="w-4/12">
-                                            <img
-                                                src={item?.product?.image}
-                                                alt={item?.product?.name}
-                                                width={"100%"}
-                                                height={"120px"}
-                                            />
+                        {isLoading ? (
+                            <Card className="animate-pulse p-4 space-y-4">
+                                <div className="space-y-2">
+                                    {new Array(5)
+                                        .fill(5)
+                                        .map((_, idx: number) => (
+                                            <div
+                                                key={idx}
+                                                className="h-20 w-full bg-gray-300 rounded"
+                                            ></div>
+                                        ))}
+                                </div>
+                            </Card>
+                        ) : (
+                            <Card>
+                                <div>
+                                    {cartItems?.map((item, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="flex items-center gap-2 my-2"
+                                        >
+                                            <div className="w-2/12">
+                                                <img
+                                                    src={item?.product?.image}
+                                                    alt={item?.product?.name}
+                                                    width={80}
+                                                    height={80}
+                                                    className="h-[80px] object-cover rounded-md"
+                                                />
+                                            </div>
+                                            <div className="w-10/12">
+                                                <h3 className="text-lg font-medium">
+                                                    {item?.product?.name}
+                                                </h3>
+                                                <p className="text-md text-gray-600 font-medium">
+                                                    Quantity: {item?.qty}
+                                                </p>
+                                                <p className="text-md text-gray-600 font-medium">
+                                                    Price: {item?.total}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="w-8/12">
-                                            <h3 className="text-lg font-semibold">
-                                                {item?.product?.name}
-                                            </h3>
-                                            <p className="text-lg font-semibold">
-                                                Quantity: {item?.qty}
-                                            </p>
-                                            <p className="text-lg font-semibold">
-                                                Price: {item?.total}
-                                            </p>
-                                        </div>
+                                    ))}
+                                </div>
+                                <hr />
+                                <div>
+                                    <div className="flex justify-between font-semibold">
+                                        <span className="text-left">
+                                            Sub-Total
+                                        </span>
+                                        <span className="text-right">
+                                            {cartItems
+                                                .reduce(
+                                                    (sum, item) =>
+                                                        sum + item.total,
+                                                    0
+                                                )
+                                                .toFixed(2)}{" "}
+                                            BDT
+                                        </span>
                                     </div>
-                                ))}
-                            </div>
-                            <div>
-                                <div className="flex justify-between font-semibold">
-                                    <span className="text-left">Sub-Total</span>
-                                    <span className="text-right">$240.00</span>
-                                </div>
-                                <div className="flex justify-between font-semibold">
-                                    <span className="text-left">
-                                        Delivery Charges
-                                    </span>
-                                    <span className="text-right">$48.00</span>
-                                </div>
+                                    <div className="flex justify-between font-semibold">
+                                        <span className="text-left">
+                                            Delivery Charges
+                                        </span>
+                                        <span className="text-right">
+                                            120.00 BDT
+                                        </span>
+                                    </div>
 
-                                <div className="flex justify-between font-bold mt-2">
-                                    <span className="text-left">
-                                        Total Amount
-                                    </span>
-                                    <span className="text-right">$288.00</span>
+                                    <div className="flex justify-between font-bold mt-2">
+                                        <span className="text-left">
+                                            Total Amount
+                                        </span>
+                                        <span className="text-right">
+                                            {cartItems
+                                                .reduce(
+                                                    (sum, item) =>
+                                                        sum + item.total,
+                                                    120
+                                                )
+                                                .toFixed(2)}{" "}
+                                            BDT
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </Card>
+                            </Card>
+                        )}
                     </div>
                     <div className="lg:w-8/12">
                         <Card>
@@ -221,7 +267,27 @@ const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-y-2">
-                                    <Button color="dark">Place Order</Button>
+                                    <Button
+                                        color="dark"
+                                        onClick={() => {
+                                            placeOrder({
+                                                ...formState,
+                                            });
+                                        }}
+                                        // isProcessing={placeOrder.isLoading}
+                                        disabled={
+                                            !formState["name"] ||
+                                            !formState["email"] ||
+                                            !formState["phone"] ||
+                                            !formState["payment_method"]
+                                        }
+                                        processingLabel="Creating"
+                                        processingSpinner={
+                                            <AiOutlineLoading className="animate-spin" />
+                                        }
+                                    >
+                                        Place Order
+                                    </Button>
                                 </div>
                             </div>
                         </Card>
