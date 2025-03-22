@@ -138,6 +138,10 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // store package routes
     Route::post('package-subscription', [SubscriptionController::class, 'subscribePackage']);
+
+    // steadfast courier routes
+    Route::post('steadfast-courier/place-order', [SteadfastCourierController::class, 'placeOrder']);
+
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {

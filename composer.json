@@ -17,6 +17,7 @@
         "maatwebsite/excel": "^3.1",
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-permission": "^6.10",
+        "steadfast-courier/steadfast-courier-laravel-package": "^1.1",
         "uddoktapay/laravel-sdk": "^2.1"
     },
     "require-dev": {
