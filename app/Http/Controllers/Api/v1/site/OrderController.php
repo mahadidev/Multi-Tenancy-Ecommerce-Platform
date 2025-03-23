@@ -76,12 +76,13 @@ class OrderController extends Controller
             'address' => 'required|string|max:2000',
             'notes' => 'nullable|string|max:1000',
             'payment_method' => 'required|in:cash,card',
+            'session_store_id' => 'nullable|exists:stores,id',
         ]);
         if($userID != null){
             $storeID = authStore();
         }
         else{
-            $storeID = $request->has('store_id') ? $request->store_id : session()->get('site_store_id');
+            $storeID = $request->has('store_id') ? $request->store_id : (session()->get('site_store_id') || $request->session_store_id);
         }
         $store = Store::active()->find($storeID);
 

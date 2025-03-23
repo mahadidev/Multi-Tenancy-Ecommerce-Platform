@@ -9,6 +9,7 @@ import Hero from "./hero/Hero";
 import LatestProducts from "./latestProducts/LatestProduct";
 import Login from "./login/Login";
 import OfferBanner from "./offerBanner/OfferBanner";
+import OrderSuccess from "./orderSuccess/OrderSuccess";
 import PageBanner from "./pageBanner/PageBanner";
 import Registration from "./registration/Registration";
 
@@ -27,6 +28,7 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         login: <Login {...props} />,
         cart: <CartProducts {...props} />,
         placeOrder: <PlaceOrder {...props} />,
+        orderSuccess: <OrderSuccess {...props} />,
     };
 
     return (

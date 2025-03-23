@@ -1245,6 +1245,33 @@
             "inputs": []
           }
         ]
+      },
+      {
+        "id": 7,
+        "name": "orderSuccess",
+        "label": "Order Success Page",
+        "slug": "/order-success",
+        "title": "Order Success Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "orderSuccess",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "orderSuccess",
+            "label": "Order Success",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
       }
     ]
   }

@@ -9,14 +9,16 @@ import {
 } from "flowbite-react";
 import { useAtom } from "jotai";
 import { FC, useEffect } from "react";
-import { AiOutlineLoading } from "react-icons/ai";
+import { AiOutlineLoading, AiOutlineShoppingCart } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import useCart from "../../hooks/useCart";
 import useForm from "../../hooks/useForm";
 import { cartAtom } from "../../store/cart.atom";
 
 const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
     const [cartItems] = useAtom(cartAtom);
-    const { placeOrder, isLoading, fetchCartItems } = useCart();
+    const { placeOrder, isLoading, fetchCartItems, isPlacingOrder } = useCart();
 
     useEffect(() => {
         fetchCartItems();
@@ -52,83 +54,117 @@ const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
                                 </div>
                             </Card>
                         ) : (
-                            <Card>
-                                <div>
-                                    {cartItems?.map((item, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center gap-2 my-2"
-                                        >
-                                            <div className="w-2/12">
-                                                <img
-                                                    src={item?.product?.image}
-                                                    alt={item?.product?.name}
-                                                    width={80}
-                                                    height={80}
-                                                    className="h-[80px] object-cover rounded-md"
-                                                />
+                            <>
+                                {cartItems?.length ? (
+                                    <Card>
+                                        <div>
+                                            {cartItems?.map((item, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="flex items-center gap-2 my-2"
+                                                >
+                                                    <div className="w-2/12">
+                                                        <img
+                                                            src={
+                                                                item?.product
+                                                                    ?.image
+                                                            }
+                                                            alt={
+                                                                item?.product
+                                                                    ?.name
+                                                            }
+                                                            width={80}
+                                                            height={80}
+                                                            className="h-[80px] object-cover rounded-md"
+                                                        />
+                                                    </div>
+                                                    <div className="w-10/12">
+                                                        <h3 className="text-lg font-medium">
+                                                            {
+                                                                item?.product
+                                                                    ?.name
+                                                            }
+                                                        </h3>
+                                                        <p className="text-md text-gray-600 font-medium">
+                                                            Quantity:{" "}
+                                                            {item?.qty}
+                                                        </p>
+                                                        <p className="text-md text-gray-600 font-medium">
+                                                            Price: {item?.total}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <hr />
+                                        <div>
+                                            <div className="flex justify-between font-semibold">
+                                                <span className="text-left">
+                                                    Sub-Total
+                                                </span>
+                                                <span className="text-right">
+                                                    {cartItems
+                                                        .reduce(
+                                                            (sum, item) =>
+                                                                sum +
+                                                                item.total,
+                                                            0
+                                                        )
+                                                        .toFixed(2)}{" "}
+                                                    BDT
+                                                </span>
                                             </div>
-                                            <div className="w-10/12">
-                                                <h3 className="text-lg font-medium">
-                                                    {item?.product?.name}
-                                                </h3>
-                                                <p className="text-md text-gray-600 font-medium">
-                                                    Quantity: {item?.qty}
-                                                </p>
-                                                <p className="text-md text-gray-600 font-medium">
-                                                    Price: {item?.total}
-                                                </p>
+                                            <div className="flex justify-between font-semibold">
+                                                <span className="text-left">
+                                                    Delivery Charges
+                                                </span>
+                                                <span className="text-right">
+                                                    120.00 BDT
+                                                </span>
+                                            </div>
+
+                                            <div className="flex justify-between font-bold mt-2">
+                                                <span className="text-left">
+                                                    Total Amount
+                                                </span>
+                                                <span className="text-right">
+                                                    {cartItems
+                                                        .reduce(
+                                                            (sum, item) =>
+                                                                sum +
+                                                                item.total,
+                                                            120
+                                                        )
+                                                        .toFixed(2)}{" "}
+                                                    BDT
+                                                </span>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
-                                <hr />
-                                <div>
-                                    <div className="flex justify-between font-semibold">
-                                        <span className="text-left">
-                                            Sub-Total
-                                        </span>
-                                        <span className="text-right">
-                                            {cartItems
-                                                .reduce(
-                                                    (sum, item) =>
-                                                        sum + item.total,
-                                                    0
-                                                )
-                                                .toFixed(2)}{" "}
-                                            BDT
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between font-semibold">
-                                        <span className="text-left">
-                                            Delivery Charges
-                                        </span>
-                                        <span className="text-right">
-                                            120.00 BDT
-                                        </span>
-                                    </div>
-
-                                    <div className="flex justify-between font-bold mt-2">
-                                        <span className="text-left">
-                                            Total Amount
-                                        </span>
-                                        <span className="text-right">
-                                            {cartItems
-                                                .reduce(
-                                                    (sum, item) =>
-                                                        sum + item.total,
-                                                    120
-                                                )
-                                                .toFixed(2)}{" "}
-                                            BDT
-                                        </span>
-                                    </div>
-                                </div>
-                            </Card>
+                                    </Card>
+                                ) : (
+                                    <Card className="flex flex-col justify-center items-center">
+                                        <h2 className="text-2xl font-semibold">
+                                            Your cart is empty.
+                                        </h2>
+                                        <Link
+                                            to="/shop"
+                                            className="text-center"
+                                        >
+                                            <Button color="dark">
+                                                <div className="flex items-center gap-3">
+                                                    Add item in cart{" "}
+                                                    <AiOutlineShoppingCart />
+                                                </div>
+                                            </Button>
+                                        </Link>
+                                    </Card>
+                                )}
+                            </>
                         )}
                     </div>
                     <div className="lg:w-8/12">
-                        <Card>
+                        <Card className="relative">
+                            <LoadingOverlay isLoading={isPlacingOrder} />
                             <h2 className="text-2xl font-bold my-3">
                                 Billing Details
                             </h2>
@@ -279,9 +315,10 @@ const PlaceOrder: FC<ThemeWidgetPropsType> = () => {
                                             !formState["name"] ||
                                             !formState["email"] ||
                                             !formState["phone"] ||
-                                            !formState["payment_method"]
+                                            !formState["payment_method"] ||
+                                            !cartItems?.length
                                         }
-                                        processingLabel="Creating"
+                                        processingLabel="Placing..."
                                         processingSpinner={
                                             <AiOutlineLoading className="animate-spin" />
                                         }

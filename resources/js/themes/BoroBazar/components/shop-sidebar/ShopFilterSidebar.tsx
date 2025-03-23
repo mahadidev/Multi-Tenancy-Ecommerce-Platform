@@ -24,27 +24,6 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({
     const [searchParams] = useSearchParams();
     const category_QR = searchParams.get("category");
 
-    const weights = [
-        "2kg",
-        "1.5kg",
-        "1kg",
-        "750g",
-        "500g",
-        "250g",
-        "100g",
-        "50g",
-    ];
-    const colors = [
-        "#E0DCDC",
-        "#F7D9C4",
-        "#FFD700",
-        "#FF69B4",
-        "#8A2BE2",
-        "#00CED1",
-        "#32CD32",
-        "#7FFFD4",
-        "#FF4500",
-    ];
     const tags = [
         "Milk",
         "Cookies",
@@ -112,44 +91,6 @@ const ShopFilterSidebar: FC<ShopFilterSidebarPropsType> = ({
                                     </Label>
                                 )
                             )}
-                        </div>
-                    </AccordionContent>
-                </AccordionPanel>
-
-                {/* Weight Filter */}
-                <AccordionPanel alwaysOpen isOpen={true}>
-                    <AccordionTitle>Weight</AccordionTitle>
-                    <AccordionContent>
-                        <div className="flex flex-col gap-2">
-                            {weights.map((weight, index) => (
-                                <Label
-                                    key={index}
-                                    className="flex items-center gap-2"
-                                >
-                                    <Checkbox
-                                        id={weight}
-                                        name={weight}
-                                        color="gray"
-                                    />
-                                    {weight}
-                                </Label>
-                            ))}
-                        </div>
-                    </AccordionContent>
-                </AccordionPanel>
-
-                {/* Color Filter */}
-                <AccordionPanel alwaysOpen isOpen={true}>
-                    <AccordionTitle>Color</AccordionTitle>
-                    <AccordionContent>
-                        <div className="flex gap-2 flex-wrap">
-                            {colors.map((color, index) => (
-                                <button
-                                    key={index}
-                                    className="w-6 h-6 rounded-full border"
-                                    style={{ backgroundColor: color }}
-                                ></button>
-                            ))}
                         </div>
                     </AccordionContent>
                 </AccordionPanel>

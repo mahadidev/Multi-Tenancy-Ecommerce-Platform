@@ -22,6 +22,7 @@ import HeroJson from "./widgets/hero/Hero.json";
 import LatestProductsJson from "./widgets/latestProducts/LatestProduct.json";
 import LoginJson from "./widgets/login/Login.json";
 import OfferBannerJson from "./widgets/offerBanner/OfferBanner.json";
+import OrderSuccessJson from "./widgets/orderSuccess/OrderSuccess.json";
 import PageBannerJson from "./widgets/pageBanner/PageBanner.json";
 import RegistrationJson from "./widgets/registration/Registration.json";
 
@@ -130,6 +131,18 @@ export const BoroBazarSeeder: ThemeType | any = {
             type: "checkout",
             thumbnail: null,
             widgets: [PageBannerJson, PlaceOrderJson],
+        },
+        {
+            id: 7,
+            name: "orderSuccess",
+            label: "Order Success Page",
+            slug: "/order-success",
+            title: "Order Success Page",
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "orderSuccess",
+            thumbnail: null,
+            widgets: [OrderSuccessJson],
         },
     ],
 };

@@ -25,3 +25,4 @@ tsconfig.tsbuildinfo
 .codegpt
 .npmrc
 !/storage/app/public/seeders
+.DS_Store
