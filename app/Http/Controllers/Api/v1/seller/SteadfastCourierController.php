@@ -58,6 +58,7 @@ class SteadfastCourierController extends Controller
 
                     if ($order) {
                         $order->is_shipped = true;
+                        $order->status = 'shipping';
                         $order->save();
 
                         // Save shipment information
@@ -145,5 +146,17 @@ class SteadfastCourierController extends Controller
             'status' => 200,
             'message' => 'Shipments have been synced successfully',
         ], 200);
+    }
+
+    public function shipments(Request $request){
+        $shipments = StoreShipment::where('store_id', authStore())
+        ->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'shipments' => ShipmentResource::collection($shipments),
+            ]
+        ]);
     }
 }
