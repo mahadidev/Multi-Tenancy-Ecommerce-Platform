@@ -33,6 +33,8 @@ class OrderResource extends JsonResource
             ],
             'total' => $this->total,
             'status' => $this->status,
+            'is_approved' => $this->is_approved,
+            'shipment' => $this->is_shipped ? new ShipmentResource($this->shipment) : null,
             'payment_status' => $this->payment_status,
             'payment_method' => $this->payment_method,
             'shipping_method' => $this->shipping_method,
