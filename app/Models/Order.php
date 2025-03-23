@@ -31,6 +31,7 @@ class Order extends Model
         'reason',
         'is_payed',
         'payment_method',
+        'is_shipped'
     ];
 
     public function user()
@@ -104,5 +105,10 @@ class Order extends Model
             Log::error('Order notification failed: ' . $e->getMessage());
             return response()->json(['status'=> 500,'message' => 'Order notification failed'], 500);
         }
+    }
+
+    public function shipment()
+    {
+        return $this->hasOne(StoreShipment::class, 'order_id');
     }
 }
