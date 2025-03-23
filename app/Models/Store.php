@@ -261,5 +261,9 @@ class Store extends Model
         }
     }
 
+    public function storeShipment()
+    {
+        return $this->hasMany(StoreShipment::class, 'store_id');
+    }
     
 }

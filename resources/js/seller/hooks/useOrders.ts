@@ -1,5 +1,7 @@
 import {
+    BulkShipmentOrderPayloadType,
     PlaceOrderPayloadType,
+    useBulkShipmentOrdersMutation,
     useFetchOrdersQuery,
     usePlaceOrderMutation,
     useUpdateOrderStatusMutation,
@@ -15,6 +17,32 @@ const useOrders = () => {
 
     // select orders
     const { orders, order } = useAppSelector((state) => state.order);
+
+    // update order status
+    const [
+        handleBulkShipmentOrders,
+        {
+            isLoading: isBulkShipmentOrdersLoading,
+            isError: isBulkShipmentOrdersError,
+            error: bulkShipmentOrdersError,
+            data: bulkShipmentOrdersData,
+        },
+    ] = useBulkShipmentOrdersMutation();
+    const bulkShipmentOrders = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: BulkShipmentOrderPayloadType;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleBulkShipmentOrders(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            }
+        });
+    };
 
     // update order status
     const [
@@ -93,6 +121,13 @@ const useOrders = () => {
             isError: isPlaceOrderError,
             error: placeOrderError,
             data: placeOrderData,
+        },
+        bulkShipmentOrders: {
+            submit: bulkShipmentOrders,
+            isLoading: isBulkShipmentOrdersLoading,
+            isError: isBulkShipmentOrdersError,
+            error: bulkShipmentOrdersError,
+            data: bulkShipmentOrdersData,
         },
     };
 };

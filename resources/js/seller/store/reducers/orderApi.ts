@@ -16,6 +16,10 @@ export interface PlaceOrderPayloadType {
     user_id: number;
 }
 
+export interface BulkShipmentOrderPayloadType {
+    orders: number[];
+}
+
 export const orderApi = createApi({
     reducerPath: "orderApi",
     baseQuery: baseQuery,
@@ -68,6 +72,19 @@ export const orderApi = createApi({
                 });
             },
         }),
+
+        bulkShipmentOrders: builder.mutation<any, BulkShipmentOrderPayloadType>(
+            {
+                query: (formData) =>
+                    createRequest({
+                        url: `${PREFIX}/steadfast-courier/place-order`,
+                        method: "post",
+                        body: formData,
+                    }),
+                invalidatesTags: ["Orders"],
+                transformErrorResponse: (error: any) => error.data,
+            }
+        ),
     }),
 });
 
@@ -75,4 +92,5 @@ export const {
     useFetchOrdersQuery,
     useUpdateOrderStatusMutation,
     usePlaceOrderMutation,
+    useBulkShipmentOrdersMutation,
 } = orderApi;

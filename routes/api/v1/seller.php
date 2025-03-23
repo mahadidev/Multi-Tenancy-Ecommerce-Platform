@@ -138,6 +138,13 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // store package routes
     Route::post('package-subscription', [SubscriptionController::class, 'subscribePackage']);
+
+    // steadfast courier routes
+    Route::post('steadfast-courier/place-order', [SteadfastCourierController::class, 'placeOrder']);
+    Route::get('steadfast-courier/track-order/{code}', [SteadfastCourierController::class, 'trackOrder']);
+    Route::get('steadfast-courier/shipments/sync', [SteadfastCourierController::class, 'syncShipments']);
+    Route::get('shipments', [SteadfastCourierController::class, 'shipments']);
+
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {

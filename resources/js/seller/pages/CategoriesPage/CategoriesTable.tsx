@@ -14,28 +14,6 @@ const CategoriesTable = () => {
         <>
             <DataTable
                 columns={[
-                    // {
-                    //     label: (
-                    //         <>
-                    //             {" "}
-                    //             <Label htmlFor="select-all" className="sr-only">
-                    //                 Select all
-                    //             </Label>
-                    //             <Checkbox id="select-all" name="select-all" />{" "}
-                    //         </>
-                    //     ),
-                    //     key: "id",
-                    //     render: () => (
-                    //         <Table.Cell className="w-4 p-4">
-                    //             <Checkbox
-                    //                 aria-describedby="checkbox-1"
-                    //                 id="checkbox-1"
-                    //             />
-                    //         </Table.Cell>
-                    //     ),
-                    //     sortable: true,
-                    // },
-
                     {
                         label: "Name",
                         key: "name",
