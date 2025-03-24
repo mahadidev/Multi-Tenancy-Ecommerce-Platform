@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { OrderType } from "@type/orderType";
+import { ShipmentOrderType } from "@type/shipmentOrdersType";
 
 const initialState: {
     orders: OrderType[];
+    shipmentOrders: ShipmentOrderType[];
     order: OrderType | null;
 } = {
     orders: [],
+    shipmentOrders: [],
     order: null,
 };
 
@@ -21,6 +24,14 @@ const orderSlice = createSlice({
         ) => {
             state.order = action.payload.order;
         },
+        setShipmentOrders: (
+            state,
+            action: PayloadAction<{
+                shipmentOrders: ShipmentOrderType[];
+            }>
+        ) => {
+            state.shipmentOrders = action.payload.shipmentOrders;
+        },
         clearOrdersStore: (state) => {
             state.order = null;
             state.orders = [];
@@ -35,5 +46,6 @@ const orderSlice = createSlice({
         },
     },
 });
-export const { setOrders, setOrder, clearOrdersStore } = orderSlice.actions;
+export const { setOrders, setOrder, setShipmentOrders, clearOrdersStore } =
+    orderSlice.actions;
 export default orderSlice.reducer;

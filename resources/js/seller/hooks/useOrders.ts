@@ -1,8 +1,10 @@
 import {
     BulkShipmentOrderPayloadType,
+    orderApi,
     PlaceOrderPayloadType,
     useBulkShipmentOrdersMutation,
     useFetchOrdersQuery,
+    useFetchShipmentOrdersQuery,
     usePlaceOrderMutation,
     useUpdateOrderStatusMutation,
 } from "@seller/store/reducers/orderApi";
@@ -14,9 +16,12 @@ const useOrders = () => {
     const { toaster } = useToast(); // for showing toast messages
 
     useFetchOrdersQuery(); // orders query
+    useFetchShipmentOrdersQuery(); // shipment orders query
 
     // select orders
-    const { orders, order } = useAppSelector((state) => state.order);
+    const { orders, order, shipmentOrders } = useAppSelector(
+        (state) => state.order
+    );
 
     // update order status
     const [
@@ -104,9 +109,37 @@ const useOrders = () => {
             }
         });
     };
+
+    // fetch sync shipment orders
+    const [
+        handleSyncShipmentOrders,
+        {
+            isLoading: isSyncShipmentOrdersLoading,
+            isError: isSyncShipmentOrders,
+            error: syncShipmentOrdersError,
+            data: syncShipmentOrdersData,
+        },
+    ] = orderApi.endpoints.syncShipmentOrders.useLazyQuery();
+    const syncShipmentOrders = ({
+        formData,
+        onSuccess,
+    }: {
+        formData: any;
+        onSuccess?: CallableFunction;
+    }) => {
+        handleSyncShipmentOrders(formData).then((response) => {
+            if (response.data?.status === 200) {
+                if (onSuccess) {
+                    onSuccess(response.data.data);
+                }
+            }
+        });
+    };
+
     // return from here
     return {
         orders,
+        shipmentOrders,
         order,
         updateOrderStatus: {
             submit: updateOrderStatus,
@@ -128,6 +161,13 @@ const useOrders = () => {
             isError: isBulkShipmentOrdersError,
             error: bulkShipmentOrdersError,
             data: bulkShipmentOrdersData,
+        },
+        syncShipmentOrders: {
+            submit: syncShipmentOrders,
+            isLoading: isSyncShipmentOrdersLoading,
+            isError: isSyncShipmentOrders,
+            error: syncShipmentOrdersError,
+            data: syncShipmentOrdersData,
         },
     };
 };
