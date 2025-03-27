@@ -1,8 +1,11 @@
 import { DataTable } from "@seller/components";
 import StatusBadge from "@seller/components/Badge/StatusBadge";
 import useOrders from "@seller/hooks/useOrders";
+import useToast from "@seller/hooks/useToast";
 import { OrderType } from "@type/orderType";
-import { Button, Table } from "flowbite-react";
+import { Button, Checkbox, Label, Table } from "flowbite-react";
+import { useState } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import OrderInfoModal from "./OrderInfoModal";
@@ -10,12 +13,52 @@ import UpdateOrderStatusModal from "./UpdateOrderStatusModal";
 
 const OrdersTable = () => {
     // get the orders
-    const { orders } = useOrders();
+    const { orders, bulkShipmentOrders } = useOrders();
+    const { toaster } = useToast();
+    const [orderIds, setOrderIds] = useState<number[]>([]);
 
     return (
         <>
             <DataTable
                 columns={[
+                    {
+                        label: (
+                            <>
+                                {" "}
+                                <Label htmlFor="select-all" className="sr-only">
+                                    Select all
+                                </Label>
+                                <Checkbox
+                                    disabled
+                                    id="select-all"
+                                    name="select-all"
+                                />{" "}
+                            </>
+                        ),
+                        key: "id",
+                        render: (row: OrderType) => (
+                            <Table.Cell className="w-4 p-4">
+                                <Checkbox
+                                    aria-describedby="checkbox-1"
+                                    id="checkbox-1"
+                                    onChange={() =>
+                                        setOrderIds(
+                                            (prev) =>
+                                                prev.includes(row?.id)
+                                                    ? prev.filter(
+                                                          (id) => id !== row?.id
+                                                      ) // Remove if exists
+                                                    : [...prev, row?.id] // Add if not exists
+                                        )
+                                    }
+                                    defaultChecked={
+                                        row?.status === "shipping" && false
+                                    }
+                                    disabled={row?.status === "shipping"}
+                                />
+                            </Table.Cell>
+                        ),
+                    },
                     {
                         label: "Order uuid",
                         key: "order_uuid",
@@ -109,18 +152,50 @@ const OrdersTable = () => {
                 }}
                 head={{
                     render: () => (
-                        <Button
-                            as={Link}
-                            to={`/orders/create`}
-                            size="md"
-                            color="primary"
-                            className="p-0"
-                        >
-                            <div className="flex items-center gap-x-2">
-                                <HiPlus className="h-5 w-5" />
-                                Create Order
-                            </div>
-                        </Button>
+                        <>
+                            <Button
+                                size="md"
+                                color="primary"
+                                className="p-0"
+                                onClick={() =>
+                                    bulkShipmentOrders.submit({
+                                        formData: { orders: orderIds },
+                                        onSuccess: () => {
+                                            toaster({
+                                                text: "Orders have been shipped",
+                                                status: "success",
+                                            });
+                                            setOrderIds([]);
+                                        },
+                                    })
+                                }
+                                isProcessing={bulkShipmentOrders.isLoading}
+                                disabled={
+                                    bulkShipmentOrders.isLoading ||
+                                    !orderIds?.length
+                                }
+                                processingLabel="Shipping..."
+                                processingSpinner={
+                                    <AiOutlineLoading className="animate-spin" />
+                                }
+                            >
+                                <div className="flex items-center gap-x-2">
+                                    Bulk Shipment
+                                </div>
+                            </Button>
+                            <Button
+                                as={Link}
+                                to={`/orders/create`}
+                                size="md"
+                                color="primary"
+                                className="p-0"
+                            >
+                                <div className="flex items-center gap-x-2">
+                                    <HiPlus className="h-5 w-5" />
+                                    Create Order
+                                </div>
+                            </Button>
+                        </>
                     ),
                 }}
                 data={orders!}

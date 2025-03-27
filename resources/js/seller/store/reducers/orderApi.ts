@@ -2,9 +2,10 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
 import { OrdersApiResponse } from "@type/orderType";
+import { ShipmentOrdersApiResponse } from "@type/shipmentOrdersType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { clearCartItems } from "../slices/cartSlice";
-import { setOrders } from "../slices/orderSlice";
+import { setOrders, setShipmentOrders } from "../slices/orderSlice";
 
 export interface PlaceOrderPayloadType {
     name: string;
@@ -16,10 +17,14 @@ export interface PlaceOrderPayloadType {
     user_id: number;
 }
 
+export interface BulkShipmentOrderPayloadType {
+    orders: number[];
+}
+
 export const orderApi = createApi({
     reducerPath: "orderApi",
     baseQuery: baseQuery,
-    tagTypes: ["Orders"],
+    tagTypes: ["Orders", "Shipments"],
     endpoints: (builder) => ({
         updateOrderStatus: builder.mutation<any, any>({
             query: (formData) =>
@@ -68,11 +73,58 @@ export const orderApi = createApi({
                 });
             },
         }),
+
+        // fetch shipment orders
+        fetchShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
+            query: (formData) =>
+                createRequest({
+                    url: `${PREFIX}/shipments`,
+                    method: "get",
+                    body: formData,
+                }),
+            providesTags: ["Shipments"],
+            transformErrorResponse: (error: any) => error.data,
+            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+                await queryFulfilled.then((response) => {
+                    dispatch(
+                        setShipmentOrders({
+                            shipmentOrders: response?.data?.data?.shipments,
+                        })
+                    );
+                });
+            },
+        }),
+
+        bulkShipmentOrders: builder.mutation<any, BulkShipmentOrderPayloadType>(
+            {
+                query: (formData) =>
+                    createRequest({
+                        url: `${PREFIX}/steadfast-courier/place-order`,
+                        method: "post",
+                        body: formData,
+                    }),
+                invalidatesTags: ["Orders"],
+                transformErrorResponse: (error: any) => error.data,
+            }
+        ),
+
+        syncShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
+            query: () =>
+                createRequest({
+                    url: `${PREFIX}/steadfast-courier/shipments/sync`,
+                    method: "get",
+                }),
+            providesTags: ["Shipments"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
     }),
 });
 
 export const {
     useFetchOrdersQuery,
+    useFetchShipmentOrdersQuery,
     useUpdateOrderStatusMutation,
     usePlaceOrderMutation,
+    useBulkShipmentOrdersMutation,
+    useSyncShipmentOrdersQuery,
 } = orderApi;

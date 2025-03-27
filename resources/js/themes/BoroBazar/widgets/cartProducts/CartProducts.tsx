@@ -35,8 +35,8 @@ const CartProducts: FC<ThemeWidgetPropsType> = () => {
                     ) : (
                         <>
                             {cartItems?.length ? (
-                                <div>
-                                    <table className="w-full border-collapse border border-gray-200">
+                                <div className="relative">
+                                    <table className="w-full border-collapse border border-gray-200 rounded-md">
                                         <thead>
                                             <tr className="bg-gray-100">
                                                 <th className="p-2 border">

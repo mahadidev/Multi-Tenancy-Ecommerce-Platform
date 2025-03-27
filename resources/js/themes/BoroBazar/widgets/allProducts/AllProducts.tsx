@@ -1,6 +1,6 @@
 import { ProductType } from "@type/productType";
 import { ThemeWidgetPropsType } from "@type/themeType";
-import { Select } from "flowbite-react";
+import { Select, TextInput } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { HiOutlineViewGrid } from "react-icons/hi";
@@ -29,7 +29,7 @@ const AllProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
 
                 <div className="lg:w-9/12 ">
                     <SectionTitle title="All Products" />
-                    <div className="flex justify-between items-center w-full p-3 bg-white shadow-sm border rounded-lg mb-5">
+                    <div className="grid md:flex justify-between gap-2 items-center w-full p-3 bg-white shadow-sm border rounded-lg mb-5">
                         {/* Grid/List Toggle Buttons */}
                         <div className="flex gap-2">
                             <button
@@ -55,7 +55,12 @@ const AllProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
                         </div>
 
                         {/* Sort Dropdown */}
-                        <div>
+                        <div className="flex items-center gap-2">
+                            <TextInput
+                                type="search"
+                                placeholder="Search product"
+                                className="w-[300px]"
+                            />
                             <Select
                                 className="w-64 rounded p-2"
                                 value={sort}
@@ -73,30 +78,45 @@ const AllProducts: FC<ThemeWidgetPropsType> = ({ store }) => {
                             </Select>
                         </div>
                     </div>
-                    <div
-                        className={`grid gap-3 ${
-                            view === "grid"
-                                ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-4"
-                                : "grid-cols-1 sm:grid-cols-2"
-                        }`}
-                    >
-                        {view === "grid" ? (
-                            <>
-                                {products?.map((product: ProductType, idx) => (
-                                    <ProductCard key={idx} product={product} />
-                                ))}
-                            </>
-                        ) : (
-                            <>
-                                {products?.map((product: ProductType, idx) => (
-                                    <ProductCardListView
-                                        key={idx}
-                                        product={product}
-                                    />
-                                ))}
-                            </>
-                        )}
-                    </div>
+                    {products?.length ? (
+                        <div
+                            className={`grid gap-3 ${
+                                view === "grid"
+                                    ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-4"
+                                    : "grid-cols-1 sm:grid-cols-2"
+                            }`}
+                        >
+                            {view === "grid" ? (
+                                <>
+                                    {products?.map(
+                                        (product: ProductType, idx) => (
+                                            <ProductCard
+                                                key={idx}
+                                                product={product}
+                                            />
+                                        )
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    {products?.map(
+                                        (product: ProductType, idx) => (
+                                            <ProductCardListView
+                                                key={idx}
+                                                product={product}
+                                            />
+                                        )
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="flex justify-center text-center items-center">
+                            <h2 className="text-xl text-gray-500 my-3 font-semibold">
+                                No products found.
+                            </h2>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

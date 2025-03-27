@@ -1245,6 +1245,114 @@
             "inputs": []
           }
         ]
+      },
+      {
+        "id": 7,
+        "name": "orderSuccess",
+        "label": "Order Success Page",
+        "slug": "/order-success",
+        "title": "Order Success Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "orderSuccess",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "orderSuccess",
+            "label": "Order Success",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "name": "myProfile",
+        "label": "My Profile Page",
+        "slug": "/my-profile",
+        "title": "My Profile Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "my-profile",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "myProfile",
+            "label": "My Profile",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "name": "myOrders",
+        "label": "My Orders Page",
+        "slug": "/my-orders",
+        "title": "My Orders Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "my-orders",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "myOrders",
+            "label": "My Orders",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "name": "trackOrders",
+        "label": "Track Orders Page",
+        "slug": "/track-orders",
+        "title": "track Orders Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "track-orders",
+        "thumbnail": null,
+        "widgets": [
+          {
+            "id": 1,
+            "name": "trackOrders",
+            "label": "Track Orders",
+            "serial": 1,
+            "type": "section",
+            "inputs": []
+          }
+        ]
       }
     ]
   }

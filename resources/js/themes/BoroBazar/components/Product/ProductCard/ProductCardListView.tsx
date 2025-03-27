@@ -1,5 +1,6 @@
 import { ProductType } from "@type/productType";
 import { FC } from "react";
+import useCart from "../../../hooks/useCart";
 import ProductActionCard from "../ProductAction/ProductActionCard";
 
 interface ProductCardPropsType {
@@ -7,6 +8,7 @@ interface ProductCardPropsType {
 }
 
 const ProductCardListView: FC<ProductCardPropsType> = ({ product }) => {
+    const { addToCart } = useCart();
     return (
         <article
             className="grid grid-cols-2 gap-4 p-4 bg-white border rounded-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
@@ -20,7 +22,10 @@ const ProductCardListView: FC<ProductCardPropsType> = ({ product }) => {
                     className="object-cover w-full h-[200px] transition-transform duration-200 ease-in-out transform group-hover:scale-105"
                 />
                 <div className="absolute hidden bottom-4 left-0 w-full mx-auto group-hover:block hover:duration-300">
-                    <ProductActionCard product={product} />
+                    <ProductActionCard
+                        product={product}
+                        onAddToCart={addToCart}
+                    />
                 </div>
             </div>
 
