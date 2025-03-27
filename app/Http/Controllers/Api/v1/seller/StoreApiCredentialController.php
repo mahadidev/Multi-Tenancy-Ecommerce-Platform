@@ -33,7 +33,7 @@ class StoreApiCredentialController extends Controller
         $request->validate([
             'provider' => 'required|string',
             'credentials' => 'required|array',
-            'status' => 'required|boolean'
+            'status' => 'nullable|boolean'
         ]);
 
         $store_id = authStore();
@@ -101,7 +101,7 @@ class StoreApiCredentialController extends Controller
         $request->validate([
             'provider' => 'required|string',
             'credentials' => 'required|array',
-            'status' => 'required|boolean'
+            'status' => 'nullable|boolean'
         ]);
 
         if (StoreApiCredential::authorized()->where('provider', $request->provider)->where('id', '!=', $id)->exists()) {
@@ -114,7 +114,7 @@ class StoreApiCredentialController extends Controller
         $storeApiCredential->update([
             'provider' => $request->provider ?? 'steadfast',
             'credentials' => json_encode(Crypt::encrypt($request->credentials)), // Ensure it's properly stored as JSON
-            'status' => $request->status
+            'status' => $request->status ?? 1
         ]);
 
         return response()->json([
