@@ -145,6 +145,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::get('steadfast-courier/shipments/sync', [SteadfastCourierController::class, 'syncShipments']);
     Route::get('shipments', [SteadfastCourierController::class, 'shipments']);
 
+    // Store API Credential Routes
+    Route::resource('store-api-credential', StoreApiCredentialController::class);
+
 });
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
