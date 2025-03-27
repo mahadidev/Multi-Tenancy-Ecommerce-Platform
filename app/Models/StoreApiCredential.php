@@ -19,5 +19,7 @@ class StoreApiCredential extends Model
         return $this->belongsTo(Store::class);
     }
 
-
+    public function scopeAuthorized($query){
+        return $query->where('store_id', authStore());
+    }
 }

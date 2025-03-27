@@ -31,14 +31,14 @@ class StoreApiCredentialController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'provider' => 'nullable|string',
+            'provider' => 'required|string',
             'credentials' => 'required|array',
-            'status' => 'nullable|boolean'
+            'status' => 'required|boolean'
         ]);
 
         $store_id = authStore();
 
-        if(StoreApiCredential::where('store_id', $store_id)->where('provider', $request->provider)->exists()) {
+        if (StoreApiCredential::authorized()->where('provider', $request->provider)->exists()) {
             return response()->json([
                 'status' => 400,
                 'message' => 'Store API credential already exists'
@@ -66,9 +66,9 @@ class StoreApiCredentialController extends Controller
      */
     public function show($id)
     {
-        $storeApiCredential = StoreApiCredential::find($id);
+        $storeApiCredential = StoreApiCredential::authorized()->find($id);
 
-        if(!$storeApiCredential) {
+        if (!$storeApiCredential) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Store API credential not found'
@@ -89,9 +89,9 @@ class StoreApiCredentialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $storeApiCredential = StoreApiCredential::find($id);
+        $storeApiCredential = StoreApiCredential::authorized()->find($id);
 
-        if(!$storeApiCredential) {
+        if (!$storeApiCredential) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Store API credential not found'
@@ -99,15 +99,19 @@ class StoreApiCredentialController extends Controller
         }
 
         $request->validate([
-            'provider' => 'nullable|string',
+            'provider' => 'required|string',
             'credentials' => 'required|array',
-            'status' => 'nullable|boolean'
+            'status' => 'required|boolean'
         ]);
 
-        $store_id = authStore();
+        if (StoreApiCredential::authorized()->where('provider', $request->provider)->where('id', '!=', $id)->exists()) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Store API credential already exists'
+            ], 400);
+        }
 
         $storeApiCredential->update([
-            'store_id' => $store_id,
             'provider' => $request->provider ?? 'steadfast',
             'credentials' => json_encode(Crypt::encrypt($request->credentials)), // Ensure it's properly stored as JSON
             'status' => $request->status
@@ -127,9 +131,9 @@ class StoreApiCredentialController extends Controller
      */
     public function destroy($id)
     {
-        $storeApiCredential = StoreApiCredential::find($id);
+        $storeApiCredential = StoreApiCredential::authorized()->find($id);
 
-        if(!$storeApiCredential) {
+        if (!$storeApiCredential) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Store API credential not found'
