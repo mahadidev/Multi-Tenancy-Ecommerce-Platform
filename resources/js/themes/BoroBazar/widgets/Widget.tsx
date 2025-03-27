@@ -8,10 +8,13 @@ import FeaturesSection from "./featuresSection/FeaturesSection";
 import Hero from "./hero/Hero";
 import LatestProducts from "./latestProducts/LatestProduct";
 import Login from "./login/Login";
+import MyOrders from "./myOrders/MyOrders";
+import MyProfile from "./myProfile/MyProfile";
 import OfferBanner from "./offerBanner/OfferBanner";
 import OrderSuccess from "./orderSuccess/OrderSuccess";
 import PageBanner from "./pageBanner/PageBanner";
 import Registration from "./registration/Registration";
+import TrackOrders from "./trackOrders/TrackOrders";
 
 const Widget: FC<ThemeWidgetPropsType> = (props) => {
     const widgets: {
@@ -29,6 +32,9 @@ const Widget: FC<ThemeWidgetPropsType> = (props) => {
         cart: <CartProducts {...props} />,
         placeOrder: <PlaceOrder {...props} />,
         orderSuccess: <OrderSuccess {...props} />,
+        myProfile: <MyProfile {...props} />,
+        myOrders: <MyOrders {...props} />,
+        trackOrders: <TrackOrders {...props} />,
     };
 
     return (

@@ -21,10 +21,13 @@ import FeaturesSectionJson from "./widgets/featuresSection/FeaturesSection.json"
 import HeroJson from "./widgets/hero/Hero.json";
 import LatestProductsJson from "./widgets/latestProducts/LatestProduct.json";
 import LoginJson from "./widgets/login/Login.json";
+import MyOrdersJson from "./widgets/myOrders/MyOrders.json";
+import MyProfileJson from "./widgets/myProfile/myProfile.json";
 import OfferBannerJson from "./widgets/offerBanner/OfferBanner.json";
 import OrderSuccessJson from "./widgets/orderSuccess/OrderSuccess.json";
 import PageBannerJson from "./widgets/pageBanner/PageBanner.json";
 import RegistrationJson from "./widgets/registration/Registration.json";
+import TrackOrdersJson from "./widgets/trackOrders/TrackOrders.json";
 
 export const BoroBazar: RegisteredThemeType = {
     name: "BoroBazar",
@@ -143,6 +146,42 @@ export const BoroBazarSeeder: ThemeType | any = {
             type: "orderSuccess",
             thumbnail: null,
             widgets: [OrderSuccessJson],
+        },
+        {
+            id: 8,
+            name: "myProfile",
+            label: "My Profile Page",
+            slug: "/my-profile",
+            title: "My Profile Page",
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "my-profile",
+            thumbnail: null,
+            widgets: [MyProfileJson],
+        },
+        {
+            id: 9,
+            name: "myOrders",
+            label: "My Orders Page",
+            slug: "/my-orders",
+            title: "My Orders Page",
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "my-orders",
+            thumbnail: null,
+            widgets: [MyOrdersJson],
+        },
+        {
+            id: 10,
+            name: "trackOrders",
+            label: "Track Orders Page",
+            slug: "/track-orders",
+            title: "track Orders Page",
+            layout: AppLayoutJson,
+            is_active: 1,
+            type: "track-orders",
+            thumbnail: null,
+            widgets: [TrackOrdersJson],
         },
     ],
 };

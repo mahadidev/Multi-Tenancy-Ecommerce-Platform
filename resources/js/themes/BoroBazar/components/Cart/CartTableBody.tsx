@@ -1,18 +1,12 @@
 import { CartItemType } from "@type/cartType";
+import { Badge } from "flowbite-react";
 import { FC } from "react";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { FaTimes } from "react-icons/fa";
-import useCart from "../../hooks/useCart";
-import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
 const CartTableBody: FC<{ cartProduct: CartItemType }> = ({ cartProduct }) => {
     // destructure product data
     const { name, image } = cartProduct?.product;
 
-    const { deleteCartItem, updateCartItem, isLoadingCart } = useCart();
-
     return (
         <>
-            <LoadingOverlay isLoading={isLoadingCart} />
             <tr className="border">
                 <td className="p-2 mx-auto !w-[350px]">
                     <div className="flex items-center justify-start gap-5">
@@ -29,44 +23,21 @@ const CartTableBody: FC<{ cartProduct: CartItemType }> = ({ cartProduct }) => {
                 </td>
                 <td className="p-2 text-center">
                     <div className="flex items-center justify-center">
-                        <button
-                            className="px-4 py-3 border bg-gray-200 hover:bg-gray-300 hover:duration-300 rounded-l-md"
-                            onClick={() =>
-                                updateCartItem(
-                                    cartProduct?.id,
-                                    cartProduct?.qty - 1
-                                )
-                            }
-                            disabled={cartProduct?.qty === 1}
-                        >
-                            <AiOutlineMinus />
-                        </button>
                         <span className="w-12 text-center border-none bg-gray-200 outline-none py-[9px]">
                             {cartProduct.qty}
                         </span>
-                        <button
-                            className="px-4 py-3 border bg-gray-200 hover:bg-gray-300 hover:duration-300 rounded-r-md"
-                            onClick={() =>
-                                updateCartItem(
-                                    cartProduct?.id,
-                                    cartProduct?.qty + 1
-                                )
-                            }
-                        >
-                            <AiOutlinePlus />
-                        </button>
                     </div>
+                </td>
+                <td className="p-2 text-center">
+                    <Badge
+                        className="w-[120px] mx-auto !text-center"
+                        color="success"
+                    >
+                        Completed
+                    </Badge>
                 </td>
                 <td className="p-2 text-center font-semibold">
                     ৳ {(cartProduct?.total).toFixed(2)}
-                </td>
-                <td className="p-2 text-center">
-                    <button
-                        onClick={() => deleteCartItem(cartProduct?.id)}
-                        className="bg-red-500 !text-white p-1 rounded-md"
-                    >
-                        <FaTimes />
-                    </button>
                 </td>
             </tr>{" "}
         </>

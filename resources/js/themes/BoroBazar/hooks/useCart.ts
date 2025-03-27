@@ -12,7 +12,7 @@ const useCart = () => {
     const [isLoadingCart, setLoadingCart] = useState(false);
 
     const navigate = useNavigate();
-    const authToken = "3|HWgJ2Ds5o1UExu6gAugrCuYQlscbJaQWwkKvGGSbd9607c74"; // Replace with actual token
+    const authToken = "2|0qN1KYrdyhhobPcO2qE3Y1GACDxd6e609R5Ih6RI4c7cabf4"; // Replace with actual token
     const BASE_URL = "http://127.0.0.1:8000/api/v1";
 
     const fetchCartItems = async () => {
