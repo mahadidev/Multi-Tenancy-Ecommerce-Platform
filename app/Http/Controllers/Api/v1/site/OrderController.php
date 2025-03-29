@@ -209,4 +209,27 @@ class OrderController extends Controller
 
         return $pdf->download("Order-{$order->uuid}.pdf");
     }
+
+    public function trackOrder($id)
+    {
+        // Find the order for the authenticated user
+        $order = Order::where('user_id', auth()->id())->find($id);
+    
+        // Check if the order exists
+        if (!$order) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Order not found or invalid ID.',
+            ], 404); // Return a 404 HTTP status code
+        }
+    
+        // Return the order status
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'order_status' => $order->status, // Changed key to snake_case for consistency
+            ],
+        ]);
+    }
+    
 }
