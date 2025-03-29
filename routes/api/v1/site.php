@@ -17,7 +17,7 @@ Route::group(['middleware' => ['auth:sanctum' , 'verified']], function () {
     // order route
     Route::post('/place-order', [OrderController::class, 'placeOrder']);
     Route::resource('/orders', OrderController::class);
-    Route::get('track-order/{id}', [OrderController::class, 'trackOrder']);
+    Route::post('track-order', [OrderController::class, 'trackOrder']);
 
     // product reviews route resource
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);

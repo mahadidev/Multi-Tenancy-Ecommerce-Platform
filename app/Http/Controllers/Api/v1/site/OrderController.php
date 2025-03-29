@@ -210,10 +210,14 @@ class OrderController extends Controller
         return $pdf->download("Order-{$order->uuid}.pdf");
     }
 
-    public function trackOrder($id)
+    public function trackOrder(Request $request)
     {
+        $request->validate([
+            'uuid' => 'required'
+        ]);
+
         // Find the order for the authenticated user
-        $order = Order::where('user_id', auth()->id())->find($id);
+        $order = Order::where('uuid', $request->uuid)->first();
     
         // Check if the order exists
         if (!$order) {
