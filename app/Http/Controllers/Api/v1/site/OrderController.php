@@ -231,7 +231,7 @@ class OrderController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'order_status' => $order->status, // Changed key to snake_case for consistency
+                'order' => OrderResource::make($order), // Changed key to snake_case for consistency
             ],
         ]);
     }
