@@ -147,6 +147,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Store API Credential Routes
     Route::resource('store-api-credential', StoreApiCredentialController::class);
+    Route::get('store-api-credential/check/steadfast', [StoreApiCredentialController::class, 'checkSteadfastApiCredential']);
 
 });
 

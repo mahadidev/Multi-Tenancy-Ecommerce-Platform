@@ -148,4 +148,23 @@ class StoreApiCredentialController extends Controller
             'message' => 'Store API credential deleted successfully'
         ], 200);
     }
+
+    public function checkSteadfastApiCredential(Request $request){
+        $store = getStore();
+        
+        if(!$store->steadfastApi){
+            return response()->json([
+                'status' => 404,
+                'message' => 'Steadfast Api not found!'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'steadfast' => StoreApiCredentialResource::make($store->steadfastApi)
+            ]
+        ]);
+
+    }
 }
