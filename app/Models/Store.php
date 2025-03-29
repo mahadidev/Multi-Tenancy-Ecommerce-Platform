@@ -269,9 +269,7 @@ class Store extends Model
 
     public function steadfastApi()
     {
-        return $this->hasOne(StoreApiCredential::class);
+        return $this->hasOne(StoreApiCredential::class, 'store_id')->where('provider', 'steadfast');
     }
 
-
-    
 }

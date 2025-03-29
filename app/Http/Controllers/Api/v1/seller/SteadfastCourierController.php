@@ -13,6 +13,15 @@ class SteadfastCourierController extends Controller
 {
     public function placeOrder(Request $request)
     {
+        $store = getStore();
+        
+        if(!$store->steadfastApi){
+            return response()->json([
+                'status' => 403,
+                'message' => 'Steadfast Api not found!'
+            ]);
+        }
+
         // Validate incoming request data
         $validatedData = $request->validate([
             'orders' => 'required|array',
