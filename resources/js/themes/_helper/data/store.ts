@@ -12,7 +12,7 @@ export const dummyStore: StoreType | any = {
     type: null,
     description: null,
     currency: "BDT",
-    logo: "http://chologori-builder.test/storage/seeders/stores/goddybro-logo.png",
+    logo: "http://chologori-builder.test/storage/seeders/stores/goodybro.png",
     dark_logo: null,
     primary_color: "#ffc100",
     featured_products: [

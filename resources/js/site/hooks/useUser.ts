@@ -3,13 +3,17 @@ import { useAppSelector } from '@site/store/store';
 
 const useUser = () => {
 	// select state
-	const { userProfileData } = useAppSelector((state) => state.auth);
+	const { userProfileData, user, accessToken } = useAppSelector(
+		(state) => state.auth
+	);
 
 	// fetch profile
 	useFetchUserProfileQuery();
 
 	return {
 		userProfileData,
+		user,
+		accessToken,
 	};
 };
 export default useUser;

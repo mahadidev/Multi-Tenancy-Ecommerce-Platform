@@ -14,8 +14,7 @@ import NavigationJson from "./layouts/navigation/Navigation.json";
 // import widget json
 import { RegisteredThemeType } from "@themes/registeredTheme";
 import HeroJson from "./widgets/hero/Hero.json";
-import IntroductionJson from "./widgets/introduction/Introduction.json";
-import OfferSectionJson from "./widgets/offerSection/OfferSection.json";
+import LoginFormjson from './widgets/loginForm/LoginForm.json';
 
 export const Simfy: RegisteredThemeType = {
     name: "Simfy",
@@ -24,23 +23,35 @@ export const Simfy: RegisteredThemeType = {
 };
 
 export const SimfySeeder: ThemeType | any = {
-    id: 1,
-    name: Simfy.name,
-    slug: Simfy.name.toLowerCase().replaceAll(" ", "-"),
-    thumbnail: null,
-    widgets: [AppLayoutJson, NavigationJson, FooterJson, OfferSectionJson],
-    pages: [
-        {
-            id: 0,
-            name: "home",
-            label: "Home",
-            slug: "/",
-            title: "Home Page",
-            layout: AppLayoutJson,
-            is_active: 1,
-            type: "home",
-            thumbnail: null,
-            widgets: [HeroJson, IntroductionJson, OfferSectionJson],
-        },
-    ],
+	id: 1,
+	name: Simfy.name,
+	slug: Simfy.name.toLowerCase().replaceAll(' ', '-'),
+	thumbnail: null,
+	widgets: [AppLayoutJson, NavigationJson, FooterJson],
+	pages: [
+		{
+			id: 1,
+			name: 'home',
+			label: 'Home',
+			slug: '/',
+			title: 'Home Page',
+			layout: AppLayoutJson,
+			is_active: 1,
+			type: 'home',
+			thumbnail: null,
+			widgets: [HeroJson],
+		},
+		{
+			id: 2,
+			name: 'login',
+			label: 'Login',
+			slug: '/login',
+			title: 'Login Page',
+			layout: AppLayoutJson,
+			is_active: 1,
+			type: 'login',
+			thumbnail: null,
+			widgets: [LoginFormjson],
+		},
+	],
 };

@@ -49,6 +49,6 @@ Route::prefix("/themes")->group(function () {
 });
 
 
-Route::get('success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
-Route::get('cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
-Route::post('webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');
+Route::get('/success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
+Route::get('/cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
+Route::post('/webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');

@@ -16,11 +16,15 @@ const Page: FC<PageType> = function (page) {
 					return widgetA.serial - widgetB.serial;
 				})
 				.map((widget) => (
-					<>{store && store.theme && registeredTheme[store.theme.name]?.widget({
-                        widget: widget,
-                        store: store,
-                        hooks: hooks
-                    })}</>
+					<>
+						{store &&
+							store.theme &&
+							registeredTheme[store.theme.name]?.widget({
+								widget: widget,
+								store: store,
+								hooks: hooks,
+							})}
+					</>
 				))}
 		</>
 	);

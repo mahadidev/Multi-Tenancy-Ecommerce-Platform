@@ -139,10 +139,10 @@ class ThemeSeeder extends Seeder
                     $newThemePage = ThemePage::updateOrCreate(
                         [
                             'slug' => $page->slug, // Assuming these two fields should uniquely identify a page
-                            'theme_id' => $newTheme->id,
-                            "layout_id" => $page->layout_id
+                            'theme_id' => $newTheme->id
                         ],
                         [
+                            "layout_id" => $page->layout_id,
                             'name' => $page->name,
                             'label' => $page->label,
                             'type' => $page->type,

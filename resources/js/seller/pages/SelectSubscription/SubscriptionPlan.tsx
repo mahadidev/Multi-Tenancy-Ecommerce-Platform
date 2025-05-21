@@ -9,7 +9,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 const SubscriptionPlan: FC<{ plan: SubscriptionType }> = ({ plan }) => {
     const { subscribePlan } = usePlans();
     const { store } = useStore();
-    console.log(store?.store_subscription_plan?.package?.name === plan?.name);
+
     return (
         <div className="dark:bg-gray-800 bg-gray-100 flex flex-col p-5 rounded-xl shadow-md relative">
             {plan?.is_trend ? (

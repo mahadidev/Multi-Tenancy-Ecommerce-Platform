@@ -1,10 +1,10 @@
 import useAuth from "./useAuth";
-import useUser from "./useUser";
 
 const useHook = () => {
 	return {
 		useAuth: useAuth,
-		useUser: useUser,
+		// useUser: useUser,
+        // useCart: useCart,
 	};
 };
 export default useHook;

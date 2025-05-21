@@ -37,12 +37,12 @@ import NotificationsPage from "./NotificationsPage/NotificationsPage";
 import CreateOrderPage from "./OrdersPage/CreateOrder/CreateOrderPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
 import SelectSubscriptionPage from "./SelectSubscription/SelectSubscriptionPage";
+import SubscriptionCancelledPage from "./SelectSubscription/SubscriptionCancelledPage";
 import SubscriptionFailedPage from "./SelectSubscription/SubscriptionFailedPage";
 import SubscriptionSuccessPage from "./SelectSubscription/SubscriptionSuccessPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
-import SubscriptionCancelledPage from "./SelectSubscription/SubscriptionCancelledPage";
 
 // routes
 export const PagesRoute: FC = function () {
@@ -179,7 +179,7 @@ export const PagesRoute: FC = function () {
                     <Route path="/" element={<SubscriptionMiddleware />}>
                         <Route path="/" element={<SubscriptionLayout />}>
                             <Route
-                                path="select-subscriptions"
+                                path="/select-subscriptions"
                                 element={<SelectSubscriptionPage />}
                             />
                             <Route

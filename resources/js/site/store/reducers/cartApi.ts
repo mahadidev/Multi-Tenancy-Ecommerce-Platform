@@ -5,28 +5,19 @@ import { baseQuery, createRequest } from '../baseQueryWithReAuth';
 export const cartApi = createApi({
 	reducerPath: 'cartApi',
 	baseQuery: baseQuery,
-	tagTypes: [
-		'User',
-		'LoggedInUser',
-		'UserProfileUpdate',
-		'UserUpdatePassword',
-		'PasswordForgotRequest',
-		'PasswordReset',
-		'DashboardAnalytics',
-	],
+	tagTypes: ['Cart'],
 	endpoints: (builder) => ({
-		login: builder.mutation<any, any>({
-			query: (formData: any) =>
+		fetchCart: builder.query<any, void>({
+			query: () =>
 				createRequest({
 					url: `${USER_PREFIX}/login`,
-					method: 'post',
-					body: formData,
+					method: 'GET',
 				}),
-			invalidatesTags: ['User'],
+			providesTags: ['Cart'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
 	}),
 });
 
-export const { useLoginMutation } =
+export const { useFetchCartQuery } =
 	cartApi;

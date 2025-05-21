@@ -10,42 +10,62 @@ export interface SubscribePayloadType {
     amount: string;
 }
 
-export const subscriptionPlanApi = createApi({
-    reducerPath: "subscriptionPlansApi",
-    baseQuery: baseQuery,
-    tagTypes: ["Subscription"],
-    endpoints: (builder) => ({
-        fetchPlans: builder.query<SubscriptionPlansApiResponseType, void>({
-            query: (formData) =>
-                createRequest({
-                    url: `/subscription-plans`,
-                    method: "get",
-                    body: formData,
-                }),
-            providesTags: ["Subscription"],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setPlans(response?.data?.data?.subscriptions));
-                });
-            },
-        }),
+export interface SubscribeSuccessPayloadType {
+	invoice_id: string;
+}
 
-        subscribePlan: builder.mutation<ApiResponseType, SubscribePayloadType>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/package-subscription`,
-                    method: "post",
-                    body: formData,
-                }),
-            invalidatesTags: ["Subscription"],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { queryFulfilled }) {
-                await queryFulfilled.then();
-            },
-        }),
-    }),
+export const subscriptionPlanApi = createApi({
+	reducerPath: 'subscriptionPlansApi',
+	baseQuery: baseQuery,
+	tagTypes: ['Subscription'],
+	endpoints: (builder) => ({
+		fetchPlans: builder.query<SubscriptionPlansApiResponseType, void>({
+			query: (formData) =>
+				createRequest({
+					url: `/subscription-plans`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Subscription'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setPlans(response?.data?.data?.subscriptions));
+				});
+			},
+		}),
+
+		subscribePlan: builder.mutation<ApiResponseType, SubscribePayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/package-subscription`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Subscription'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { queryFulfilled }) {
+				await queryFulfilled.then();
+			},
+		}),
+		subscribeVerify: builder.mutation<
+			ApiResponseType,
+			SubscribeSuccessPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/package-subscription-verify`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Subscription'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { queryFulfilled }) {
+				await queryFulfilled.then();
+			},
+		}),
+	}),
 });
 
-export const { useFetchPlansQuery, useSubscribePlanMutation } =
+export const { useFetchPlansQuery, useSubscribePlanMutation, useSubscribeVerifyMutation } =
     subscriptionPlanApi;

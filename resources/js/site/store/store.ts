@@ -6,6 +6,7 @@ import { authApi } from './reducers/authApi';
 import { storeApi } from './reducers/storeApi';
 import { userApi } from "./reducers/userApi";
 import authSlice from './slices/authSlice';
+import cartSlice from './slices/cartSlice';
 import storeSlice from './slices/storeSlice';
 
 const authPersistConfig = {
@@ -20,6 +21,7 @@ const persistedReducer = persistReducer(
 	combineReducers({
 		store: storeSlice,
 		auth: authSlice,
+        cart: cartSlice,
 		[storeApi.reducerPath]: storeApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
 		[userApi.reducerPath]: userApi.reducer

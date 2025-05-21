@@ -3,13 +3,13 @@ import { CartItemType } from '@type/cartType';
 
 
 const initialState: {
-	cartItems: CartItemType[] | null;
-	totalCartQty: number;
-	totalCartPrice: number;
+	items: CartItemType[] | null;
+	qty: number;
+	price: number;
 } = {
-	cartItems: null,
-	totalCartQty: 0,
-	totalCartPrice: 0,
+	items: null,
+	qty: 0,
+	price: 0,
 };
 
 const cartSlice = createSlice({
@@ -19,22 +19,22 @@ const cartSlice = createSlice({
 		setCart: (
 			state,
 			action: PayloadAction<{
-				cartItems: CartItemType[];
-				totalCartQty: number;
-				totalCartPrice: number;
+				items: CartItemType[];
+				qty: number;
+				price: number;
 			}>
 		) => {
-			state.cartItems = action.payload.cartItems;
-			state.totalCartQty = action.payload.totalCartQty;
-			state.totalCartPrice = action.payload.totalCartPrice;
+			state.items = action.payload.items;
+			state.qty = action.payload.qty;
+			state.price = action.payload.price;
 		},
-		setCartItems: (state, action: PayloadAction<CartItemType[]>) => {
-			state.cartItems = action.payload;
+		setItems: (state, action: PayloadAction<CartItemType[]>) => {
+			state.items = action.payload;
 		},
 		clearCart: (state) => {
-			state.cartItems = null;
+			state.items = null;
 		},
 	},
 });
-export const { setCart, setCartItems, clearCart } = cartSlice.actions;
+export const { setCart, setItems, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -2,6 +2,7 @@ import { Card } from "flowbite-react";
 import { FC } from "react";
 import Confetti from "react-confetti";
 import { FaCheckCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 const SubscriptionSuccessPage: FC = () => {
@@ -22,9 +23,9 @@ const SubscriptionSuccessPage: FC = () => {
                         Explore your premium subscription and stay connected
                         with us{" "}
                     </p>
-                    <button className="dark:bg-white dark:text-black px-4 py-2 rounded-lg text-sm font-medium">
+                    <Link to="/" className="dark:bg-white dark:text-black px-4 py-2 rounded-lg text-sm font-medium">
                         Your dashboard
-                    </button>
+                    </Link>
                 </div>
             </Card>
         </div>

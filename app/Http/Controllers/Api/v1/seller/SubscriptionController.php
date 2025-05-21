@@ -131,7 +131,7 @@ class SubscriptionController extends Controller
                 return redirect()->to(url('seller/subscription-failed'));
             }
 
-          
+
         } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
             Log::info(['message' => 'Verification Error: ' . $e->getMessage()]);
             return redirect()->to(url('seller/subscription-cancelled'));

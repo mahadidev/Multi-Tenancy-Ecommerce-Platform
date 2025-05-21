@@ -52,7 +52,7 @@ class PagesRelationManager extends RelationManager
                     ->columnSpanFull(),
 
                 Forms\Components\Repeater::make('widgets')
-                    ->relationship('page_widgets')
+                    ->relationship('widgets')
                     ->schema([
                         Forms\Components\TextInput::make('name')->label('Name')->placeholder('e.g. heroSection')->required()->hint('e.g., Header, Navbar, Contact Form'),
                         Forms\Components\TextInput::make('label')->label('Label')->placeholder('e.g. Hero Section')->required(),

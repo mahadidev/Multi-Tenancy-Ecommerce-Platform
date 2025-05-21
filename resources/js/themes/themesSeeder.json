@@ -32,121 +32,11 @@
         "label": "Footer",
         "type": "partial",
         "inputs": []
-      },
-      {
-        "id": 1,
-        "name": "offersSection",
-        "label": "Offers Section",
-        "serial": 1,
-        "type": "section",
-        "inputs": [
-          {
-            "id": 1,
-            "name": "title",
-            "label": "Title",
-            "type": "text",
-            "value": "YOUR_WIDGET_TITLE",
-            "placeholder": "Enter title"
-          },
-          {
-            "id": 2,
-            "name": "offers",
-            "label": "offers",
-            "type": "array",
-            "child": [
-              {
-                "id": 1,
-                "name": "title",
-                "label": "Title",
-                "type": "text",
-                "value": "Offer title 1",
-                "placeholder": "Enter title"
-              },
-              {
-                "id": 1,
-                "name": "description",
-                "label": "Description",
-                "type": "textarea",
-                "value": "Offer description 1",
-                "placeholder": "Enter offer description"
-              },
-              {
-                "id": 1,
-                "name": "icon",
-                "label": "Icon",
-                "type": "icon",
-                "value": "<svg></svg>"
-              }
-            ]
-          },
-          {
-            "id": 3,
-            "name": "offers",
-            "label": "offers",
-            "type": "array",
-            "child": [
-              {
-                "id": 1,
-                "name": "title",
-                "label": "Title",
-                "type": "text",
-                "value": "Offer title 2",
-                "placeholder": "Enter title"
-              },
-              {
-                "id": 1,
-                "name": "description",
-                "label": "Description",
-                "type": "textarea",
-                "value": "Offer description 2",
-                "placeholder": "Enter offer description"
-              },
-              {
-                "id": 1,
-                "name": "icon",
-                "label": "Icon",
-                "type": "icon",
-                "value": "<svg></svg>"
-              }
-            ]
-          },
-          {
-            "id": 3,
-            "name": "offers",
-            "label": "offers",
-            "type": "array",
-            "child": [
-              {
-                "id": 1,
-                "name": "title",
-                "label": "Title",
-                "type": "text",
-                "value": "Offer title 3",
-                "placeholder": "Enter title"
-              },
-              {
-                "id": 1,
-                "name": "description",
-                "label": "Description",
-                "type": "textarea",
-                "value": "Offer description 3",
-                "placeholder": "Enter offer description"
-              },
-              {
-                "id": 1,
-                "name": "icon",
-                "label": "Icon",
-                "type": "icon",
-                "value": "<svg></svg>"
-              }
-            ]
-          }
-        ]
       }
     ],
     "pages": [
       {
-        "id": 0,
+        "id": 1,
         "name": "home",
         "label": "Home",
         "slug": "/",
@@ -177,142 +67,33 @@
                 "value": "YOUR_WIDGET_TITLE"
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "login",
+        "label": "Login",
+        "slug": "/login",
+        "title": "Login Page",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "login",
+        "thumbnail": null,
+        "widgets": [
           {
             "id": 1,
-            "name": "introduction",
-            "label": "Introduction",
-            "serial": 2,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "aboutUs",
-                "label": "About Us",
-                "type": "textarea",
-                "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
-                "placeholder": "Enter Company Introduction",
-                "required": true
-              },
-              {
-                "id": 1,
-                "name": "groupPhoto",
-                "label": "Group Photo",
-                "type": "image",
-                "value": "https://placehold.co/400",
-                "placeholder": "Group Photo"
-              }
-            ]
-          },
-          {
-            "id": 1,
-            "name": "offersSection",
-            "label": "Offers Section",
+            "name": "loginForm",
+            "label": "Login Form",
             "serial": 1,
             "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "title",
-                "label": "Title",
-                "type": "text",
-                "value": "YOUR_WIDGET_TITLE",
-                "placeholder": "Enter title"
-              },
-              {
-                "id": 2,
-                "name": "offers",
-                "label": "offers",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 1",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Offer description 1",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              },
-              {
-                "id": 3,
-                "name": "offers",
-                "label": "offers",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 2",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Offer description 2",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              },
-              {
-                "id": 3,
-                "name": "offers",
-                "label": "offers",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 3",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Offer description 3",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              }
-            ]
+            "inputs": []
           }
         ]
       }
