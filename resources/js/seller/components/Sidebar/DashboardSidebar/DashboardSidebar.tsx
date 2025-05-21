@@ -288,6 +288,10 @@ const pages: SidebarItem[] = [
                 href: RoutePath.OrdersPage.index(),
                 label: "Orders",
             },
+            {
+                href: RoutePath.ShipmentOrdersPage.index(),
+                label: "Shipment Orders",
+            },
         ],
     },
     {

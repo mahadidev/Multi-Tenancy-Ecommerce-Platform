@@ -1,8 +1,9 @@
 import { MenuItemType, MenuType } from "@type/menuType";
 import { ThemeLayoutPropsType } from "@type/themeType";
-import { Navbar } from "flowbite-react";
+import { MegaMenuDropdown, Navbar } from "flowbite-react";
 import { useAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
+import { FaUser } from "react-icons/fa";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -130,6 +131,42 @@ const Navigation: FC<ThemeLayoutPropsType> = ({ store }) => {
                                 )}
                             </>
                         ))}
+                        <MegaMenuDropdown
+                            toggle={
+                                <>
+                                    <FaUser /> My Profile
+                                </>
+                            }
+                        >
+                            <ul className="grid">
+                                <div className="space-y-4 p-2">
+                                    <li>
+                                        <Link
+                                            to="/my-profile"
+                                            className="hover:text-primary-600 dark:hover:text-primary-500"
+                                        >
+                                            My profile
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to="/my-orders/"
+                                            className="hover:text-primary-600 dark:hover:text-primary-500"
+                                        >
+                                            My orders
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to="/track-orders"
+                                            className="hover:text-primary-600 dark:hover:text-primary-500"
+                                        >
+                                            Track order
+                                        </Link>
+                                    </li>
+                                </div>
+                            </ul>
+                        </MegaMenuDropdown>
                         <Navbar.Toggle />
                     </div>
                 </Navbar>

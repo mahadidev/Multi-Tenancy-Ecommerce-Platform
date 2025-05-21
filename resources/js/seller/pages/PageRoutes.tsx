@@ -40,6 +40,7 @@ import SelectSubscriptionPage from "./SelectSubscription/SelectSubscriptionPage"
 import SubscriptionCancelledPage from "./SelectSubscription/SubscriptionCancelledPage";
 import SubscriptionFailedPage from "./SelectSubscription/SubscriptionFailedPage";
 import SubscriptionSuccessPage from "./SelectSubscription/SubscriptionSuccessPage";
+import ShipmentOrdersPage from "./ShipmentPage/OrdersShipmentPage";
 import StoreAdminPage from "./StoreAdminPage/StoreAdminPage";
 import CreateStorePage from "./StoresPage/CreateStorePage";
 import StoresPage from "./StoresPage/StoresPage";
@@ -56,6 +57,10 @@ export const PagesRoute: FC = function () {
                             <Route path="/" element={<DashboardPage />} />
                             {/* Orders Pages */}
                             <Route path="/orders" element={<OrdersPage />} />
+                            <Route
+                                path="/shipment-orders"
+                                element={<ShipmentOrdersPage />}
+                            />
                             {/* Orders Pages */}
                             <Route
                                 path="/customers"

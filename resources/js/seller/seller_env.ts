@@ -45,6 +45,9 @@ export const RoutePath = {
     OrdersPage: {
         index: () => "/orders",
     },
+    ShipmentOrdersPage: {
+        index: () => "/shipment-orders",
+    },
     CustomersPage: {
         index: () => "/customers",
     },

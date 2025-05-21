@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
 
+
 class Store extends Model
 {
     use SoftDeletes, HasFactory;
@@ -261,5 +262,14 @@ class Store extends Model
         }
     }
 
-    
+    public function storeShipment()
+    {
+        return $this->hasMany(StoreShipment::class, 'store_id');
+    }
+
+    public function steadfastApi()
+    {
+        return $this->hasOne(StoreApiCredential::class, 'store_id')->where('provider', 'steadfast');
+    }
+
 }

@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "name": "orderSuccess",
+    "label": "Order Success",
+    "serial": 1,
+    "type": "section",
+    "inputs": []
+}
