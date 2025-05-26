@@ -68,7 +68,7 @@ const BarcodeGenerator: FC<{ product: ProductType }> = ({ product }) => {
 									margin: 0,
 								}}
 							>
-								<p className="w-full text-end" style={{ fontSize: '10px' }}>{product.sku}</p>
+								<p className="w-full text-center" style={{ fontSize: '10px' }}>{product.sku}</p>
 								<svg
 									ref={barcodeRef}
 									style={{ visibility: isSvgReady ? 'visible' : 'hidden' }}
