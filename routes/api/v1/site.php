@@ -21,7 +21,6 @@ Route::group(['middleware' => ['auth:sanctum' , 'verified']], function () {
 
     // product reviews route resource
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
-    
 });
 
 
