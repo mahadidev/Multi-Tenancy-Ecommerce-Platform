@@ -1,5 +1,5 @@
 import { Label, TextInput as TextInputFR } from 'flowbite-react';
-import { ChangeEventHandler, FC, InputHTMLAttributes, useEffect } from 'react';
+import { ChangeEventHandler, FC, InputHTMLAttributes } from 'react';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	name: string;

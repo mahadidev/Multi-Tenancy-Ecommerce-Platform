@@ -1,6 +1,5 @@
 import { RoutePath } from "@seller/seller_env";
 import { Breadcrumb } from "flowbite-react";
-import { access } from "fs";
 import { FC } from "react";
 import { HiHome } from "react-icons/hi";
 

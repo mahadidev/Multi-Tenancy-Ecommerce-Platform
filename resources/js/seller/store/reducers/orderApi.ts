@@ -88,7 +88,7 @@ export const orderApi = createApi({
 				}),
 			invalidatesTags: ['Orders'],
 			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+			async onQueryStarted(_queryArgument, {  queryFulfilled }) {
 				await queryFulfilled.then(() => {
 					// dispatch(clearCartItems());
 				});

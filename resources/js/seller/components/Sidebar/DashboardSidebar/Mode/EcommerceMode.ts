@@ -1,6 +1,6 @@
-import { FaBlogger, FaLayerGroup, FaPaintBrush, FaUsers } from 'react-icons/fa';
+import { FaLayerGroup, FaUsers } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
-import { MdCollectionsBookmark, MdDeliveryDining } from 'react-icons/md';
+import { MdDeliveryDining } from 'react-icons/md';
 
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
