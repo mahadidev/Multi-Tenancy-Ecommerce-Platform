@@ -93,13 +93,17 @@ class SubscriptionController extends Controller
         $storeId = $request->input('store_id');
 
         try {
-
             $response = $this->uddoktapay->verify($request);
             $store = Store::where(["id" => $storeId])->first();
             $responseData = $response->toArray();
-            $payment = Payment::where(["transaction_id" => $responseData["metadata"]["transaction_id"]])->orWhere(["invoice_id" => $responseData["invoice_id"]])->first();
+            $payment = Payment::where(["transaction_id" => $responseData["metadata"]["transaction_id"]])
+                ->orWhere(["invoice_id" => $responseData["invoice_id"]])
+                ->first();
 
             $package = Subscription::find($payment->payable_id);
+
+            // Convert trial_days to integer
+            $trialDays = (int) $package->trial_days;
 
             if ($response->success() || $response->pending()) {
                 if ($payment) {
@@ -112,16 +116,13 @@ class SubscriptionController extends Controller
                     $store->storeSubscription()->update([
                         'subscription_id' => $package->id,
                         'start_date' => now(),
-                        'end_date' => now()->addDays($package->trial_days),
+                        'end_date' => now()->addDays($trialDays), // Using converted integer value
                         'is_active' => true,
                     ]);
                 }
 
-
                 return redirect()->to(url('seller/subscription-success'));
-
             } else {
-
                 if ($payment) {
                     $payment->update([
                         'transaction_id' => $responseData['transaction_id'],
@@ -130,15 +131,11 @@ class SubscriptionController extends Controller
                     ]);
                 }
 
-                // Payment verification failed.
                 return redirect()->to(url('seller/subscription-failed'));
             }
-
-
         } catch (\UddoktaPay\LaravelSDK\Exceptions\UddoktaPayException $e) {
             Log::info(['message' => 'Verification Error: ' . $e->getMessage()]);
             return redirect()->to(url('seller/subscription-cancelled'));
-
         }
     }
 
