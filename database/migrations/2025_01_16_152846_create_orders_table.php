@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -26,6 +25,7 @@ return new class extends Migration
             $table->double('discount')->default(0);
             $table->double('vat')->default(0);
             $table->string('status')->default('pending');
+            $table->boolean('is_shipped')->default(false); // Removed after() clause
             $table->boolean('is_approved')->default(false);
             $table->boolean('is_closed')->default(false);
             $table->text('notes')->nullable();
@@ -34,7 +34,6 @@ return new class extends Migration
             $table->string('reason')->nullable();
             $table->boolean('is_payed')->default(false);
             $table->string('payment_method')->default('cash');
-            $table->boolean('is_shipped')->default(false)->after('status');
             $table->timestamps();
         });
     }
