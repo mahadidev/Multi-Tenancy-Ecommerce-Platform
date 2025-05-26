@@ -72,6 +72,7 @@ const BarcodeGenerator: FC<{ product: ProductType }> = ({ product }) => {
 								<svg
 									ref={barcodeRef}
 									style={{ visibility: isSvgReady ? 'visible' : 'hidden' }}
+                                    className='max-w-full'
 								></svg>
 								<p className='w-full font-semibold text-center' style={{ fontSize: '10px' }}>Price - TK {product.price}</p>
 							</div>
