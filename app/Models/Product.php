@@ -32,6 +32,7 @@ class Product extends Model
         'discount_to',
         'discount_type',
         'discount_amount',
+        'tax'
     ];
 
     protected $casts = [
@@ -98,7 +99,7 @@ class Product extends Model
 
     public function getAttachmentsImageAttribute()
     {
-        $attachments = $this->attachments; 
+        $attachments = $this->attachments;
 
         if (is_array($attachments)) {
             return array_map(fn($path) => url(Storage::url($path)), $attachments);
@@ -129,7 +130,7 @@ class Product extends Model
                 } else if ($discountType === 'flat') {
                     $discountedPrice = $price - $discount;
                     return number_format($discountedPrice, 2, '.', '');
-                }   
+                }
             }
         }
 

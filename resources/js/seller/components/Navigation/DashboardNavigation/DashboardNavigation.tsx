@@ -107,7 +107,7 @@ export function DashboardNavigation() {
                                 <HiSearch className="h-6 w-6" />
                             </button>
                             <NotificationBellDropdown />
-                            <AppDrawerDropdown />
+                            {/* <AppDrawerDropdown /> */}
                             <div className="hidden dark:block">
                                 <Tooltip content="Toggle light mode">
                                     <DarkThemeToggle />
@@ -122,9 +122,9 @@ export function DashboardNavigation() {
                             <div className="ml-3 flex items-center">
                                 <UserDropdown />
                             </div>
-                            <div>
+                            {/* <div>
                                 <StoresDropdown />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

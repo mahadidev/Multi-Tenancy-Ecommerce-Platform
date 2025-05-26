@@ -185,7 +185,6 @@ const BlogEditPage: React.FC = () => {
                                 <QuillRichTextEditor
                                     content={formState["content"]}
                                     onChangeContent={(value: string) => {
-                                        // @ts-ignore
                                         setFormState((prev: any) => ({
                                             ...prev,
                                             content: value,

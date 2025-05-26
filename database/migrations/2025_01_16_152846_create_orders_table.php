@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('reason')->nullable();
             $table->boolean('is_payed')->default(false);
             $table->string('payment_method')->default('cash');
+            $table->boolean('is_shipped')->default(false)->after('status');
             $table->timestamps();
         });
     }

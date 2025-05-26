@@ -89,6 +89,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::resource('/product', ProductController::class);
     Route::get('/product/generate/pdf', [ProductController::class, 'pdf']);
     Route::get('/product/generate/excel', [ProductController::class, 'excel']);
+    Route::post("/product/{id}/barcode/generate", [ProductBarCodeController::class, "generate"]);
 
     // Product Review Route
     Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'destroy']);
@@ -118,6 +119,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Order Placement for a user
     Route::post('/place-order', [OrderController::class, 'placeOrder']);
+    Route::post('/place-order-non-user', [OrderController::class, 'placeOrderNonUser']);
 
     // Store Menus Routes
     Route::resource('store-menus', StoreMenuController::class);

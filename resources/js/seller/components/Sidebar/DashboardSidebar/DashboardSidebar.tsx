@@ -1,34 +1,19 @@
 import { GLOBAL_APP_URL } from "@helper/global_env";
 import useStore from "@seller/hooks/useStore";
-import { RoutePath } from "@seller/seller_env";
 import {
     setIsOpenMobile,
     setSidebarCollapsed,
 } from "@seller/store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "@seller/store/store";
+import { SidebarItemType } from "@type/sidebarType";
 import { Button, Sidebar, TextInput } from "flowbite-react";
-import type { ComponentProps, FC, HTMLAttributeAnchorTarget } from "react";
 import { useEffect, useState } from "react";
-import { FaBlogger, FaPaintBrush, FaUsers } from "react-icons/fa";
-import { HiChartPie, HiCog, HiSearch, HiShoppingBag } from "react-icons/hi";
-import {
-    MdAdminPanelSettings,
-    MdCollectionsBookmark,
-    MdOutlineAccessTimeFilled,
-} from "react-icons/md";
+import { HiSearch } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { useMode } from "./Mode/Mode";
 
-interface SidebarItem {
-    href?: string;
-    target?: HTMLAttributeAnchorTarget;
-    icon?: FC<ComponentProps<"svg">>;
-    label: string;
-    items?: SidebarItem[];
-    badge?: string;
-}
-
-interface SidebarItemProps extends SidebarItem {
+interface SidebarItemProps extends SidebarItemType {
     pathname: string;
 }
 
@@ -53,11 +38,9 @@ function DesktopSidebar() {
         dispatch(setSidebarCollapsed(value));
     }
     const [isPreview, setIsPreview] = useState(isCollapsed);
-
     useEffect(() => {
         if (isCollapsed) setIsPreview(false);
     }, [isCollapsed]);
-
     const preview = {
         enable() {
             if (!isCollapsed) return;
@@ -70,8 +53,8 @@ function DesktopSidebar() {
 
             setCollapsed(true);
         },
-    };
-
+    }
+    const { pages, externalPages } = useMode('e-commerce');
     return (
         <Sidebar
             onMouseEnter={preview.enable}
@@ -131,9 +114,8 @@ function MobileSidebar() {
     function close() {
         dispatch(setIsOpenMobile(false));
     }
-
+    const { pages, externalPages } = useMode('e-commerce');
     if (!isOpen) return null;
-
     return (
         <>
             <Sidebar
@@ -269,86 +251,3 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
         </div>
     );
 }
-
-const pages: SidebarItem[] = [
-    {
-        href: RoutePath.DashboardPage.index(),
-        icon: HiChartPie,
-        label: "Dashboard",
-    },
-    {
-        icon: HiShoppingBag,
-        label: "E-commerce",
-        items: [
-            { href: RoutePath.CategoriesPage.index(), label: "Category" },
-            { href: RoutePath.BrandsPage.index(), label: "Brand" },
-
-            { href: RoutePath.ProductsPage.index(), label: "Products" },
-            {
-                href: RoutePath.OrdersPage.index(),
-                label: "Orders",
-            },
-            {
-                href: RoutePath.ShipmentOrdersPage.index(),
-                label: "Shipment Orders",
-            },
-        ],
-    },
-    {
-        href: RoutePath.CustomersPage.index(),
-        icon: FaUsers,
-        label: "Customers",
-    },
-    {
-        icon: FaBlogger,
-        label: "Blogs",
-        items: [
-            { href: RoutePath.BlogsPage.categories(), label: "Category" },
-            { href: RoutePath.BlogsPage.index(), label: "Blogs" },
-        ],
-    },
-];
-
-const externalPages: SidebarItem[] = [
-    // {
-    //     href: RoutePath.StoresPage.index(),
-    //     icon: MdStore,
-    //     label: "Stores",
-    // },
-    {
-        href: RoutePath.StorePagesPage.index(),
-        icon: MdCollectionsBookmark,
-        label: "Pages",
-    },
-
-    {
-        icon: FaPaintBrush,
-        label: "Appearance",
-        items: [
-            { href: RoutePath.ThemesPage.index(), label: "Themes" },
-            { href: RoutePath.MenusPage.index(), label: "Menus" },
-            // { href: "/e-commerce/billing", label: "Billing" },
-            // { href: "/e-commerce/invoice", label: "Invoice" },
-        ],
-    },
-    {
-        href: RoutePath.StoreAdminPage.index(),
-        icon: MdAdminPanelSettings,
-        label: "Store Admin",
-    },
-    {
-        href: RoutePath.AccessManagementPage.index(),
-        icon: MdOutlineAccessTimeFilled,
-        label: "Access Management",
-    },
-    {
-        href: RoutePath.SettingsPage.index(),
-        icon: HiCog,
-        label: "Settings",
-    },
-    // {
-    // 	href: RouteRoutePath.help.index(),
-    // 	icon: HiSupport,
-    // 	label: 'Help',
-    // },
-];

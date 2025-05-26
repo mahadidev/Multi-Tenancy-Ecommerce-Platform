@@ -21,11 +21,11 @@ class OrderResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'address' => $this->address,
-            'user' => [
+            'user' => $this->user_id ? [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'email' => $this->user->email,
-            ],
+            ] : null,
             'store' => [
                 'id' => $this->store->id,
                 'name' => $this->store->name,

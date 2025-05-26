@@ -38,6 +38,7 @@ class ProductResource extends JsonResource
             'discount_type' => $this->discount_type,
             'discount_amount' => $this->discount_amount,
             'price' => $this->price,
+            'tax' => $this->tax,
             'discount_price' => $this->discount_price,
             'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
             'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),

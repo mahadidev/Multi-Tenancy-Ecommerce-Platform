@@ -22,7 +22,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort'); // Sort order, 
+        $sort = $request->input('sort'); // Sort order,
         $perPage = $request->input('per_page'); // Items per page,
 
         $orders = Order::currentStore()
@@ -195,6 +195,75 @@ class OrderController extends Controller
         }
     }
 
+    public static function placeOrderNonUser(Request $request){
+        // Validate the incoming request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'phone' => 'required',
+            'address' => 'required|string|max:2000',
+            'notes' => 'nullable|string|max:1000',
+            'status' => 'string|max:2000',
+            'payment_method' => 'required',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.variants.*.label' => "required|string",
+            'items.*.variants.*.value' => "required|string",
+            'items.*.variants.*.price' => "required|int",
+            'items.*.qty' => "required|int",
+            'items.*.discount' => 'required|int',
+        ]);
+
+        $storeID = authStore();
+
+        // create order
+        $order = Order::create([
+            'uuid' => Str::uuid(),
+            'user_id' => null,
+            'store_id' => $storeID,
+            'name' => $request->name,
+            'phone' =>  $request->phone,
+            'email' => $request->email ?? null,
+            'address' => $request->address,
+            'notes' => $request->note ?? "",
+            'payment_method' => $request->payment_method,
+            'total' => 0,
+            'status' => $request->status,
+        ]);
+
+        foreach($request->items as $item){
+            $product = Product::where(["id" => $item["product_id"]])->first();
+            $product_price = $product->price;
+            foreach($item["variants"] as $variant){
+                $product_price = $product_price + $variant["price"];
+            }
+
+            $price = $item["qty"] * $product_price;
+            $discount = $item["discount"];
+            $discountedPrice = $price - ($price * ($discount / 100));
+
+
+            $order_item = OrderItem::create([
+                'order_id' => $order->id,
+                'user_id' => null,
+                'product_id' => $product->id,
+                'store_id' => $storeID,
+                'item' => $product->name,
+                'qty' => $item['qty'],
+                'price' => $product_price - ($product_price * ($discount / 100)),
+                'total' => $discountedPrice,
+                'shop_id' => $product->shop_id,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Order placed successfully',
+            'data' => [
+                'order' => new OrderResource($order->load('items')),
+            ]
+        ]);
+    }
+
     public function downloadOrderDetails($uuid, $isCustomer)
     {
         $order = Order::where('uuid', $uuid)->with('items')->first();
@@ -218,7 +287,7 @@ class OrderController extends Controller
 
         // Find the order for the authenticated user
         $order = Order::where('uuid', $request->uuid)->first();
-    
+
         // Check if the order exists
         if (!$order) {
             return response()->json([
@@ -226,7 +295,7 @@ class OrderController extends Controller
                 'message' => 'Order not found or invalid ID.',
             ], 404); // Return a 404 HTTP status code
         }
-    
+
         // Return the order status
         return response()->json([
             'status' => 200,
@@ -235,5 +304,5 @@ class OrderController extends Controller
             ],
         ]);
     }
-    
+
 }

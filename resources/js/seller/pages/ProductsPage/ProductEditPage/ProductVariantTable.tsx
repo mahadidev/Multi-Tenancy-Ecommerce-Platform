@@ -36,7 +36,7 @@ const ProductVariantTable: FC<ProductVariantProps> = ({ product }) => {
                         <Table>
                             <Table.Head>
                                 <Table.HeadCell>Label</Table.HeadCell>
-                                <Table.HeadCell>Price</Table.HeadCell>
+                                <Table.HeadCell>Extra Price</Table.HeadCell>
                                 <Table.HeadCell>Stock</Table.HeadCell>
                             </Table.Head>
                             <Table.Body>
@@ -46,7 +46,7 @@ const ProductVariantTable: FC<ProductVariantProps> = ({ product }) => {
                                         key={option.id}
                                     >
                                         <Table.Cell>{option.label}</Table.Cell>
-                                        <Table.Cell>{option.price}</Table.Cell>
+                                        <Table.Cell>{option.price} TK</Table.Cell>
                                         <Table.Cell>
                                             {option.qty_stock}
                                         </Table.Cell>

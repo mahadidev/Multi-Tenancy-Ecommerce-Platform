@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\seller;
 
+use App\Exceptions\OrderProcessingException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use Illuminate\Http\Request;
@@ -10,14 +11,21 @@ use Illuminate\Support\Facades\Log;
 use App\Mail\OrderStatusUpdated;
 use App\Models\Store;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
+use App\Services\OrderService;
 use App\Notifications\OrderNotification;
 
 class OrderController extends Controller
 {
+    protected $orderService;
+
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
     public function index(Request $request)
     {
-        $sort = $request->input('sort'); // Sort order, 
+        $sort = $request->input('sort'); // Sort order,
         $perPage = $request->input('per_page'); // Items per page,
 
         $store = getStore();
@@ -171,5 +179,17 @@ class OrderController extends Controller
         $response = \App\Http\Controllers\Api\v1\site\OrderController::placeOrder($request, $request->user_id);
 
         return $response->original;
+    }
+
+    public function placeOrderNonUser(Request $request)
+    {
+        try {
+            return $this->orderService->placeOrderForGuest($request);
+        } catch (OrderProcessingException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 }

@@ -31,6 +31,7 @@ import DashboardAnalyticsSlice from "./slices/dashboardAnalyticsSlice";
 import fileSlice from "./slices/fileSlice";
 import MenuSlice from "./slices/menuSlice";
 import notificationSlice from "./slices/notificationSlice";
+import orderPlacerSlice from "./slices/orderPlacerSlice";
 import OrderSlice from "./slices/orderSlice";
 import pageSlice from "./slices/pageSlice";
 import productSlice from "./slices/productSlice";
@@ -94,6 +95,7 @@ const persistedReducer = persistReducer(
         notification: notificationSlice,
         customer: customerSlice,
         plans: SubscriptionPlanSlice,
+        orderPlacer: orderPlacerSlice,
         [subscriptionPlanApi.reducerPath]: subscriptionPlanApi.reducer,
         [rolePermissionApi.reducerPath]: rolePermissionApi.reducer,
         [storeAdminApi.reducerPath]: storeAdminApi.reducer,

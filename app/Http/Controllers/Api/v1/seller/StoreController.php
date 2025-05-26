@@ -163,7 +163,7 @@ class StoreController extends Controller
             'location' => $request->location ?? null,
             'currency' => $request->currency ?? 'BDT',
             'logo' => $request->logo ?? null,
-            "theme_id" => $theme_id ?? Theme::first()->id,
+            "theme_id" => $theme_id ?? null,
             'dark_logo' => $request->dark_logo ?? null,
             'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null,
@@ -171,7 +171,7 @@ class StoreController extends Controller
             'store_type_id' => $request->store_type_id ? $request->store_type_id : StoreType::first()->id,
         ]);
 
-        if ($store->theme->widgets) {
+        if ($store->theme && $store->theme->widgets) {
             $store->widgets()->delete();
             foreach ($store->theme->widgets as $widget) {
                 $store->widgets()->create([

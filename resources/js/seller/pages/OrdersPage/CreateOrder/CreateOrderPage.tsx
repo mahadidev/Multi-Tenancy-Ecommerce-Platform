@@ -68,42 +68,45 @@ export default function CreateOrderPage() {
     };
 
     return (
-        <div className="p-6 mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
-            <div className="grid md:grid-cols-3 gap-5 my-4">
-                <CustomerSelector
-                    customers={customers}
-                    selected={selectedCustomer}
-                    setSelected={setSelectedCustomer}
-                />
-                <ProductSelector
-                    products={products}
-                    selected={selectedProduct}
-                    setSelected={setSelectedProduct}
-                />
-                <div className="flex flex-col justify-end gap-2">
-                    <Button
-                        color="primary"
-                        disabled={!selectedCustomer || !selectedProduct}
-                        onClick={handleAddToCart}
-                        isProcessing={addToCart.isLoading}
-                    >
-                        Add to Cart
-                    </Button>
-                </div>
-            </div>
+			<div className="p-6 mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
+				{/* <div className="grid md:grid-cols-3 gap-5 my-4">
+					<CustomerSelector
+						customers={customers}
+						selected={selectedCustomer}
+						setSelected={setSelectedCustomer}
+					/>
+					<ProductSelector
+						products={products}
+						selected={selectedProduct}
+						setSelected={setSelectedProduct}
+					/>
+					<div className="flex flex-col justify-end gap-2">
+						<Button
+							color="primary"
+							disabled={!selectedCustomer || !selectedProduct}
+							onClick={handleAddToCart}
+							isProcessing={addToCart.isLoading}
+						>
+							Add to Cart
+						</Button>
+					</div>
 
-            <CartSummaryCard
-                cartItems={cartItems}
-                totalAmount={totalAmount}
-                updateCart={updateCart}
-                removeCartItem={removeCartItem}
-                paymentMethod={paymentMethod}
-                setPaymentMethod={setPaymentMethod}
-                handlePlaceOrder={handlePlaceOrder}
-                isLoading={placeOrder.isLoading}
-            />
-        </div>
-    );
+
+				</div>
+
+				{/* <CartSummaryCard
+					cartItems={cartItems}
+					totalAmount={totalAmount}
+					updateCart={updateCart}
+					removeCartItem={removeCartItem}
+					paymentMethod={paymentMethod}
+					setPaymentMethod={setPaymentMethod}
+					handlePlaceOrder={handlePlaceOrder}
+					isLoading={placeOrder.isLoading}
+				/> */}
+
+			</div>
+		);
 }
 
 const getOrderCustomerDetails = (
@@ -115,9 +118,9 @@ const getOrderCustomerDetails = (
     );
 
     return {
-        name: customer?.name!,
+        name: customer?.name ?? "",
         phone: customer?.phone || "017*******",
-        email: customer?.email!,
+        email: customer?.email ?? "",
         address: customer?.address || "N/A",
         user_id: customerId,
     };

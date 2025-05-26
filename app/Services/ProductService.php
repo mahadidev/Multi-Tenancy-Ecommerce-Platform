@@ -13,11 +13,11 @@ class ProductService
 {
     public static function index(Request $request)
     {
-        $sort = $request->input('sort'); // Sort order, 
-        $perPage = $request->input('per_page'); // Items per page, 
+        $sort = $request->input('sort'); // Sort order,
+        $perPage = $request->input('per_page'); // Items per page,
 
         $query = Product::authorized();
-        
+
         self::applyFiltersAndSorting($query, $request);
 
         $products = $query
@@ -57,6 +57,7 @@ class ProductService
             'has_variants' => 'nullable|boolean',
             'has_in_stocks' => 'nullable|boolean',
             'status' => 'nullable|boolean',
+            'tax' => 'nullable|integer',
 
             'is_featured' => 'nullable|boolean',
             'is_trending' => 'nullable|boolean',
@@ -105,6 +106,7 @@ class ProductService
             'discount_to' => $validatedData['discount_to'] ?? null,
             'discount_type' => $validatedData['discount_type'] ?? null,
             'discount_amount' => $validatedData['discount_amount'] ?? null,
+            'tax' => $validatedData["tax"] ?? 0,
         ]);
 
         // Handle variants if they exist
@@ -127,7 +129,7 @@ class ProductService
                         'price' => $option['price'] ?? 0,
                         'qty_stock' => $option['qty_stock'] ?? 0,
                     ]);
-                  
+
                 }
             }
         }
@@ -164,6 +166,7 @@ class ProductService
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
             'discount_to' => 'nullable|date',
+            'tax' => 'nullable|integer',
             'discount_type' => 'nullable|string|in:flat,percentage',
             'discount_amount' => 'nullable|numeric|min:0',
             'variants' => 'nullable|array|required_if:has_variants,1',
@@ -199,11 +202,12 @@ class ProductService
             'discount_to' => $validatedData['discount_to'] ?? $product->discount_to,
             'discount_type' => $validatedData['discount_type'] ?? $product->discount_type,
             'discount_amount' => $validatedData['discount_amount'] ?? $product->discount_amount,
+            'tax' => $validatedData['tax'] ?? $product->tax,
         ]);
 
         // Handle variants if present
         if ($request->has('variants')) {
-           
+
             $product->variants()->delete();
 
             // Add new variants
@@ -214,7 +218,7 @@ class ProductService
                         'label' => $variant['label'],
                         'slug' => $variant['slug'],
                     ]);
-    
+
                     // Add options for the variant
                     foreach ($variant['options'] as $option) {
                         $productVariantOption = ProductVariantOption::create([

@@ -32,4 +32,6 @@ export { default as StoreOnboardPage } from "./OnboardPage/StoreOnboardPage/Stor
 // theme pages
 export { default as ThemesPage } from "./ThemesPage/ThemesPage";
 
+export { default as OrderPlacerPage } from "./OrderPlacer/OrderPlacerPage";
+
 

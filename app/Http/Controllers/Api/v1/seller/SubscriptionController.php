@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Store;
 use App\Models\Subscription;
 use App\Models\Payment;
 use App\Models\StoreSubscription;
@@ -41,6 +42,7 @@ class SubscriptionController extends Controller
         }
 
         $user = auth()->user();
+        $store = $user->storeSession()->first();
 
         $payment = Payment::create([
             'user_id' => $user->id,
@@ -56,13 +58,12 @@ class SubscriptionController extends Controller
         ]);
 
         try {
-
             $checkoutRequest = CheckoutRequest::make()
                 ->setFullName($payment->name)
                 ->setEmail($payment->email)
                 ->setAmount($payment->amount)
                 ->addMetadata('transaction_id', $payment->transaction_id)
-                ->setRedirectUrl(route('uddoktapay.success')) // need to test in server
+                ->setRedirectUrl(route('uddoktapay.success') . "?store_id=" . $store->id) // need to test in server
                 ->setCancelUrl(route('uddoktapay.cancel'))
                 ->setWebhookUrl(route('uddoktapay.webhook'));
 
@@ -89,13 +90,15 @@ class SubscriptionController extends Controller
     public function success(Request $request)
     {
         $invoiceId = $request->input('invoice_id');
+        $storeId = $request->input('store_id');
 
         try {
 
             $response = $this->uddoktapay->verify($request);
-            $store = getStore();
+            $store = Store::where(["id" => $storeId])->first();
             $responseData = $response->toArray();
-            $payment = Payment::where('transaction_id', $responseData['metadata']['transaction_id'])->first();
+            $payment = Payment::where(["transaction_id" => $responseData["metadata"]["transaction_id"]])->orWhere(["invoice_id" => $responseData["invoice_id"]])->first();
+
             $package = Subscription::find($payment->payable_id);
 
             if ($response->success() || $response->pending()) {

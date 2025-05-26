@@ -10,10 +10,6 @@ export interface SubscribePayloadType {
     amount: string;
 }
 
-export interface SubscribeSuccessPayloadType {
-	invoice_id: string;
-}
-
 export const subscriptionPlanApi = createApi({
 	reducerPath: 'subscriptionPlansApi',
 	baseQuery: baseQuery,
@@ -48,24 +44,8 @@ export const subscriptionPlanApi = createApi({
 				await queryFulfilled.then();
 			},
 		}),
-		subscribeVerify: builder.mutation<
-			ApiResponseType,
-			SubscribeSuccessPayloadType
-		>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/package-subscription-verify`,
-					method: 'post',
-					body: formData,
-				}),
-			invalidatesTags: ['Subscription'],
-			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { queryFulfilled }) {
-				await queryFulfilled.then();
-			},
-		}),
 	}),
 });
 
-export const { useFetchPlansQuery, useSubscribePlanMutation, useSubscribeVerifyMutation } =
+export const { useFetchPlansQuery, useSubscribePlanMutation } =
     subscriptionPlanApi;

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreignId('brand_id')->nullable()->references('id')->on('categories')->onDelete('cascade');
-    
+
             $table->string('name');
             $table->string('slug');
             $table->string('sku')->nullable(); // Stock keeping unit
@@ -35,9 +35,12 @@ return new class extends Migration
             $table->dateTime('discount_to')->nullable();
             $table->string('discount_type',)->nullable()->comment('flat/percentage');
             $table->decimal('discount_amount',)->nullable();
+            $table->integer("tax")->nullable()->default(0);
+            $table->string("barcode")->unique()->nullable();
+            $table->boolean('is_featured')->default(false)->after('is_trending');
             $table->timestamps();
 
-          
+
         });
     }
 

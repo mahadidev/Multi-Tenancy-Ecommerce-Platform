@@ -43,4 +43,12 @@ export interface OrderItemType {
 	product: ProductType;
 }
 
+export interface OrderProduct extends ProductType {
+	selectedVariants: OrderProductVariantType[];
+}
 
+export interface OrderProductVariantType {
+	label: string;
+	value: string;
+    price: number;
+}

@@ -22,6 +22,7 @@ export interface CreateProductPayloadType {
 	category_id: number;
 	price: number;
 	thumbnail: string;
+	attachments: string[]
 }
 
 export interface UpdateProductPayloadType {
@@ -31,10 +32,15 @@ export interface UpdateProductPayloadType {
 	category_id?: number;
 	price?: number;
 	thumbnail?: string;
+	attachments?: string[];
 }
 
 export interface DeleteProductPayloadType {
 	id: number | string;
+}
+
+export interface GenerateBarcodePayloadType {
+    id: number | string;
 }
 
 export const productApi = createApi({
@@ -108,6 +114,19 @@ export const productApi = createApi({
 			invalidatesTags: ['Products'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
+		generateBarcode: builder.mutation<
+			ApiResponseType,
+			GenerateBarcodePayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/product/${formData.id}/barcode/generate`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Products'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
 	}),
 });
 
@@ -117,4 +136,5 @@ export const {
 	useCreateProductMutation,
 	useUpdateProductMutation,
 	useDeleteProductMutation,
+    useGenerateBarcodeMutation
 } = productApi;

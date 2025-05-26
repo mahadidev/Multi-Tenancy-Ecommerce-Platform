@@ -2,16 +2,19 @@ import {
     CreateProductPayloadType,
     DeleteProductPayloadType,
     FetchProductPayloadType,
+    GenerateBarcodePayloadType,
     productApi,
     UpdateProductPayloadType,
     useCreateProductMutation,
     useDeleteProductMutation,
     useFetchProductsQuery,
+    useGenerateBarcodeMutation,
     useUpdateProductMutation,
 } from '@seller/store/reducers/productApi';
 import { setProduct } from '@seller/store/slices/productSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { ProductVariantType } from '@type/productType';
+import { isArrayEmptyOrBlank } from '../../tool/checker';
 
 const useProduct = () => {
 	// fetch products
@@ -40,7 +43,10 @@ const useProduct = () => {
 		formData: CreateProductPayloadType;
 		onSuccess?: CallableFunction;
 	}) => {
-		handleCreate(formData).then((response) => {
+		handleCreate({
+			...formData,
+            attachments: isArrayEmptyOrBlank(formData.attachments) ? [formData.thumbnail] : formData.attachments
+		}).then((response) => {
 			if (response.data?.status === 200) {
 				if (onSuccess) {
 					onSuccess(response.data.data);
@@ -66,6 +72,13 @@ const useProduct = () => {
 		formData: UpdateProductPayloadType;
 		onSuccess?: CallableFunction;
 	}) => {
+		formData = {
+			...formData,
+			attachments: formData.attachments?.filter((a) => !a.includes('http'))
+				.length
+				? formData.attachments.filter((a) => !a.includes('http'))
+				: undefined,
+		};
 		handleUpdate(formData).then((response) => {
 			if (response.data?.status === 200) {
 				if (onSuccess) {
@@ -138,11 +151,11 @@ const useProduct = () => {
 		if (product) {
 			// if variant already exist
 			const filteredVariants = product.variants?.filter(
-				(filterVariant) => filterVariant.label !== formData.label
+				(filterVariant: any) => filterVariant.label !== formData.label
 			);
 
 			const findVariant = product.variants?.find(
-				(filterVariant) => filterVariant.label === formData.label
+				(filterVariant: any) => filterVariant.label === formData.label
 			);
 
 			if (filteredVariants && findVariant) {
@@ -202,6 +215,32 @@ const useProduct = () => {
 		}
 	};
 
+    // barcode generate
+    const [
+			handleGenerateBarcode,
+			{
+				isLoading: isBarCodeGenerateLoading,
+				isError: isBarCodeGenerateError,
+				error: barCodeGenerateError,
+				data: barCodeGenerateData,
+			},
+		] = useGenerateBarcodeMutation();
+		const generateBarcode = ({
+			formData,
+			onSuccess,
+		}: {
+			formData: GenerateBarcodePayloadType;
+			onSuccess?: CallableFunction;
+		}) => {
+			handleGenerateBarcode(formData).then((response) => {
+				if (response.data?.status === 200) {
+					if (onSuccess) {
+						onSuccess(response.data.data);
+					}
+				}
+			});
+		};
+
 	return {
 		products,
 		product,
@@ -239,6 +278,13 @@ const useProduct = () => {
 		},
 		removeVariant: {
 			submit: removeVariant,
+		},
+		generateBarcode: {
+			submit: generateBarcode,
+			isLoading: isBarCodeGenerateLoading,
+			isError: isBarCodeGenerateError,
+			error: barCodeGenerateError,
+			data: barCodeGenerateData,
 		},
 	};
 };

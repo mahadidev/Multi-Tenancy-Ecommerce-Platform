@@ -19,86 +19,89 @@ export const APP_NAME: string = document.head.querySelector(
 )?.content;
 
 export const RoutePath = {
-    LoginPage: {
-        index: () => "/login",
-    },
-    RegisterPage: {
-        index: () => "/register",
-    },
-    ForgotPasswordPage: {
-        index: () => "/forgot-password",
-    },
-    ForgotPasswordSuccessPage: {
-        index: () => "/forgot-password-success",
-    },
-    MyAccountPage: {
-        ProfileSettings: { index: () => "/my-account/profile-settings" },
-    },
-    Onboard: {
-        Store: {
-            index: () => "/onboard/store",
-        },
-    },
-    DashboardPage: {
-        index: () => "/",
-    },
-    OrdersPage: {
-        index: () => "/orders",
-    },
-    ShipmentOrdersPage: {
-        index: () => "/shipment-orders",
-    },
-    CustomersPage: {
-        index: () => "/customers",
-    },
-    BrandsPage: {
-        index: () => "/brands",
-    },
-    CategoriesPage: {
-        index: () => "/categories",
-    },
-    StorePagesPage: {
-        index: () => "/pages",
-        indexUrl: () => BASE_URL + PREFIX + `/pages`,
-        edit: (pageId: number) => `/pages/${pageId}`,
-        editUrl: (pageId: number) => BASE_URL + PREFIX + `/pages/${pageId}`,
-    },
-    StoresPage: {
-        index: () => "/stores",
-    },
-    ProductsPage: {
-        index: () => "/products",
-        edit: (productId: number) => `/products/${productId}`,
-    },
-    AccessManagementPage: {
-        index: () => "/access-management",
-    },
-    StoreAdminPage: {
-        index: () => "/store-admin",
-    },
-    SettingsPage: {
-        index: () => "/settings",
-    },
-    ThemesPage: {
-        index: () => "/themes",
-    },
-    MenusPage: {
-        index: () => "/menus",
-    },
-    BlogsPage: {
-        index: () => "/blogs",
-        categories: () => `/blogs/categories`,
-        create: () => `/blogs/create`,
-        edit: (blogId: number) => `/blogs/${blogId}`,
-    },
-    NotificationsPage: {
-        index: () => "/notifications",
-    },
+	LoginPage: {
+		index: () => '/login',
+	},
+	RegisterPage: {
+		index: () => '/register',
+	},
+	ForgotPasswordPage: {
+		index: () => '/forgot-password',
+	},
+	ForgotPasswordSuccessPage: {
+		index: () => '/forgot-password-success',
+	},
+	MyAccountPage: {
+		ProfileSettings: { index: () => '/my-account/profile-settings' },
+	},
+	Onboard: {
+		Store: {
+			index: () => '/onboard/store',
+		},
+	},
+	DashboardPage: {
+		index: () => '/',
+	},
+	OrdersPage: {
+		index: () => '/orders',
+	},
+	ShipmentOrdersPage: {
+		index: () => '/shipment-orders',
+	},
+	CustomersPage: {
+		index: () => '/customers',
+	},
+	BrandsPage: {
+		index: () => '/brands',
+	},
+	CategoriesPage: {
+		index: () => '/categories',
+	},
+	StorePagesPage: {
+		index: () => '/pages',
+		indexUrl: () => BASE_URL + PREFIX + `/pages`,
+		edit: (pageId: number) => `/pages/${pageId}`,
+		editUrl: (pageId: number) => BASE_URL + PREFIX + `/pages/${pageId}`,
+	},
+	StoresPage: {
+		index: () => '/stores',
+	},
+	ProductsPage: {
+		index: () => '/products',
+		edit: (productId: number) => `/products/${productId}`,
+	},
+	AccessManagementPage: {
+		index: () => '/access-management',
+	},
+	StoreAdminPage: {
+		index: () => '/store-admin',
+	},
+	SettingsPage: {
+		index: () => '/settings',
+	},
+	ThemesPage: {
+		index: () => '/themes',
+	},
+	MenusPage: {
+		index: () => '/menus',
+	},
+	BlogsPage: {
+		index: () => '/blogs',
+		categories: () => `/blogs/categories`,
+		create: () => `/blogs/create`,
+		edit: (blogId: number) => `/blogs/${blogId}`,
+	},
+	NotificationsPage: {
+		index: () => '/notifications',
+	},
 
-    SubscriptionPage: {
-        index: () => "/select-subscriptions",
-    },
-    SubscriptionSuccessPage: {
-        index: () => "/subscriptions-success",
-    },
+	SubscriptionPage: {
+		index: () => '/select-subscriptions',
+	},
+	SubscriptionSuccessPage: {
+		index: () => '/subscriptions-success',
+	},
+	orderPlacer: {
+		index: () => '/order-placer',
+	},
 };
