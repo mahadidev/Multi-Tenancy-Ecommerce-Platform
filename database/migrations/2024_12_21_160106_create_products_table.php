@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,9 +12,9 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('brand_id')->nullable()->references('id')->on('categories')->onDelete('cascade');
+            $table->foreignId('store_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('cascade'); // Changed from 'categories' to 'brands'
 
             $table->string('name');
             $table->string('slug');
@@ -31,16 +30,14 @@ return new class extends Migration
             $table->boolean('has_in_stocks')->default(true); // Nullable for products with variants
             $table->boolean('status')->default(true); // 'true', 'false'
             $table->boolean('is_trending')->default(false);
+            $table->boolean('is_featured')->default(false); // Removed after() method
             $table->boolean('has_discount')->default(false);
             $table->dateTime('discount_to')->nullable();
-            $table->string('discount_type',)->nullable()->comment('flat/percentage');
-            $table->decimal('discount_amount',)->nullable();
-            $table->integer("tax")->nullable()->default(0);
-            $table->string("barcode")->unique()->nullable();
-            $table->boolean('is_featured')->default(false)->after('is_trending');
+            $table->string('discount_type')->nullable()->comment('flat/percentage'); // Removed trailing comma
+            $table->decimal('discount_amount', 8, 2)->nullable(); // Added precision and scale
+            $table->integer('tax')->nullable()->default(0);
+            $table->string('barcode')->nullable()->unique();
             $table->timestamps();
-
-
         });
     }
 
