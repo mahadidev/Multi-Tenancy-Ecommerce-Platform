@@ -108,21 +108,21 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 				<div className="border-t pt-2">
 					<div className="flex justify-between">
 						<span>Subtotal:</span>
-						<span>{subTotal.toFixed(2)}</span>
+						<span>{subTotal}</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Tax (5%):</span>
-						<span>{taxAmount.toFixed(2)}</span>
+						<span>{taxAmount}</span>
 					</div>
 					{order.shipping_cost && (
 						<div className="flex justify-between">
 							<span>Shipping:</span>
-							<span>{order.shipping_cost.toFixed(2)}</span>
+							<span>{order.shipping_cost}</span>
 						</div>
 					)}
 					<div className="flex justify-between font-bold mt-1">
 						<span>TOTAL:</span>
-						<span>{order.total.toFixed(2)}</span>
+						<span>{order.total}</span>
 					</div>
 				</div>
 
