@@ -45,7 +45,7 @@ const useProduct = () => {
 	}) => {
 		handleCreate({
 			...formData,
-            attachments: isArrayEmptyOrBlank(formData.attachments) ? [formData.thumbnail] : formData.attachments
+            attachments: isArrayEmptyOrBlank(formData.attachments) ? (formData.thumbnail ? [formData.thumbnail] : []) : formData.attachments
 		}).then((response) => {
 			if (response.data?.status === 200) {
 				if (onSuccess) {

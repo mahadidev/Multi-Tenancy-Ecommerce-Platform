@@ -118,29 +118,29 @@ const useTable = (props: DataTablePropsType) => {
 	};
 
 	// handle on search
-	const onSearch = (query: string, onlySearch?: boolean) => {
-		setCurrentPage(1);
-		if (props?.search?.columns) {
-			setSearchQuery(query);
-			setData(() => {
-				const sortedData = props?.data?.filter((dataItem: any) => {
-					const result = props?.search?.columns.map((column) => {
-						return dataItem[column]?.includes(query);
+    const onSearch = (query: string, onlySearch?: boolean) => {
+			setCurrentPage(1);
+			if (props?.search?.columns) {
+				setSearchQuery(query);
+                console.log(query);
+				setData(() => {
+					const lowerCaseQuery = query.toLowerCase();
+
+					const sortedData = props?.data?.filter((dataItem: any) => {
+						return props?.search?.columns.some((column) => {
+							const value = dataItem[column]?.toString().toLowerCase();
+							return value?.includes(lowerCaseQuery);
+						});
 					});
 
-					if (result?.includes(true)) {
-						return true;
+					if (sort && !onlySearch) {
+						return sortData({ data: sortedData, sort: sort });
+					} else {
+						return sortedData;
 					}
 				});
-
-				if (sort && !onlySearch) {
-					return sortData({ data: sortedData, sort: sort });
-				} else {
-					return sortedData;
-				}
-			});
-		}
-	};
+			}
+		};
 
 	return {
 		paginate: {

@@ -21,12 +21,9 @@ class OrderItemsResource extends JsonResource
             'qty' => $this->qty,
             'price' => $this->price,
             'total' => $this->total,
-            'product' => [
-                'id' => $this->product->id,
-                'name' => $this->product->name,
-                'price' => $this->product->price,
-                'image' => $this->product->thumbnail_image ? $this->product->thumbnail_image : 'https://placehold.co/600x400',
-            ],
+            'taxAmount' => $this->taxAmount,
+            'afterTaxTotalPrice' => $this->afterTaxTotalPrice,
+            'product' => $this->product,
         ];
     }
 }

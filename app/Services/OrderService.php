@@ -167,11 +167,22 @@ class OrderService
         float $unitPrice,
         int $storeId
     ): OrderItem {
-        $discount = (float) $itemData['discount'];
+        $discount = (float) ($itemData['discount'] ?? 0); // Default to 0 if not set
         $quantity = (int) $itemData['qty'];
+        $taxRate = (float) ($product['tax'] ?? 0); // Default to 0 if not set
 
-        $discountedUnitPrice = $unitPrice - ($unitPrice * ($discount / 100));
-        $totalPrice = $discountedUnitPrice * $quantity;
+        // Calculate the total price before discount
+        $totalBeforeDiscount = $unitPrice * $quantity;
+
+        // Apply discount to the total price
+        $discountAmount = $totalBeforeDiscount * ($discount / 100);
+        $totalAfterDiscount = $totalBeforeDiscount - $discountAmount;
+
+        // Calculate tax on the discounted amount
+        $taxAmount = $totalAfterDiscount * ($taxRate / 100);
+
+        // Final total including tax
+        $finalTotal = $totalAfterDiscount + $taxAmount;
 
         return OrderItem::create([
             'order_id' => $order->id,
@@ -180,8 +191,11 @@ class OrderService
             'store_id' => $storeId,
             'item' => $product->name,
             'qty' => $quantity,
-            'price' => $discountedUnitPrice,
-            'total' => $totalPrice,
+            'price' => $unitPrice, // Original unit price
+            'total' => $totalAfterDiscount, // Total after discount (before tax)
+            'discount_amount' => $discountAmount, // Added discount amount for reference
+            'taxAmount' => $taxAmount,
+            'afterTaxTotalPrice' => $finalTotal,
             'shop_id' => $product->shop_id,
             'variants' => $itemData['variants'] ?? null,
         ]);

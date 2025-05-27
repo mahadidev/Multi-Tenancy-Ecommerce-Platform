@@ -29,6 +29,8 @@ return new class extends Migration
             $table->boolean('is_free')->default(false);
             $table->boolean('is_returned')->default(false);
             $table->json('options')->nullable();
+            $table->integer("taxAmount")->default(0);
+            $table->integer("afterTaxTotalPrice")->default(0);
             $table->timestamps();
         });
     }

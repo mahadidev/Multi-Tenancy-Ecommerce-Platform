@@ -1,52 +1,45 @@
+import { OrderType } from '@type/orderType';
 import { Button } from 'flowbite-react';
 import React from 'react';
 import { useReactToPrint } from 'react-to-print';
 
-type OrderItem = {
-	id: number;
-	product: {
-		name: string;
-		price: number;
-	};
-	qty: number;
-	total: number;
-};
-
-type OrderType = {
-	id: number;
-	created_at: string;
-	name: string;
-	phone?: string;
-	email?: string;
-	address?: string;
-	store: {
-		name: string;
-	};
-	items: OrderItem[];
-	shipping_cost?: number;
-    total: number;
-};
 
 const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 	const contentRef = React.useRef<HTMLDivElement>(null);
-	const TAX_RATE = 0.05;
-	const subTotal = order.items.reduce((sum, item) => sum + item.total, 0);
-	const taxAmount = subTotal * TAX_RATE;
+
+	// Helper function to safely convert to number and format
+	const formatCurrency = (value: number | string | undefined): string => {
+		const num = Number(value) || 0;
+		return num.toFixed(2);
+	};
+
+	const subTotal = order.items.reduce(
+		(sum, item) => sum + Number(item.total),
+		0
+	);
+	const taxAmount = order.items.reduce(
+		(sum, item) => sum + Number(item.taxAmount),
+		0
+	);
+    const totalAmmountAfterTax = order.items.reduce(
+			(sum, item) => sum + Number(item.afterTaxTotalPrice),
+			0
+		);
 
 	const handlePrint = useReactToPrint({
 		contentRef,
 		pageStyle: `
-      @page {
-        size: 80mm auto;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        margin: 0 !important;
-        padding: 0 !important;
-        font-family: Arial, sans-serif;
-      }
-    `,
+            @page {
+                size: 80mm auto;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-family: Arial, sans-serif;
+            }
+        `,
 	});
 
 	return (
@@ -97,8 +90,10 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 							<tr key={item.id} className="border-b last:border-b-0">
 								<td className="py-1">{item.product.name}</td>
 								<td className="text-right">{item.qty}</td>
-								<td className="text-right">{item.product.price}</td>
-								<td className="text-right">{item.total}</td>
+								<td className="text-right">
+									{formatCurrency(item.product.price)}
+								</td>
+								<td className="text-right">{formatCurrency(item.total)}</td>
 							</tr>
 						))}
 					</tbody>
@@ -108,21 +103,21 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 				<div className="border-t pt-2">
 					<div className="flex justify-between">
 						<span>Subtotal:</span>
-						<span>{subTotal}</span>
+						<span>TK {formatCurrency(subTotal)}</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Tax (5%):</span>
-						<span>{taxAmount}</span>
+						<span>TK {formatCurrency(taxAmount)}</span>
 					</div>
 					{order.shipping_cost && (
 						<div className="flex justify-between">
 							<span>Shipping:</span>
-							<span>{order.shipping_cost}</span>
+							<span>TK {formatCurrency(order.shipping_cost)}</span>
 						</div>
 					)}
 					<div className="flex justify-between font-bold mt-1">
 						<span>TOTAL:</span>
-						<span>{order.total}</span>
+						<span>TK {formatCurrency(totalAmmountAfterTax)}</span>
 					</div>
 				</div>
 
@@ -133,7 +128,7 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 				</div>
 			</div>
 
-			{/* Print Button (Optional) */}
+			{/* Print Button */}
 			<Button
 				color="primary"
 				size="xs"

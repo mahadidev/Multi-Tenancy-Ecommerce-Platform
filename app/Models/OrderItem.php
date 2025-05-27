@@ -23,8 +23,10 @@ class OrderItem extends Model
         'is_free',
         'is_returned',
         'options',
+        'taxAmount',
+        'afterTaxTotalPrice'
     ];
-    
+
     protected $casts = [
         'options' => 'array',
     ];
@@ -49,5 +51,5 @@ class OrderItem extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+
 }

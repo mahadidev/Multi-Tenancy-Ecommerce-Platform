@@ -40,6 +40,8 @@ export interface OrderItemType {
 	qty: number;
 	price: string;
 	total: string;
+	taxAmount: string;
+	afterTaxTotalPrice: string;
 	product: ProductType;
 }
 

@@ -3,6 +3,7 @@ import { clearCart } from '@seller/store/slices/orderPlacerSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Button, Modal } from 'flowbite-react';
 import { useRef } from 'react';
+import { AiOutlineLoading } from 'react-icons/ai';
 import OrderReceipt from './OrderReceipt';
 
 const Submit = () => {
@@ -71,6 +72,10 @@ const Submit = () => {
 					type="submit"
 					className="w-full"
 					onClick={handleSubmit}
+					isProcessing={placeOrderNonUser.isLoading}
+					disabled={placeOrderNonUser.isLoading}
+					processingLabel="Creating"
+					processingSpinner={<AiOutlineLoading className="animate-spin" />}
 				>
 					Send the order
 				</Button>
