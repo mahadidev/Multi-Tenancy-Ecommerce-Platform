@@ -97,8 +97,8 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 							<tr key={item.id} className="border-b last:border-b-0">
 								<td className="py-1">{item.product.name}</td>
 								<td className="text-right">{item.qty}</td>
-								<td className="text-right">{item.product.price.toFixed(2)}</td>
-								<td className="text-right">{item.total.toFixed(2)}</td>
+								<td className="text-right">{item.product.price}</td>
+								<td className="text-right">{item.total}</td>
 							</tr>
 						))}
 					</tbody>
