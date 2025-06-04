@@ -26,3 +26,4 @@ tsconfig.tsbuildinfo
 .npmrc
 !/storage/app/public/seeders
 .DS_Store
+.htaccess
