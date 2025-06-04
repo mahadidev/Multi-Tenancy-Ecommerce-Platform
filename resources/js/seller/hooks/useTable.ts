@@ -142,6 +142,10 @@ const useTable = (props: DataTablePropsType) => {
 			}
 		};
 
+        useEffect(() => {
+            onSearch(searchQuery)
+        }, [searchQuery])
+
 	return {
 		paginate: {
 			totalPages,
@@ -158,6 +162,8 @@ const useTable = (props: DataTablePropsType) => {
 		setSort,
 		onSort,
 		onSearch,
+        searchQuery,
+		setSearchQuery,
 	};
 };
 export default useTable;

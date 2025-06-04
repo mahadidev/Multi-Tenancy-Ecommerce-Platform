@@ -14,9 +14,13 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 	};
 
 	const subTotal = order.items.reduce(
-		(sum, item) => sum + Number(item.total),
+		(sum, item) => sum + Number(Number(item.price) * item.qty),
 		0
 	);
+    const discount = order.items.reduce(
+			(sum, item) => sum + ((Number(item.price) * (item.product.discount_amount ?? 0)) / 100),
+			0
+		);
 	const taxAmount = order.items.reduce(
 		(sum, item) => sum + Number(item.taxAmount),
 		0
@@ -104,6 +108,10 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 					<div className="flex justify-between">
 						<span>Subtotal:</span>
 						<span>TK {formatCurrency(subTotal)}</span>
+					</div>
+					<div className="flex justify-between">
+						<span>Discount:</span>
+						<span className='text-primary-700'>TK -{formatCurrency(discount)}</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Tax (5%):</span>

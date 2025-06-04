@@ -15,7 +15,7 @@ const CartProducts = () => {
   return (
 		<>
 			<div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
-				{cartItems.map((item) => (
+				{cartItems.map((item: OrderPlacerCartItemType) => (
 					<div
 						className="flex flex-wrap items-center space-y-4 p-6 sm:gap-6 sm:space-y-0 md:justify-between"
 						key={item.uniqueID}

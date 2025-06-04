@@ -20,8 +20,8 @@ const BarcodeGenerator: FC<{ product: ProductType }> = ({ product }) => {
 						JsBarcode(barcodeRef.current, product.sku, {
 							format: 'CODE128',
 							displayValue: false,
-							width: 1,
-							height: 50,
+							width: 2, // thicker bars
+							height: 60, // taller bars
 							margin: 0,
 						});
 						setSvgReady(true);
@@ -29,11 +29,11 @@ const BarcodeGenerator: FC<{ product: ProductType }> = ({ product }) => {
 						console.error('Failed to generate barcode:', error);
 					}
 				}
-			}, 100);
+			}, 300); // increased delay
 
 			return () => clearTimeout(timer);
 		}
-	}, [isOpen, product, isSvgReady]);
+	}, [isOpen, product]);
 
 	const handlePrint = useReactToPrint({
 		contentRef,
@@ -45,8 +45,8 @@ const BarcodeGenerator: FC<{ product: ProductType }> = ({ product }) => {
 
 		try {
 			const canvas = await html2canvas(contentRef.current, {
-				scale: 2, // Higher quality
-				backgroundColor: null, // Transparent background
+				scale: 2,
+				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
 			});
@@ -76,34 +76,55 @@ const BarcodeGenerator: FC<{ product: ProductType }> = ({ product }) => {
 						<Modal.Header>Generate Barcode</Modal.Header>
 						<Modal.Body className="flex justify-center items-center bg-white">
 							<div
-								className="flex-col gap-0.5 overflow-hidden"
 								ref={contentRef}
 								style={{
 									width: '38mm',
 									height: '25mm',
 									display: 'flex',
+									flexDirection: 'column',
 									alignItems: 'center',
 									justifyContent: 'center',
+									backgroundColor: 'white',
 									padding: 0,
 									margin: 0,
 								}}
 							>
-								<p className="w-full text-center" style={{ fontSize: '10px' }}>
+								<p
+									style={{
+										fontSize: '10px',
+										textAlign: 'center',
+										width: '100%',
+									}}
+								>
 									{product.sku}
 								</p>
+
 								<svg
 									ref={barcodeRef}
-									style={{ visibility: isSvgReady ? 'visible' : 'hidden' }}
-									className="max-w-full"
+									style={{
+										visibility: isSvgReady ? 'visible' : 'hidden',
+										width: '38mm',
+										height: 'auto',
+                                        maxWidth: "100%"
+									}}
+									viewBox="0 0 200 60"
+									preserveAspectRatio="xMidYMid meet"
+                                    className='w-[38mm]'
 								></svg>
+
 								<p
-									className="w-full font-semibold text-center"
-									style={{ fontSize: '10px' }}
+									style={{
+										fontSize: '10px',
+										textAlign: 'center',
+										width: '100%',
+										fontWeight: 600,
+									}}
 								>
 									Price - TK {product.price}
 								</p>
 							</div>
 						</Modal.Body>
+
 						<Modal.Footer className="flex gap-2">
 							<Button color="dark" onClick={handlePrint} disabled={!isSvgReady}>
 								Print

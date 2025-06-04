@@ -4,6 +4,8 @@ import { addCartItem } from '@seller/store/slices/orderPlacerSlice';
 import { useAppDispatch } from '@seller/store/store';
 import { ProductType } from '@type/productType';
 import { Button, Table } from 'flowbite-react';
+import { IoClose } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 import uuid4 from 'uuid4';
 
 const Products = () => {
@@ -24,38 +26,53 @@ const Products = () => {
 			(product.price * qty * (product.tax / 100)).toFixed(2)
 		);
 
-		dispatch(
-			addCartItem({
-				uniqueID: uuid4(),
-				qty: qty,
-				product: product,
-				price: price,
-				afterDiscountPrice: afterDiscountWithoutTaxPrice,
-				taxAmount: totalTax,
-				// Final price
-				afterTaxPrice: afterDiscountWithoutTaxPrice + totalTax,
-				discount: product.discount_amount ?? 0,
-			})
-		);
+		if (Number(product.stock ?? 0) > 0) {
+			dispatch(
+				addCartItem({
+					uniqueID: uuid4(),
+					qty: qty,
+					product: product,
+					price: price,
+					afterDiscountPrice: afterDiscountWithoutTaxPrice,
+					taxAmount: totalTax,
+					// Final price
+					afterTaxPrice: afterDiscountWithoutTaxPrice + totalTax,
+					discount: product.discount_amount ?? 0,
+				})
+			);
+		}
 	};
 
-	const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	const onSubmit = ({
+		event,
+		setSearchQuery,
+	}: {
+		event: React.FormEvent<HTMLFormElement>;
+		setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+	}) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
 		const searchInput = formData.get('search-input') as string;
-		const product = products.find((product) => product.sku === searchInput);
+		const product = products.find((product: ProductType) => product.sku === searchInput);
 
 		if (product) {
+			if (Number(product.stock) > 0) {
+				setSearchQuery('');
+			}
 			onAddProduct(product);
 		}
 	};
 
 	return (
 		<>
-			<div className="mb-6 hidden items-center sm:flex sm:divide-x sm:divide-gray-100 dark:divide-gray-700 justify-between">
+			<div className="mb-6 hidden items-center sm:flex  justify-between">
 				<h1 className="dark:text-white text-2xl font-semibold">
 					Welcome to Banzo
 				</h1>
+
+				<Link to="/products">
+					<IoClose size={23} className="cursor-pointer" />
+				</Link>
 			</div>
 
 			<DataTable
@@ -82,7 +99,7 @@ const Products = () => {
 					{
 						render: (row: ProductType) => (
 							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-								{row?.discount_amount && <>{row.discount_amount}% off</>}
+								{row?.stock && <>{row.stock} stock</>}
 							</Table.Cell>
 						),
 					},
@@ -119,6 +136,7 @@ const Products = () => {
 					placeholder: 'Search product',
 					columns: ['sku', 'name'],
 					onSearchSubmit: onSubmit,
+					autoFocus: true,
 				}}
 			/>
 		</>

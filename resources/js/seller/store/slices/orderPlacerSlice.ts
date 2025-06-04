@@ -24,28 +24,43 @@ const orderPlacerSlice = createSlice({
 			state.customer = action.payload;
 		},
 		addCartItem: (state, action: PayloadAction<OrderPlacerCartItemType>) => {
-            const findCartItem = state.cartItems.find((item) => item.product.sku === action.payload.product.sku);
+			const existingItemIndex = state.cartItems.findIndex(
+				(item) => item.product.sku === action.payload.product.sku
+			);
+			const productStock = action.payload.product.stock ?? 0;
+            const existingItem = state.cartItems[existingItemIndex];
 
-			if (findCartItem) {
-				state.cartItems = [
-					...state.cartItems.filter(
-						(item) => item.product.sku !== action.payload.product.sku
-					),
-					{
-						...findCartItem,
-						product: action.payload.product,
-						qty: findCartItem.qty + action.payload.qty,
-						price: findCartItem.price + action.payload.price,
-						afterDiscountPrice:
-							findCartItem.afterDiscountPrice +
-							action.payload.afterDiscountPrice,
-						taxAmount: findCartItem.taxAmount + action.payload.taxAmount,
-						afterTaxPrice:
-							findCartItem.afterTaxPrice + action.payload.afterTaxPrice,
-					},
-				];
+			// Existing item update
+			if (existingItemIndex !== -1 && existingItem) {
+				// ✅ TypeScript knows this is safe
+				const newQty = existingItem.qty + action.payload.qty;
+
+				if (newQty > productStock) {
+					console.warn('Not enough stock available.');
+					return;
+				}
+
+				state.cartItems[existingItemIndex] = {
+					...existingItem,
+					qty: newQty,
+					price: existingItem.price + action.payload.price,
+					afterDiscountPrice:
+						existingItem.afterDiscountPrice + action.payload.afterDiscountPrice,
+					taxAmount: existingItem.taxAmount + action.payload.taxAmount,
+					afterTaxPrice:
+						existingItem.afterTaxPrice + action.payload.afterTaxPrice,
+					uniqueID: existingItem.uniqueID,
+					product: existingItem.product,
+					discount: existingItem.discount,
+					variants: existingItem.variants,
+				};
 			} else {
-				state.cartItems = [...state.cartItems, action.payload];
+				// New item
+				if (action.payload.qty > productStock) {
+					console.warn('Not enough stock available.');
+					return;
+				}
+				state.cartItems.push(action.payload);
 			}
 		},
 		removeCartItem: (

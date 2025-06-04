@@ -127,10 +127,21 @@ class OrderService
     {
         foreach ($items as $item) {
             $product = Product::findOrFail($item['product_id']);
+
+            // Check stock availability
+            if ($product->stock < $item['qty']) {
+                throw new OrderProcessingException("Not enough stock for product: {$product->name}. Available: {$product->stock}, Requested: {$item['qty']}");
+            }
+
             $unitPrice = $this->calculateUnitPrice($product, $item['variants'] ?? []);
+
             $this->createOrderItem($order, $product, $item, $unitPrice, $storeId);
+
+            // Deduct stock
+            $product->decrement('stock', $item["qty"]);
         }
     }
+
 
     /**
      * Calculate the unit price including variants
