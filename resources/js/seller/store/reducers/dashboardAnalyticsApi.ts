@@ -9,11 +9,12 @@ export interface DashboardAnalyticsType extends ApiResponseType {
 }
 
 export interface AnalyticsResponseData {
-    products_count: number;
-    categories_count: number;
-    orders_count: number;
-    customers_count: number;
-    order_analytics: OrderAnalytics;
+	products_count: number;
+	categories_count: number;
+	orders_count: number;
+	customers_count: number;
+	order_analytics: OrderAnalytics;
+	unique_visitor_count: number;
 }
 
 export interface OrderAnalytics {

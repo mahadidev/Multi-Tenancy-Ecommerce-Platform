@@ -16,11 +16,11 @@ const DashboardPage: FC = () => {
     ];
 
     const overviewChartData = [
-        analytics?.products_count || 0,
-        analytics?.categories_count || 0,
-        analytics?.orders_count || 6,
-        analytics?.customers_count || 8,
-    ];
+			analytics?.products_count || 0,
+			analytics?.categories_count || 0,
+			analytics?.orders_count || 0,
+			analytics?.unique_visitor_count || 0,
+		];
 
     return (
         <div className="p-4">
