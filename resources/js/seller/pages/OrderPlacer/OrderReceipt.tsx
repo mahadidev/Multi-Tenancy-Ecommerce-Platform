@@ -18,7 +18,7 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 		0
 	);
     const discount = order.items.reduce(
-			(sum, item) => sum + ((Number(item.price) * (item.product.discount_amount ?? 0)) / 100),
+			(sum, item) => sum + item.discount_amount,
 			0
 		);
 	const taxAmount = order.items.reduce(
@@ -97,7 +97,9 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 								<td className="text-right">
 									{formatCurrency(item.product.price)}
 								</td>
-								<td className="text-right">{formatCurrency(item.total)}</td>
+								<td className="text-right">
+									{Number(item.price) * Number(item.qty)}
+								</td>
 							</tr>
 						))}
 					</tbody>
@@ -111,10 +113,12 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 					</div>
 					<div className="flex justify-between">
 						<span>Discount:</span>
-						<span className='text-primary-700'>TK -{formatCurrency(discount)}</span>
+						<span className="text-primary-700">
+							TK -{formatCurrency(discount)}
+						</span>
 					</div>
 					<div className="flex justify-between">
-						<span>Tax (5%):</span>
+						<span>Tax:</span>
 						<span>TK {formatCurrency(taxAmount)}</span>
 					</div>
 					{order.shipping_cost && (

@@ -3,8 +3,6 @@ import { FC } from "react";
 import ProductsTable from "./ProductsTable";
 
 const ProductsPage: FC = function () {
-    // const { meta } = useProduct();
-
     return (
         <>
             <div className="block items-center justify-between border-b border-gray-200 bg-white sm:flex dark:border-gray-700 dark:bg-gray-800">
@@ -19,8 +17,6 @@ const ProductsPage: FC = function () {
                     </div>
                 </div>
             </div>
-
-            {/* {meta && <ProductsTablePagination meta={meta} />} */}
         </>
     );
 };

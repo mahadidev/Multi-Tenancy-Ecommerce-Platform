@@ -166,7 +166,7 @@ class ProductService
             'is_trending' => 'nullable|boolean',
             'has_discount' => 'nullable|boolean',
             'discount_to' => 'nullable|date',
-            'tax' => 'nullable|integer',
+            'tax' => 'nullable',
             'discount_type' => 'nullable|string|in:flat,percentage',
             'discount_amount' => 'nullable|numeric|min:0',
             'variants' => 'nullable|array|required_if:has_variants,1',

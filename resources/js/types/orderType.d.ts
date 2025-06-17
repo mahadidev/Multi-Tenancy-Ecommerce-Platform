@@ -42,6 +42,8 @@ export interface OrderItemType {
 	total: string;
 	taxAmount: string;
 	afterTaxTotalPrice: string;
+	discount_amount: number;
+    discount: number;
 	product: ProductType;
 }
 

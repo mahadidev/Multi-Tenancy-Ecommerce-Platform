@@ -1,13 +1,14 @@
 import useToast from "@seller/hooks/useToast";
 import { Toast } from "flowbite-react";
+import { useEffect } from "react";
 import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
 
 const ToastMessage = () => {
     const { toast, dismissToaster } = useToast();
 
-    // useEffect(() => {
-    //     console.log(toast);
-    // }, [toast])
+    useEffect(() => {
+        console.log(toast);
+    }, [toast])
 
     return (
         <>

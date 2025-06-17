@@ -21,6 +21,8 @@ class OrderItemsResource extends JsonResource
             'qty' => $this->qty,
             'price' => $this->price,
             'total' => $this->total,
+            'discount' => $this->discount,
+            'discount_amount' => $this->discount_amount,
             'taxAmount' => $this->taxAmount,
             'afterTaxTotalPrice' => $this->afterTaxTotalPrice,
             'product' => $this->product,

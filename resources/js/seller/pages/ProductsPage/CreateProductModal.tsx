@@ -3,10 +3,9 @@ import useCategory from '@seller/hooks/useCategory';
 import useForm from '@seller/hooks/useForm';
 import useProduct from '@seller/hooks/useProduct';
 import useString from '@seller/hooks/useString';
-import useToast from '@seller/hooks/useToast';
 import { CategoryType } from '@type/categoryType';
 import { Button, Label, Modal, Select } from 'flowbite-react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { HiPlus } from 'react-icons/hi';
 import { FileInput } from '../../components';
@@ -21,18 +20,6 @@ const CreateProductModal: FC = function () {
 	});
 	const { getSlug } = useString();
 	const [attachments, setAttachments] = useState<string[]>(['']);
-    const {toaster} = useToast()
-
-    useEffect(() => {
-        return toaster({
-					text:
-						(create.error as { message?: string; error?: string })?.message ??
-						(create.error as { error?: string })?.error ??
-						'Something went wrong',
-					status: 'error',
-				});
-    }, [create.error])
-
 	return (
 		<>
 			<Button color="primary" className="p-0" onClick={() => setOpen(true)}>

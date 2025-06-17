@@ -51,14 +51,7 @@ const CartProducts = () => {
 						<div className=" md:text-right flex items-center gap-6">
 							<p className="text-base font-bold text-gray-900 dark:text-white">
 								TK{' '}
-								{item.discount > 0 && (
-									<>
-										<span className="line-through opacity-70">
-											{item.price}
-										</span>{' '}
-									</>
-								)}
-								{item.afterDiscountPrice}
+								{item.price}
 							</p>
 
 							<button

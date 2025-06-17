@@ -190,7 +190,7 @@ class OrderService
         $totalAfterDiscount = $totalBeforeDiscount - $discountAmount;
 
         // Calculate tax on the discounted amount
-        $taxAmount = $totalAfterDiscount * ($taxRate / 100);
+        $taxAmount = $totalBeforeDiscount * ($taxRate / 100);
 
         // Final total including tax
         $finalTotal = $totalAfterDiscount + $taxAmount;
@@ -203,8 +203,9 @@ class OrderService
             'item' => $product->name,
             'qty' => $quantity,
             'price' => $unitPrice, // Original unit price
-            'total' => $totalAfterDiscount, // Total after discount (before tax)
-            'discount_amount' => $discountAmount, // Added discount amount for reference
+            'total' => $totalBeforeDiscount, // Total after discount (before tax)
+            'discount' => $discount, // Added discount amount for reference
+            'discount_amount' => $discountAmount,
             'taxAmount' => $taxAmount,
             'afterTaxTotalPrice' => $finalTotal,
             'shop_id' => $product->shop_id,

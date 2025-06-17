@@ -14,6 +14,7 @@ class OrderItem extends Model
         'item',
         'price',
         'discount',
+        'discount_amount',
         'vat',
         'total',
         'returned',

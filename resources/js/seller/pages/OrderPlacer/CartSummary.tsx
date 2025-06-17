@@ -1,26 +1,26 @@
 import { useAppSelector } from '@seller/store/store';
+import { OrderPlacerCartItemType } from '@type/orderPlacer';
 
 const CartSummary = () => {
 	const { cartItems } = useAppSelector((state) => state.orderPlacer);
 
 	// CALCULATION CHANGES START HERE
-	const getItemTax = (item: any) => {
-		// Match backend calculation: (price - (price * discount/100)) * (taxRate/100)
-		const discountedPrice = item.price - item.price * (item.discount / 100);
-		return discountedPrice * (item.product.tax / 100) * item.qty;
+	const getItemTax = (item: OrderPlacerCartItemType) => {
+		return item.taxAmount;
 	};
 
 	const totalTax = cartItems.reduce((sum, item) => sum + getItemTax(item), 0);
 
-    const subtotal = cartItems.reduce(
-			(sum, item) => sum + item.price * item.qty,
-			0
-		);
+    const subtotal = cartItems
+			.reduce((sum, item) => sum + item.price, 0)
+			.toFixed(2);
+
 		const totalDiscount = cartItems.reduce((sum, item) => {
-			return sum + (item.price - item.afterDiscountPrice) * item.qty;
+			return sum + (item.price - item.afterDiscountPrice);
 		}, 0);
 
-    const grandTotal = subtotal - totalDiscount + totalTax;
+
+    const grandTotal =  Number(subtotal) - totalDiscount + totalTax;
 
 	return (
 		<>
@@ -30,9 +30,7 @@ const CartSummary = () => {
 						<dt className="text-gray-500 dark:text-gray-400">Sub total</dt>
 						<dd className="text-base font-medium text-gray-900 dark:text-white">
 							TK{' '}
-							{cartItems
-								.reduce((sum, item) => sum + item.afterDiscountPrice, 0)
-								.toFixed(2)}
+							{subtotal}
 						</dd>
 					</dl>
 
