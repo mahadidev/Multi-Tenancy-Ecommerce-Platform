@@ -21,8 +21,10 @@ export interface CreateProductPayloadType {
 	sku: string;
 	category_id: number;
 	price: number;
+	buying_price?: number;
+	discount_price?: number;
 	thumbnail: string;
-	attachments: string[]
+	attachments: string[];
 }
 
 export interface UpdateProductPayloadType {

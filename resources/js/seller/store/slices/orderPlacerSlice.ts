@@ -28,7 +28,7 @@ const orderPlacerSlice = createSlice({
 				(item) => item.product.sku === action.payload.product.sku
 			);
 			const productStock = action.payload.product.stock ?? 0;
-            const existingItem = state.cartItems[existingItemIndex];
+			const existingItem = state.cartItems[existingItemIndex];
 
 			// Existing item update
 			if (existingItemIndex !== -1 && existingItem) {
@@ -43,16 +43,13 @@ const orderPlacerSlice = createSlice({
 				state.cartItems[existingItemIndex] = {
 					...existingItem,
 					qty: newQty,
-					price: existingItem.price + action.payload.price,
-					afterDiscountPrice:
-						existingItem.afterDiscountPrice + action.payload.afterDiscountPrice,
-					taxAmount: existingItem.taxAmount + action.payload.taxAmount,
-					afterTaxPrice:
-						existingItem.afterTaxPrice + action.payload.afterTaxPrice,
 					uniqueID: existingItem.uniqueID,
 					product: existingItem.product,
-					discount: existingItem.discount,
 					variants: existingItem.variants,
+					price: existingItem.price + action.payload.price,
+					discount_price:
+						existingItem.discount_price + action.payload.discount_price,
+					tax: existingItem.tax + action.payload.tax,
 				};
 			} else {
 				// New item
@@ -72,6 +69,20 @@ const orderPlacerSlice = createSlice({
 			state.cartItems = state.cartItems.filter(
 				(item) => item.uniqueID !== action.payload.uniqueID
 			);
+		},
+		updateCartItem: (state, action: PayloadAction<OrderPlacerCartItemType>) => {
+			const existingItemIndex = state.cartItems.findIndex(
+				(item) => item.product.sku === action.payload.product.sku
+			);
+			const existingItem = state.cartItems[existingItemIndex];
+
+			// Existing item update
+			if (existingItemIndex !== -1 && existingItem) {
+				state.cartItems[existingItemIndex] = {
+                    ...existingItem,
+					...action.payload
+				};
+			}
 		},
 		setPaymentMethod: (
 			state,
@@ -100,5 +111,6 @@ export const {
 	clearCart,
 	setPaymentMethod,
 	setStatus,
+	updateCartItem,
 } = orderPlacerSlice.actions;
 export default orderPlacerSlice.reducer;

@@ -4,11 +4,11 @@ import useForm from '@seller/hooks/useForm';
 import useProduct from '@seller/hooks/useProduct';
 import useString from '@seller/hooks/useString';
 import { CategoryType } from '@type/categoryType';
-import { Button, Label, Modal, Select } from 'flowbite-react';
-import { FC, useState } from 'react';
+import { Button, Label, Modal } from 'flowbite-react';
+import { ChangeEvent, FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { HiPlus } from 'react-icons/hi';
-import { FileInput } from '../../components';
+import { FileInput, Select, TextInput } from '../../components';
 import MultipleImageUploader from './ProductEditPage/MultipleImageUploader';
 
 const CreateProductModal: FC = function () {
@@ -31,13 +31,14 @@ const CreateProductModal: FC = function () {
 			<Modal onClose={() => setOpen(false)} show={isOpen}>
 				<Modal.Header>Create a new Product</Modal.Header>
 				<Modal.Body>
-					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-						<FormInput
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+						<TextInput
 							id="name"
+							name="name"
 							label="Product Name"
 							formState={formState}
 							formErrors={formErrors}
-							handleChange={(event) => {
+							onChange={(event) => {
 								handleChange(event);
 								const slug = getSlug(event.target.value);
 								const sku =
@@ -51,66 +52,93 @@ const CreateProductModal: FC = function () {
 									sku: sku,
 								}));
 							}}
+							placeholder="Product name"
+							required
 						/>
-						<FormInput
+						<TextInput
 							id="slug"
+							name="slug"
 							label="Product Slug"
+							placeholder="Product Slug"
 							formState={formState}
 							formErrors={formErrors}
-							handleChange={handleChange}
+							onChange={handleChange}
+							required
 						/>
-						<FormInput
+						<TextInput
 							id="sku"
+							name="sku"
 							label="Product sku"
+							placeholder="Product sku"
 							formState={formState}
 							formErrors={formErrors}
-							handleChange={handleChange}
+							onChange={handleChange}
+							required
 						/>
-						<FormInput
+						<TextInput
 							id="price"
-							label="Product Price"
+							name="price"
+							label="Product Price ( TK )"
+							placeholder="Product Price"
 							formState={formState}
 							formErrors={formErrors}
-							handleChange={handleChange}
+							onChange={handleChange}
 							type="number"
+							required
 						/>
-						<div className="flex flex-col gap-2">
-							<Label htmlFor="category_id">Category</Label>
-							<div>
-								<Select
-									id="category_id"
-									name="category_id"
-									value={formState['category_id']}
-									color={formErrors['category_id'] ? 'failure' : 'gray'}
-									helperText={
-										formErrors['category_id']
-											? formErrors['category_id'][0]
-											: false
-									}
-									onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-										if (event.target.value === '0') {
-											event.target.value = 'null';
-										}
-										handleChange(event);
-									}}
-									required
-								>
-									<option value={0}>Select a Category</option>
-									{productCategories?.map((category: CategoryType) => (
-										<option value={category.id} key={category.id}>
-											{category.name}
-										</option>
-									))}
-								</Select>
-							</div>
-						</div>
-						<FormInput
-							id="stock"
-							label="Product Stock"
+						<TextInput
+							id="discount_amount"
+							name="discount_amount"
+							label="Discount amount ( TK )"
+							placeholder="Discount amount"
 							formState={formState}
 							formErrors={formErrors}
-							handleChange={handleChange}
+							onChange={handleChange}
 							type="number"
+							required
+						/>
+						<TextInput
+							id="buying_price"
+							name="buying_price"
+							label="Buying Price ( TK )"
+							placeholder="Buying Price"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+							min={0}
+						/>
+						<Select
+							id="category_id"
+							name="category_id"
+							label="Category"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+								if (event.target.value === '0') {
+									event.target.value = 'null';
+								}
+								handleChange(event);
+							}}
+							required
+						>
+							<option value={0}>Select a Category</option>
+							{productCategories?.map((category: CategoryType) => (
+								<option value={category.id} key={category.id}>
+									{category.name}
+								</option>
+							))}
+						</Select>
+						<TextInput
+							id="stock"
+							name="stock"
+							label="Product Stock"
+							placeholder="Stock Qty"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+							required
 						/>
 						<div className="flex flex-col gap-2 col-span-full">
 							<Label htmlFor="thumbnail">Thumbnail</Label>
@@ -146,6 +174,7 @@ const CreateProductModal: FC = function () {
 								formData: {
 									...formState,
 									attachments,
+                                    discount_type: "flat"
 								},
 								onSuccess: () => {
 									setOpen(false);

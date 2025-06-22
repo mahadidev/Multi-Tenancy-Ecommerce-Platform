@@ -1,5 +1,4 @@
-import { FileInput, TextInput } from '@seller/components';
-import FormInput from '@seller/components/FormInput/FormInput';
+import { FileInput, Select, TextInput, Textarea } from '@seller/components';
 import LoadingOverlay from '@seller/components/LoadingOverlay/LoadingOverlay';
 import { PageBreadCrumb } from '@seller/components/PageHeader/PageBreadcrumb';
 import useBrand from '@seller/hooks/useBrand';
@@ -10,7 +9,7 @@ import useString from '@seller/hooks/useString';
 import useToast from '@seller/hooks/useToast';
 import { BrandType } from '@type/brandType';
 import { CategoryType } from '@type/categoryType';
-import { Button, Label, Select, Textarea } from 'flowbite-react';
+import { Button, Label } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
@@ -35,9 +34,11 @@ const ProductEditPage = () => {
 			category_id: product?.category?.id || '',
 			brand: product?.brand?.id || '',
 			price: product?.price,
+			buying_price: product?.buying_price,
 			discount_amount: product?.discount_amount,
 			stock: product?.stock,
 			tax: product?.tax,
+			discount_type: "flat",
 			description: product?.description,
 			short_description: product?.short_description,
 			variants: product?.variants,
@@ -67,8 +68,10 @@ const ProductEditPage = () => {
 				category_id: product?.category?.id || '',
 				brand_id: product?.brand?.id || '',
 				price: product?.price,
+				buying_price: product?.buying_price,
 				tax: product?.tax,
 				discount_amount: product?.discount_amount,
+				discount_type: 'flat',
 				stock: product?.stock,
 				description: product?.description,
 				short_description: product?.short_description,
@@ -96,170 +99,183 @@ const ProductEditPage = () => {
 			/>
 
 			<section className="p-4">
-				<div>
-					<div>
-						<div className="flex flex-col gap-6">
-							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full ">
-								<FormInput
-									id="name"
-									label="Product Name"
-									formState={formState}
-									formErrors={formErrors}
-									handleChange={(event) => {
+				<div className="flex flex-col gap-6">
+					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full">
+						<TextInput
+							id="name"
+							name="name"
+							label="Product Name"
+							placeholder="Product Name"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={(event) => {
+								handleChange(event);
+								setFormState((prev: any) => ({
+									...prev,
+									slug: getSlug(event.target.value),
+								}));
+							}}
+							required
+						/>
+						<TextInput
+							id="slug"
+							name="slug"
+							label="Product Slug"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							required
+						/>
+						<TextInput
+							id="sku"
+							name="sku"
+							label="Product SKU"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							readOnly
+							required
+						/>
+
+						<Select
+							id="category_id"
+							name="category_id"
+							onChange={handleChange}
+							value={formState['category_id']}
+							label="Category"
+							required
+							formState={formState}
+							formErrors={formErrors}
+						>
+							<option value={0}>Select a Category</option>
+							{productCategories?.map((category: CategoryType) => (
+								<option value={category.id} key={category.id}>
+									{category.name}
+								</option>
+							))}
+						</Select>
+
+						<Select
+							id="brand_id"
+							name="brand_id"
+							onChange={handleChange}
+							value={formState['brand_id']}
+							label="Brand"
+							formState={formState}
+							formErrors={formErrors}
+						>
+							<option value={0}>Select a brand</option>
+							{brands.map((brand: BrandType) => (
+								<option value={brand.id} key={brand.id}>
+									{brand.name}
+								</option>
+							))}
+						</Select>
+
+						<TextInput
+							id="buying_price"
+							name="buying_price"
+							label="Buying Price"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+						/>
+						<TextInput
+							id="price"
+							name="price"
+							label="Product Price"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+							required
+						/>
+						<TextInput
+							id="discount_amount"
+							name="discount_amount"
+							label="Discount Amount"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+							placeholder="Discount Amount"
+						/>
+						<TextInput
+							id="stock"
+							name="stock"
+							label="Stock Quantity"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+							min={0}
+							required
+						/>
+						<TextInput
+							id="tax"
+							name="tax"
+							label="Tax (tk)"
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							type="number"
+							min={0}
+						/>
+
+						<Textarea
+							id="short_description"
+							name={'short_description'}
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							label="Short Description"
+							placeholder="Short Description of product"
+						/>
+
+						<Textarea
+							id="description"
+							name={'description'}
+							formState={formState}
+							formErrors={formErrors}
+							onChange={handleChange}
+							label="Description"
+							placeholder="Description of product"
+						/>
+
+						{/* Variants */}
+						<ProductVariantTable product={product!} />
+
+						{/* Thumbnail */}
+						<div className="flex flex-col gap-6 col-span-full">
+							<div className="flex flex-col gap-2">
+								<Label htmlFor="thumbnail">Thumbnail</Label>
+								<FileInput
+									id="thumbnail"
+									name="thumbnail"
+									placeholder="Click to upload thumbnail"
+									value={formState['thumbnail'] ?? product?.thumbnail}
+									color={formErrors['thumbnail'] ? 'failure' : 'gray'}
+									helperText={
+										formErrors['thumbnail'] ? formErrors['thumbnail'][0] : false
+									}
+									onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 										handleChange(event);
-										setFormState((prev: any) => ({
-											...prev,
-											slug: getSlug(event.target.value),
-										}));
 									}}
-								/>
-								<FormInput
-									id="slug"
-									label="Product Slug"
-									formState={formState}
-									formErrors={formErrors}
-									handleChange={handleChange}
-								/>
-								<TextInput
-									name="sku"
-									label="Product sku"
-									formState={formState}
-									formErrors={formErrors}
-                                    onChange={handleChange}
-                                    readOnly
-								/>
-
-								<div className="flex flex-col gap-2">
-									<Label htmlFor="category_id">Category</Label>
-									<Select
-										id="category_id"
-										name="category_id"
-										value={formState['category_id']}
-										onChange={handleChange}
-										required
-									>
-										<option value={0}>Select a Category</option>
-										{productCategories?.map((category: CategoryType) => (
-											<option value={category.id} key={category.id}>
-												{category.name}
-											</option>
-										))}
-									</Select>
-								</div>
-								<div className="flex flex-col gap-2">
-									<Label htmlFor="brand_id">Brand</Label>
-									<Select
-										id="brand_id"
-										name="brand_id"
-										value={formState['brand_id']}
-										onChange={handleChange}
-										required
-									>
-										<option value={0}>Select a brand</option>
-										{brands.map((brand: BrandType) => (
-											<option value={brand.id} key={brand.id}>
-												{brand.name}
-											</option>
-										))}
-									</Select>
-								</div>
-								<FormInput
-									id="price"
-									label="Product Price"
-									formState={formState}
-									formErrors={formErrors}
-									handleChange={handleChange}
-									type="number"
-								/>
-								<TextInput
-									name="discount_amount"
-									label="Discount Amount"
-									formState={formState}
-									formErrors={formErrors}
-									onChange={handleChange}
-									type="number"
-									placeholder="discount in %"
-								/>
-
-								<TextInput
-									name="stock"
-									label="Stock Quantity"
-									formState={formState}
-									formErrors={formErrors}
-									onChange={handleChange}
-									type="number"
-								/>
-
-								<TextInput
-									name="tax"
-									label="Tax (%)"
-									formState={formState}
-									formErrors={formErrors}
-									onChange={handleChange}
-									type="number"
-								/>
-
-								<div className="flex flex-col gap-2 col-span-full">
-									<Label htmlFor="short_description">Sort Description</Label>
-									<Textarea
-										id="short_description"
-										name="short_description"
-										placeholder="Enter product short description"
-										rows={5}
-										value={formState['short_description']}
-										onChange={handleChange}
-									/>
-								</div>
-								<div className="flex flex-col gap-2 col-span-full">
-									<Label htmlFor="description">Description</Label>
-									<Textarea
-										id="description"
-										name="description"
-										placeholder="Enter product description"
-										rows={5}
-										value={formState['description']}
-										onChange={handleChange}
-									/>
-								</div>
-
-								{/* variants */}
-								<ProductVariantTable product={product!} />
-
-								<div className="flex flex-col gap-6 col-span-full">
-									<div className="flex flex-col gap-2">
-										<Label htmlFor="thumbnail">Thumbnail</Label>
-										<div>
-											<FileInput
-												id="thumbnail"
-												name="thumbnail"
-												placeholder="Click to upload thumbnail"
-												value={formState['thumbnail'] ?? product?.thumbnail}
-												color={formErrors['thumbnail'] ? 'failure' : 'gray'}
-												helperText={
-													formErrors['thumbnail']
-														? formErrors['thumbnail'][0]
-														: false
-												}
-												onChange={(
-													event: React.ChangeEvent<HTMLInputElement>
-												) => {
-													handleChange(event);
-												}}
-											/>
-										</div>
-									</div>
-								</div>
-
-								{/* multiple image uploader */}
-								<MultipleImageUploader
-									attachments={attachments}
-									setAttachments={setAttachments}
 								/>
 							</div>
 						</div>
+
+						{/* Multiple Image Uploader */}
+						<MultipleImageUploader
+							attachments={attachments}
+							setAttachments={setAttachments}
+						/>
 					</div>
 				</div>
+
 				<LoadingOverlay isLoading={fetchProduct.isLoading} position="fixed" />
+
 				<div className="flex justify-end mt-6">
 					<Button
 						color="primary"

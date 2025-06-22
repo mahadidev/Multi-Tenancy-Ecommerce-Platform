@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 class Product extends Model
 {
-
     protected $fillable = [
         'store_id',
         'category_id',
@@ -21,6 +20,7 @@ class Product extends Model
         'thumbnail',
         'cost_price',
         'price',
+        'buying_price',
         'stock',
         'has_variants',
         'has_in_stocks',
@@ -32,7 +32,7 @@ class Product extends Model
         'discount_to',
         'discount_type',
         'discount_amount',
-        'tax'
+        'tax',
     ];
 
     protected $casts = [
@@ -43,21 +43,19 @@ class Product extends Model
     {
         parent::boot();
 
-        static::creating(function ($data) {
-            // Auto-generate slug from name if it's not provided
-            if (empty($data->slug)) {
-                $data->slug = Str::slug($data->name);  // Generate slug from name
+        static::creating(function ($product) {
+            if (empty($product->slug)) {
+                $product->slug = Str::slug($product->name);
             }
 
-            if (empty($data->status)) {
-                $data->status = 1;
+            if (empty($product->status)) {
+                $product->status = 1;
             }
         });
 
-
-        static::updating(function ($data) {
-            if ($data->isDirty('name')) {  // Check if the 'name' attribute has changed
-                $data->slug = Str::slug($data->name);  // Update slug based on new name
+        static::updating(function ($product) {
+            if ($product->isDirty('name')) {
+                $product->slug = Str::slug($product->name);
             }
         });
     }
@@ -110,31 +108,22 @@ class Product extends Model
 
     // The following functions will be used in the frontend sections
 
-    public function getDiscountPriceAttribute()
+    public function calculateDiscountPrice()
     {
-        $price = $this->attributes['price'] ?? 0;
-        $has_discount = $this->attributes['has_discount'] ?? 0;
-        $discount = $this->attributes['discount_amount'] ?? 0;
-        $discountTo = $this->attributes['discount_to'] ?? null;
-        $discountType = $this->attributes['discount_type'] ?? null;
+        $price = $this->price ?? 0;
+        $hasDiscount = $this->has_discount;
+        $discount = $this->discount_amount ?? 0;
+        $discountTo = $this->discount_to;
+        $discountType = $this->discount_type;
 
-        if ($has_discount) {
-            $currentDate = Carbon::today();
-            $discountEndDate = Carbon::parse($discountTo);
-
-            if ($currentDate->lte($discountEndDate)) {
-                // Calculate the discounted price
-                if ($discountType === 'percentage') {
-                    $discountedPrice = $price - ($price * ($discount / 100));
-                    return number_format($discountedPrice, 2, '.', '');
-                } else if ($discountType === 'flat') {
-                    $discountedPrice = $price - $discount;
-                    return number_format($discountedPrice, 2, '.', '');
-                }
+        if ($hasDiscount && $discountTo && Carbon::today()->lte(Carbon::parse($discountTo))) {
+            if ($discountType === 'percentage') {
+                return round($price - ($price * ($discount / 100)), 2);
+            } elseif ($discountType === 'flat') {
+                return round($price - $discount, 2);
             }
         }
 
-        // If no discount or the discount date is not valid, return the original price
         return $price;
     }
 

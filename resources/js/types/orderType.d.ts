@@ -25,7 +25,7 @@ export interface OrderType {
     payment_status: null;
     payment_method: string;
     shipping_method: null;
-    shipping_cost: null;
+    shipping_cost: null | number;
     shipping_address: null;
     billing_address: null;
     created_at: string;
@@ -38,12 +38,9 @@ export interface OrderItemType {
 	order_id: number;
 	product_id: number;
 	qty: number;
-	price: string;
-	total: string;
-	taxAmount: string;
-	afterTaxTotalPrice: string;
-	discount_amount: number;
-    discount: number;
+	price: number;
+    discount_price: number;
+	tax: number;
 	product: ProductType;
 }
 

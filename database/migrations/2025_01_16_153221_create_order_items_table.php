@@ -19,9 +19,8 @@ return new class extends Migration
             $table->foreignId('store_id')->nullable()->constrained('stores')->cascadeOnDelete();
             $table->string('item')->nullable();
             $table->decimal('price', 8,2)->default(0);
-            $table->decimal('discount', 8,2)->default(0);
-            $table->decimal('discount_amount', 8, 2)->default(0);
-            $table->double('vat')->default(0);
+            $table->decimal('discount_price', 8,2)->default(0);
+            $table->double('tax')->default(0);
             $table->decimal('total', 8,2)->default(0);
             $table->double('returned')->default(0);
             $table->integer('qty')->default(1);
@@ -30,8 +29,6 @@ return new class extends Migration
             $table->boolean('is_free')->default(false);
             $table->boolean('is_returned')->default(false);
             $table->json('options')->nullable();
-            $table->integer("taxAmount")->default(0);
-            $table->integer("afterTaxTotalPrice")->default(0);
             $table->timestamps();
         });
     }

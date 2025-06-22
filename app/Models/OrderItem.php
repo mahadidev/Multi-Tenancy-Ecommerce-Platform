@@ -13,9 +13,8 @@ class OrderItem extends Model
         'store_id',
         'item',
         'price',
-        'discount',
-        'discount_amount',
-        'vat',
+        'discount_price',
+        'tax',
         'total',
         'returned',
         'qty',
@@ -24,8 +23,6 @@ class OrderItem extends Model
         'is_free',
         'is_returned',
         'options',
-        'taxAmount',
-        'afterTaxTotalPrice'
     ];
 
     protected $casts = [

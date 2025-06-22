@@ -1,9 +1,9 @@
-import { FaLayerGroup, FaUsers } from 'react-icons/fa';
+import { FaLayerGroup, FaSteamSymbol, FaUsers } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
-import { MdDeliveryDining } from 'react-icons/md';
 
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
+import { TbTruckDelivery } from 'react-icons/tb';
 
 export const ecommerceModePages: SidebarItemType[] = [
 	{
@@ -25,7 +25,12 @@ export const ecommerceModePages: SidebarItemType[] = [
 		href: RoutePath.CustomersPage.index(),
 		icon: FaUsers,
 		label: 'Customers',
-	}
+	},
+	{
+		href: RoutePath.OrdersPage.index(),
+		icon: TbTruckDelivery,
+		label: 'Orders',
+	},
 ];
 
 export const ecommerceModeExternalPages: SidebarItemType[] = [
@@ -46,7 +51,7 @@ export const ecommerceModeExternalPages: SidebarItemType[] = [
 	},
 	{
 		href: RoutePath.orderPlacer.index(),
-		icon: MdDeliveryDining,
+		icon: FaSteamSymbol,
 		label: 'Order Placer',
 	},
 ];

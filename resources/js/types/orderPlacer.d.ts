@@ -3,12 +3,10 @@ import { ProductType } from "./productType";
 export interface OrderPlacerCartItemType {
 	uniqueID: string;
 	qty: number;
-	discount: number;
 	product: ProductType;
 	price: number;
-	afterDiscountPrice: number;
-	afterTaxPrice: number;
-	taxAmount: number;
+	discount_price: number;
+	tax: number;
 	variants?: {
 		label: string;
 		value: string;

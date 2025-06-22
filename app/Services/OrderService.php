@@ -71,7 +71,9 @@ class OrderService
             'items.*.variants.*.value' => 'required_with:items.*.variants|string',
             'items.*.variants.*.price' => 'required_with:items.*.variants|numeric|min:0',
             'items.*.qty' => 'required|integer|min:1',
-            'items.*.discount' => 'required|numeric|min:0|max:100',
+            'items.*.price' => 'required|numeric|min:0',
+            'items.*.discount_amount' => 'nullable|numeric|min:0',
+            'items.*.tax' => 'nullable|numeric|min:0|max:100',
         ]);
     }
 
@@ -133,9 +135,7 @@ class OrderService
                 throw new OrderProcessingException("Not enough stock for product: {$product->name}. Available: {$product->stock}, Requested: {$item['qty']}");
             }
 
-            $unitPrice = $this->calculateUnitPrice($product, $item['variants'] ?? []);
-
-            $this->createOrderItem($order, $product, $item, $unitPrice, $storeId);
+            $this->createOrderItem($order, $product, $item, $storeId);
 
             // Deduct stock
             $product->decrement('stock', $item["qty"]);
@@ -143,57 +143,19 @@ class OrderService
     }
 
 
-    /**
-     * Calculate the unit price including variants
-     *
-     * @param Product $product
-     * @param array $variants
-     * @return float
-     */
-    protected function calculateUnitPrice(Product $product, array $variants): float
-    {
-        $price = $product->price;
-
-        foreach ($variants as $variant) {
-            $price += (float) $variant['price'];
-        }
-
-        return $price;
-    }
-
-    /**
-     * Create an order item record
-     *
-     * @param Order $order
-     * @param Product $product
-     * @param array $itemData
-     * @param float $unitPrice
-     * @param int $storeId
-     * @return OrderItem
-     */
     protected function createOrderItem(
         Order $order,
         Product $product,
         array $itemData,
-        float $unitPrice,
         int $storeId
     ): OrderItem {
-        $discount = (float) ($itemData['discount'] ?? 0); // Default to 0 if not set
+        $discount = (float) ($itemData['discount_amount'] ?? 0); // Default to 0 if not set
         $quantity = (int) $itemData['qty'];
         $taxRate = (float) ($product['tax'] ?? 0); // Default to 0 if not set
 
         // Calculate the total price before discount
-        $totalBeforeDiscount = $unitPrice * $quantity;
-
-        // Apply discount to the total price
-        $discountAmount = $totalBeforeDiscount * ($discount / 100);
-        $totalAfterDiscount = $totalBeforeDiscount - $discountAmount;
-
-        // Calculate tax on the discounted amount
-        $taxAmount = $totalBeforeDiscount * ($taxRate / 100);
-
-        // Final total including tax
-        $finalTotal = $totalAfterDiscount + $taxAmount;
+        $price = $product->price * $quantity;
+        $discount_price = ($product->price * $quantity) - $discount;
 
         return OrderItem::create([
             'order_id' => $order->id,
@@ -202,34 +164,22 @@ class OrderService
             'store_id' => $storeId,
             'item' => $product->name,
             'qty' => $quantity,
-            'price' => $unitPrice, // Original unit price
-            'total' => $totalBeforeDiscount, // Total after discount (before tax)
-            'discount' => $discount, // Added discount amount for reference
-            'discount_amount' => $discountAmount,
-            'taxAmount' => $taxAmount,
-            'afterTaxTotalPrice' => $finalTotal,
+            'price' => $price, // Original unit price
+            'discount_price' => $discount_price, // Added discount amount for reference
+            'tax' => $taxRate,
             'shop_id' => $product->shop_id,
             'variants' => $itemData['variants'] ?? null,
         ]);
     }
 
-    /**
-     * Update the order total based on items
-     *
-     * @param Order $order
-     */
+
     protected function updateOrderTotal(Order $order): void
     {
         $total = $order->items()->sum('total');
         $order->update(['total' => $total]);
     }
 
-    /**
-     * Build the success response
-     *
-     * @param Order $order
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     protected function buildSuccessResponse(Order $order)
     {
         return response()->json([

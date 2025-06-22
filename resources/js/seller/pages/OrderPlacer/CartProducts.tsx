@@ -1,18 +1,36 @@
-import { removeCartItem } from '@seller/store/slices/orderPlacerSlice';
+import {
+    removeCartItem,
+    updateCartItem,
+} from '@seller/store/slices/orderPlacerSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { OrderPlacerCartItemType } from '@type/orderPlacer';
 
 const CartProducts = () => {
-    const {cartItems} = useAppSelector((state) => state.orderPlacer)
-    const dispatch = useAppDispatch();
+	const { cartItems } = useAppSelector((state) => state.orderPlacer);
+	const dispatch = useAppDispatch();
 
-    const onRemoveCartItem = (item: OrderPlacerCartItemType) => {
-        dispatch(removeCartItem({
-            uniqueID: item.uniqueID
-        }))
-    }
+	const onRemoveCartItem = (item: OrderPlacerCartItemType) => {
+		dispatch(
+			removeCartItem({
+				uniqueID: item.uniqueID,
+			})
+		);
+	};
 
-  return (
+	const onChangeItemPrice = (
+		item: OrderPlacerCartItemType,
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		dispatch(
+			updateCartItem({
+				...item,
+				uniqueID: item.uniqueID,
+				discount_price: Number(event.target.value),
+			})
+		);
+	};
+
+	return (
 		<>
 			<div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
 				{cartItems.map((item: OrderPlacerCartItemType) => (
@@ -31,7 +49,8 @@ const CartProducts = () => {
 									alt="imac dark"
 								/>
 								<div className="absolute -top-4 -right-5 rounded-full px-2 py-1 flex justify-center items-center bg-blue-700 text-white text-sm">
-									{item.product.discount_amount}%
+									{item.product.discount_amount}{' '}
+									{item.product.discount_type === 'flat' ? 'tk' : '%'}
 								</div>
 							</a>
 							<div className="w-full md:max-w-sm">
@@ -51,7 +70,24 @@ const CartProducts = () => {
 						<div className=" md:text-right flex items-center gap-6">
 							<p className="text-base font-bold text-gray-900 dark:text-white">
 								TK{' '}
-								{item.price}
+								{item.price != item.discount_price && (
+									<>
+										<span className=' line-through opacity-50'>{item.price}</span> {" "}
+									</>
+								)}
+								<input
+									className="w-auto max-w-[80px] p-0 border-none bg-transparent focus:ring-0 text-right"
+									min={0}
+									type="number"
+									value={item.discount_price}
+									onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+										onChangeItemPrice(item, event);
+									}}
+									placeholder="Item Price"
+									style={{
+										width: `${String(item.discount_price).length + 2}ch`,
+									}}
+								/>
 							</p>
 
 							<button
@@ -66,5 +102,5 @@ const CartProducts = () => {
 			</div>
 		</>
 	);
-}
-export default CartProducts
+};
+export default CartProducts;

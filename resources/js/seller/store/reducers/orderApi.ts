@@ -29,7 +29,9 @@ export interface PlaceOrderNonUserPayloadType {
 	items: {
 		product_id: number;
 		qty: number;
-		discount: number;
+		price: number;
+		discount_amount: number;
+        tax: number;
 		variants?: {
 			label: string;
 			value: string;

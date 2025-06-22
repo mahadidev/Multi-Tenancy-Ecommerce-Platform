@@ -1,5 +1,6 @@
-import { Label, TextInput as TextInputFR } from 'flowbite-react';
+import { TextInput as TextInputFR } from 'flowbite-react';
 import { ChangeEventHandler, FC, InputHTMLAttributes } from 'react';
+import Label from '../Label';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	name: string;
@@ -18,7 +19,7 @@ const TextInput: FC<FormInputProps> = ({
 }) => {
 	return (
 		<div className="w-full flex flex-col gap-2">
-			{label && <Label htmlFor={name}>{label}</Label>}
+			<Label name={name} label={label} required={rest.required} />
 
 			<TextInputFR
 				name={name}

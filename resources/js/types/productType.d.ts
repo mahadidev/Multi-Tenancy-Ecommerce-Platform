@@ -6,6 +6,8 @@ export interface ProductType {
 	name: string;
 	slug: string;
 	price: number;
+	buying_price?: number;
+	discount_price: number;
 	sku: string;
 	thumbnail: string;
 	category: CategoryType;
@@ -21,9 +23,8 @@ export interface ProductType {
 	has_discount: 0 | 1;
 	discount_to: null;
 	discount_type: null;
-	discount_amount: number | null;
-	discount_price: number;
-    tax: number;
+	discount_amount: number;
+	tax: number;
 	created_at: string;
 	updated_at: string;
 }

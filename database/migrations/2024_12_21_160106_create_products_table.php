@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->json('attachments')->nullable();
             $table->decimal('cost_price', 10, 2)->nullable(); // Nullable if the product has variants
             $table->decimal('price', 10, 2)->nullable(); // Nullable if the product has variants
+            $table->decimal('buying_price', 10, 2)->nullable(); // Nullable if the product has variants
             $table->integer('stock')->nullable(); // Nullable if the product has variants
             $table->boolean('has_variants')->default(false);
             $table->boolean('has_in_stocks')->default(true); // Nullable for products with variants

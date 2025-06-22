@@ -9,6 +9,8 @@ use App\Http\Resources\ProductResource;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Storage;
 use App\Models\ProductVariantOption;
+use Carbon\Carbon;
+
 class ProductService
 {
     public static function index(Request $request)
@@ -52,8 +54,9 @@ class ProductService
             'thumbnail' => 'nullable|string',
             'attachments' => 'nullable|array',
             'attachments.*' => 'string',
+            'buying_price' => 'nullable|numeric',
             'price' => 'required|numeric',
-            'stock' => 'nullable|integer',
+            'stock' => 'required|integer',
             'has_variants' => 'nullable|boolean',
             'has_in_stocks' => 'nullable|boolean',
             'status' => 'nullable|boolean',
@@ -81,7 +84,13 @@ class ProductService
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
 
-        // return $validatedData;
+        if ($validatedData["discount_amount"] && !isset($validatedData["discount_to"])) {
+            $validatedData["discount_to"] = Carbon::now()->addYears(10);
+        }
+
+        if ($validatedData["discount_amount"] && !isset($validatedData["has_discount"])) {
+            $validatedData["has_discount"] = true;
+        }
 
         // Create the product entry
         $product = Product::create([
@@ -95,6 +104,7 @@ class ProductService
             'description' => $validatedData['description'] ?? null,
             'thumbnail' => $validatedData['thumbnail'] ?? null,
             'attachments' => $validatedData['attachments'] ?? null,
+            'buying_price' => $validatedData['buying_price'] ?? null,
             'price' => $validatedData['price'],
             'stock' => $validatedData['stock'] ?? null,
             'has_variants' => $validatedData['has_variants'] ?? false,
@@ -158,6 +168,7 @@ class ProductService
             'attachments' => 'nullable|array',
             'attachments.*' => 'string',
             'price' => 'nullable|numeric',
+            'buying_price' => 'nullable|numeric',
             'stock' => 'nullable|integer',
             'has_variants' => 'nullable|boolean',
             'has_in_stocks' => 'nullable|boolean',
@@ -179,6 +190,14 @@ class ProductService
             'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
             'variants.*.options.*.code' => 'nullable|string',
         ]);
+
+        if($validatedData["discount_amount"] && !isset($validatedData["discount_to"])){
+            $validatedData["discount_to"] = Carbon::now()->addYears(10);
+        }
+
+        if($validatedData["discount_amount"] && !isset($validatedData["has_discount"])){
+            $validatedData["has_discount"] = true;
+        }
 
         // Update the product entry
         $product->update([
@@ -202,7 +221,7 @@ class ProductService
             'discount_to' => $validatedData['discount_to'] ?? $product->discount_to,
             'discount_type' => $validatedData['discount_type'] ?? $product->discount_type,
             'discount_amount' => $validatedData['discount_amount'] ?? $product->discount_amount,
-            'tax' => $validatedData['tax'] ?? $product->tax,
+            'tax' => $validatedData["tax"] ?? $product->tax
         ]);
 
         // Handle variants if present

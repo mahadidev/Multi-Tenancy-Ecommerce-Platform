@@ -1,34 +1,35 @@
 import { OrderType } from '@type/orderType';
 import { Button } from 'flowbite-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
 
 const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 	const contentRef = React.useRef<HTMLDivElement>(null);
 
-	// Helper function to safely convert to number and format
-	const formatCurrency = (value: number | string | undefined): string => {
-		const num = Number(value) || 0;
-		return num.toFixed(2);
-	};
+	const [summary, setSummary] = useState({
+		subtotal: 0,
+		totalDiscount: 0,
+		totalTax: 0,
+		grandTotal: 0,
+	});
 
-	const subTotal = order.items.reduce(
-		(sum, item) => sum + Number(Number(item.price) * item.qty),
-		0
-	);
-    const discount = order.items.reduce(
-			(sum, item) => sum + item.discount_amount,
+	useEffect(() => {
+		const newSubtotal = order.items.reduce((sum, item) => sum + item.price, 0);
+		const newTotalDiscount = order.items.reduce(
+			(sum, item) => sum + (item.price - item.discount_price),
 			0
 		);
-	const taxAmount = order.items.reduce(
-		(sum, item) => sum + Number(item.taxAmount),
-		0
-	);
-    const totalAmmountAfterTax = order.items.reduce(
-			(sum, item) => sum + Number(item.afterTaxTotalPrice),
-			0
-		);
+		const newTotalTax = order.items.reduce((sum, item) => sum + item.tax, 0);
+		const newGrandTotal = newSubtotal - newTotalDiscount + newTotalTax;
+
+		setSummary({
+			subtotal: newSubtotal,
+			totalDiscount: newTotalDiscount,
+			totalTax: newTotalTax,
+			grandTotal: newGrandTotal,
+		});
+	}, [order.items]);
 
 	const handlePrint = useReactToPrint({
 		contentRef,
@@ -95,10 +96,10 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 								<td className="py-1">{item.product.name}</td>
 								<td className="text-right">{item.qty}</td>
 								<td className="text-right">
-									{formatCurrency(item.product.price)}
+									{(item.product.price.toFixed(2))}
 								</td>
 								<td className="text-right">
-									{Number(item.price) * Number(item.qty)}
+									{Number(item.price)}
 								</td>
 							</tr>
 						))}
@@ -109,27 +110,27 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 				<div className="border-t pt-2">
 					<div className="flex justify-between">
 						<span>Subtotal:</span>
-						<span>TK {formatCurrency(subTotal)}</span>
+						<span>TK {summary.subtotal.toFixed(2)}</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Discount:</span>
 						<span className="text-primary-700">
-							TK -{formatCurrency(discount)}
+							TK -{summary.totalDiscount.toFixed(2)}
 						</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Tax:</span>
-						<span>TK {formatCurrency(taxAmount)}</span>
+						<span>TK {summary.totalTax.toFixed(2)}</span>
 					</div>
 					{order.shipping_cost && (
 						<div className="flex justify-between">
 							<span>Shipping:</span>
-							<span>TK {formatCurrency(order.shipping_cost)}</span>
+							<span>TK {order.shipping_cost?.toFixed(2)}</span>
 						</div>
 					)}
 					<div className="flex justify-between font-bold mt-1">
 						<span>TOTAL:</span>
-						<span>TK {formatCurrency(totalAmmountAfterTax)}</span>
+						<span>TK {summary.grandTotal.toFixed(2)}</span>
 					</div>
 				</div>
 

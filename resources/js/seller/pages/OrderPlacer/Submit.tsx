@@ -1,8 +1,9 @@
 import useOrders from '@seller/hooks/useOrders';
+import { productApi } from '@seller/store/reducers/productApi';
 import { clearCart } from '@seller/store/slices/orderPlacerSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Button, Modal } from 'flowbite-react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import OrderReceipt from './OrderReceipt';
 
@@ -21,8 +22,11 @@ const Submit = () => {
 				items: cartItems.map((item) => {
 					return {
 						qty: item.qty,
-						discount: item.discount,
+						discount_amount: item.price - item.discount_price,
 						product_id: item.product.id,
+						variants: item.variants,
+						tax: item.tax,
+						price: item.price,
 					};
 				}),
 				payment_method: paymentMethod,
@@ -30,6 +34,16 @@ const Submit = () => {
 			},
 		});
 	};
+
+	// fetch theme by slug or id
+	const [
+		fetchProductLazy,
+	] = productApi.endpoints.fetchProducts.useLazyQuery();
+	useEffect(() => {
+        if(placeOrderNonUser.isSuccess){
+            fetchProductLazy();
+        }
+    }, [fetchProductLazy, placeOrderNonUser.isSuccess]);
 
 	return (
 		<>

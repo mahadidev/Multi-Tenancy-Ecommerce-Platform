@@ -15,16 +15,9 @@ const Products = () => {
 	const onAddProduct = (product: ProductType) => {
 		const qty = 1;
 		const price = product.price * qty;
-		const afterDiscountWithoutTaxPrice = Number(
-			(
-				product.price *
-				qty *
-				(1 - (product.discount_amount ?? 0) / 100)
-			).toFixed(2)
-		);
-		const totalTax = Number(
-			(product.price * qty * (product.tax / 100)).toFixed(2)
-		);
+        const discount_price = product.discount_price * qty;
+        const tax = product.tax * qty;
+
 
 		if (Number(product.stock ?? 0) > 0) {
 			dispatch(
@@ -33,11 +26,8 @@ const Products = () => {
 					qty: qty,
 					product: product,
 					price: price,
-					afterDiscountPrice: afterDiscountWithoutTaxPrice,
-					taxAmount: totalTax,
-					// Final price
-					afterTaxPrice: afterDiscountWithoutTaxPrice + totalTax,
-					discount: product.discount_amount ?? 0,
+					discount_price: discount_price,
+					tax: tax,
 				})
 			);
 		}
@@ -83,7 +73,8 @@ const Products = () => {
 								<div className=" w-max h-max relative">
 									{row.discount_amount && (
 										<div className="absolute -top-4 -right-5 rounded-full px-2 py-1 flex justify-center items-center bg-blue-700 text-white text-sm">
-											{row?.discount_amount}%
+											{row.discount_amount}{' '}
+											{row.discount_type === 'flat' ? 'tk' : '%'}
 										</div>
 									)}
 									<img

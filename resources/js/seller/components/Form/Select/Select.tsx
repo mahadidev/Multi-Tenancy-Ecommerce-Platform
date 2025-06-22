@@ -1,5 +1,6 @@
-import { Label, Select as SelectPr } from 'flowbite-react';
+import { Select as SelectPr } from 'flowbite-react';
 import { ChangeEventHandler, FC, InputHTMLAttributes } from 'react';
+import Label from '../Label';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLSelectElement> {
 	name: string;
@@ -20,7 +21,8 @@ const Select: FC<FormInputProps> = ({
 }) => {
 	return (
 		<div className="w-full flex flex-col gap-2">
-			{label && <Label htmlFor={name}>{label}</Label>}
+			<Label name={name} label={label} required={rest.required} />
+
 			<SelectPr
 				name={name}
 				value={formState[name] || ''}
@@ -28,8 +30,8 @@ const Select: FC<FormInputProps> = ({
 				helperText={formErrors[name]?.[0] || ''}
 				{...rest}
 			>
-                {children}
-            </SelectPr>
+				{children}
+			</SelectPr>
 		</div>
 	);
 };
