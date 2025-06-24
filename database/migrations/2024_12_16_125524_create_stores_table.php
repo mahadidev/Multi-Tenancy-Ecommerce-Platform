@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->text('location')->nullable();
-            $table->string('currency')->default('BDT'); 
-            $table->string('logo')->nullable(); 
+            $table->string('currency')->default('BDT');
+            $table->string('logo')->nullable();
             $table->string('dark_logo')->nullable();
             $table->unsignedBigInteger('theme_id')->nullable();
             $table->string('primary_color')->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->json('settings')->nullable();
             $table->longText('description')->nullable();
             $table->tinyInteger('status')->default(1);
-           
+
             $table->softDeletes();
             $table->timestamps();
         });
