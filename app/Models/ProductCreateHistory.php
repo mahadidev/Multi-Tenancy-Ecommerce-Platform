@@ -6,5 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductCreateHistory extends Model
 {
-    //
+    public $fillable = [
+        "product_id",
+        "qty",
+        "price",
+        "discount_amount",
+        "buying_price",
+        "note",
+        "tax"
+    ];
+
+    protected $casts = [
+        'qty' => 'float',
+        'price' => 'float',
+        'discount_amount' => 'float',
+        'buying_price' => 'float',
+        'tax' => 'float',
+    ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

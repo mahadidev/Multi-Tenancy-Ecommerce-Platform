@@ -1,11 +1,10 @@
-import FormInput from '@seller/components/FormInput/FormInput';
 import useCategory from '@seller/hooks/useCategory';
 import useForm from '@seller/hooks/useForm';
 import useProduct from '@seller/hooks/useProduct';
 import useString from '@seller/hooks/useString';
 import { CategoryType } from '@type/categoryType';
 import { Button, Label, Modal } from 'flowbite-react';
-import { ChangeEvent, FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { HiPlus } from 'react-icons/hi';
 import { FileInput, Select, TextInput } from '../../components';

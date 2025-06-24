@@ -2,7 +2,7 @@ import { createTheme, theme, type CustomFlowbiteTheme } from 'flowbite-react';
 import { twMerge } from 'tailwind-merge';
 
 const formFieldBaseClass =
-	'border border-gray-300 bg-gray-50 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500';
+	'border border-gray-300 bg-gray-50 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 read-only:focus:ring-0 read-only:focus:border-gray-300  read-only:bg-gray-100 read-only:cursor-not-allowed dark:read-only:focus:border-gray-600 dark:read-only:bg-gray-800';
 
 const buttonBaseClass =
 	'group relative flex items-stretch justify-center p-0.5 text-center font-medium transition-[color,background-color,border-color,text-decoration-color,fill,stroke,box-shadow] focus:z-10 focus:outline-none border border-transparent rounded-lg w-full px-0 py-px sm:w-auto';

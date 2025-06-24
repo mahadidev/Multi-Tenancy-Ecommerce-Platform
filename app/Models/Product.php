@@ -37,6 +37,12 @@ class Product extends Model
 
     protected $casts = [
         'attachments' => 'array',
+        'cost_price' => 'float',
+        'price' => 'float',
+        'buying_price' => 'float',
+        'stock' => 'float',
+        'discount_amount' => 'float',
+        'tax' => 'float',
     ];
 
     protected static function boot()

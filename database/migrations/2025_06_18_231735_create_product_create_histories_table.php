@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('product_create_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->decimal("qty")->default(0);
+            $table->decimal('price')->default(0);
+            $table->decimal('discount_amount')->default(0);
+            $table->decimal('buying_price')->default(0);
+            $table->decimal('tax')->default(0);
             $table->string("note")->nullable();
             $table->timestamps();
         });

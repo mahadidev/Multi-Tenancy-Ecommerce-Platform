@@ -27,6 +27,19 @@ class OrderItem extends Model
 
     protected $casts = [
         'options' => 'array',
+        'price' => 'float',
+        'discount_price' => 'float',
+        'tax' => 'float',
+        'total' => 'float',
+        'qty' => 'float',
+        'returned_qty' => 'float',
+        'returned' => 'boolean',
+        'is_free' => 'boolean',
+        'is_returned' => 'boolean',
+        'order_id' => 'integer',
+        'user_id' => 'integer',
+        'product_id' => 'integer',
+        'store_id' => 'integer',
     ];
 
     public function order()

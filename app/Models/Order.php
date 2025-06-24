@@ -34,6 +34,13 @@ class Order extends Model
         'is_shipped'
     ];
 
+    protected $casts = [
+        'total' => 'float',
+        'discount' => 'float',
+        'vat' => 'float',
+        'return_total' => 'float',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -85,7 +92,7 @@ class Order extends Model
                     } catch (\Exception $e) {
                         Log::error('Failed to send order confirmation notification: ' . $e->getMessage());
                     }
-                    
+
                 }
 
                 // Notify seller

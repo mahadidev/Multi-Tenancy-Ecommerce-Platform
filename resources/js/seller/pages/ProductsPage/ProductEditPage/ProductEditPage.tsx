@@ -15,7 +15,6 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
 import BarcodeGenerator from './BarcodeGenerator/BarcodeGenerator';
 import MultipleImageUploader from './MultipleImageUploader';
-import PlaceOrder from './PlaceOrder';
 import ProductVariantTable from './ProductVariantTable';
 
 const ProductEditPage = () => {
@@ -91,7 +90,6 @@ const ProductEditPage = () => {
 						{product && (
 							<>
 								<BarcodeGenerator product={product} />
-								<PlaceOrder product={product} />
 							</>
 						)}
 					</div>
@@ -176,6 +174,7 @@ const ProductEditPage = () => {
 							id="buying_price"
 							name="buying_price"
 							label="Buying Price"
+							placeholder="Buying Price"
 							formState={formState}
 							formErrors={formErrors}
 							onChange={handleChange}
@@ -191,10 +190,23 @@ const ProductEditPage = () => {
 							type="number"
 							required
 						/>
+
+						<Select
+							id="discount_type"
+							name="discount_type"
+							onChange={handleChange}
+							value={formState['discount_type']}
+							label="Discount Type"
+							formState={formState}
+							formErrors={formErrors}
+						>
+							<option value="flat">TK</option>
+							<option value="percentage">%</option>
+						</Select>
 						<TextInput
 							id="discount_amount"
 							name="discount_amount"
-							label="Discount Amount"
+							label={`Discount Amount (${formState["discount_type"] === "flat" ? "TK" : "%"})`}
 							formState={formState}
 							formErrors={formErrors}
 							onChange={handleChange}
@@ -211,11 +223,13 @@ const ProductEditPage = () => {
 							type="number"
 							min={0}
 							required
+							readOnly
 						/>
 						<TextInput
 							id="tax"
 							name="tax"
 							label="Tax (tk)"
+							placeholder="Tax (tk)"
 							formState={formState}
 							formErrors={formErrors}
 							onChange={handleChange}

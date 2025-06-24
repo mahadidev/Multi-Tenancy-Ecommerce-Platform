@@ -12,7 +12,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
     // total amount
     const totalAmount = items?.reduce(
 			(sum, item: OrderItemType) =>
-				sum + item.qty * parseFloat(item?.price as string),
+				sum + item.qty * item.price,
 			0
 		);
 
@@ -98,12 +98,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
                                         {item?.qty}
                                     </Table.Cell>
                                     <Table.Cell className="text-gray-900 dark:text-gray-300">
-                                        {parseFloat(item?.price)?.toFixed(2)}{" "}
+                                        {(item.price)?.toFixed(2)}{" "}
                                         BDT
                                     </Table.Cell>
                                     <Table.Cell className="text-gray-900 dark:text-gray-300">
                                         {(
-                                            item?.qty * parseFloat(item?.price)
+                                            item?.qty * (item.price)
                                         ).toFixed(2)}{" "}
                                         BDT
                                     </Table.Cell>

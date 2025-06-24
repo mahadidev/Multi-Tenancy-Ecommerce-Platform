@@ -84,11 +84,11 @@ class ProductService
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
 
-        if ($validatedData["discount_amount"] && !isset($validatedData["discount_to"])) {
+        if (isset($validatedData["discount_amount"]) && !isset($validatedData["discount_to"])) {
             $validatedData["discount_to"] = Carbon::now()->addYears(10);
         }
 
-        if ($validatedData["discount_amount"] && !isset($validatedData["has_discount"])) {
+        if (isset($validatedData["discount_amount"]) && !isset($validatedData["has_discount"])) {
             $validatedData["has_discount"] = true;
         }
 
@@ -118,6 +118,12 @@ class ProductService
             'discount_amount' => $validatedData['discount_amount'] ?? null,
             'tax' => $validatedData["tax"] ?? 0,
         ]);
+
+        $productRecord = new ProductHistoryService();
+        $productDataForRecord = $product;
+        $productDataForRecord->qty = $product->stock ?? 0;
+
+        $productRecord->recordProductCreation($productDataForRecord);
 
         // Handle variants if they exist
         if ($request->has('variants')) {
