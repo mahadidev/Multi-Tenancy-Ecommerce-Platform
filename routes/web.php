@@ -27,7 +27,7 @@ Route::post('/deploy', function (Request $request) {
     Artisan::call('view:clear');
     Artisan::call('route:clear');
 
-    return response("Deployment successful:\n" . nl2br($output));
+    return response("Deployment:\n" . nl2br($output));
 });
 
 Route::get('/', function () {
