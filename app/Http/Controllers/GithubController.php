@@ -34,6 +34,9 @@ class GithubController extends Controller
         // 3. Dispatch to a queue for processing
         ProcessGitHubWebhook::dispatch($request->all());
 
+        // migrate
+        Artisan::call('migrate');
+
         return $this->gitPull();
     }
 
