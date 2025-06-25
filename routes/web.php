@@ -1,38 +1,11 @@
 <?php
 
+use App\Http\Controllers\GithubController;
 use App\Http\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\v1\seller\SubscriptionController;
-
-// git push webhook
-Route::post('/deploy', function (Request $request) {
-    $secret = env('GITHUB_WEBHOOK_SECRET');
-
-    $payload = $request->getContent();
-    $expected = 'sha256=' . hash_hmac('sha256', $payload, $secret);
-    $received = $request->header('X-Hub-Signature-256');
-
-    if (!hash_equals($expected, $received)) {
-        logger()->error('Signature mismatch', [
-            'expected' => $expected,
-            'received' => $received,
-            'payload' => $payload,
-        ]);
-        abort(403, 'Invalid signature');
-    }
-
-    $output = shell_exec('cd ' . base_path() . ' && git pull origin main 2>&1');
-
-    Artisan::call('config:clear');
-    Artisan::call('route:clear');
-    Artisan::call('view:clear');
-
-    return response("✅ Deployment successful:\n" . nl2br($output));
-})->withoutMiddleware([
-        VerifyCsrfToken::class,
-]);
 
 Route::get('/', function () {
     return view("welcome");
@@ -53,7 +26,7 @@ Route::prefix('/seller')->group(function () {
 });
 
 Route::prefix("/sites")->group(function () {
-    Route::get("/{slug}", function ($slug) {
+    Route::get("/{slug}", function($slug){
         return view("site.index", ["slug" => $slug]);
     });
 
@@ -78,3 +51,10 @@ Route::prefix("/themes")->group(function () {
 Route::get('/success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
 Route::get('/cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
 Route::post('/webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');
+
+// without middlware routes
+Route::withoutMiddleware([
+    VerifyCsrfToken::class
+])->group(function(){
+   Route::post('/deploy', [GithubController::class, "handle"]);
+});

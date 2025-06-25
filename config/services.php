@@ -46,5 +46,8 @@ return [
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => env('FACEBOOK_REDIRECT_URI'),
     ],
+    'github' => [
+        'webhook_secret' => env('GITHUB_WEBHOOK_SECRET', "iPVM5Dqh01KeBM4q31VJDehwHTZvDUFGPR27YkctIto"),
+    ],
 
 ];
