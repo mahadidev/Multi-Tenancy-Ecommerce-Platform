@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ThemeController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FilamentController;
 use App\Http\Controllers\ArtisanController;
@@ -30,7 +31,9 @@ Route::post('/deploy', function (Request $request) {
     Log::info("GitHub Deploy Output:\n" . $output);
 
     return response("✅ Deployment:\n" . nl2br($output));
-});
+})->withoutMiddleware([
+    VerifyCsrfToken::class
+]);
 
 Route::get('/', function () {
     return view("welcome");
