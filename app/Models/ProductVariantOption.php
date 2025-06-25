@@ -18,6 +18,9 @@ class ProductVariantOption extends Model
     protected $casts = [
         'qty_stock' => 'float',
         'price' => 'float',
+        'label' => 'string',
+        'slug' => 'string',
+        'code' => 'string'
     ];
 
     public function variant(){

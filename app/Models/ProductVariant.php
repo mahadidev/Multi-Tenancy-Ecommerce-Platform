@@ -16,7 +16,7 @@ class ProductVariant extends Model
             if (empty($data->slug)) {
                 $data->slug = Str::slug($data->label);  // Generate slug from name
             }
-            
+
         });
 
         // Automatically update the slug when updating
@@ -34,14 +34,15 @@ class ProductVariant extends Model
     ];
 
     protected $hidden = [
-        'created_at', 
+        'created_at',
         'updated_at'
     ];
 
     protected $casts = [
         // 'options' => 'array',
+        'label' => 'string'
     ];
-    
+
     public function product()
     {
         return $this->belongsTo(Product::class);

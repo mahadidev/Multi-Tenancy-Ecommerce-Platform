@@ -74,14 +74,12 @@ class ProductService
             'variants.*.slug' => 'nullable|string|max:255',
 
             'variants.*.options' => 'required|array|min:1',
-            'variants.*.options.*.label' => 'required|string|max:255',
-            'variants.*.options.*.slug' => 'nullable|string|max:255',
+            'variants.*.options.*.label' => 'required|max:255',
+            'variants.*.options.*.slug' => 'nullable|max:255',
             'variants.*.options.*.price' => 'nullable|numeric|min:0',
             'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
-            'variants.*.options.*.code' => 'nullable|string',
+            'variants.*.options.*.code' => 'nullable',
         ]);
-
-        $validatedData["sku"] = strval($validatedData["sku"]);
 
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
@@ -192,11 +190,11 @@ class ProductService
             'variants.*.label' => 'required|string|max:255',
             'variants.*.slug' => 'nullable|string|max:255',
             'variants.*.options' => 'required|array|min:1',
-            'variants.*.options.*.label' => 'required|string|max:255',
-            'variants.*.options.*.slug' => 'nullable|string|max:255',
+            'variants.*.options.*.label' => 'required|max:255',
+            'variants.*.options.*.slug' => 'nullable|max:255',
             'variants.*.options.*.price' => 'nullable|numeric|min:0',
             'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
-            'variants.*.options.*.code' => 'nullable|string',
+            'variants.*.options.*.code' => 'nullable',
         ]);
 
         $validatedData["sku"] = strval($validatedData["sku"]);

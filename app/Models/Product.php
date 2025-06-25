@@ -43,6 +43,7 @@ class Product extends Model
         'stock' => 'float',
         'discount_amount' => 'float',
         'tax' => 'float',
+        'sku' => 'string'
     ];
 
     protected static function boot()
