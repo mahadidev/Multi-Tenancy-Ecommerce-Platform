@@ -8,6 +8,24 @@ use App\Http\Controllers\Api\v1\site\OrderController;
 use App\Http\Controllers\UddoktaPayController;
 use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 
+// git push
+Route::get("/deploy", function(){
+    $path = base_path(); // your Laravel root
+
+    // Pull the latest code
+    $output = shell_exec("cd $path && git pull origin main 2>&1");
+
+    // Optional: Run post-deployment tasks
+    Artisan::call('config:cache');
+    Artisan::call('route:cache');
+    Artisan::call('view:clear');
+
+    // Log or return response
+    Log::info("Deploy Output: " . $output);
+
+    return response("Deployment complete:\n" . nl2br($output));
+});
+
 Route::get('/', function () {
     return view("welcome");
 });

@@ -20,7 +20,7 @@ Route::group(['middleware' => ['auth:sanctum' , 'verified']], function () {
     Route::post('track-order', [OrderController::class, 'trackOrder']);
 
     // product reviews route resource
-    Route::resource('product-reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('products/reviews', ProductReviewController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 
