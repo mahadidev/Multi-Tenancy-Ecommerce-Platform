@@ -56,6 +56,6 @@ Route::post('/webhook', [SubscriptionController::class, 'webhook'])->name('uddok
 Route::withoutMiddleware([
     VerifyCsrfToken::class
 ])->group(function(){
-    // github
+    // github controller
    Route::post('/deploy', [GithubController::class, "handle"]);
 });
