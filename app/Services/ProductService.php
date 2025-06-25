@@ -81,6 +81,8 @@ class ProductService
             'variants.*.options.*.code' => 'nullable|string',
         ]);
 
+        $validatedData["sku"] = strval($validatedData["sku"]);
+
         // Add the authenticated store ID to the data
         $validatedData['store_id'] = authStore();
 
@@ -196,6 +198,8 @@ class ProductService
             'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
             'variants.*.options.*.code' => 'nullable|string',
         ]);
+
+        $validatedData["sku"] = strval($validatedData["sku"]);
 
         if($validatedData["discount_amount"] && !isset($validatedData["discount_to"])){
             $validatedData["discount_to"] = Carbon::now()->addYears(10);
