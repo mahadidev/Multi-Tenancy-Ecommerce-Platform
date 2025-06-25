@@ -36,7 +36,7 @@ const ProductVariantTable: FC<ProductVariantProps> = ({ product }) => {
                         <Table>
                             <Table.Head>
                                 <Table.HeadCell>Label</Table.HeadCell>
-                                <Table.HeadCell>Extra Price</Table.HeadCell>
+                                <Table.HeadCell>Price</Table.HeadCell>
                                 <Table.HeadCell>Stock</Table.HeadCell>
                             </Table.Head>
                             <Table.Body>
