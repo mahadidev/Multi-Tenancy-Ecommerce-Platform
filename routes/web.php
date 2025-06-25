@@ -10,26 +10,28 @@ use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 Route::post('/deploy', function (Request $request) {
     $secret = env('GITHUB_WEBHOOK_SECRET');
 
-    $signature = 'sha256=' . hash_hmac('sha256', $request->getContent(), $secret);
-    $headerSig = $request->header('X-Hub-Signature-256');
+    $payload = $request->getContent();
+    $expected = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+    $received = $request->header('X-Hub-Signature-256');
 
-    if (!hash_equals($signature, $headerSig)) {
-        Log::error("Invalid GitHub signature.");
-        abort(403, 'Invalid signature.');
+    if (!hash_equals($expected, $received)) {
+        logger()->error('Signature mismatch', [
+            'expected' => $expected,
+            'received' => $received,
+            'payload' => $payload,
+        ]);
+        abort(403, 'Invalid signature');
     }
 
     $output = shell_exec('cd ' . base_path() . ' && git pull origin main 2>&1');
 
     Artisan::call('config:clear');
-    Artisan::call('cache:clear');
-    Artisan::call('view:clear');
     Artisan::call('route:clear');
+    Artisan::call('view:clear');
 
-    Log::info("GitHub Deploy Output:\n" . $output);
-
-    return response("Deployment Result:\n" . nl2br($output));
+    return response("✅ Deployment successful:\n" . nl2br($output));
 })->withoutMiddleware([
-    VerifyCsrfToken::class
+        VerifyCsrfToken::class,
 ]);
 
 Route::get('/', function () {
@@ -51,7 +53,7 @@ Route::prefix('/seller')->group(function () {
 });
 
 Route::prefix("/sites")->group(function () {
-    Route::get("/{slug}", function($slug){
+    Route::get("/{slug}", function ($slug) {
         return view("site.index", ["slug" => $slug]);
     });
 
