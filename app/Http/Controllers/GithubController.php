@@ -17,7 +17,7 @@ class GithubController extends Controller
         $payload = $request->getContent();
         $secret = config('services.github.webhook_secret'); // Retrieve webhook secret from config
 
-        if (!$this->verifyWebhookSignature($payload, $signature, $secret)) {
+        if (!$this->verifyWebhookSignature($payload ?? "", $signature ?? "", $secret ?? "")) {
             return response()->json(['message' => 'Invalid signature'], 401);
         }
 
