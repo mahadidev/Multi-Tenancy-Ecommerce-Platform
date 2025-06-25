@@ -10,24 +10,26 @@ use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 
 // git push webhook
 Route::post('/deploy', function (Request $request) {
-    // Secret Verification (optional)
     $secret = env('GITHUB_WEBHOOK_SECRET');
-    $signature = 'sha256=' . hash_hmac('sha256', $request->getContent(), $secret);
 
-    if (!hash_equals($signature, $request->header('X-Hub-Signature-256'))) {
-        abort(403, 'Invalid signature');
+    $signature = 'sha256=' . hash_hmac('sha256', $request->getContent(), $secret);
+    $headerSig = $request->header('X-Hub-Signature-256');
+
+    if (!hash_equals($signature, $headerSig)) {
+        Log::error("Invalid GitHub signature.");
+        abort(403, 'Invalid signature.');
     }
 
-    // Pull from GitHub
     $output = shell_exec('cd ' . base_path() . ' && git pull origin main 2>&1');
 
-    // Laravel cleanup
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
     Artisan::call('view:clear');
     Artisan::call('route:clear');
 
-    return response("Deployment:\n" . nl2br($output));
+    Log::info("GitHub Deploy Output:\n" . $output);
+
+    return response("✅ Deployment completed:\n" . nl2br($output));
 });
 
 Route::get('/', function () {
