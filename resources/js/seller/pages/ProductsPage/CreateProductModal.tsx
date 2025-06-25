@@ -85,16 +85,30 @@ const CreateProductModal: FC = function () {
 							type="number"
 							required
 						/>
+						<Select
+							id="discount_type"
+							name="discount_type"
+							onChange={handleChange}
+							value={formState['discount_type']}
+							label="Discount Type"
+							formState={formState}
+							formErrors={formErrors}
+						>
+							<option value="flat">TK</option>
+							<option value="percentage">%</option>
+						</Select>
 						<TextInput
 							id="discount_amount"
 							name="discount_amount"
-							label="Discount amount ( TK )"
+							label={`Discount Amount (${
+								formState['discount_type'] === 'flat' ? 'TK' : '%'
+							})`}
 							placeholder="Discount amount"
 							formState={formState}
 							formErrors={formErrors}
 							onChange={handleChange}
 							type="number"
-							required
+                            defaultValue={0}
 						/>
 						<TextInput
 							id="buying_price"
@@ -173,7 +187,7 @@ const CreateProductModal: FC = function () {
 								formData: {
 									...formState,
 									attachments,
-                                    discount_type: "flat"
+									discount_type: 'flat',
 								},
 								onSuccess: () => {
 									setOpen(false);

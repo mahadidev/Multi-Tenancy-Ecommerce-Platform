@@ -71,12 +71,12 @@ const Products = () => {
 						render: (row: ProductType) => (
 							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white flex gap-4 items-center">
 								<div className=" w-max h-max relative">
-									{row.discount_amount && (
+									{row.discount_amount && row.discount_amount > 0 ? (
 										<div className="absolute -top-4 -right-5 rounded-full px-2 py-1 flex justify-center items-center bg-blue-700 text-white text-sm">
 											{row.discount_amount}{' '}
 											{row.discount_type === 'flat' ? 'tk' : '%'}
 										</div>
-									)}
+									) : <></>}
 									<img
 										src={row.thumbnail}
 										className="w-12 h-12 aspect-square object-fit rounded-sm"

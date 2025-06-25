@@ -15,6 +15,11 @@ class ProductVariantOption extends Model
         'qty_stock',
     ];
 
+    protected $casts = [
+        'qty_stock' => 'float',
+        'price' => 'float',
+    ];
+
     public function variant(){
         return $this->belongsTo(ProductVariant::class, 'variant_id');
     }

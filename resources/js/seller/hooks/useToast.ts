@@ -14,7 +14,7 @@ const useToast = () => {
 
         setTimeout(() => {
             dismissToaster();
-        }, 5000);
+        }, 3000);
     };
 
     // dismiss toaster
