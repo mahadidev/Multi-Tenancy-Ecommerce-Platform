@@ -9,19 +9,25 @@ use App\Http\Controllers\UddoktaPayController;
 use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 
 // git push webhook
-Route::get("/deploy/{token}", function ($token) {
-    if ($token !== env('DEPLOY_SECRET')) {
-        abort(403);
+Route::post('/deploy', function (Request $request) {
+    // Secret Verification (optional)
+    $secret = env('GITHUB_WEBHOOK_SECRET');
+    $signature = 'sha256=' . hash_hmac('sha256', $request->getContent(), $secret);
+
+    if (!hash_equals($signature, $request->header('X-Hub-Signature-256'))) {
+        abort(403, 'Invalid signature');
     }
 
-    $path = base_path();
-    $output = shell_exec("cd $path && git pull origin main 2>&1");
+    // Pull from GitHub
+    $output = shell_exec('cd ' . base_path() . ' && git pull origin main 2>&1');
 
-    Artisan::call('config:cache');
-    Artisan::call('route:cache');
+    // Laravel cleanup
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
     Artisan::call('view:clear');
+    Artisan::call('route:clear');
 
-    return response("Deployed:\n" . nl2br($output));
+    return response("Deployment successful:\n" . nl2br($output));
 });
 
 Route::get('/', function () {
