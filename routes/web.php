@@ -27,7 +27,7 @@ Route::post('/deploy', function (Request $request) {
 
     Log::info("GitHub Deploy Output:\n" . $output);
 
-    return response("Deployment:\n" . nl2br($output));
+    return response("Deployment Result:\n" . nl2br($output));
 })->withoutMiddleware([
     VerifyCsrfToken::class
 ]);
