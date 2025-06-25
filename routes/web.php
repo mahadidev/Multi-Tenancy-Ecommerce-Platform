@@ -23,7 +23,7 @@ Route::get("/deploy", function(){
     // Log or return response
     Log::info("Deploy Output: " . $output);
 
-    return response("Deployment complete:\n" . nl2br($output));
+    return response("Wow! Deployment complete:\n" . nl2br($output));
 });
 
 Route::get('/', function () {
