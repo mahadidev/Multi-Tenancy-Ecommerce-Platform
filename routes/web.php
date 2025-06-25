@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\v1\site\OrderController;
 use App\Http\Controllers\UddoktaPayController;
 use App\Http\Controllers\Api\v1\seller\SubscriptionController;
 
-// git push
+// git push webhook
 Route::get("/deploy/{token}", function ($token) {
     if ($token !== env('DEPLOY_SECRET')) {
         abort(403);
