@@ -20,7 +20,7 @@ interface PropsType extends DataTablePropsType {
 	head?: {
 		render: CallableFunction;
 	};
-	filename: string;
+	filename?: string;
 	disablePagination?: boolean;
 	disableSl?: boolean;
 	disableHead?: boolean;

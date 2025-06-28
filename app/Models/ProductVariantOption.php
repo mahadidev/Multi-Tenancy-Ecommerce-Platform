@@ -26,4 +26,8 @@ class ProductVariantOption extends Model
     public function variant(){
         return $this->belongsTo(ProductVariant::class, 'variant_id');
     }
+
+    public function Stocks(){
+        return $this->hasMany(ProductVariantStockItem::class, 'variant_option_id');
+    }
 }

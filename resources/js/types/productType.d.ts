@@ -21,6 +21,8 @@ export interface ProductType {
 	variants: ProductVariantType[] | null;
 	is_trending: 0 | 1;
 	has_discount: 0 | 1;
+	variants_type: "none" | "basic" | "advance";
+    has_variants: boolean;
 	discount_to: null;
 	discount_type: null;
 	discount_amount: number;

@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DataTable, FileInput, Select, TextInput, Textarea } from '@seller/components';
+import {
+    DataTable,
+    FileInput,
+    Select,
+    TextInput,
+    Textarea,
+} from '@seller/components';
 import LoadingOverlay from '@seller/components/LoadingOverlay/LoadingOverlay';
 import { PageBreadCrumb } from '@seller/components/PageHeader/PageBreadcrumb';
 import useBrand from '@seller/hooks/useBrand';
@@ -17,7 +23,6 @@ import { useParams } from 'react-router-dom';
 import BarcodeGenerator from './BarcodeGenerator/BarcodeGenerator';
 import MultipleImageUploader from './MultipleImageUploader';
 import ProductVariantTable from './ProductVariantTable';
-import Variants from './Variants';
 
 const ProductEditPage = () => {
 	const { id } = useParams();
@@ -299,7 +304,9 @@ const ProductEditPage = () => {
 						{(formState['variants_type'] === 'basic' ||
 							formState['variants_type'] === 'advance') && (
 							<div className="col-span-full">
-								<Variants formState={formState} formErrors={formErrors} setFormState={setFormState} handleChange={handleChange} />
+								<h2 className="mb-2.5">Product Variants</h2>
+
+								<DataTable disablePagination columns={[{}]} data={[]} />
 							</div>
 						)}
 

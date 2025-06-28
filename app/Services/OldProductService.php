@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\ProductVariantOption;
 use Carbon\Carbon;
 
-class ProductService
+class OldProductService
 {
     public static function index(Request $request)
     {
@@ -23,7 +23,7 @@ class ProductService
         self::applyFiltersAndSorting($query, $request);
 
         $products = $query
-                ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
+            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
         // Paginate or get all results based on the presence of `per_page`
         $paginated = $perPage ? $products->paginate($perPage) : $products->get();
@@ -74,23 +74,12 @@ class ProductService
             'variants.*.label' => 'required|string|max:255',
             'variants.*.slug' => 'nullable|string|max:255',
 
-            // variants
             'variants.*.options' => 'required|array|min:1',
             'variants.*.options.*.label' => 'required|max:255',
             'variants.*.options.*.slug' => 'nullable|max:255',
             'variants.*.options.*.price' => 'nullable|numeric|min:0',
             'variants.*.options.*.qty_stock' => 'nullable|integer|min:0',
             'variants.*.options.*.code' => 'nullable',
-
-            // stocks
-            'variants.*.stocks' => "nullable|array",
-            'variants.*.stocks.*.qty' => "required|max:255",
-            'variants.*.stocks.*.buying_price' => 'nullable|max:255',
-            'variants.*.stocks.*.price' => 'required|max:255',
-            'variants.*.stocks.*.sku' => 'required|max:255',
-            'variants.*.stocks.*.items' => 'nullable|array',
-            'variants.*.stocks.*.items.*.variant_label' => 'required',
-            'variants.*.stocks.*.items.*.option_label' => 'required',
         ]);
 
         // Add the authenticated store ID to the data
@@ -213,11 +202,11 @@ class ProductService
 
         $validatedData["sku"] = strval($validatedData["sku"]);
 
-        if($validatedData["discount_amount"] && !isset($validatedData["discount_to"])){
+        if ($validatedData["discount_amount"] && !isset($validatedData["discount_to"])) {
             $validatedData["discount_to"] = Carbon::now()->addYears(10);
         }
 
-        if($validatedData["discount_amount"] && !isset($validatedData["has_discount"])){
+        if ($validatedData["discount_amount"] && !isset($validatedData["has_discount"])) {
             $validatedData["has_discount"] = true;
         }
 
@@ -253,7 +242,7 @@ class ProductService
             $product->variants()->delete();
 
             // Add new variants
-            if(!empty($validatedData['variants'])){
+            if (!empty($validatedData['variants'])) {
                 foreach ($validatedData['variants'] as $variant) {
                     $productVariant = ProductVariant::create([
                         'product_id' => $product->id,
@@ -335,8 +324,8 @@ class ProductService
             $query->where('category_id', $request->category_id);
         }
 
-         // 8. featured Filter - Essential for category-specific products
-         if ($request->has('is_featured')) {
+        // 8. featured Filter - Essential for category-specific products
+        if ($request->has('is_featured')) {
             $query->where('is_featured', true);
         }
 

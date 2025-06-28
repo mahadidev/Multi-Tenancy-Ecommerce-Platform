@@ -23,6 +23,7 @@ class Product extends Model
         'buying_price',
         'stock',
         'has_variants',
+        'variants_type',
         'has_in_stocks',
         'status',
         'attachments',
