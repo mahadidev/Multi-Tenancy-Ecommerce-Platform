@@ -1,11 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
+import { OrderPlacerCartItemVariantType } from "@type/orderPlacer";
 import { OrdersApiResponse } from "@type/orderType";
 import { ShipmentOrdersApiResponse } from "@type/shipmentOrdersType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { clearCartItems } from "../slices/cartSlice";
-import { setOrders, setShipmentOrders } from "../slices/orderSlice";
+import { setOrderReport, setOrders, setShipmentOrders } from "../slices/orderSlice";
 
 export interface PlaceOrderPayloadType {
     name: string;
@@ -32,16 +33,17 @@ export interface PlaceOrderNonUserPayloadType {
 		price: number;
 		discount_amount: number;
         tax: number;
-		variants?: {
-			label: string;
-			value: string;
-			price: number;
-		}[];
+		stock_id: number;
 	}[];
 }
 
 export interface BulkShipmentOrderPayloadType {
     orders: number[];
+}
+
+
+export interface FetchOrderReportPayloadType {
+	range?: 'today' | 'week' | 'month' | 'year';
 }
 
 export const orderApi = createApi({
@@ -90,7 +92,7 @@ export const orderApi = createApi({
 				}),
 			invalidatesTags: ['Orders'],
 			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, {  queryFulfilled }) {
+			async onQueryStarted(_queryArgument, { queryFulfilled }) {
 				await queryFulfilled.then(() => {
 					// dispatch(clearCartItems());
 				});
@@ -153,6 +155,20 @@ export const orderApi = createApi({
 			providesTags: ['Shipments'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
+		fetchOrderReport: builder.query<any, FetchOrderReportPayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/orders/report?period=${formData.range}`,
+					method: 'get',
+				}),
+			providesTags: ['Shipments'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setOrderReport(response?.data?.data?.report));
+				});
+			},
+		}),
 	}),
 });
 
@@ -163,5 +179,6 @@ export const {
     usePlaceOrderMutation,
     useBulkShipmentOrdersMutation,
     useSyncShipmentOrdersQuery,
-    usePlaceOrderNonUserMutation
+    usePlaceOrderNonUserMutation,
+    useFetchOrderReportQuery
 } = orderApi;

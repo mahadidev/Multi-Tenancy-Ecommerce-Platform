@@ -142,17 +142,6 @@ const CreateProductModal: FC = function () {
 								</option>
 							))}
 						</Select>
-						<TextInput
-							id="stock"
-							name="stock"
-							label="Product Stock"
-							placeholder="Stock Qty"
-							formState={formState}
-							formErrors={formErrors}
-							onChange={handleChange}
-							type="number"
-							required
-						/>
 						<div className="flex flex-col gap-2 col-span-full">
 							<Label htmlFor="thumbnail">Thumbnail</Label>
 							<div>

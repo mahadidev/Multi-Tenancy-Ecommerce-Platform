@@ -3,7 +3,10 @@ import {
     updateCartItem,
 } from '@seller/store/slices/orderPlacerSlice';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import { OrderPlacerCartItemType } from '@type/orderPlacer';
+import {
+    OrderPlacerCartItemType,
+} from '@type/orderPlacer';
+import { Table } from 'flowbite-react';
 
 const CartProducts = () => {
 	const { cartItems } = useAppSelector((state) => state.orderPlacer);
@@ -33,72 +36,96 @@ const CartProducts = () => {
 	return (
 		<>
 			<div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
-				{cartItems.map((item: OrderPlacerCartItemType) => (
-					<div
-						className="flex flex-wrap items-center space-y-4 p-6 sm:gap-6 sm:space-y-0 md:justify-between"
-						key={item.uniqueID}
-					>
-						<div className="w-full items-center space-y-4 sm:flex sm:space-x-6 sm:space-y-0 md:max-w-md">
-							<a
-								href="#"
-								className="block aspect-square w-20 shrink-0 relative"
+				<Table
+					hoverable
+					className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm"
+				>
+					<Table.Head>
+						<Table.HeadCell>Product</Table.HeadCell>
+						<Table.HeadCell>Variant</Table.HeadCell>
+						<Table.HeadCell>Qty</Table.HeadCell>
+						<Table.HeadCell>Price</Table.HeadCell>
+						<Table.HeadCell>Action</Table.HeadCell>
+					</Table.Head>
+					<Table.Body className="divide-y">
+						{cartItems.map((item: OrderPlacerCartItemType) => (
+							<Table.Row
+								key={item.uniqueID}
+								className="bg-white dark:bg-gray-800"
 							>
-								<img
-									className="h-full w-full rounded-sm"
-									src={item.product.thumbnail}
-									alt="imac dark"
-								/>
-								<div className="absolute -top-4 -right-5 rounded-full px-2 py-1 flex justify-center items-center bg-blue-700 text-white text-sm">
-									{item.product.discount_amount}{' '}
-									{item.product.discount_type === 'flat' ? 'tk' : '%'}
-								</div>
-							</a>
-							<div className="w-full md:max-w-sm">
-								<a
-									href="#"
-									className="font-medium text-gray-900 hover:underline dark:text-white"
-								>
-									{item.product.name}
-								</a>
-							</div>
-						</div>
-						<div className="w-8 shrink-0">
-							<p className="text-base font-normal text-gray-900 dark:text-white">
-								x{item.qty}
-							</p>
-						</div>
-						<div className=" md:text-right flex items-center gap-6">
-							<p className="text-base font-bold text-gray-900 dark:text-white">
-								TK{' '}
-								{item.price != item.discount_price && (
-									<>
-										<span className=' line-through opacity-50'>{item.price}</span> {" "}
-									</>
-								)}
-								<input
-									className="w-auto max-w-[80px] p-0 border-none bg-transparent focus:ring-0 text-right"
-									min={0}
-									type="number"
-									value={item.discount_price}
-									onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-										onChangeItemPrice(item, event);
-									}}
-									placeholder="Item Price"
-									style={{
-										width: `${String(item.discount_price).length + 2}ch`,
-									}}
-								/>
-							</p>
-
-							<button
-								className="text-red-600"
-								onClick={() => onRemoveCartItem(item)}
-							>
-								Remove
-							</button>
-						</div>
-					</div>
-				))}
+								<Table.Cell>
+									<div className="flex items-center space-x-4">
+										<div className="relative w-10 h-10 shrink-0">
+											<img
+												src={item.product.thumbnail}
+												alt={item.product.name}
+												className="rounded-sm w-full h-full object-cover"
+											/>
+											{item.product.has_discount ? (
+												<div className="absolute -top-2 -right-2 bg-blue-700 text-white text-xs px-2 py-1 rounded-full">
+													{item.stock.discount_amount}
+													{item.product.discount_type === 'flat' ? 'tk' : '%'}
+												</div>
+											) : (
+												<></>
+											)}
+										</div>
+										<div>
+											<p className="font-medium text-gray-900 dark:text-white">
+												{item.product.name}
+											</p>
+										</div>
+									</div>
+								</Table.Cell>
+								<Table.Cell>
+									{item.product.has_variants ? (
+										item.stock.stock_items?.map((stockItem, index) => (
+											<span
+												key={index}
+												className="inline-block text-sm mr-1 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded"
+											>
+												{stockItem.variant_option?.label}
+											</span>
+										))
+									) : (
+										<></>
+									)}
+								</Table.Cell>
+								<Table.Cell>
+									<span className="text-gray-900 dark:text-white">
+										x{item.qty}
+									</span>
+								</Table.Cell>
+								<Table.Cell>
+									<div className="flex items-center space-x-1">
+										{item.price !== item.discount_price && (
+											<span className="line-through text-sm text-gray-500">
+												{item.price}
+											</span>
+										)}
+										<input
+											type="number"
+											min={0}
+											value={item.discount_price}
+											className="bg-transparent border-none focus:ring-0 w-[80px] text-gray-900 dark:text-white p-0"
+											onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+												onChangeItemPrice(item, event)
+											}
+										/>
+									</div>
+								</Table.Cell>
+								<Table.Cell>
+									<button
+										onClick={() => onRemoveCartItem(item)}
+										className="text-red-600 hover:underline"
+									>
+										Remove
+									</button>
+								</Table.Cell>
+							</Table.Row>
+						))}
+					</Table.Body>
+				</Table>
 			</div>
 		</>
 	);

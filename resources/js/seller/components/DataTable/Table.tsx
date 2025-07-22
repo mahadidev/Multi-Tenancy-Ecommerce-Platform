@@ -1,6 +1,6 @@
 import useTable, { DataTablePropsType } from '@seller/hooks/useTable';
 import { Button, Card, Label, Table, TextInput } from 'flowbite-react';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { CSVLink } from 'react-csv';
 import { HiDocumentDownload } from 'react-icons/hi';
 import { MdClear } from 'react-icons/md';
@@ -15,15 +15,17 @@ interface PropsType extends DataTablePropsType {
 			event: React.FormEvent<HTMLFormElement>;
 			setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 		}) => void;
-        autoFocus?: boolean
+		autoFocus?: boolean;
 	};
 	head?: {
 		render: CallableFunction;
 	};
-	filename: string;
+	filename?: string;
 	disablePagination?: boolean;
 	disableSl?: boolean;
 	disableHead?: boolean;
+	bodyClassName?: string;
+	tableWrapperClassName?: string;
 }
 
 const DataTable: FC<PropsType> = (props) => {
@@ -38,9 +40,7 @@ const DataTable: FC<PropsType> = (props) => {
 		searchQuery,
 	} = useTable(props);
 
-    useEffect(() => {
-        console.log("q", searchQuery)
-    }, [searchQuery])
+
 	return (
 		<>
 			{(props.exportable || props.search || props.head?.render) && (
@@ -108,7 +108,7 @@ const DataTable: FC<PropsType> = (props) => {
 					</div>
 				</div>
 			)}
-			<div className="flex flex-col">
+			<div className={`flex flex-col ${props.tableWrapperClassName ?? ""}`}>
 				<div className="overflow-x-auto">
 					<div className="inline-block min-w-full align-middle">
 						<div className="overflow-hidden shadow">
@@ -203,7 +203,7 @@ const DataTable: FC<PropsType> = (props) => {
 									className={`${
 										!props.disableHead &&
 										'divide-y divide-gray-200 dark:divide-gray-700'
-									} bg-white  dark:bg-gray-800`}
+									} bg-white  dark:bg-gray-800 ${props.bodyClassName ?? ""}`}
 								>
 									<>
 										{paginate?.currentData?.map((row: any, idx) => (

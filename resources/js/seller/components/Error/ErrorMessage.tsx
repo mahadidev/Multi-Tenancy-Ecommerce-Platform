@@ -1,10 +1,19 @@
-import { FC } from "react";
+import { FC, HTMLAttributes, ReactNode } from 'react';
 
-const ErrorMessage:FC<{children: React.ReactNode}> = ({children}) => {
-  return (
+interface Props extends HTMLAttributes<HTMLDivElement> {
+	children: ReactNode;
+}
+
+const ErrorMessage: FC<Props> = ({ children, className, ...rest }) => {
+	return (
 		<>
-			{children && <p className="mt-2 text-sm text-red-600 dark:text-red-500">{children}</p>}
+			{children && (
+				<p className={`${className} mt-2 text-sm text-red-600 dark:text-red-500`}
+                {...rest}>
+					{children}
+				</p>
+			)}
 		</>
 	);
-}
-export default ErrorMessage
+};
+export default ErrorMessage;

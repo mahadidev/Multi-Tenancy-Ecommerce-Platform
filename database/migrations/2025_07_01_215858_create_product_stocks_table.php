@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_create_histories', function (Blueprint $table) {
+        Schema::create('product_stocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->decimal("qty")->default(0);
-            $table->decimal('price')->default(0);
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->decimal('price', 10, 2)->nullable();
+            $table->decimal('buying_price', 10, 2)->nullable();
             $table->decimal('discount_amount')->default(0);
-            $table->decimal('buying_price')->default(0);
+            $table->integer('qty')->nullable();
+            $table->string('sku')->nullable();
             $table->decimal('tax')->default(0);
-            $table->string("note")->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_create_histories');
+        Schema::dropIfExists('product_stocks');
     }
 };

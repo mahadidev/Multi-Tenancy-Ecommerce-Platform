@@ -28,7 +28,11 @@ return new class extends Migration
             $table->double('returned_qty')->default(0);
             $table->boolean('is_free')->default(false);
             $table->boolean('is_returned')->default(false);
-            $table->json('options')->nullable();
+            $table->unsignedBigInteger('product_stock_id')->nullable();
+            $table->foreign('product_stock_id')
+                ->references('id')
+                ->on('product_stocks')
+                ->onDelete('set null'); // 🔁 updated here
             $table->timestamps();
         });
     }

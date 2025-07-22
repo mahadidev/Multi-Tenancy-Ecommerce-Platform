@@ -44,6 +44,15 @@ export interface DeleteProductPayloadType {
 export interface GenerateBarcodePayloadType {
     id: number | string;
 }
+export interface CreateProductVariantPayloadType {
+    id: number | string;
+	variants: {
+		label: string;
+		options?: {
+			label: string;
+		}[];
+	}[];
+}
 
 export const productApi = createApi({
 	reducerPath: 'productApi',

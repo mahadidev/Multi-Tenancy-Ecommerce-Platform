@@ -1,5 +1,6 @@
 import { Label, Textarea as TextareaFR } from 'flowbite-react';
 import { ChangeEventHandler, FC, TextareaHTMLAttributes } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface FormInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	name: string;
@@ -7,16 +8,18 @@ interface FormInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 	formState: any;
 	formErrors: any;
 	onChange: ChangeEventHandler<HTMLTextAreaElement>;
+    wrapperClassName?: string
 }
 const Textarea: FC<FormInputProps> = ({
 	name,
 	label,
 	formState,
 	formErrors,
+    wrapperClassName,
 	...rest
 }) => {
 	return (
-		<div className="w-full flex flex-col gap-2">
+		<div className={twMerge('w-full flex flex-col gap-2', wrapperClassName)}>
 			{label && <Label htmlFor={name}>{label}</Label>}
 
 			<TextareaFR

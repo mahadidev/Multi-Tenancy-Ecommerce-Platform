@@ -19,6 +19,7 @@ class OrderItemsResource extends JsonResource
             parent::toArray($request), // or $this->resource->toArray()
             [
                 'product' => $this->product,
+                'stock' => $this->stock
             ]
         );
     }

@@ -45,14 +45,16 @@ const useForm = function (props?: FormProps) {
 	) => {
 		let { name, value, type, files }: ChangeEventTargetType = e.target;
 
+		// Handle checkbox
+		if (type === 'checkbox') {
+			value = e.target.checked ? 1 : 0;
+		}
+
 		// Handle numeric inputs (including 0)
-		if (type !== 'file' && type !== 'tel') {
-			// Explicitly check for "0" string or 0 number
+		else if (type !== 'file' && type !== 'tel') {
 			if (value === '0' || value === 0) {
 				value = 0;
-			}
-			// Check if value is a number (including "0")
-			else if (/^\d+$/.test(value)) {
+			} else if (/^\d+$/.test(value)) {
 				value = parseInt(value, 10);
 			}
 		}
@@ -77,7 +79,6 @@ const useForm = function (props?: FormProps) {
 			[name]: null,
 			message: null,
 		}));
-
 
 		// Update form state - explicitly preserve 0
 		setFormState((prev: any) => ({
