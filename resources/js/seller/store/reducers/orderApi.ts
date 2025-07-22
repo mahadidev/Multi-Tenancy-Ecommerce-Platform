@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
-import { OrderPlacerCartItemVariantType } from "@type/orderPlacer";
 import { OrdersApiResponse } from "@type/orderType";
 import { ShipmentOrdersApiResponse } from "@type/shipmentOrdersType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";

@@ -1,5 +1,5 @@
 import { CheckboxProps, Checkbox as FlowbiteCheckbox } from 'flowbite-react';
-import { ChangeEventHandler, ForwardedRef, forwardRef } from 'react';
+import { ChangeEventHandler, forwardRef } from 'react';
 import Label from '../Label';
 
 interface FormCheckboxProps extends CheckboxProps {

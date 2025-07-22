@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserType } from "@type/authType";
-import { AnalyticsResponseData } from "../reducers/dashboardAnalyticsApi";
+import { DashboardAnalyticsType } from '../reducers/dashboardAnalyticsApi';
 import { UserProfileType } from "./../../../types/authType.d";
 
 const initialState: {
-    user: UserType | null;
-    userProfileData: UserProfileType | null;
-    accessToken: string | null;
-    analytics: AnalyticsResponseData | null;
+	user: UserType | null;
+	userProfileData: UserProfileType | null;
+	accessToken: string | null;
+	analytics: DashboardAnalyticsType | null;
 } = {
-    user: null,
-    userProfileData: null,
-    accessToken: null,
-    analytics: null,
+	user: null,
+	userProfileData: null,
+	accessToken: null,
+	analytics: null,
 };
 
 const authSlice = createSlice({
