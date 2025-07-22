@@ -1,8 +1,8 @@
-import { TextInput as TextInputFR } from 'flowbite-react';
-import { ChangeEventHandler, FC, InputHTMLAttributes } from 'react';
+import { TextInput as TextInputFR, TextInputProps } from 'flowbite-react';
+import { ChangeEventHandler, ForwardedRef, forwardRef } from 'react';
 import Label from '../Label';
 
-interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface FormInputProps extends TextInputProps {
 	name: string;
 	label?: string;
 	type?: string;
@@ -10,26 +10,29 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	formErrors: any;
 	onChange: ChangeEventHandler<HTMLInputElement>;
 }
-const TextInput: FC<FormInputProps> = ({
-	name,
-	label,
-	formState,
-	formErrors,
-	...rest
-}) => {
-	return (
-		<div className="w-full flex flex-col gap-2">
-			<Label name={name} label={label} required={rest.required} />
 
-			<TextInputFR
-				name={name}
-				value={formState[name]}
-				color={formErrors[name] ? 'failure' : 'gray'}
-				helperText={formErrors[name]?.[0] || ''}
-				{...rest}
-			/>
-		</div>
-	);
-};
+const TextInput = forwardRef<HTMLInputElement, FormInputProps>(
+	(
+		{ name, label, formState, formErrors, ...rest },
+		ref: ForwardedRef<HTMLInputElement>
+	) => {
+		return (
+			<div className="w-full flex flex-col gap-2">
+				<Label name={name} label={label} required={rest.required} />
+
+				<TextInputFR
+					ref={ref}
+					name={name}
+					value={formState[name]}
+					color={formErrors[name] ? 'failure' : 'gray'}
+					helperText={formErrors[name]?.[0] || ''}
+					{...rest}
+				/>
+			</div>
+		);
+	}
+);
+
+TextInput.displayName = 'TextInput';
 
 export default TextInput;

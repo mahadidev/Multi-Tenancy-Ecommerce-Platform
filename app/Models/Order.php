@@ -39,6 +39,7 @@ class Order extends Model
         'discount' => 'float',
         'vat' => 'float',
         'return_total' => 'float',
+        'is_payed' => 'boolean'
     ];
 
     public function user()

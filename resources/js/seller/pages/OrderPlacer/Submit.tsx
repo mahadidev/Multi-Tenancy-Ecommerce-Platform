@@ -24,7 +24,7 @@ const Submit = () => {
 						qty: item.qty,
 						discount_amount: item.price - item.discount_price,
 						product_id: item.product.id,
-						variants: item.variants,
+						stock_id: item.stock.id,
 						tax: item.tax,
 						price: item.price,
 					};

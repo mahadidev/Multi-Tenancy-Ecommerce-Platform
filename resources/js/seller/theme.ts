@@ -89,4 +89,144 @@ export const customTheme: CustomFlowbiteTheme = createTheme({
 		},
 		spinnerSlot: 'absolute left-4 h-5 w-5',
 	},
+	sidebar: {
+		root: {
+			base: 'h-full',
+			collapsed: {
+				on: 'w-16',
+				off: 'w-64',
+			},
+			inner:
+				'h-full overflow-y-auto overflow-x-hidden rounded bg-white px-3 py-4 dark:bg-gray-800',
+		},
+		collapse: {
+			button:
+				'group flex w-full items-center rounded-lg p-2 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700',
+			icon: {
+				base: 'h-6 w-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white',
+				open: {
+					off: '',
+					on: 'text-gray-900',
+				},
+			},
+			label: {
+				base: 'ml-3 flex-1 whitespace-nowrap text-left',
+				title: 'sr-only',
+				icon: {
+					base: 'h-6 w-6 transition delay-0 ease-in-out',
+					open: {
+						on: 'rotate-180',
+						off: '',
+					},
+				},
+			},
+			list: 'space-y-2 py-2',
+		},
+		cta: {
+			base: 'mt-6 rounded-lg bg-gray-100 p-4 dark:bg-gray-700',
+			color: {
+				blue: 'bg-cyan-50 dark:bg-cyan-900',
+				dark: 'bg-dark-50 dark:bg-dark-900',
+				failure: 'bg-red-50 dark:bg-red-900',
+				gray: 'bg-gray-50 dark:bg-gray-900',
+				green: 'bg-green-50 dark:bg-green-900',
+				light: 'bg-light-50 dark:bg-light-900',
+				red: 'bg-red-50 dark:bg-red-900',
+				purple: 'bg-purple-50 dark:bg-purple-900',
+				success: 'bg-green-50 dark:bg-green-900',
+				yellow: 'bg-yellow-50 dark:bg-yellow-900',
+				warning: 'bg-yellow-50 dark:bg-yellow-900',
+			},
+		},
+		item: {
+			base: 'flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700',
+			active: 'bg-gray-50 dark:bg-gray-700',
+			collapsed: {
+				insideCollapse: 'group w-full pl-8 transition duration-75',
+				noIcon: 'font-bold',
+			},
+			content: {
+				base: 'flex-1 whitespace-nowrap px-3',
+			},
+			icon: {
+				base: 'h-6 w-6 shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white',
+				active: 'text-gray-700 dark:text-gray-100',
+			},
+			label: '',
+			listItem: '',
+		},
+		items: {
+			base: '',
+		},
+		itemGroup: {
+			base: 'mt-4 space-y-2 border-t border-gray-200 pt-4 first:mt-0 first:border-t-0 first:pt-0 dark:border-gray-700',
+		},
+		logo: {
+			base: 'mb-5 flex items-center pl-2.5',
+			collapsed: {
+				on: 'hidden',
+				off: 'self-center whitespace-nowrap text-xl font-semibold dark:text-white',
+			},
+			img: 'mr-3 h-6 sm:h-7',
+		},
+	},
+	tabs: {
+		base: 'flex flex-col gap-2',
+		tablist: {
+			base: 'flex text-center',
+			variant: {
+				default: 'flex-wrap border-b border-gray-200 dark:border-gray-700 bg-white',
+				underline:
+					'-mb-px flex-wrap border-b border-gray-200 dark:border-gray-700',
+				pills:
+					'flex-wrap space-x-2 text-sm font-medium text-gray-500 dark:text-gray-400',
+				fullWidth:
+					'grid w-full grid-flow-col divide-x divide-gray-200 rounded-none text-sm font-medium shadow dark:divide-gray-700 dark:text-gray-400',
+			},
+			tabitem: {
+				base: 'flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 focus:outline-none disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500',
+				variant: {
+					default: {
+						base: 'rounded-t-lg',
+						active: {
+							on: 'bg-gray-100 text-primary-600 dark:bg-gray-800 dark:text-primary-500',
+							off: 'text-gray-500 hover:bg-gray-50 hover:text-gray-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300',
+						},
+					},
+					underline: {
+						base: 'rounded-t-lg',
+						active: {
+							on: 'rounded-t-lg border-b-2 border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-500',
+							off: 'border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300',
+						},
+					},
+					pills: {
+						base: '',
+						active: {
+							on: 'rounded-lg bg-primary-600 text-white',
+							off: 'rounded-lg hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white',
+						},
+					},
+					fullWidth: {
+						base: 'ml-0 flex w-full rounded-none first:ml-0',
+						active: {
+							on: 'rounded-none bg-gray-100 p-4 text-gray-900 dark:bg-gray-700 dark:text-white',
+							off: 'rounded-none bg-white hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white',
+						},
+					},
+				},
+				icon: 'mr-2 h-5 w-5',
+			},
+		},
+		tabitemcontainer: {
+			base: '',
+			variant: {
+				default: '',
+				underline: '',
+				pills: '',
+				fullWidth: '',
+			},
+		},
+		tabpanel: 'py-3',
+	},
 });

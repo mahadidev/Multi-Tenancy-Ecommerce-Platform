@@ -1,21 +1,14 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
+import { DashboardAnalytics } from "@type/analytics";
 import { ApiResponseType } from "@type/apiType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { setDashboardAnalytics } from "../slices/dashboardAnalyticsSlice";
 
 export interface DashboardAnalyticsType extends ApiResponseType {
-    data: AnalyticsResponseData;
+    data: DashboardAnalytics;
 }
 
-export interface AnalyticsResponseData {
-	products_count: number;
-	categories_count: number;
-	orders_count: number;
-	customers_count: number;
-	order_analytics: OrderAnalytics;
-	unique_visitor_count: number;
-}
 
 export interface OrderAnalytics {
     total_revenue: number;

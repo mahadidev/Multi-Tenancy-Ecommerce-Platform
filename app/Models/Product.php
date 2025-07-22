@@ -85,7 +85,7 @@ class Product extends Model
 
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductVariant::class, "product_id");
     }
 
     public function scopeAuthorized($query)
@@ -171,5 +171,69 @@ class Product extends Model
         }
 
         return 0;
+    }
+
+    public function totalVariantStock()
+    {
+        if ($this->relationLoaded('variants')) {
+            $variants = $this->variants;
+        } else {
+            $variants = $this->variants()->with('options')->get();
+        }
+
+        if ($variants->isEmpty()) {
+            return 0;
+        }
+
+        return $variants
+            ->flatMap(fn($variant) => $variant->options ?? collect())
+            ->sum('qty_stock');
+    }
+
+    public function totalVariantValue()
+    {
+        if ($this->relationLoaded('variants')) {
+            $variants = $this->variants;
+        } else {
+            $variants = $this->variants()->with('options')->get();
+        }
+
+        if ($variants->isEmpty()) {
+            return 0;
+        }
+
+        return $variants
+            ->flatMap(fn($variant) => $variant->relationLoaded('options') ? $variant->options : $variant->options()->get() ?? collect())
+            ->sum(fn($option) => ($option->price ?? 0) * ($option->qty_stock ?? 0));
+    }
+
+    public function stocks(){
+        return $this->hasMany(ProductStock::class, "product_id");
+    }
+
+    public function totalStockValue()
+    {
+        return $this->stocks->sum(function ($stock) {
+            return $stock->price * $stock->qty;
+        });
+    }
+
+    public function totalDiscountedStockValue()
+    {
+        return $this->stocks->sum(function ($stock) {
+            $price = $stock->price;
+            $discount = $stock->discount_amount ?? 0;
+            $discountedPrice = max(0, $price - $discount); // Ensure no negative pricing
+            return $discountedPrice * $stock->qty;
+        });
+    }
+
+
+
+    // new total stock qty
+    public function stockQty(){
+        return $this->stocks->sum(function ($stock) {
+            return $stock->qty;
+        });
     }
 }

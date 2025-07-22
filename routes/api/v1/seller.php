@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\seller\ProductControllers\ProductController;
+use App\Http\Controllers\Api\v1\seller\ProductControllers\ProductStockController;
+use App\Http\Controllers\Api\v1\seller\ProductControllers\ProductStockHistoryController;
+use App\Http\Controllers\Api\v1\seller\ProductControllers\ProductVariantController;
 use App\Http\Controllers\Api\v1\site\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function () {
     // Get owned store list
-    Route::get('/get-stores', [StoreController::class, 'index']);
+    Route::get('/get-stores', action: [StoreController::class, 'index']);
 
     // Select an authorized store
     Route::post('/switch-store', [StoreController::class, 'switchStore']);
@@ -87,6 +91,13 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Product Route
     Route::resource('/product', ProductController::class);
+    Route::resource("/products/{product}/variants", ProductVariantController::class);
+    Route::resource("/products/{product}/stocks", ProductStockController::class);
+
+    // product history
+    Route::get('/products/stock-history', [ProductStockHistoryController::class, "productsHistory"]);
+    Route::get('/products/{product}/stock-history', [ProductStockHistoryController::class, "productHistory"]);
+
     Route::get('/product/generate/pdf', [ProductController::class, 'pdf']);
     Route::get('/product/generate/excel', [ProductController::class, 'excel']);
     Route::post("/product/{id}/barcode/generate", [ProductBarCodeController::class, "generate"]);
@@ -108,6 +119,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
 
     // Order Routes
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/report', [OrderController::class, 'report']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::put('/orders/update/status/{id}', [OrderController::class, 'updateOrderStatus']);
 

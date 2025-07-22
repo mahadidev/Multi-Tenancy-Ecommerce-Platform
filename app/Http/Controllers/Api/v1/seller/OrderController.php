@@ -192,4 +192,37 @@ class OrderController extends Controller
             ], 422);
         }
     }
+
+    public function report(Request $request)
+    {
+        try {
+            $request->validate([
+                'period' => 'sometimes|in:today,week,month,year,custom',
+                'start_date' => 'required_if:period,custom|date',
+                'end_date' => 'required_if:period,custom|date',
+            ]);
+
+            $period = $request->input('period', 'today');
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+
+            $report = $this->orderService->getOrderReport($period, $startDate, $endDate);
+
+            return response()->json([
+                'status' => 200,
+                'data' => [ 'report' => $report],
+            ]);
+        } catch (OrderProcessingException $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => $e->getMessage(),
+            ], 400);
+        } catch (\Exception $e) {
+            Log::error('Order report failed: ' . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to generate order report',
+            ], 500);
+        }
+    }
 }

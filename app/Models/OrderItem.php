@@ -22,7 +22,7 @@ class OrderItem extends Model
         'returned_qty',
         'is_free',
         'is_returned',
-        'options',
+        'product_stock_id',
     ];
 
     protected $casts = [
@@ -40,6 +40,7 @@ class OrderItem extends Model
         'user_id' => 'integer',
         'product_id' => 'integer',
         'store_id' => 'integer',
+        'product_stock_id' => 'integer'
     ];
 
     public function order()
@@ -60,6 +61,11 @@ class OrderItem extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function stock()
+    {
+        return $this->belongsTo(ProductStock::class, "product_stock_id");
     }
 
 

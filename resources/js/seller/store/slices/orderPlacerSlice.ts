@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
     OrderPlacerCartItemType,
+    OrderPlacerCartItemVariantType,
     OrderPlacerCustomerType,
 } from '@type/orderPlacer';
 
@@ -16,6 +17,24 @@ const initialState: {
 	status: 'Paid',
 };
 
+export function areVariantsEqual(
+	a: OrderPlacerCartItemVariantType[],
+	b: OrderPlacerCartItemVariantType[]
+): boolean {
+	if (a.length !== b.length) return false;
+
+	return a.every((itemA, index) => {
+		const itemB = b[index];
+		if (!itemB) return false;
+
+		return (
+			itemA.id === itemB.id &&
+			itemA.label === itemB.label &&
+			itemA.price === itemB.price
+		);
+	});
+}
+
 const orderPlacerSlice = createSlice({
 	name: 'orderPlacer',
 	initialState,
@@ -25,38 +44,23 @@ const orderPlacerSlice = createSlice({
 		},
 		addCartItem: (state, action: PayloadAction<OrderPlacerCartItemType>) => {
 			const existingItemIndex = state.cartItems.findIndex(
-				(item) => item.product.sku === action.payload.product.sku
+				(item) => item.stock.id === action.payload.stock.id
 			);
-			const productStock = action.payload.product.stock ?? 0;
-			const existingItem = state.cartItems[existingItemIndex];
+            const existingItem = state.cartItems[existingItemIndex];
 
-			// Existing item update
 			if (existingItemIndex !== -1 && existingItem) {
-				// ✅ TypeScript knows this is safe
-				const newQty = existingItem.qty + action.payload.qty;
-
-				if (newQty > productStock) {
-					console.warn('Not enough stock available.');
-					return;
-				}
-
 				state.cartItems[existingItemIndex] = {
 					...existingItem,
-					qty: newQty,
-					uniqueID: existingItem.uniqueID,
-					product: existingItem.product,
-					variants: existingItem.variants,
+					...action.payload,
+					qty: existingItem.qty + action.payload.qty,
 					price: existingItem.price + action.payload.price,
 					discount_price:
 						existingItem.discount_price + action.payload.discount_price,
+					discount_amount:
+						existingItem.discount_amount + action.payload.discount_amount,
 					tax: existingItem.tax + action.payload.tax,
 				};
 			} else {
-				// New item
-				if (action.payload.qty > productStock) {
-					console.warn('Not enough stock available.');
-					return;
-				}
 				state.cartItems.push(action.payload);
 			}
 		},
@@ -72,15 +76,15 @@ const orderPlacerSlice = createSlice({
 		},
 		updateCartItem: (state, action: PayloadAction<OrderPlacerCartItemType>) => {
 			const existingItemIndex = state.cartItems.findIndex(
-				(item) => item.product.sku === action.payload.product.sku
+				(item) => item.stock.id === action.payload.stock.id
 			);
 			const existingItem = state.cartItems[existingItemIndex];
 
 			// Existing item update
 			if (existingItemIndex !== -1 && existingItem) {
 				state.cartItems[existingItemIndex] = {
-                    ...existingItem,
-					...action.payload
+					...existingItem,
+					...action.payload,
 				};
 			}
 		},

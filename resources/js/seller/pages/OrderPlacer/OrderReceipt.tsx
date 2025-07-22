@@ -52,7 +52,11 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 			{/* Receipt Content */}
 			<div
 				ref={contentRef}
-				style={{ width: '80mm', padding: '5mm', fontSize: '12px' }}
+				style={{
+					width: '80mm',
+					padding: '5mm',
+					fontSize: '10px',
+				}}
 			>
 				{/* Store Header */}
 				<div className="text-center mb-2">
@@ -93,14 +97,10 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 					<tbody>
 						{order.items.map((item) => (
 							<tr key={item.id} className="border-b last:border-b-0">
-								<td className="py-1">{item.product.name}</td>
+								<td className="py-1">{item.item}</td>
 								<td className="text-right">{item.qty}</td>
-								<td className="text-right">
-									{(item.product.price.toFixed(2))}
-								</td>
-								<td className="text-right">
-									{Number(item.price)}
-								</td>
+								<td className="text-right">{item.product.price}</td>
+								<td className="text-right">{Number(item.price)}</td>
 							</tr>
 						))}
 					</tbody>
@@ -110,27 +110,27 @@ const OrderReceipt: React.FC<{ order: OrderType }> = ({ order }) => {
 				<div className="border-t pt-2">
 					<div className="flex justify-between">
 						<span>Subtotal:</span>
-						<span>TK {summary.subtotal.toFixed(2)}</span>
+						<span>TK {summary.subtotal}</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Discount:</span>
 						<span className="text-primary-700">
-							TK -{summary.totalDiscount.toFixed(2)}
+							TK -{summary.totalDiscount}
 						</span>
 					</div>
 					<div className="flex justify-between">
 						<span>Tax:</span>
-						<span>TK {summary.totalTax.toFixed(2)}</span>
+						<span>TK {summary.totalTax}</span>
 					</div>
 					{order.shipping_cost && (
 						<div className="flex justify-between">
 							<span>Shipping:</span>
-							<span>TK {order.shipping_cost?.toFixed(2)}</span>
+							<span>TK {order.shipping_cost}</span>
 						</div>
 					)}
 					<div className="flex justify-between font-bold mt-1">
 						<span>TOTAL:</span>
-						<span>TK {summary.grandTotal.toFixed(2)}</span>
+						<span>TK {summary.grandTotal}</span>
 					</div>
 				</div>
 

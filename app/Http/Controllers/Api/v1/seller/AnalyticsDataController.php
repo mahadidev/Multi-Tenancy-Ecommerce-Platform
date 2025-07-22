@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductVariantOption;
+use App\Services\ProductServices\ProductStockServices\ProductStockHistoryService;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
@@ -14,8 +15,15 @@ use Illuminate\Support\Facades\DB;
 
 class AnalyticsDataController extends Controller
 {
+    protected $productStockHistoryService;
 
-    public function index(Request $request){
+    public function __construct() {
+        $this->productStockHistoryService = new ProductStockHistoryService;
+    }
+
+
+    public function index(Request $request)
+    {
 
         // Filtered queries
         $orders = Order::authorized()->get();
@@ -23,6 +31,15 @@ class AnalyticsDataController extends Controller
         $categories_count = Category::authorized()->where('type', 'product')->count() ?? 0;
         $orders_count = $orders->count() ?? 0;
         $customers_count = User::whereJsonContains('store_id', authStore())->count() ?? 0;
+
+        // products
+        $products = Product::authorized()->get();
+        $total = $products->sum(function ($product) {
+            return $product->totalStockValue();
+        });
+        $totalDiscounted = $products->sum(function ($product) {
+            return $product->totalDiscountedStockValue();
+        });
 
         // visitors query
         $store = getStore();
@@ -34,6 +51,7 @@ class AnalyticsDataController extends Controller
 
         // Charts and Graphs data
         $order_analytics = $this->getOrderAnalytics($request, $filter) ?? null;
+
 
         return response()->json([
             'status' => '200',
@@ -47,13 +65,24 @@ class AnalyticsDataController extends Controller
                 'unique_visitor_count' => $unique_visitor_count,
                 'unique_visitor_today_count' => $unique_visitor_today_count,
                 'order_analytics' => $order_analytics,
-                'productAnalytics' => $this->productAnalytics()
+                'productAnalytics' => $this->productAnalytics(),
+                'product' => [
+                    'valuation' => [
+                        "total" => $total,
+                        "totalDiscounted" => $totalDiscounted
+                    ],
+                    "stock" => [
+                        "history" => $this->productStockHistoryService->getStockHistorySummary()
+                    ]
+
+                ]
             ]
         ], 200);
 
     }
 
-    public function getOrderAnalytics($request, $filter = 'year') {
+    public function getOrderAnalytics($request, $filter = 'year')
+    {
         $query = Order::authorized();
 
         $orderCounts = [];
@@ -97,10 +126,10 @@ class AnalyticsDataController extends Controller
         $totalValueation = 0;
         $totalBuyingPrice = 0;
 
-        foreach($totalProducts as $product){
+        foreach ($totalProducts as $product) {
             // buying price
             $totalBuyingPrice += $product->buying_price ?? 0;
-            if(isset($product->variants)){
+            if (isset($product->variants)) {
 
             }
         }

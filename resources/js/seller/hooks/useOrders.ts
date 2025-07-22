@@ -21,7 +21,7 @@ const useOrders = () => {
 	useFetchShipmentOrdersQuery(); // shipment orders query
 
 	// select orders
-	const { orders, order, shipmentOrders } = useAppSelector(
+	const { orders, order, shipmentOrders, report } = useAppSelector(
 		(state) => state.order
 	);
 
@@ -183,6 +183,7 @@ const useOrders = () => {
 		orders,
 		shipmentOrders,
 		order,
+        report,
 		updateOrderStatus: {
 			submit: updateOrderStatus,
 			isLoading: isUpdateOrderStatusLoading,

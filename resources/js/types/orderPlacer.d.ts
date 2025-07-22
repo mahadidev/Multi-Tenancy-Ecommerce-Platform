@@ -1,29 +1,32 @@
-import { ProductType } from "./productType";
+import { ProductStockType, ProductType } from './productType';
 
 export interface OrderPlacerCartItemType {
 	uniqueID: string;
-	qty: number;
 	product: ProductType;
+	stock: ProductStockType;
+	qty: number;
 	price: number;
-	discount_price: number;
+	discount_amount: number;
+    discount_price: number;
 	tax: number;
-	variants?: {
-		label: string;
-		value: string;
-		price: number;
-	}[];
+}
+
+export interface OrderPlacerCartItemVariantType {
+    id: number;
+	label: string;
+	price: number;
 }
 
 export interface OrderPlacerCustomerType {
-    id?: number | null;
-    name?: string | null;
-    phone?: string | null;
-    email?: string | null;
-    note?: string | null;
-    address?: string | null;
+	id?: number | null;
+	name?: string | null;
+	phone?: string | null;
+	email?: string | null;
+	note?: string | null;
+	address?: string | null;
 }
 
 export interface OrderPlacerCartType {
-    customer: OrderPlacerCustomerType,
-    items: OrderPlacerCartItemType[]
+	customer: OrderPlacerCustomerType;
+	items: OrderPlacerCartItemType[];
 }
