@@ -2,7 +2,7 @@ import { DataTable } from '@seller/components';
 import useProductVariant from '@seller/hooks/useProductVariant';
 import { ProductVariantType } from '@type/productType';
 import { Table } from 'flowbite-react';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import CreateAttributeModal from './CreateAttributeModal';
 import DeleteAttributeModal from './DeleteAttributeModal';

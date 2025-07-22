@@ -1,4 +1,4 @@
-import { Checkbox, TextInput } from '@seller/components';
+import { Checkbox } from '@seller/components';
 import { Label } from 'flowbite-react';
 import { SectionProps } from '../ProductEditPage';
 import Stocks from '../Stocks/Stocks';
