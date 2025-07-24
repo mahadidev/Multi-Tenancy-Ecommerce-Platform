@@ -21,9 +21,6 @@ const ProductStockHistoryChart = () => {
 		{ label: 'This Year', value: 'year' },
 	];
 
-	// Get the first key of the summaryData object (e.g., a date, month, etc.)
-	const firstKey = summaryData ? Object.keys(summaryData)[0] : null;
-
 	// Fixing types for chart data and calculating series values
 	const chartData = useMemo(() => {
 		if (!summaryData)
@@ -32,11 +29,13 @@ const ProductStockHistoryChart = () => {
 		const labels = Object.keys(summaryData); // Get the dynamic keys (like dates, months, etc.)
 
 		// Map over the labels and extract qty, sellingValue, buyingValue for each key
-		const qty = labels.map((key) => summaryData[key]?.qty || 0);
+		const qty = labels.map((key) => summaryData.chartSeries[key]?.qty || 0);
 		const sellingValue = labels.map(
-			(key) => summaryData[key]?.sellingValue || 0
+			(key) => summaryData.chartSeries[key]?.sellingValue || 0
 		);
-		const buyingValue = labels.map((key) => summaryData[key]?.buyingValue || 0);
+		const buyingValue = labels.map(
+			(key) => summaryData.chartSeries[key]?.buyingValue || 0
+		);
 
 		return { labels, qty, sellingValue, buyingValue };
 	}, [summaryData]);
@@ -118,10 +117,6 @@ const ProductStockHistoryChart = () => {
 		},
 	];
 
-	// Accessing the dynamic key data based on the first key of the summaryData object
-	const currentSummary = (summaryData && firstKey)
-		? summaryData[firstKey]
-		: { qty: 0, sellingValue: 0, buyingValue: 0 };
 
 	return (
 		<div className="space-y-4 col-span-full">
@@ -129,21 +124,17 @@ const ProductStockHistoryChart = () => {
 			<div className="grid grid-cols-3 gap-4">
 				<Card className="w-full">
 					<h5 className="text-lg font-semibold">Current Stock Quantity</h5>
-					<div className="text-2xl font-bold">{currentSummary?.qty}</div>
+					<div className="text-2xl font-bold">{chartData.qty}</div>
 				</Card>
 
 				<Card className="w-full">
 					<h5 className="text-lg font-semibold">Current Selling Value</h5>
-					<div className="text-2xl font-bold">
-						৳{currentSummary?.sellingValue}
-					</div>
+					<div className="text-2xl font-bold">৳{chartData.sellingValue}</div>
 				</Card>
 
 				<Card className="w-full">
 					<h5 className="text-lg font-semibold">Current Buying Value</h5>
-					<div className="text-2xl font-bold">
-						৳{currentSummary?.buyingValue}
-					</div>
+					<div className="text-2xl font-bold">৳{chartData.buyingValue}</div>
 				</Card>
 			</div>
 

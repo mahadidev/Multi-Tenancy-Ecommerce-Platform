@@ -46,27 +46,23 @@ class ProductService
             case 'today':
                 $start = Carbon::today();
                 $end = Carbon::tomorrow();
-                $format = 'H:i'; // Hour and minute (Today)
+                $format = 'H:i';
                 break;
-
             case 'week':
                 $start = Carbon::now()->subDays(6)->startOfDay();
                 $end = Carbon::now()->endOfDay();
-                $format = 'l'; // Weekdays (Monday, Tuesday...)
+                $format = 'l';
                 break;
-
             case 'month':
                 $start = Carbon::now()->startOfMonth();
                 $end = Carbon::now()->endOfMonth();
-                $format = 'd'; // Day of the month
+                $format = 'd';
                 break;
-
             case 'year':
                 $start = Carbon::now()->startOfYear();
                 $end = Carbon::now()->endOfYear();
-                $format = 'F'; // Month names (January, February...)
+                $format = 'F';
                 break;
-
             default:
                 throw new \InvalidArgumentException("Invalid date range: $range");
         }
@@ -74,35 +70,32 @@ class ProductService
         // Fetch and group data based on stocks' created_at
         $histories = $query->with([
             'stocks' => function ($query) use ($start, $end) {
-                // Filter stocks by their created_at date
                 $query->whereBetween('created_at', [$start, $end]);
             }
-        ])
-            ->get()
-            ->groupBy(fn($item) => $item->stocks->isNotEmpty() ? $item->stocks->first()->created_at->format($format) : null) // Group by stock's created_at
-            ->filter(fn($group) => $group->isNotEmpty()) // Remove any empty groups
+        ])->get();
+
+        $grouped = $histories
+            ->groupBy(fn($item) => $item->stocks->isNotEmpty()
+                ? $item->stocks->first()->created_at->format($format)
+                : '')
+            ->filter(fn($group) => $group->isNotEmpty())
             ->map(fn($group) => [
-                'qty' => $group->sum(fn($item) => $item->stocks->sum('qty')), // Sum qty for each product
-                'buyingValue' => $group->sum(fn($item) => $item->stocks->sum(fn($stock) => $stock->buying_price * $stock->qty)), // Sum value for each product stock,
-                'sellingValue' => $group->sum(fn($item) => $item->stocks->sum(fn($stock) => $stock->price * $stock->qty)), // Sum value for each product stock
-            ])
-            ->toArray();
+                'qty' => $group->sum(fn($item) => $item->stocks->sum('qty')),
+                'buyingValue' => $group->sum(fn($item) => $item->stocks->sum(fn($stock) => $stock->buying_price * $stock->qty)),
+                'sellingValue' => $group->sum(fn($item) => $item->stocks->sum(fn($stock) => $stock->price * $stock->qty)),
+            ]);
 
-        // Transform the data to match the ProductSummaryType structure
-        $transformedHistories = collect($histories)->map(function ($item) {
-            return [
-                'chartSeries' => [
-                    'qty' => $item['qty'],
-                    'buyingValue' => $item['buyingValue'],
-                    'sellingValue' => $item['sellingValue'],
-                ],
-                'qty' => $item['qty'],
-                'buyingValue' => $item['buyingValue'],
-                'sellingValue' => $item['sellingValue'],
-            ];
-        })->toArray();
+        // Total summary
+        $totalQty = $grouped->sum('qty');
+        $totalBuyingValue = $grouped->sum('buyingValue');
+        $totalSellingValue = $grouped->sum('sellingValue');
 
-        return $transformedHistories;
+        // Final structured response
+        return [
+            'qty' => $totalQty,
+            'buyingValue' => $totalBuyingValue,
+            'sellingValue' => $totalSellingValue,
+            'chartSeries' => $grouped->toArray(),
+        ];
     }
-
 }
