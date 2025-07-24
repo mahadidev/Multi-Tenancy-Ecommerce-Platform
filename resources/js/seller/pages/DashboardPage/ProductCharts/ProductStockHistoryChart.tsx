@@ -101,17 +101,17 @@ const ProductStockHistoryChart = () => {
 	// Prepare the chart series
 	const chartSeries = [
 		{
-			name: 'Quantity',
+			name: `Quantity ${summaryData?.qty ?? 0}`,
 			data: chartData.qty,
 			type: 'line',
 		},
 		{
-			name: 'Selling Value',
+			name: `Selling Value ${summaryData?.sellingValue ?? 0} TK`,
 			data: chartData.sellingValue,
 			type: 'line',
 		},
 		{
-			name: 'Buying Value',
+			name: `Buying Value ${summaryData?.buyingValue ?? 0} TK`,
 			data: chartData.buyingValue,
 			type: 'line',
 		},
@@ -120,28 +120,10 @@ const ProductStockHistoryChart = () => {
 
 	return (
 		<div className="space-y-4 col-span-full">
-			{/* Display Current Stock Summary Cards */}
-			<div className="grid grid-cols-3 gap-4">
-				<Card className="w-full">
-					<h5 className="text-lg font-semibold">Current Stock Quantity</h5>
-					<div className="text-2xl font-bold">{chartData.qty}</div>
-				</Card>
-
-				<Card className="w-full">
-					<h5 className="text-lg font-semibold">Current Selling Value</h5>
-					<div className="text-2xl font-bold">৳{chartData.sellingValue}</div>
-				</Card>
-
-				<Card className="w-full">
-					<h5 className="text-lg font-semibold">Current Buying Value</h5>
-					<div className="text-2xl font-bold">৳{chartData.buyingValue}</div>
-				</Card>
-			</div>
-
 			{/* Stock History Chart */}
 			<Card className="w-full col-span-full">
 				<div className="flex flex-wrap justify-between items-center mb-4 gap-2">
-					<h5 className="text-lg font-semibold">Stock History</h5>
+					<h5 className="text-lg font-semibold">Product Stock</h5>
 					<div className="flex gap-2">
 						{ranges.map((r) => (
 							<Button
@@ -155,6 +137,7 @@ const ProductStockHistoryChart = () => {
 						))}
 					</div>
 				</div>
+
 
 				{chartData.labels.length > 0 ? (
 					<ApexChart
