@@ -160,7 +160,7 @@ class ProductStockHistoryService
             ->groupBy(fn($item) => $item->created_at->format($format))
             ->map(fn($group) => [
                 'qty' => $group->sum('qty'),
-                'total_value' => $group->sum(fn($item) => $item->qty * $item->price),
+                'total_value' => $group->sum(fn($item) => $item->qty * $item->buying_price),
             ])
             ->toArray();
 
