@@ -78,5 +78,14 @@ export interface ProductStockItemType {
 
 export interface ProductStockHistoryType {
     qty: number;
+    buyingValue: number;
+    sellingValue: number;
+}
+
+
+export interface ProductSummaryType {
+	qty: number;
+	buyingValue: number;
+	sellingValue: number;
 }
 

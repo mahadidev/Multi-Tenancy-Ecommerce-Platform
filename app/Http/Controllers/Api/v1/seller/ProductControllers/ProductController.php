@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api\v1\seller\ProductControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use App\Services\ProductServices\ProductCreatorService;
 use App\Services\ProductServices\ProductUpdaterService;
 use App\Services\ProductServices\ProductDeleterService;
@@ -115,5 +116,26 @@ class ProductController extends Controller
         return $this->productService->getExcelDownload($request);
     }
 
+
+    public function getSummary(Request $request, Product $product)
+    {
+        $range = $request->input('range', 'today');
+
+        try {
+            $reportData = $this->productService->getSummary($range);
+
+            return response()->json([
+                'status' => 200,
+                'data' => [
+                    'history' => $reportData,
+                ],
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'status' => 400,
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }
 

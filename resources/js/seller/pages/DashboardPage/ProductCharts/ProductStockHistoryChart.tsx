@@ -1,4 +1,5 @@
 import useProductStockHistory from '@seller/hooks/useProductStockHistory';
+import { ProductSummaryType } from '@type/productType';
 import { ApexOptions } from 'apexcharts';
 import { Button, Card } from 'flowbite-react';
 import { useMemo, useState } from 'react';
@@ -17,16 +18,23 @@ const ProductStockHistoryChart = () => {
 		{ label: 'This Year', value: 'year' },
 	];
 
+	// Fixing types for chart data
 	const chartData = useMemo(() => {
-		if (!allProductStockHistory) return { labels: [], qty: [], total: [] };
+		if (!allProductStockHistory)
+			return { labels: [], qty: [], sellingValue: [], buyingValue: [] };
 
 		const labels = Object.keys(allProductStockHistory);
-		const qty = Object.values(allProductStockHistory).map((d: any) => d.qty);
-		const total = Object.values(allProductStockHistory).map(
-			(d: any) => d.total_value
+		const qty = Object.values(allProductStockHistory).map(
+			(d: ProductSummaryType) => d.qty
+		);
+		const sellingValue = Object.values(allProductStockHistory).map(
+			(d: ProductSummaryType) => d.sellingValue // Selling value
+		);
+		const buyingValue = Object.values(allProductStockHistory).map(
+			(d: ProductSummaryType) => d.buyingValue // Buying value
 		);
 
-		return { labels, qty, total };
+		return { labels, qty, sellingValue, buyingValue };
 	}, [allProductStockHistory]);
 
 	const chartOptions: ApexOptions = {
@@ -35,7 +43,7 @@ const ProductStockHistoryChart = () => {
 			toolbar: { show: false },
 			zoom: { enabled: false },
 		},
-		colors: ['#3b82f6', '#10b981'], // qty = blue, total_value = green
+		colors: ['#3b82f6', '#10b981', '#f59e0b'], // qty = blue, selling_value = green, buying_value = yellow
 		dataLabels: { enabled: false },
 		stroke: { curve: 'smooth', width: 2 },
 		xaxis: {
@@ -51,7 +59,14 @@ const ProductStockHistoryChart = () => {
 			},
 			{
 				opposite: true,
-				title: { text: 'Total Value' },
+				title: { text: 'Selling Value' },
+				labels: {
+					formatter: (val: number) => `৳${val}`,
+				},
+			},
+			{
+				opposite: true,
+				title: { text: 'Buying Value' },
 				labels: {
 					formatter: (val: number) => `৳${val}`,
 				},
@@ -62,8 +77,14 @@ const ProductStockHistoryChart = () => {
 			y: {
 				formatter: (val: number, opts) => {
 					const seriesName =
-						opts?.seriesIndex === 1 ? 'Total Value' : 'Quantity';
-					return seriesName === 'Total Value' ? `৳${val}` : `${val}`;
+						opts?.seriesIndex === 1
+							? 'Selling Value'
+							: opts?.seriesIndex === 2
+							? 'Buying Value'
+							: 'Quantity';
+					return seriesName === 'Selling Value' || seriesName === 'Buying Value'
+						? `৳${val}`
+						: `${val}`;
 				},
 			},
 		},
@@ -73,18 +94,23 @@ const ProductStockHistoryChart = () => {
 		},
 	};
 
-    const chartSeries = [
-			{
-				name: 'Quantity',
-				data: chartData.qty,
-				type: 'line',
-			},
-			{
-				name: 'Total Value',
-				data: chartData.total,
-				type: 'line',
-			},
-		];
+	const chartSeries = [
+		{
+			name: 'Quantity',
+			data: chartData.qty,
+			type: 'line',
+		},
+		{
+			name: 'Selling Value',
+			data: chartData.sellingValue,
+			type: 'line',
+		},
+		{
+			name: 'Buying Value',
+			data: chartData.buyingValue,
+			type: 'line',
+		},
+	];
 
 	return (
 		<Card className="w-full col-span-full">
