@@ -26,7 +26,7 @@ const ProductStockHistoryChart = () => {
 		if (!summaryData)
 			return { labels: [], qty: [], sellingValue: [], buyingValue: [] };
 
-		const labels = Object.keys(summaryData); // Get the dynamic keys (like dates, months, etc.)
+		const labels = Object.keys(summaryData.chartSeries); // Get the dynamic keys (like dates, months, etc.)
 
 		// Map over the labels and extract qty, sellingValue, buyingValue for each key
 		const qty = labels.map((key) => summaryData.chartSeries[key]?.qty || 0);
