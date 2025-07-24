@@ -122,7 +122,7 @@ class ProductStockHistoryService
     // summary
     public function getStockHistorySummary(string $range = 'month'): array
     {
-        $query = ProductStockHistory::query();
+        $query = ProductStockHistory::query()->where(["type" => "added"]);
 
         // Define the time range
         switch ($range) {
