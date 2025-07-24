@@ -1,150 +1,171 @@
-import { ReactNode, useEffect, useState } from "react";
-
-export interface DataTablePropsType {
-    columns: {
-        label?: string | ReactNode;
-        key?: string;
-        render?: CallableFunction;
-        sortable?: boolean;
-    }[];
-    data: any[];
-    search?: {
-        columns: string[];
-    };
-}
+import { DataTablePropsType } from '@type/tableType';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const useTable = (props: DataTablePropsType) => {
-	const [searchQuery, setSearchQuery] = useState<string>('');
-	const [sort, setSort] = useState<{
-		key: string;
-		dir: 'asc' | 'desc';
-	} | null>();
-	const [columns, setColumns] = useState(props?.columns);
-	const [data, setData] = useState(props?.data);
+	const [searchParams, setSearchParams] = useSearchParams();
 
+	// Get from URL
+	const queryPage = parseInt(searchParams.get('page') || '1', 10);
+	const querySortKey = searchParams.get('sortBy') || null;
+	const querySortDir = searchParams.get('sortDir') as 'asc' | 'desc' | null;
+	const querySearch = searchParams.get('search') || '';
+
+	// States
+	const [searchQuery, setSearchQuery] = useState(querySearch);
+	const [sort, setSort] = useState<{ key: string; dir: 'asc' | 'desc' } | null>(
+		querySortKey && querySortDir
+			? { key: querySortKey, dir: querySortDir }
+			: null
+	);
+	const [data, setData] = useState(props.data || []);
+	const [currentPage, setCurrentPage] = useState(queryPage || 1);
+
+	// Pagination constants
 	const rowsPerPage = 10;
 	const totalPages = Math.ceil(data.length / rowsPerPage);
-	const [currentPage, setCurrentPage] = useState(1);
 	const indexOfLastRow = currentPage * rowsPerPage;
 	const indexOfFirstRow = indexOfLastRow - rowsPerPage;
 
-	// refresh
+	// Refresh data from props
 	useEffect(() => {
-		setData(props?.data);
-	}, [props?.data]);
+		setData(props.data);
+	}, [props.data]);
 
-	// refresh
-	useEffect(() => {
-		setColumns(props?.columns);
-	}, [props?.columns]);
-
-	// handle paginate page change
-	const onNextPage = (page: number) => {
-		if (page >= 1 && page <= totalPages) {
-			setCurrentPage(page);
-		}
-	};
-
-	// sort data
+	// Sort logic
 	const sortData = ({
 		sort,
 		data,
 	}: {
-		sort: {
-			key: string;
-			dir: 'asc' | 'desc';
-		};
-		data: any;
+		sort: { key: string; dir: 'asc' | 'desc' };
+		data: any[];
 	}) => {
-		data = [...data];
-		if (sort?.dir === 'desc') {
-			return (Array?.isArray(data) ? data : data?.split(''))?.sort(
-				(x: any, y: any) => {
-					if (x[sort?.key] < y[sort?.key]) return -1;
-					if (x[sort?.key] > y[sort?.key]) return 1;
-					return 0;
-				}
-			);
-		} else if (sort?.dir === 'asc') {
-			return (Array?.isArray(data) ? data : data?.split(''))?.sort(
-				(x: any, y: any) => {
-					if (x[sort?.key] > y[sort?.key]) return -1;
-					if (x[sort?.key] < y[sort?.key]) return 1;
-					return 0;
-				}
-			);
-		}
-	};
-
-	// handle on sort
-	const onSort = (val: string) => {
-		setCurrentPage(1);
-		setSort((prev: any) => {
-			if (prev && prev?.dir === 'asc') {
-				onSearch(searchQuery, true);
-				return null;
-			} else if (prev && prev?.dir === 'desc') {
-				setData((prevData) => {
-					return sortData({
-						data: prevData,
-						sort: {
-							key: val,
-							dir: 'asc',
-						},
-					});
-				});
-
-				return {
-					key: val,
-					dir: 'asc',
-				};
-			} else {
-				setData((prevData) => {
-					return sortData({
-						data: prevData,
-						sort: {
-							key: val,
-							dir: 'desc',
-						},
-					});
-				});
-
-				return {
-					key: val,
-					dir: 'desc',
-				};
-			}
+		return [...data].sort((a, b) => {
+			if (a[sort.key] < b[sort.key]) return sort.dir === 'asc' ? -1 : 1;
+			if (a[sort.key] > b[sort.key]) return sort.dir === 'asc' ? 1 : -1;
+			return 0;
 		});
 	};
 
-	// handle on search
-    const onSearch = (query: string, onlySearch?: boolean) => {
-			setCurrentPage(1);
-			if (props?.search?.columns) {
-				setSearchQuery(query);
-                console.log(query);
-				setData(() => {
-					const lowerCaseQuery = query.toLowerCase();
+	// Update URL on any state change
+	const updateURLParams = ({
+		page = currentPage,
+		sortKey = sort?.key,
+		sortDir = sort?.dir,
+		search = searchQuery,
+	}: {
+		page?: number;
+		sortKey?: string | null;
+		sortDir?: 'asc' | 'desc' | null;
+		search?: string;
+	}) => {
+		const newParams = new URLSearchParams();
 
-					const sortedData = props?.data?.filter((dataItem: any) => {
-						return props?.search?.columns.some((column) => {
-							const value = dataItem[column]?.toString().toLowerCase();
-							return value?.includes(lowerCaseQuery);
-						});
-					});
+		if (page > 1) newParams.set('page', page.toString());
+		if (sortKey && sortDir) {
+			newParams.set('sortBy', sortKey);
+			newParams.set('sortDir', sortDir);
+		}
+		if (search?.trim()) newParams.set('search', search.trim());
 
-					if (sort && !onlySearch) {
-						return sortData({ data: sortedData, sort: sort });
-					} else {
-						return sortedData;
-					}
-				});
+		setSearchParams(newParams);
+	};
+
+	// Page change handler
+	const onNextPage = (page: number) => {
+		if (page >= 1 && page <= totalPages) {
+			setCurrentPage(page);
+			updateURLParams({ page });
+		}
+	};
+
+	// Sort column handler
+	const onSort = (key: string) => {
+		setCurrentPage(1);
+
+		setSort((prev) => {
+			let nextSort: typeof prev;
+
+			if (!prev || prev.key !== key) {
+				nextSort = { key, dir: 'desc' };
+			} else if (prev.dir === 'desc') {
+				nextSort = { key, dir: 'asc' };
+			} else {
+				nextSort = null;
 			}
-		};
 
-        useEffect(() => {
-            onSearch(searchQuery)
-        }, [searchQuery])
+			// Update data
+			if (nextSort) {
+				setData(sortData({ sort: nextSort, data }));
+			} else {
+				setData(props.data);
+			}
+
+			// Update URL
+			updateURLParams({
+				page: 1,
+				sortKey: nextSort?.key || null,
+				sortDir: nextSort?.dir || null,
+			});
+
+			return nextSort;
+		});
+	};
+
+	// Search handler
+	const onSearch = (query: string, onlySearch = false) => {
+		setSearchQuery(query);
+		setCurrentPage(1);
+
+		let filteredData = props.data;
+
+		if (props?.search?.columns?.length) {
+			const lowerQuery = query.toLowerCase();
+			filteredData = props.data.filter((item) =>
+				props?.search?.columns.some((col) =>
+					item[col]?.toString().toLowerCase().includes(lowerQuery)
+				)
+			);
+		}
+
+		// Apply sort if already exists
+		if (sort && !onlySearch) {
+			filteredData = sortData({ sort, data: filteredData });
+		}
+
+		setData(filteredData);
+
+		// Update URL
+		updateURLParams({
+			page: 1,
+			sortKey: sort?.key || null,
+			sortDir: sort?.dir || null,
+			search: query,
+		});
+	};
+
+	// On initial mount: apply search & sort from URL
+	useEffect(() => {
+		let filteredData = props.data;
+
+		if (querySearch) {
+			const lower = querySearch.toLowerCase();
+			filteredData = filteredData.filter((item) =>
+				props?.search?.columns.some((col) =>
+					item[col]?.toString()?.toLowerCase().includes(lower)
+				)
+			);
+		}
+
+		if (querySortKey && querySortDir) {
+			filteredData = sortData({
+				sort: { key: querySortKey, dir: querySortDir },
+				data: filteredData,
+			});
+		}
+
+		setData(filteredData);
+	}, [props.data]);
 
 	return {
 		paginate: {
@@ -152,18 +173,19 @@ const useTable = (props: DataTablePropsType) => {
 			indexOfLastRow,
 			indexOfFirstRow,
 			currentPage,
-			currentData: data?.slice(indexOfFirstRow, indexOfLastRow),
+			currentData: data.slice(indexOfFirstRow, indexOfLastRow),
 			onNextPage,
 		},
-		columns,
+		columns: props.columns,
 		data,
 		setData,
 		sort,
 		setSort,
 		onSort,
 		onSearch,
-        searchQuery,
+		searchQuery,
 		setSearchQuery,
 	};
 };
+
 export default useTable;

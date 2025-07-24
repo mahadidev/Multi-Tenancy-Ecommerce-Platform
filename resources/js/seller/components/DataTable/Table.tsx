@@ -1,4 +1,5 @@
-import useTable, { DataTablePropsType } from '@seller/hooks/useTable';
+import useTable from '@seller/hooks/useTable';
+import { DataTablePropsType } from '@type/tableType';
 import { Button, Card, Label, Table, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { CSVLink } from 'react-csv';

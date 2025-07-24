@@ -8,3 +8,16 @@ export interface MetaType {
 	total: number;
 	per_page: number;
 }
+
+export interface DataTablePropsType {
+	columns: {
+		label?: string | ReactNode;
+		key?: string;
+		render?: CallableFunction;
+		sortable?: boolean;
+	}[];
+	data: any[];
+	search?: {
+		columns: string[];
+	};
+}
