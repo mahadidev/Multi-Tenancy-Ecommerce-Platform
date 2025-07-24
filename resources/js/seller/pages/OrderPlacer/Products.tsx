@@ -31,7 +31,7 @@ type StockInfo = {
 } | null;
 
 const Products = () => {
-	const { products } = useProduct();
+	const { products } = useProduct({});
 	const dispatch = useAppDispatch();
 	const [showVariantModal, setVariantModal] = useState<boolean>(false);
 	const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(

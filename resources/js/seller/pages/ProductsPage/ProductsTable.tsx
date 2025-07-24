@@ -8,7 +8,7 @@ import CreateProductModal from "./CreateProductModal";
 import DeleteProductModal from "./DeleteProductModal";
 
 const ProductsTable = () => {
-    const { products } = useProduct();
+    const { products } = useProduct({});
 
     return (
         <>

@@ -8,6 +8,7 @@ import {
     useCreateProductMutation,
     useDeleteProductMutation,
     useFetchProductsQuery,
+    useFetchProductsSummaryQuery,
     useGenerateBarcodeMutation,
     useUpdateProductMutation,
 } from '@seller/store/reducers/productApi';
@@ -16,12 +17,24 @@ import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { ProductVariantType } from '@type/productType';
 import { isArrayEmptyOrBlank } from '../../tool/checker';
 
-const useProduct = () => {
+const useProduct = ({
+	summaryFilterRange,
+}: {
+	summaryFilterRange?: 'today' | 'week' | 'month' | 'year';
+}) => {
 	// fetch products
 	useFetchProductsQuery();
+	useFetchProductsSummaryQuery(
+		{ range: summaryFilterRange ?? 'today' },
+		{
+			refetchOnMountOrArgChange: true,
+		}
+	);
 
 	// select product
-	const { products, meta, product } = useAppSelector((state) => state.product);
+	const { products, meta, product, summary } = useAppSelector(
+		(state) => state.product
+	);
 
 	// dispatch
 	const dispatch = useAppDispatch();
@@ -45,7 +58,11 @@ const useProduct = () => {
 	}) => {
 		handleCreate({
 			...formData,
-            attachments: isArrayEmptyOrBlank(formData.attachments) ? (formData.thumbnail ? [formData.thumbnail] : []) : formData.attachments
+			attachments: isArrayEmptyOrBlank(formData.attachments)
+				? formData.thumbnail
+					? [formData.thumbnail]
+					: []
+				: formData.attachments,
 		}).then((response) => {
 			if (response.data?.status === 200) {
 				if (onSuccess) {
@@ -215,36 +232,37 @@ const useProduct = () => {
 		}
 	};
 
-    // barcode generate
-    const [
-			handleGenerateBarcode,
-			{
-				isLoading: isBarCodeGenerateLoading,
-				isError: isBarCodeGenerateError,
-				error: barCodeGenerateError,
-				data: barCodeGenerateData,
-			},
-		] = useGenerateBarcodeMutation();
-		const generateBarcode = ({
-			formData,
-			onSuccess,
-		}: {
-			formData: GenerateBarcodePayloadType;
-			onSuccess?: CallableFunction;
-		}) => {
-			handleGenerateBarcode(formData).then((response) => {
-				if (response.data?.status === 200) {
-					if (onSuccess) {
-						onSuccess(response.data.data);
-					}
+	// barcode generate
+	const [
+		handleGenerateBarcode,
+		{
+			isLoading: isBarCodeGenerateLoading,
+			isError: isBarCodeGenerateError,
+			error: barCodeGenerateError,
+			data: barCodeGenerateData,
+		},
+	] = useGenerateBarcodeMutation();
+	const generateBarcode = ({
+		formData,
+		onSuccess,
+	}: {
+		formData: GenerateBarcodePayloadType;
+		onSuccess?: CallableFunction;
+	}) => {
+		handleGenerateBarcode(formData).then((response) => {
+			if (response.data?.status === 200) {
+				if (onSuccess) {
+					onSuccess(response.data.data);
 				}
-			});
-		};
+			}
+		});
+	};
 
 	return {
 		products,
 		product,
 		meta,
+		summary,
 		create: {
 			submit: create,
 			isLoading: isCreateLoading,
@@ -286,6 +304,7 @@ const useProduct = () => {
 			error: barCodeGenerateError,
 			data: barCodeGenerateData,
 		},
+		fetchSummary: {},
 	};
 };
 export default useProduct;

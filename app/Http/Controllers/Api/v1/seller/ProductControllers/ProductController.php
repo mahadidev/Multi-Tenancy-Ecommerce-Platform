@@ -127,7 +127,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 200,
                 'data' => [
-                    'history' => $reportData,
+                    'summary' => $reportData,
                 ],
             ]);
         } catch (\InvalidArgumentException $e) {

@@ -46,13 +46,13 @@ class ProductService
             case 'today':
                 $start = Carbon::today();
                 $end = Carbon::tomorrow();
-                $format = 'H:i';
+                $format = 'H:i'; // Hour and minute (Today)
                 break;
 
             case 'week':
                 $start = Carbon::now()->subDays(6)->startOfDay();
                 $end = Carbon::now()->endOfDay();
-                $format = 'l'; // Monday, Tuesday...
+                $format = 'l'; // Weekdays (Monday, Tuesday...)
                 break;
 
             case 'month':
@@ -64,7 +64,7 @@ class ProductService
             case 'year':
                 $start = Carbon::now()->startOfYear();
                 $end = Carbon::now()->endOfYear();
-                $format = 'F'; // January, February...
+                $format = 'F'; // Month names (January, February...)
                 break;
 
             default:
@@ -88,7 +88,21 @@ class ProductService
             ])
             ->toArray();
 
-        return $histories;
+        // Transform the data to match the ProductSummaryType structure
+        $transformedHistories = collect($histories)->map(function ($item) {
+            return [
+                'chartSeries' => [
+                    'qty' => $item['qty'],
+                    'buyingValue' => $item['buyingValue'],
+                    'sellingValue' => $item['sellingValue'],
+                ],
+                'qty' => $item['qty'],
+                'buyingValue' => $item['buyingValue'],
+                'sellingValue' => $item['sellingValue'],
+            ];
+        })->toArray();
+
+        return $transformedHistories;
     }
 
 }

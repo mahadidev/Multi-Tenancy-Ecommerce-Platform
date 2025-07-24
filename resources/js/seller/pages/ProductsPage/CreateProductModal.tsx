@@ -12,7 +12,7 @@ import MultipleImageUploader from './ProductEditPage/MultipleImageUploader';
 
 const CreateProductModal: FC = function () {
 	const [isOpen, setOpen] = useState(false);
-	const { create } = useProduct();
+	const { create } = useProduct({});
 	const { productCategories } = useCategory();
 	const { handleChange, formState, formErrors, setFormState } = useForm({
 		formValidationError: create.error,

@@ -12,7 +12,7 @@ interface PropsType {
 
 const DeleteProductModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
-	const { delete: deleteProduct } = useProduct();
+	const { delete: deleteProduct } = useProduct({});
 	const { toaster } = useToast();
 
 	return (

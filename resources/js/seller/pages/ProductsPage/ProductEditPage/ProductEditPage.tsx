@@ -31,7 +31,7 @@ export interface SectionProps {
 
 const ProductEditPage = () => {
 	const { id } = useParams();
-	const { update, product, fetchProduct } = useProduct();
+	const { update, product, fetchProduct } = useProduct({});
 	const [attachments, setAttachments] = useState<string[]>(['']);
 
 	const { handleChange, formState, formErrors, setFormState } = useForm({

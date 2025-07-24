@@ -1,9 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { PREFIX } from '@seller/seller_env';
 import { ApiResponseType } from '@type/apiType';
+import { ProductSummaryType } from '@type/products/summaries';
 import { ProductType } from '@type/productType';
 import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
-import { setProduct, setTableProducts } from '../slices/productSlice';
+import { setProduct, setSummary, setTableProducts } from '../slices/productSlice';
 
 export interface ProductsFetchResponseType extends ApiResponseType {
 	data: {
@@ -54,10 +55,20 @@ export interface CreateProductVariantPayloadType {
 	}[];
 }
 
+export interface FetchProductSummaryResponseType {
+    data: {
+        summary: ProductSummaryType
+    }
+}
+
+export interface FetchProductSummaryPayloadType {
+	range?: 'today' | 'week' | 'month' | 'year';
+}
+
 export const productApi = createApi({
 	reducerPath: 'productApi',
 	baseQuery: baseQueryWithReAuth,
-	tagTypes: ['Products', 'Product'],
+	tagTypes: ['Products', 'Product', 'Stocks'],
 	endpoints: (builder) => ({
 		fetchProducts: builder.query<ProductsFetchResponseType, void>({
 			query: (formData) =>
@@ -138,6 +149,23 @@ export const productApi = createApi({
 			invalidatesTags: ['Products'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
+		fetchProductsSummary: builder.query<
+			FetchProductSummaryResponseType,
+			FetchProductSummaryPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/products/stock-history?range=${formData.range}`,
+					method: 'get',
+				}),
+			providesTags: ['Stocks'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setSummary(response.data.data.summary));
+				});
+			},
+		}),
 	}),
 });
 
@@ -147,5 +175,6 @@ export const {
 	useCreateProductMutation,
 	useUpdateProductMutation,
 	useDeleteProductMutation,
-    useGenerateBarcodeMutation
+    useGenerateBarcodeMutation,
+    useFetchProductsSummaryQuery
 } = productApi;

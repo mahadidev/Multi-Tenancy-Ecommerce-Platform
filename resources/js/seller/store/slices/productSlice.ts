@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ProductSummaryType } from '@type/products/summaries';
 import { ProductType } from '@type/productType';
 import { MetaType } from '@type/tableType';
 
@@ -6,10 +7,12 @@ const initialState: {
 	products: ProductType[];
 	product: ProductType | null;
 	meta: MetaType | null;
+    summary: ProductSummaryType | null;
 } = {
 	products: [],
 	product: null,
 	meta: null,
+    summary: null
 };
 
 const productSlice = createSlice({
@@ -36,6 +39,9 @@ const productSlice = createSlice({
 			state.product = action.payload;
 			console.log(state.product);
 		},
+		setSummary: (state, action: PayloadAction<ProductSummaryType>) => {
+			state.summary = action.payload;
+		},
 		clearProducts: (state) => {
 			state.products = [];
 			state.meta = null;
@@ -48,6 +54,7 @@ export const {
 	setMeta,
 	setTableProducts,
 	setProduct,
+    setSummary,
 	clearProducts,
 } = productSlice.actions;
 export default productSlice.reducer;
