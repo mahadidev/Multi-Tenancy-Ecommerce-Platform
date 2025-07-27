@@ -30,8 +30,6 @@ const Stocks: FC<Props> = () => {
 			</div>
 
 			<DataTable
-				disablePagination
-				disableSl
 				columns={[
 					{
 						sortable: true,

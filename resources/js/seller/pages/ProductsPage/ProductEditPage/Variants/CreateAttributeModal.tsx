@@ -22,7 +22,7 @@ const CreateAttributeModal = () => {
 
 	const handleAddOption = () => {
 		const newOption = {
-			label: formState.option?.trim(),
+			label: formState.option?.toString(),
 		};
 		if (!newOption) return;
 
@@ -156,6 +156,7 @@ const CreateAttributeModal = () => {
 								className="w-full"
 								id="option"
 								name="option"
+                                type="text"
 								formState={formState}
 								onChange={handleChange}
 								formErrors={formErrors}
