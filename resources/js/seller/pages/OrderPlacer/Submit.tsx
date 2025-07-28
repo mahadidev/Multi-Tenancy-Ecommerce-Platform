@@ -41,9 +41,10 @@ const Submit = () => {
 	] = productApi.endpoints.fetchProducts.useLazyQuery();
 	useEffect(() => {
         if(placeOrderNonUser.isSuccess){
+            dispatch(clearCart());
             fetchProductLazy();
         }
-    }, [fetchProductLazy, placeOrderNonUser.isSuccess]);
+    }, [dispatch, fetchProductLazy, placeOrderNonUser.isSuccess]);
 
 	return (
 		<>
