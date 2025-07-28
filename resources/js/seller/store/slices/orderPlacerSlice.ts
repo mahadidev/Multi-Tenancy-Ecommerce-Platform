@@ -8,7 +8,7 @@ import {
 const initialState: {
 	cartItems: OrderPlacerCartItemType[];
 	customer: OrderPlacerCustomerType | null;
-	paymentMethod: 'Cash' | 'Bkash' | 'Nagad' | 'Card';
+	paymentMethod: 'Cash' | 'Bkash' | 'Nagad' | 'Card' | string;
 	status: 'Paid' | 'Pending' | 'Completed';
 } = {
 	cartItems: [],
@@ -90,7 +90,7 @@ const orderPlacerSlice = createSlice({
 		},
 		setPaymentMethod: (
 			state,
-			action: PayloadAction<'Cash' | 'Bkash' | 'Nagad' | 'Card'>
+			action: PayloadAction<'Cash' | 'Bkash' | 'Nagad' | 'Card' | string>
 		) => {
 			state.paymentMethod = action.payload;
 		},

@@ -1,25 +1,24 @@
 import { Select, TextInput } from '@seller/components';
 import useCustomer from '@seller/hooks/useCustomer';
 import useForm from '@seller/hooks/useForm';
-import { setCustomer } from '@seller/store/slices/orderPlacerSlice';
-import { useAppDispatch } from '@seller/store/store';
+import { setCustomer, setPaymentMethod } from '@seller/store/slices/orderPlacerSlice';
+import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { CustomerType } from '@type/customersType';
 import { useEffect } from 'react';
 
 const Customer = () => {
 	const { formErrors, formState, handleChange, setFormState } = useForm({
         default: {
-            "status": "paid"
+            "status": "completed"
         }
     });
+    const {paymentMethod} = useAppSelector((state) => state.orderPlacer)
 	const { customers } = useCustomer();
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		dispatch(setCustomer(formState));
 	}, [dispatch, formState]);
-
-	useEffect(() => {}, []);
 
 	return (
 		<div className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -87,16 +86,23 @@ const Customer = () => {
 					placeholder="Customer address"
 				/>
 				<Select
-					name="status"
-					label="Order Status"
+					name="payment_method"
+					label="Paymant Method"
 					formState={formState}
 					formErrors={formErrors}
 					type="string"
-					onChange={handleChange}
-					placeholder="Customer address"
+					placeholder="Payment Method"
+					onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+						dispatch(setPaymentMethod(event.target.value));
+					}}
 				>
-					{['Paid', 'Pending'].map((option) => (
-						<option key={option} value={option} className="uppercase">
+					{['Cash', 'Card', 'Bank', 'Bkash', 'Pending'].map((option) => (
+						<option
+							key={option}
+							value={option}
+							className="uppercase"
+							selected={paymentMethod === option}
+						>
 							{option}
 						</option>
 					))}

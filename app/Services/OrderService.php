@@ -40,6 +40,10 @@ class OrderService
             DB::commit();
 
             return $this->buildSuccessResponse($order);
+        } catch (OrderProcessingException $e) {
+            DB::rollBack();
+            // Let the original message through
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Order processing failed: ' . $e->getMessage(), [
@@ -114,7 +118,7 @@ class OrderService
             'notes' => $data['notes'] ?? '',
             'payment_method' => $data['payment_method'] ?? "",
             'total' => 0, // Will be updated after items are processed
-            'status' => $data['status'] ?? 'pending',
+            'status' => $data['status'] ?? 'completed',
         ]);
     }
 
@@ -128,6 +132,7 @@ class OrderService
     protected function processOrderItems(Order $order, array $items, int $storeId): void
     {
         foreach ($items as $item) {
+
             $product = Product::findOrFail($item['product_id']);
             $stock = ProductStock::where(["id" => $item["stock_id"]])->first();
 
@@ -138,7 +143,7 @@ class OrderService
 
             $this->createOrderItem($order, $product, $item, $storeId);
 
-            // Deduct stock
+            // // Deduct stock
             $product->decrement('stock', $item["qty"]);
         }
     }
