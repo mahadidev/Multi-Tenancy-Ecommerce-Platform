@@ -2,33 +2,34 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ProductStockHistoryType } from '@type/productType';
 
 const initialState: {
-	allProductStockHistory: ProductStockHistoryType[];
-	productStockHistory: ProductStockHistoryType[];
+	// updated
+	histories: ProductStockHistoryType[];
+	history: ProductStockHistoryType | null;
 } = {
-	allProductStockHistory: [],
-    productStockHistory: []
+	histories: [],
+	history: null,
 };
 
 const productStockHistorySlice = createSlice({
 	name: 'productStockHistory',
 	initialState,
 	reducers: {
-		setAllProductStockHistory: (state, action: PayloadAction<ProductStockHistoryType[]>) => {
-			state.allProductStockHistory = action.payload;
+		setHistories: (state, action: PayloadAction<ProductStockHistoryType[]>) => {
+			state.histories = action.payload;
 		},
-		setProductStockHistory: (state, action: PayloadAction<ProductStockHistoryType[]>) => {
-			state.productStockHistory = action.payload;
+		setHistory: (state, action: PayloadAction<ProductStockHistoryType[]>) => {
+			state.histories = action.payload;
 		},
-		clearProductStockHistory: (state) => {
-			state.allProductStockHistory = [];
-			state.productStockHistory = [];
+		clearHistories: (state) => {
+			state.histories = [];
+			state.history = null;
 		},
 	},
 });
 
 export const {
-	setAllProductStockHistory,
-    setProductStockHistory,
-    clearProductStockHistory
+	setHistories,
+    setHistory,
+    clearHistories
 } = productStockHistorySlice.actions;
 export default productStockHistorySlice.reducer;

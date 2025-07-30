@@ -11,7 +11,8 @@ import {
     BlogsPage,
     BrandsPage,
     CategoriesPage,
-    DashboardPage,
+    // DashboardPage,
+    DashboardPageV2,
     LoginPage,
     OrderPlacerPage,
     PageEditPage,
@@ -42,7 +43,6 @@ import SocialMediaPage from './AuthPage/SocialMediaPage';
 import CustomersPage from './CustomersPage/CustomersPage';
 import MenusPage from './MenusPage/MenusPage';
 import NotificationsPage from './NotificationsPage/NotificationsPage';
-import CreateOrderPage from './OrdersPage/CreateOrder/CreateOrderPage';
 import OrdersPage from './OrdersPage/OrdersPage';
 import SelectSubscriptionPage from './SelectSubscription/SelectSubscriptionPage';
 import SubscriptionCancelledPage from './SelectSubscription/SubscriptionCancelledPage';
@@ -71,11 +71,11 @@ export const PagesRoute: FC = function () {
 				{/* Authenticated Routes */}
 				<Route path="/" element={<DashboardMiddleware />}>
 					<Route path="/" element={<DashboardLayout />}>
-						<Route path="/" element={<DashboardPage />} />
+						<Route path="/" element={<DashboardPageV2 />} />
+						{/* <Route path="/" element={<DashboardPage />} /> */}
 						<Route path="/orders" element={<OrdersPage />} />
 						<Route path="/shipment-orders" element={<ShipmentOrdersPage />} />
 						<Route path="/customers" element={<CustomersPage />} />
-						<Route path="/orders/create" element={<CreateOrderPage />} />
 						<Route path="pages" element={<PagesPage />} />
 						<Route path="products" element={<ProductsPage />} />
 						<Route path="products/:id" element={<ProductEditPage />} />

@@ -18,7 +18,7 @@ interface PropsType {
 
 const UpdateOrderStatusModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const { updateOrderStatus } = useOrders();
+    const { updateOrderStatus } = useOrders({});
     const { toaster } = useToast();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: updateOrderStatus.error,

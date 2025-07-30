@@ -1,27 +1,37 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { PREFIX } from '@seller/seller_env';
 import { ApiResponseType } from '@type/apiType';
+import { ProductStockHistoryType } from '@type/productType';
 import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
-import { setAllProductStockHistory, setProductStockHistory } from '../slices/productStockHistorySlice';
+import { setHistories } from '../slices/productStockHistorySlice';
 
 
-export interface FetchAllProductStockHistoryPayloadType {
-    range?: "today" | 'week' | "month" | "year"
+export interface FetchHistoriesPayloadType {
+	range?: 'today' | 'week' | 'month' | 'year';
 }
 
-export interface FetchAllProductStockHistoryResponse extends ApiResponseType {
+export interface FetchHistoriesResponseType extends ApiResponseType {
 	data: {
-		history: any[];
+		histories: ProductStockHistoryType[];
 	};
 }
 
-export interface FetchProductStockHistoryPayloadType {
-	productId: number | string;
+export interface FetchSingleProductHistoryPayloadType {
+    productId: number | string;
+	range?: 'today' | 'week' | 'month' | 'year';
+}
+export interface FetchSingleProductHistoryResponseType extends ApiResponseType {
+	data: {
+		histories: ProductStockHistoryType[];
+	};
 }
 
-export interface FetchProductStockHistoryResponse extends ApiResponseType {
+export interface FetchHistoryPayloadType {
+	historyId: number | string;
+}
+export interface FetchHistoryResponseType extends ApiResponseType {
 	data: {
-		history: any[];
+		history: ProductStockHistoryType;
 	};
 }
 
@@ -32,42 +42,24 @@ export const productStockHistoryApi = createApi({
 	tagTypes: ['Stocks', 'Stock'],
 	endpoints: (builder) => ({
 		// history
-		fetchAllProductStockHistory: builder.query<
-			FetchAllProductStockHistoryResponse,
-			FetchAllProductStockHistoryPayloadType
+		fetchHistories: builder.query<
+			FetchHistoriesResponseType,
+			FetchHistoriesPayloadType
 		>({
 			query: (formData) =>
 				createRequest({
-					url: `${PREFIX}/products/stock-history?range=${formData.range}`,
+					url: `${PREFIX}/products/stocks/history?range=${formData.range}`,
 					method: 'get',
 				}),
 			providesTags: ['Stocks'],
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
 				await queryFulfilled.then((response) => {
-					dispatch(setAllProductStockHistory(response.data.data.history));
-				});
-			},
-		}),
-		// history
-		fetchProductStockHistory: builder.query<
-			FetchProductStockHistoryResponse,
-			FetchProductStockHistoryPayloadType
-		>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/products/${formData.productId}/stock-history`,
-					method: 'get',
-				}),
-			providesTags: ['Stocks'],
-			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-				await queryFulfilled.then((response) => {
-					dispatch(setProductStockHistory(response.data.data.history));
+					dispatch(setHistories(response.data.data.histories));
 				});
 			},
 		}),
 	}),
 });
 
-export const { useFetchAllProductStockHistoryQuery, useFetchProductStockHistoryQuery } = productStockHistoryApi;
+export const { useFetchHistoriesQuery } = productStockHistoryApi;

@@ -28,8 +28,8 @@ class ProductResource extends JsonResource
                 'stocks' => $this->stocks->isNotEmpty() ? ProductStockResource::collection($this->stocks) : null,
                 'discount_price' => $this->calculateDiscountPrice(),
                 'discount_amount' => $this->discount_amount ?? 0,
-                'variantStocks' => $this->totalVariantStock(),
-                'variantValue' => $this->totalVariantValue(),
+                'stockValue' => $this->totalDiscountedStockValue(),
+                'stockBuyingValue' => $this->stockBuyingValue(),
                 'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
                 'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
             ]

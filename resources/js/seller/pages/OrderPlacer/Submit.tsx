@@ -8,7 +8,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import OrderReceipt from './OrderReceipt';
 
 const Submit = () => {
-	const { placeOrderNonUser } = useOrders();
+	const { placeOrderNonUser } = useOrders({});
 	const { customer, cartItems, status, paymentMethod } = useAppSelector(
 		(state) => state.orderPlacer
 	);

@@ -218,6 +218,7 @@ class OrderService
         $storeId = $this->getStoreId();
         $query = Order::where('store_id', $storeId);
 
+        // Adjusting period-based filtering
         switch ($period) {
             case 'today':
                 $query->whereDate('created_at', now()->today());
@@ -245,7 +246,7 @@ class OrderService
                 $query->whereBetween('created_at', [now()->subDays(30), now()]);
         }
 
-        // Get basic statistics
+        // Fetch basic statistics
         $totalOrders = $query->count();
         $totalRevenue = $query->sum('total');
         $paidRevenue = (clone $query)->where('is_payed', true)->sum('total');
@@ -276,6 +277,28 @@ class OrderService
             ->orderBy('date')
             ->get();
 
+        // Prepare sales chart series similar to getSummary
+        $chartSeries = $dailyTrends->groupBy(function ($item) use ($period) {
+            // Group by period-based format, similar to getSummary
+            switch ($period) {
+                case 'today':
+                    return Carbon::parse($item->date)->format('H:i'); // Group by hour for today
+                case 'week':
+                    return Carbon::parse($item->date)->format('l'); // Group by weekday for week
+                case 'month':
+                    return Carbon::parse($item->date)->format('d'); // Group by day for month
+                case 'year':
+                    return Carbon::parse($item->date)->format('F'); // Group by month for year
+                default:
+                    return Carbon::parse($item->date)->format('Y-m-d'); // Default
+            }
+        })->map(function ($group) {
+            return [
+                'order_count' => $group->sum('order_count'),
+                'revenue' => $group->sum('revenue')
+            ];
+        });
+
         // Get top products (via order items)
         $topProducts = OrderItem::whereIn('order_id', $query->clone()->pluck('id'))
             ->select(
@@ -283,7 +306,7 @@ class OrderService
                 DB::raw('sum(qty) as total_quantity'),
                 DB::raw('sum(price * qty) as total_revenue')
             )
-            ->with('product:id,name')
+            ->with('product')
             ->groupBy('product_id')
             ->orderByDesc('total_quantity')
             ->limit(5)
@@ -301,6 +324,8 @@ class OrderService
             'payment_method_distribution' => $paymentMethodDistribution,
             'daily_trends' => $dailyTrends,
             'top_products' => $topProducts,
+            'chartSeries' => $chartSeries->toArray(), // Returning the sales chart series
         ];
     }
+
 }

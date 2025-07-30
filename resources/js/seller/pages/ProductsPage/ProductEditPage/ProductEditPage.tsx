@@ -88,8 +88,6 @@ const ProductEditPage = () => {
 				short_description: product.short_description,
 				variants: product.variants,
 				attachments: product.attachments || [],
-				variantStocks: product.variantStocks,
-				variantValue: product.variantValue,
 			});
 		}
 	}, [product]);

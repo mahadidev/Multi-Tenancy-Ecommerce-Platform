@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\v1\seller\ProductControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductStockHistoryResource;
 use App\Http\Resources\ProductStockResource;
 use App\Models\Product;
 use App\Models\ProductStockHistory;
@@ -17,6 +18,25 @@ class ProductStockHistoryController extends Controller
     {
         $this->productStockHistoryService = new ProductStockHistoryService();
     }
+
+    public function index()
+    {
+        $products = Product::authorized()->with('stockHistory')->get();
+
+        $stockHistories = $products->flatMap(function ($product) {
+            return $product->stockHistory;
+        })->sortByDesc('created_at')->values(); // <-- Sort by created_at descending
+
+        $response = [
+            'status' => 200,
+            'data' => [
+                'histories' => ProductStockHistoryResource::collection($stockHistories),
+            ],
+        ];
+
+        return response()->json($response, 200);
+    }
+
 
     // analytics summary
     public function productsHistory(Request $request, Product $product)

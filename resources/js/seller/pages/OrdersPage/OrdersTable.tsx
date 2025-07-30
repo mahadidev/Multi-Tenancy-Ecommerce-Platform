@@ -13,7 +13,7 @@ import UpdateOrderStatusModal from "./UpdateOrderStatusModal";
 
 const OrdersTable = () => {
     // get the orders
-    const { orders, bulkShipmentOrders } = useOrders();
+    const { orders, bulkShipmentOrders } = useOrders({});
     const { toaster } = useToast();
     const [orderIds, setOrderIds] = useState<number[]>([]);
 

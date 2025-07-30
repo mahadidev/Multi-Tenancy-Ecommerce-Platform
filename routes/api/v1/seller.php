@@ -93,6 +93,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum', 'store']], 
     Route::resource('/product', ProductController::class);
     Route::resource("/products/{product}/variants", ProductVariantController::class);
     Route::resource("/products/{product}/stocks", ProductStockController::class);
+    Route::resource("/products/stocks/history", ProductStockHistoryController::class);
 
     // product history
     Route::get('/products/stock-history', [ProductController::class, "getSummary"]);

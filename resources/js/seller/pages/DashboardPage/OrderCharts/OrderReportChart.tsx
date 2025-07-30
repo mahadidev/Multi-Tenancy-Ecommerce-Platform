@@ -9,7 +9,7 @@ const OrderReportChart = () => {
 	const [range, setRange] = useState<'today' | 'week' | 'month' | 'year'>(
 		'month'
 	);
-	const { report: orderReport } = useOrders();
+	const { report: orderReport } = useOrders({});
 
 	useFetchOrderReportQuery({ range }, { refetchOnMountOrArgChange: true });
 
@@ -97,18 +97,18 @@ const OrderReportChart = () => {
 		},
 	};
 
-	const chartSeries = [
-		{
-			name: 'Orders',
-			type: 'area',
-			data: chartData.orders,
-		},
-		{
-			name: 'Revenue',
-			type: 'area',
-			data: chartData.revenue,
-		},
-	];
+	// const chartSeries = [
+	// 	{
+	// 		name: 'Orders',
+	// 		type: 'area',
+	// 		data: chartData.orders,
+	// 	},
+	// 	{
+	// 		name: 'Revenue',
+	// 		type: 'area',
+	// 		data: chartData.revenue,
+	// 	},
+	// ];
 
 	return (
 		<>
@@ -155,7 +155,7 @@ const OrderReportChart = () => {
 					<>
 						<ApexChart
 							options={chartOptions}
-							series={chartSeries}
+							series={[]}
 							type="area" // ✅ switched to area chart
 							height={350}
 						/>

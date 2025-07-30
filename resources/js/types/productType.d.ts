@@ -27,9 +27,9 @@ export interface ProductType {
 	discount_type: null;
 	discount_amount: number;
 	tax: number;
-	variantStocks: 0;
-	variantValue: 0;
 	stockQty: number;
+	stockValue: number;
+	stockBuyingValue: number;
 	created_at: string;
 	updated_at: string;
 }
@@ -77,9 +77,19 @@ export interface ProductStockItemType {
 }
 
 export interface ProductStockHistoryType {
-    qty: number;
-    buyingValue: number;
-    sellingValue: number;
+	id: number;
+	product_id: number;
+    product: ProductType;
+	product_stock_id: number;
+	qty: number;
+	price: number;
+	discount_amount: number;
+	buying_price: number;
+	tax: number;
+	note: string | null;
+	type: 'added' | 'removed' | string; // Add more known types if applicable
+	created_at: string; // ISO 8601 datetime string
+	updated_at: string; // ISO 8601 datetime string
 }
 
 

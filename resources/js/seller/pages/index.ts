@@ -1,6 +1,7 @@
 export { default as BrandsPage } from "./BrandsPage/BrandsPage";
 export { default as CategoriesPage } from "./CategoriesPage/CategoriesPage";
 export { default as DashboardPage } from "./DashboardPage/DashboardPage";
+export { default as DashboardPageV2 } from './DashboardPageV2/DashboardPageV2';
 export { default as SettingsPage } from "./SettingsPage/SettingsPage";
 
 // auth pages

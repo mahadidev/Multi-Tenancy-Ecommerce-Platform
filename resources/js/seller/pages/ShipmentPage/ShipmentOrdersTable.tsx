@@ -8,7 +8,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 
 const ShipmentOrdersTable = () => {
     // get the orders
-    const { shipmentOrders, syncShipmentOrders } = useOrders();
+    const { shipmentOrders, syncShipmentOrders } = useOrders({});
     const { toaster } = useToast();
     return (
         <>

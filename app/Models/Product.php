@@ -207,6 +207,8 @@ class Product extends Model
             ->sum(fn($option) => ($option->price ?? 0) * ($option->qty_stock ?? 0));
     }
 
+
+    // vvi
     public function stocks(){
         return $this->hasMany(ProductStock::class, "product_id");
     }
@@ -228,6 +230,13 @@ class Product extends Model
         });
     }
 
+    public function stockBuyingValue()
+    {
+        return $this->stocks->sum(function ($stock) {
+            return $stock->buying_price * $stock->qty;
+        });
+    }
+
 
 
     // new total stock qty
@@ -235,5 +244,9 @@ class Product extends Model
         return $this->stocks->sum(function ($stock) {
             return $stock->qty;
         });
+    }
+
+    public function stockHistory(){
+        return $this->hasMany(ProductStockHistory::class, "product_id");
     }
 }

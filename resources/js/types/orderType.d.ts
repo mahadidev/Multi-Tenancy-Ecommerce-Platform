@@ -56,36 +56,39 @@ export interface OrderProductVariantType {
 }
 
 
-export interface OrderReportType {
+interface OrderReportType {
 	period: string;
-	start_date: null | string;
-	end_date: null | string;
+	start_date: string | null;
+	end_date: string | null;
 	total_orders: number;
 	total_revenue: number;
 	paid_revenue: number;
 	pending_revenue: number;
 	status_distribution: {
-		Paid: number;
+		[key: string]: number; // Keys are status names, values are counts
 	};
 	payment_method_distribution: {
-		Cash: number;
+		[key: string]: number; // Keys are payment methods, values are counts
 	};
-	daily_trends: [
-		{
-			date: string;
+	daily_trends: DailyTrend[];
+	top_products: TopProductType[];
+	chartSeries: {
+		[key: string]: {
 			order_count: number;
 			revenue: number;
-		}
-	];
-	top_products: [
-		{
-			product_id: number;
-			total_quantity: number;
-			total_revenue: number;
-			product: {
-				id: number;
-				name: string;
-			};
-		}
-	];
+		};
+	};
+}
+
+interface DailyTrend {
+	date: string; // Format: YYYY-MM-DD
+	order_count: number;
+	revenue: string; // String for the revenue (could also be a number depending on the format)
+}
+
+interface TopProductType {
+	product_id: number;
+	total_quantity: number; // Quantity as a string
+	total_revenue: number; // Revenue as a string
+	product: ProductType;
 }
