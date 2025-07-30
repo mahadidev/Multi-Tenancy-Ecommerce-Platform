@@ -63,8 +63,7 @@ const StockTable = () => {
 									<TableHeadCell>Created</TableHeadCell>
 								</TableHead>
 								<TableBody className="bg-white dark:bg-gray-800">
-									{histories
-										.slice(0, 10)
+									{histories?.slice(0, 10)
 										.map((history: ProductStockHistoryType, index: number) => (
 											<TableRow key={`${history.id}-${index}`}>
 												<TableCell className="p-4 text-sm font-normal whitespace-nowrap text-gray-900 dark:text-white flex gap-2.5 items-start">
