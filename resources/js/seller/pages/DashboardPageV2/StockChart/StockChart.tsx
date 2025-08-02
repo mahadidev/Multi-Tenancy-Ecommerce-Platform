@@ -13,7 +13,7 @@ const StockChart = () => {
 							{productReport?.qty}
 						</span>
 						<h3 className="text-base font-normal text-gray-600 dark:text-gray-400">
-							New products this week
+							New products this year
 						</h3>
 					</div>
 					<div className="ml-5 flex w-0 flex-1 items-center justify-end text-base font-bold text-green-500 dark:text-green-400">
