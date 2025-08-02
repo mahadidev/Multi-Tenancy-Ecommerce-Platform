@@ -39,6 +39,7 @@ export interface OrderItemType {
 	product_id: number;
 	qty: number;
 	price: number;
+    total: number;
 	discount_price: number;
 	tax: number;
 	item: string;

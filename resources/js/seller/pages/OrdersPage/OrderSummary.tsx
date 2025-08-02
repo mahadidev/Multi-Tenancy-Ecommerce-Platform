@@ -1,5 +1,5 @@
 import StatusBadge from "@seller/components/Badge/StatusBadge";
-import { OrderItemType, OrderType } from "@type/orderType";
+import { OrderType } from "@type/orderType";
 import { Card, Table } from "flowbite-react";
 
 interface OrderSummaryProps {
@@ -8,13 +8,6 @@ interface OrderSummaryProps {
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
     const { items } = order; // items
-
-    // total amount
-    const totalAmount = items?.reduce(
-			(sum, item: OrderItemType) =>
-				sum + item.qty * item.price,
-			0
-		);
 
     return (
         <div className="overflow-x-auto mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 transition-colors">
@@ -103,7 +96,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
                                     </Table.Cell>
                                     <Table.Cell className="text-gray-900 dark:text-gray-300">
                                         {(
-                                            item?.qty * (item.price)
+                                            item.total
                                         ).toFixed(2)}{" "}
                                         BDT
                                     </Table.Cell>
@@ -117,7 +110,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order }) => {
                         Total Amount
                     </span>
                     <span className="text-green-600 dark:text-green-400">
-                        {totalAmount.toFixed(2)} BDT
+                        {order.total} BDT
                     </span>
                 </div>
             </div>

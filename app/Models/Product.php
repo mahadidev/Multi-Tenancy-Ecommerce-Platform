@@ -43,6 +43,7 @@ class Product extends Model
         'buying_price' => 'float',
         'stock' => 'float',
         'discount_amount' => 'float',
+        'has_variants' => 'boolean',
         'tax' => 'float',
         'sku' => 'string'
     ];
