@@ -10,11 +10,13 @@ import {
     ProductVariantOptionType,
 } from '@type/productType';
 import { Alert, Badge, Button, Modal, Table } from 'flowbite-react';
+import { AirVent } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import uuid4 from 'uuid4';
+
 
 type SelectedOptions = {
 	[variantId: number]: ProductVariantOptionType | null;
@@ -287,12 +289,16 @@ const Products = () => {
 						render: (row: ProductType) => (
 							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white flex gap-4 items-center">
 								<div className="w-max h-max relative">
-									{row.has_discount && row.discount_amount && row.discount_amount > 0 ? (
+									{row.has_discount &&
+									row.discount_amount &&
+									row.discount_amount > 0 ? (
 										<div className="absolute -top-4 -right-5 rounded-full px-2 py-1 flex justify-center items-center bg-blue-700 text-white text-sm">
 											{row.discount_amount}{' '}
 											{row.discount_type === 'flat' ? 'tk' : '%'}
 										</div>
-									) : <></>}
+									) : (
+										<></>
+									)}
 									<img
 										src={row.thumbnail || ''}
 										className="w-12 h-12 aspect-square object-fit rounded-sm"
@@ -327,7 +333,9 @@ const Products = () => {
 										color="primary"
 										className="p-0"
 									>
-										<div className="flex items-center gap-x-2">Add to Cart</div>
+										<div className="flex items-center gap-x-2">
+											{row.has_variants ? "Select Variant" : "Add to cart"}
+										</div>
 									</Button>
 								</div>
 							</Table.Cell>
