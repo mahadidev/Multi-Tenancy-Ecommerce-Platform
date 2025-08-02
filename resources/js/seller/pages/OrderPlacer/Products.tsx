@@ -10,7 +10,6 @@ import {
     ProductVariantOptionType,
 } from '@type/productType';
 import { Alert, Badge, Button, Modal, Table } from 'flowbite-react';
-import { AirVent } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
