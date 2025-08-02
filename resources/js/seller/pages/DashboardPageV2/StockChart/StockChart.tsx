@@ -2,7 +2,7 @@ import useProduct from "@seller/hooks/useProduct";
 import StockApexChart from "./StockApexChart";
 
 const StockChart = () => {
-    const {summary: productReport} = useProduct({})
+    const {summary: productReport} = useProduct({summaryFilterRange: "year"})
 
   return (
 		<>
