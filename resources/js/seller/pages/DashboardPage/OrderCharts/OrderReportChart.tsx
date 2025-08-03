@@ -26,11 +26,11 @@ const OrderReportChart = () => {
 
 	const chartData = useMemo(() => {
 		if (!orderReport?.daily_trends)
-			return { dates: [], orders: [], revenue: [] };
+			return { dates: [], qty: [], revenue: [] };
 
 		return {
 			dates: orderReport.daily_trends.map((item) => item.date),
-			orders: orderReport.daily_trends.map((item) => item.order_count),
+			qty: orderReport.daily_trends.map((item) => item.product_qty),
 			revenue: orderReport.daily_trends.map((item) => item.revenue),
 		};
 	}, [orderReport]);
@@ -68,7 +68,7 @@ const OrderReportChart = () => {
 		},
 		yaxis: [
 			{
-				title: { text: 'Orders' },
+				title: { text: 'Qty' },
 				labels: {
 					formatter: (val: number) => `${Math.round(val)}`,
 				},

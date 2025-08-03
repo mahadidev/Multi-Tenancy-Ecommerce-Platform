@@ -71,11 +71,14 @@ class OrderService
             'notes' => 'nullable|string|max:1000',
             'status' => 'nullable|string|max:255',
             'payment_method' => 'nullable|string|max:255',
+            'is_payed' => 'nullable|boolean',
+            'is_approved' => 'nullable|boolean',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.stock_id' => 'required|exists:product_stocks,id',
             'items.*.qty' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
+            'items.*.custom_price' => 'nullable|numeric|min:0',
             'items.*.discount_amount' => 'nullable|numeric|min:0',
             'items.*.tax' => 'nullable|numeric|min:0|max:100',
         ]);
@@ -117,6 +120,8 @@ class OrderService
             'address' => $data['address'] ?? "",
             'notes' => $data['notes'] ?? '',
             'payment_method' => $data['payment_method'] ?? "",
+            'is_payed' => $data['is_payed'] ?? false,
+            'is_approved' => $data['is_approved'] ?? false,
             'total' => 0, // Will be updated after items are processed
             'status' => $data['status'] ?? 'completed',
         ]);
@@ -157,12 +162,17 @@ class OrderService
     ): OrderItem {
         $discount = (float) ($itemData['discount_amount'] ?? 0); // Default to 0 if not set
         $quantity = (int) $itemData['qty'];
-        $taxRate = (float) ($itemData['tax'] ?? 0); // Default to 0 if not set
+        $taxRate = (float) ($itemData['tax'] ?? 0); // Tax rate in percentage (e.g., 5 means 5%)
 
-        // Calculate the total price before discount
-        $price = $product->price * $quantity;
-        $discount_price = ($product->price * $quantity) - $discount;
-        $total = (($price + ($price * $taxRate)) * $quantity) - $discount;
+        $unitPrice = $product->price;
+        $price = $unitPrice * $quantity; // Total price before discount and tax
+        $discountedPrice = $price - $discount;
+
+        // Calculate tax on unit price * quantity
+        $taxAmount = ($unitPrice * $taxRate / 100) * $quantity;
+
+        // Final total including tax
+        $total = $discountedPrice + $taxAmount;
 
         // stock
         $stock = ProductStock::where(["id" => $itemData["stock_id"]])->first();
@@ -186,7 +196,7 @@ class OrderService
             'qty' => $quantity,
             'price' => $price, // Original unit price
             'total' => $total, // Original unit price
-            'discount_price' => $discount_price, // Added discount amount for reference
+            'discount_price' => $discountedPrice, // Added discount amount for reference
             'tax' => $taxRate,
             'shop_id' => $product->shop_id,
             'product_stock_id' => $stock->id,
@@ -251,6 +261,7 @@ class OrderService
         $totalRevenue = $query->sum('total');
         $paidRevenue = (clone $query)->where('is_payed', true)->sum('total');
         $pendingRevenue = (clone $query)->where('is_payed', false)->sum('total');
+        $totalProductQty = OrderItem::whereIn('order_id', $query->pluck('id'))->sum('qty');
 
         // Get order status distribution
         $statusDistribution = $query->clone()
@@ -267,12 +278,16 @@ class OrderService
             ->pluck('count', 'payment_method');
 
         // Get daily trends for the period
-        $dailyTrends = $query->clone()
+        $dailyTrends = DB::table('orders')
             ->select(
-                DB::raw('DATE(created_at) as date'),
-                DB::raw('count(*) as order_count'),
-                DB::raw('sum(total) as revenue')
+                DB::raw('DATE(orders.created_at) as date'),
+                DB::raw('COUNT(DISTINCT orders.id) as order_count'),
+                DB::raw('SUM(orders.total) as revenue'),
+                DB::raw('COALESCE(SUM(order_items.qty), 0) as product_qty')
             )
+            ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->where('orders.store_id', $storeId)
+            // Add your date filters here matching your original query
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -295,7 +310,8 @@ class OrderService
         })->map(function ($group) {
             return [
                 'order_count' => $group->sum('order_count'),
-                'revenue' => $group->sum('revenue')
+                'revenue' => $group->sum('revenue'),
+                'product_qty' => $group->sum('product_qty'),
             ];
         });
 
@@ -317,6 +333,7 @@ class OrderService
             'start_date' => $period === 'custom' ? $start_date : null,
             'end_date' => $period === 'custom' ? $end_date : null,
             'total_orders' => $totalOrders,
+            'total_product_qty' => $totalProductQty,
             'total_revenue' => $totalRevenue,
             'paid_revenue' => $paidRevenue,
             'pending_revenue' => round($pendingRevenue, 2),

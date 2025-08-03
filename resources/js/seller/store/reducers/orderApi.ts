@@ -26,13 +26,16 @@ export interface PlaceOrderNonUserPayloadType {
 	notes?: string; // Nullable field
 	payment_method?: string; // Limited to these values
 	status?: string; // Nullable field
+	is_payed?: boolean;
+	is_approved?: boolean;
 	items: {
 		product_id: number;
 		qty: number;
 		price: number;
 		discount_amount: number;
-        tax: number;
+		tax: number;
 		stock_id: number;
+		custom_price?: number;
 	}[];
 }
 

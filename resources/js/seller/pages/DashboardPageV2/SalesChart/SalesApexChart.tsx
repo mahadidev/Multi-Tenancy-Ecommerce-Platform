@@ -25,7 +25,7 @@ function SalesApexChart() {
 	// Qty Series
 	const qtyData = categories.map((category) => ({
 		x: category,
-		y: chartSeries ? chartSeries[category]?.order_count : 0,
+		y: chartSeries ? chartSeries[category]?.product_qty : 0,
 	}));
 
 	// Combine both series into a format ApexCharts expects

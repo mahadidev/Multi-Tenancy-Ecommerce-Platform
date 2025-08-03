@@ -9,7 +9,9 @@ import { useEffect } from 'react';
 const Customer = () => {
 	const { formErrors, formState, handleChange, setFormState } = useForm({
         default: {
-            "status": "completed"
+            "status": "completed",
+            'is_payed': 1,
+            'is_approved': 0,
         }
     });
     const {paymentMethod} = useAppSelector((state) => state.orderPlacer)
@@ -94,6 +96,12 @@ const Customer = () => {
 					placeholder="Payment Method"
 					onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
 						dispatch(setPaymentMethod(event.target.value));
+                        if(event.target.value === "Pending"){
+                            setFormState((prev: any) => ({
+                                ...prev,
+                                "is_payed": 0
+                            }))
+                        }
 					}}
 				>
 					{['Cash', 'Card', 'Bank', 'Bkash', 'Pending'].map((option) => (

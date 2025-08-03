@@ -56,18 +56,20 @@ const OrdersTable = () => {
 							render: (row: OrderType) => (
 								<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
 									{row.items.map((item, index: number) => (
-										<span key={item.id}>{item.item} {index + 1 < row.items.length && " | "}</span>
+										<span key={item.id}>
+											{item.item} {index + 1 < row.items.length && ' | '}
+										</span>
 									))}
 								</Table.Cell>
 							),
 							sortable: true,
 						},
 						{
-							label: 'Customer Name',
-							key: 'user_name',
+							label: 'Quantity',
+							key: 'qty',
 							render: (row: OrderType) => (
 								<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-									{row?.user?.name}
+									{row.total_product_qty}
 								</Table.Cell>
 							),
 							sortable: false,

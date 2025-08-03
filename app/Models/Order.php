@@ -57,6 +57,12 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function productQty()
+    {
+        return $this->items()->sum('qty');
+    }
+
+
     public function scopeCurrentStore($query)
     {
         return $query->where('store_id', session()->get('site_store_id'));

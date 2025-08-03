@@ -21,6 +21,7 @@ export interface OrderType {
     user: UserType;
     store: StoreType;
     total: string;
+    total_product_qty: number;
     status: string;
     payment_status: null;
     payment_method: string;
@@ -62,6 +63,7 @@ interface OrderReportType {
 	start_date: string | null;
 	end_date: string | null;
 	total_orders: number;
+	totalProductQty: number;
 	total_revenue: number;
 	paid_revenue: number;
 	pending_revenue: number;
@@ -77,6 +79,7 @@ interface OrderReportType {
 		[key: string]: {
 			order_count: number;
 			revenue: number;
+			product_qty: number;
 		};
 	};
 }
@@ -85,6 +88,7 @@ interface DailyTrend {
 	date: string; // Format: YYYY-MM-DD
 	order_count: number;
 	revenue: string; // String for the revenue (could also be a number depending on the format)
+	product_qty: number;
 }
 
 interface TopProductType {
