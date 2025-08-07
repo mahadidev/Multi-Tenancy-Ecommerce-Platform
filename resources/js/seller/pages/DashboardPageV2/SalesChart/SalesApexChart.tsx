@@ -22,17 +22,27 @@ function SalesApexChart() {
 		y: chartSeries ? chartSeries[category]?.revenue : 0,
 	}));
 
+	// Profit Series
+	const profitData = categories.map((category) => ({
+		x: category,
+		y: chartSeries ? chartSeries[category]?.profit : 0,
+	}));
+
 	// Qty Series
 	const qtyData = categories.map((category) => ({
 		x: category,
 		y: chartSeries ? chartSeries[category]?.product_qty : 0,
 	}));
 
-	// Combine both series into a format ApexCharts expects
+	// Combine all series into the format ApexCharts expects
 	const combinedSeries = [
 		{
 			name: 'Revenue',
 			data: revenueData,
+		},
+		{
+			name: 'Profit',
+			data: profitData,
 		},
 		{
 			name: 'Qty',
@@ -70,8 +80,11 @@ function SalesApexChart() {
 			},
 			y: {
 				formatter: (val: number, opts) => {
-					const seriesName = opts?.seriesIndex === 0 ? 'Revenue' : 'Qty';
-					return seriesName === 'Revenue' ? `৳${val}` : `${val}`;
+					const seriesName = opts?.w?.globals?.seriesNames[opts.seriesIndex];
+					if (seriesName === 'Revenue' || seriesName === 'Profit') {
+						return `৳${val}`;
+					}
+					return `${val}`;
 				},
 			},
 		},

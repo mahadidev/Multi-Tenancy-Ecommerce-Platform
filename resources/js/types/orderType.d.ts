@@ -80,6 +80,8 @@ interface OrderReportType {
 			order_count: number;
 			revenue: number;
 			product_qty: number;
+			profit: number;
+            product: ProductType | null
 		};
 	};
 }

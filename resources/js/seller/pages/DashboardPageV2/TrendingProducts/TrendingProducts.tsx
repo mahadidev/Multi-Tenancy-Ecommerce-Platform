@@ -24,7 +24,7 @@ const TrendingProducts = () => {
 							<div className="flex items-center space-x-4">
 								<div className="shrink-0">
 									<div className="w-8 h-8 rounded-full object-center overflow-hidden">
-										{topProduct.product.thumbnail ? (
+										{topProduct.product?.thumbnail ? (
 											<img
 												className="w-full h-full object-fill"
 												src={topProduct.product.thumbnail}
@@ -37,7 +37,7 @@ const TrendingProducts = () => {
 								</div>
 								<div className="min-w-0 flex-1">
 									<p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-										{topProduct.product.name}
+										{topProduct.product?.name}
 									</p>
 									<p className="truncate text-sm text-gray-500 dark:text-gray-400">
 										Sales this {orderReport.period} {topProduct.total_quantity}

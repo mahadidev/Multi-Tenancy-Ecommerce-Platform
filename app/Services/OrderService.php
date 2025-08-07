@@ -2,18 +2,20 @@
 
 namespace App\Services;
 
-use App\Models\ProductStock;
-use App\Models\Store;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\OrderItem;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+use App\Models\ProductStock;
+use App\Models\Store;
 use App\Exceptions\OrderProcessingException;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class OrderService
 {
@@ -33,7 +35,6 @@ class OrderService
             DB::beginTransaction();
 
             $order = $this->createOrder($validatedData, $storeId);
-
             $this->processOrderItems($order, $validatedData['items'], $storeId);
             $this->updateOrderTotal($order);
 
@@ -42,7 +43,6 @@ class OrderService
             return $this->buildSuccessResponse($order);
         } catch (OrderProcessingException $e) {
             DB::rollBack();
-            // Let the original message through
             throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -122,7 +122,7 @@ class OrderService
             'payment_method' => $data['payment_method'] ?? "",
             'is_payed' => $data['is_payed'] ?? false,
             'is_approved' => $data['is_approved'] ?? false,
-            'total' => 0, // Will be updated after items are processed
+            'total' => 0,
             'status' => $data['status'] ?? 'completed',
         ]);
     }
@@ -133,59 +133,43 @@ class OrderService
      * @param Order $order
      * @param array $items
      * @param int $storeId
+     * @throws OrderProcessingException
      */
     protected function processOrderItems(Order $order, array $items, int $storeId): void
     {
         foreach ($items as $item) {
-
             $product = Product::findOrFail($item['product_id']);
-            $stock = ProductStock::where(["id" => $item["stock_id"]])->first();
+            $stock = ProductStock::where('id', $item["stock_id"])->first();
 
-            // Check stock availability
             if ($stock->qty < $item['qty']) {
                 throw new OrderProcessingException("Not enough stock for product: {$product->name}. Available: {$stock->qty}, Requested: {$item['qty']}");
             }
 
             $this->createOrderItem($order, $product, $item, $storeId);
-
-            // // Deduct stock
             $product->decrement('stock', $item["qty"]);
         }
     }
 
-
-    protected function createOrderItem(
-        Order $order,
-        Product $product,
-        array $itemData,
-        int $storeId
-    ): OrderItem {
-        $discount = (float) ($itemData['discount_amount'] ?? 0); // Default to 0 if not set
+    protected function createOrderItem(Order $order, Product $product, array $itemData, int $storeId): OrderItem
+    {
+        $discount = (float) ($itemData['discount_amount'] ?? 0);
         $quantity = (int) $itemData['qty'];
-        $taxRate = (float) ($itemData['tax'] ?? 0); // Tax rate in percentage (e.g., 5 means 5%)
+        $taxRate = (float) ($itemData['tax'] ?? 0);
 
         $unitPrice = $product->price;
-        $price = $unitPrice * $quantity; // Total price before discount and tax
+        $price = $unitPrice * $quantity;
         $discountedPrice = $price - $discount;
-
-        // Calculate tax on unit price * quantity
         $taxAmount = ($unitPrice * $taxRate / 100) * $quantity;
-
-        // Final total including tax
         $total = $discountedPrice + $taxAmount;
 
-        // stock
-        $stock = ProductStock::where(["id" => $itemData["stock_id"]])->first();
+        $stock = ProductStock::where('id', $itemData["stock_id"])->first();
 
-        // set name
         $title = $product->name;
         foreach ($stock->items as $item) {
-            $title = $title . " " . $item->variantOption->label;
+            $title .= " " . $item->variantOption->label;
         }
 
-        // minus stock
         $stock->update(["qty" => $stock->qty - $quantity]);
-
 
         return OrderItem::create([
             'order_id' => $order->id,
@@ -194,22 +178,20 @@ class OrderService
             'store_id' => $storeId,
             'item' => $title,
             'qty' => $quantity,
-            'price' => $price, // Original unit price
-            'total' => $total, // Original unit price
-            'discount_price' => $discountedPrice, // Added discount amount for reference
+            'price' => $price,
+            'total' => $total,
+            'discount_price' => $discountedPrice,
             'tax' => $taxRate,
             'shop_id' => $product->shop_id,
             'product_stock_id' => $stock->id,
         ]);
     }
 
-
     protected function updateOrderTotal(Order $order): void
     {
         $total = $order->items()->sum('total');
         $order->update(['total' => $total]);
     }
-
 
     protected function buildSuccessResponse(Order $order)
     {
@@ -223,126 +205,153 @@ class OrderService
         ]);
     }
 
-    public function getOrderReport(string $period = "month", ?string $start_date = null, ?string $end_date = null)
+    // ---------------------- REPORTING -----------------------
+
+    /**
+     * Get Order Report
+     *
+     * @return array<string, mixed>
+     */
+    public function getOrderReport(string $period = 'month', ?string $start_date = null, ?string $end_date = null): array
     {
+        [$start, $end] = $this->getDateRange($period, $start_date, $end_date);
         $storeId = $this->getStoreId();
-        $query = Order::where('store_id', $storeId);
 
-        // Adjusting period-based filtering
-        switch ($period) {
-            case 'today':
-                $query->whereDate('created_at', now()->today());
-                break;
-            case 'week':
-                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-                break;
-            case 'month':
-                $query->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()]);
-                break;
-            case 'year':
-                $query->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()]);
-                break;
-            case 'custom':
-                if (!$start_date || !$end_date) {
-                    throw new OrderProcessingException('Start date and end date are required for custom period');
-                }
-                $query->whereBetween('created_at', [
-                    Carbon::parse($start_date)->startOfDay(),
-                    Carbon::parse($end_date)->endOfDay()
-                ]);
-                break;
-            default:
-                // Default to last 30 days
-                $query->whereBetween('created_at', [now()->subDays(30), now()]);
-        }
-
-        // Fetch basic statistics
-        $totalOrders = $query->count();
-        $totalRevenue = $query->sum('total');
-        $paidRevenue = (clone $query)->where('is_payed', true)->sum('total');
-        $pendingRevenue = (clone $query)->where('is_payed', false)->sum('total');
-        $totalProductQty = OrderItem::whereIn('order_id', $query->pluck('id'))->sum('qty');
-
-        // Get order status distribution
-        $statusDistribution = $query->clone()
-            ->select('status', DB::raw('count(*) as count'))
-            ->groupBy('status')
-            ->get()
-            ->pluck('count', 'status');
-
-        // Get payment method distribution
-        $paymentMethodDistribution = $query->clone()
-            ->select('payment_method', DB::raw('count(*) as count'))
-            ->groupBy('payment_method')
-            ->get()
-            ->pluck('count', 'payment_method');
-
-        // Get daily trends for the period
-        $dailyTrends = DB::table('orders')
-            ->select(
-                DB::raw('DATE(orders.created_at) as date'),
-                DB::raw('COUNT(DISTINCT orders.id) as order_count'),
-                DB::raw('SUM(orders.total) as revenue'),
-                DB::raw('COALESCE(SUM(order_items.qty), 0) as product_qty')
-            )
-            ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->where('orders.store_id', $storeId)
-            // Add your date filters here matching your original query
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
-
-        // Prepare sales chart series similar to getSummary
-        $chartSeries = $dailyTrends->groupBy(function ($item) use ($period) {
-            // Group by period-based format, similar to getSummary
-            switch ($period) {
-                case 'today':
-                    return Carbon::parse($item->date)->format('H:i'); // Group by hour for today
-                case 'week':
-                    return Carbon::parse($item->date)->format('l'); // Group by weekday for week
-                case 'month':
-                    return Carbon::parse($item->date)->format('d'); // Group by day for month
-                case 'year':
-                    return Carbon::parse($item->date)->format('F'); // Group by month for year
-                default:
-                    return Carbon::parse($item->date)->format('Y-m-d'); // Default
-            }
-        })->map(function ($group) {
-            return [
-                'order_count' => $group->sum('order_count'),
-                'revenue' => $group->sum('revenue'),
-                'product_qty' => $group->sum('product_qty'),
-            ];
-        });
-
-        // Get top products (via order items)
-        $topProducts = OrderItem::whereIn('order_id', $query->clone()->pluck('id'))
-            ->select(
-                'product_id',
-                DB::raw('sum(qty) as total_quantity'),
-                DB::raw('sum(price * qty) as total_revenue')
-            )
-            ->with('product')
-            ->groupBy('product_id')
-            ->orderByDesc('total_quantity')
-            ->limit(5)
-            ->get();
+        $metrics = $this->getOrderMetrics($storeId, $start, $end);
+        $orderItems = $this->getOrderItems($storeId, $start, $end);
+        $products = $this->getProducts($orderItems);
 
         return [
             'period' => $period,
             'start_date' => $period === 'custom' ? $start_date : null,
             'end_date' => $period === 'custom' ? $end_date : null,
-            'total_orders' => $totalOrders,
-            'total_product_qty' => $totalProductQty,
-            'total_revenue' => $totalRevenue,
-            'paid_revenue' => $paidRevenue,
-            'pending_revenue' => round($pendingRevenue, 2),
-            'status_distribution' => $statusDistribution,
-            'payment_method_distribution' => $paymentMethodDistribution,
-            'daily_trends' => $dailyTrends,
-            'top_products' => $topProducts,
-            'chartSeries' => $chartSeries->toArray(), // Returning the sales chart series
+            ...$metrics,
+            'daily_trends' => $this->getDailyTrends($storeId, $start, $end, $orderItems, $products),
+            'chartSeries' => $this->getChartSeries($orderItems, $products, $period),
+            'top_products' => $this->getTopProducts($orderItems, $products),
         ];
     }
 
+    private function getDateRange(string $period, ?string $start_date, ?string $end_date): array
+    {
+        return match ($period) {
+            'today' => [now()->startOfDay(), now()->endOfDay()],
+            'week' => [now()->startOfWeek(), now()->endOfWeek()],
+            'month' => [now()->startOfMonth(), now()->endOfMonth()],
+            'year' => [now()->startOfYear(), now()->endOfYear()],
+            'custom' => [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()],
+            default => [now()->subDays(30), now()],
+        };
+    }
+
+    private function getOrderMetrics(int $storeId, $start, $end): array
+    {
+        $ordersQuery = DB::table('orders')->where('store_id', $storeId)
+            ->whereBetween('created_at', [$start, $end]);
+
+        return [
+            'total_orders' => $ordersQuery->count(),
+            'total_revenue' => $ordersQuery->sum('total'),
+            'paid_revenue' => (clone $ordersQuery)->where('is_payed', true)->sum('total'),
+            'pending_revenue' => round((clone $ordersQuery)->where('is_payed', false)->sum('total'), 2),
+            'status_distribution' => (clone $ordersQuery)
+                ->select('status', DB::raw('COUNT(*) as count'))
+                ->groupBy('status')
+                ->pluck('count', 'status'),
+            'payment_method_distribution' => (clone $ordersQuery)
+                ->select('payment_method', DB::raw('COUNT(*) as count'))
+                ->groupBy('payment_method')
+                ->pluck('count', 'payment_method'),
+        ];
+    }
+
+    private function getOrderItems(int $storeId, $start, $end): Collection
+    {
+        return DB::table('order_items')
+            ->whereIn('order_id', function ($q) use ($storeId, $start, $end) {
+                $q->select('id')->from('orders')
+                    ->where('store_id', $storeId)
+                    ->whereBetween('created_at', [$start, $end]);
+            })->get();
+    }
+
+    private function getProducts(Collection $orderItems): Collection
+    {
+        $productIds = $orderItems->pluck('product_id')->unique();
+        return Product::with(['category', 'brand', 'variants', 'stocks', 'store'])
+            ->whereIn('id', $productIds)
+            ->get()
+            ->keyBy('id');
+    }
+
+    private function getDailyTrends(int $storeId, $start, $end, Collection $orderItems, Collection $products): Collection
+    {
+        return DB::table('orders')
+            ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->selectRaw('DATE(orders.created_at) as date, COUNT(DISTINCT orders.id) as order_count, SUM(orders.total) as revenue, COALESCE(SUM(order_items.qty), 0) as product_qty')
+            ->where('orders.store_id', $storeId)
+            ->whereBetween('orders.created_at', [$start, $end])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->map(function ($trend) use ($orderItems, $products) {
+                $itemsForDate = $orderItems->filter(fn($item) => Carbon::parse($item->created_at)->format('Y-m-d') === $trend->date);
+                $productIdsForDate = $itemsForDate->pluck('product_id')->unique();
+                $productsForDate = $products->only($productIdsForDate->toArray())->values();
+
+                return [
+                    'date' => $trend->date,
+                    'order_count' => $trend->order_count,
+                    'revenue' => $trend->revenue,
+                    'product_qty' => $trend->product_qty,
+                    'products' => ProductResource::collection($productsForDate),
+                ];
+            });
+    }
+
+    private function getChartSeries(Collection $orderItems, Collection $products, string $period): Collection
+    {
+        return $orderItems->groupBy(function ($item) use ($period) {
+            $createdAt = Carbon::parse($item->created_at);
+            return match ($period) {
+                'today' => $createdAt->format('H:i'),
+                'week' => $createdAt->format('l'),
+                'month' => $createdAt->format('d'),
+                'year' => $createdAt->format('F'),
+                default => $createdAt->format('Y-m-d'),
+            };
+        })->map(function ($group) use ($products) {
+            $productIdsInGroup = $group->pluck('product_id')->unique();
+            $productsInGroup = $products->only($productIdsInGroup->toArray())->values();
+
+            return [
+                'order_count' => $group->pluck('order_id')->unique()->count(),
+                'revenue' => $group->sum(fn($item) => $item->discount_price ?: $item->price),
+                'profit' => $group->sum(function ($item) use ($products) {
+                    $sellingPrice = $item->discount_price ?: $item->price;
+                    $perUnitPrice = $sellingPrice / $item->qty;
+                    $buyingPrice = $products[$item->product_id]->buying_price ?? 0;
+                    return ($perUnitPrice - $buyingPrice) * $item->qty;
+                }),
+                'products' => ProductResource::collection($productsInGroup),
+                'product_qty' => $group->sum('qty'),
+            ];
+        });
+    }
+
+    private function getTopProducts(Collection $orderItems, Collection $products): Collection
+    {
+        return $orderItems->groupBy('product_id')
+            ->map(function ($items) use ($products) {
+                $product = $products[$items->first()->product_id] ?? null;
+                return [
+                    'product' => $product ? new ProductResource($product) : null,
+                    'total_quantity' => $items->sum('qty'),
+                    'total_revenue' => $items->sum(fn($i) => ($i->discount_price ?: $i->price) * $i->qty),
+                ];
+            })
+            ->sortByDesc('total_quantity')
+            ->take(5)
+            ->values();
+    }
 }
