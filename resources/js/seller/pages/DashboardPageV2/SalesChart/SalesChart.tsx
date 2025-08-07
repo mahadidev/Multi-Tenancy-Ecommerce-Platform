@@ -22,7 +22,7 @@ const SalesChart = () => {
 			value: 'year',
 		},
 	];
-	const [range, setRange] = useState<'today' | 'week' | 'month' | 'year'>('today');
+	const [range, setRange] = useState<'today' | 'week' | 'month' | 'year'>('week');
 	const { report: orderReport } = useOrders({ reportFilterRange: range });
 
 	return (
