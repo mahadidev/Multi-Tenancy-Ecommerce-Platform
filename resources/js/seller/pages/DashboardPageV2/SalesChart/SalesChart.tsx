@@ -1,12 +1,29 @@
-import useOrders from "@seller/hooks/useOrders";
-import { useState } from "react";
-import SalesApexChart from "./SalesApexChart";
+import useOrders from '@seller/hooks/useOrders';
+import { Dropdown, DropdownItem } from 'flowbite-react';
+import { FC, useState } from 'react';
+import SalesApexChart from './SalesApexChart';
 
 const SalesChart = () => {
-	const [range, ] = useState<'today' | 'week' | 'month' | 'year'>(
-		'week'
-	);
-	const { report: orderReport } = useOrders({reportFilterRange: range});
+	const rangeList = [
+		{
+			label: 'Today',
+			value: 'today',
+		},
+		{
+			label: 'Week',
+			value: 'week',
+		},
+		{
+			label: 'Month',
+			value: 'month',
+		},
+		{
+			label: 'Year',
+			value: 'year',
+		},
+	];
+	const [range, setRange] = useState<'today' | 'week' | 'month' | 'year'>('today');
+	const { report: orderReport } = useOrders({ reportFilterRange: range });
 
 	return (
 		<>
@@ -36,9 +53,70 @@ const SalesChart = () => {
 						</svg>
 					</div>
 				</div>
-                <SalesApexChart />
+				<SalesApexChart />
+
+				<div className="mt-5 flex items-center justify-between border-t border-gray-200 pt-3 sm:pt-6 dark:border-gray-700">
+					<DateRangeDropdown
+						defaultValue={{
+							label: range.toUpperCase(),
+							value: range,
+						}}
+						onChange={setRange}
+						list={rangeList}
+					/>
+					{/* <div className="shrink-0">
+						<a
+							href="#"
+							className="text-primary-700 dark:text-primary-500 inline-flex items-center rounded-lg p-2 text-xs font-medium uppercase hover:bg-gray-100 sm:text-sm dark:hover:bg-gray-700"
+						>
+							Sales Report
+							<svg
+								className="ml-1 h-4 w-4 sm:h-5 sm:w-5"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M9 5l7 7-7 7"
+								/>
+							</svg>
+						</a>
+					</div> */}
+				</div>
 			</div>
 		</>
 	);
 };
 export default SalesChart;
+
+const DateRangeDropdown: FC<{
+	onChange: CallableFunction;
+	list: {
+		label: string;
+		value: string;
+	}[];
+    defaultValue: {
+        label: string;
+        value: string;
+    }
+}> = ({ defaultValue, onChange, list }) => {
+	return (
+		<span className="p-2 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+			<Dropdown inline label={defaultValue.label}>
+				{/* <DropdownItem>
+					<strong>Sep 16, 2021 - Sep 22, 2021</strong>
+				</DropdownItem> */}
+				{/* <DropdownDivider /> */}
+				{list.map((item, index) => (
+					<DropdownItem key={index} onClick={() => onChange(item.value)}>
+						{item.label}
+					</DropdownItem>
+				))}
+			</Dropdown>
+		</span>
+	);
+};

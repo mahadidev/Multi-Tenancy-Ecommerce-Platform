@@ -24,9 +24,14 @@ const useOrders = ({
 
 	useFetchOrdersQuery(); // orders query
 	useFetchShipmentOrdersQuery(); // shipment orders query
-	useFetchOrderReportQuery({
-		range: reportFilterRange ?? "week",
-	});
+	useFetchOrderReportQuery(
+		{
+			range: reportFilterRange ?? 'week',
+		},
+		{
+			refetchOnMountOrArgChange: true,
+		}
+	);
 
 	// select orders
 	const { orders, order, shipmentOrders, report } = useAppSelector(

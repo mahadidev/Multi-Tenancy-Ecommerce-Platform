@@ -51,8 +51,8 @@ const TrendingProducts = () => {
 					))}
 				</ul>
 			</div>
-			<div className="flex items-center justify-between border-t border-gray-200 pt-3 sm:pt-6 dark:border-gray-700">
-				{/* <DateRangeDropdown /> */}
+			{/* <div className="flex items-center justify-between border-t border-gray-200 pt-3 sm:pt-6 dark:border-gray-700">
+				<DateRangeDropdown />
 				<div className="shrink-0">
 					<a
 						href="#"
@@ -75,7 +75,7 @@ const TrendingProducts = () => {
 						</svg>
 					</a>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };

@@ -32,14 +32,14 @@ const StockTable = () => {
 						This is a list of latest stock history
 					</span>
 				</div>
-				<div className="shrink-0">
+				{/* <div className="shrink-0">
 					<a
 						href="#"
 						className="text-primary-700 dark:text-primary-500 rounded-lg p-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700"
 					>
 						View all
 					</a>
-				</div>
+				</div> */}
 			</div>
 			<div className="mt-8 flex flex-col">
 				<div className="overflow-x-auto rounded-lg">
@@ -120,8 +120,8 @@ const StockTable = () => {
 					</div>
 				</div>
 			</div>
-			<div className="flex items-center justify-between pt-3 sm:pt-6">
-				{/* <DateRangeDropdown /> */}
+			{/* <div className="flex items-center justify-between pt-3 sm:pt-6">
+				<DateRangeDropdown />
 				<div className="shrink-0">
 					<a
 						href="#"
@@ -144,7 +144,7 @@ const StockTable = () => {
 						</svg>
 					</a>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };
