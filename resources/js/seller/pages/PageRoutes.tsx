@@ -13,6 +13,8 @@ import {
     CategoriesPage,
     // DashboardPage,
     DashboardPageV2,
+    ExpensePage,
+    VendorsPage,
     LoginPage,
     OrderPlacerPage,
     PageEditPage,
@@ -85,6 +87,8 @@ export const PagesRoute: FC = function () {
 						<Route path="blogs/:id" element={<BlogEditPage />} />
 						<Route path="categories" element={<CategoriesPage />} />
 						<Route path="brands" element={<BrandsPage />} />
+						<Route path="expenses" element={<ExpensePage />} />
+						<Route path="vendors" element={<VendorsPage />} />
 						<Route path="settings" element={<SettingsPage />} />
 						<Route
 							path="access-management"

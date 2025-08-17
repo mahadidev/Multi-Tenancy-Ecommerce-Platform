@@ -11,6 +11,7 @@ import { cartApi } from './reducers/cartApi';
 import { categoryApi } from './reducers/categoryApi';
 import { customerApi } from './reducers/customerApi';
 import { dashboardAnalyticsApi } from './reducers/dashboardAnalyticsApi';
+import { expenseApi } from './reducers/expenseApi';
 import { fileApi } from './reducers/fileApi';
 import { menuApi } from './reducers/menuApi';
 import { notificationApi } from './reducers/notificationApi';
@@ -25,6 +26,7 @@ import { storeAdminApi } from './reducers/storeAdminApi';
 import { storeApi } from './reducers/storeApi';
 import { subscriptionPlanApi } from './reducers/subscriptionPlanApi';
 import { themeApi } from './reducers/themeApi';
+import { vendorApi } from './reducers/vendorApi';
 
 // Slices
 import { productStockHistoryApi } from './reducers/productStockHistoryApi';
@@ -35,6 +37,7 @@ import CartSlice from './slices/cartSlice';
 import categorySlice from './slices/categorySlice';
 import customerSlice from './slices/customerSlice';
 import DashboardAnalyticsSlice from './slices/dashboardAnalyticsSlice';
+import expenseSlice from './slices/expenseSlice';
 import fileSlice from './slices/fileSlice';
 import MenuSlice from './slices/menuSlice';
 import notificationSlice from './slices/notificationSlice';
@@ -52,6 +55,7 @@ import StoreSlice from './slices/storeSlice';
 import SubscriptionPlanSlice from './slices/subscriptionPlanSlice';
 import themeSlice from './slices/themeSlice';
 import uiSlice from './slices/uiSlice';
+import vendorSlice from './slices/vendorSlice';
 import widgetSlice from './slices/widgetSlice';
 
 const authPersistConfig = {
@@ -65,6 +69,7 @@ const authPersistConfig = {
 		'orderApi',
 		'authApi',
 		'dashboardAnalyticsApi',
+		'expenseApi',
 		'fileApi',
 		'themeApi',
 		'storeApi',
@@ -80,6 +85,7 @@ const authPersistConfig = {
 		'notificationApi',
 		'customerApi',
 		'subscriptionPlansApi',
+		'vendorApi',
 	],
 	storage,
 	version: 0.1,
@@ -96,6 +102,7 @@ const persistedReducer = persistReducer(
 		cart: CartSlice,
 		analytics: DashboardAnalyticsSlice,
 		store: StoreSlice,
+		expense: expenseSlice,
 		file: fileSlice,
 		theme: themeSlice,
 		ui: uiSlice,
@@ -113,6 +120,7 @@ const persistedReducer = persistReducer(
 		customer: customerSlice,
 		plans: SubscriptionPlanSlice,
 		orderPlacer: orderPlacerSlice,
+		vendor: vendorSlice,
 
 		// API reducers
 		[subscriptionPlanApi.reducerPath]: subscriptionPlanApi.reducer,
@@ -125,6 +133,7 @@ const persistedReducer = persistReducer(
 		[notificationApi.reducerPath]: notificationApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
 		[orderApi.reducerPath]: orderApi.reducer,
+		[expenseApi.reducerPath]: expenseApi.reducer,
 		[fileApi.reducerPath]: fileApi.reducer,
 		[themeApi.reducerPath]: themeApi.reducer,
 		[storeApi.reducerPath]: storeApi.reducer,
@@ -137,6 +146,7 @@ const persistedReducer = persistReducer(
         [productStockHistoryApi.reducerPath]: productStockHistoryApi.reducer,
 		[brandApi.reducerPath]: brandApi.reducer,
 		[socialMediaApi.reducerPath]: socialMediaApi.reducer,
+		[vendorApi.reducerPath]: vendorApi.reducer,
 	})
 );
 
@@ -155,6 +165,7 @@ export const store = configureStore({
 			customerApi.middleware,
 			notificationApi.middleware,
 			dashboardAnalyticsApi.middleware,
+			expenseApi.middleware,
 			fileApi.middleware,
 			themeApi.middleware,
 			storeApi.middleware,
@@ -168,6 +179,7 @@ export const store = configureStore({
 			brandApi.middleware,
 			socialMediaApi.middleware,
 			subscriptionPlanApi.middleware,
+			vendorApi.middleware,
 		]),
 });
 

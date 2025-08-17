@@ -1,5 +1,6 @@
-import { FaLayerGroup, FaSteamSymbol, FaUsers } from 'react-icons/fa';
+import { FaLayerGroup, FaSteamSymbol, FaUsers, FaBuilding } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
+import { MdAttachMoney, MdBusiness } from 'react-icons/md';
 
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
@@ -20,6 +21,14 @@ export const ecommerceModePages: SidebarItemType[] = [
 		href: RoutePath.ProductsPage.index(),
 		label: 'Products',
 		icon: HiShoppingBag,
+	},
+	{
+		icon: MdAttachMoney,
+		label: 'Expenses',
+		items: [
+			{ href: RoutePath.ExpensesPage.index(), label: 'All Expenses' },
+			{ href: RoutePath.VendorsPage.index(), label: 'Vendors' },
+		],
 	},
 	{
 		href: RoutePath.CustomersPage.index(),

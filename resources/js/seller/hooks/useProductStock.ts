@@ -10,14 +10,26 @@ import {
 
 import { useAppSelector } from '@seller/store/store';
 
-const useProductStock = (id: number | string) => {
-	// fetch stocks
-	useFetchProductStocksQuery({
-		productId: id,
-	});
+const useProductStock = (id: number | string, options: { fetchData?: boolean } = { fetchData: true }) => {
+	// Only fetch if explicitly requested to avoid multiple calls from modals
+	const { data: stocksData, isLoading: isFetching, error: fetchError } = useFetchProductStocksQuery(
+		{ productId: id },
+		{
+			// Skip if id is falsy or fetchData is false
+			skip: !id || !options.fetchData,
+			// Only refetch when mounting if data is stale
+			refetchOnMountOrArgChange: false,
+			// Don't refetch on focus or reconnect to reduce calls
+			refetchOnFocus: false,
+			refetchOnReconnect: false,
+		}
+	);
 
-	// select product stocks from slice
-	const { productStocks, productStock } = useAppSelector(
+	// Get stocks directly from RTK Query cache
+	const productStocks = stocksData?.data?.stocks || [];
+	
+	// select product stock from slice (for individual stock selection)
+	const { productStock } = useAppSelector(
 		(state) => state.productStock
 	);
 
@@ -102,6 +114,8 @@ const useProductStock = (id: number | string) => {
 	return {
 		productStocks,
 		productStock,
+		isFetching,
+		fetchError,
 		create: {
 			submit: create,
 			isLoading: isCreateLoading,

@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\GithubController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\ThemeController;
+use App\Modules\ThemeManagement\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\v1\seller\SubscriptionController;
+// SubscriptionController is now handled by SubscriptionManagement module
 
 Route::get('/', function () {
     return view("welcome");
@@ -40,18 +40,19 @@ Route::prefix("/sites")->group(function () {
 
 
 Route::prefix("/themes")->group(function () {
-    Route::get("/{slug}", [ThemeController::class, "show"]);
+    Route::get("/{slug}", [ThemeController::class, "preview"]);
 
     Route::prefix("/{slug}")->group(function () {
-        Route::get("/{any}", [ThemeController::class, "show"])->where('any', '.*');
+        Route::get("/{any}", [ThemeController::class, "preview"])->where('any', '.*');
         ;
     });
 });
 
 
-Route::get('/success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
-Route::get('/cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
-Route::post('/webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');
+// Subscription webhook routes are now handled by SubscriptionManagement module
+// Route::get('/success', [SubscriptionController::class, 'success'])->name('uddoktapay.success');
+// Route::get('/cancel', [SubscriptionController::class, 'cancel'])->name('uddoktapay.cancel');
+// Route::post('/webhook', [SubscriptionController::class, 'webhook'])->name('uddoktapay.webhook');
 
 // without middlware routes
 Route::withoutMiddleware([

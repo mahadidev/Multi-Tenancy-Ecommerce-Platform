@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Modules\ThemeManagement\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Widget;
+
+class Theme extends Model
+{
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Automatically generate a slug when creating
+        static::creating(function ($data) {
+            if (empty($data->slug)) {
+                $data->slug = Str::slug($data->name);  // Generate slug from name
+            }
+
+        });
+
+        // Automatically update the slug when updating
+        static::updating(function ($data) {
+            if ($data->isDirty('name')) {  // Check if the 'name' attribute has changed
+                $data->slug = Str::slug($data->name);  // Update slug based on new name
+            }
+        });
+
+        // Delete related widgets when deleting a theme
+        static::deleting(function ($theme) {
+            $theme->widgets()->delete(); // Delete related widgets
+        });
+    }
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'thumbnail',
+        'is_active',
+        'has_widgets'
+    ];
+
+    public function pages()
+    {
+        return $this->hasMany(ThemePage::class);
+    }
+
+    public function getThumbnailImageAttribute()
+    {
+        return $this->thumbnail ? url(($this->thumbnail)) : null;
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
+
+    public function widgets()
+    {
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 3]); // return only section type widget
+    }
+
+    public function layouts()
+    {
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 1]); // return only layout type widget
+    }
+
+    public function partials()
+    {
+        return $this->morphMany(Widget::class, 'ref')->where(["type_id" => 2]); // return only layout type widget
+    }
+}

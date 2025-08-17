@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\RequestLog;
+use App\Modules\AnalyticsManagement\Models\RequestLog;
 
 class LogRequests
 {
@@ -16,14 +16,19 @@ class LogRequests
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Store the request in the database
-        RequestLog::create([
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-            'headers' => json_encode($request->headers->all()),
-            'body' => json_encode($request->all()),
-            'ip' => $request->ip(),
-        ]);
+        try {
+            // Store the request in the database
+            RequestLog::create([
+                'method' => $request->method(),
+                'url' => $request->fullUrl(),
+                'headers' => json_encode($request->headers->all()),
+                'body' => json_encode($request->all()),
+                'ip' => $request->ip(),
+            ]);
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Log::warning('Failed to log request: ' . $e->getMessage());
+        }
         
         return $next($request);
     }

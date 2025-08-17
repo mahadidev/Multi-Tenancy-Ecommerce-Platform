@@ -29,6 +29,7 @@
         "js-cookie": "^3.0.5",
         "jsbarcode": "^3.11.6",
         "lucide-react": "^0.536.0",
+        "motion": "^12.23.12",
         "polished": "^4.3.1",
         "prismjs": "^1.25.0",
         "quill": "^2.0.3",

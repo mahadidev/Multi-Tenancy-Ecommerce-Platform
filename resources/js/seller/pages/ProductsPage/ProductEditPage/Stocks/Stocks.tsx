@@ -20,7 +20,7 @@ interface Props {
 
 const Stocks: FC<Props> = () => {
 	const { id } = useParams();
-	const { productStocks } = useProductStock(id ?? 0);
+	const { productStocks } = useProductStock(id ?? 0, { fetchData: true }); // Only this component fetches data
 
 	return (
 		<>

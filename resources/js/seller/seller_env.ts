@@ -57,6 +57,12 @@ export const RoutePath = {
 	CategoriesPage: {
 		index: () => '/categories',
 	},
+	ExpensesPage: {
+		index: () => '/expenses',
+	},
+	VendorsPage: {
+		index: () => '/vendors',
+	},
 	StorePagesPage: {
 		index: () => '/pages',
 		indexUrl: () => BASE_URL + PREFIX + `/pages`,

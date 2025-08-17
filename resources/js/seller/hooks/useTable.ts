@@ -165,7 +165,7 @@ const useTable = (props: DataTablePropsType) => {
 		}
 
 		setData(filteredData);
-	}, [props.data]);
+	}, [props.data, props?.search?.columns, querySearch, querySortDir, querySortKey]);
 
 	return {
 		paginate: {
@@ -173,7 +173,9 @@ const useTable = (props: DataTablePropsType) => {
 			indexOfLastRow,
 			indexOfFirstRow,
 			currentPage,
-			currentData: data.slice(indexOfFirstRow, indexOfLastRow),
+			currentData: Array.isArray(data)
+				? data.slice(indexOfFirstRow, indexOfLastRow)
+				: [],
 			onNextPage,
 		},
 		columns: props.columns,

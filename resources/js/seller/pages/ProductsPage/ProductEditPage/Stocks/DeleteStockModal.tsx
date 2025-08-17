@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 const DeleteStockModal = ({ stock }: { stock: ProductStockType }) => {
 	const { id } = useParams();
-	const { delete: deleteStock } = useProductStock(id ?? 0);
+	const { delete: deleteStock } = useProductStock(id ?? 0, { fetchData: false }); // Don't fetch, just use mutations
 
 	const [showModal, setShowModal] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);

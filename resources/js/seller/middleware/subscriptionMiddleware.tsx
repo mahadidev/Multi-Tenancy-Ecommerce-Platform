@@ -10,10 +10,8 @@ const SubscriptionMiddleware = () => {
         return <Navigate to={RoutePath.LoginPage.index()} />;
     }
 
-    // if (store?.store_subscription_status !== "Active") {
-    //     // If subscription is not active, redirect to subscription selection
-    //     return <Outlet />;
-    // }
+    // For subscription-related routes, always allow access
+    // This middleware just ensures authentication
 
     // If logged in and subscription is active, allow access
     return <Outlet />;

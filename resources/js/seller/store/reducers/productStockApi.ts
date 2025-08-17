@@ -3,7 +3,6 @@ import { PREFIX } from '@seller/seller_env';
 import { ApiResponseType } from '@type/apiType';
 import { ProductStockType } from '@type/productType';
 import baseQueryWithReAuth, { createRequest } from '../baseQueryWithReAuth';
-import { setProductStocks } from '../slices/productStockSlice';
 
 export interface ProductStockItemInputType {
 	variant_option_id: number;
@@ -77,13 +76,11 @@ export const productStockApi = createApi({
 					url: `${PREFIX}/products/${formData.productId}/stocks`,
 					method: 'get',
 				}),
-			providesTags: ['Stocks'],
+			providesTags: (_result, _error, arg) => [
+				{ type: 'Stocks', id: arg.productId },
+				'Stocks'
+			],
 			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-				await queryFulfilled.then((response) => {
-					dispatch(setProductStocks(response.data.data.stocks));
-				});
-			},
 		}),
 		createProductStock: builder.mutation<
 			ApiResponseType,
@@ -95,7 +92,10 @@ export const productStockApi = createApi({
 					method: 'post',
 					body: formData.stock,
 				}),
-			invalidatesTags: ['Stocks'],
+			invalidatesTags: (_result, _error, arg) => [
+				{ type: 'Stocks', id: arg.productId },
+				'Stocks'
+			],
 			transformErrorResponse: (error: any) => error.data,
 		}),
 		updateProductStock: builder.mutation<
@@ -109,7 +109,10 @@ export const productStockApi = createApi({
 					apiMethod: 'PUT',
 					body: formData.stock,
 				}),
-			invalidatesTags: ['Stocks'],
+			invalidatesTags: (_result, _error, arg) => [
+				{ type: 'Stocks', id: arg.productId },
+				'Stocks'
+			],
 			transformErrorResponse: (error: any) => error.data,
 		}),
 		deleteProductStock: builder.mutation<
@@ -122,7 +125,10 @@ export const productStockApi = createApi({
 					method: 'POST',
 					apiMethod: 'DELETE',
 				}),
-			invalidatesTags: ['Stocks'],
+			invalidatesTags: (_result, _error, arg) => [
+				{ type: 'Stocks', id: arg.productId },
+				'Stocks'
+			],
 			transformErrorResponse: (error: any) => error.data,
 		}),
 	}),

@@ -1,5 +1,6 @@
 import useOrders from '@seller/hooks/useOrders';
 import { TopProductType } from '@type/orderType';
+import { Link } from 'react-router-dom';
 
 const TrendingProducts = () => {
 	const { report: orderReport } = useOrders({});
@@ -23,22 +24,24 @@ const TrendingProducts = () => {
 						<li key={topProduct.product_id} className="py-3 sm:py-4">
 							<div className="flex items-center space-x-4">
 								<div className="shrink-0">
-									<div className="w-8 h-8 rounded-full object-center overflow-hidden">
-										{topProduct.product?.thumbnail ? (
-											<img
-												className="w-full h-full object-fill"
-												src={topProduct.product.thumbnail}
-												alt="Product Iamge"
-											/>
-										) : (
-											<div className="w-full h-full bg-gray-300"></div>
-										)}
-									</div>
+									<Link to={`products/${topProduct.product.id}`}>
+										<div className="w-8 h-8 rounded-full object-center overflow-hidden">
+											{topProduct.product?.thumbnail ? (
+												<img
+													className="w-full h-full object-cover"
+													src={topProduct.product.thumbnail}
+													alt="Product Iamge"
+												/>
+											) : (
+												<div className="w-full h-full bg-gray-300"></div>
+											)}
+										</div>
+									</Link>
 								</div>
 								<div className="min-w-0 flex-1">
-									<p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+									<Link to={`products/${topProduct.product.id}`} className="truncate text-sm font-medium text-gray-900 dark:text-white">
 										{topProduct.product?.name}
-									</p>
+									</Link>
 									<p className="truncate text-sm text-gray-500 dark:text-gray-400">
 										Sales this {orderReport.period} {topProduct.total_quantity}
 									</p>

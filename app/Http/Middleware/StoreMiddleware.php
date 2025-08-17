@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Store;
-use App\Models\StoreSession;
+use App\Modules\StoreManagement\Models\Store;
+use App\Modules\StoreManagement\Models\StoreSession;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -21,7 +21,11 @@ class StoreMiddleware
         $storeSession = StoreSession::where('user_id', auth()->id())->first();
 
         // Check if a store ID exists in the session or the request attributes
-        $storeId = $storeSession ? $storeSession->store_id : (Session::get('store_id') ?? $request->attributes->get('store_id'));
+        $sessionStoreId = null;
+        if (session()->isStarted()) {
+            $sessionStoreId = Session::get('store_id');
+        }
+        $storeId = $storeSession ? $storeSession->store_id : ($sessionStoreId ?? $request->attributes->get('store_id'));
 
         if (!$storeId) {
             return response()->json(['message' => 'You must have an authorized store to proceed.'], 403);

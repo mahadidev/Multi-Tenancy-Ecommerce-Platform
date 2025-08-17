@@ -37,36 +37,6 @@ const StoreStepTwo: FC<PropsType> = function (props) {
 						placeholder="Click to upload logo"
 					/>
 				</div>
-				{/* <div className="flex flex-col gap-y-2">
-					<Label htmlFor="primaryColor">Primary Color</Label>
-					<ColorInput
-						id="primaryColor"
-						name="primaryColor"
-						value={props.formState['primaryColor']}
-						color={props.formErrors['primaryColor'] ? 'failure' : 'gray'}
-						helperText={
-							props.formErrors['primaryColor']
-								? props.formErrors['primaryColor'][0]
-								: false
-						}
-						onChange={props.handleChange}
-					/>
-				</div>
-				<div className="flex flex-col gap-y-2">
-					<Label htmlFor="secondaryColor">Secondary Color</Label>
-					<ColorInput
-						id="secondaryColor"
-						name="secondaryColor"
-						value={props.formState['secondaryColor']}
-						color={props.formErrors['secondaryColor'] ? 'failure' : 'gray'}
-						helperText={
-							props.formErrors['secondaryColor']
-								? props.formErrors['secondaryColor'][0]
-								: false
-						}
-						onChange={props.handleChange}
-					/>
-				</div> */}
 
 				<div className="mb-6 flex items-center justify-between">
 					<Button
@@ -93,7 +63,6 @@ const StoreStepTwo: FC<PropsType> = function (props) {
 						onClick={() => {
 							props.setStepNum(3);
 						}}
-						disabled={!props.formState['logo']}
 						processingSpinner={
 							<AiOutlineLoading className="h-6 w-6 animate-spin" />
 						}

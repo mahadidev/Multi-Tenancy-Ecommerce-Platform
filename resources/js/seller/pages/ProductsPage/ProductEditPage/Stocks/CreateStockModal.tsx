@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 const CreateStockModal = () => {
 	const { id } = useParams();
 	const productId = Number(id);
-	const { create } = useProductStock(productId);
+	const { create } = useProductStock(productId, { fetchData: false }); // Don't fetch, just use mutations
 	const { product } = useAppSelector((state) => state.product);
     const {productVariants: variants} = useProductVariant(id ?? 1);
 
