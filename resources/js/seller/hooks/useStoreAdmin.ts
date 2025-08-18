@@ -6,7 +6,7 @@ import {
     useUpdateAdminMutation,
 } from "@seller/store/reducers/storeAdminApi";
 import { useAppSelector } from "@seller/store/store";
-import { StoreAdminType } from "@type/storeAdminType";
+import { StoreAdminType, CreateStoreAdminType, UpdateStoreAdminType } from "@type/storeAdminType";
 import useToast from "./useToast";
 
 const useStoreAdmin = () => {
@@ -32,11 +32,11 @@ const useStoreAdmin = () => {
         formData,
         onSuccess,
     }: {
-        formData: StoreAdminType;
+        formData: CreateStoreAdminType;
         onSuccess?: CallableFunction;
     }) => {
         handleCreateAdmin(formData).then((response) => {
-            if (response.data?.status === 200) {
+            if (response.data?.success) {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
@@ -67,11 +67,11 @@ const useStoreAdmin = () => {
         formData,
         onSuccess,
     }: {
-        formData: StoreAdminType;
+        formData: UpdateStoreAdminType;
         onSuccess?: CallableFunction;
     }) => {
         handleUpdateAdmin(formData).then((response) => {
-            if (response.data?.status === 200) {
+            if (response.data?.success) {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }
@@ -106,7 +106,7 @@ const useStoreAdmin = () => {
         onSuccess?: CallableFunction;
     }) => {
         handleDeleteAdmin(formData).then((response) => {
-            if (response.data?.status === 200) {
+            if (response.data?.success) {
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }

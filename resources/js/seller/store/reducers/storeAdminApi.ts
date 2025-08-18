@@ -4,6 +4,8 @@ import { ApiResponseType } from "@type/apiType";
 import {
     StoreAdminFetchResponseType,
     StoreAdminType,
+    CreateStoreAdminType,
+    UpdateStoreAdminType,
 } from "@type/storeAdminType";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { setAdmins } from "../slices/storeAdminSlice";
@@ -38,7 +40,7 @@ export const storeAdminApi = createApi({
         }),
 
         // create admin
-        createAdmin: builder.mutation<ApiResponseType, StoreAdminType>({
+        createAdmin: builder.mutation<ApiResponseType, CreateStoreAdminType>({
             query: (formData) =>
                 createRequest({
                     url: `${PREFIX}/store-admin`,
@@ -50,7 +52,7 @@ export const storeAdminApi = createApi({
         }),
 
         // update admin
-        updateAdmin: builder.mutation<ApiResponseType, StoreAdminType>({
+        updateAdmin: builder.mutation<ApiResponseType, UpdateStoreAdminType>({
             query: (formData) =>
                 createRequest({
                     url: `${PREFIX}/store-admin/${formData.id}`,

@@ -4,7 +4,6 @@ import {
     PlaceOrderNonUserPayloadType,
     PlaceOrderPayloadType,
     useBulkShipmentOrdersMutation,
-    useFetchOrderReportQuery,
     useFetchOrdersQuery,
     useFetchShipmentOrdersQuery,
     usePlaceOrderMutation,
@@ -15,26 +14,14 @@ import { OrderType } from "@type/orderType";
 import { useAppSelector } from "../store/store";
 import useToast from "./useToast";
 
-const useOrders = ({
-	reportFilterRange,
-}: {
-	reportFilterRange?: 'today' | 'week' | 'month' | 'year' | undefined;
-}) => {
+const useOrders = () => {
 	const { toaster } = useToast(); // for showing toast messages
 
 	useFetchOrdersQuery(); // orders query
 	useFetchShipmentOrdersQuery(); // shipment orders query
-	useFetchOrderReportQuery(
-		{
-			range: reportFilterRange ?? 'week',
-		},
-		{
-			refetchOnMountOrArgChange: true,
-		}
-	);
 
 	// select orders
-	const { orders, order, shipmentOrders, report } = useAppSelector(
+	const { orders, order, shipmentOrders } = useAppSelector(
 		(state) => state.order
 	);
 
@@ -196,7 +183,6 @@ const useOrders = ({
 		orders,
 		shipmentOrders,
 		order,
-		report,
 		updateOrderStatus: {
 			submit: updateOrderStatus,
 			isLoading: isUpdateOrderStatusLoading,

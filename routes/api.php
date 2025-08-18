@@ -17,6 +17,9 @@ Route::group(['prefix' => 'v1'], function () {
     // Include the onboarding routes
     require __DIR__ . '/api/v1/onboarding.php';
 
+    // Include role management routes
+    require app_path('Modules/RoleManagement/Routes/api.php');
+
     // Authentication routes are now handled by Authentication module
     // See: app/Modules/Authentication/Routes/api.php
 

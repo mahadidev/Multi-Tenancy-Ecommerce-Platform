@@ -7,6 +7,8 @@ use App\Http\Middleware\Cors;
 use App\Http\Middleware\LogRequests;
 use App\Http\Middleware\StoreMiddleware;
 use App\Http\Middleware\TrackStoreVisitor;
+use App\Http\Middleware\CheckCustomPermission;
+use App\Http\Middleware\CheckCustomRole;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,6 +29,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'store' => StoreMiddleware::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+            'custom.role' => CheckCustomRole::class,
+            'custom.permission' => CheckCustomPermission::class,
+            // Legacy Spatie middleware (deprecated)
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,

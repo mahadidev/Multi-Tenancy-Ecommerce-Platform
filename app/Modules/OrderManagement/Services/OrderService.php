@@ -212,7 +212,7 @@ class OrderService
      *
      * @return array<string, mixed>
      */
-    public function getOrderReport(string $period = 'month', ?string $start_date = null, ?string $end_date = null): array
+    public function getOrderReport(string $period = 'last30days', ?string $start_date = null, ?string $end_date = null): array
     {
         [$start, $end] = $this->getDateRange($period, $start_date, $end_date);
         $storeId = $this->getStoreId();
@@ -236,11 +236,11 @@ class OrderService
     {
         return match ($period) {
             'today' => [now()->startOfDay(), now()->endOfDay()],
-            'week' => [now()->startOfWeek(), now()->endOfWeek()],
-            'month' => [now()->startOfMonth(), now()->endOfMonth()],
-            'year' => [now()->startOfYear(), now()->endOfYear()],
+            'last7days' => [now()->subDays(6)->startOfDay(), now()->endOfDay()],
+            'last30days' => [now()->subDays(29)->startOfDay(), now()->endOfDay()],
+            'last1year' => [now()->subYear()->startOfDay(), now()->endOfDay()],
             'custom' => [Carbon::parse($start_date)->startOfDay(), Carbon::parse($end_date)->endOfDay()],
-            default => [now()->subDays(30), now()],
+            default => [now()->subDays(6)->startOfDay(), now()->endOfDay()],
         };
     }
 

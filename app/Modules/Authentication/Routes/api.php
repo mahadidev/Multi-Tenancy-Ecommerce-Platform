@@ -8,6 +8,7 @@ Route::prefix('api/v1')->middleware('web')->group(function () {
     Route::prefix('seller')->group(function () {
         Route::post('/login', [AuthController::class, 'sellerLogin']);
         Route::post('/register', [AuthController::class, 'sellerRegister']);
+        Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     });
 
     // User Authentication Routes

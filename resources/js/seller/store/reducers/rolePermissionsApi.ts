@@ -49,7 +49,7 @@ export const rolePermissionApi = createApi({
         fetchPermissions: builder.query<PermissionFetchResponseType, void>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/store-permissions`,
+                    url: `${PREFIX}/permissions`,
                     method: "get",
                     body: formData,
                 }),

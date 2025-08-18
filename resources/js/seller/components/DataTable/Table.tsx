@@ -90,8 +90,8 @@ const DataTable: FC<PropsType> = (props) => {
 							)}
 							<div className="ml-auto flex items-center space-x-2 sm:space-x-3">
 								{props.head && props.head.render(data)}
-								{props.exportable && (
-									<CSVLink data={props.data} filename={props.filename}>
+								{props.exportable && props.data && (
+									<CSVLink data={props.data ?? []} filename={props.filename}>
 										<Button
 											className="p-0"
 											color="gray"

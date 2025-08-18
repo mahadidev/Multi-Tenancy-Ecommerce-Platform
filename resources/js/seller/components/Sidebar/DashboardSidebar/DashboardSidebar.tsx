@@ -54,7 +54,7 @@ function DesktopSidebar() {
             setCollapsed(true);
         },
     }
-    const { pages, externalPages } = useMode('e-commerce');
+    const { pages, externalPages } = useMode('permission-aware');
     return (
         <Sidebar
             onMouseEnter={preview.enable}
@@ -87,7 +87,7 @@ function DesktopSidebar() {
                                     pathname={pathname}
                                 />
                             ))}{" "}
-                            <br />{" "}
+                            {/* <br />{" "}
                             <SidebarItem
                                 key={"subscription_plan"}
                                 {...{
@@ -95,7 +95,7 @@ function DesktopSidebar() {
                                     label: "Upgrade Plan",
                                 }}
                                 pathname={pathname}
-                            />
+                            /> */}
                         </Sidebar.ItemGroup>
                     </Sidebar.Items>
                 </div>
@@ -114,7 +114,7 @@ function MobileSidebar() {
     function close() {
         dispatch(setIsOpenMobile(false));
     }
-    const { pages, externalPages } = useMode('e-commerce');
+    const { pages, externalPages } = useMode('permission-aware');
     if (!isOpen) return null;
     return (
         <>

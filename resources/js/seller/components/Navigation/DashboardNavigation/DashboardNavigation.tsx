@@ -1,7 +1,9 @@
 import NotificationCard from "@seller/components/Notification/NotificationCard";
+import SearchDropdown from "@seller/components/Search/SearchDropdown";
 import { useMediaQuery } from "@seller/hooks/use-media-query";
 import useAuth from "@seller/hooks/useAuth";
 import useNotification from "@seller/hooks/useNotification";
+import useSearch from "@seller/hooks/useSearch";
 import useStore from "@seller/hooks/useStore";
 import { RoutePath } from "@seller/seller_env";
 import {
@@ -20,6 +22,7 @@ import {
     TextInput,
     Tooltip,
 } from "flowbite-react";
+import { useEffect, useRef, useState } from "react";
 import { FiCheck } from "react-icons/fi";
 import {
     HiArchive,
@@ -46,6 +49,21 @@ export function DashboardNavigation() {
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
     const { store } = useStore();
+    const { 
+        query, 
+        results, 
+        isLoading, 
+        isOpen, 
+        handleSearch, 
+        handleResultClick, 
+        clearSearch, 
+        setIsOpen,
+        getAllResults 
+    } = useSearch();
+    
+    const searchRef = useRef<HTMLDivElement>(null);
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
+
     function handleToggleSidebar() {
         if (isDesktop) {
             dispatch(toggleSidebar());
@@ -53,6 +71,27 @@ export function DashboardNavigation() {
             dispatch(toggleIsOpenMobile());
         }
     }
+
+    // Close search dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [setIsOpen]);
+
+    const handleMobileSearchToggle = () => {
+        setShowMobileSearch(!showMobileSearch);
+        if (showMobileSearch) {
+            clearSearch();
+        }
+    };
 
     return (
         <Navbar
@@ -85,7 +124,7 @@ export function DashboardNavigation() {
                                 {store?.name}
                             </h2>
                         </Navbar.Brand>
-                        <form className="hidden lg:block lg:pl-2">
+                        <div className="hidden lg:block lg:pl-2 relative" ref={searchRef}>
                             <Label htmlFor="search" className="sr-only">
                                 Search
                             </Label>
@@ -94,17 +133,28 @@ export function DashboardNavigation() {
                                 icon={HiSearch}
                                 id="search"
                                 name="search"
-                                placeholder="Search"
-                                required
+                                placeholder="Search products, orders, customers..."
+                                value={query}
+                                onChange={(e) => handleSearch(e.target.value)}
                                 type="search"
                             />
-                        </form>
+                            <SearchDropdown
+                                isOpen={isOpen}
+                                results={getAllResults()}
+                                isLoading={isLoading}
+                                onResultClick={handleResultClick}
+                                query={query}
+                            />
+                        </div>
                     </div>
                     <div className="flex items-center lg:gap-3">
                         <div className="flex items-center">
-                            <button className="cursor-pointer rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-700">
+                            <button 
+                                onClick={handleMobileSearchToggle}
+                                className="cursor-pointer rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-700"
+                            >
                                 <span className="sr-only">Search</span>
-                                <HiSearch className="h-6 w-6" />
+                                {showMobileSearch ? <HiX className="h-6 w-6" /> : <HiSearch className="h-6 w-6" />}
                             </button>
                             <NotificationBellDropdown />
                             {/* <AppDrawerDropdown /> */}
@@ -129,6 +179,33 @@ export function DashboardNavigation() {
                     </div>
                 </div>
             </div>
+            
+            {/* Mobile Search Overlay */}
+            {showMobileSearch && (
+                <div className="lg:hidden border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+                    <div className="relative" ref={searchRef}>
+                        <TextInput
+                            className="w-full"
+                            icon={HiSearch}
+                            placeholder="Search products, orders, customers..."
+                            value={query}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            type="search"
+                            autoFocus
+                        />
+                        <SearchDropdown
+                            isOpen={isOpen}
+                            results={getAllResults()}
+                            isLoading={isLoading}
+                            onResultClick={(result) => {
+                                handleResultClick(result);
+                                setShowMobileSearch(false);
+                            }}
+                            query={query}
+                        />
+                    </div>
+                </div>
+            )}
         </Navbar>
     );
 }

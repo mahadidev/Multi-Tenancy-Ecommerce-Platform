@@ -12,4 +12,6 @@ export { default as AuthLayout } from './Layout/AuthLayout';
 export { default as DashboardLayout } from './Layout/DasboardLayout';
 export { default as EditorLayout } from './Layout/EditorLayout/EditorLayout';
 export { default as OrderPlacerLayout } from "./Layout/OrderPlacerLayout";
+export { default as PermissionGuard } from './PermissionGuard/PermissionGuard';
+export { default as ProductImagePlaceholder } from './ProductImagePlaceholder';
 

@@ -11,10 +11,31 @@ export interface StoreAdminType {
     name: string;
     email: string;
     role: string[];
-    phone: null;
-    address: null;
-    image: null;
+    phone: string | null;
+    address: string | null;
+    image: string | null;
     store_session: StoreSession;
+}
+
+export interface CreateStoreAdminType {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+    phone?: string;
+    address?: string;
+    role_ids: number[];
+}
+
+export interface UpdateStoreAdminType {
+    id: number;
+    name: string;
+    email: string;
+    password?: string;
+    password_confirmation?: string;
+    phone?: string;
+    address?: string;
+    role_ids: number[];
 }
 
 export interface StoreSession {

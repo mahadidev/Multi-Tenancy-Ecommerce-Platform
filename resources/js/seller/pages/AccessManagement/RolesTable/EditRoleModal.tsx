@@ -71,7 +71,6 @@ const EditRoleModal: FC<PropsType> = ({ role }) => {
                 <Modal.Body>
                     <div className="grid gap-6">
                         <div>
-                            <Label htmlFor="name">Name</Label>
                             <FormInput
                                 id="name"
                                 label="Name"

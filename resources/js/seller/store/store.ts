@@ -16,6 +16,7 @@ import { fileApi } from './reducers/fileApi';
 import { menuApi } from './reducers/menuApi';
 import { notificationApi } from './reducers/notificationApi';
 import { orderApi } from './reducers/orderApi';
+import { salesChartApi } from './reducers/salesChartApi';
 import { pageApi } from './reducers/pageApi';
 import { productApi } from './reducers/productApi';
 import { productStockApi } from './reducers/productStockApi'; // ✅ NEW
@@ -57,6 +58,7 @@ import themeSlice from './slices/themeSlice';
 import uiSlice from './slices/uiSlice';
 import vendorSlice from './slices/vendorSlice';
 import widgetSlice from './slices/widgetSlice';
+import salesChartSlice from './slices/salesChartSlice';
 
 const authPersistConfig = {
 	key: 'seller',
@@ -69,6 +71,7 @@ const authPersistConfig = {
 		'orderApi',
 		'authApi',
 		'dashboardAnalyticsApi',
+		'salesChartApi',
 		'expenseApi',
 		'fileApi',
 		'themeApi',
@@ -121,6 +124,7 @@ const persistedReducer = persistReducer(
 		plans: SubscriptionPlanSlice,
 		orderPlacer: orderPlacerSlice,
 		vendor: vendorSlice,
+		salesChart: salesChartSlice,
 
 		// API reducers
 		[subscriptionPlanApi.reducerPath]: subscriptionPlanApi.reducer,
@@ -147,6 +151,7 @@ const persistedReducer = persistReducer(
 		[brandApi.reducerPath]: brandApi.reducer,
 		[socialMediaApi.reducerPath]: socialMediaApi.reducer,
 		[vendorApi.reducerPath]: vendorApi.reducer,
+		[salesChartApi.reducerPath]: salesChartApi.reducer,
 	})
 );
 
@@ -180,6 +185,7 @@ export const store = configureStore({
 			socialMediaApi.middleware,
 			subscriptionPlanApi.middleware,
 			vendorApi.middleware,
+			salesChartApi.middleware,
 		]),
 });
 

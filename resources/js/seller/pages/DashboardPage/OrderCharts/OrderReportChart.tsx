@@ -1,39 +1,36 @@
-import useOrders from '@seller/hooks/useOrders';
-import { useFetchOrderReportQuery } from '@seller/store/reducers/orderApi';
+import useSalesChart from '@seller/hooks/useSalesChart';
 import { ApexOptions } from 'apexcharts';
 import { Button, Card } from 'flowbite-react';
 import { useMemo, useState } from 'react';
 import ApexChart from 'react-apexcharts';
 
 const OrderReportChart = () => {
-	const [range, setRange] = useState<'today' | 'week' | 'month' | 'year'>(
-		'month'
+	const [range, setRange] = useState<'today' | 'last7days' | 'last30days' | 'last1year'>(
+		'last30days'
 	);
-	const { report: orderReport } = useOrders({});
-
-	useFetchOrderReportQuery({ range }, { refetchOnMountOrArgChange: true });
+	const { report: salesReport } = useSalesChart({ reportFilterRange: range });
 
     const ranges: {
 			label: string;
-			value: 'today' | 'week' | 'month' | 'year';
+			value: 'today' | 'last7days' | 'last30days' | 'last1year';
 		}[] = [
 			{ label: 'Today', value: 'today' },
-			{ label: 'This Week', value: 'week' },
-			{ label: 'This Month', value: 'month' },
-			{ label: 'This Year', value: 'year' },
+			{ label: 'Last 7 Days', value: 'last7days' },
+			{ label: 'Last 30 Days', value: 'last30days' },
+			{ label: 'Last 1 Year', value: 'last1year' },
 		];
 
 
 	const chartData = useMemo(() => {
-		if (!orderReport?.daily_trends)
+		if (!salesReport?.daily_trends)
 			return { dates: [], qty: [], revenue: [] };
 
 		return {
-			dates: orderReport.daily_trends.map((item) => item.date),
-			qty: orderReport.daily_trends.map((item) => item.product_qty),
-			revenue: orderReport.daily_trends.map((item) => item.revenue),
+			dates: salesReport.daily_trends.map((item: any) => item.date),
+			qty: salesReport.daily_trends.map((item: any) => item.product_qty),
+			revenue: salesReport.daily_trends.map((item: any) => item.revenue),
 		};
-	}, [orderReport]);
+	}, [salesReport]);
 
 	const chartOptions: ApexOptions = {
 		chart: {
@@ -58,7 +55,7 @@ const OrderReportChart = () => {
 			},
 		},
 		xaxis: {
-			categories: chartData.dates.map((date) =>
+			categories: chartData.dates.map((date: any) =>
 				new Date(date).toLocaleDateString('en-US', {
 					month: 'short',
 					day: 'numeric',
@@ -117,19 +114,19 @@ const OrderReportChart = () => {
 					<div className="bg-blue-50 p-4 rounded-lg">
 						<p className="text-sm text-gray-600">Total Orders</p>
 						<p className="text-xl font-bold">
-							{orderReport?.total_orders || 0}
+							{salesReport?.total_orders || 0}
 						</p>
 					</div>
 					<div className="bg-green-50 p-4 rounded-lg">
 						<p className="text-sm text-gray-600">Revenue</p>
 						<p className="text-xl font-bold">
-							৳{orderReport?.paid_revenue?.toFixed(2) || '0.00'}
+							৳{salesReport?.paid_revenue?.toFixed(2) || '0.00'}
 						</p>
 					</div>
 					<div className="bg-purple-50 p-4 rounded-lg">
 						<p className="text-sm text-gray-600">Pending Payment</p>
 						<p className="text-xl font-bold">
-							৳{orderReport?.pending_revenue?.toFixed(2) || '0.00'}
+							৳{salesReport?.pending_revenue?.toFixed(2) || '0.00'}
 						</p>
 					</div>
 				</div>

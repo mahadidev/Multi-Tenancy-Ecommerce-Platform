@@ -2,6 +2,7 @@
 
 use App\Modules\UserManagement\Controllers\UserController;
 use App\Modules\UserManagement\Controllers\ProfileController;
+use App\Modules\UserManagement\Controllers\StoreAdminController;
 // use App\Modules\UserManagement\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,17 @@ Route::prefix('api/v1')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'profile']);
         Route::post('/profile/update', [ProfileController::class, 'updateProfile']);
         Route::post('/profile/password-change', [ProfileController::class, 'passwordChange']);
+    });
+
+    // Store Admin Management Routes - Require store user management permission
+    Route::prefix('seller')->middleware(['store', 'custom.permission:store.manage_users'])->group(function () {
+        Route::prefix('store-admin')->controller(StoreAdminController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+            Route::get('/{admin}', 'show');
+            Route::put('/{admin}', 'update');
+            Route::delete('/{admin}', 'destroy');
+        });
     });
 
     // Role & Permission Management Routes - TODO: Create RoleController

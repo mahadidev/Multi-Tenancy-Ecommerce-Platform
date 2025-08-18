@@ -1,4 +1,4 @@
-import { DataTable } from "@seller/components";
+import { DataTable, PermissionGuard } from "@seller/components";
 import useProduct from "@seller/hooks/useProduct";
 import { ProductType } from "@type/productType";
 import { Button, Table } from "flowbite-react";
@@ -68,19 +68,23 @@ const ProductsTable = () => {
                         render: (row: ProductType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
-                                    <Button
-                                        as={Link}
-                                        to={`/products/${row.id}`}
-                                        size="sm"
-                                        color="primary"
-                                        className="p-0"
-                                    >
-                                        <div className="flex items-center gap-x-2">
-                                            <HiPencilAlt className="h-5 w-5" />
-                                            Edit Product
-                                        </div>
-                                    </Button>
-                                    <DeleteProductModal product={row} />
+                                    <PermissionGuard permission="products.edit">
+                                        <Button
+                                            as={Link}
+                                            to={`/products/${row.id}`}
+                                            size="sm"
+                                            color="primary"
+                                            className="p-0"
+                                        >
+                                            <div className="flex items-center gap-x-2">
+                                                <HiPencilAlt className="h-5 w-5" />
+                                                Edit Product
+                                            </div>
+                                        </Button>
+                                    </PermissionGuard>
+                                    <PermissionGuard permission="products.delete">
+                                        <DeleteProductModal product={row} />
+                                    </PermissionGuard>
                                 </div>
                             </Table.Cell>
                         ),
@@ -92,7 +96,11 @@ const ProductsTable = () => {
                 }}
                 data={products}
                 head={{
-                    render: (_data: ProductType[]) => <CreateProductModal />,
+                    render: (_data: ProductType[]) => (
+                        <PermissionGuard permission="products.create">
+                            <CreateProductModal />
+                        </PermissionGuard>
+                    ),
                 }}
                 exportable={true}
                 filename="products"

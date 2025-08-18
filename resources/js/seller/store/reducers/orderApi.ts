@@ -5,7 +5,7 @@ import { OrdersApiResponse } from "@type/orderType";
 import { ShipmentOrdersApiResponse } from "@type/shipmentOrdersType";
 import { baseQuery, createRequest } from "../baseQueryWithReAuth";
 import { clearCartItems } from "../slices/cartSlice";
-import { setOrderReport, setOrders, setShipmentOrders } from "../slices/orderSlice";
+import { setOrders, setShipmentOrders } from "../slices/orderSlice";
 
 export interface PlaceOrderPayloadType {
     name: string;
@@ -44,9 +44,6 @@ export interface BulkShipmentOrderPayloadType {
 }
 
 
-export interface FetchOrderReportPayloadType {
-	range?: 'today' | 'week' | 'month' | 'year';
-}
 
 export const orderApi = createApi({
 	reducerPath: 'orderApi',
@@ -157,20 +154,6 @@ export const orderApi = createApi({
 			providesTags: ['Shipments'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
-		fetchOrderReport: builder.query<any, FetchOrderReportPayloadType>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/orders/report?period=${formData.range}`,
-					method: 'get',
-				}),
-			providesTags: ['Shipments'],
-			transformErrorResponse: (error: any) => error.data,
-			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-				await queryFulfilled.then((response) => {
-					dispatch(setOrderReport(response?.data?.data?.report));
-				});
-			},
-		}),
 	}),
 });
 
@@ -181,6 +164,5 @@ export const {
     usePlaceOrderMutation,
     useBulkShipmentOrdersMutation,
     useSyncShipmentOrdersQuery,
-    usePlaceOrderNonUserMutation,
-    useFetchOrderReportQuery
+    usePlaceOrderNonUserMutation
 } = orderApi;

@@ -63,7 +63,7 @@ export const authApi = createApi({
 			query: (formData) =>
 				createRequest({
 					url: `${USER_PREFIX}/logout`,
-					method: 'get',
+					method: 'post',
 					body: formData,
 				}),
 			invalidatesTags: ['User'],

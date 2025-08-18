@@ -6,7 +6,7 @@ namespace App\Modules\UserManagement\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
+use App\Modules\RoleManagement\Traits\HasCustomRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    use HasFactory, Notifiable, HasCustomRoles, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -93,18 +93,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if (auth()->check() && (auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('admin')) && $panel->getId() === 'admin') {
+        if (auth()->check() && $this->canAccessAdminPanel() && $panel->getId() === 'admin') {
             return true;
         }
-        return false;
-    }
-
-    public function isAdmin()
-    {
-        if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin')) {
-            return true;
-        }
-
         return false;
     }
 
@@ -216,13 +207,4 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return $this->email_verified_at !== null;
     }
 
-    /**
-     * Check if user has a specific role in a store
-     */
-    public function hasStoreRole(int $storeId, string $role): bool
-    {
-        // Implementation depends on how store-specific roles are handled
-        // This is a placeholder for store-specific role checking
-        return $this->hasRole($role) && $this->hasStoreAccess($storeId);
-    }
 }
