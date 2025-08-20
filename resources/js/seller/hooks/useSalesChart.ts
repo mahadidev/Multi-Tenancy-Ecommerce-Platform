@@ -10,11 +10,13 @@ import useToast from "./useToast";
 
 const useSalesChart = ({
     reportFilterRange,
+    customDateRange,
     enableSummary = false,
     enableTrends = false,
     compareWithPrevious = false
 }: {
-    reportFilterRange?: 'today' | 'last7days' | 'last30days' | 'last1year' | undefined;
+    reportFilterRange?: 'today' | 'last7days' | 'last30days' | 'last1year' | 'custom' | undefined;
+    customDateRange?: { startDate: string; endDate: string };
     enableSummary?: boolean;
     enableTrends?: boolean;
     compareWithPrevious?: boolean;
@@ -31,6 +33,8 @@ const useSalesChart = ({
     } = useFetchSalesChartQuery(
         {
             range: reportFilterRange ?? 'last7days',
+            start_date: reportFilterRange === 'custom' ? customDateRange?.startDate : undefined,
+            end_date: reportFilterRange === 'custom' ? customDateRange?.endDate : undefined,
         },
         {
             refetchOnMountOrArgChange: true,
@@ -58,6 +62,8 @@ const useSalesChart = ({
     } = useFetchSalesSummaryQuery(
         {
             range: reportFilterRange ?? 'last7days',
+            start_date: reportFilterRange === 'custom' ? customDateRange?.startDate : undefined,
+            end_date: reportFilterRange === 'custom' ? customDateRange?.endDate : undefined,
         },
         {
             skip: !enableSummary,
@@ -75,7 +81,9 @@ const useSalesChart = ({
     } = useFetchSalesTrendsQuery(
         {
             range: reportFilterRange ?? 'last7days',
-            compare: compareWithPrevious
+            compare: compareWithPrevious,
+            start_date: reportFilterRange === 'custom' ? customDateRange?.startDate : undefined,
+            end_date: reportFilterRange === 'custom' ? customDateRange?.endDate : undefined,
         },
         {
             skip: !enableTrends,

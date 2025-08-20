@@ -1,6 +1,6 @@
 export type TrendingProductsFilterType = 'top_selling' | 'most_revenue' | 'most_profitable' | 'recently_popular';
 
-export type TimeRangeType = 'today' | 'last7days' | 'last30days' | 'last1year';
+export type TimeRangeType = 'today' | 'last7days' | 'last30days' | 'last1year' | 'custom';
 
 export interface TrendingProductsFilterOption {
 	label: string;

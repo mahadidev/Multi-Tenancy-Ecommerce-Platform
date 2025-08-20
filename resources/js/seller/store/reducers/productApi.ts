@@ -62,7 +62,9 @@ export interface FetchProductSummaryResponseType {
 }
 
 export interface FetchProductSummaryPayloadType {
-	range?: 'today' | 'week' | 'month' | 'year';
+	range?: 'today' | 'week' | 'month' | 'year' | 'custom';
+	start_date?: string;
+	end_date?: string;
 }
 
 export const productApi = createApi({
@@ -153,11 +155,16 @@ export const productApi = createApi({
 			FetchProductSummaryResponseType,
 			FetchProductSummaryPayloadType
 		>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/products/stock-history?range=${formData.range}`,
+			query: (formData) => {
+				let url = `${PREFIX}/products/stock-history?range=${formData.range}`;
+				if (formData.range === 'custom' && formData.start_date && formData.end_date) {
+					url += `&start_date=${formData.start_date}&end_date=${formData.end_date}`;
+				}
+				return createRequest({
+					url,
 					method: 'get',
-				}),
+				});
+			},
 			providesTags: ['Stocks'],
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {

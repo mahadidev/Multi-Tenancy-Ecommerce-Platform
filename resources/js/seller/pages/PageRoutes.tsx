@@ -27,6 +27,7 @@ import {
     StoreOnboardPage,
     ThemesPage,
 } from '.';
+import StockReportPage from './StockReportPage/StockReportPage';
 import {
     AuthLayout,
     DashboardLayout,
@@ -104,6 +105,7 @@ export const PagesRoute: FC = function () {
 						<Route path="notifications" element={<NotificationsPage />} />
 						<Route path="stores" element={<StoresPage />} />
 						<Route path="stores/create" element={<CreateStorePage />} />
+						<Route path="stock-report" element={<StockReportPage />} />
 					</Route>
 
 					{/* Order Placer */}

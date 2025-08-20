@@ -19,13 +19,19 @@ import { isArrayEmptyOrBlank } from '../../tool/checker';
 
 const useProduct = ({
 	summaryFilterRange,
+	customDateRange,
 }: {
-	summaryFilterRange?: 'today' | 'week' | 'month' | 'year';
+	summaryFilterRange?: 'today' | 'week' | 'month' | 'year' | 'custom';
+	customDateRange?: { startDate: string; endDate: string };
 }) => {
 	// fetch products
 	useFetchProductsQuery();
 	useFetchProductsSummaryQuery(
-		{ range: summaryFilterRange ?? 'today' },
+		{ 
+			range: summaryFilterRange ?? 'today',
+			start_date: summaryFilterRange === 'custom' ? customDateRange?.startDate : undefined,
+			end_date: summaryFilterRange === 'custom' ? customDateRange?.endDate : undefined,
+		},
 		{
 			refetchOnMountOrArgChange: true,
 		}

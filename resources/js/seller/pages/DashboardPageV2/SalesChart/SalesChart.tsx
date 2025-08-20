@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import SalesApexChart from './SalesApexChart';
 import { MetricsCards, SalesChartFooter, SalesChartHeader } from './components';
 import { RangeOption, RangeType } from './types';
+import CustomDateModal, { CustomDateRange } from '../../../components/DatePicker/CustomDateModal';
 
 const SalesChart = () => {
 	const rangeList: RangeOption[] = useMemo(() => [
@@ -11,20 +12,34 @@ const SalesChart = () => {
 		{ label: 'Last 7 Days', value: 'last7days' },
 		{ label: 'Last 30 Days', value: 'last30days' },
 		{ label: 'Last 1 Year', value: 'last1year' },
+		{ label: 'Custom', value: 'custom' },
 	], []);
 
 	const [range, setRange] = useState<RangeType>('last7days');
+	const [customRange, setCustomRange] = useState<CustomDateRange>();
+	const [showCustomModal, setShowCustomModal] = useState(false);
 	const [isChangingFilter, setIsChangingFilter] = useState(false);
 
 	const { report: salesReport, isLoading: isSalesDataLoading, getTotals, getGrowthPercentage } = useSalesChart({
-		reportFilterRange: range
+		reportFilterRange: range,
+		customDateRange: range === 'custom' ? customRange : undefined
 	});
 
 	const handleRangeChange = (newRange: RangeType) => {
-		if (newRange !== range) {
+		if (newRange === 'custom') {
+			setShowCustomModal(true);
+		} else if (newRange !== range) {
 			setIsChangingFilter(true);
 			setRange(newRange);
+			setCustomRange(undefined);
 		}
+	};
+
+	const handleCustomDateApply = (customDateRange: CustomDateRange) => {
+		setCustomRange(customDateRange);
+		setRange('custom');
+		setShowCustomModal(false);
+		setIsChangingFilter(true);
 	};
 
 	useEffect(() => {
@@ -55,7 +70,20 @@ const SalesChart = () => {
 		}).format(amount).replace('BDT', '৳');
 	};
 
-	const currentRangeOption: RangeOption = rangeList.find(item => item.value === range) || { label: 'Last 7 Days', value: 'last7days' };
+	const currentRangeOption: RangeOption = useMemo(() => {
+		if (range === 'custom' && customRange) {
+			const start = new Date(customRange.startDate);
+			const end = new Date(customRange.endDate);
+			const startLabel = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+			const endLabel = end.toLocaleDateString('en-US', { 
+				month: 'short', 
+				day: 'numeric',
+				year: start.getFullYear() !== end.getFullYear() ? 'numeric' : undefined
+			});
+			return { label: `${startLabel} - ${endLabel}`, value: 'custom' };
+		}
+		return rangeList.find(item => item.value === range) || { label: 'Last 7 Days', value: 'last7days' };
+	}, [range, customRange, rangeList]);
 
 	if (loading) {
 		return (
@@ -73,37 +101,47 @@ const SalesChart = () => {
 	}
 
 	return (
-		<Card className="xl:col-span-2 border-0 relative">
-			<SalesChartHeader
-				growthPercentage={growthPercentage}
-				isPositiveGrowth={isPositiveGrowth}
-			/>
+		<>
+			<Card className="xl:col-span-2 border-0 relative">
+				<SalesChartHeader
+					growthPercentage={growthPercentage}
+					isPositiveGrowth={isPositiveGrowth}
+				/>
 
-			<MetricsCards
-				totals={totals}
-				formatCurrency={formatCurrency}
-				showFilterLoader={showFilterLoader}
-			/>
+				<MetricsCards
+					totals={totals}
+					formatCurrency={formatCurrency}
+					showFilterLoader={showFilterLoader}
+				/>
 
-			<div className=" dark:bg-gray-900 rounded-lg relative">
-				{showFilterLoader && (
-					<div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-lg z-10 flex items-center justify-center">
-						<div className="text-center">
-							<Spinner size="lg" className="mb-2" />
-							<p className="text-sm text-gray-500 dark:text-gray-400">Updating chart...</p>
+				<div className=" dark:bg-gray-900 rounded-lg relative">
+					{showFilterLoader && (
+						<div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-lg z-10 flex items-center justify-center">
+							<div className="text-center">
+								<Spinner size="lg" className="mb-2" />
+								<p className="text-sm text-gray-500 dark:text-gray-400">Updating chart...</p>
+							</div>
 						</div>
-					</div>
-				)}
-				<SalesApexChart range={range} />
-			</div>
+					)}
+					<SalesApexChart range={range} />
+				</div>
 
-			<SalesChartFooter
-				currentRange={currentRangeOption}
-				rangeList={rangeList}
-				onRangeChange={handleRangeChange}
-				isLoading={showFilterLoader}
+				<SalesChartFooter
+					currentRange={currentRangeOption}
+					rangeList={rangeList}
+					onRangeChange={handleRangeChange}
+					isLoading={showFilterLoader}
+				/>
+			</Card>
+
+			{/* Custom Date Range Modal */}
+			<CustomDateModal
+				isOpen={showCustomModal}
+				onClose={() => setShowCustomModal(false)}
+				onApply={handleCustomDateApply}
+				currentRange={customRange}
 			/>
-		</Card>
+		</>
 	);
 };
 

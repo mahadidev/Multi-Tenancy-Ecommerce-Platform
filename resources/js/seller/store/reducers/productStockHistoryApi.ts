@@ -7,7 +7,11 @@ import { setHistories } from '../slices/productStockHistorySlice';
 
 
 export interface FetchHistoriesPayloadType {
-	range?: 'today' | 'week' | 'month' | 'year';
+	range?: 'today' | 'week' | 'month' | 'year' | 'custom';
+	start_date?: string;
+	end_date?: string;
+	limit?: number;
+	page?: number;
 }
 
 export interface FetchHistoriesResponseType extends ApiResponseType {
@@ -46,16 +50,26 @@ export const productStockHistoryApi = createApi({
 			FetchHistoriesResponseType,
 			FetchHistoriesPayloadType
 		>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/products/stocks/history?range=${formData.range}`,
+			query: (formData) => {
+				let url = `${PREFIX}/products/stocks/history?range=${formData.range}`;
+				if (formData.range === 'custom' && formData.start_date && formData.end_date) {
+					url += `&start_date=${formData.start_date}&end_date=${formData.end_date}`;
+				}
+				// Add pagination and limit to prevent timeouts
+				url += `&limit=${formData.limit || 10}&page=${formData.page || 1}`;
+				return createRequest({
+					url,
 					method: 'get',
-				}),
+				});
+			},
 			providesTags: ['Stocks'],
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
 				await queryFulfilled.then((response) => {
-					dispatch(setHistories(response.data.data.histories));
+					dispatch(setHistories({
+						histories: response.data.data.histories,
+						meta: response.data.meta || null
+					}));
 				});
 			},
 		}),

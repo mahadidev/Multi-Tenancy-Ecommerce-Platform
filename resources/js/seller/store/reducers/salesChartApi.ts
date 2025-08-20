@@ -90,7 +90,9 @@ export interface SalesMetricsApiResponse extends ApiResponseType {
 }
 
 export interface FetchSalesChartPayloadType {
-	range?: 'today' | 'last7days' | 'last30days' | 'last1year';
+	range?: 'today' | 'last7days' | 'last30days' | 'last1year' | 'custom';
+	start_date?: string;
+	end_date?: string;
 }
 
 export const salesChartApi = createApi({
@@ -100,11 +102,16 @@ export const salesChartApi = createApi({
 	endpoints: (builder) => ({
 		// fetch sales chart data - dedicated endpoint for charts only
 		fetchSalesChart: builder.query<SalesChartApiResponse, FetchSalesChartPayloadType>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/sales/chart?period=${formData.range}`,
+			query: (formData) => {
+				let url = `${PREFIX}/sales/chart?period=${formData.range}`;
+				if (formData.range === 'custom' && formData.start_date && formData.end_date) {
+					url += `&start_date=${formData.start_date}&end_date=${formData.end_date}`;
+				}
+				return createRequest({
+					url,
 					method: 'get',
-				}),
+				});
+			},
 			providesTags: ['SalesChart'],
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
@@ -118,22 +125,32 @@ export const salesChartApi = createApi({
 
 		// fetch sales metrics summary - lightweight endpoint
 		fetchSalesSummary: builder.query<SalesMetricsApiResponse, FetchSalesChartPayloadType>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/sales/metrics?period=${formData.range}`,
+			query: (formData) => {
+				let url = `${PREFIX}/sales/metrics?period=${formData.range}`;
+				if (formData.range === 'custom' && formData.start_date && formData.end_date) {
+					url += `&start_date=${formData.start_date}&end_date=${formData.end_date}`;
+				}
+				return createRequest({
+					url,
 					method: 'get',
-				}),
+				});
+			},
 			providesTags: ['SalesChart'],
 			transformErrorResponse: (error: any) => error.data,
 		}),
 
 		// fetch sales trends for comparison
-		fetchSalesTrends: builder.query<SalesTrendsApiResponse, { range: string; compare?: boolean }>({
-			query: (formData) =>
-				createRequest({
-					url: `${PREFIX}/sales/trends?period=${formData.range}&compare=${formData.compare || false}`,
+		fetchSalesTrends: builder.query<SalesTrendsApiResponse, { range: string; compare?: boolean; start_date?: string; end_date?: string }>({
+			query: (formData) => {
+				let url = `${PREFIX}/sales/trends?period=${formData.range}&compare=${formData.compare || false}`;
+				if (formData.range === 'custom' && formData.start_date && formData.end_date) {
+					url += `&start_date=${formData.start_date}&end_date=${formData.end_date}`;
+				}
+				return createRequest({
+					url,
 					method: 'get',
-				}),
+				});
+			},
 			providesTags: ['SalesChart'],
 			transformErrorResponse: (error: any) => error.data,
 		}),

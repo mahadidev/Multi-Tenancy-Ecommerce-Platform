@@ -19,7 +19,8 @@ import { orderApi } from './reducers/orderApi';
 import { salesChartApi } from './reducers/salesChartApi';
 import { pageApi } from './reducers/pageApi';
 import { productApi } from './reducers/productApi';
-import { productStockApi } from './reducers/productStockApi'; // ✅ NEW
+import { productStockApi } from './reducers/productStockApi';
+import { productStocksApi } from './reducers/productStocksApi';
 import { productVariantApi } from './reducers/productVariantApi';
 import { rolePermissionApi } from './reducers/rolePermissionsApi';
 import { socialMediaApi } from './reducers/socialMediaApi';
@@ -48,6 +49,7 @@ import pageSlice from './slices/pageSlice';
 import productSlice from './slices/productSlice';
 import productStockHistorySlice from './slices/productStockHistorySlice';
 import productStockSlice from './slices/productStockSlice';
+import productStocksSlice from './slices/productStocksSlice';
 import productVariantSlice from './slices/productVariantSlice';
 import RolePermissionSlice from './slices/rolePermissionsSlice';
 import socialMediaSlice from './slices/socialMediaSlice';
@@ -81,6 +83,7 @@ const authPersistConfig = {
 		'productApi',
 		'productVariantApi',
 		'productStockApi',
+		'productStocksApi',
 		'productStockHistoryApi',
 		'blogApi',
 		'brandApi',
@@ -114,7 +117,8 @@ const persistedReducer = persistReducer(
 		page: pageSlice,
 		product: productSlice,
 		productVariant: productVariantSlice,
-		productStock: productStockSlice, // ✅ NEW
+		productStock: productStockSlice,
+		productStocks: productStocksSlice,
         productStockHistory: productStockHistorySlice,
 		brand: brandSlice,
 		socialMedia: socialMediaSlice,
@@ -146,7 +150,8 @@ const persistedReducer = persistReducer(
 		[pageApi.reducerPath]: pageApi.reducer,
 		[productApi.reducerPath]: productApi.reducer,
 		[productVariantApi.reducerPath]: productVariantApi.reducer,
-		[productStockApi.reducerPath]: productStockApi.reducer, // ✅ NEW
+		[productStockApi.reducerPath]: productStockApi.reducer,
+		[productStocksApi.reducerPath]: productStocksApi.reducer,
         [productStockHistoryApi.reducerPath]: productStockHistoryApi.reducer,
 		[brandApi.reducerPath]: brandApi.reducer,
 		[socialMediaApi.reducerPath]: socialMediaApi.reducer,
@@ -160,6 +165,11 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: false,
+			immutableCheck: {
+				// Disable for performance in development when state gets large
+				warnAfter: 128, // Increase warning threshold from 32ms to 128ms
+				ignoredPaths: ['productStockHistory', 'salesChart'], // Ignore large data states
+			},
 		}).concat([
 			storeAdminApi.middleware,
 			rolePermissionApi.middleware,
@@ -178,7 +188,8 @@ export const store = configureStore({
 			pageApi.middleware,
 			productApi.middleware,
 			productVariantApi.middleware,
-			productStockApi.middleware, // ✅ NEW
+			productStockApi.middleware,
+			productStocksApi.middleware,
             productStockHistoryApi.middleware,
 			blogApi.middleware,
 			brandApi.middleware,

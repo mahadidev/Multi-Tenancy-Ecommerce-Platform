@@ -1,4 +1,4 @@
-export type RangeType = 'today' | 'last7days' | 'last30days' | 'last1year';
+export type RangeType = 'today' | 'last7days' | 'last30days' | 'last1year' | 'custom';
 
 export interface RangeOption {
 	label: string;
