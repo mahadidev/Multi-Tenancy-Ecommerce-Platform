@@ -1,4 +1,4 @@
-import useNotification from "@seller/hooks/useNotification";
+import useNotification from "@seller/_hooks/useNotification";
 import { RoutePath } from "@seller/seller_env";
 import { NotificationType, RedirectUrlType } from "@type/notification";
 import React from "react";

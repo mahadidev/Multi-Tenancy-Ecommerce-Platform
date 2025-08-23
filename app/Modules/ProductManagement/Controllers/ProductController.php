@@ -119,9 +119,11 @@ class ProductController extends Controller
     public function getSummary(Request $request, Product $product)
     {
         $range = $request->input('range', 'today');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
         try {
-            $reportData = $this->productService->getSummary($range);
+            $reportData = $this->productService->getSummary($range, $startDate, $endDate);
 
             return response()->json([
                 'status' => 200,

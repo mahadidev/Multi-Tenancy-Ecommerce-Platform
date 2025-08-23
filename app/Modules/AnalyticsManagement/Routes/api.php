@@ -1,10 +1,14 @@
 <?php
 
+use App\Modules\AnalyticsManagement\Controllers\AnalyticsController;
 use App\Modules\AnalyticsManagement\Controllers\SalesChartController;
 use App\Modules\AnalyticsManagement\Controllers\TrendingProductsController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api/v1/seller', 'middleware' => ['auth:sanctum', 'store']], function () {
+    
+    // Main Analytics Route - Dashboard analytics overview
+    Route::middleware(['custom.permission:analytics.view,orders.view,products.view'])->get('/analytics', [AnalyticsController::class, 'index']);
     
     // Sales Chart Routes - Dedicated endpoints for chart data only
     Route::prefix('/sales')->group(function () {

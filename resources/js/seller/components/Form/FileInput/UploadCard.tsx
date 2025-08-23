@@ -2,7 +2,7 @@ import { ImageCropper } from "@seller/components/ImageCropper/ImageCropper";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
 import { FC, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
-import useFile from "../../../hooks/useFile";
+import useFile from "../../../_hooks/useFile";
 import ErrorMessage from "../../Error/ErrorMessage";
 
 interface PropsType {

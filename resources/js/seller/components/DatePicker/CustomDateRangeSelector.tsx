@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import { Button, Modal } from 'flowbite-react';
-import { HiCalendar, HiX } from 'react-icons/hi';
+import { HiCalendar } from 'react-icons/hi';
 
 export type TimeRangeType = 'today' | 'week' | 'month' | 'year' | 'custom';
 

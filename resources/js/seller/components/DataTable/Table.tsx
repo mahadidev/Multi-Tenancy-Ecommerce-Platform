@@ -1,4 +1,4 @@
-import useTable from '@seller/hooks/useTable';
+import useTable from '@seller/_hooks/useTable';
 import { DataTablePropsType } from '@type/tableType';
 import { Button, Card, Label, Table, TextInput } from 'flowbite-react';
 import { FC } from 'react';

@@ -1,4 +1,4 @@
-import { FaBlogger, FaPaintBrush, FaUsers } from 'react-icons/fa';
+import { FaBlogger, FaPaintBrush, FaUsers, FaChartBar } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
 import { MdCollectionsBookmark, MdDeliveryDining } from 'react-icons/md';
 
@@ -12,10 +12,15 @@ export const defaultModePages: SidebarItemType[] = [
 		label: 'Dashboard',
 	},
 	{
+		href: RoutePath.AnalyticsPage.index(),
+		icon: FaChartBar,
+		label: 'Analytics',
+	},
+	{
 		icon: HiShoppingBag,
 		label: 'E-commerce',
 		items: [
-			{ href: RoutePath.CategoriesPage.index(), label: 'Category' },
+			{ href: RoutePath.CategoriesPage.index(), label: 'Product Categories' },
 			{ href: RoutePath.BrandsPage.index(), label: 'Brand' },
 
 			{ href: RoutePath.ProductsPage.index(), label: 'Products' },
@@ -38,7 +43,7 @@ export const defaultModePages: SidebarItemType[] = [
 		icon: FaBlogger,
 		label: 'Blogs',
 		items: [
-			{ href: RoutePath.BlogsPage.categories(), label: 'Category' },
+			{ href: RoutePath.BlogsPage.categories(), label: 'Blog Categories' },
 			{ href: RoutePath.BlogsPage.index(), label: 'Blogs' },
 		],
 	},
@@ -68,6 +73,7 @@ export const defaultModeExternalPages: SidebarItemType[] = [
 		label: 'Settings',
 		items: [
 			{ href: RoutePath.SettingsPage.index(), label: 'General' },
+			{ href: RoutePath.AnalyticsPage.index(), label: 'Analytics' },
 			{
 				href: RoutePath.AccessManagementPage.index(),
 				label: 'Access Management',

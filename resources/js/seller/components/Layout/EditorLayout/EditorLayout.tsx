@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import useStore from '@seller/_hooks/useStore';
 import { SidebarProvider } from '@seller/contexts/sidebar-context';
-import useStore from '@seller/hooks/useStore';
 import { useAppSelector } from '@seller/store/store';
 import useColor from '@themes/_helper/hooks/useColor';
 import { FC, useEffect } from 'react';

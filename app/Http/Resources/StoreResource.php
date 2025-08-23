@@ -46,6 +46,15 @@ class StoreResource extends JsonResource
             'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
             'partials' => $this->partials ? WidgetResource::collection($this->partials) : [],
             'layouts' => $this->layouts ? WidgetResource::collection($this->layouts) : [],
+            'website' => $this->website ? [
+                'id' => $this->website->id,
+                'subdomain' => $this->website->subdomain,
+                'domain' => $this->website->domain,
+                'title' => $this->website->title,
+                'description' => $this->website->description,
+                'is_published' => $this->website->is_published,
+                'is_maintenance_mode' => $this->website->is_maintenance_mode,
+            ] : null,
             'store_subscription_status' => $this->package_remaining_days == 0 ? 'Expired' : 'Active',
             'store_subscription_plan' => ($this->package_remaining_days != 0 && $this->storeSubscription) ? [
                 'id' => $this->storeSubscription->id,

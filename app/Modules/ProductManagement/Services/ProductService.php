@@ -38,7 +38,7 @@ class ProductService
         return Excel::download(new ProductsExport, $fileName);
     }
 
-    public function getSummary(string $range = 'month')
+    public function getSummary(string $range = 'month', ?string $startDate = null, ?string $endDate = null)
     {
         $query = Product::authorized();
 
@@ -63,6 +63,15 @@ class ProductService
                 $start = Carbon::now()->startOfYear();
                 $end = Carbon::now()->endOfYear();
                 $format = 'F';
+                break;
+            case 'custom':
+                if ($startDate && $endDate) {
+                    $start = Carbon::parse($startDate)->startOfDay();
+                    $end = Carbon::parse($endDate)->endOfDay();
+                    $format = 'd M';
+                } else {
+                    throw new \InvalidArgumentException("Custom date range requires both start_date and end_date parameters");
+                }
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid date range: $range");

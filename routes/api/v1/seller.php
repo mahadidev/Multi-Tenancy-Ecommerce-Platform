@@ -11,6 +11,9 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth:sanctum']], function 
      * See respective module Routes/api.php files
      */
 
+    // Subscription routes are now handled by SubscriptionManagement module
+    // See: app/Modules/SubscriptionManagement/Routes/api.php
+
     // Routes now handled by respective modules:
     // - Profile routes: UserManagement module
     // - Contact routes: ContactManagement module

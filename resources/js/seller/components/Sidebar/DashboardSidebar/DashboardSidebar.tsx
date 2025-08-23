@@ -1,5 +1,5 @@
-import { GLOBAL_APP_URL } from "@helper/global_env";
-import useStore from "@seller/hooks/useStore";
+import { GLOBAL_APP_URL, WEBSITE_RENDERER_URL } from "@helper/global_env";
+import useStore from "@seller/_hooks/useStore";
 import {
     setIsOpenMobile,
     setSidebarCollapsed,
@@ -231,6 +231,39 @@ function SidebarItem({
 function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
     const { store } = useStore();
 
+    const getWebsiteUrl = () => {
+        // If store has a website with subdomain, use the website renderer
+        if (store?.website?.subdomain) {
+            return `${WEBSITE_RENDERER_URL}/?subdomain=${store.website.subdomain}`;
+        }
+        // Fallback to old site structure
+        return `${GLOBAL_APP_URL}/sites/${store?.slug}`;
+    };
+
+    const handleVisitWebsite = (e: React.MouseEvent) => {
+        // Completely prevent any React Router interference
+        e.preventDefault();
+        e.stopPropagation();
+        e.nativeEvent.preventDefault();
+        e.nativeEvent.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+
+        const url = getWebsiteUrl();
+        console.log('Opening website URL:', url);
+        console.log('Store website data:', store?.website);
+        console.log('WEBSITE_RENDERER_URL:', WEBSITE_RENDERER_URL);
+        
+        // Direct window.open without timeout to avoid any interference
+        window.open(url, '_blank', 'noopener,noreferrer');
+        
+        // Return false to ensure no further event handling
+        return false;
+    };
+
+    const handleVisitOldSite = () => {
+        window.open(`${GLOBAL_APP_URL}/sites/${store?.slug}`, '_blank', 'noopener,noreferrer');
+    };
+
     return (
         <div
             className={twMerge(
@@ -239,14 +272,24 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
             )}
         >
             {store && (
-                <Button
-                    color="primary"
-                    as="a"
-                    href={`${GLOBAL_APP_URL}/sites/${store.slug}`}
-                    target="_blank"
-                >
-                    Visit Site
-                </Button>
+                <div className="flex gap-2 w-full">
+                    <button
+                        onClick={handleVisitWebsite}
+                        onMouseDown={(e) => e.preventDefault()}
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-2 rounded transition-colors"
+                        type="button"
+                    >
+                        {store?.website?.subdomain ? "Visit Website" : "Visit Site"}
+                    </button>
+                    {store?.website?.subdomain && !isCollapsed && (
+                        <button
+                            onClick={handleVisitOldSite}
+                            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-3 py-2 rounded transition-colors"
+                        >
+                            Old Site
+                        </button>
+                    )}
+                </div>
             )}
         </div>
     );

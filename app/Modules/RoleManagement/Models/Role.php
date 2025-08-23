@@ -101,19 +101,19 @@ class Role extends Model
     }
 
     /**
-     * Scope to get active roles
+     * Scope to filter roles by store
+     */
+    public function scopeForStore($query, $storeId)
+    {
+        return $query->where('store_id', $storeId);
+    }
+
+    /**
+     * Scope to filter active roles
      */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope to get roles for a specific store
-     */
-    public function scopeForStore($query, int $storeId)
-    {
-        return $query->where('store_id', $storeId);
     }
 
     /**

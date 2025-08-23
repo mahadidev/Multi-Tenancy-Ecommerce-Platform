@@ -1,8 +1,8 @@
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
-import { FaBuilding, FaLayerGroup, FaSteamSymbol, FaUsers } from 'react-icons/fa';
+import { FaLayerGroup, FaSteamSymbol, FaUsers, FaChartBar } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
-import { MdAttachMoney, MdBusiness } from 'react-icons/md';
+import { MdAttachMoney, MdBusiness, MdWeb } from 'react-icons/md';
 import { TbCoinTakaFilled, TbTruckDelivery } from 'react-icons/tb';
 
 export interface PermissionAwareSidebarItem extends SidebarItemType {
@@ -32,6 +32,12 @@ export const permissionAwarePages: PermissionAwareSidebarItem[] = [
 		icon: HiChartPie,
 		label: 'Dashboard',
 		permissions: ['analytics.view', 'reports.export'],
+	},
+	{
+		href: RoutePath.AnalyticsPage.index(),
+		icon: FaChartBar,
+		label: 'Analytics',
+		permissions: ['analytics.view', 'analytics.manage'],
 	},
 
 	// Inventory Group
@@ -151,6 +157,15 @@ export const permissionAwarePages: PermissionAwareSidebarItem[] = [
 				],
 			},
 		],
+	},
+
+	// Website Builder
+	{
+		href: RoutePath.WebsiteBuilder.index(),
+		icon: MdWeb,
+		label: 'Website Builder',
+		// No permissions required initially - accessible to all users
+		// TODO: Add proper permissions when website permissions are implemented in backend
 	},
 ];
 

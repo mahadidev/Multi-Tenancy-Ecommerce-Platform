@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useForm from "@seller/hooks/useForm";
-import usePage from "@seller/hooks/usePage";
+import useForm from "@seller/_hooks/useForm";
+import usePage from "@seller/_hooks/usePage";
 import { Label, TextInput } from "flowbite-react";
 import { useEffect } from "react";
 import PartialEditor from "./PartialEditor";

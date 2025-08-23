@@ -53,7 +53,7 @@ class Store extends Model
             $data->sendWelcomeEmail();
         });
 
-         // Set default trial period for the store
+         // Set default trial period for the store and create website
         static::created(function ($data) {
 
              // $package = Subscription::where('name', 'free-trial')->first();
@@ -67,6 +67,9 @@ class Store extends Model
              //         'is_active' => true,
              //     ]);
              // }
+
+             // Auto-create website for the store
+             $data->createDefaultWebsite();
 
         });
 
@@ -290,6 +293,150 @@ class Store extends Model
     public function steadfastApi()
     {
         return $this->hasOne(StoreApiCredential::class, 'store_id')->where('provider', 'steadfast');
+    }
+
+    public function website()
+    {
+        return $this->hasOne(\App\Modules\WebsiteBuilder\Models\StoreWebsite::class, 'store_id');
+    }
+
+    /**
+     * Create default website for the store
+     */
+    public function createDefaultWebsite()
+    {
+        try {
+            // Import WebsiteBuilder models
+            $websiteClass = \App\Modules\WebsiteBuilder\Models\StoreWebsite::class;
+            $menuClass = \App\Modules\WebsiteBuilder\Models\WebsiteMenu::class;
+            $pageClass = \App\Modules\WebsiteBuilder\Models\WebsitePage::class;
+            $sectionClass = \App\Modules\WebsiteBuilder\Models\PageSection::class;
+            $componentClass = \App\Modules\WebsiteBuilder\Models\PageComponent::class;
+
+            // Create the website
+            $website = $websiteClass::create([
+                'store_id' => $this->id,
+                'title' => $this->name . ' - Online Store',
+                'description' => 'Welcome to ' . $this->name . ' - Your one-stop online shopping destination.',
+                'subdomain' => $this->slug,
+                'seo_meta' => [
+                    'title' => $this->name . ' - Online Store',
+                    'description' => 'Welcome to ' . $this->name . ' - Your one-stop online shopping destination.',
+                    'keywords' => 'online store, shopping, ' . strtolower($this->name),
+                ],
+                'global_styles' => [
+                    'primary_color' => $this->primary_color ?? '#3B82F6',
+                    'secondary_color' => $this->secondary_color ?? '#1F2937',
+                    'font_family' => 'Inter',
+                ],
+                'is_published' => true,
+                'published_at' => now(),
+            ]);
+
+            // Create default menu
+            $menuClass::create([
+                'website_id' => $website->id,
+                'name' => 'Main Menu',
+                'location' => 'header',
+                'items' => [
+                    [
+                        'id' => 1,
+                        'title' => 'Home',
+                        'url' => '/',
+                        'type' => 'page',
+                        'target' => '_self',
+                        'parent_id' => null,
+                    ],
+                    [
+                        'id' => 2,
+                        'title' => 'Products',
+                        'url' => '/products',
+                        'type' => 'product',
+                        'target' => '_self',
+                        'parent_id' => null,
+                    ],
+                    [
+                        'id' => 3,
+                        'title' => 'About',
+                        'url' => '/about',
+                        'type' => 'page',
+                        'target' => '_self',
+                        'parent_id' => null,
+                    ],
+                    [
+                        'id' => 4,
+                        'title' => 'Contact',
+                        'url' => '/contact',
+                        'type' => 'page',
+                        'target' => '_self',
+                        'parent_id' => null,
+                    ],
+                ],
+                'is_active' => true,
+            ]);
+
+            // Create homepage
+            $homepage = $pageClass::create([
+                'website_id' => $website->id,
+                'title' => 'Home',
+                'slug' => '',
+                'type' => 'page',
+                'is_homepage' => true,
+                'is_published' => true,
+                'seo_meta' => [
+                    'title' => $this->name . ' - Welcome to Our Store',
+                    'description' => 'Discover amazing products at ' . $this->name . '. Quality products, great prices, excellent service.',
+                ],
+            ]);
+
+            // Create hero section for homepage
+            $heroSection = $sectionClass::create([
+                'page_id' => $homepage->id,
+                'name' => 'Hero Section',
+                'type' => 'hero',
+                'sort_order' => 1,
+                'is_visible' => true,
+            ]);
+
+            // Get hero component type
+            $heroComponentType = \App\Modules\WebsiteBuilder\Models\ComponentType::where('slug', 'hero-section')->first();
+
+            if ($heroComponentType) {
+                // Create hero component
+                $componentClass::create([
+                    'section_id' => $heroSection->id,
+                    'component_type_id' => $heroComponentType->id,
+                    'name' => 'Welcome Hero',
+                    'props' => [
+                        'title' => 'Welcome to ' . $this->name,
+                        'subtitle' => 'Discover Amazing Products',
+                        'description' => 'Explore our wide range of quality products and find exactly what you\'re looking for.',
+                        'background_color' => $this->primary_color ?? '#3B82F6',
+                        'text_color' => 'white',
+                        'alignment' => 'center',
+                        'height' => 'large',
+                        'buttons' => [
+                            [
+                                'text' => 'Shop Now',
+                                'url' => '/products',
+                                'style' => 'primary',
+                            ],
+                            [
+                                'text' => 'Learn More',
+                                'url' => '/about',
+                                'style' => 'outline',
+                            ],
+                        ],
+                    ],
+                    'sort_order' => 1,
+                    'is_visible' => true,
+                ]);
+            }
+
+            Log::info('Default website created successfully for store: ' . $this->name);
+        } catch (\Exception $e) {
+            Log::error('Error creating default website for store ' . $this->name . ': ' . $e->getMessage());
+        }
     }
 
 }

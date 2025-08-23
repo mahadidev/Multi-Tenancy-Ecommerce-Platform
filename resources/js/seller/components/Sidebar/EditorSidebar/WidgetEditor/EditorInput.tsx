@@ -1,5 +1,5 @@
+import useWidget from '@seller/_hooks/useWidget';
 import { ColorInput, FileInput } from '@seller/components';
-import useWidget from '@seller/hooks/useWidget';
 import { WidgetInputType } from '@type/widgetType';
 import { Label, TextInput } from 'flowbite-react';
 import { FC } from 'react';

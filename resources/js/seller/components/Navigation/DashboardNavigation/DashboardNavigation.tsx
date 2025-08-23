@@ -1,10 +1,10 @@
+import { useMediaQuery } from "@seller/_hooks/use-media-query";
+import useAuth from "@seller/_hooks/useAuth";
+import useNotification from "@seller/_hooks/useNotification";
+import useSearch from "@seller/_hooks/useSearch";
+import useStore from "@seller/_hooks/useStore";
 import NotificationCard from "@seller/components/Notification/NotificationCard";
 import SearchDropdown from "@seller/components/Search/SearchDropdown";
-import { useMediaQuery } from "@seller/hooks/use-media-query";
-import useAuth from "@seller/hooks/useAuth";
-import useNotification from "@seller/hooks/useNotification";
-import useSearch from "@seller/hooks/useSearch";
-import useStore from "@seller/hooks/useStore";
 import { RoutePath } from "@seller/seller_env";
 import {
     toggleIsOpenMobile,
@@ -49,18 +49,18 @@ export function DashboardNavigation() {
     const dispatch = useAppDispatch();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
     const { store } = useStore();
-    const { 
-        query, 
-        results, 
-        isLoading, 
-        isOpen, 
-        handleSearch, 
-        handleResultClick, 
-        clearSearch, 
+    const {
+        query,
+        results,
+        isLoading,
+        isOpen,
+        handleSearch,
+        handleResultClick,
+        clearSearch,
         setIsOpen,
-        getAllResults 
+        getAllResults
     } = useSearch();
-    
+
     const searchRef = useRef<HTMLDivElement>(null);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
 
@@ -149,7 +149,7 @@ export function DashboardNavigation() {
                     </div>
                     <div className="flex items-center lg:gap-3">
                         <div className="flex items-center">
-                            <button 
+                            <button
                                 onClick={handleMobileSearchToggle}
                                 className="cursor-pointer rounded p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-700"
                             >
@@ -179,7 +179,7 @@ export function DashboardNavigation() {
                     </div>
                 </div>
             </div>
-            
+
             {/* Mobile Search Overlay */}
             {showMobileSearch && (
                 <div className="lg:hidden border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">

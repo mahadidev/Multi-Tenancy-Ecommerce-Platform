@@ -41,6 +41,7 @@ export interface StoreType {
     brands: BrandType[];
     widgets: WidgetType[];
     menus: MenuType[];
+    website?: WebsiteType | null;
     created_at: string;
     updated_at: string;
 }
@@ -73,4 +74,14 @@ export interface StoreTypesType {
     type: string;
     created_at: string;
     updated_at: string;
+}
+
+export interface WebsiteType {
+    id: number;
+    subdomain: string;
+    domain?: string | null;
+    title: string;
+    description?: string | null;
+    is_published: boolean;
+    is_maintenance_mode: boolean;
 }

@@ -1,0 +1,12 @@
+export { DashboardRoutes } from './Dashboard/DashboardRoutes';
+export { InventoryRoutes } from './Inventory/InventoryRoutes';
+export { SalesRoutes } from './Sales/SalesRoutes';
+export { FinanceRoutes } from './Finance/FinanceRoutes';
+export { ContentRoutes } from './Content/ContentRoutes';
+export { UsersRoutes } from './Users/UsersRoutes';
+export { SettingsRoutes } from './Settings/SettingsRoutes';
+export { AuthRoutes } from './Auth/AuthRoutes';
+export { SubscriptionRoutes } from './Subscription/SubscriptionRoutes';
+export { EditorRoutes } from './Editor/EditorRoutes';
+export { OnboardRoutes } from './Onboard/OnboardRoutes';
+export { WebsiteBuilderRoutes } from './WebsiteBuilder/WebsiteBuilderRoutes';

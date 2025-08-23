@@ -50,4 +50,13 @@ return [
         'webhook_secret' => env('GITHUB_WEBHOOK_SECRET', "iPVM5Dqh01KeBM4q31VJDehwHTZvDUFGPR27YkctIto"),
     ],
 
+    'uddoktapay' => [
+        'api_key' => env('UDDOKTAPAY_API_KEY'),
+        'api_url' => env('UDDOKTAPAY_API_URL', 'https://uddoktapay.com/api/'),
+    ],
+
+    'website_renderer' => [
+        'url' => env('WEBSITE_RENDERER_URL', 'http://localhost:3000'),
+    ],
+
 ];

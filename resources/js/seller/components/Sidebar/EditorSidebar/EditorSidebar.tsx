@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@seller/store/store';
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
-import useWidget from '@seller/hooks/useWidget';
+import useWidget from '@seller/_hooks/useWidget';
 import { twMerge } from 'tailwind-merge';
 import PageEditor from './PageEditor/PageEditor';
 import WidgetEditor from './WidgetEditor/WidgetEditor';

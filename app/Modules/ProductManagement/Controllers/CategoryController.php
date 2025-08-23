@@ -83,14 +83,34 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        // Set default type if not provided
+        $type = $request->input('type', 'product');
+        
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'nullable|string|max:50|in:post,product', // Correct format for 'in' rule
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                // Custom rule to ensure unique name within the same type and store
+                function ($attribute, $value, $fail) use ($type) {
+                    $exists = Category::where('store_id', authStore())
+                        ->where('type', $type)
+                        ->where('name', $value)
+                        ->exists();
+                    
+                    if ($exists) {
+                        $typeLabel = $type === 'product' ? 'product' : 'blog';
+                        $fail("A {$typeLabel} category with this name already exists.");
+                    }
+                },
+            ],
+            'type' => 'nullable|string|max:50|in:post,product',
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         // Automatically assign the authenticated user's ID
         $validated['store_id'] = authStore();
+        $validated['type'] = $type;
 
         $category = Category::create($validated);
 
@@ -114,9 +134,29 @@ class CategoryController extends Controller
             ], 404);
         }
 
+        // Use the existing type or the one provided in request
+        $type = $request->input('type', $category->type);
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'nullable|string|max:50|in:post,product', // Correct format for 'in' rule
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                // Custom rule to ensure unique name within the same type and store (excluding current category)
+                function ($attribute, $value, $fail) use ($type, $id) {
+                    $exists = Category::where('store_id', authStore())
+                        ->where('type', $type)
+                        ->where('name', $value)
+                        ->where('id', '!=', $id)
+                        ->exists();
+                    
+                    if ($exists) {
+                        $typeLabel = $type === 'product' ? 'product' : 'blog';
+                        $fail("A {$typeLabel} category with this name already exists.");
+                    }
+                },
+            ],
+            'type' => 'nullable|string|max:50|in:post,product',
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 

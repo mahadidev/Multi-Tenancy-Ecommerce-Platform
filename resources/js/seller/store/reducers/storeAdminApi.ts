@@ -3,7 +3,6 @@ import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
 import {
     StoreAdminFetchResponseType,
-    StoreAdminType,
     CreateStoreAdminType,
     UpdateStoreAdminType,
 } from "@type/storeAdminType";

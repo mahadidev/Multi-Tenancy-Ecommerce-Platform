@@ -1,6 +1,6 @@
 import { GLOBAL_APP_URL } from '@helper/global_env';
-import usePage from '@seller/hooks/usePage';
-import useStore from '@seller/hooks/useStore';
+import usePage from '@seller/_hooks/usePage';
+import useStore from '@seller/_hooks/useStore';
 import { RoutePath } from '@seller/seller_env';
 import {
     toggleIsOpenMobile,
@@ -14,7 +14,7 @@ import { FiEye, FiSettings } from 'react-icons/fi';
 import { HiMenuAlt1, HiX } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import { useMediaQuery } from '../../../hooks/use-media-query';
+import { useMediaQuery } from '../../../_hooks/use-media-query';
 
 export function EditorNavigation() {
 	const sidebar = useAppSelector((state) => state.ui.sidebar);

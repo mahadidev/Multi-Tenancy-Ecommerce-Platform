@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Modules\RoleManagement\Traits\HasCustomRoles;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasCustomRoles, HasApiTokens;
+    use HasFactory, Notifiable, HasCustomRoles, HasApiTokens, HasRoles;
 
     /**
      * The attributes that are mass assignable.

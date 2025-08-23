@@ -1,6 +1,6 @@
-import { FaLayerGroup, FaSteamSymbol, FaUsers, FaBuilding } from 'react-icons/fa';
+import { FaBlogger, FaLayerGroup, FaSteamSymbol, FaUsers, FaChartBar } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
-import { MdAttachMoney, MdBusiness } from 'react-icons/md';
+import { MdAttachMoney, MdWeb } from 'react-icons/md';
 
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
@@ -13,14 +13,32 @@ export const ecommerceModePages: SidebarItemType[] = [
 		label: 'Dashboard',
 	},
 	{
+		href: RoutePath.AnalyticsPage.index(),
+		icon: FaChartBar,
+		label: 'Analytics',
+	},
+	{
 		href: RoutePath.CategoriesPage.index(),
-		label: 'Category',
+		label: 'Product Categories',
 		icon: FaLayerGroup,
 	},
 	{
 		href: RoutePath.ProductsPage.index(),
 		label: 'Products',
 		icon: HiShoppingBag,
+	},
+	{
+		icon: FaBlogger,
+		label: 'Blogs',
+		items: [
+			{ href: RoutePath.BlogsPage.categories(), label: 'Blog Categories' },
+			{ href: RoutePath.BlogsPage.index(), label: 'All Blogs' },
+		],
+	},
+	{
+		href: RoutePath.WebsiteBuilder.index(),
+		label: 'Website Builder',
+		icon: MdWeb,
 	},
 	{
 		icon: MdAttachMoney,
@@ -48,6 +66,7 @@ export const ecommerceModeExternalPages: SidebarItemType[] = [
 		label: 'Settings',
 		items: [
 			{ href: RoutePath.SettingsPage.index(), label: 'General' },
+			{ href: RoutePath.AnalyticsPage.index(), label: 'Analytics' },
 			{
 				href: RoutePath.AccessManagementPage.index(),
 				label: 'Access Management',

@@ -1,6 +1,6 @@
+import useFile from "@seller/_hooks/useFile";
 import { ImageCropper } from "@seller/components/ImageCropper/ImageCropper";
 import LoadingOverlay from "@seller/components/LoadingOverlay/LoadingOverlay";
-import useFile from "@seller/hooks/useFile";
 import { FileType } from "@type/fileType";
 import { Button, Card } from "flowbite-react";
 import { FC, useState } from "react";

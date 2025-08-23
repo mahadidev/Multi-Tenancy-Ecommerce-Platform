@@ -85,6 +85,10 @@ export const RoutePath = {
 	SettingsPage: {
 		index: () => '/settings',
 	},
+	AnalyticsPage: {
+		index: () => '/analytics',
+		productStock: () => '/analytics/product-stock',
+	},
 	ThemesPage: {
 		index: () => '/themes',
 	},
@@ -109,5 +113,11 @@ export const RoutePath = {
 	},
 	orderPlacer: {
 		index: () => '/order-placer',
+	},
+	WebsiteBuilder: {
+		index: () => '/websites',
+		create: () => '/websites/create',
+		edit: (websiteId: number) => `/websites/${websiteId}`,
+		pageBuilder: (websiteId: number, pageId: number) => `/websites/${websiteId}/pages/${pageId}/builder`,
 	},
 };

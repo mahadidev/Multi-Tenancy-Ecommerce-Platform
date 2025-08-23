@@ -19,6 +19,12 @@ Route::group(['prefix' => 'v1'], function () {
 
     // Include role management routes
     require app_path('Modules/RoleManagement/Routes/api.php');
+    
+    // Include settings management routes
+    require app_path('Modules/SettingsManagement/Routes/api.php');
+    
+    // Include financial management routes  
+    require app_path('Modules/FinancialManagement/Routes/api.php');
 
     // Authentication routes are now handled by Authentication module
     // See: app/Modules/Authentication/Routes/api.php

@@ -1,4 +1,4 @@
-import useWidget from '@seller/hooks/useWidget';
+import useWidget from '@seller/_hooks/useWidget';
 import { WidgetInputType } from '@type/widgetType';
 import { FC, useEffect, useState } from 'react';
 import EditorInput from './EditorInput';

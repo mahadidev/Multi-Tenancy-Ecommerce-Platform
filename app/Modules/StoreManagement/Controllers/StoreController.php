@@ -27,7 +27,8 @@ class StoreController extends Controller
         $sort = $request->input('sort'); // Sort order, default is 'desc'
         $perPage = $request->input('per_page'); // Items per page, default is 10
 
-        $stores = Store::where(["owner_id" => $user->id])
+        $stores = Store::with(['website'])
+            ->where(["owner_id" => $user->id])
             ->when($search, function ($query, $search) {
                 $query
                     ->where('name', 'like', '%' . $search . '%')
@@ -59,11 +60,11 @@ class StoreController extends Controller
             $request->attributes->set('store_id', $storeSession->store_id);
 
             // find the store
-            $current_store = Store::find($storeSession->store_id);
+            $current_store = Store::with(['website'])->find($storeSession->store_id);
         }
 
         if (!$storeSession) {
-            $current_store = Store::where('owner_id', $user->id)->first();
+            $current_store = Store::with(['website'])->where('owner_id', $user->id)->first();
 
             if ($current_store) {
                 StoreSession::updateOrCreate([

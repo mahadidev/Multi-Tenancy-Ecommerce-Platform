@@ -26,7 +26,9 @@ export const subscriptionPlanApi = createApi({
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
 				await queryFulfilled.then((response) => {
-					dispatch(setPlans(response?.data?.data?.subscriptions));
+					// Handle both old and new response formats
+					const plans = response?.data?.data?.plans || response?.data?.data?.subscriptions || [];
+					dispatch(setPlans(plans));
 				});
 			},
 		}),

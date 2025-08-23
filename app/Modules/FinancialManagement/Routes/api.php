@@ -13,7 +13,7 @@ use App\Modules\FinancialManagement\Controllers\VendorController;
 |
 */
 
-Route::prefix('api/v1/seller')->middleware(['auth:sanctum', 'store'])->group(function () {
+Route::prefix('seller')->middleware(['auth:sanctum', 'store'])->group(function () {
     
     // Expense Management Routes - Logical permissions
     Route::prefix('expenses')->group(function () {

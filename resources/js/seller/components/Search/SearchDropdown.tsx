@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { HiSearch, HiX } from 'react-icons/hi';
+import { HiSearch } from 'react-icons/hi';
 
 interface SearchResult {
     id: string;

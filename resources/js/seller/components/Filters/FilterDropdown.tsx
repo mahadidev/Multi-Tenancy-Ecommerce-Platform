@@ -1,5 +1,5 @@
 import { Spinner } from 'flowbite-react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HiCheck, HiSelector } from 'react-icons/hi';
 
 export interface FilterOption {

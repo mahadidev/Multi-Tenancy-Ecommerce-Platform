@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { PREFIX } from "@seller/seller_env";
+import { API_URL } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
 import { VendorType } from "@type/vendorType";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
@@ -42,7 +42,7 @@ export const vendorApi = createApi({
         fetchVendors: builder.query<VendorsFetchResponse, void>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/vendors`,
+                    url: `${API_URL}/seller/vendors`,
                     method: "get",
                     body: formData,
                 }),
@@ -62,7 +62,7 @@ export const vendorApi = createApi({
         createVendor: builder.mutation<ApiResponseType, CreateVendorPayloadType>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/vendors`,
+                    url: `${API_URL}/seller/vendors`,
                     method: "post",
                     body: formData,
                 }),
@@ -72,7 +72,7 @@ export const vendorApi = createApi({
         updateVendor: builder.mutation<ApiResponseType, UpdateVendorPayloadType>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/vendors/${formData.id}`,
+                    url: `${API_URL}/seller/vendors/${formData.id}`,
                     method: "post",
                     apiMethod: "PUT",
                     body: formData,
@@ -83,7 +83,7 @@ export const vendorApi = createApi({
         deleteVendor: builder.mutation<ApiResponseType, DeleteVendorPayloadType>({
             query: (formData) =>
                 createRequest({
-                    url: `${PREFIX}/vendors/${formData.id}`,
+                    url: `${API_URL}/seller/vendors/${formData.id}`,
                     method: "post",
                     apiMethod: "delete",
                     body: formData,

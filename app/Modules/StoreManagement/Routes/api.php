@@ -5,6 +5,12 @@ use App\Modules\StoreManagement\Controllers\StoreTypeController;
 use App\Modules\StoreManagement\Controllers\StoreShipmentController;
 use Illuminate\Support\Facades\Route;
 
+// Store Creation - Only requires authentication (no store middleware)
+Route::group(['prefix' => 'api/v1/seller', 'middleware' => ['auth:sanctum']], function () {
+    // Store creation endpoint - doesn't require existing store
+    Route::post('/store', [StoreController::class, 'store']);
+});
+
 Route::group(['prefix' => 'api/v1/seller', 'middleware' => ['auth:sanctum', 'store']], function () {
     // Get owned store list
     Route::get('/get-stores', [StoreController::class, 'index']);
@@ -15,8 +21,11 @@ Route::group(['prefix' => 'api/v1/seller', 'middleware' => ['auth:sanctum', 'sto
     // get current store information
     Route::get('/current-store', [StoreController::class, 'currentStore']);
 
-    // Store Routes
-    Route::resource('/store', StoreController::class);
+    // Store Routes (except creation which is handled above)
+    Route::get('/store', [StoreController::class, 'index']);
+    Route::get('/store/{store}', [StoreController::class, 'show']);
+    Route::put('/store/{store}', [StoreController::class, 'update']);
+    Route::delete('/store/{store}', [StoreController::class, 'destroy']);
 
     // Store Update Route
     Route::post('/store/{id}', [StoreController::class, 'updateByPost']);

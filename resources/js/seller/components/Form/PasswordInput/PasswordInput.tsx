@@ -4,11 +4,15 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const PasswordInput: FC<any> = (props) => {
     const [type, setType] = useState<string>("password");
+    const { value, ...restProps } = props;
+    
     return (
         <div className="relative">
             <TextInput
                 className="w-full h-full z-10"
-                {...{ ...props, type }}
+                {...restProps}
+                type={type}
+                value={value ?? ""}
                 autoComplete="off"
             />
             <div className="absolute h-max right-2 top-0 bottom-0 my-auto">
