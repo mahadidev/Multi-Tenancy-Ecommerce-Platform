@@ -3,7 +3,7 @@
 namespace App\Modules\ContentManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\WidgetResource;
+use App\Modules\ContentManagement\Resources\WidgetResource;
 use App\Modules\ContentManagement\Services\WidgetService;
 use Illuminate\Http\Request;
 

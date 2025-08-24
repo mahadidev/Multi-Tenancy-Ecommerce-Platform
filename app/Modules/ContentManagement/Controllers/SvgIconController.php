@@ -5,7 +5,7 @@ namespace App\Modules\ContentManagement\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\ContentManagement\Models\SvgIcon;
-use App\Http\Resources\SvgIconResource;
+use App\Modules\ContentManagement\Resources\SvgIconResource;
 
 class SvgIconController extends Controller
 {

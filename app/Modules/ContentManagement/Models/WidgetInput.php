@@ -2,7 +2,7 @@
 
 namespace App\Modules\ContentManagement\Models;
 
-use App\Http\Resources\WidgetInputResource;
+use App\Modules\ContentManagement\Resources\WidgetInputResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

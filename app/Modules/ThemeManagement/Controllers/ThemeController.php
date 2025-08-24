@@ -3,7 +3,7 @@
 namespace App\Modules\ThemeManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ThemeResource;
+use App\Modules\ThemeManagement\Resources\ThemeResource;
 use App\Modules\ThemeManagement\Models\Theme;
 use Illuminate\Http\Request;
 

@@ -5,7 +5,7 @@ namespace App\Modules\ContactManagement\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\ContactManagement\Models\Contact;
 use Illuminate\Http\Request;
-use App\Http\Resources\ContactResource;
+use App\Modules\ContactManagement\Resources\ContactResource;
 
 class ContactController extends Controller
 {

@@ -2,8 +2,8 @@
 
 namespace App\Modules\OrderManagement\Services;
 
-use App\Http\Resources\ProductResource;
-use App\Http\Resources\OrderResource;
+use App\Modules\ProductManagement\Resources\ProductResource;
+use App\Modules\OrderManagement\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;

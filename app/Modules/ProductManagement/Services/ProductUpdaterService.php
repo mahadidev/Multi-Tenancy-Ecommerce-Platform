@@ -3,7 +3,7 @@
 namespace App\Modules\ProductManagement\Services;
 
 use App\Models\Product;
-use App\Http\Resources\ProductResource;
+use App\Modules\ProductManagement\Resources\ProductResource;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 

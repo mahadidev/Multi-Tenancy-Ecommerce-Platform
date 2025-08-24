@@ -3,7 +3,7 @@
 namespace App\Modules\ProductManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductVariantResource;
+use App\Modules\ProductManagement\Resources\ProductVariantResource;
 use App\Modules\ProductManagement\Models\Product;
 use App\Modules\ProductManagement\Models\ProductVariant;
 use App\Modules\ProductManagement\Services\ProductVariantService;

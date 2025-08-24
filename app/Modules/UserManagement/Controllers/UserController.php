@@ -7,7 +7,7 @@ use App\Modules\UserManagement\Services\UserService;
 use App\Modules\UserManagement\Requests\CreateUserRequest;
 use App\Modules\UserManagement\Requests\UpdateUserRequest;
 use App\Modules\UserManagement\Requests\UpdateProfileRequest;
-use App\Http\Resources\UserResource;
+use App\Modules\UserManagement\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;

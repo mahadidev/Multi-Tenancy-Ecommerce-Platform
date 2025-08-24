@@ -11,31 +11,15 @@ const SettingsSocialMedia = () => {
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: updateSocialMedia.error,
         default: {
-            facebook_url: socialMediaSettings.facebook_url,
-            twitter_url: socialMediaSettings.twitter_url,
-            instagram_url: socialMediaSettings.instagram_url,
-            linkedin_url: socialMediaSettings.linkedin_url,
-            youtube_url: socialMediaSettings.youtube_url,
-            tiktok_url: socialMediaSettings.tiktok_url,
-            pinterest_url: socialMediaSettings.pinterest_url,
-            whatsapp_number: socialMediaSettings.whatsapp_number,
-            telegram_username: socialMediaSettings.telegram_username,
+            ...socialMediaSettings,
         },
     });
 
     // Update form state when settings change
     useEffect(() => {
-        setFormState({
-            facebook_url: socialMediaSettings.facebook_url,
-            twitter_url: socialMediaSettings.twitter_url,
-            instagram_url: socialMediaSettings.instagram_url,
-            linkedin_url: socialMediaSettings.linkedin_url,
-            youtube_url: socialMediaSettings.youtube_url,
-            tiktok_url: socialMediaSettings.tiktok_url,
-            pinterest_url: socialMediaSettings.pinterest_url,
-            whatsapp_number: socialMediaSettings.whatsapp_number,
-            telegram_username: socialMediaSettings.telegram_username,
-        });
+        if (socialMediaSettings && Object.keys(socialMediaSettings).length > 0) {
+            setFormState(socialMediaSettings);
+        }
     }, [socialMediaSettings, setFormState]);
 
     const socialPlatforms = [

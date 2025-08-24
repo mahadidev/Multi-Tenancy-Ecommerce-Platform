@@ -3,8 +3,8 @@
 namespace App\Modules\Authentication\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreResource;
-use App\Http\Resources\UserResource;
+use App\Modules\StoreManagement\Resources\StoreResource;
+use App\Modules\UserManagement\Resources\UserResource;
 use App\Modules\Authentication\Services\AuthenticationService;
 use App\Modules\Authentication\Requests\LoginRequest;
 use App\Modules\Authentication\Requests\RegisterRequest;

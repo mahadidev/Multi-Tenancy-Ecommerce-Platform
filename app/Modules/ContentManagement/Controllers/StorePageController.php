@@ -3,7 +3,7 @@
 namespace App\Modules\ContentManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StorePagesResource;
+use App\Modules\StoreManagement\Resources\StorePagesResource;
 use App\Modules\StoreManagement\Models\Store;
 use App\Modules\ContentManagement\Models\StorePage;
 use App\Modules\ThemeManagement\Models\Theme;

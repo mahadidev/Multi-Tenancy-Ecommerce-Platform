@@ -3,7 +3,7 @@
 namespace App\Modules\ContentManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PageTypeResource;
+use App\Modules\ContentManagement\Resources\PageTypeResource;
 use Illuminate\Http\Request;
 use App\Modules\ContentManagement\Models\PageType;
 

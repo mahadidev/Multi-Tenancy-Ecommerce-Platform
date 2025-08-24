@@ -8,7 +8,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Modules\UserManagement\Models\User;
 use App\Modules\StoreManagement\Models\Store;
-use App\Http\Resources\CustomerResource;
+use App\Modules\CustomerManagement\Resources\CustomerProfileResource;
+use App\Modules\CustomerManagement\Services\CustomerProfileService;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
@@ -22,24 +23,38 @@ use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CustomerController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('permission:view_customer', ['only' => ['index', 'show', 'pdf', 'excel']]);
-    //     $this->middleware('permission:create_customer', ['only' => ['store']]);
-    //     $this->middleware('permission:edit_customer', ['only' => ['update']]);
-    //     $this->middleware('permission:delete_customer', ['only' => ['destroy']]);
-    // }
+    protected CustomerProfileService $profileService;
+
+    public function __construct(CustomerProfileService $profileService)
+    {
+        $this->profileService = $profileService;
+        // $this->middleware('permission:view_customer', ['only' => ['index', 'show', 'pdf', 'excel']]);
+        // $this->middleware('permission:create_customer', ['only' => ['store']]);
+        // $this->middleware('permission:edit_customer', ['only' => ['update']]);
+        // $this->middleware('permission:delete_customer', ['only' => ['destroy']]);
+    }
 
     public function index(Request $request)
     {
         $search = $request->input('search'); // Search keyword
         $sort = $request->input('sort'); // Sort order, default is 'desc'
         $perPage = $request->input('per_page'); // Items per page, default is 10
+        $currentStoreId = authStore();
 
-        $customers = User::whereJsonContains('store_id', authStore())
-            ->when($search, function ($query, $search) {
-                $query
-                    ->where('name', 'like', '%' . $search . '%');
+        $customers = User::whereJsonContains('store_id', $currentStoreId)
+            ->with(['customerProfiles' => function($query) use ($currentStoreId) {
+                $query->where('store_id', $currentStoreId);
+            }])
+            ->when($search, function ($query, $search) use ($currentStoreId) {
+                $query->where(function($q) use ($search, $currentStoreId) {
+                    // Search in user name
+                    $q->where('name', 'like', '%' . $search . '%')
+                      // Or search in store-specific display name
+                      ->orWhereHas('customerProfiles', function($profileQuery) use ($search, $currentStoreId) {
+                          $profileQuery->where('store_id', $currentStoreId)
+                                      ->where('display_name', 'like', '%' . $search . '%');
+                      });
+                });
             })
             ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest());
 
@@ -50,7 +65,7 @@ class CustomerController extends Controller
         $response = [
             'status' => 200,
             'data' => [
-                'customers' => CustomerResource::collection($paginated),
+                'customers' => CustomerProfileResource::collection($paginated),
             ],
         ];
 
@@ -76,48 +91,67 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'nullable|numeric',
+            'phone' => 'nullable|string',
             'password' => 'nullable|string',
             'address' => 'nullable|string',
             'image' => 'nullable|string',
+            'notes' => 'nullable|string',
         ]);
 
-        $password = false;
+        $currentStoreId = authStore();
+        $password = $request->password ?? '123'; // Default password
+        $passwordProvided = !empty($request->password);
+        
+        // Check if user exists
         $user = User::where('email', $request->email)->first();
+        
         if ($user) {
-            if (is_array($user->store_id) && in_array(authStore(), $user->store_id)) {
+            // Check if already customer of this store
+            if ($user->hasProfileInStore($currentStoreId)) {
                 return response()->json([
                     'status' => 400,
                     'message' => 'Customer already exists in this store',
                 ], 400);
-            } else {
-                // Temporarily skip role assignment to avoid guard issues
-                // TODO: Fix role assignment guard mismatch later
-                // if (!$user->hasRole('user')) {
-                //     $user->assignRole('user');
-                // }
-                $storeIds = $user->store_id ?? [];
-                $storeIds[] = authStore();
-                $password = true;
-                $user->update([
-                    'store_id' => $storeIds,
-                    // 'address' => $request->address,
-                    // 'image' => $request->image,
-                    // 'phone' => $request->phone,
-                ]);
             }
+            
+            // Add user to store
+            $storeIds = $user->store_id ?? [];
+            if (!in_array($currentStoreId, $storeIds)) {
+                $storeIds[] = $currentStoreId;
+                $user->update(['store_id' => $storeIds]);
+            }
+            
+            // Create store-specific profile using service
+            $this->profileService->updateProfile($user, $currentStoreId, [
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'notes' => $request->notes,
+            ]);
+            
+            // Set store-specific password if provided
+            if ($passwordProvided) {
+                $this->profileService->setStorePassword($user, $currentStoreId, $password);
+            }
+            
         } else {
-            $verificationCode = Str::random(40); // Generate a random verification code
+            // Create new user
+            $verificationCode = Str::random(40);
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'password' => Hash::make($request->password) ?? Hash::make('123'), // Default password is 123
-                'store_id' => [authStore()],
+                'password' => Hash::make($password),
+                'store_id' => [$currentStoreId],
                 'address' => $request->address,
                 'image' => $request->image,
                 'verification_code' => $verificationCode,
                 'email_verified_at' => null,
+            ]);
+            
+            // Create profile using service
+            $this->profileService->updateProfile($user, $currentStoreId, [
+                'notes' => $request->notes,
             ]);
         }
 
@@ -127,7 +161,7 @@ class CustomerController extends Controller
             'status' => 200,
             'message' => 'Customer created successfully',
             'date' => [
-                'customer' => new CustomerResource($user),
+                'customer' => new CustomerProfileResource($user),
             ]
         ], 200);
     }
@@ -191,7 +225,7 @@ class CustomerController extends Controller
         return response()->json([
             'status' => 200,
             'data' => [
-                'customer' => new CustomerResource($customer),
+                'customer' => new CustomerProfileResource($customer),
             ],
         ], 200);
     }
@@ -200,36 +234,41 @@ class CustomerController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'phone' => 'nullable|numeric',
+            'phone' => 'nullable|string',
             'password' => 'nullable|string',
             'address' => 'nullable|string',
             'image' => 'nullable|string',
+            'notes' => 'nullable|string',
+            'status' => 'nullable|in:active,inactive,blocked',
         ]);
 
-        $customer = User::whereJsonContains('store_id', authStore())->find($id);
+        $currentStoreId = authStore();
+        $customer = User::whereJsonContains('store_id', $currentStoreId)->findOrFail($id);
+        
+        // Update store-specific data using service
+        $this->profileService->updateProfile($customer, $currentStoreId, [
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'notes' => $request->notes,
+            'status' => $request->status ?? 'active',
+        ]);
 
-        if (!$customer) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Customer not found',
-            ], 404);
+        // Update store-specific password if provided
+        if (!empty($request->password)) {
+            $this->profileService->setStorePassword($customer, $currentStoreId, $request->password);
         }
 
-        $customer->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password) ?? $customer->password,
-            'address' => $request->address,
-            'image' => $request->image,
-        ]);
+        // Update global user data only if needed
+        if ($request->has('image')) {
+            $customer->update(['image' => $request->image]);
+        }
 
         return response()->json([
             'status' => 200,
             'message' => 'Customer updated successfully',
             'data' => [
-                'customer' => new CustomerResource($customer),
+                'customer' => new CustomerProfileResource($customer),
             ],
         ], 200);
     }

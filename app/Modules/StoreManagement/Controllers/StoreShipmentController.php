@@ -3,7 +3,7 @@
 namespace App\Modules\StoreManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ShipmentResource;
+use App\Modules\StoreManagement\Resources\ShipmentResource;
 use App\Modules\StoreManagement\Models\StoreShipment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;

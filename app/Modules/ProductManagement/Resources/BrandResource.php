@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Modules\ProductManagement\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class BrandResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'store_id' => $this->store_id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'image' => $this->brand_image,
+            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+        ];
+    }
+}

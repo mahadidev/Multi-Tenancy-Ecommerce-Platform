@@ -3,7 +3,7 @@
 namespace App\Modules\StoreManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreTypeResource;
+use App\Modules\StoreManagement\Resources\StoreTypeResource;
 use App\Modules\StoreManagement\Models\StoreType;
 use Illuminate\Http\Request;
 

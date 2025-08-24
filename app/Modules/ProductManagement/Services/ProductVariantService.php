@@ -2,7 +2,7 @@
 
 namespace App\Modules\ProductManagement\Services;
 
-use App\Http\Resources\ProductVariantResource;
+use App\Modules\ProductManagement\Resources\ProductVariantResource;
 use App\Modules\ProductManagement\Models\Product;
 use App\Modules\ProductManagement\Models\ProductVariant;
 use App\Modules\ProductManagement\Models\ProductVariantOption;

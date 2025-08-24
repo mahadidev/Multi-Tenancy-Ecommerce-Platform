@@ -5,7 +5,7 @@ namespace App\Modules\FileManagement\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\FileManagement\Models\FileStorage;
-use App\Http\Resources\FileStorageResource;
+use App\Modules\FileManagement\Resources\FileStorageResource;
 use Illuminate\Support\Facades\Storage;
 
 class FileStorageController extends Controller

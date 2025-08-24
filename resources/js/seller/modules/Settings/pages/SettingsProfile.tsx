@@ -13,16 +13,7 @@ const SettingsProfile = () => {
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: updateProfile.error,
         default: {
-            first_name: profileSettings.first_name,
-            last_name: profileSettings.last_name,
-            email: profileSettings.email,
-            phone: profileSettings.phone,
-            bio: profileSettings.bio,
-            address: profileSettings.address,
-            city: profileSettings.city,
-            state: profileSettings.state,
-            country: profileSettings.country,
-            postal_code: profileSettings.postal_code,
+            ...profileSettings,
         },
     });
 
@@ -41,18 +32,9 @@ const SettingsProfile = () => {
 
     // Update form state when settings change
     useEffect(() => {
-        setFormState({
-            first_name: profileSettings.first_name,
-            last_name: profileSettings.last_name,
-            email: profileSettings.email,
-            phone: profileSettings.phone,
-            bio: profileSettings.bio,
-            address: profileSettings.address,
-            city: profileSettings.city,
-            state: profileSettings.state,
-            country: profileSettings.country,
-            postal_code: profileSettings.postal_code,
-        });
+        if (profileSettings && Object.keys(profileSettings).length > 0) {
+            setFormState(profileSettings);
+        }
     }, [profileSettings, setFormState]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

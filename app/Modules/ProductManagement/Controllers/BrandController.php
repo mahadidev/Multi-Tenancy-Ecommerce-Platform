@@ -3,7 +3,7 @@
 namespace App\Modules\ProductManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BrandResource;
+use App\Modules\ProductManagement\Resources\BrandResource;
 use Illuminate\Http\Request;
 use App\Modules\ProductManagement\Models\Brand;
 use Illuminate\Support\Facades\Storage;

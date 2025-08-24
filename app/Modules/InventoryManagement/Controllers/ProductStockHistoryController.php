@@ -2,8 +2,8 @@
 namespace App\Modules\InventoryManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductStockHistoryResource;
-use App\Http\Resources\ProductStockResource;
+use App\Modules\InventoryManagement\Resources\ProductStockHistoryResource;
+use App\Modules\InventoryManagement\Resources\ProductStockResource;
 use App\Modules\ProductManagement\Models\Product;
 use App\Modules\InventoryManagement\Models\ProductStockHistory;
 use App\Modules\InventoryManagement\Services\ProductStockHistoryService;

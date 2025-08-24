@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Modules\StoreManagement\Resources;
+
+use App\Models\PageType;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class StorePagesResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'title' => $this->title,
+            'layout' => $this->layout ? new WidgetResource($this->layout) : null,
+            'is_active' => $this->is_active,
+            'type' => new PageTypeResource(PageType::where(["id" => $this->type])->first()),
+            "type_id" => $this->type,
+            'widgets' => $this->widgets ? WidgetResource::collection($this->widgets) : [],
+            'created_at' => date('d M, Y | h:i A', strtotime($this->created_at)),
+            'updated_at' => date('d M, Y | h:i A', strtotime($this->updated_at)),
+        ];
+    }
+}

@@ -3,7 +3,7 @@
 namespace App\Modules\ProductManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
+use App\Modules\ProductManagement\Resources\CategoryResource;
 use App\Modules\ProductManagement\Models\Category;
 use App\Modules\StoreManagement\Models\Store;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;

@@ -2,7 +2,7 @@
 namespace App\Modules\ProductManagement\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
+use App\Modules\ProductManagement\Resources\ProductResource;
 use App\Modules\ProductManagement\Models\Product;
 use App\Modules\ProductManagement\Services\ProductService;
 use App\Modules\ProductManagement\Services\ProductFetcherService;

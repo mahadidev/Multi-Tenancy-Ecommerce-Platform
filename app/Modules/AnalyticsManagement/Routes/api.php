@@ -3,6 +3,7 @@
 use App\Modules\AnalyticsManagement\Controllers\AnalyticsController;
 use App\Modules\AnalyticsManagement\Controllers\SalesChartController;
 use App\Modules\AnalyticsManagement\Controllers\TrendingProductsController;
+use App\Modules\AnalyticsManagement\Controllers\VisitorTrackingController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api/v1/seller', 'middleware' => ['auth:sanctum', 'store']], function () {
@@ -41,4 +42,11 @@ Route::group(['prefix' => 'api/v1/seller', 'middleware' => ['auth:sanctum', 'sto
         Route::middleware(['custom.permission:orders.view,orders.manage'])->get('/sales', [SalesChartController::class, 'chart']);
     });
 
+});
+
+// Public visitor tracking routes - accessible without authentication
+Route::group(['prefix' => 'api/v1'], function () {
+    Route::post('/track/page-view', [VisitorTrackingController::class, 'trackPageView']);
+    Route::post('/track/session', [VisitorTrackingController::class, 'trackSession']);
+    Route::post('/track/event', [VisitorTrackingController::class, 'trackEvent']);
 });

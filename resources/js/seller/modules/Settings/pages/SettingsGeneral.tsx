@@ -10,31 +10,15 @@ const SettingsGeneral = () => {
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: updateGeneral.error,
         default: {
-            site_name: generalSettings.site_name,
-            site_description: generalSettings.site_description,
-            default_timezone: generalSettings.default_timezone,
-            default_currency: generalSettings.default_currency,
-            date_format: generalSettings.date_format,
-            time_format: generalSettings.time_format,
-            admin_email: generalSettings.admin_email,
-            maintenance_mode: generalSettings.maintenance_mode,
-            allow_registration: generalSettings.allow_registration,
+            ...generalSettings,
         },
     });
 
     // Update form state when settings change
     useEffect(() => {
-        setFormState({
-            site_name: generalSettings.site_name,
-            site_description: generalSettings.site_description,
-            default_timezone: generalSettings.default_timezone,
-            default_currency: generalSettings.default_currency,
-            date_format: generalSettings.date_format,
-            time_format: generalSettings.time_format,
-            admin_email: generalSettings.admin_email,
-            maintenance_mode: generalSettings.maintenance_mode,
-            allow_registration: generalSettings.allow_registration,
-        });
+        if (generalSettings && Object.keys(generalSettings).length > 0) {
+            setFormState(generalSettings);
+        }
     }, [generalSettings, setFormState]);
 
     const timezones = [

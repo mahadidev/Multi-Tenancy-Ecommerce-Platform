@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Http\Resources\ThemeResource;
+use App\Modules\ThemeManagement\Resources\ThemeResource;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\StorePage;
@@ -79,7 +79,7 @@ class SellerAccountSeeder extends Seeder
             ]);   
 
         // $theme = Theme::with('widgets','pages.layout')->with("")->first();
-        // $themeData = new \App\Http\Resources\ThemeResource($theme);
+        // $themeData = new \App\Modules\ThemeManagement\Resources\ThemeResource($theme);
 
         // if ($theme) {
         //     $store->update(['theme_id' => $theme->id]);

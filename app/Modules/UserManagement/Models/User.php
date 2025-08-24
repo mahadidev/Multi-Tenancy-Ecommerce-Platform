@@ -23,6 +23,7 @@ use App\Modules\PaymentManagement\Models\Payment;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Modules\CustomerManagement\Models\CustomerProfile;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
@@ -40,11 +41,13 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         'phone',
         'image',
         'address',
+        'bio',
         'password',
         'verification_code',
         'email_verified_at',
         'store_id',
         'remember_token',
+        'settings',
     ];
 
     /**
@@ -67,7 +70,8 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'store_id' => 'array'
+            'store_id' => 'array',
+            'settings' => 'array'
         ];
     }
 
@@ -160,6 +164,14 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return $this->hasMany(\App\Modules\FinancialManagement\Models\Expense::class, 'user_id');
     }
 
+    /**
+     * Get customer profiles for different stores
+     */
+    public function customerProfiles(): HasMany
+    {
+        return $this->hasMany(CustomerProfile::class);
+    }
+
     // === Business Logic Methods ===
 
     /**
@@ -214,6 +226,57 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     public function getDefaultGuardName(): string
     {
         return '';
+    }
+
+    // === Customer Profile Methods ===
+
+    /**
+     * Get customer profile for specific store
+     */
+    public function getProfileForStore(int $storeId): ?CustomerProfile
+    {
+        return $this->customerProfiles()->where('store_id', $storeId)->first();
+    }
+
+    /**
+     * Get or create customer profile for store
+     */
+    public function getOrCreateProfileForStore(int $storeId): CustomerProfile
+    {
+        return $this->customerProfiles()->firstOrCreate(
+            ['store_id' => $storeId],
+            [
+                'status' => 'active',
+            ]
+        );
+    }
+
+    /**
+     * Check if user has profile in specific store
+     */
+    public function hasProfileInStore(int $storeId): bool
+    {
+        return $this->customerProfiles()->where('store_id', $storeId)->exists();
+    }
+
+    /**
+     * Get effective data for store (profile data or fallback to user data)
+     */
+    public function getEffectiveDataForStore(int $storeId): array
+    {
+        $profile = $this->getProfileForStore($storeId);
+        
+        return [
+            'name' => $profile?->effective_name ?? $this->name,
+            'email' => $this->email,
+            'phone' => $profile?->effective_phone ?? $this->phone,
+            'address' => $profile?->effective_address ?? $this->address,
+            'status' => $profile?->status ?? 'active',
+            'notes' => $profile?->notes,
+            'total_spent' => $profile?->total_spent ?? 0,
+            'total_orders' => $profile?->total_orders ?? 0,
+            'last_order_at' => $profile?->last_order_at,
+        ];
     }
 
 }

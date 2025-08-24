@@ -30,21 +30,18 @@ class SettingsController extends Controller
             }
 
             $settings = [
-                'store_name' => $store->name,
-                'store_email' => $store->email,
-                'store_phone' => $store->phone,
-                'store_address' => $store->location,
-                'store_description' => $store->description,
-                'currency' => $store->currency ?? 'USD',
-                'primary_color' => $store->primary_color,
-                'secondary_color' => $store->secondary_color,
-                'logo' => $store->logo,
+                'site_name' => $store->name,
+                'admin_email' => $store->email,
+                'site_description' => $store->description,
+                'default_currency' => $store->currency ?? 'USD',
+                'site_logo' => $store->logo,
                 'dark_logo' => $store->dark_logo,
-                'favicon' => $store->settings['favicon'] ?? null,
-                'timezone' => $store->settings['timezone'] ?? 'UTC',
-                'language' => $store->settings['language'] ?? 'en',
+                'site_favicon' => $store->settings['favicon'] ?? null,
+                'default_timezone' => $store->settings['timezone'] ?? 'UTC',
                 'date_format' => $store->settings['date_format'] ?? 'Y-m-d',
                 'time_format' => $store->settings['time_format'] ?? 'H:i:s',
+                'maintenance_mode' => $store->settings['maintenance_mode'] ?? false,
+                'allow_registration' => $store->settings['allow_registration'] ?? true,
             ];
 
             return response()->json([
@@ -68,18 +65,15 @@ class SettingsController extends Controller
     {
         try {
             $request->validate([
-                'store_name' => 'required|string|max:255',
-                'store_email' => 'required|email|max:255',
-                'store_phone' => 'nullable|string|max:20',
-                'store_address' => 'nullable|string',
-                'store_description' => 'nullable|string',
-                'currency' => 'required|string|max:3',
-                'primary_color' => 'nullable|string|max:7',
-                'secondary_color' => 'nullable|string|max:7',
-                'timezone' => 'nullable|string|max:50',
-                'language' => 'nullable|string|max:5',
+                'site_name' => 'required|string|max:255',
+                'admin_email' => 'required|email|max:255',
+                'site_description' => 'nullable|string',
+                'default_currency' => 'required|string|max:3',
+                'default_timezone' => 'nullable|string|max:50',
                 'date_format' => 'nullable|string|max:10',
                 'time_format' => 'nullable|string|max:10',
+                'maintenance_mode' => 'nullable|boolean',
+                'allow_registration' => 'nullable|boolean',
             ]);
 
             $storeId = authStore();
@@ -94,22 +88,19 @@ class SettingsController extends Controller
 
             // Update store fields
             $store->update([
-                'name' => $request->store_name,
-                'email' => $request->store_email,
-                'phone' => $request->store_phone,
-                'location' => $request->store_address,
-                'description' => $request->store_description,
-                'currency' => $request->currency,
-                'primary_color' => $request->primary_color,
-                'secondary_color' => $request->secondary_color,
+                'name' => $request->site_name,
+                'email' => $request->admin_email,
+                'description' => $request->site_description,
+                'currency' => $request->default_currency,
             ]);
 
             // Update settings JSON field
             $settings = $store->settings ?? [];
-            $settings['timezone'] = $request->timezone;
-            $settings['language'] = $request->language;
+            $settings['timezone'] = $request->default_timezone;
             $settings['date_format'] = $request->date_format;
             $settings['time_format'] = $request->time_format;
+            $settings['maintenance_mode'] = $request->maintenance_mode ?? false;
+            $settings['allow_registration'] = $request->allow_registration ?? true;
             
             $store->update(['settings' => $settings]);
 
@@ -134,16 +125,22 @@ class SettingsController extends Controller
         try {
             $user = Auth::user();
 
+            // Split name into first and last name for frontend compatibility
+            $userName = $user->name ?? '';
+            $nameParts = !empty($userName) ? explode(' ', trim($userName), 2) : ['', ''];
+            
             $settings = [
-                'name' => $user->name,
+                'first_name' => !empty($nameParts[0]) ? $nameParts[0] : '',
+                'last_name' => isset($nameParts[1]) ? $nameParts[1] : '',
                 'email' => $user->email,
                 'phone' => $user->phone,
                 'avatar' => $user->avatar,
                 'bio' => $user->bio,
-                'location' => $user->location,
-                'website' => $user->website,
-                'date_of_birth' => $user->date_of_birth,
-                'gender' => $user->gender,
+                'address' => $user->address ?? '',
+                'city' => $user->settings['city'] ?? '',
+                'state' => $user->settings['state'] ?? '',
+                'country' => $user->settings['country'] ?? '',
+                'postal_code' => $user->settings['postal_code'] ?? '',
             ];
 
             return response()->json([
@@ -167,21 +164,46 @@ class SettingsController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255',
+                'first_name' => 'nullable|string|max:255',
+                'last_name' => 'nullable|string|max:255',
                 'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
                 'phone' => 'nullable|string|max:20',
                 'bio' => 'nullable|string|max:500',
-                'location' => 'nullable|string|max:255',
-                'website' => 'nullable|url|max:255',
-                'date_of_birth' => 'nullable|date',
-                'gender' => 'nullable|in:male,female,other',
+                'address' => 'nullable|string|max:500',
+                'city' => 'nullable|string|max:100',
+                'state' => 'nullable|string|max:100',
+                'country' => 'nullable|string|max:100',
+                'postal_code' => 'nullable|string|max:20',
             ]);
 
             $user = Auth::user();
-            $user->update($request->only([
-                'name', 'email', 'phone', 'bio', 'location', 
-                'website', 'date_of_birth', 'gender'
-            ]));
+            
+            // Combine first and last name
+            $firstName = trim($request->first_name ?? '');
+            $lastName = trim($request->last_name ?? '');
+            $fullName = trim($firstName . ' ' . $lastName);
+            
+            // Ensure we have at least some name
+            if (empty($fullName)) {
+                $fullName = $firstName ?: $lastName ?: $user->name ?: 'User';
+            }
+            
+            $user->update([
+                'name' => $fullName,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'bio' => $request->bio,
+                'address' => $request->address,
+            ]);
+            
+            // Update settings JSON for additional fields
+            $settings = $user->settings ?? [];
+            $settings['city'] = $request->city;
+            $settings['state'] = $request->state;
+            $settings['country'] = $request->country;
+            $settings['postal_code'] = $request->postal_code;
+            
+            $user->update(['settings' => $settings]);
 
             return response()->json([
                 'status' => 200,
@@ -214,12 +236,15 @@ class SettingsController extends Controller
 
             $settings = $store->settings ?? [];
             $socialMedia = [
-                'facebook' => $settings['social_media']['facebook'] ?? '',
-                'twitter' => $settings['social_media']['twitter'] ?? '',
-                'instagram' => $settings['social_media']['instagram'] ?? '',
-                'linkedin' => $settings['social_media']['linkedin'] ?? '',
-                'youtube' => $settings['social_media']['youtube'] ?? '',
-                'tiktok' => $settings['social_media']['tiktok'] ?? '',
+                'facebook_url' => $settings['social_media']['facebook_url'] ?? '',
+                'twitter_url' => $settings['social_media']['twitter_url'] ?? '',
+                'instagram_url' => $settings['social_media']['instagram_url'] ?? '',
+                'linkedin_url' => $settings['social_media']['linkedin_url'] ?? '',
+                'youtube_url' => $settings['social_media']['youtube_url'] ?? '',
+                'tiktok_url' => $settings['social_media']['tiktok_url'] ?? '',
+                'pinterest_url' => $settings['social_media']['pinterest_url'] ?? '',
+                'whatsapp_number' => $settings['social_media']['whatsapp_number'] ?? '',
+                'telegram_username' => $settings['social_media']['telegram_username'] ?? '',
             ];
 
             return response()->json([
@@ -243,12 +268,15 @@ class SettingsController extends Controller
     {
         try {
             $request->validate([
-                'facebook' => 'nullable|url',
-                'twitter' => 'nullable|url',
-                'instagram' => 'nullable|url',
-                'linkedin' => 'nullable|url',
-                'youtube' => 'nullable|url',
-                'tiktok' => 'nullable|url',
+                'facebook_url' => 'nullable|url',
+                'twitter_url' => 'nullable|url',
+                'instagram_url' => 'nullable|url',
+                'linkedin_url' => 'nullable|url',
+                'youtube_url' => 'nullable|url',
+                'tiktok_url' => 'nullable|url',
+                'pinterest_url' => 'nullable|url',
+                'whatsapp_number' => 'nullable|string|max:20',
+                'telegram_username' => 'nullable|string|max:100',
             ]);
 
             $storeId = authStore();
@@ -263,7 +291,8 @@ class SettingsController extends Controller
 
             $settings = $store->settings ?? [];
             $settings['social_media'] = $request->only([
-                'facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok'
+                'facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url', 
+                'youtube_url', 'tiktok_url', 'pinterest_url', 'whatsapp_number', 'telegram_username'
             ]);
             
             $store->update(['settings' => $settings]);

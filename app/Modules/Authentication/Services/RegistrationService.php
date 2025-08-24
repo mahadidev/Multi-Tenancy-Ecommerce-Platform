@@ -2,9 +2,10 @@
 
 namespace App\Modules\Authentication\Services;
 
-use App\Http\Resources\UserResource;
+use App\Modules\UserManagement\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Modules\UserManagement\Models\User;
+use App\Modules\CustomerManagement\Services\CustomerProfileService;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
@@ -14,13 +15,16 @@ class RegistrationService
 {
     protected EmailVerificationService $emailVerificationService;
     protected SessionService $sessionService;
+    protected CustomerProfileService $profileService;
 
     public function __construct(
         EmailVerificationService $emailVerificationService,
-        SessionService $sessionService
+        SessionService $sessionService,
+        CustomerProfileService $profileService
     ) {
         $this->emailVerificationService = $emailVerificationService;
         $this->sessionService = $sessionService;
+        $this->profileService = $profileService;
     }
 
     public function registerSeller(Request $request): JsonResponse
@@ -119,12 +123,7 @@ class RegistrationService
 
     private function findUserInDifferentStore(string $email, int $storeId)
     {
-        return User::where('email', $email)
-            ->where(function ($query) use ($storeId) {
-                $query->whereJsonDoesntContain('store_id', $storeId)
-                    ->orWhereNull('store_id');
-            })
-            ->first();
+        return User::where('email', $email)->first();
     }
 
     private function createNewUser(Request $request, int $storeId): JsonResponse
@@ -139,6 +138,9 @@ class RegistrationService
             'verification_code' => $verificationCode,
             'email_verified_at' => null,
         ]);
+
+        // Create customer profile for this store using service
+        $this->profileService->getOrCreateProfile($user, $storeId);
 
         // Temporarily skip role assignment
         // $roleName = $request->input('role', 'user');
@@ -163,6 +165,9 @@ class RegistrationService
     {
         $storeIds = $user->store_id ?? [];
         $storeIds[] = $storeId;
+
+        // Create customer profile for this store with store-specific password using service
+        $this->profileService->setStorePassword($user, $storeId, $request->password);
 
         if (!$user->hasRole('user')) {
             // Temporarily skip role assignment

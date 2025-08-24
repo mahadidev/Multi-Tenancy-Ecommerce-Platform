@@ -7,7 +7,7 @@
     
     // Configuration
     const config = {
-        apiBaseUrl: window.location.origin + '/api/v1/visitor',
+        apiBaseUrl: window.location.origin + '/api/v1/track',
         sessionTimeout: 30 * 60 * 1000, // 30 minutes
         heartbeatInterval: 30 * 1000, // 30 seconds
         trackScrollDepth: true,
@@ -140,7 +140,7 @@
                 deviceInfo: utils.getDeviceInfo()
             };
 
-            this.sendData('/pageview', data);
+            this.sendData('/page-view', data);
             sessionData.pageViews++;
             utils.log('Page view tracked', data);
         },

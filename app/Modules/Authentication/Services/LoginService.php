@@ -2,21 +2,24 @@
 
 namespace App\Modules\Authentication\Services;
 
-use App\Http\Resources\StoreResource;
-use App\Http\Resources\UserResource;
+use App\Modules\StoreManagement\Resources\StoreResource;
+use App\Modules\UserManagement\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Modules\UserManagement\Models\User;
 use App\Modules\StoreManagement\Models\Store;
+use App\Modules\CustomerManagement\Services\CustomerProfileService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 
 class LoginService
 {
     protected SessionService $sessionService;
+    protected CustomerProfileService $profileService;
 
-    public function __construct(SessionService $sessionService)
+    public function __construct(SessionService $sessionService, CustomerProfileService $profileService)
     {
         $this->sessionService = $sessionService;
+        $this->profileService = $profileService;
     }
 
     public function authenticateSeller(Request $request): JsonResponse
@@ -78,16 +81,18 @@ class LoginService
 
         $user = User::where('email', $request->email)
             ->where('email_verified_at', '!=', null)
+            ->whereJsonContains('store_id', $storeId)
             ->first();
 
-        if (!$user || !Hash::check($request->password, $user->password) || !$user->hasRole('user')) {
-            $message = !$user || !Hash::check($request->password, $user->password)
-                ? 'Invalid email or password'
-                : 'Unauthorized. Only customers can log in.';
-
-            $statusCode = !$user || !Hash::check($request->password, $user->password) ? 401 : 403;
-
+        if (!$user || !$user->hasRole('user')) {
+            $message = !$user ? 'Invalid email or password' : 'Unauthorized. Only customers can log in.';
+            $statusCode = !$user ? 401 : 403;
             return $this->errorResponse($message, $statusCode);
+        }
+
+        // Use profile service to verify password for this store
+        if (!$this->profileService->verifyPassword($user, $storeId, $request->password)) {
+            return $this->errorResponse('Invalid email or password', 401);
         }
 
         $storeId = $store->id;

@@ -4,7 +4,7 @@ namespace App\Modules\OrderManagement\Controllers;
 
 use App\Exceptions\OrderProcessingException;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderResource;
+use App\Modules\OrderManagement\Resources\OrderResource;
 use Illuminate\Http\Request;
 use App\Modules\OrderManagement\Models\Order;
 use Illuminate\Support\Facades\Log;

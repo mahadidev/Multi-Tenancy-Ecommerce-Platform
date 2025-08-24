@@ -234,24 +234,10 @@ export const permissionAwareExternalPages: PermissionAwareSidebarItem[] = [
 
     // Settings Group
     {
+        href: RoutePath.SettingsPage.index(),
         icon: HiCog,
         label: 'Settings',
-        permissions: [
-            'settings.view', 'settings.edit',
-            'analytics.view', 'reports.export'
-        ],
-        items: [
-            {
-                href: RoutePath.SettingsPage.index(),
-                label: 'Store Settings',
-                permissions: ['settings.view', 'settings.edit'],
-            },
-            {
-                href: '#',
-                label: 'Analytics',
-                permissions: ['analytics.view', 'reports.export'],
-            },
-        ],
+        permissions: ['settings.view', 'settings.edit'],
     },
 
     // Tools & Utilities

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\ProductManagement\Models\Product;
 use App\Modules\UserManagement\Models\User;
-use App\Http\Resources\CartResource;
+use App\Modules\OrderManagement\Resources\CartResource;
 
 class CartController extends Controller
 {

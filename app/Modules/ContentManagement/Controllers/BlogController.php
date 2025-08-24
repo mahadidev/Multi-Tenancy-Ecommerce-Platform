@@ -8,7 +8,7 @@ use App\Modules\ContentManagement\Models\Blog;
 use App\Modules\ProductManagement\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\BlogResource;
+use App\Modules\ContentManagement\Resources\BlogResource;
 
 
 class BlogController extends Controller
