@@ -9,7 +9,7 @@ import {
 	HiEye,
 	HiRefresh
 } from 'react-icons/hi';
-import { useDashboard } from '../../../hooks';
+import { useDashboard } from '../../hooks';
 
 interface MetricCardProps {
 	title: string;

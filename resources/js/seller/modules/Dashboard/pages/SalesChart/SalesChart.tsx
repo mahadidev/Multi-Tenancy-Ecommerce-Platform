@@ -1,33 +1,38 @@
-import { useDashboard } from '../../../hooks';
+import CustomDateModal, {
+    CustomDateRange,
+} from '@seller/components/DatePicker/CustomDateModal';
 import { Card, Spinner } from 'flowbite-react';
 import { useEffect, useMemo, useState } from 'react';
+import { useDashboard } from '../../hooks';
 import SalesApexChart from './SalesApexChart';
 import { MetricsCards, SalesChartFooter, SalesChartHeader } from './components';
 import { RangeOption, RangeType } from './types';
-import CustomDateModal, { CustomDateRange } from '@seller/components/DatePicker/CustomDateModal';
 
 const SalesChart = () => {
-	const rangeList: RangeOption[] = useMemo(() => [
-		{ label: 'Today', value: 'today' },
-		{ label: 'Last 7 Days', value: 'last7days' },
-		{ label: 'Last 30 Days', value: 'last30days' },
-		{ label: 'Last 1 Year', value: 'last1year' },
-		{ label: 'Custom', value: 'custom' },
-	], []);
+	const rangeList: RangeOption[] = useMemo(
+		() => [
+			{ label: 'Today', value: 'today' },
+			{ label: 'Last 7 Days', value: 'last7days' },
+			{ label: 'Last 30 Days', value: 'last30days' },
+			{ label: 'Last 1 Year', value: 'last1year' },
+			{ label: 'Custom', value: 'custom' },
+		],
+		[]
+	);
 
 	const [range, setRange] = useState<RangeType>('last7days');
 	const [customRange, setCustomRange] = useState<CustomDateRange>();
 	const [showCustomModal, setShowCustomModal] = useState(false);
 	const [isChangingFilter, setIsChangingFilter] = useState(false);
 
-	const { 
-		report: salesReport, 
-		isSalesLoading: isSalesDataLoading, 
-		getSalesTotals: getTotals, 
-		getSalesGrowthPercentage: getGrowthPercentage 
+	const {
+		report: salesReport,
+		isSalesLoading: isSalesDataLoading,
+		getSalesTotals: getTotals,
+		getSalesGrowthPercentage: getGrowthPercentage,
 	} = useDashboard({
 		reportFilterRange: range,
-		customDateRange: range === 'custom' ? customRange : undefined
+		customDateRange: range === 'custom' ? customRange : undefined,
 	});
 
 	const handleRangeChange = (newRange: RangeType) => {
@@ -71,23 +76,33 @@ const SalesChart = () => {
 		return new Intl.NumberFormat('en-BD', {
 			style: 'currency',
 			currency: 'BDT',
-			minimumFractionDigits: 0
-		}).format(amount).replace('BDT', '৳');
+			minimumFractionDigits: 0,
+		})
+			.format(amount)
+			.replace('BDT', '৳');
 	};
 
 	const currentRangeOption: RangeOption = useMemo(() => {
 		if (range === 'custom' && customRange) {
 			const start = new Date(customRange.startDate);
 			const end = new Date(customRange.endDate);
-			const startLabel = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-			const endLabel = end.toLocaleDateString('en-US', { 
-				month: 'short', 
+			const startLabel = start.toLocaleDateString('en-US', {
+				month: 'short',
 				day: 'numeric',
-				year: start.getFullYear() !== end.getFullYear() ? 'numeric' : undefined
+			});
+			const endLabel = end.toLocaleDateString('en-US', {
+				month: 'short',
+				day: 'numeric',
+				year: start.getFullYear() !== end.getFullYear() ? 'numeric' : undefined,
 			});
 			return { label: `${startLabel} - ${endLabel}`, value: 'custom' };
 		}
-		return rangeList.find(item => item.value === range) || { label: 'Last 7 Days', value: 'last7days' };
+		return (
+			rangeList.find((item) => item.value === range) || {
+				label: 'Last 7 Days',
+				value: 'last7days',
+			}
+		);
 	}, [range, customRange, rangeList]);
 
 	if (loading) {
@@ -97,7 +112,9 @@ const SalesChart = () => {
 					<div className="flex items-center justify-center h-96">
 						<div className="text-center">
 							<Spinner size="xl" className="mb-4" />
-							<p className="text-gray-500 dark:text-gray-400">Loading sales data...</p>
+							<p className="text-gray-500 dark:text-gray-400">
+								Loading sales data...
+							</p>
 						</div>
 					</div>
 				</div>
@@ -124,11 +141,13 @@ const SalesChart = () => {
 						<div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-lg z-10 flex items-center justify-center">
 							<div className="text-center">
 								<Spinner size="lg" className="mb-2" />
-								<p className="text-sm text-gray-500 dark:text-gray-400">Updating chart...</p>
+								<p className="text-sm text-gray-500 dark:text-gray-400">
+									Updating chart...
+								</p>
 							</div>
 						</div>
 					)}
-					<SalesApexChart range={range} />
+					<SalesApexChart range={range === 'custom' ? 'last30days' : range} />
 				</div>
 
 				<SalesChartFooter

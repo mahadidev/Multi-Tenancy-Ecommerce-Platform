@@ -1,12 +1,19 @@
 import { Card } from "flowbite-react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Confetti from "react-confetti";
 import { FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useWindowSize } from "react-use";
+import { useFetchStoresQuery } from "@seller/store/reducers/storeApi";
 
 const SubscriptionSuccessPage: FC = () => {
     const { width, height } = useWindowSize();
+    const { refetch } = useFetchStoresQuery();
+
+    // Refetch store data to get updated subscription status
+    useEffect(() => {
+        refetch();
+    }, [refetch]);
 
     return (
         <div className="flex justify-center items-center min-h-screen">
@@ -24,7 +31,7 @@ const SubscriptionSuccessPage: FC = () => {
                         with us{" "}
                     </p>
                     <Link to="/" className="dark:bg-white dark:text-black px-4 py-2 rounded-lg text-sm font-medium">
-                        Your dashboard
+                        Return to Dashboard
                     </Link>
                 </div>
             </Card>

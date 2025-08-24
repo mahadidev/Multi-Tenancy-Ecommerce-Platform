@@ -208,4 +208,12 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         return $this->email_verified_at !== null;
     }
 
+    /**
+     * Get the default guard name for Spatie Permission package
+     */
+    public function getDefaultGuardName(): string
+    {
+        return '';
+    }
+
 }

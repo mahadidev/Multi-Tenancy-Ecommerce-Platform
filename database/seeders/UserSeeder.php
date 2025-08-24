@@ -20,7 +20,14 @@ class UserSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Check if the 'admin' role already exists, if not, create it
-        $admin = Role::firstOrCreate(['name' => 'super-admin']);
+        $admin = Role::firstOrCreate(
+            ['name' => 'super-admin', 'guard_name' => ''],
+            [
+                'name' => 'super-admin',
+                'slug' => 'super-admin-empty',
+                'guard_name' => '',
+            ]
+        );
 
         // Check if the user with email 'admin@gmail.com' already exists
         $user = User::where('email', 'admin@gmail.com')->first();

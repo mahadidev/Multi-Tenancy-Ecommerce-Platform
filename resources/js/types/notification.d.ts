@@ -1,6 +1,6 @@
 export interface ToastMessageType {
     text: string;
-    status: "success" | "danger" | "error";
+    status: "success" | "danger" | "error" | "warning" | "info";
     description?: string;
 }
 

@@ -43,10 +43,10 @@ const useCategory = () => {
     formData: CreateCategoryPayload;
     onSuccess?: CallableFunction;
   }) => {
-    handleCreate(formData).then((response) => {
-      if (response.data?.success) {
+    handleCreate(formData).then((response: any) => {
+      if ('data' in response && response.data) {
         if (onSuccess) {
-          onSuccess(response.data.data);
+          onSuccess(response.data);
         }
       }
     });
@@ -70,10 +70,10 @@ const useCategory = () => {
     formData: UpdateCategoryPayload;
     onSuccess?: CallableFunction;
   }) => {
-    handleUpdate(formData).then((response) => {
-      if (response.data?.success) {
+    handleUpdate(formData).then((response: any) => {
+      if ('data' in response && response.data) {
         if (onSuccess) {
-          onSuccess(response.data.data);
+          onSuccess(response.data);
         }
       }
     });
@@ -97,10 +97,10 @@ const useCategory = () => {
     formData: DeleteCategoryPayload;
     onSuccess?: CallableFunction;
   }) => {
-    handleDelete(formData).then((response) => {
-      if (response.data?.success) {
+    handleDelete(formData).then((response: any) => {
+      if ('data' in response && response.data) {
         if (onSuccess) {
-          onSuccess(response.data.data);
+          onSuccess(response.data);
         }
       }
     });

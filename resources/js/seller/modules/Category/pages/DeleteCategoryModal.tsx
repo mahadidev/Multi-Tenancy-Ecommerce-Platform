@@ -1,4 +1,3 @@
-import useToast from '@seller/_hooks/useToast';
 import { CategoryType } from '@type/categoryType';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
@@ -13,7 +12,6 @@ interface PropsType {
 const DeleteCategoryModal: FC<PropsType> = function (props) {
 	const [isOpen, setOpen] = useState(false);
 	const { delete: categoryDelete } = useCategory();
-	const { toaster } = useToast();
 
 	return (
 		<>
@@ -49,10 +47,6 @@ const DeleteCategoryModal: FC<PropsType> = function (props) {
 										},
 										onSuccess: () => {
 											setOpen(false);
-											toaster({
-												text: 'Category has been deleted',
-												status: 'danger',
-											});
 										},
 									});
 								}}

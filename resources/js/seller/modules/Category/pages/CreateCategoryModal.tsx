@@ -1,6 +1,5 @@
 import useForm from "@seller/_hooks/useForm";
 import useString from "@seller/_hooks/useString";
-import useToast from "@seller/_hooks/useToast";
 import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
@@ -13,7 +12,6 @@ const CreateCategoryModal: FC = function () {
     const [isClosing, setIsClosing] = useState(false);
     const { create, productCategories } = useCategory();
     const { getSlug } = useString();
-    const { toaster } = useToast();
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: create.error,
@@ -35,10 +33,6 @@ const CreateCategoryModal: FC = function () {
                 type: 'product' // Explicitly set type to 'product' for product categories
             },
             onSuccess: () => {
-                toaster({
-                    text: "✅ Product category created successfully!",
-                    status: "success",
-                });
                 handleClose();
             }
         });
@@ -46,10 +40,6 @@ const CreateCategoryModal: FC = function () {
 
     useEffect(() => {
         if (create.data && isOpen) {
-            toaster({
-                text: "Category created successfully!",
-                status: "success",
-            });
             handleClose();
         }
     }, [create.data]);

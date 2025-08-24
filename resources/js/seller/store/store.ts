@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { apiToastMiddleware } from './middleware/apiToastMiddleware';
 
 // Modular APIs - Using new module structure
 import { accessManagementApi, accessManagementSlice } from '../modules/AccessManagement/store';
@@ -187,6 +188,8 @@ export const store = configureStore({
 				ignoredPaths: ['productStock', 'dashboard', 'stockReport'], // Ignore large data states
 			},
 		}).concat([
+			// Global API Toast Middleware
+			apiToastMiddleware,
 			// Modular API Middleware - Using new module structure
 			authApi.middleware,
 			accessManagementApi.middleware,

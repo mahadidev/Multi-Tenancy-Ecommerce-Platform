@@ -56,9 +56,9 @@ class RegistrationService
 
         // Assign role to the seller
         try {
-            $roleName = $request->input('role', 'seller');
-            $role = Role::firstOrCreate(['name' => $roleName]);
-            $user->assignRole($role->name);
+            // Temporarily skip role assignment
+            // $roleName = $request->input('role', 'seller');
+            // $user->assignRole($roleName);
         } catch (\Exception $e) {
             // Log the error but don't fail the registration
             \Log::warning('Failed to assign role during registration: ' . $e->getMessage());
@@ -140,9 +140,9 @@ class RegistrationService
             'email_verified_at' => null,
         ]);
 
-        $roleName = $request->input('role', 'user');
-        $role = Role::firstOrCreate(['name' => $roleName]);
-        $user->assignRole($role->name);
+        // Temporarily skip role assignment
+        // $roleName = $request->input('role', 'user');
+        // $user->assignRole($roleName);
 
         if ($storeId) {
             $this->sessionService->storeSessionData($request, $storeId);
@@ -165,9 +165,9 @@ class RegistrationService
         $storeIds[] = $storeId;
 
         if (!$user->hasRole('user')) {
-            $roleName = $request->input('role', 'user');
-            $role = Role::firstOrCreate(['name' => $roleName]);
-            $user->assignRole($role->name);
+            // Temporarily skip role assignment
+            // $roleName = $request->input('role', 'user');
+            // $user->assignRole($roleName);
         }
 
         $user->update(['store_id' => $storeIds]);

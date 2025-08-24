@@ -163,18 +163,6 @@ const OrdersTable = () => {
 								>
 									<div className="flex items-center gap-x-2">Bulk Shipment</div>
 								</Button>
-								<Button
-									as={Link}
-									to={`/orders/create`}
-									size="md"
-									color="primary"
-									className="p-0"
-								>
-									<div className="flex items-center gap-x-2">
-										<HiPlus className="h-5 w-5" />
-										Create Order
-									</div>
-								</Button>
 							</>
 						),
 					}}

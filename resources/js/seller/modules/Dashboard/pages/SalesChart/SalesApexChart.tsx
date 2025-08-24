@@ -1,7 +1,7 @@
 import { ApexChart } from '@seller/components';
-import { useDashboard } from '../../../hooks';
 import { useThemeMode } from 'flowbite-react';
 import { useMemo } from 'react';
+import { useDashboard } from '../../hooks';
 
 interface SalesApexChartProps {
 	range: 'today' | 'last7days' | 'last30days' | 'last1year';
@@ -15,7 +15,7 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 	// Enhanced color scheme
 	const colors = {
 		revenue: isDarkTheme ? '#60A5FA' : '#3B82F6', // Blue
-		profit: isDarkTheme ? '#34D399' : '#10B981',  // Green
+		profit: isDarkTheme ? '#34D399' : '#10B981', // Green
 		quantity: isDarkTheme ? '#A78BFA' : '#8B5CF6', // Purple
 	};
 
@@ -29,40 +29,69 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 		const chartSeries = salesReport?.chartSeries;
 		if (!chartSeries) return { series: [], categories: [] };
 
+		// Handle empty array case
+		if (Array.isArray(chartSeries) && chartSeries.length === 0) {
+			return { series: [], categories: [], isEmpty: true };
+		}
+
 		const categories = Object.keys(chartSeries);
 
-		const revenueData = categories.map(category =>
-			chartSeries[category]?.revenue || 0
+		// If no categories (empty object), show empty state
+		if (categories.length === 0) {
+			return { series: [], categories: [], isEmpty: true };
+		}
+
+		const revenueData = categories.map(
+			(category) => chartSeries[category]?.revenue || 0
 		);
 
-		const profitData = categories.map(category =>
-			chartSeries[category]?.profit || 0
+		const profitData = categories.map(
+			(category) => chartSeries[category]?.profit || 0
 		);
 
-		const quantityData = categories.map(category =>
-			chartSeries[category]?.product_qty || 0
+		const quantityData = categories.map(
+			(category) => chartSeries[category]?.product_qty || 0
 		);
 
 		const series = [
 			{
 				name: 'Revenue',
 				data: revenueData,
-				type: 'area'
+				type: 'area',
 			},
 			{
 				name: 'Profit',
 				data: profitData,
-				type: 'area'
+				type: 'area',
 			},
 			{
 				name: 'Orders',
 				data: quantityData,
-				type: 'line'
-			}
+				type: 'line',
+			},
 		];
 
 		return { series, categories };
 	}, [salesReport]);
+
+	// Show no data message when chartSeries is empty array
+	if (chartData.isEmpty) {
+		return (
+			<div className="relative h-[420px] flex items-center justify-center">
+				<div className="text-center">
+					<svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+					</svg>
+					<h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+						No sales data found
+					</h3>
+					<p className="text-sm text-gray-500 dark:text-gray-400">
+						Sales data will appear here once you have orders for the selected period.
+					</p>
+				</div>
+			</div>
+		);
+	}
 
 	const options: ApexCharts.ApexOptions = {
 		chart: {
@@ -79,23 +108,23 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				speed: 800,
 				animateGradually: {
 					enabled: true,
-					delay: 150
+					delay: 150,
 				},
 				dynamicAnimation: {
 					enabled: true,
-					speed: 350
-				}
+					speed: 350,
+				},
 			},
 			zoom: {
 				enabled: true,
 				type: 'x',
-				autoScaleYaxis: true
-			}
+				autoScaleYaxis: true,
+			},
 		},
 		stroke: {
 			curve: 'smooth',
 			width: [0, 0, 3],
-			colors: [colors.revenue, colors.profit, colors.quantity]
+			colors: [colors.revenue, colors.profit, colors.quantity],
 		},
 		fill: {
 			type: ['gradient', 'gradient', 'solid'],
@@ -106,13 +135,13 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				gradientToColors: [
 					isDarkTheme ? '#1E40AF' : '#DBEAFE',
 					isDarkTheme ? '#047857' : '#D1FAE5',
-					colors.quantity
+					colors.quantity,
 				],
 				inverseColors: false,
 				opacityFrom: 0.7,
 				opacityTo: 0.1,
-				stops: [0, 90, 100]
-			}
+				stops: [0, 90, 100],
+			},
 		},
 		colors: [colors.revenue, colors.profit, colors.quantity],
 		dataLabels: {
@@ -126,8 +155,8 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 			strokeOpacity: 0.9,
 			hover: {
 				size: 8,
-				sizeOffset: 3
-			}
+				sizeOffset: 3,
+			},
 		},
 		tooltip: {
 			shared: true,
@@ -138,32 +167,32 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				fontFamily: 'Inter, sans-serif',
 			},
 			x: {
-				format: 'dd MMM yyyy'
+				format: 'dd MMM yyyy',
 			},
 			y: [
 				{
 					title: {
-						formatter: () => 'Revenue: '
+						formatter: () => 'Revenue: ',
 					},
-					formatter: (val: number) => `৳${val.toLocaleString()}`
+					formatter: (val: number) => `৳${val.toLocaleString()}`,
 				},
 				{
 					title: {
-						formatter: () => 'Profit: '
+						formatter: () => 'Profit: ',
 					},
-					formatter: (val: number) => `৳${val.toLocaleString()}`
+					formatter: (val: number) => `৳${val.toLocaleString()}`,
 				},
 				{
 					title: {
-						formatter: () => 'Orders: '
+						formatter: () => 'Orders: ',
 					},
-					formatter: (val: number) => `${val} items`
-				}
+					formatter: (val: number) => `${val} items`,
+				},
 			],
 			marker: {
 				show: true,
 			},
-			custom: function({series, dataPointIndex, w}) {
+			custom: function ({ series, dataPointIndex, w }) {
 				const category = w.globals.categoryLabels[dataPointIndex];
 
 				return `
@@ -194,7 +223,7 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 						</div>
 					</div>
 				`;
-			}
+			},
 		},
 		grid: {
 			show: true,
@@ -202,10 +231,10 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 			strokeDashArray: 3,
 			position: 'back',
 			xaxis: {
-				lines: { show: false }
+				lines: { show: false },
 			},
 			yaxis: {
-				lines: { show: true }
+				lines: { show: true },
 			},
 			padding: {
 				top: 10,
@@ -220,7 +249,7 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				show: true,
 				color: borderColor,
 				offsetX: 0,
-				offsetY: 0
+				offsetY: 0,
 			},
 			axisTicks: {
 				show: true,
@@ -228,7 +257,7 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				color: borderColor,
 				height: 6,
 				offsetX: 0,
-				offsetY: 0
+				offsetY: 0,
 			},
 			labels: {
 				style: {
@@ -240,8 +269,8 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				offsetY: 5,
 			},
 			tooltip: {
-				enabled: false
-			}
+				enabled: false,
+			},
 		},
 		yaxis: [
 			{
@@ -253,7 +282,7 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 						fontSize: '12px',
 						fontFamily: 'Inter, sans-serif',
 						fontWeight: 600,
-					}
+					},
 				},
 				labels: {
 					style: {
@@ -262,13 +291,13 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 						fontFamily: 'Inter, sans-serif',
 						fontWeight: 500,
 					},
-					formatter: (val: number) => `৳${(val / 1000).toFixed(0)}k`
+					formatter: (val: number) => `৳${(val / 1000).toFixed(0)}k`,
 				},
 				tickAmount: 6,
 			},
 			{
 				seriesName: 'Revenue',
-				show: false
+				show: false,
 			},
 			{
 				opposite: true,
@@ -280,7 +309,7 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 						fontSize: '12px',
 						fontFamily: 'Inter, sans-serif',
 						fontWeight: 600,
-					}
+					},
 				},
 				labels: {
 					style: {
@@ -289,10 +318,10 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 						fontFamily: 'Inter, sans-serif',
 						fontWeight: 500,
 					},
-					formatter: (val: number) => `${val}`
+					formatter: (val: number) => `${val}`,
 				},
 				tickAmount: 6,
-			}
+			},
 		],
 		legend: {
 			show: true,
@@ -309,42 +338,42 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 				strokeWidth: 0,
 				fillColors: [colors.revenue, colors.profit, colors.quantity],
 				offsetX: 0,
-				offsetY: 0
+				offsetY: 0,
 			},
 			itemMargin: {
 				horizontal: 8,
-				vertical: 0
+				vertical: 0,
 			},
 			floating: false,
 			onItemClick: {
-				toggleDataSeries: true
+				toggleDataSeries: true,
 			},
 			onItemHover: {
-				highlightDataSeries: true
-			}
+				highlightDataSeries: true,
+			},
 		},
 		responsive: [
 			{
 				breakpoint: 1024,
 				options: {
 					chart: {
-						height: 350
+						height: 350,
 					},
 					legend: {
 						position: 'top',
 						horizontalAlign: 'center',
 						itemMargin: {
 							horizontal: 6,
-							vertical: 0
-						}
-					}
-				}
+							vertical: 0,
+						},
+					},
+				},
 			},
 			{
 				breakpoint: 768,
 				options: {
 					chart: {
-						height: 300
+						height: 300,
 					},
 					legend: {
 						position: 'top',
@@ -352,46 +381,46 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 						fontSize: '12px',
 						itemMargin: {
 							horizontal: 4,
-							vertical: 0
-						}
+							vertical: 0,
+						},
 					},
 					xaxis: {
 						labels: {
 							show: true,
-							rotate: -45
-						}
+							rotate: -45,
+						},
 					},
 					yaxis: [
 						{
 							title: {
-								text: ''
-							}
+								text: '',
+							},
 						},
 						{
-							show: false
+							show: false,
 						},
 						{
 							title: {
-								text: ''
-							}
-						}
-					]
-				}
-			}
+								text: '',
+							},
+						},
+					],
+				},
+			},
 		],
 		states: {
 			hover: {
 				filter: {
-					type: 'lighten'
-				}
+					type: 'lighten',
+				},
 			},
 			active: {
 				allowMultipleDataPointsSelection: false,
 				filter: {
-					type: 'darken'
-				}
-			}
-		}
+					type: 'darken',
+				},
+			},
+		},
 	};
 
 	return (
@@ -409,7 +438,9 @@ function SalesApexChart({ range }: SalesApexChartProps) {
 					<div className="text-center">
 						<div className="animate-pulse">
 							<div className="w-8 h-8 bg-blue-500 rounded-full mx-auto mb-2"></div>
-							<p className="text-sm text-gray-600 dark:text-gray-400">Loading chart data...</p>
+							<p className="text-sm text-gray-600 dark:text-gray-400">
+								Loading chart data...
+							</p>
 						</div>
 					</div>
 				</div>

@@ -16,7 +16,8 @@ export interface NotificationType {
 
 export interface ToastMessageType {
     text: string;
-    status: "success" | "error" | "warning" | "info";
+    status: "success" | "danger" | "error" | "warning" | "info";
+    description?: string;
 }
 
 export interface NotificationsResponseType {

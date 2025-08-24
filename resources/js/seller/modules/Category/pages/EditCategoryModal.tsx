@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import useForm from "@seller/_hooks/useForm";
 import useString from "@seller/_hooks/useString";
-import useToast from "@seller/_hooks/useToast";
 import { CategoryType } from "@type/categoryType";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
@@ -16,7 +15,6 @@ interface PropsType {
 const EditCategoryModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
     const { update, productCategories } = useCategory();
-    const { toaster } = useToast();
     const { getSlug } = useString();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
@@ -169,10 +167,6 @@ const EditCategoryModal: FC<PropsType> = function (props) {
                                 formData: formState,
                                 onSuccess: () => {
                                     setOpen(false);
-                                    toaster({
-                                        text: "Category has been updated",
-                                        status: "success",
-                                    });
                                 },
                             });
                         }}

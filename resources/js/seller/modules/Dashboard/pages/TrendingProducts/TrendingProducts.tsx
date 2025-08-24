@@ -1,4 +1,4 @@
-import { useDashboard } from '../../../hooks';
+import { useDashboard } from '../../hooks';
 import { Button, Spinner } from 'flowbite-react';
 import { useMemo, useState } from 'react';
 import { HiChartBar, HiExclamationCircle, HiRefresh } from 'react-icons/hi';
@@ -54,7 +54,7 @@ const TrendingProducts: React.FC<TrendingProductsProps> = ({ className = "" }) =
 		enableTrendingProducts: true,
 		trendingProductsParams: {
 			filterType: currentFilter,
-			timeRange: currentTimeRange,
+			timeRange: currentTimeRange === 'custom' ? 'last30days' : currentTimeRange as Exclude<TimeRangeType, 'custom'>,
 			limit: 10
 		}
 	});
@@ -91,7 +91,7 @@ const TrendingProducts: React.FC<TrendingProductsProps> = ({ className = "" }) =
 				day: 'numeric',
 				year: start.getFullYear() !== end.getFullYear() ? 'numeric' : undefined
 			});
-			return { label: `${startLabel} - ${endLabel}`, value: 'custom' };
+			return { label: `${startLabel} - ${endLabel}`, value: 'custom' as TimeRangeType };
 		}
 		return timeRangeOptions.find((item) => item.value === currentTimeRange) || timeRangeOptions[1];
 	}, [currentTimeRange, customRange, timeRangeOptions]);

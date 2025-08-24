@@ -26,7 +26,14 @@ class SellerAccountSeeder extends Seeder
     public function run(): void
     {
         // Ensure the 'store-owner' role exists
-        $role = Role::firstOrCreate(['name' => 'seller']);
+        $role = Role::firstOrCreate(
+            ['name' => 'seller', 'guard_name' => ''],
+            [
+                'name' => 'seller',
+                'slug' => 'seller-empty',
+                'guard_name' => '',
+            ]
+        );
 
         // Find the user by email or create a new one
         $user = User::updateOrCreate(

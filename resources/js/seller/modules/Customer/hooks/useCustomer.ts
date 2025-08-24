@@ -36,9 +36,9 @@ const useCustomer = () => {
     onSuccess?: CallableFunction;
   }) => {
     handleCreate(formData).then((response) => {
-      if (response.data?.success) {
+      if ('data' in response && response.data) {
         if (onSuccess) {
-          onSuccess(response.data.data);
+          onSuccess(response.data);
         }
       }
     });
@@ -63,9 +63,9 @@ const useCustomer = () => {
     onSuccess?: CallableFunction;
   }) => {
     handleUpdate(formData).then((response) => {
-      if (response.data?.success) {
+      if ('data' in response && response.data) {
         if (onSuccess) {
-          onSuccess(response.data.data);
+          onSuccess(response.data);
         }
       }
     });
@@ -90,9 +90,9 @@ const useCustomer = () => {
     onSuccess?: CallableFunction;
   }) => {
     handleDelete(formData).then((response) => {
-      if (response.data?.success) {
+      if ('data' in response && response.data) {
         if (onSuccess) {
-          onSuccess(response.data.data);
+          onSuccess(response.data);
         }
       }
     });
