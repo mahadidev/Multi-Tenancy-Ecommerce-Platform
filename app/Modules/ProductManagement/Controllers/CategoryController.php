@@ -19,36 +19,52 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        // Retrieve query parameters
-        $search = $request->input('search'); // Search keyword
-        $sort = $request->input('sort'); // Sort order, default is 'desc'
-        $perPage = $request->input('per_page'); // Items per page, default is 10
+        // Retrieve and validate query parameters
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortOrder = $request->input('sort_order', 'desc');
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
         $type = $request->input('type');
 
-        // Fetch brands with optional search and sorting, paginated
+        // Validate sort parameters
+        $allowedSortFields = ['name', 'slug', 'created_at', 'updated_at', 'type'];
+        $allowedSortOrders = ['asc', 'desc'];
+        
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+        
+        if (!in_array($sortOrder, $allowedSortOrders)) {
+            $sortOrder = 'desc';
+        }
+
+        // Build query with relations for better performance
         $categories = Category::authorized()
+            ->with(['has_parent:id,name']) // Load parent info efficiently
             ->when($search, function ($query, $search) {
-                $query
-                    ->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('slug', 'like', '%' . $search . '%');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('slug', 'like', '%' . $search . '%')
+                      ->orWhereHas('has_parent', function ($parentQuery) use ($search) {
+                          $parentQuery->where('name', 'like', '%' . $search . '%');
+                      });
+                });
             })
-            ->when($sort, fn($query) => $query->orderBy('created_at', $sort), fn($query) => $query->latest())
-            ->when($type, fn($query) => $query->where('type', $type));
+            ->when($type, fn($query) => $query->where('type', $type))
+            ->orderBy($sortBy, $sortOrder);
 
-        // Paginate or get all results based on the presence of `per_page`
-        $paginated = $perPage ? $categories->paginate($perPage) : $categories->get();
+        // Always paginate for performance, but allow higher limits if needed
+        $perPage = min(max((int)$perPage, 1), 100); // Between 1 and 100
+        $paginated = $categories->paginate($perPage, ['*'], 'page', $page);
 
-        // Prepare the response
+        // Prepare standardized response
         $response = [
             'status' => 200,
             'data' => [
                 'categories' => CategoryResource::collection($paginated),
             ],
-        ];
-
-        // Add pagination meta data if `per_page` is provided
-        if ($perPage) {
-            $response['meta'] = [
+            'meta' => [
                 'current_page' => $paginated->currentPage(),
                 'first_page_url' => $paginated->url(1),
                 'last_page' => $paginated->lastPage(),
@@ -57,8 +73,10 @@ class CategoryController extends Controller
                 'prev_page_url' => $paginated->previousPageUrl(),
                 'total' => $paginated->total(),
                 'per_page' => $paginated->perPage(),
-            ];
-        }
+                'from' => $paginated->firstItem(),
+                'to' => $paginated->lastItem(),
+            ]
+        ];
 
         return response()->json($response, 200);
     }

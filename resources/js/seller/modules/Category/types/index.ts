@@ -5,6 +5,7 @@ export interface Category {
   type: 'product' | 'post' | 'blog';
   parent_id?: number;
   parent?: Category;
+  has_parent?: Category;
   children?: Category[];
   description?: string;
   image?: string;
@@ -19,12 +20,12 @@ export interface Category {
 
 export interface CategoryFilters {
   page?: number;
-  limit?: number;
+  per_page?: number;
   search?: string;
   type?: 'product' | 'post' | 'blog';
   parent_id?: number | null;
   is_active?: boolean;
-  sort_by?: 'name' | 'created_at' | 'sort_order';
+  sort_by?: 'name' | 'slug' | 'created_at' | 'updated_at' | 'type';
   sort_order?: 'asc' | 'desc';
 }
 

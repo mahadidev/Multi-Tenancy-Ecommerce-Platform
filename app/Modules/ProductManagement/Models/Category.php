@@ -57,6 +57,10 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id');
     }
     
+    public function has_parent(){
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+    
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id');

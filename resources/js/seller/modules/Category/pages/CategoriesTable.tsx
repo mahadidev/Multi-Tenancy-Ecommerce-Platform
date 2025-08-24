@@ -1,23 +1,18 @@
-import { DataTable } from "@seller/components";
+import { ServerTable } from "@seller/components";
 import { CategoryType } from "@type/categoryType";
 import { Table } from "flowbite-react";
-import { useEffect } from "react";
-import { useCategory } from "../hooks";
+import useCategoryTable from "../hooks/useCategoryTable";
 import CreateCategoryModal from "./CreateCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
 
 const CategoriesTable = () => {
-    // get the product categories
-    const { productCategories } = useCategory();
-
-    useEffect(() => {
-        console.log(productCategories);
-    }, [productCategories]);
+    // Get categories with server-side pagination
+    const { categories, meta, isLoading, isError, isFetching } = useCategoryTable();
 
     return (
         <>
-            <DataTable
+            <ServerTable
                 columns={[
                     {
                         label: "Name",
@@ -44,7 +39,7 @@ const CategoriesTable = () => {
                         key: "parent",
                         render: (row: CategoryType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row?.has_parent?.name}
+                                {row?.has_parent?.name || '-'}
                             </Table.Cell>
                         ),
                         sortable: false,
@@ -54,12 +49,13 @@ const CategoriesTable = () => {
                         key: "created_at",
                         render: (row: CategoryType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.created_at}
+                                {new Date(row.created_at).toLocaleDateString()}
                             </Table.Cell>
                         ),
                         sortable: true,
                     },
                     {
+                        label: "Actions",
                         render: (row: CategoryType) => (
                             <Table.Cell>
                                 <div className="flex items-center gap-x-3 whitespace-nowrap">
@@ -71,15 +67,22 @@ const CategoriesTable = () => {
                     },
                 ]}
                 search={{
-                    placeholder: "Search for products category...",
-                    columns: ["name", "slug", "parent", "created_at"],
+                    placeholder: "Search categories by name, slug, or parent...",
+                    columns: ["name", "slug", "parent"],
                 }}
-                data={productCategories}
+                data={categories}
+                meta={meta}
+                isLoading={isLoading}
+                isFetching={isFetching}
+                isError={isError}
                 head={{
                     render: (_data: CategoryType[]) => <CreateCategoryModal />,
                 }}
                 exportable={true}
                 filename="product_categories"
+                defaultSortBy="created_at"
+                defaultSortOrder="desc"
+                defaultPerPage={10}
             />
         </>
     );

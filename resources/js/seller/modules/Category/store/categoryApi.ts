@@ -50,13 +50,69 @@ export const categoryApi = createApi({
 			transformErrorResponse: (error: any) => error.data,
 		}),
 
-		// Get Product Categories (backward compatibility)
-		getProductCategories: builder.query<CategoriesResponse, void>({
-			query: () =>
-				createRequest({
-					url: `${PREFIX}/category?type=product`,
+		// Get Product Categories with server-side pagination (NEW)
+		getProductCategoriesTable: builder.query<CategoriesResponse, CategoryFilters>({
+			query: (filters) => {
+				const params = new URLSearchParams();
+				
+				// Set default values and add all filters
+				const queryParams = {
+					type: 'product',
+					per_page: 10,
+					page: 1,
+					sort_by: 'created_at',
+					sort_order: 'desc',
+					...filters
+				};
+
+				// Build query params - include all params for cache differentiation
+				Object.entries(queryParams).forEach(([key, value]) => {
+					if (value !== undefined && value !== null && value !== '') {
+						params.append(key, String(value));
+					}
+				});
+
+				const url = `${PREFIX}/category?${params.toString()}`;
+				console.log('🚀 NEW API Call:', url, 'Filters:', queryParams);
+
+				return createRequest({
+					url,
 					method: 'get',
-				}),
+				});
+			},
+			providesTags: (result, error, filters) => [
+				{ type: 'Categories', id: `PRODUCT_TABLE_${JSON.stringify(filters)}` }
+			],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+
+		// Get Product Categories (backward compatibility - OLD)
+		getProductCategories: builder.query<CategoriesResponse, CategoryFilters | void>({
+			query: (filters = {}) => {
+				const params = new URLSearchParams();
+				
+				// Set default values and add all filters
+				const queryParams = {
+					type: 'product',
+					per_page: 10,
+					page: 1,
+					sort_by: 'created_at',
+					sort_order: 'desc',
+					...filters
+				};
+
+				// Build query params
+				Object.entries(queryParams).forEach(([key, value]) => {
+					if (value !== undefined && value !== null && value !== '') {
+						params.append(key, String(value));
+					}
+				});
+
+				return createRequest({
+					url: `${PREFIX}/category?${params.toString()}`,
+					method: 'get',
+				});
+			},
 			providesTags: [{ type: 'Categories', id: 'PRODUCT' }],
 			transformErrorResponse: (error: any) => error.data,
 			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
@@ -64,7 +120,7 @@ export const categoryApi = createApi({
 					dispatch(
 						setTableProductCategories({
 							categories: response.data.data.categories,
-                            meta: null
+                            meta: response.data.meta || null
 						})
 					);
 				});
@@ -277,6 +333,7 @@ export const categoryApi = createApi({
 export const {
 	useGetCategoriesQuery,
 	useGetProductCategoriesQuery,
+	useGetProductCategoriesTableQuery,
 	useGetBlogCategoriesQuery,
 	useGetCategoryQuery,
 	useCreateCategoryMutation,

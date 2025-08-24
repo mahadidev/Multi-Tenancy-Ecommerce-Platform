@@ -1,5 +1,6 @@
 export { default as ApexChart } from "./Charts/ApexChart";
 export { default as DataTable } from './DataTable/Table';
+export { default as ServerTable } from './DataTable/ServerTable';
 export { default as ErrorMessage } from "./Error/ErrorMessage";
 export { default as Checkbox } from './Form/Checkbox/Checkbox';
 export { default as ColorInput } from './Form/ColorInput/ColorInput';
