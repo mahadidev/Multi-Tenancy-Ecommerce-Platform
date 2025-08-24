@@ -29,7 +29,7 @@ return new class extends Migration
             $table->decimal('buying_price')->default(0);
             $table->decimal('tax')->default(0);
             $table->string('note')->nullable();
-            $table->enum('type', ['added', 'deleted', 'edited'])->default('added');
+            $table->enum('type', ['added', 'deleted', 'adjusted'])->default('added');
             $table->timestamps();
         });
     }

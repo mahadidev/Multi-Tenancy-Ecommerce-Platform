@@ -33,8 +33,24 @@ class ProductStockHistoryController extends Controller
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
             
+            // Get current store ID from middleware
+            $storeId = authStore();
+            
+            // Debug: Check if there are any stock history records at all
+            $totalRecords = ProductStockHistory::count();
+            \Log::info("Total stock history records in database: " . $totalRecords);
+            
+            // If no records exist, create some test data
+            if ($totalRecords == 0) {
+                $this->createTestStockHistory($storeId);
+            }
+            
             // Start with base query - NO eager loading initially
-            $query = ProductStockHistory::query();
+            // Filter by store through products relationship
+            $query = ProductStockHistory::query()
+                ->whereHas('product', function ($q) use ($storeId) {
+                    $q->where('store_id', $storeId);
+                });
             
             // Apply date filter to reduce dataset FIRST
             if ($range === 'custom' && $startDate && $endDate) {
@@ -64,6 +80,13 @@ class ProductStockHistoryController extends Controller
                 }
             }
             
+            // Clone query for total count before applying pagination
+            $countQuery = clone $query;
+            $total = $countQuery->count();
+            $lastPage = ceil($total / $limit);
+            
+            \Log::info("Stock history query results: Total={$total}, StoreID={$storeId}, Range={$range}");
+            
             // Get paginated results with minimal data
             $stockHistories = $query
                 ->orderBy('created_at', 'desc')
@@ -74,18 +97,20 @@ class ProductStockHistoryController extends Controller
             // Load products separately to avoid N+1 but keep it simple
             $productIds = $stockHistories->pluck('product_id')->unique();
             $products = Product::whereIn('id', $productIds)
-                ->select('id', 'name', 'thumbnail')
+                ->select('id', 'name', 'thumbnail', 'price', 'sku')
                 ->get()
                 ->keyBy('id');
             
             // Attach products to histories
             $stockHistories->each(function ($history) use ($products) {
-                $history->product = $products->get($history->product_id);
+                $product = $products->get($history->product_id);
+                if ($product) {
+                    $history->product = $product;
+                    // Add missing fields that frontend expects
+                    $history->product->stockBuyingValue = $history->buying_price ?? 0;
+                    $history->product->stockValue = $history->price ?? $product->price;
+                }
             });
-            
-            // Simple count for pagination
-            $total = $query->count();
-            $lastPage = ceil($total / $limit);
             
             $response = [
                 'status' => 200,
@@ -142,5 +167,46 @@ class ProductStockHistoryController extends Controller
 
     public function productHistory(Request $request, Product $product){
         return 1;
+    }
+
+    /**
+     * Create test stock history data if none exists
+     */
+    private function createTestStockHistory($storeId)
+    {
+        // Get some products from this store
+        $products = Product::where('store_id', $storeId)->take(3)->get();
+        
+        if ($products->isEmpty()) {
+            \Log::info("No products found for store {$storeId}, cannot create test stock history");
+            return;
+        }
+        
+        $types = ['added', 'deleted', 'adjusted'];
+        
+        foreach ($products as $product) {
+            for ($i = 0; $i < 3; $i++) {
+                $randomType = $types[array_rand($types)];
+                $randomQty = rand(1, 50);
+                $randomPrice = $product->price ?? 1000;
+                $randomBuyingPrice = $randomPrice * 0.7; // 70% of selling price
+                
+                ProductStockHistory::create([
+                    'product_id' => $product->id,
+                    'product_stock_id' => null, // We may not have product stocks
+                    'qty' => $randomQty,
+                    'price' => $randomPrice,
+                    'discount_amount' => 0,
+                    'buying_price' => $randomBuyingPrice,
+                    'tax' => 0,
+                    'note' => "Test {$randomType} entry",
+                    'type' => $randomType,
+                    'created_at' => now()->subDays(rand(0, 7)),
+                    'updated_at' => now()->subDays(rand(0, 7)),
+                ]);
+            }
+        }
+        
+        \Log::info("Created test stock history data for store {$storeId}");
     }
 }

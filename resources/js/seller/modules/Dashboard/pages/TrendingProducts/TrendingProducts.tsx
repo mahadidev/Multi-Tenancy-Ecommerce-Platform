@@ -1,7 +1,8 @@
-import { useDashboard } from '../../hooks';
+import CustomDateModal, { CustomDateRange } from '@seller/components/DatePicker/CustomDateModal';
 import { Button, Spinner } from 'flowbite-react';
 import { useMemo, useState } from 'react';
 import { HiChartBar, HiExclamationCircle, HiRefresh } from 'react-icons/hi';
+import { useDashboard } from '../../hooks';
 import { FilterTabs, ProductTable, TimeRangeSelect, TrendingProductCard } from './components';
 import {
     TimeRangeOption,
@@ -9,7 +10,6 @@ import {
     TrendingProductsFilterOption,
     TrendingProductsFilterType,
 } from './types';
-import CustomDateModal, { CustomDateRange } from '@seller/components/DatePicker/CustomDateModal';
 
 interface TrendingProductsProps {
 	className?: string;
@@ -44,12 +44,12 @@ const TrendingProducts: React.FC<TrendingProductsProps> = ({ className = "" }) =
 	const [customRange, setCustomRange] = useState<CustomDateRange>();
 	const [showCustomModal, setShowCustomModal] = useState(false);
 
-	const { 
-		trendingProducts: products, 
-		isTrendingProductsLoading: isLoading, 
-		isTrendingProductsError: isError, 
-		trendingProductsError: error, 
-		refreshTrendingProducts: refetch 
+	const {
+		trendingProducts: products,
+		isTrendingProductsLoading: isLoading,
+		isTrendingProductsError: isError,
+		trendingProductsError: error,
+		refreshTrendingProducts: refetch
 	} = useDashboard({
 		enableTrendingProducts: true,
 		trendingProductsParams: {
@@ -86,8 +86,8 @@ const TrendingProducts: React.FC<TrendingProductsProps> = ({ className = "" }) =
 			const start = new Date(customRange.startDate);
 			const end = new Date(customRange.endDate);
 			const startLabel = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-			const endLabel = end.toLocaleDateString('en-US', { 
-				month: 'short', 
+			const endLabel = end.toLocaleDateString('en-US', {
+				month: 'short',
 				day: 'numeric',
 				year: start.getFullYear() !== end.getFullYear() ? 'numeric' : undefined
 			});
@@ -141,7 +141,7 @@ const TrendingProducts: React.FC<TrendingProductsProps> = ({ className = "" }) =
 		<>
 			<TrendingProductCard className={className}>
 				{/* Header */}
-				<div className="p-6 border-b border-gray-200 dark:border-gray-700">
+				<div className="border-b border-gray-200 dark:border-gray-700">
 					<div className="flex items-center justify-between mb-4">
 						<div className="flex items-center space-x-2">
 							<HiChartBar className="h-5 w-5 text-blue-600 dark:text-blue-400" />

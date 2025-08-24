@@ -79,15 +79,15 @@ export interface ProductStockItemType {
 export interface ProductStockHistoryType {
 	id: number;
 	product_id: number;
-    product: ProductType;
-	product_stock_id: number;
+    product?: ProductType; // Made optional since product might not always be loaded
+	product_stock_id: number | null;
 	qty: number;
 	price: number;
 	discount_amount: number;
 	buying_price: number;
 	tax: number;
 	note: string | null;
-	type: 'added' | 'removed' | string; // Add more known types if applicable
+	type: 'added' | 'deleted' | 'adjusted'; // Fixed types to match backend
 	created_at: string; // ISO 8601 datetime string
 	updated_at: string; // ISO 8601 datetime string
 }

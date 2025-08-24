@@ -19,7 +19,7 @@ const DashboardPage = () => {
 
 				{/* Third Row - Additional Insights */}
 				<ExpenseChart />
-				<StockTable />
+				<StockTable className='col-span-full' />
 			</div>
 		</div>
 	);
