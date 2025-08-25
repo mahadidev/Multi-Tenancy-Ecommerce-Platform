@@ -5,6 +5,7 @@ import useCategoryTable from "../hooks/useCategoryTable";
 import CreateCategoryModal from "./CreateCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const CategoriesTable = () => {
     // Get categories with server-side pagination
@@ -49,7 +50,7 @@ const CategoriesTable = () => {
                         key: "created_at",
                         render: (row: CategoryType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {new Date(row.created_at).toLocaleDateString()}
+                                {formatTableDate(row.created_at)}
                             </Table.Cell>
                         ),
                         sortable: true,

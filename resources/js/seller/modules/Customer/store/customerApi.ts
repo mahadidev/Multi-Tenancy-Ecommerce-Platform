@@ -7,7 +7,8 @@ import type {
   CustomerResponse, 
   CreateCustomerPayload, 
   UpdateCustomerPayload, 
-  DeleteCustomerPayload 
+  DeleteCustomerPayload,
+  CustomerFilters
 } from "../types";
 
 export const customerApi = createApi({
@@ -32,6 +33,28 @@ export const customerApi = createApi({
           );
         });
       },
+    }),
+
+    // Fetch customers with table filters (for generic table)
+    fetchCustomersTable: builder.query<CustomersResponse, CustomerFilters>({
+      query: (filters) => {
+        const params = new URLSearchParams();
+        
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            // Skip empty search values to keep URL clean
+            if (key === 'search' && value === '') return;
+            params.append(key, String(value));
+          }
+        });
+        
+        return createRequest({
+          url: `${PREFIX}/customers?${params.toString()}`,
+          method: "get",
+        });
+      },
+      providesTags: ["Customers"],
+      transformErrorResponse: (error: any) => error.data,
     }),
 
     // create customer
@@ -75,6 +98,7 @@ export const customerApi = createApi({
 
 export const {
   useFetchCustomersQuery,
+  useFetchCustomersTableQuery,
   useCreateCustomerMutation,
   useUpdateCustomerMutation,
   useDeleteCustomerMutation,

@@ -5,6 +5,7 @@ import { StoreType } from "@type/storeType";
 import { Button, Table } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const StoresTable = () => {
     const { stores, currentStore, switchStore } = useStore();
@@ -58,7 +59,7 @@ const StoresTable = () => {
                         key: "created_at",
                         render: (row: StoreType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.created_at}
+                                {formatTableDate(row.created_at)}
                             </Table.Cell>
                         ),
                         sortable: true,

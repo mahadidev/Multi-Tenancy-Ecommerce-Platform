@@ -10,7 +10,9 @@ import type {
   DeleteExpensePayload,
   CreateVendorPayload,
   UpdateVendorPayload,
-  DeleteVendorPayload
+  DeleteVendorPayload,
+  ExpenseFilters,
+  VendorFilters
 } from "../types";
 
 export const expenseApi = createApi({
@@ -55,6 +57,50 @@ export const expenseApi = createApi({
           );
         });
       },
+    }),
+
+    // Fetch expenses with table filters (for generic table)
+    fetchExpensesTable: builder.query<ExpensesResponse, ExpenseFilters>({
+      query: (filters) => {
+        const params = new URLSearchParams();
+        
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            // Skip empty search values to keep URL clean
+            if (key === 'search' && value === '') return;
+            params.append(key, String(value));
+          }
+        });
+        
+        return createRequest({
+          url: `${PREFIX}/expenses?${params.toString()}`,
+          method: "get",
+        });
+      },
+      providesTags: ["Expenses"],
+      transformErrorResponse: (error: any) => error.data,
+    }),
+
+    // Fetch vendors with table filters (for generic table)
+    fetchVendorsTable: builder.query<VendorsResponse, VendorFilters>({
+      query: (filters) => {
+        const params = new URLSearchParams();
+        
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            // Skip empty search values to keep URL clean
+            if (key === 'search' && value === '') return;
+            params.append(key, String(value));
+          }
+        });
+        
+        return createRequest({
+          url: `${PREFIX}/vendors?${params.toString()}`,
+          method: "get",
+        });
+      },
+      providesTags: ["Vendors"],
+      transformErrorResponse: (error: any) => error.data,
     }),
 
     createExpense: builder.mutation<ExpensesResponse, CreateExpensePayload>({
@@ -129,7 +175,9 @@ export const expenseApi = createApi({
 
 export const {
   useFetchExpensesQuery,
+  useFetchExpensesTableQuery,
   useFetchVendorsQuery,
+  useFetchVendorsTableQuery,
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
   useDeleteExpenseMutation,

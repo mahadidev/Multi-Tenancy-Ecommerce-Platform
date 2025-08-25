@@ -8,12 +8,11 @@ export interface Brand {
   updated_at: string;
 }
 
-export interface BrandFilters {
-  page?: number;
+import type { ServerTableFilters } from '@seller/_hooks/types/table';
+
+export interface BrandFilters extends ServerTableFilters {
   limit?: number;
-  search?: string;
   sort_by?: 'name' | 'created_at';
-  sort_order?: 'asc' | 'desc';
 }
 
 export interface BrandFormData {

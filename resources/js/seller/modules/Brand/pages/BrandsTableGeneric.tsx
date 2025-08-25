@@ -4,10 +4,9 @@ import useBrandTable from "../hooks/useBrandTable";
 import CreateBrandModal from "./CreateBrandModal";
 import DeleteBrandModal from "./DeleteBrandModal";
 import EditBrandModal from "./EditBrandModal";
-import { formatTableDate } from "@seller/_utils/dateUtils";
 import type { Brand } from "../types";
 
-const BrandsTable = () => {
+const BrandsTableGeneric = () => {
     // Get brands using the generic table hook
     const brandTable = useBrandTable();
 
@@ -16,41 +15,51 @@ const BrandsTable = () => {
             table={brandTable}
             columns={[
                 {
-                    label: "Brand",
+                    label: "Name",
                     key: "name",
                     render: (row: Brand) => (
-                        <Table.Cell className="p-4">
-                            <div className="flex items-center space-x-3">
-                                {row.image ? (
-                                    <img 
-                                        src={row.image} 
-                                        alt={row.name} 
-                                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                                    />
-                                ) : (
-                                    <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">No Image</span>
-                                    </div>
-                                )}
-                                <div className="min-w-0 flex-1">
-                                    <div className="font-semibold text-gray-900 dark:text-white truncate">
-                                        {row.name}
-                                    </div>
-                                    <div className="text-xs text-gray-400 dark:text-gray-500 truncate">
-                                        {row.slug}
-                                    </div>
-                                </div>
-                            </div>
+                        <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                            {row.name}
                         </Table.Cell>
                     ),
                     sortable: true,
+                },
+                {
+                    label: "Slug",
+                    key: "slug",
+                    render: (row: Brand) => (
+                        <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                            {row.slug}
+                        </Table.Cell>
+                    ),
+                    sortable: false,
+                },
+                {
+                    label: "Image",
+                    key: "image",
+                    render: (row: Brand) => (
+                        <Table.Cell className="whitespace-nowrap p-4">
+                            {row.image ? (
+                                <img 
+                                    src={row.image} 
+                                    alt={row.name} 
+                                    className="w-10 h-10 rounded-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">No Image</span>
+                                </div>
+                            )}
+                        </Table.Cell>
+                    ),
+                    sortable: false,
                 },
                 {
                     label: "Created At",
                     key: "created_at",
                     render: (row: Brand) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                            {formatTableDate(row.created_at)}
+                            {new Date(row.created_at).toLocaleDateString()}
                         </Table.Cell>
                     ),
                     sortable: true,
@@ -82,4 +91,5 @@ const BrandsTable = () => {
         />
     );
 };
-export default BrandsTable;
+
+export default BrandsTableGeneric;

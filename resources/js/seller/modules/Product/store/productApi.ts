@@ -5,6 +5,7 @@ import { ProductSummaryType } from '@type/products/summaries';
 import { ProductType } from '@type/productType';
 import baseQueryWithReAuth, { createRequest } from '@seller/store/baseQueryWithReAuth';
 import { setProduct, setSummary, setTableProducts } from './productSlice';
+import type { ProductFilters } from '../types';
 
 export interface ProductsFetchResponseType extends ApiResponseType {
     data: {
@@ -174,11 +175,36 @@ export const productApi = createApi({
                 });
             },
         }),
+        
+        // Fetch products with table filters (for generic table)
+        fetchProductsTable: builder.query<ProductsFetchResponseType, ProductFilters>({
+            query: (filters) => {
+                const params = new URLSearchParams();
+                
+                // Add filters to URL params
+                Object.entries(filters).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== '') {
+                        // Skip empty search values to keep URL clean
+                        if (key === 'search' && value === '') return;
+                        params.append(key, String(value));
+                    }
+                });
+                
+                return createRequest({
+                    url: `${PREFIX}/product?${params.toString()}`,
+                    method: 'get',
+                });
+            },
+            providesTags: ['Products'],
+            transformErrorResponse: (error: any) => error.data,
+            // Don't automatically dispatch to slice - let the table handle its own state
+        }),
     }),
 });
 
 export const {
     useFetchProductsQuery,
+    useFetchProductsTableQuery,
     useFetchProductQuery,
     useCreateProductMutation,
     useUpdateProductMutation,

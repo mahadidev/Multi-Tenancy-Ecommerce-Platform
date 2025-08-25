@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { useOrders } from "../../hooks";
 import OrderInfoModal from "../Modals/OrderInfoModal";
 import UpdateOrderStatusModal from "../Modals/UpdateOrderStatusModal";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const OrdersTable = () => {
     // get the orders
@@ -109,7 +110,7 @@ const OrdersTable = () => {
 							key: 'created_at',
 							render: (row: OrderType) => (
 								<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-									{row.created_at}
+									{formatTableDate(row.created_at)}
 								</Table.Cell>
 							),
 							sortable: true,

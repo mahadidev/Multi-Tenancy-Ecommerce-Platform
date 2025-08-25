@@ -18,15 +18,13 @@ export interface Category {
   updated_at: string;
 }
 
-export interface CategoryFilters {
-  page?: number;
-  per_page?: number;
-  search?: string;
+import type { ServerTableFilters } from '@seller/_hooks/types/table';
+
+export interface CategoryFilters extends ServerTableFilters {
   type?: 'product' | 'post' | 'blog';
   parent_id?: number | null;
   is_active?: boolean;
   sort_by?: 'name' | 'slug' | 'created_at' | 'updated_at' | 'type';
-  sort_order?: 'asc' | 'desc';
 }
 
 export interface CategoryFormData {

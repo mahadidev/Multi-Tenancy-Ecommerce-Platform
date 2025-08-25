@@ -11,12 +11,11 @@ export interface Customer {
   updated_at?: string;
 }
 
-export interface CustomerFilters {
-  page?: number;
+import type { ServerTableFilters } from '@seller/_hooks/types/table';
+
+export interface CustomerFilters extends ServerTableFilters {
   limit?: number;
-  search?: string;
   sort_by?: 'name' | 'email' | 'created_at';
-  sort_order?: 'asc' | 'desc';
 }
 
 export interface CustomerFormData {

@@ -20,16 +20,20 @@ export interface Expense {
   updated_at: string;
 }
 
-export interface ExpenseFilters {
-  page?: number;
+import type { ServerTableFilters } from '@seller/_hooks/types/table';
+
+export interface ExpenseFilters extends ServerTableFilters {
   limit?: number;
-  search?: string;
   vendor_id?: number;
   category?: string;
   date_from?: string;
   date_to?: string;
   sort_by?: 'amount' | 'date' | 'created_at';
-  sort_order?: 'asc' | 'desc';
+}
+
+export interface VendorFilters extends ServerTableFilters {
+  limit?: number;
+  sort_by?: 'name' | 'email' | 'created_at';
 }
 
 // API Response Types

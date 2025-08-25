@@ -5,6 +5,7 @@ import { Table } from "flowbite-react";
 import CreateMenuModal from "./CreateMenuModal";
 import DeleteMenuModal from "./DeleteMenuModal";
 import EditMenuModal from "./EditMenuModal";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const MenusTable = () => {
     const { menus } = useMenu();
@@ -48,7 +49,7 @@ const MenusTable = () => {
                         key: "created_at",
                         render: (row: MenuType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.created_at}
+                                {formatTableDate(row.created_at)}
                             </Table.Cell>
                         ),
                         sortable: true,

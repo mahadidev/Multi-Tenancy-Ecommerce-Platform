@@ -7,7 +7,8 @@ import type {
   BrandResponse, 
   CreateBrandPayload, 
   UpdateBrandPayload, 
-  DeleteBrandPayload 
+  DeleteBrandPayload,
+  BrandFilters
 } from "../types";
 
 export const brandApi = createApi({
@@ -33,6 +34,26 @@ export const brandApi = createApi({
           );
         });
       },
+    }),
+
+    // Fetch brands with table filters (for generic table)
+    fetchBrandsTable: builder.query<BrandsResponse, BrandFilters>({
+      query: (filters) => {
+        const params = new URLSearchParams();
+        
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            params.append(key, String(value));
+          }
+        });
+        
+        return createRequest({
+          url: `${PREFIX}/brand?${params.toString()}`,
+          method: "get",
+        });
+      },
+      providesTags: ["Brands"],
+      transformErrorResponse: (error: any) => error.data,
     }),
 
     // create brand
@@ -77,6 +98,7 @@ export const brandApi = createApi({
 
 export const {
   useFetchBrandsQuery,
+  useFetchBrandsTableQuery,
   useCreateBrandMutation,
   useUpdateBrandMutation,
   useDeleteBrandMutation,

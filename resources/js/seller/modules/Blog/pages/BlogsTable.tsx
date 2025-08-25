@@ -8,6 +8,7 @@ import { HiPencilAlt, HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import DeleteBlogModal from "./DeleteBlogModal";
 import PreviewPostModal from "./PreviewBlogModal";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const BlogsTable = () => {
     const { blogs } = useBlog();
@@ -51,7 +52,7 @@ const BlogsTable = () => {
                         key: "created_at",
                         render: (row: BlogType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {row.created_at}
+                                {formatTableDate(row.created_at)}
                             </Table.Cell>
                         ),
                         sortable: true,

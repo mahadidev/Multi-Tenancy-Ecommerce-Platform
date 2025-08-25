@@ -27,12 +27,14 @@ export interface ProductVariantOption {
     value?: string;
 }
 
-export interface ProductFilters {
-    search?: string;
+import type { ServerTableFilters } from '@seller/_hooks/types/table';
+
+export interface ProductFilters extends ServerTableFilters {
     category_id?: number;
     price_min?: number;
     price_max?: number;
     status?: string;
+    sort_by?: 'name' | 'sku' | 'price' | 'created_at' | 'updated_at';
 }
 
 export interface CreateProductPayload {
