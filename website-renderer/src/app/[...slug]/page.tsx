@@ -28,13 +28,20 @@ function DynamicPageContent() {
   // Initialize subdomain on client side only to prevent hydration mismatch
   useEffect(() => {
     const querySubdomain = searchParams.get('subdomain');
-    const extractedSubdomain = querySubdomain || extractSubdomain();
+    let extractedSubdomain = querySubdomain || extractSubdomain();
+    
+    // Clean the subdomain - remove any path components
+    if (extractedSubdomain && extractedSubdomain.includes('/')) {
+      extractedSubdomain = extractedSubdomain.split('/')[0];
+    }
+    
+    
     setSubdomain(extractedSubdomain);
   }, [searchParams]);
 
   useEffect(() => {
     if (!subdomain) {
-      setError('Website subdomain is required');
+      setError('Website subdomain is required. For development, add ?subdomain=your-subdomain to the URL');
       setLoading(false);
       return;
     }
@@ -62,8 +69,14 @@ function DynamicPageContent() {
     const hostname = window.location.hostname;
     const parts = hostname.split('.');
     
-    // Check if this is a subdomain (has more than 2 parts and isn't localhost)
-    if (parts.length > 2 && hostname !== 'localhost') {
+    // For localhost development, we can't extract from hostname
+    // so we rely on query parameters
+    if (hostname === 'localhost' || hostname.startsWith('127.0.0.1')) {
+      return null; // Will use query parameter
+    }
+    
+    // Check if this is a subdomain (has more than 2 parts)
+    if (parts.length > 2) {
       return parts[0];
     }
     

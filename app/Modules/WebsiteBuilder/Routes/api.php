@@ -11,8 +11,31 @@ use App\Modules\WebsiteBuilder\Controllers\WebsiteFormController;
 use App\Modules\WebsiteBuilder\Controllers\PageSectionController;
 use App\Modules\WebsiteBuilder\Controllers\WebsiteRenderController;
 use App\Modules\WebsiteBuilder\Controllers\WebsiteSettingsController;
+use App\Modules\WebsiteBuilder\Controllers\WebsiteBuilderController;
 
 Route::prefix('api/v1')->middleware(['auth:sanctum'])->group(function () {
+    
+    // Website Builder API routes
+    Route::prefix('website-builder')->group(function () {
+        // Theme/Template management
+        Route::get('/themes', [WebsiteBuilderController::class, 'getThemes']);
+        Route::post('/apply-theme', [WebsiteBuilderController::class, 'applyTheme']);
+        
+        // Component library
+        Route::get('/components', [WebsiteBuilderController::class, 'getComponents']);
+        
+        // Website management
+        Route::get('/websites/{websiteId}', [WebsiteBuilderController::class, 'getWebsiteSettings']);
+        Route::put('/websites/{websiteId}', [WebsiteBuilderController::class, 'updateWebsiteSettings']);
+        
+        // Page management
+        Route::get('/websites/{websiteId}/pages', [WebsiteBuilderController::class, 'getWebsitePages']);
+        Route::post('/websites/{websiteId}/pages', [WebsiteBuilderController::class, 'createPage']);
+        Route::put('/pages/{pageId}/settings', [WebsiteBuilderController::class, 'updatePageSettings']);
+        Route::put('/pages/{pageId}/sections', [WebsiteBuilderController::class, 'savePageSections']);
+        Route::post('/pages/{pageId}/duplicate', [WebsiteBuilderController::class, 'duplicatePage']);
+        Route::delete('/pages/{pageId}', [WebsiteBuilderController::class, 'deletePage']);
+    });
     
     // Website management routes
     Route::prefix('websites')->group(function () {
@@ -131,5 +154,13 @@ Route::prefix('api/website')->group(function () {
     
     // Website data APIs
     Route::get('/{subdomain}/products', [WebsiteRenderController::class, 'getProducts']);
+    Route::get('/{subdomain}/{slug}/products', [WebsiteRenderController::class, 'getProducts']);
     Route::get('/{subdomain}/search', [WebsiteRenderController::class, 'searchProducts']);
+    Route::get('/{subdomain}/{slug}/search', [WebsiteRenderController::class, 'searchProducts']);
+});
+
+// Temporary test routes for website builder (no auth required)
+Route::prefix('api/test/website-builder')->group(function () {
+    Route::get('/components', [WebsiteBuilderController::class, 'getComponents']);
+    Route::get('/themes', [WebsiteBuilderController::class, 'getThemes']);
 });

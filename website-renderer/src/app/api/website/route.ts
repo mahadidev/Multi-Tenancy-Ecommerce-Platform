@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const LARAVEL_API_BASE = process.env.LARAVEL_API_BASE || 'http://localhost:8000/api';
+const LARAVEL_API_BASE = process.env.LARAVEL_API_BASE || 'https://chologori.test/api';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -12,18 +12,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // For testing, use the mock endpoint
-    if (subdomain === 'test-store') {
-      const response = await fetch(`http://localhost:8000/test-website-data`);
-      
-      if (!response.ok) {
-        return NextResponse.json({ error: 'Failed to fetch test website data' }, { status: 500 });
-      }
-
-      const result = await response.json();
-      return NextResponse.json(result);
-    }
-
     let apiUrl: string;
     
     if (path === '' || path === '/') {

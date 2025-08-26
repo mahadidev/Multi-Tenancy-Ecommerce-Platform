@@ -17,6 +17,7 @@ interface ProductGridProps {
   show_description?: boolean;
   show_add_to_cart?: boolean;
   websiteSubdomain?: string;
+  products?: Product[]; // Pre-loaded products from server
 }
 
 export function ProductGrid({
@@ -30,13 +31,21 @@ export function ProductGrid({
   show_price = true,
   show_description = false,
   show_add_to_cart = true,
-  websiteSubdomain
+  websiteSubdomain,
+  products: preLoadedProducts
 }: ProductGridProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // If we have pre-loaded products, use them instead of fetching
+    if (preLoadedProducts && preLoadedProducts.length > 0) {
+      setProducts(preLoadedProducts);
+      setLoading(false);
+      return;
+    }
+
     if (!websiteSubdomain) return;
 
     const fetchProducts = async () => {
@@ -59,7 +68,7 @@ export function ProductGrid({
     };
 
     fetchProducts();
-  }, [websiteSubdomain, filter, category_id, brand_id, max_products]);
+  }, [websiteSubdomain, filter, category_id, brand_id, max_products, preLoadedProducts]);
 
   const gridCols = {
     1: 'grid-cols-1',

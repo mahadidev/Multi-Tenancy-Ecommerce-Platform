@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const LARAVEL_API_BASE = process.env.LARAVEL_API_BASE || 'http://localhost:8000/api';
+const LARAVEL_API_BASE = process.env.LARAVEL_API_BASE || 'http://localhost:8001/api';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
+    // Always use the base products endpoint (not page-specific)  
     const apiUrl = `${LARAVEL_API_BASE}/website/${subdomain}/products?${queryParams.toString()}`;
 
     const response = await fetch(apiUrl, {
@@ -39,7 +40,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
 
   } catch (error) {
-    console.error('Error fetching products:', error);
     return NextResponse.json(
       { error: 'Failed to fetch products' },
       { status: 500 }

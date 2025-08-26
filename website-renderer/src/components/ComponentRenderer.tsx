@@ -3,14 +3,18 @@
 import React from 'react';
 import { PageComponent } from '@/types';
 import { HeroSection } from './widgets/HeroSection';
+import { HeroBanner } from './widgets/HeroBanner';
+import { HeroSlider } from './widgets/HeroSlider';
 import { TextBlock } from './widgets/TextBlock';
 import { ImageBlock } from './widgets/ImageBlock';
 import { ProductGrid } from './widgets/ProductGrid';
+import { ProductCarousel } from './widgets/ProductCarousel';
 import { ContactForm } from './widgets/ContactForm';
 import { ButtonBlock } from './widgets/ButtonBlock';
 import { VideoBlock } from './widgets/VideoBlock';
 import { TestimonialBlock } from './widgets/TestimonialBlock';
 import { FeaturesList } from './widgets/FeaturesList';
+import { FeatureCards } from './widgets/FeatureCards';
 import { NewsletterSignup } from './widgets/NewsletterSignup';
 
 interface ComponentRendererProps {
@@ -19,16 +23,33 @@ interface ComponentRendererProps {
 }
 
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
+  // Hero components
   'hero-section': HeroSection,
+  'hero-banner': HeroBanner,
+  'hero-slider': HeroSlider,
+  
+  // Product components
+  'product-grid': ProductGrid,
+  'product-carousel': ProductCarousel,
+  
+  // Content components
   'text-block': TextBlock,
   'image-block': ImageBlock,
-  'product-grid': ProductGrid,
+  'feature-cards': FeatureCards,
+  'features-list': FeaturesList,
+  
+  // Interactive components
   'contact-form': ContactForm,
   'button-block': ButtonBlock,
   'video-block': VideoBlock,
   'testimonial-block': TestimonialBlock,
-  'features-list': FeaturesList,
   'newsletter-signup': NewsletterSignup,
+  
+  // Navigation components (TODO: implement these)
+  'navigation-bar': TextBlock, // Placeholder
+  'modern-footer': TextBlock, // Placeholder
+  'image-gallery': TextBlock, // Placeholder
+  'testimonials': TestimonialBlock, // Use existing testimonial block
 };
 
 export function ComponentRenderer({ component, websiteSubdomain }: ComponentRendererProps) {

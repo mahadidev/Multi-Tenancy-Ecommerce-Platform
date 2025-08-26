@@ -13,18 +13,6 @@ export class ApiClient {
   }
 
   async getWebsite(subdomain: string, path: string = ''): Promise<{ website: Website; page: WebsitePage }> {
-    // For testing, use the mock endpoint
-    if (subdomain === 'test-store') {
-      const response = await fetch(`http://localhost:8000/test-website-data`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch test website data');
-      }
-
-      const result = await response.json();
-      return result.data;
-    }
-
     const params = new URLSearchParams({
       subdomain,
       path
@@ -43,9 +31,13 @@ export class ApiClient {
   }
 
   async getProducts(subdomain: string, filters: Record<string, any> = {}): Promise<Product[]> {
-    const params = new URLSearchParams({
-      subdomain,
-      ...filters
+    const params = new URLSearchParams({ subdomain });
+    
+    // Only add filters that have defined values
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params.set(key, value.toString());
+      }
     });
 
     const response = await fetch(`${API_BASE}/products?${params}`);
@@ -60,10 +52,16 @@ export class ApiClient {
   }
 
   async searchProducts(subdomain: string, query: string, filters: Record<string, any> = {}): Promise<Product[]> {
-    const params = new URLSearchParams({
+    const params = new URLSearchParams({ 
       subdomain,
-      q: query,
-      ...filters
+      q: query 
+    });
+    
+    // Only add filters that have defined values
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        params.set(key, value.toString());
+      }
     });
 
     const response = await fetch(`${API_BASE}/products?${params}`);

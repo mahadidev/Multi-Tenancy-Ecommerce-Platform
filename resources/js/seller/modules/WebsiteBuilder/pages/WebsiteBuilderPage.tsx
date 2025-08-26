@@ -131,15 +131,20 @@ const WebsiteBuilderPage: React.FC = () => {
       });
 
       // Save to server
-      await updateComponent({
+      const result = await updateComponent({
         id: componentId,
         data: serverData,
       }).unwrap();
       
+      // Update the selected component if it's the one we just updated
+      if (selectedComponent?.id === componentId && result.data) {
+        dispatch(setSelectedComponent(result.data));
+      }
+      
     } catch (error) {
       console.error('Failed to update component:', error);
     }
-  }, [dispatch, updateComponent]);
+  }, [dispatch, updateComponent, selectedComponent]);
 
   // Handle deleting a component
   const handleDeleteComponent = useCallback(async (componentId: number) => {

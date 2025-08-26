@@ -97,7 +97,7 @@ const DroppableComponent: React.FC<DroppableComponentProps> = ({
   };
 
   const renderComponentPreview = () => {
-    const props = component.props || {};
+    const props = parseProps(component.props);
     const componentType = component.component_type;
 
     // Simple preview based on component type
@@ -282,6 +282,18 @@ const DroppableSection: React.FC<DroppableSectionProps> = ({
   );
 };
 
+// Helper function to parse props (they might be JSON strings from the database)
+const parseProps = (props: any): Record<string, any> => {
+  if (typeof props === 'string') {
+    try {
+      return JSON.parse(props);
+    } catch (e) {
+      return {};
+    }
+  }
+  return props || {};
+};
+
 // Main Page Builder Component
 const DragDropPageBuilder: React.FC<DragDropPageBuilderProps> = ({
   componentTypes,
@@ -337,6 +349,7 @@ const DragDropPageBuilder: React.FC<DragDropPageBuilderProps> = ({
         {selectedComponent && (
           <div className="w-80 bg-gray-50 border-l border-gray-200 p-4 overflow-y-auto">
             <h2 className="text-lg font-semibold mb-4">Properties</h2>
+            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -353,16 +366,18 @@ const DragDropPageBuilder: React.FC<DragDropPageBuilderProps> = ({
               
               {/* Dynamic props editing based on component schema */}
               {selectedComponent.component_type?.schema?.properties && 
-                Object.entries(selectedComponent.component_type.schema.properties).map(([key, prop]: [string, any]) => (
+                Object.entries(selectedComponent.component_type.schema.properties).map(([key, prop]: [string, any]) => {
+                  const parsedProps = parseProps(selectedComponent.props);
+                  return (
                   <div key={key}>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {prop.title || key}
                     </label>
                     {prop.type === 'string' && prop.enum ? (
                       <select
-                        value={selectedComponent.props?.[key] || prop.default || ''}
+                        value={parsedProps[key] !== undefined ? parsedProps[key] : (prop.default || '')}
                         onChange={(e) => onUpdateComponent(selectedComponent.id, { 
-                          props: { ...selectedComponent.props, [key]: e.target.value }
+                          props: { ...parsedProps, [key]: e.target.value }
                         })}
                         className="w-full p-2 border border-gray-300 rounded text-sm"
                       >
@@ -372,9 +387,9 @@ const DragDropPageBuilder: React.FC<DragDropPageBuilderProps> = ({
                       </select>
                     ) : prop.format === 'textarea' ? (
                       <textarea
-                        value={selectedComponent.props?.[key] || prop.default || ''}
+                        value={parsedProps[key] !== undefined ? parsedProps[key] : (prop.default || '')}
                         onChange={(e) => onUpdateComponent(selectedComponent.id, { 
-                          props: { ...selectedComponent.props, [key]: e.target.value }
+                          props: { ...parsedProps, [key]: e.target.value }
                         })}
                         className="w-full p-2 border border-gray-300 rounded text-sm"
                         rows={3}
@@ -383,9 +398,9 @@ const DragDropPageBuilder: React.FC<DragDropPageBuilderProps> = ({
                     ) : (
                       <input
                         type={prop.type === 'number' ? 'number' : 'text'}
-                        value={selectedComponent.props?.[key] || prop.default || ''}
+                        value={parsedProps[key] !== undefined ? parsedProps[key] : (prop.default || '')}
                         onChange={(e) => onUpdateComponent(selectedComponent.id, { 
-                          props: { ...selectedComponent.props, [key]: e.target.value }
+                          props: { ...parsedProps, [key]: e.target.value }
                         })}
                         className="w-full p-2 border border-gray-300 rounded text-sm"
                         placeholder={prop.description}
@@ -395,7 +410,8 @@ const DragDropPageBuilder: React.FC<DragDropPageBuilderProps> = ({
                       <p className="text-xs text-gray-500 mt-1">{prop.description}</p>
                     )}
                   </div>
-                ))
+                  );
+                })
               }
             </div>
           </div>
