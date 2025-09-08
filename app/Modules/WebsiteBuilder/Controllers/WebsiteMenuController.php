@@ -52,6 +52,10 @@ class WebsiteMenuController extends Controller
                 'items.*.target' => 'sometimes|string|in:_self,_blank',
                 'items.*.parent_id' => 'nullable|integer',
                 'items.*.sort_order' => 'nullable|integer',
+                'items.*.page_slug' => 'nullable|string|max:255',
+                'items.*.product_slug' => 'nullable|string|max:255',
+                'items.*.category_slug' => 'nullable|string|max:255',
+                'items.*.visibility' => 'nullable|string|in:all,logged_in,guest',
                 'styles' => 'nullable|array',
             ]);
 
@@ -70,6 +74,10 @@ class WebsiteMenuController extends Controller
                         'target' => $item['target'] ?? '_self',
                         'parent_id' => $item['parent_id'] ?? null,
                         'sort_order' => $item['sort_order'] ?? $index + 1,
+                        'page_slug' => $item['page_slug'] ?? null,
+                        'product_slug' => $item['product_slug'] ?? null,
+                        'category_slug' => $item['category_slug'] ?? null,
+                        'visibility' => $item['visibility'] ?? 'all',
                         'is_active' => true,
                     ];
                 }
@@ -111,6 +119,10 @@ class WebsiteMenuController extends Controller
                 'items.*.target' => 'sometimes|string|in:_self,_blank',
                 'items.*.parent_id' => 'nullable|integer',
                 'items.*.sort_order' => 'nullable|integer',
+                'items.*.page_slug' => 'nullable|string|max:255',
+                'items.*.product_slug' => 'nullable|string|max:255',
+                'items.*.category_slug' => 'nullable|string|max:255',
+                'items.*.visibility' => 'nullable|string|in:all,logged_in,guest',
                 'styles' => 'nullable|array',
                 'is_active' => 'boolean',
             ]);
@@ -132,6 +144,10 @@ class WebsiteMenuController extends Controller
                         'target' => $item['target'] ?? '_self',
                         'parent_id' => $item['parent_id'] ?? null,
                         'sort_order' => $item['sort_order'] ?? $index + 1,
+                        'page_slug' => $item['page_slug'] ?? null,
+                        'product_slug' => $item['product_slug'] ?? null,
+                        'category_slug' => $item['category_slug'] ?? null,
+                        'visibility' => $item['visibility'] ?? 'all',
                         'is_active' => $item['is_active'] ?? true,
                     ];
                 }

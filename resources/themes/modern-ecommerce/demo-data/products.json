@@ -1,0 +1,266 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Wireless Bluetooth Headphones",
+      "slug": "wireless-bluetooth-headphones",
+      "short_description": "Premium wireless headphones with noise cancellation and 30-hour battery life.",
+      "full_description": "Experience superior sound quality with these premium wireless Bluetooth headphones. Featuring advanced noise cancellation technology, these headphones deliver crystal-clear audio while blocking out ambient noise. With a 30-hour battery life and quick-charge capability, you can enjoy uninterrupted listening all day long. The ergonomic design ensures comfortable wear for extended periods, making them perfect for work, travel, or leisure.",
+      "price": 199.99,
+      "sale_price": 149.99,
+      "sku": "WBH-001",
+      "stock_quantity": 50,
+      "category": "Electronics",
+      "category_slug": "electronics",
+      "tags": ["wireless", "bluetooth", "headphones", "audio", "noise-cancelling"],
+      "featured": true,
+      "rating": 4.8,
+      "review_count": 124,
+      "images": [
+        "/themes/modern-ecommerce/images/products/headphones-1.jpg",
+        "/themes/modern-ecommerce/images/products/headphones-2.jpg",
+        "/themes/modern-ecommerce/images/products/headphones-3.jpg"
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "name": "Color",
+          "options": [
+            {"name": "Black", "value": "black"},
+            {"name": "White", "value": "white"},
+            {"name": "Blue", "value": "blue"}
+          ]
+        }
+      ],
+      "specifications": {
+        "Brand": "AudioTech",
+        "Model": "AT-WH300",
+        "Connectivity": "Bluetooth 5.0",
+        "Battery Life": "30 hours",
+        "Charging Time": "2 hours",
+        "Weight": "280g",
+        "Warranty": "2 years"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Smart Watch Series 5",
+      "slug": "smart-watch-series-5",
+      "short_description": "Advanced smartwatch with fitness tracking, GPS, and cellular connectivity.",
+      "full_description": "Stay connected and track your health with the Smart Watch Series 5. This advanced wearable device features comprehensive fitness tracking, built-in GPS, and optional cellular connectivity. Monitor your heart rate, track workouts, and receive notifications directly on your wrist. The bright, always-on display is easy to read in any lighting condition, and the water-resistant design makes it perfect for swimming and outdoor activities.",
+      "price": 399.99,
+      "sku": "SW-S5-001",
+      "stock_quantity": 30,
+      "category": "Electronics",
+      "category_slug": "electronics",
+      "tags": ["smartwatch", "fitness", "gps", "health", "wearable"],
+      "featured": true,
+      "rating": 4.7,
+      "review_count": 89,
+      "images": [
+        "/themes/modern-ecommerce/images/products/smartwatch-1.jpg",
+        "/themes/modern-ecommerce/images/products/smartwatch-2.jpg"
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "name": "Size",
+          "options": [
+            {"name": "40mm", "value": "40mm"},
+            {"name": "44mm", "value": "44mm", "price_adjustment": 50}
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Band",
+          "options": [
+            {"name": "Sport Band", "value": "sport"},
+            {"name": "Leather", "value": "leather", "price_adjustment": 100},
+            {"name": "Stainless Steel", "value": "steel", "price_adjustment": 150}
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Premium Cotton T-Shirt",
+      "slug": "premium-cotton-t-shirt",
+      "short_description": "Soft, comfortable 100% organic cotton t-shirt in various colors.",
+      "full_description": "Made from 100% organic cotton, this premium t-shirt offers unmatched comfort and durability. The soft, breathable fabric feels great against your skin and maintains its shape wash after wash. Perfect for casual wear or layering, this versatile piece is a wardrobe essential. Available in a variety of colors to suit any style.",
+      "price": 29.99,
+      "sale_price": 24.99,
+      "sku": "CT-PREM-001",
+      "stock_quantity": 200,
+      "category": "Fashion",
+      "category_slug": "fashion",
+      "tags": ["t-shirt", "cotton", "organic", "casual", "comfortable"],
+      "featured": false,
+      "rating": 4.5,
+      "review_count": 67,
+      "images": [
+        "/themes/modern-ecommerce/images/products/tshirt-1.jpg",
+        "/themes/modern-ecommerce/images/products/tshirt-2.jpg"
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "name": "Size",
+          "options": [
+            {"name": "Small", "value": "S"},
+            {"name": "Medium", "value": "M"},
+            {"name": "Large", "value": "L"},
+            {"name": "X-Large", "value": "XL"}
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Color",
+          "options": [
+            {"name": "White", "value": "white"},
+            {"name": "Black", "value": "black"},
+            {"name": "Navy", "value": "navy"},
+            {"name": "Gray", "value": "gray"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Ergonomic Office Chair",
+      "slug": "ergonomic-office-chair",
+      "short_description": "Professional ergonomic office chair with lumbar support and adjustable features.",
+      "full_description": "Enhance your workspace with this professional ergonomic office chair designed for all-day comfort. Features adjustable lumbar support, seat height, and armrests to provide optimal support for your posture. The breathable mesh back keeps you cool, while the cushioned seat provides comfort during long work sessions. Built with high-quality materials and backed by a 5-year warranty.",
+      "price": 299.99,
+      "sku": "OC-ERG-001",
+      "stock_quantity": 25,
+      "category": "Home & Garden",
+      "category_slug": "home-garden",
+      "tags": ["office chair", "ergonomic", "furniture", "workspace", "comfort"],
+      "featured": true,
+      "rating": 4.6,
+      "review_count": 45,
+      "images": [
+        "/themes/modern-ecommerce/images/products/office-chair-1.jpg",
+        "/themes/modern-ecommerce/images/products/office-chair-2.jpg"
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "name": "Color",
+          "options": [
+            {"name": "Black", "value": "black"},
+            {"name": "Gray", "value": "gray"},
+            {"name": "White", "value": "white"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Yoga Mat Pro",
+      "slug": "yoga-mat-pro",
+      "short_description": "Professional-grade yoga mat with superior grip and cushioning.",
+      "full_description": "Take your practice to the next level with the Yoga Mat Pro. This premium mat features a non-slip surface that provides excellent grip even during the most challenging poses. The 6mm thickness offers optimal cushioning for your joints while maintaining stability. Made from eco-friendly TPE material, it's free from harmful chemicals and odors. Includes a carrying strap for easy transport.",
+      "price": 79.99,
+      "sku": "YM-PRO-001",
+      "stock_quantity": 75,
+      "category": "Sports & Fitness",
+      "category_slug": "sports",
+      "tags": ["yoga", "mat", "fitness", "exercise", "eco-friendly"],
+      "featured": false,
+      "rating": 4.9,
+      "review_count": 156,
+      "images": [
+        "/themes/modern-ecommerce/images/products/yoga-mat-1.jpg",
+        "/themes/modern-ecommerce/images/products/yoga-mat-2.jpg"
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "name": "Color",
+          "options": [
+            {"name": "Purple", "value": "purple"},
+            {"name": "Blue", "value": "blue"},
+            {"name": "Green", "value": "green"},
+            {"name": "Pink", "value": "pink"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Stainless Steel Water Bottle",
+      "slug": "stainless-steel-water-bottle",
+      "short_description": "Insulated stainless steel water bottle keeps drinks cold for 24 hours.",
+      "full_description": "Stay hydrated throughout the day with this premium stainless steel water bottle. Double-wall vacuum insulation keeps cold drinks cold for up to 24 hours and hot drinks hot for up to 12 hours. The leak-proof design and wide mouth opening make it easy to fill, drink from, and clean. Perfect for work, gym, travel, or outdoor activities.",
+      "price": 34.99,
+      "sku": "WB-SS-001",
+      "stock_quantity": 100,
+      "category": "Sports & Fitness",
+      "category_slug": "sports",
+      "tags": ["water bottle", "insulated", "stainless steel", "hydration", "eco-friendly"],
+      "featured": false,
+      "rating": 4.4,
+      "review_count": 78,
+      "images": [
+        "/themes/modern-ecommerce/images/products/water-bottle-1.jpg",
+        "/themes/modern-ecommerce/images/products/water-bottle-2.jpg"
+      ],
+      "variants": [
+        {
+          "id": 1,
+          "name": "Size",
+          "options": [
+            {"name": "16oz", "value": "16oz"},
+            {"name": "24oz", "value": "24oz", "price_adjustment": 5},
+            {"name": "32oz", "value": "32oz", "price_adjustment": 10}
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Color",
+          "options": [
+            {"name": "Silver", "value": "silver"},
+            {"name": "Black", "value": "black"},
+            {"name": "Blue", "value": "blue"},
+            {"name": "Red", "value": "red"}
+          ]
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Electronics",
+      "slug": "electronics",
+      "description": "Latest tech gadgets and electronic devices",
+      "image": "/themes/modern-ecommerce/images/categories/electronics.jpg",
+      "product_count": 150
+    },
+    {
+      "id": 2,
+      "name": "Fashion",
+      "slug": "fashion",
+      "description": "Trendy clothing and accessories for every style",
+      "image": "/themes/modern-ecommerce/images/categories/fashion.jpg",
+      "product_count": 320
+    },
+    {
+      "id": 3,
+      "name": "Home & Garden",
+      "slug": "home-garden",
+      "description": "Everything you need for your home and garden",
+      "image": "/themes/modern-ecommerce/images/categories/home-garden.jpg",
+      "product_count": 210
+    },
+    {
+      "id": 4,
+      "name": "Sports & Fitness",
+      "slug": "sports",
+      "description": "Gear and equipment for active lifestyles",
+      "image": "/themes/modern-ecommerce/images/categories/sports.jpg",
+      "product_count": 180
+    }
+  ]
+}

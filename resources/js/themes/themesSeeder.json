@@ -1,9 +1,13 @@
 [
   {
     "id": 1,
-    "name": "Simfy",
-    "slug": "simfy",
-    "thumbnail": null,
+    "name": "Modern E-commerce",
+    "slug": "modern-ecommerce",
+    "thumbnail": "/themes/modern-ecommerce/preview.jpg",
+    "description": "A complete modern e-commerce theme with clean design and powerful features",
+    "category": "e-commerce",
+    "price": 0,
+    "is_premium": false,
     "widgets": [
       {
         "id": 1,
@@ -13,34 +17,98 @@
         "inputs": []
       },
       {
-        "id": 1,
-        "name": "navigation",
-        "label": "Navigation",
+        "id": 2,
+        "name": "header",
+        "label": "Header",
         "type": "partial",
         "inputs": [
           {
-            "name": "is_fixed",
-            "label": "Navigation Fixed",
+            "name": "logo_text",
+            "label": "Logo Text",
+            "type": "text",
+            "value": "Modern Store",
+            "placeholder": "Enter store name"
+          },
+          {
+            "name": "show_search",
+            "label": "Show Search Bar",
             "type": "boolean",
-            "value": false
+            "value": true
+          },
+          {
+            "name": "header_style",
+            "label": "Header Style",
+            "type": "select",
+            "value": "modern",
+            "options": [
+              {"value": "minimal", "label": "Minimal"},
+              {"value": "modern", "label": "Modern"},
+              {"value": "classic", "label": "Classic"}
+            ]
           }
         ]
       },
       {
-        "id": 1,
+        "id": 3,
         "name": "footer",
         "label": "Footer",
         "type": "partial",
-        "inputs": []
+        "inputs": [
+          {
+            "name": "copyright_text",
+            "label": "Copyright Text",
+            "type": "text",
+            "value": "© 2024 Modern Store. All rights reserved.",
+            "placeholder": "Enter copyright text"
+          },
+          {
+            "name": "show_social_links",
+            "label": "Show Social Links",
+            "type": "boolean",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "productGrid",
+        "label": "Product Grid",
+        "type": "section",
+        "inputs": [
+          {
+            "name": "columns",
+            "label": "Columns",
+            "type": "select",
+            "value": "4",
+            "options": [
+              {"value": "2", "label": "2 Columns"},
+              {"value": "3", "label": "3 Columns"},
+              {"value": "4", "label": "4 Columns"},
+              {"value": "5", "label": "5 Columns"}
+            ]
+          },
+          {
+            "name": "show_rating",
+            "label": "Show Product Rating",
+            "type": "boolean",
+            "value": true
+          },
+          {
+            "name": "show_cart_button",
+            "label": "Show Add to Cart Button",
+            "type": "boolean",
+            "value": true
+          }
+        ]
       }
     ],
     "pages": [
       {
         "id": 1,
         "name": "home",
-        "label": "Home",
+        "label": "Homepage",
         "slug": "/",
-        "title": "Home Page",
+        "title": "Modern Store - Your One-Stop Shop",
         "layout": {
           "id": 1,
           "name": "appLayout",
@@ -50,7 +118,7 @@
         },
         "is_active": 1,
         "type": "home",
-        "thumbnail": null,
+        "thumbnail": "/themes/modern-ecommerce/previews/homepage.jpg",
         "widgets": [
           {
             "id": 1,
@@ -62,9 +130,164 @@
               {
                 "id": 1,
                 "name": "title",
-                "label": "Title",
+                "label": "Hero Title",
                 "type": "text",
-                "value": "YOUR_WIDGET_TITLE"
+                "value": "Discover Amazing Products",
+                "placeholder": "Enter hero title"
+              },
+              {
+                "id": 2,
+                "name": "subtitle",
+                "label": "Hero Subtitle", 
+                "type": "textarea",
+                "value": "Shop the latest trends and discover incredible deals on thousands of products",
+                "placeholder": "Enter hero subtitle"
+              },
+              {
+                "id": 3,
+                "name": "background_image",
+                "label": "Background Image",
+                "type": "text",
+                "value": "/themes/modern-ecommerce/images/hero-bg.jpg",
+                "placeholder": "Enter background image URL"
+              },
+              {
+                "id": 4,
+                "name": "cta_text",
+                "label": "Call to Action Text",
+                "type": "text",
+                "value": "Shop Now",
+                "placeholder": "Enter CTA button text"
+              },
+              {
+                "id": 5,
+                "name": "cta_link",
+                "label": "Call to Action Link",
+                "type": "text",
+                "value": "/shop",
+                "placeholder": "Enter CTA button link"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "name": "featuredCategories",
+            "label": "Featured Categories",
+            "serial": 2,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "section_title",
+                "label": "Section Title",
+                "type": "text",
+                "value": "Shop by Category",
+                "placeholder": "Enter section title"
+              },
+              {
+                "id": 2,
+                "name": "categories_to_show",
+                "label": "Number of Categories",
+                "type": "select",
+                "value": "4",
+                "options": [
+                  {"value": "3", "label": "3 Categories"},
+                  {"value": "4", "label": "4 Categories"},
+                  {"value": "6", "label": "6 Categories"},
+                  {"value": "8", "label": "8 Categories"}
+                ]
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "name": "featuredProducts",
+            "label": "Featured Products",
+            "serial": 3,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "section_title",
+                "label": "Section Title",
+                "type": "text",
+                "value": "Featured Products",
+                "placeholder": "Enter section title"
+              },
+              {
+                "id": 2,
+                "name": "products_limit",
+                "label": "Number of Products",
+                "type": "select",
+                "value": "8",
+                "options": [
+                  {"value": "4", "label": "4 Products"},
+                  {"value": "8", "label": "8 Products"},
+                  {"value": "12", "label": "12 Products"},
+                  {"value": "16", "label": "16 Products"}
+                ]
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "name": "testimonials",
+            "label": "Customer Reviews",
+            "serial": 4,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "section_title",
+                "label": "Section Title",
+                "type": "text",
+                "value": "What Our Customers Say",
+                "placeholder": "Enter section title"
+              },
+              {
+                "id": 2,
+                "name": "testimonials_count",
+                "label": "Number of Testimonials",
+                "type": "select",
+                "value": "3",
+                "options": [
+                  {"value": "2", "label": "2 Testimonials"},
+                  {"value": "3", "label": "3 Testimonials"},
+                  {"value": "4", "label": "4 Testimonials"}
+                ]
+              }
+            ]
+          },
+          {
+            "id": 5,
+            "name": "newsletter",
+            "label": "Newsletter Signup",
+            "serial": 5,
+            "type": "section",
+            "inputs": [
+              {
+                "id": 1,
+                "name": "section_title",
+                "label": "Section Title",
+                "type": "text",
+                "value": "Stay Updated",
+                "placeholder": "Enter section title"
+              },
+              {
+                "id": 2,
+                "name": "section_subtitle",
+                "label": "Section Subtitle",
+                "type": "textarea",
+                "value": "Subscribe to our newsletter and get 10% off your first order plus exclusive deals",
+                "placeholder": "Enter section subtitle"
+              },
+              {
+                "id": 3,
+                "name": "button_text",
+                "label": "Button Text",
+                "type": "text",
+                "value": "Subscribe",
+                "placeholder": "Enter button text"
               }
             ]
           }
@@ -72,673 +295,10 @@
       },
       {
         "id": 2,
-        "name": "login",
-        "label": "Login",
-        "slug": "/login",
-        "title": "Login Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "login",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "loginForm",
-            "label": "Login Form",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 1,
-    "name": "RapidShopper",
-    "slug": "rapidshopper",
-    "thumbnail": null,
-    "widgets": [
-      {
-        "id": 1,
-        "name": "appLayout",
-        "label": "App Layout",
-        "type": "layout",
-        "inputs": []
-      },
-      {
-        "id": 1,
-        "name": "navigation",
-        "label": "Navigation",
-        "type": "partial",
-        "inputs": []
-      },
-      {
-        "id": 1,
-        "name": "footer",
-        "label": "Footer",
-        "type": "partial",
-        "inputs": []
-      }
-    ],
-    "pages": [
-      {
-        "id": 0,
-        "name": "home",
-        "label": "Home",
-        "slug": "/",
-        "title": "Home Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "home",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "hero",
-            "label": "Hero Section",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "title",
-                "label": "Title",
-                "type": "text",
-                "value": "YOUR_WIDGET_TITLE"
-              }
-            ]
-          },
-          {
-            "id": 1,
-            "name": "featuresSection",
-            "label": "Features Section",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "features",
-                "label": "features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 1",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Feature tagline d",
-                    "placeholder": "Enter feature tagline"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "icon"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "name": "features",
-                "label": "features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 2",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Feature tagline 2",
-                    "placeholder": "Enter feature tagline"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              },
-              {
-                "id": 3,
-                "name": "features",
-                "label": "features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 3",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Feature tagline 3",
-                    "placeholder": "Enter feature tagline"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              },
-              {
-                "id": 4,
-                "name": "features",
-                "label": "features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 4",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Feature tagline 4",
-                    "placeholder": "Enter feature tagline"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              },
-              {
-                "id": 5,
-                "name": "features",
-                "label": "features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Offer title 4",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Feature tagline 4",
-                    "placeholder": "Enter feature tagline"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "<svg></svg>"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": 1,
-            "name": "bannersSection",
-            "label": "Banners Section",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "banner",
-                "label": "banner",
-                "type": "text",
-                "placeholder": "Enter banner url",
-                "value": "https://i.ibb.co.com/d0xxp4N2/promo-banner-2.webp"
-              },
-              {
-                "id": 2,
-                "name": "banner",
-                "label": "banner",
-                "type": "text",
-                "placeholder": "Enter banner url",
-                "value": "https://i.ibb.co.com/3yPSkV0h/promo-banner-3.webp"
-              },
-              {
-                "id": 3,
-                "name": "banner",
-                "label": "banner",
-                "type": "text",
-                "placeholder": "Enter banner url",
-                "value": "https://i.ibb.co.com/q3PBZbcP/promo-banner-1.webp"
-              }
-            ]
-          },
-          {
-            "id": 2,
-            "name": "featuredProducts",
-            "label": "Featured Products Section",
-            "serial": 2,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 1,
-    "name": "BoroBazar",
-    "slug": "borobazar",
-    "thumbnail": null,
-    "widgets": [
-      {
-        "id": 1,
-        "name": "appLayout",
-        "label": "App Layout",
-        "type": "layout",
-        "inputs": []
-      },
-      {
-        "id": 1,
-        "name": "authLayout",
-        "label": "Auth Layout",
-        "type": "layout",
-        "inputs": []
-      },
-      {
-        "id": 1,
-        "name": "navigation",
-        "label": "Navigation",
-        "type": "partial",
-        "inputs": [
-          {
-            "name": "is_fixed",
-            "label": "Navigation Fixed",
-            "type": "boolean",
-            "value": false
-          }
-        ]
-      },
-      {
-        "id": 1,
-        "name": "footer",
-        "label": "Footer",
-        "type": "partial",
-        "inputs": []
-      }
-    ],
-    "pages": [
-      {
-        "id": 0,
-        "name": "home",
-        "label": "Home",
-        "slug": "/",
-        "title": "Home Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "home",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "hero",
-            "label": "Hero Section",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "slider_1",
-                "label": "Slider 1",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "First slider tagline",
-                    "placeholder": "Enter tagline"
-                  },
-                  {
-                    "id": 2,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "First Slider Title",
-                    "placeholder": "Enter first slider title"
-                  },
-                  {
-                    "id": 3,
-                    "name": "btnText",
-                    "label": "Button Label",
-                    "type": "text",
-                    "value": "Shop Now"
-                  },
-                  {
-                    "id": 4,
-                    "name": "sliderImage",
-                    "label": "Image URL",
-                    "type": "text",
-                    "value": "https://i.ibb.co.com/h1FyLTm1/qafuoal7vim22vfuq6jq.webp"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "name": "slider_2",
-                "label": "Slider 2",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Second slider tagline",
-                    "placeholder": "Enter tagline"
-                  },
-                  {
-                    "id": 2,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Second Slider Title",
-                    "placeholder": "Enter first slider title"
-                  },
-                  {
-                    "id": 3,
-                    "name": "btnText",
-                    "label": "Button Label",
-                    "type": "text",
-                    "value": "Shop Now"
-                  },
-                  {
-                    "id": 4,
-                    "name": "sliderImage",
-                    "label": "Image URL",
-                    "type": "text",
-                    "value": "https://i.ibb.co.com/Lz5LJmN5/u31nswluoqaioll4oiwz.webp"
-                  }
-                ]
-              },
-              {
-                "id": 3,
-                "name": "slider_3",
-                "label": "Slider 3",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "tagline",
-                    "label": "Tagline",
-                    "type": "text",
-                    "value": "Third slider tagline",
-                    "placeholder": "Enter tagline"
-                  },
-                  {
-                    "id": 2,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Third Slider Title",
-                    "placeholder": "Enter third slider title"
-                  },
-                  {
-                    "id": 3,
-                    "name": "btnText",
-                    "label": "Button Label",
-                    "type": "text",
-                    "value": "Shop Now"
-                  },
-                  {
-                    "id": 4,
-                    "name": "sliderImage",
-                    "label": "Image URL",
-                    "type": "text",
-                    "value": "https://i.ibb.co.com/q3NGsG6s/uhs2vgt8ybzsq79amrww.webp"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": 1,
-            "name": "featuresSection",
-            "label": "Features Section",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "features",
-                "label": "Features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Free Shipping",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Free shipping on all US order or order above $200",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "text",
-                    "value": "https://cdn-icons-png.flaticon.com/128/709/709790.png",
-                    "placeholder": "Enter icon link"
-                  }
-                ]
-              },
-              {
-                "id": 1,
-                "name": "features",
-                "label": "Features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "24X7 Support",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Contact us 24 hours a day, 7 days a week",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "https://cdn-icons-png.flaticon.com/128/18832/18832188.png",
-                    "placeholder": "Enter icon link"
-                  }
-                ]
-              },
-              {
-                "id": 1,
-                "name": "features",
-                "label": "Features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "30 Days Return",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Simply return it within 30 days for an exchange",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "https://cdn-icons-png.flaticon.com/128/1611/1611179.png",
-                    "placeholder": "Enter icon link"
-                  }
-                ]
-              },
-              {
-                "id": 1,
-                "name": "features",
-                "label": "Features",
-                "type": "array",
-                "child": [
-                  {
-                    "id": 1,
-                    "name": "title",
-                    "label": "Title",
-                    "type": "text",
-                    "value": "Payment Secure",
-                    "placeholder": "Enter title"
-                  },
-                  {
-                    "id": 1,
-                    "name": "description",
-                    "label": "Description",
-                    "type": "textarea",
-                    "value": "Contact us 24 hours a day, 7 days a week",
-                    "placeholder": "Enter offer description"
-                  },
-                  {
-                    "id": 1,
-                    "name": "icon",
-                    "label": "Icon",
-                    "type": "icon",
-                    "value": "https://cdn-icons-png.flaticon.com/128/590/590501.png",
-                    "placeholder": "Enter icon link"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": 2,
-            "name": "featuredProducts",
-            "label": "Featured Products Section",
-            "serial": 2,
-            "type": "section",
-            "inputs": []
-          },
-          {
-            "id": 1,
-            "name": "offerBanner",
-            "label": "Offer Banner",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "offerBannerUrl",
-                "label": "Offer Banner URL",
-                "type": "text",
-                "value": "https://i.ibb.co.com/bZB0nq3/image.webp",
-                "placeholder": "Enter offer banner url"
-              },
-              {
-                "id": 1,
-                "name": "offerLink",
-                "label": "Offer link",
-                "type": "text",
-                "value": "https://i.ibb.co.com/bZB0nq3/image.webp",
-                "placeholder": "Enter offer link"
-              }
-            ]
-          },
-          {
-            "id": 2,
-            "name": "latestProducts",
-            "label": "Latest Products Section",
-            "serial": 2,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 1,
         "name": "shop",
         "label": "Shop",
         "slug": "/shop",
-        "title": "Shop Page",
+        "title": "Shop - All Products",
         "layout": {
           "id": 1,
           "name": "appLayout",
@@ -748,117 +308,52 @@
         },
         "is_active": 1,
         "type": "shop",
-        "thumbnail": null,
+        "thumbnail": "/themes/modern-ecommerce/previews/product-listing.jpg",
         "widgets": [
           {
             "id": 1,
-            "name": "pageBanner",
-            "label": "Page Banner",
+            "name": "productListing",
+            "label": "Product Listing",
             "serial": 1,
             "type": "section",
             "inputs": [
               {
                 "id": 1,
-                "name": "pageName",
-                "label": "Current Page Title",
-                "type": "text",
-                "value": "Shop Page",
-                "placeholder": "Enter page name"
+                "name": "products_per_page",
+                "label": "Products Per Page",
+                "type": "select",
+                "value": "24",
+                "options": [
+                  {"value": "12", "label": "12 Products"},
+                  {"value": "24", "label": "24 Products"},
+                  {"value": "36", "label": "36 Products"},
+                  {"value": "48", "label": "48 Products"}
+                ]
               },
               {
-                "id": 1,
-                "name": "currentPageBreadcrumbLabel",
-                "label": "Current Page Breadcrumb Label",
-                "type": "text",
-                "value": "Shop",
-                "placeholder": "Enter current page breadcrumb"
+                "id": 2,
+                "name": "show_filters",
+                "label": "Show Product Filters",
+                "type": "boolean",
+                "value": true
               },
               {
-                "id": 1,
-                "name": "bannerLink",
-                "label": "Banner link",
-                "type": "text",
-                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
-                "placeholder": "Enter banner url"
+                "id": 3,
+                "name": "show_sorting",
+                "label": "Show Sort Options",
+                "type": "boolean",
+                "value": true
               }
             ]
-          },
-          {
-            "id": 2,
-            "name": "allProducts",
-            "label": "All Products Section",
-            "serial": 2,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 2,
-        "name": "single-products",
-        "label": "Single-Products",
-        "slug": "/single-products",
-        "title": "Single Products Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "single-products",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "pageBanner",
-            "label": "Page Banner",
-            "serial": 1,
-            "type": "section",
-            "inputs": [
-              {
-                "id": 1,
-                "name": "pageName",
-                "label": "Current Page Title",
-                "type": "text",
-                "value": "Shop Page",
-                "placeholder": "Enter page name"
-              },
-              {
-                "id": 1,
-                "name": "currentPageBreadcrumbLabel",
-                "label": "Current Page Breadcrumb Label",
-                "type": "text",
-                "value": "Shop",
-                "placeholder": "Enter current page breadcrumb"
-              },
-              {
-                "id": 1,
-                "name": "bannerLink",
-                "label": "Banner link",
-                "type": "text",
-                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
-                "placeholder": "Enter banner url"
-              }
-            ]
-          },
-          {
-            "id": 2,
-            "name": "allProducts",
-            "label": "All Products Section",
-            "serial": 2,
-            "type": "section",
-            "inputs": []
           }
         ]
       },
       {
         "id": 3,
-        "name": "registration",
-        "label": "Registration Page",
-        "slug": "/register",
-        "title": "Registration Page",
+        "name": "product-detail",
+        "label": "Product Detail",
+        "slug": "/product/*",
+        "title": "Product Detail",
         "layout": {
           "id": 1,
           "name": "appLayout",
@@ -867,52 +362,52 @@
           "inputs": []
         },
         "is_active": 1,
-        "type": "register",
-        "thumbnail": null,
+        "type": "product-detail",
+        "thumbnail": "/themes/modern-ecommerce/previews/product-detail.jpg",
         "widgets": [
           {
             "id": 1,
-            "name": "registration",
-            "label": "Registration Page",
+            "name": "productDetail",
+            "label": "Product Detail",
             "serial": 1,
             "type": "section",
-            "inputs": []
+            "inputs": [
+              {
+                "id": 1,
+                "name": "show_related_products",
+                "label": "Show Related Products",
+                "type": "boolean",
+                "value": true
+              },
+              {
+                "id": 2,
+                "name": "show_reviews",
+                "label": "Show Product Reviews",
+                "type": "boolean",
+                "value": true
+              },
+              {
+                "id": 3,
+                "name": "gallery_style",
+                "label": "Image Gallery Style",
+                "type": "select",
+                "value": "thumbnails",
+                "options": [
+                  {"value": "thumbnails", "label": "Thumbnails"},
+                  {"value": "dots", "label": "Dots"},
+                  {"value": "arrows", "label": "Arrows Only"}
+                ]
+              }
+            ]
           }
         ]
       },
       {
         "id": 4,
-        "name": "registration",
-        "label": "Login Page",
-        "slug": "/login",
-        "title": "Login Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "login",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "login",
-            "label": "Login Page",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 5,
         "name": "cart",
-        "label": "Cart Page",
+        "label": "Shopping Cart",
         "slug": "/cart",
-        "title": "Cart Page",
+        "title": "Shopping Cart",
         "layout": {
           "id": 1,
           "name": "appLayout",
@@ -922,57 +417,89 @@
         },
         "is_active": 1,
         "type": "cart",
-        "thumbnail": null,
+        "thumbnail": "/themes/modern-ecommerce/previews/cart.jpg",
         "widgets": [
           {
             "id": 1,
-            "name": "pageBanner",
-            "label": "Page Banner",
+            "name": "cart",
+            "label": "Shopping Cart",
             "serial": 1,
             "type": "section",
             "inputs": [
               {
                 "id": 1,
-                "name": "pageName",
-                "label": "Current Page Title",
-                "type": "text",
-                "value": "Shop Page",
-                "placeholder": "Enter page name"
+                "name": "show_cross_sell",
+                "label": "Show Related Products",
+                "type": "boolean",
+                "value": true
               },
               {
-                "id": 1,
-                "name": "currentPageBreadcrumbLabel",
-                "label": "Current Page Breadcrumb Label",
-                "type": "text",
-                "value": "Shop",
-                "placeholder": "Enter current page breadcrumb"
-              },
-              {
-                "id": 1,
-                "name": "bannerLink",
-                "label": "Banner link",
-                "type": "text",
-                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
-                "placeholder": "Enter banner url"
+                "id": 2,
+                "name": "show_shipping_calculator",
+                "label": "Show Shipping Calculator",
+                "type": "boolean",
+                "value": true
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "name": "about",
+        "label": "About Us",
+        "slug": "/about",
+        "title": "About Us",
+        "layout": {
+          "id": 1,
+          "name": "appLayout",
+          "label": "App Layout",
+          "type": "layout",
+          "inputs": []
+        },
+        "is_active": 1,
+        "type": "page",
+        "thumbnail": null,
+        "widgets": [
           {
             "id": 1,
-            "name": "cart",
-            "label": "Cart Page",
+            "name": "aboutContent",
+            "label": "About Content",
             "serial": 1,
             "type": "section",
-            "inputs": []
+            "inputs": [
+              {
+                "id": 1,
+                "name": "company_story",
+                "label": "Company Story",
+                "type": "textarea",
+                "value": "Founded in 2020, Modern Store began as a small family business with a simple mission: to provide high-quality products at fair prices with exceptional customer service.",
+                "placeholder": "Enter company story"
+              },
+              {
+                "id": 2,
+                "name": "show_team_section",
+                "label": "Show Team Section",
+                "type": "boolean",
+                "value": true
+              },
+              {
+                "id": 3,
+                "name": "show_values_section",
+                "label": "Show Values Section",
+                "type": "boolean",
+                "value": true
+              }
+            ]
           }
         ]
       },
       {
         "id": 6,
-        "name": "checkout",
-        "label": "Checkout Page",
-        "slug": "/checkout",
-        "title": "Checkout Page",
+        "name": "contact",
+        "label": "Contact Us",
+        "slug": "/contact",
+        "title": "Contact Us",
         "layout": {
           "id": 1,
           "name": "appLayout",
@@ -981,157 +508,48 @@
           "inputs": []
         },
         "is_active": 1,
-        "type": "checkout",
+        "type": "contact",
         "thumbnail": null,
         "widgets": [
           {
             "id": 1,
-            "name": "pageBanner",
-            "label": "Page Banner",
+            "name": "contactForm",
+            "label": "Contact Form",
             "serial": 1,
             "type": "section",
             "inputs": [
               {
                 "id": 1,
-                "name": "pageName",
-                "label": "Current Page Title",
-                "type": "text",
-                "value": "Shop Page",
-                "placeholder": "Enter page name"
+                "name": "contact_email",
+                "label": "Contact Email",
+                "type": "email",
+                "value": "support@modernstore.com",
+                "placeholder": "Enter contact email"
               },
               {
-                "id": 1,
-                "name": "currentPageBreadcrumbLabel",
-                "label": "Current Page Breadcrumb Label",
+                "id": 2,
+                "name": "phone_number",
+                "label": "Phone Number",
                 "type": "text",
-                "value": "Shop",
-                "placeholder": "Enter current page breadcrumb"
+                "value": "+1 (555) 123-4567",
+                "placeholder": "Enter phone number"
               },
               {
-                "id": 1,
-                "name": "bannerLink",
-                "label": "Banner link",
-                "type": "text",
-                "value": "https://i.ibb.co.com/N6F5H9Tq/shop-banner-1.jpg",
-                "placeholder": "Enter banner url"
+                "id": 3,
+                "name": "address",
+                "label": "Business Address",
+                "type": "textarea",
+                "value": "123 Business St, Suite 100\nNew York, NY 10001",
+                "placeholder": "Enter business address"
+              },
+              {
+                "id": 4,
+                "name": "show_map",
+                "label": "Show Map",
+                "type": "boolean",
+                "value": true
               }
             ]
-          },
-          {
-            "id": 1,
-            "name": "placeOrder",
-            "label": "Place Order Page",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 7,
-        "name": "orderSuccess",
-        "label": "Order Success Page",
-        "slug": "/order-success",
-        "title": "Order Success Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "orderSuccess",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "orderSuccess",
-            "label": "Order Success",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 8,
-        "name": "myProfile",
-        "label": "My Profile Page",
-        "slug": "/my-profile",
-        "title": "My Profile Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "my-profile",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "myProfile",
-            "label": "My Profile",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 9,
-        "name": "myOrders",
-        "label": "My Orders Page",
-        "slug": "/my-orders",
-        "title": "My Orders Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "my-orders",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "myOrders",
-            "label": "My Orders",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
-          }
-        ]
-      },
-      {
-        "id": 10,
-        "name": "trackOrders",
-        "label": "Track Orders Page",
-        "slug": "/track-orders",
-        "title": "track Orders Page",
-        "layout": {
-          "id": 1,
-          "name": "appLayout",
-          "label": "App Layout",
-          "type": "layout",
-          "inputs": []
-        },
-        "is_active": 1,
-        "type": "track-orders",
-        "thumbnail": null,
-        "widgets": [
-          {
-            "id": 1,
-            "name": "trackOrders",
-            "label": "Track Orders",
-            "serial": 1,
-            "type": "section",
-            "inputs": []
           }
         ]
       }

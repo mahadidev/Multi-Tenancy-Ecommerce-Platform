@@ -12,6 +12,8 @@ class StoreWebsite extends Model
     protected $fillable = [
         'store_id',
         'template_id',
+        'theme_id',
+        'theme_customization_id',
         'domain',
         'subdomain',
         'title',
@@ -20,6 +22,8 @@ class StoreWebsite extends Model
         'seo_meta',
         'global_styles',
         'analytics_settings',
+        'header_data',
+        'footer_data',
         'is_published',
         'published_at',
         'is_maintenance_mode',
@@ -31,6 +35,8 @@ class StoreWebsite extends Model
         'seo_meta' => 'json',
         'global_styles' => 'json',
         'analytics_settings' => 'json',
+        'header_data' => 'json',
+        'footer_data' => 'json',
         'is_published' => 'boolean',
         'published_at' => 'datetime',
         'is_maintenance_mode' => 'boolean',
@@ -45,6 +51,16 @@ class StoreWebsite extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(WebsiteTemplate::class, 'template_id');
+    }
+
+    public function theme(): BelongsTo
+    {
+        return $this->belongsTo(Theme::class, 'theme_id');
+    }
+
+    public function themeCustomization(): BelongsTo
+    {
+        return $this->belongsTo(ThemeCustomization::class, 'theme_customization_id');
     }
 
     public function pages(): HasMany

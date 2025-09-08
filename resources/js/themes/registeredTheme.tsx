@@ -1,7 +1,4 @@
 import { ThemeLayoutPropsType, ThemeWidgetPropsType } from "@type/themeType";
-import { RapidShopper } from "./RapidShopper/RapidShopper";
-import { Simfy } from "./Simfy/Simfy";
-import { BoroBazar } from "./BoroBazar/BoroBazar";
 
 export interface RegisteredThemeType {
     name: string;
@@ -12,8 +9,7 @@ export interface RegisteredThemeType {
 export const registeredTheme: {
     [Key: string]: RegisteredThemeType;
 } = {
-    Simfy: Simfy,
-    RapidShopper: RapidShopper,
-    BoroBazar: BoroBazar,
-    // register new theme
+    // Add new themes here when they are created
+    // Example:
+    // ModernEcommerce: ModernEcommerce,
 };

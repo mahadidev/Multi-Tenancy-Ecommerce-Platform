@@ -24,6 +24,7 @@ import {
     EditorRoutes,
     OnboardRoutes,
     WebsiteBuilderRoutes,
+    CGBuilderRoutes,
 } from './Routes';
 
 const App: FC = function () {
@@ -69,6 +70,9 @@ const App: FC = function () {
                         {/* Settings & Configuration */}
                         {SettingsRoutes}
                     </Route>
+
+                    {/* CG Builder - Independent Layout */}
+                    {CGBuilderRoutes}
 
                     {/* Editor & Special Layouts */}
                     {EditorRoutes}

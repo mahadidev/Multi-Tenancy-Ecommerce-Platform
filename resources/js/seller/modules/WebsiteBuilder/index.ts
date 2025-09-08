@@ -1,5 +1,5 @@
 export { default as WebsiteBuilderPage } from './pages/WebsiteBuilderPage';
-export { default as DragDropPageBuilder } from './components/DragDropPageBuilder';
+// DragDropPageBuilder removed - replaced by UnifiedPageBuilder in CG Builder
 
 export * from './types';
 export * from './store/websiteBuilderApi';

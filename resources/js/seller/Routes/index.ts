@@ -10,3 +10,4 @@ export { SubscriptionRoutes } from './Subscription/SubscriptionRoutes';
 export { EditorRoutes } from './Editor/EditorRoutes';
 export { OnboardRoutes } from './Onboard/OnboardRoutes';
 export { WebsiteBuilderRoutes } from './WebsiteBuilder/WebsiteBuilderRoutes';
+export { CGBuilderRoutes } from './CGBuilder/CGBuilderRoutes';

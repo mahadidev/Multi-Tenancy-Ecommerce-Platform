@@ -27,10 +27,7 @@ const WebsiteEditPage: React.FC = () => {
     websiteIdNum,
     { skip: websiteIdNum === 0 }
   );
-  const { data: pagesData, isLoading: pagesLoading } = useGetPagesQuery(
-    websiteIdNum,
-    { skip: websiteIdNum === 0 }
-  );
+  const { data: pagesData, isLoading: pagesLoading } = useGetPagesQuery();
 
   // Mutations
   const [updateWebsite] = useUpdateWebsiteMutation();

@@ -1,0 +1,146 @@
+{
+  "name": "Modern E-commerce",
+  "slug": "modern-ecommerce", 
+  "version": "1.0.0",
+  "description": "A complete modern e-commerce theme with clean design and powerful features",
+  "author": "CG Builder Team",
+  "preview_image": "/themes/modern-ecommerce/preview.jpg",
+  "preview_images": [
+    "/themes/modern-ecommerce/previews/homepage.jpg",
+    "/themes/modern-ecommerce/previews/product-listing.jpg", 
+    "/themes/modern-ecommerce/previews/product-detail.jpg",
+    "/themes/modern-ecommerce/previews/cart.jpg"
+  ],
+  "category": "e-commerce",
+  "tags": ["modern", "clean", "responsive", "shop", "store"],
+  "is_premium": false,
+  "price": 0,
+  "features": [
+    "Responsive Design",
+    "Product Catalog",
+    "Shopping Cart",
+    "Checkout Process",
+    "User Authentication",
+    "Search & Filters",
+    "Product Reviews",
+    "Wishlist",
+    "Multi-category Support",
+    "SEO Optimized"
+  ],
+  "demo_url": "https://demo.modernstore.com",
+  "documentation_url": "https://docs.cgbuilder.com/themes/modern-ecommerce",
+  "support": {
+    "email": "support@cgbuilder.com",
+    "documentation": true,
+    "forum": true
+  },
+  "requirements": {
+    "php": "8.0+",
+    "laravel": "10.0+",
+    "extensions": ["gd", "curl", "json"]
+  },
+  "customization": {
+    "colors": {
+      "primary": "#2563eb",
+      "secondary": "#64748b", 
+      "accent": "#f59e0b",
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444"
+    },
+    "fonts": {
+      "primary": "Inter",
+      "headings": "Poppins"
+    },
+    "layout": {
+      "container_width": "1200px",
+      "sidebar_width": "280px",
+      "header_height": "80px"
+    }
+  },
+  "pages": [
+    {
+      "slug": "homepage",
+      "title": "Homepage", 
+      "type": "homepage",
+      "is_homepage": true,
+      "template": "homepage.json"
+    },
+    {
+      "slug": "shop",
+      "title": "Shop",
+      "type": "product-listing",
+      "template": "product-listing.json"
+    },
+    {
+      "slug": "product-detail",
+      "title": "Product Detail",
+      "type": "product-detail", 
+      "template": "product-detail.json"
+    },
+    {
+      "slug": "cart",
+      "title": "Shopping Cart",
+      "type": "cart",
+      "template": "cart.json"
+    },
+    {
+      "slug": "checkout", 
+      "title": "Checkout",
+      "type": "checkout",
+      "template": "checkout.json"
+    },
+    {
+      "slug": "about",
+      "title": "About Us",
+      "type": "page",
+      "template": "about.json"
+    },
+    {
+      "slug": "contact",
+      "title": "Contact Us", 
+      "type": "page",
+      "template": "contact.json"
+    }
+  ],
+  "menus": [
+    {
+      "location": "header",
+      "name": "Main Navigation",
+      "items": [
+        { "label": "Home", "url": "/", "type": "page" },
+        { "label": "Shop", "url": "/shop", "type": "page" },
+        { "label": "Categories", "url": "#", "type": "dropdown", "children": [
+          { "label": "Electronics", "url": "/shop?category=electronics" },
+          { "label": "Clothing", "url": "/shop?category=clothing" },
+          { "label": "Home & Garden", "url": "/shop?category=home-garden" },
+          { "label": "Sports", "url": "/shop?category=sports" }
+        ]},
+        { "label": "About", "url": "/about", "type": "page" },
+        { "label": "Contact", "url": "/contact", "type": "page" }
+      ]
+    },
+    {
+      "location": "footer",
+      "name": "Footer Links",
+      "items": [
+        { "label": "Privacy Policy", "url": "/privacy" },
+        { "label": "Terms of Service", "url": "/terms" },
+        { "label": "Shipping Info", "url": "/shipping" },
+        { "label": "Returns", "url": "/returns" }
+      ]
+    }
+  ],
+  "widgets": [
+    "product-grid",
+    "product-carousel", 
+    "category-list",
+    "search-bar",
+    "cart-widget",
+    "user-account",
+    "newsletter-signup",
+    "social-links",
+    "testimonials",
+    "brand-logos"
+  ]
+}

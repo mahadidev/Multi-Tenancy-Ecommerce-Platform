@@ -19,8 +19,8 @@ class ThemeSeeder extends Seeder
      */
     public function run(): void
     {
-        $simfy_commerce = file_get_contents('resources/js/themes/themesSeeder.json');
-        $themes = json_decode($simfy_commerce);
+        $themes_json = file_get_contents('resources/js/themes/themesSeeder.json');
+        $themes = json_decode($themes_json);
 
         foreach ($themes as $key => $theme) {
             $newTheme = Theme::updateOrCreate(

@@ -134,7 +134,7 @@ const WebsiteManagementPage: React.FC = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <div
                 onClick={() => navigate(`/websites/${mainWebsite.id}/pages`)}
                 className="bg-white rounded-lg shadow p-6 cursor-pointer hover:shadow-md transition-shadow"
@@ -200,6 +200,23 @@ const WebsiteManagementPage: React.FC = () => {
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Page Builder</h3>
                     <p className="text-sm text-gray-500">Visual page builder</p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                onClick={() => navigate('/cg-builder')}
+                className="bg-white rounded-lg shadow p-6 cursor-pointer hover:shadow-md transition-shadow border-2 border-blue-200 hover:border-blue-300"
+              >
+                <div className="flex items-center">
+                  <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-3">
+                    <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-medium text-gray-900">CG Builder</h3>
+                    <p className="text-sm text-gray-500">Advanced building platform</p>
                   </div>
                 </div>
               </div>

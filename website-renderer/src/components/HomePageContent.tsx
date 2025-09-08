@@ -104,7 +104,11 @@ export function HomePageContent() {
 
   return (
     <WebsiteLayout website={data.website} page={data.page}>
-      <PageRenderer page={data.page} websiteSubdomain={subdomain!} />
+      <PageRenderer 
+        page={data.page} 
+        websiteSubdomain={subdomain!}
+        websiteMenus={data.website.menus}
+      />
     </WebsiteLayout>
   );
 }

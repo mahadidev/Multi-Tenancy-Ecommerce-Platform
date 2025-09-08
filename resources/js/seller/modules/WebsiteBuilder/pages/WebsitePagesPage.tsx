@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   useGetPagesQuery,
@@ -15,14 +15,12 @@ const WebsitePagesPage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedPage, setSelectedPage] = useState<any>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [dropdownOpenPageId, setDropdownOpenPageId] = useState<number | null>(null);
 
   const websiteIdNum = websiteId ? parseInt(websiteId, 10) : 0;
 
   // API queries
-  const { data: pagesData, isLoading, refetch } = useGetPagesQuery(
-    websiteIdNum,
-    { skip: websiteIdNum === 0 }
-  );
+  const { data: pagesData, isLoading, refetch } = useGetPagesQuery();
 
   // Mutations
   const [createPage] = useCreatePageMutation();
@@ -107,6 +105,33 @@ const WebsitePagesPage: React.FC = () => {
   const handleEditPage = (page: any) => {
     navigate(`/websites/${websiteId}/pages/${page.id}/builder`);
   };
+
+  const handleEditWithCGBuilder = (page: any) => {
+    navigate(`/cg-builder/page/${websiteId}/${page.id}`);
+  };
+
+  const handleEditWithElementor = (page: any) => {
+    navigate(`/cg-builder/elementor/${websiteId}/${page.id}`);
+  };
+
+  const toggleDropdown = (pageId: number) => {
+    setDropdownOpenPageId(dropdownOpenPageId === pageId ? null : pageId);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setDropdownOpenPageId(null);
+    };
+
+    if (dropdownOpenPageId !== null) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [dropdownOpenPageId]);
 
   if (isLoading) {
     return (
@@ -262,12 +287,63 @@ const WebsitePagesPage: React.FC = () => {
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <button
-                        onClick={() => handleEditPage(page)}
-                        className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700"
-                      >
-                        Edit Content
-                      </button>
+                      <div className="relative">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleDropdown(page.id);
+                          }}
+                          className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 flex items-center space-x-1"
+                        >
+                          <span>Edit Content</span>
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        
+                        {dropdownOpenPageId === page.id && (
+                          <div className="absolute left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-10">
+                            <div className="py-1">
+                              <button
+                                onClick={() => {
+                                  handleEditPage(page);
+                                  setDropdownOpenPageId(null);
+                                }}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a1 1 0 01-1-1V9a1 1 0 011-1h1a2 2 0 100-4H4a1 1 0 01-1-1V4a1 1 0 011-1h3a1 1 0 001-1v-1a2 2 0 114 0z" />
+                                </svg>
+                                Standard Builder
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleEditWithCGBuilder(page);
+                                  setDropdownOpenPageId(null);
+                                }}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <div className="w-4 h-4 mr-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">CG</span>
+                                </div>
+                                CG Builder
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleEditWithElementor(page);
+                                  setDropdownOpenPageId(null);
+                                }}
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <div className="w-4 h-4 mr-2 bg-purple-600 rounded flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">E</span>
+                                </div>
+                                Elementor Builder
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       
                       <div className="flex items-center space-x-1">
                         <button

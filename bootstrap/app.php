@@ -9,6 +9,7 @@ use App\Http\Middleware\StoreMiddleware;
 use App\Http\Middleware\TrackStoreVisitor;
 use App\Http\Middleware\CheckCustomPermission;
 use App\Http\Middleware\CheckCustomRole;
+use App\Http\Middleware\HookRateLimit;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'hook.rate_limit' => HookRateLimit::class,
         ]);
         $middleware->api(prepend: [
             \Illuminate\Session\Middleware\StartSession::class,

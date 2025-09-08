@@ -13,10 +13,12 @@ class WebsitePage extends Model
         'title',
         'slug',
         'description',
+        'content',
         'type',
         'seo_meta',
         'is_published',
         'is_homepage',
+        'access_level',
         'sort_order',
         'meta_data',
     ];
@@ -56,6 +58,19 @@ class WebsitePage extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order');
+    }
+
+    public function scopeAccessibleTo($query, bool $isAuthenticated)
+    {
+        return $query->where(function ($q) use ($isAuthenticated) {
+            $q->where('access_level', 'all')
+              ->when($isAuthenticated, function ($query) {
+                  $query->orWhere('access_level', 'user');
+              })
+              ->when(!$isAuthenticated, function ($query) {
+                  $query->orWhere('access_level', 'guest');
+              });
+        });
     }
 
     public function getFullUrlAttribute(): string

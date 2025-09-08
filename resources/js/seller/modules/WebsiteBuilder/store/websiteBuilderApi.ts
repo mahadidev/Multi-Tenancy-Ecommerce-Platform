@@ -99,17 +99,17 @@ export const websiteBuilderApi = createApi({
     }),
 
     // Pages
-    getPages: builder.query<{ data: WebsitePage[] }, number>({
-      query: (websiteId) => `/websites/${websiteId}/pages`,
-      providesTags: (result, error, websiteId) => [
+    getPages: builder.query<{ data: WebsitePage[] }, void>({
+      query: () => `/pages`,
+      providesTags: (result) => [
         { type: 'Page', id: 'LIST' },
         ...(result?.data || []).map(({ id }) => ({ type: 'Page' as const, id })),
       ],
     }),
 
-    getPage: builder.query<{ data: WebsitePage }, { websiteId: number; pageId: number }>({
-      query: ({ websiteId, pageId }) => `/websites/${websiteId}/pages/${pageId}`,
-      providesTags: (result, error, { pageId }) => [{ type: 'Page', id: pageId }],
+    getPage: builder.query<{ data: WebsitePage }, number>({
+      query: (pageId) => `/pages/${pageId}`,
+      providesTags: (result, error, pageId) => [{ type: 'Page', id: pageId }],
     }),
 
     createPage: builder.mutation<{ data: WebsitePage }, {
@@ -418,6 +418,48 @@ export const websiteBuilderApi = createApi({
       }),
       invalidatesTags: ['Menu'],
     }),
+
+    // Header and Footer
+    getHeader: builder.query<{ data: any }, number>({
+      query: (websiteId) => `/websites/${websiteId}/header`,
+      providesTags: (result, error, websiteId) => [{ type: 'Website', id: `${websiteId}-header` }],
+    }),
+
+    updateHeader: builder.mutation<{ data: any }, { websiteId: number; data: any }>({
+      query: ({ websiteId, data }) => ({
+        url: `/websites/${websiteId}/header`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { websiteId }) => [{ type: 'Website', id: `${websiteId}-header` }],
+    }),
+
+    getFooter: builder.query<{ data: any }, number>({
+      query: (websiteId) => `/websites/${websiteId}/footer`,
+      providesTags: (result, error, websiteId) => [{ type: 'Website', id: `${websiteId}-footer` }],
+    }),
+
+    updateFooter: builder.mutation<{ data: any }, { websiteId: number; data: any }>({
+      query: ({ websiteId, data }) => ({
+        url: `/websites/${websiteId}/footer`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { websiteId }) => [{ type: 'Website', id: `${websiteId}-footer` }],
+    }),
+
+    // Elementor page data
+    saveElementorPageData: builder.mutation<
+      { status: number; message: string; data: any }, 
+      { pageId: number; sections: any[]; deviceSettings?: any }
+    >({
+      query: ({ pageId, sections, deviceSettings }) => ({
+        url: `/website-builder/pages/${pageId}/elementor-data`,
+        method: 'PUT',
+        body: { sections, deviceSettings },
+      }),
+      invalidatesTags: (result, error, { pageId }) => [{ type: 'Page', id: pageId }],
+    }),
   }),
 });
 
@@ -481,4 +523,13 @@ export const {
   useCreateWebsiteMenuMutation,
   useUpdateWebsiteMenuMutation,
   useDeleteWebsiteMenuMutation,
+
+  // Header and Footer
+  useGetHeaderQuery,
+  useUpdateHeaderMutation,
+  useGetFooterQuery,
+  useUpdateFooterMutation,
+
+  // Elementor page data
+  useSaveElementorPageDataMutation,
 } = websiteBuilderApi;

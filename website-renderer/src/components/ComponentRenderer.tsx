@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PageComponent } from '@/types';
+import { PageComponent, WebsiteMenu } from '@/types';
 import { HeroSection } from './widgets/HeroSection';
 import { HeroBanner } from './widgets/HeroBanner';
 import { HeroSlider } from './widgets/HeroSlider';
@@ -16,10 +16,16 @@ import { TestimonialBlock } from './widgets/TestimonialBlock';
 import { FeaturesList } from './widgets/FeaturesList';
 import { FeatureCards } from './widgets/FeatureCards';
 import { NewsletterSignup } from './widgets/NewsletterSignup';
+import { LoginForm } from './widgets/LoginForm';
+import { SignupForm } from './widgets/SignupForm';
+import { ProfileForm } from './widgets/ProfileForm';
+import { CartPage } from './widgets/CartPage';
+import { BreadcrumbWidget } from './widgets/BreadcrumbWidget';
 
 interface ComponentRendererProps {
   component: PageComponent;
   websiteSubdomain: string;
+  websiteMenus?: WebsiteMenu[];
 }
 
 const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
@@ -45,6 +51,17 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   'testimonial-block': TestimonialBlock,
   'newsletter-signup': NewsletterSignup,
   
+  // Authentication components
+  'login-form': LoginForm,
+  'signup-form': SignupForm,
+  'profile-form': ProfileForm,
+  
+  // E-commerce components
+  'cart-page': CartPage,
+  
+  // Navigation components
+  'breadcrumb': BreadcrumbWidget,
+  
   // Navigation components (TODO: implement these)
   'navigation-bar': TextBlock, // Placeholder
   'modern-footer': TextBlock, // Placeholder
@@ -52,7 +69,7 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   'testimonials': TestimonialBlock, // Use existing testimonial block
 };
 
-export function ComponentRenderer({ component, websiteSubdomain }: ComponentRendererProps) {
+export function ComponentRenderer({ component, websiteSubdomain, websiteMenus = [] }: ComponentRendererProps) {
   // Treat undefined as visible (default to true if not explicitly set to false)
   const isVisible = component.is_visible !== false;
   
@@ -131,14 +148,17 @@ export function ComponentRenderer({ component, websiteSubdomain }: ComponentRend
   const containerClasses = getResponsiveClasses(component.responsive_settings);
   const animationClasses = getAnimationClasses(component.animation_settings);
 
+  const inlineStyles = getInlineStyles(component.styles);
+
   return (
     <div 
       className={`${containerClasses} ${animationClasses}`}
-      style={component.styles}
+      style={inlineStyles}
     >
       <ComponentToRender 
         {...component.props}
         websiteSubdomain={websiteSubdomain}
+        websiteMenus={websiteMenus}
         componentId={component.id}
       />
     </div>
@@ -179,4 +199,22 @@ function getAnimationClasses(animationSettings?: Record<string, any>): string {
   }
 
   return classes.join(' ');
+}
+
+function getInlineStyles(styles?: Record<string, any>): React.CSSProperties {
+  if (!styles) return {};
+
+  const inlineStyles: React.CSSProperties = {};
+
+  // Only include styles that don't start with a CSS selector (., #, etc.)
+  Object.entries(styles).forEach(([key, value]) => {
+    // Skip CSS selectors (keys starting with ., #, :, etc.)
+    if (!key.startsWith('.') && !key.startsWith('#') && !key.startsWith(':') && !key.includes(' ')) {
+      // Convert kebab-case to camelCase for React styles
+      const camelCaseKey = key.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+      inlineStyles[camelCaseKey as keyof React.CSSProperties] = value;
+    }
+  });
+
+  return inlineStyles;
 }

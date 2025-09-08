@@ -27,6 +27,29 @@ class WebsiteRenderController extends Controller
         $this->renderService = $renderService;
     }
 
+    /**
+     * Add cache control headers to response when caching is disabled
+     */
+    private function addCacheHeaders(JsonResponse $response): JsonResponse
+    {
+        $disableCache = request()->header('X-Disable-Cache') === '1' 
+            || request()->has('_t') 
+            || request()->has('_r')
+            || env('DISABLE_CACHE', false);
+
+        if ($disableCache) {
+            $response->headers->add([
+                'Cache-Control' => 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+                'X-Cache-Status' => 'DISABLED',
+                'X-Timestamp' => time(),
+            ]);
+        }
+
+        return $response;
+    }
+
     public function renderHomepage(string $subdomain): JsonResponse
     {
         try {
@@ -69,13 +92,15 @@ class WebsiteRenderController extends Controller
             // Track page view
             $this->trackPageView($website, $homepage, request());
 
-            return response()->json([
+            $response = response()->json([
                 'status' => 200,
                 'data' => [
                     'website' => $this->getWebsiteData($website),
                     'page' => $renderedPage,
                 ]
             ]);
+
+            return $this->addCacheHeaders($response);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -114,13 +139,15 @@ class WebsiteRenderController extends Controller
             // Track page view
             $this->trackPageView($website, $page, request());
 
-            return response()->json([
+            $response = response()->json([
                 'status' => 200,
                 'data' => [
                     'website' => $this->getWebsiteData($website),
                     'page' => $renderedPage,
                 ]
             ]);
+
+            return $this->addCacheHeaders($response);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -202,10 +229,12 @@ class WebsiteRenderController extends Controller
 
             $products = $this->dataIntegrationService->getProducts($website->store, $filters);
 
-            return response()->json([
+            $response = response()->json([
                 'status' => 200,
                 'data' => $products
             ]);
+
+            return $this->addCacheHeaders($response);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -245,10 +274,12 @@ class WebsiteRenderController extends Controller
 
             $products = $this->dataIntegrationService->searchProducts($website->store, $query, $filters);
 
-            return response()->json([
+            $response = response()->json([
                 'status' => 200,
                 'data' => $products
             ]);
+
+            return $this->addCacheHeaders($response);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -260,6 +291,19 @@ class WebsiteRenderController extends Controller
 
     private function getWebsiteBySubdomain(string $subdomain): ?StoreWebsite
     {
+        // Check if cache should be disabled
+        $disableCache = request()->header('X-Disable-Cache') === '1' 
+            || request()->has('_t') 
+            || request()->has('_r')
+            || env('DISABLE_CACHE', false);
+
+        if ($disableCache) {
+            // Skip cache when disabled
+            return StoreWebsite::with(['store', 'pages.sections.components.componentType', 'menus', 'forms'])
+                ->where('subdomain', $subdomain)
+                ->first();
+        }
+
         $cacheKey = "website_subdomain_{$subdomain}";
         
         return Cache::remember($cacheKey, 300, function () use ($subdomain) {
@@ -281,6 +325,8 @@ class WebsiteRenderController extends Controller
             'favicon' => $website->favicon,
             'seo_meta' => $website->seo_meta,
             'global_styles' => $website->global_styles,
+            'header_data' => $website->header_data,
+            'footer_data' => $website->footer_data,
             'store' => $this->dataIntegrationService->getStoreInfo($website->store),
             'menus' => $website->menus->map(function ($menu) {
                 return [

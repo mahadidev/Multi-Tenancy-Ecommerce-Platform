@@ -159,13 +159,30 @@ export const permissionAwarePages: PermissionAwareSidebarItem[] = [
 		],
 	},
 
-	// Website Builder
+	// CG Builder - Complete Website Management System
 	{
-		href: RoutePath.WebsiteBuilder.index(),
 		icon: MdWeb,
-		label: 'Website Builder',
+		label: 'CG Builder',
 		// No permissions required initially - accessible to all users
 		// TODO: Add proper permissions when website permissions are implemented in backend
+		items: [
+			{
+				href: '/cg-builder',
+				label: 'Dashboard',
+			},
+			{
+				href: '/cg-builder/pages',
+				label: 'Pages',
+			},
+			{
+				href: '/cg-builder/layouts',
+				label: 'Layouts',
+			},
+			{
+				href: '/website-builder/themes',
+				label: 'Themes',
+			},
+		],
 	},
 ];
 
@@ -188,7 +205,7 @@ export const permissionAwareExternalPages: PermissionAwareSidebarItem[] = [
                 ],
             },
             {
-                href: '#',
+                href: '/cg-builder/menus',
                 label: 'Menus',
                 permissions: [
                     'menus.view', 'menus.create', 'menus.edit', 'menus.delete'

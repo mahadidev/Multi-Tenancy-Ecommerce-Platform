@@ -271,8 +271,8 @@ export const dummyStore: StoreType | any = {
     theme_id: 1,
     theme: {
         id: 1,
-        name: "Simfy",
-        slug: "simfy",
+        name: "Modern E-commerce",
+        slug: "modern-ecommerce",
         thumbnail: null,
         is_active: 1,
         pages: [

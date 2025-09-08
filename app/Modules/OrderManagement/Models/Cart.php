@@ -23,6 +23,15 @@ class Cart extends Model
         'options',
         'is_active',
     ];
+
+    protected $casts = [
+        'options' => 'array',
+        'price' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'vat' => 'decimal:2',
+        'total' => 'decimal:2',
+        'is_active' => 'boolean',
+    ];
     
     
     public function product(){

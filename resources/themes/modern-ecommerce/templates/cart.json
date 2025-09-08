@@ -1,0 +1,130 @@
+{
+  "page": {
+    "title": "Shopping Cart",
+    "slug": "cart",
+    "type": "cart",
+    "seo": {
+      "meta_title": "Shopping Cart - Modern Store",
+      "meta_description": "Review your selected items and proceed to checkout",
+      "meta_keywords": "shopping cart, checkout, review order"
+    }
+  },
+  "sections": [
+    {
+      "id": "page-header",
+      "name": "Page Header",
+      "type": "header",
+      "settings": {
+        "background_color": "gray-50",
+        "padding_top": "40px",
+        "padding_bottom": "40px"
+      },
+      "components": [
+        {
+          "type": "breadcrumb",
+          "content": {
+            "items": [
+              { "label": "Home", "url": "/" },
+              { "label": "Cart", "url": "/cart", "active": true }
+            ]
+          }
+        },
+        {
+          "type": "heading",
+          "content": {
+            "text": "Shopping Cart",
+            "tag": "h1",
+            "size": "3xl",
+            "color": "gray-900",
+            "weight": "bold",
+            "margin_top": "4"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cart-content",
+      "name": "Cart Content",
+      "type": "content",
+      "settings": {
+        "background_color": "white",
+        "padding_top": "40px",
+        "padding_bottom": "80px"
+      },
+      "components": [
+        {
+          "type": "cart-table",
+          "content": {
+            "columns": ["image", "product", "price", "quantity", "total", "remove"],
+            "show_product_image": true,
+            "show_product_variants": true,
+            "quantity_controls": true,
+            "remove_button": true,
+            "update_cart_button": true,
+            "continue_shopping_link": true
+          }
+        },
+        {
+          "type": "cart-summary",
+          "content": {
+            "position": "right",
+            "elements": [
+              "subtotal",
+              "shipping_calculator",
+              "tax_calculator", 
+              "discount_code",
+              "total",
+              "checkout_button",
+              "paypal_express",
+              "security_badges"
+            ],
+            "shipping_calculator": {
+              "enabled": true,
+              "fields": ["country", "state", "zip"]
+            },
+            "discount_code": {
+              "enabled": true,
+              "placeholder": "Enter discount code"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cross-sell-products",
+      "name": "You Might Also Like",
+      "type": "content",
+      "settings": {
+        "background_color": "gray-50",
+        "padding_top": "60px",
+        "padding_bottom": "60px"
+      },
+      "components": [
+        {
+          "type": "heading",
+          "content": {
+            "text": "You Might Also Like",
+            "tag": "h2",
+            "size": "2xl",
+            "color": "gray-900",
+            "weight": "bold",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "product-carousel",
+          "content": {
+            "products": "cross_sell",
+            "limit": 6,
+            "columns": 4,
+            "show_rating": true,
+            "show_price": true,
+            "show_cart_button": true,
+            "autoplay": false,
+            "margin_top": "8"
+          }
+        }
+      ]
+    }
+  ]
+}

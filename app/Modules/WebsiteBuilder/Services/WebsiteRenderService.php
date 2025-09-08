@@ -45,7 +45,9 @@ class WebsiteRenderService
                 'seo_meta' => $page->seo_meta,
                 'is_homepage' => $page->is_homepage,
                 'sections' => $renderedSections,
+                'content' => $page->content, // Add content field for Elementor data
                 'meta_data' => $page->meta_data,
+                'access_level' => $page->access_level,
             ];
         });
     }

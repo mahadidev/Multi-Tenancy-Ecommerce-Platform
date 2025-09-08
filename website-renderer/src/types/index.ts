@@ -9,6 +9,8 @@ export interface Website {
   seo_meta?: Record<string, any>;
   global_styles?: Record<string, any>;
   analytics_settings?: Record<string, any>;
+  header_data?: any | null;
+  footer_data?: any | null;
   store: StoreInfo;
   menus: WebsiteMenu[];
 }
@@ -33,8 +35,13 @@ export interface MenuItem {
   id: number;
   title: string;
   url: string;
-  type: 'page' | 'product' | 'category' | 'external';
+  type: 'page' | 'product' | 'category' | 'external' | 'custom';
   target?: '_blank' | '_self';
+  page_slug?: string;
+  product_slug?: string;
+  category_slug?: string;
+  is_active?: boolean;
+  visibility?: 'all' | 'logged_in' | 'guest';
   children?: MenuItem[];
 }
 
@@ -44,6 +51,7 @@ export interface WebsitePage {
   slug: string;
   description?: string;
   type: string;
+  access_level?: 'all' | 'guest' | 'user';
   seo_meta?: Record<string, any>;
   sections: PageSection[];
 }
@@ -98,6 +106,7 @@ export interface Product {
   description?: string;
   price: number;
   sale_price?: number;
+  thumbnail?: string;
   images: string[];
   slug: string;
   category?: ProductCategory;

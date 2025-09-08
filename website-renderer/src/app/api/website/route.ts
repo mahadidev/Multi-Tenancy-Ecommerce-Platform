@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const LARAVEL_API_BASE = process.env.LARAVEL_API_BASE || 'https://chologori.test/api';
+const LARAVEL_API_BASE = process.env['LARAVEL_API_BASE'] || 'http://localhost:8000/api';
+const DISABLE_CACHE = process.env['DISABLE_CACHE'] === 'true';
+const CACHE_REVALIDATE_TIME = parseInt(process.env['CACHE_REVALIDATE_TIME'] || '300');
+const ENABLE_CACHE_BUSTING = process.env['ENABLE_CACHE_BUSTING'] === 'true';
+
+// Next.js route segment config - must be static values
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -23,12 +30,23 @@ export async function GET(request: NextRequest) {
       apiUrl = `${LARAVEL_API_BASE}/website/render/${subdomain}/${slug}`;
     }
 
+    // Add cache busting parameters when enabled
+    if (ENABLE_CACHE_BUSTING) {
+      apiUrl += `?_t=${Date.now()}&_r=${Math.random()}`;
+    }
+
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        ...(DISABLE_CACHE ? {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'X-Disable-Cache': '1'
+        } : {})
       },
+      ...(DISABLE_CACHE ? { cache: 'no-store' } : {})
     });
 
     if (!response.ok) {
@@ -37,7 +55,28 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    
+    // Create response with appropriate headers
+    const nextResponse = NextResponse.json(data);
+    
+    // Control caching based on environment variables
+    if (DISABLE_CACHE) {
+      nextResponse.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate');
+      nextResponse.headers.set('Pragma', 'no-cache');
+      nextResponse.headers.set('Expires', '0');
+      nextResponse.headers.set('ETag', '');
+      nextResponse.headers.set('Last-Modified', '');
+      nextResponse.headers.set('X-Cache-Disabled', '1');
+      nextResponse.headers.set('X-Timestamp', Date.now().toString());
+      nextResponse.headers.set('Vary', '*');
+      // Add CORS headers to prevent browser preflight caching
+      nextResponse.headers.set('Access-Control-Max-Age', '0');
+    } else {
+      // Use configured cache revalidate time
+      nextResponse.headers.set('Cache-Control', `public, max-age=${CACHE_REVALIDATE_TIME}, stale-while-revalidate=60`);
+    }
+    
+    return nextResponse;
 
   } catch (error) {
     console.error('Error fetching website data:', error);

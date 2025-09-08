@@ -18,6 +18,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ page, onSave, onCancel }) => {
     featured_image: null as File | null,
     is_published: false,
     is_homepage: false,
+    access_level: 'all',
     template: 'default',
     custom_css: '',
     custom_js: '',
@@ -38,6 +39,7 @@ const PageEditor: React.FC<PageEditorProps> = ({ page, onSave, onCancel }) => {
         featured_image: null,
         is_published: page.is_published ?? false,
         is_homepage: page.is_homepage ?? false,
+        access_level: page.access_level || 'all',
         template: page.template || 'default',
         custom_css: page.custom_css || '',
         custom_js: page.custom_js || '',
@@ -251,6 +253,25 @@ const PageEditor: React.FC<PageEditorProps> = ({ page, onSave, onCancel }) => {
               Set as homepage
             </span>
           </label>
+
+          <div>
+            <label htmlFor="access_level" className="block text-sm font-medium text-gray-700 mb-2">
+              Page Access Level
+            </label>
+            <select
+              id="access_level"
+              value={formData.access_level}
+              onChange={(e) => setFormData(prev => ({ ...prev, access_level: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="all">All Visitors</option>
+              <option value="guest">Guest Users Only</option>
+              <option value="user">Logged In Users Only</option>
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              Control who can access this page. Guest pages are hidden when logged in, User pages require login.
+            </p>
+          </div>
         </div>
       </div>
 

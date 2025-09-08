@@ -60,8 +60,8 @@ class DataIntegrationService
                     'price' => $product->price,
                     'sale_price' => $product->sale_price,
                     'currency' => $product->currency,
-                    'images' => $product->images ? json_decode($product->images, true) : [],
-                    'thumbnail' => $product->thumbnail,
+                    'images' => $product->attachments_image,
+                    'thumbnail' => $product->thumbnail_image,
                     'category' => $product->category ? [
                         'id' => $product->category->id,
                         'name' => $product->category->name,
@@ -345,7 +345,7 @@ class DataIntegrationService
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'sale_price' => $product->sale_price,
-                'thumbnail' => $product->thumbnail,
+                'thumbnail' => $product->thumbnail_image,
                 'url' => url("/products/{$product->slug}"),
             ];
         })->toArray();

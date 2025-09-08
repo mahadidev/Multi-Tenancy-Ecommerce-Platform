@@ -48,6 +48,18 @@ class WebsitePageController extends Controller
             ->with(['sections.components.componentType'])
             ->findOrFail($pageId);
 
+        // Decode Elementor content if it exists
+        if ($page->content) {
+            try {
+                $page->elementor_data = json_decode($page->content, true);
+            } catch (\Exception $e) {
+                // If JSON decode fails, keep content as string
+                $page->elementor_data = null;
+            }
+        } else {
+            $page->elementor_data = null;
+        }
+
         return response()->json([
             'status' => 200,
             'message' => 'Page retrieved successfully',

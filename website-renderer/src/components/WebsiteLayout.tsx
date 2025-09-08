@@ -3,8 +3,12 @@
 import React from 'react';
 import Head from 'next/head';
 import { Website, WebsitePage } from '@/types';
-import { Navigation } from './Navigation';
-import { Footer } from './Footer';
+import { HeaderRenderer } from './HeaderRenderer';
+import { FooterRenderer } from './FooterRenderer';
+import { CartProvider, CartNotifications } from '@/contexts/CartContext';
+import { ToastProvider } from '@/contexts/ToastContext';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { CartSyncIndicator } from './CartSyncIndicator';
 
 interface WebsiteLayoutProps {
   website: Website;
@@ -22,7 +26,9 @@ export function WebsiteLayout({ website, page, children }: WebsiteLayoutProps) {
   const pageDescription = page.description || website.description || seoMeta.description;
 
   return (
-    <>
+    <AuthProvider subdomain={website.subdomain}>
+      <CartProvider subdomain={website.subdomain}>
+        <ToastProvider>
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -61,17 +67,17 @@ export function WebsiteLayout({ website, page, children }: WebsiteLayoutProps) {
         <link rel="canonical" href={`https://${website.full_domain}${page.slug === 'home' ? '' : `/${page.slug}`}`} />
         
         {/* Global Styles */}
-        {website.global_styles && (
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              :root {
-                ${Object.entries(website.global_styles).map(([key, value]) => 
-                  `--${key}: ${value};`
-                ).join('\n')}
-              }
-            `
-          }} />
-        )}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            :root {
+              /* Theme container width - defaults to 1140px but can be overridden */
+              --container-max-width: ${website.theme_settings?.containerWidth || '1140px'};
+              ${website.global_styles ? Object.entries(website.global_styles).map(([key, value]) => 
+                `--${key}: ${value};`
+              ).join('\n') : ''}
+            }
+          `
+        }} />
         
         {/* Analytics */}
         {website.analytics_settings?.google_analytics && (
@@ -96,7 +102,7 @@ export function WebsiteLayout({ website, page, children }: WebsiteLayoutProps) {
 
       <div className="website-container min-h-screen flex flex-col">
         {/* Header Navigation */}
-        <Navigation website={website} />
+        <HeaderRenderer website={website} />
         
         {/* Main Content */}
         <div className="flex-1">
@@ -104,8 +110,17 @@ export function WebsiteLayout({ website, page, children }: WebsiteLayoutProps) {
         </div>
         
         {/* Footer */}
-        <Footer website={website} />
+        <FooterRenderer website={website} />
+        
+        {/* Cart Notifications */}
+        <CartNotifications />
+        
+        {/* Cart Sync Indicator */}
+        <CartSyncIndicator />
+        
       </div>
-    </>
+        </ToastProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }

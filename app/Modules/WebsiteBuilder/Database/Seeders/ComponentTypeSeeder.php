@@ -15,8 +15,11 @@ class ComponentTypeSeeder extends Seeder
         $this->createEcommerceComponents();
         $this->createMediaComponents();
         $this->createFormComponents();
+        $this->createAuthComponents();
         $this->createFeatureComponents();
         $this->createTestimonialComponents();
+        $this->createFooterComponents();
+        $this->createHeaderComponents();
     }
 
     private function createHeroComponents(): void
@@ -762,6 +765,542 @@ class ComponentTypeSeeder extends Seeder
                 ],
                 'is_active' => true,
                 'sort_order' => 1,
+            ],
+        ];
+
+        foreach ($components as $component) {
+            ComponentType::updateOrCreate(
+                ['slug' => $component['slug']],
+                $component
+            );
+        }
+    }
+
+    private function createAuthComponents(): void
+    {
+        $formCategory = ComponentCategory::where('slug', 'forms')->first();
+        if (!$formCategory) return;
+
+        $components = [
+            [
+                'category_id' => $formCategory->id,
+                'name' => 'Login Form',
+                'slug' => 'login-form',
+                'description' => 'Customer login form with email and password',
+                'icon' => 'login',
+                'default_props' => [
+                    'title' => 'Sign In',
+                    'subtitle' => 'Welcome back! Please sign in to your account.',
+                    'button_text' => 'Sign In',
+                    'button_color' => '#3B82F6',
+                    'form_style' => 'card',
+                    'alignment' => 'center',
+                    'show_social_login' => false,
+                    'show_signup_link' => true,
+                    'signup_link_text' => "Don't have an account? Sign up",
+                    'signup_page_url' => '/signup',
+                    'show_forgot_password' => true,
+                    'redirect_after_login' => '/',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'title' => 'Form Title',
+                            'default' => 'Sign In',
+                        ],
+                        'subtitle' => [
+                            'type' => 'string',
+                            'title' => 'Subtitle',
+                            'default' => 'Welcome back! Please sign in to your account.',
+                        ],
+                        'button_text' => [
+                            'type' => 'string',
+                            'title' => 'Button Text',
+                            'default' => 'Sign In',
+                        ],
+                        'button_color' => [
+                            'type' => 'string',
+                            'title' => 'Button Color',
+                            'default' => '#3B82F6',
+                            'format' => 'color',
+                        ],
+                        'form_style' => [
+                            'type' => 'string',
+                            'title' => 'Form Style',
+                            'enum' => ['card', 'minimal', 'bordered'],
+                            'default' => 'card',
+                        ],
+                        'alignment' => [
+                            'type' => 'string',
+                            'title' => 'Alignment',
+                            'enum' => ['left', 'center', 'right'],
+                            'default' => 'center',
+                        ],
+                        'show_social_login' => [
+                            'type' => 'boolean',
+                            'title' => 'Show Social Login',
+                            'default' => false,
+                        ],
+                        'show_signup_link' => [
+                            'type' => 'boolean',
+                            'title' => 'Show Signup Link',
+                            'default' => true,
+                        ],
+                        'signup_page_url' => [
+                            'type' => 'string',
+                            'title' => 'Signup Page URL',
+                            'default' => '/signup',
+                        ],
+                        'show_forgot_password' => [
+                            'type' => 'boolean',
+                            'title' => 'Show Forgot Password',
+                            'default' => true,
+                        ],
+                        'redirect_after_login' => [
+                            'type' => 'string',
+                            'title' => 'Redirect After Login',
+                            'default' => '/',
+                        ],
+                    ],
+                ],
+                'template' => '<div class="login-form-wrapper">
+                    <div class="login-form">
+                        <h2>{{title}}</h2>
+                        <p>{{subtitle}}</p>
+                        <form>
+                            <input type="email" placeholder="Email Address" required />
+                            <input type="password" placeholder="Password" required />
+                            <button type="submit" style="background-color: {{button_color}}">{{button_text}}</button>
+                        </form>
+                    </div>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'category_id' => $formCategory->id,
+                'name' => 'Signup Form',
+                'slug' => 'signup-form',
+                'description' => 'Customer registration form with name, email, and password',
+                'icon' => 'user-plus',
+                'default_props' => [
+                    'title' => 'Create Account',
+                    'subtitle' => 'Join us today and get started!',
+                    'button_text' => 'Sign Up',
+                    'button_color' => '#3B82F6',
+                    'form_style' => 'card',
+                    'alignment' => 'center',
+                    'show_social_signup' => false,
+                    'show_login_link' => true,
+                    'login_link_text' => 'Already have an account? Sign in',
+                    'login_page_url' => '/login',
+                    'require_phone' => false,
+                    'show_terms' => true,
+                    'terms_text' => 'I agree to the Terms of Service and Privacy Policy',
+                    'terms_url' => '/terms',
+                    'privacy_url' => '/privacy',
+                    'show_name_fields' => 'full',
+                    'redirect_after_signup' => '/',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'title' => 'Form Title',
+                            'default' => 'Create Account',
+                        ],
+                        'subtitle' => [
+                            'type' => 'string',
+                            'title' => 'Subtitle',
+                            'default' => 'Join us today and get started!',
+                        ],
+                        'button_text' => [
+                            'type' => 'string',
+                            'title' => 'Button Text',
+                            'default' => 'Sign Up',
+                        ],
+                        'button_color' => [
+                            'type' => 'string',
+                            'title' => 'Button Color',
+                            'default' => '#3B82F6',
+                            'format' => 'color',
+                        ],
+                        'form_style' => [
+                            'type' => 'string',
+                            'title' => 'Form Style',
+                            'enum' => ['card', 'minimal', 'bordered'],
+                            'default' => 'card',
+                        ],
+                        'alignment' => [
+                            'type' => 'string',
+                            'title' => 'Alignment',
+                            'enum' => ['left', 'center', 'right'],
+                            'default' => 'center',
+                        ],
+                        'show_social_signup' => [
+                            'type' => 'boolean',
+                            'title' => 'Show Social Signup',
+                            'default' => false,
+                        ],
+                        'show_login_link' => [
+                            'type' => 'boolean',
+                            'title' => 'Show Login Link',
+                            'default' => true,
+                        ],
+                        'login_page_url' => [
+                            'type' => 'string',
+                            'title' => 'Login Page URL',
+                            'default' => '/login',
+                        ],
+                        'require_phone' => [
+                            'type' => 'boolean',
+                            'title' => 'Require Phone Number',
+                            'default' => false,
+                        ],
+                        'show_terms' => [
+                            'type' => 'boolean',
+                            'title' => 'Show Terms Agreement',
+                            'default' => true,
+                        ],
+                        'show_name_fields' => [
+                            'type' => 'string',
+                            'title' => 'Name Fields',
+                            'enum' => ['full', 'first_last', 'single'],
+                            'default' => 'full',
+                        ],
+                        'redirect_after_signup' => [
+                            'type' => 'string',
+                            'title' => 'Redirect After Signup',
+                            'default' => '/',
+                        ],
+                    ],
+                ],
+                'template' => '<div class="signup-form-wrapper">
+                    <div class="signup-form">
+                        <h2>{{title}}</h2>
+                        <p>{{subtitle}}</p>
+                        <form>
+                            <input type="text" placeholder="Full Name" required />
+                            <input type="email" placeholder="Email Address" required />
+                            <input type="password" placeholder="Password" required />
+                            <input type="password" placeholder="Confirm Password" required />
+                            <button type="submit" style="background-color: {{button_color}}">{{button_text}}</button>
+                        </form>
+                    </div>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 2,
+            ],
+        ];
+
+        foreach ($components as $component) {
+            ComponentType::updateOrCreate(
+                ['slug' => $component['slug']],
+                $component
+            );
+        }
+    }
+
+    private function createFooterComponents(): void
+    {
+        $footerCategory = ComponentCategory::where('slug', 'layout')->first() 
+            ?? ComponentCategory::first(); // Fallback if no layout category
+
+        if (!$footerCategory) return;
+
+        $components = [
+            [
+                'category_id' => $footerCategory->id,
+                'name' => 'logo',
+                'slug' => 'footer-logo',
+                'description' => 'Company logo with optional text',
+                'icon' => 'image',
+                'default_props' => [
+                    'show_image' => true,
+                    'show_text' => true,
+                    'text' => 'Your Store',
+                    'image_url' => '',
+                    'link' => '/',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'text' => ['type' => 'string', 'title' => 'Logo Text'],
+                        'image_url' => ['type' => 'string', 'title' => 'Logo Image URL'],
+                        'link' => ['type' => 'string', 'title' => 'Link URL'],
+                    ],
+                ],
+                'template' => '<div class="footer-logo">
+                    <a href="{{link}}">
+                        {{#if show_image}}<img src="{{image_url}}" alt="{{text}}" />{{/if}}
+                        {{#if show_text}}<span>{{text}}</span>{{/if}}
+                    </a>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'category_id' => $footerCategory->id,
+                'name' => 'links',
+                'slug' => 'footer-links',
+                'description' => 'List of footer navigation links',
+                'icon' => 'link',
+                'default_props' => [
+                    'title' => 'Quick Links',
+                    'links' => [
+                        ['label' => 'About Us', 'url' => '/about'],
+                        ['label' => 'Contact', 'url' => '/contact'],
+                        ['label' => 'Privacy Policy', 'url' => '/privacy'],
+                    ],
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => ['type' => 'string', 'title' => 'Section Title'],
+                        'links' => [
+                            'type' => 'array',
+                            'title' => 'Links',
+                            'items' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'label' => ['type' => 'string', 'title' => 'Link Text'],
+                                    'url' => ['type' => 'string', 'title' => 'URL'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'template' => '<div class="footer-links">
+                    <h4>{{title}}</h4>
+                    <ul>
+                        {{#each links}}
+                        <li><a href="{{url}}">{{label}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 2,
+            ],
+            [
+                'category_id' => $footerCategory->id,
+                'name' => 'social-icons',
+                'slug' => 'footer-social-icons',
+                'description' => 'Social media icons and links',
+                'icon' => 'share',
+                'default_props' => [
+                    'title' => 'Follow Us',
+                    'social_links' => [
+                        ['platform' => 'facebook', 'url' => '#', 'icon' => 'fab fa-facebook'],
+                        ['platform' => 'twitter', 'url' => '#', 'icon' => 'fab fa-twitter'],
+                        ['platform' => 'instagram', 'url' => '#', 'icon' => 'fab fa-instagram'],
+                    ],
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => ['type' => 'string', 'title' => 'Section Title'],
+                        'social_links' => [
+                            'type' => 'array',
+                            'title' => 'Social Links',
+                            'items' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'platform' => ['type' => 'string', 'title' => 'Platform'],
+                                    'url' => ['type' => 'string', 'title' => 'URL'],
+                                    'icon' => ['type' => 'string', 'title' => 'Icon Class'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'template' => '<div class="footer-social">
+                    <h4>{{title}}</h4>
+                    <div class="social-icons">
+                        {{#each social_links}}
+                        <a href="{{url}}" target="_blank" rel="noopener"><i class="{{icon}}"></i></a>
+                        {{/each}}
+                    </div>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 3,
+            ],
+            [
+                'category_id' => $footerCategory->id,
+                'name' => 'contact-info',
+                'slug' => 'footer-contact-info',
+                'description' => 'Contact information display',
+                'icon' => 'phone',
+                'default_props' => [
+                    'title' => 'Contact Us',
+                    'address' => '123 Main Street, City, State 12345',
+                    'phone' => '+1 (555) 123-4567',
+                    'email' => 'info@yourstore.com',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => ['type' => 'string', 'title' => 'Section Title'],
+                        'address' => ['type' => 'string', 'title' => 'Address'],
+                        'phone' => ['type' => 'string', 'title' => 'Phone'],
+                        'email' => ['type' => 'string', 'title' => 'Email'],
+                    ],
+                ],
+                'template' => '<div class="footer-contact">
+                    <h4>{{title}}</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> {{address}}</p>
+                        <p><i class="fas fa-phone"></i> {{phone}}</p>
+                        <p><i class="fas fa-envelope"></i> {{email}}</p>
+                    </div>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 4,
+            ],
+            [
+                'category_id' => $footerCategory->id,
+                'name' => 'newsletter-signup',
+                'slug' => 'footer-newsletter-signup',
+                'description' => 'Newsletter subscription form',
+                'icon' => 'mail',
+                'default_props' => [
+                    'title' => 'Newsletter',
+                    'description' => 'Subscribe to get the latest updates and offers.',
+                    'placeholder' => 'Enter your email',
+                    'button_text' => 'Subscribe',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => ['type' => 'string', 'title' => 'Section Title'],
+                        'description' => ['type' => 'string', 'title' => 'Description'],
+                        'placeholder' => ['type' => 'string', 'title' => 'Input Placeholder'],
+                        'button_text' => ['type' => 'string', 'title' => 'Button Text'],
+                    ],
+                ],
+                'template' => '<div class="footer-newsletter">
+                    <h4>{{title}}</h4>
+                    <p>{{description}}</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="{{placeholder}}" required />
+                        <button type="submit">{{button_text}}</button>
+                    </form>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 5,
+            ],
+            [
+                'category_id' => $footerCategory->id,
+                'name' => 'copyright',
+                'slug' => 'footer-copyright',
+                'description' => 'Copyright notice',
+                'icon' => 'copyright',
+                'default_props' => [
+                    'text' => 'All rights reserved.',
+                    'show_year' => true,
+                    'company_name' => 'Your Store',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'text' => ['type' => 'string', 'title' => 'Copyright Text'],
+                        'show_year' => ['type' => 'boolean', 'title' => 'Show Current Year'],
+                        'company_name' => ['type' => 'string', 'title' => 'Company Name'],
+                    ],
+                ],
+                'template' => '<div class="footer-copyright">
+                    <p>{{#if show_year}}© {{current_year}} {{/if}}{{company_name}}. {{text}}</p>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 6,
+            ],
+        ];
+
+        foreach ($components as $component) {
+            ComponentType::updateOrCreate(
+                ['slug' => $component['slug']],
+                $component
+            );
+        }
+    }
+
+    private function createHeaderComponents(): void
+    {
+        $headerCategory = ComponentCategory::where('slug', 'layout')->first() 
+            ?? ComponentCategory::first(); // Fallback if no layout category
+
+        if (!$headerCategory) return;
+
+        $components = [
+            [
+                'category_id' => $headerCategory->id,
+                'name' => 'logo',
+                'slug' => 'header-logo',
+                'description' => 'Header logo component',
+                'icon' => 'image',
+                'default_props' => [
+                    'text' => 'Your Store',
+                    'show_image' => true,
+                    'show_text' => true,
+                    'link' => '/',
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'text' => ['type' => 'string', 'title' => 'Logo Text'],
+                        'link' => ['type' => 'string', 'title' => 'Link URL'],
+                    ],
+                ],
+                'template' => '<div class="header-logo">
+                    <a href="{{link}}">
+                        {{#if show_image}}<img src="{{image_url}}" alt="{{text}}" />{{/if}}
+                        {{#if show_text}}<span>{{text}}</span>{{/if}}
+                    </a>
+                </div>',
+                'is_active' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'category_id' => $headerCategory->id,
+                'name' => 'navigation',
+                'slug' => 'header-navigation',
+                'description' => 'Header navigation menu',
+                'icon' => 'menu',
+                'default_props' => [
+                    'menu_items' => [
+                        ['label' => 'Home', 'url' => '/'],
+                        ['label' => 'Shop', 'url' => '/shop'],
+                        ['label' => 'About', 'url' => '/about'],
+                        ['label' => 'Contact', 'url' => '/contact'],
+                    ],
+                ],
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'menu_items' => [
+                            'type' => 'array',
+                            'title' => 'Menu Items',
+                            'items' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'label' => ['type' => 'string', 'title' => 'Label'],
+                                    'url' => ['type' => 'string', 'title' => 'URL'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'template' => '<nav class="header-navigation">
+                    <ul>
+                        {{#each menu_items}}
+                        <li><a href="{{url}}">{{label}}</a></li>
+                        {{/each}}
+                    </ul>
+                </nav>',
+                'is_active' => true,
+                'sort_order' => 2,
             ],
         ];
 

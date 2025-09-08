@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { apiClient } from '@/lib/api';
 import { Product } from '@/types';
+import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/contexts/ToastContext';
 
 interface ProductGridProps {
   title?: string;
@@ -128,6 +130,7 @@ export function ProductGrid({
               showPrice={show_price}
               showDescription={show_description}
               showAddToCart={show_add_to_cart}
+              websiteSubdomain={websiteSubdomain}
             />
           ))}
         </div>
@@ -147,11 +150,35 @@ interface ProductCardProps {
   showPrice: boolean;
   showDescription: boolean;
   showAddToCart: boolean;
+  websiteSubdomain?: string;
 }
 
-function ProductCard({ product, showPrice, showDescription, showAddToCart }: ProductCardProps) {
-  const primaryImage = product.images?.[0] || '/placeholder-product.jpg';
+function ProductCard({ product, showPrice, showDescription, showAddToCart, websiteSubdomain }: ProductCardProps) {
+  const primaryImage = product.thumbnail || product.images?.[0] || '/placeholder-product.jpg';
   const hasDiscount = product.sale_price && product.sale_price < product.price;
+  const { addToCart, isLoading } = useCart();
+  const { showToast } = useToast();
+  const [isAdding, setIsAdding] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleAddToCart = async () => {
+    if (!websiteSubdomain || isAdding || isLoading) return;
+
+    setIsAdding(true);
+    try {
+      const success = await addToCart(product.id.toString(), 1);
+      if (success) {
+        setShowSuccess(true);
+        showToast(`${product.name} added to cart!`, 'success');
+        setTimeout(() => setShowSuccess(false), 2000); // Hide after 2 seconds
+      }
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      showToast('Failed to add item to cart', 'error');
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -203,10 +230,31 @@ function ProductCard({ product, showPrice, showDescription, showAddToCart }: Pro
 
         {showAddToCart && (
           <button
-            disabled={product.stock_quantity === 0}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200"
+            onClick={handleAddToCart}
+            disabled={product.stock_quantity === 0 || isAdding || isLoading || showSuccess}
+            className={`w-full py-2 px-4 rounded transition-all duration-300 ${
+              showSuccess
+                ? 'bg-green-500 text-white'
+                : product.stock_quantity === 0 || isAdding || isLoading
+                ? 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
-            {product.stock_quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+            {product.stock_quantity === 0 ? 'Out of Stock' : 
+             showSuccess ? (
+               <div className="flex items-center justify-center">
+                 <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                 </svg>
+                 Added to Cart!
+               </div>
+             ) :
+             (isAdding || isLoading) ? (
+               <div className="flex items-center justify-center">
+                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                 Adding...
+               </div>
+             ) : 'Add to Cart'}
           </button>
         )}
       </div>

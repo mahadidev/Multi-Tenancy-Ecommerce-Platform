@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { websiteBuilderApi } from '../../store/websiteBuilderApi';
 
 interface MenuItem {
   id?: number;
@@ -10,15 +11,27 @@ interface MenuItem {
   parent_id?: number | null;
   sort_order: number;
   is_active: boolean;
+  page_slug?: string;
+  product_slug?: string;
+  category_slug?: string;
+  visibility?: 'all' | 'logged_in' | 'guest';
+}
+
+interface PageOption {
+  id: number;
+  title: string;
+  slug: string;
+  access_level?: string;
 }
 
 interface MenuBuilderProps {
   menu?: any;
+  websiteId: number;
   onSave: (menuData: any) => void;
   onCancel: () => void;
 }
 
-const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => {
+const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, websiteId, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     name: '',
     location: 'header' as 'header' | 'footer' | 'sidebar' | 'mobile',
@@ -32,9 +45,15 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
     type: 'custom',
     target: '_self',
     is_active: true,
+    visibility: 'all',
   });
 
   const [showAddForm, setShowAddForm] = useState(false);
+
+  // Fetch pages for the website
+  const { data: pagesResponse, isLoading: pagesLoading } = websiteBuilderApi.useGetPagesQuery();
+  
+  const pages = pagesResponse?.data || [];
 
   useEffect(() => {
     if (menu) {
@@ -62,7 +81,9 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
   };
 
   const addMenuItem = () => {
-    if (!newItem.title || !newItem.url) return;
+    if (!newItem.title) return;
+    if (newItem.type === 'page' && !newItem.page_slug) return;
+    if (newItem.type !== 'page' && !newItem.url) return;
     
     const item: MenuItem = {
       id: Date.now(), // Temporary ID for frontend
@@ -72,6 +93,10 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
       target: newItem.target || '_self',
       sort_order: menuItems.length + 1,
       is_active: newItem.is_active ?? true,
+      page_slug: newItem.page_slug,
+      product_slug: newItem.product_slug,
+      category_slug: newItem.category_slug,
+      visibility: newItem.visibility || 'all',
     };
     
     setMenuItems(prev => [...prev, item]);
@@ -81,6 +106,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
       type: 'custom',
       target: '_self',
       is_active: true,
+      visibility: 'all',
     });
     setShowAddForm(false);
   };
@@ -103,6 +129,17 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
     items.splice(result.destination.index, 0, reorderedItem);
 
     setMenuItems(items);
+  };
+
+  // Map page access level to menu visibility
+  const mapPageAccessToVisibility = (pageAccessLevel: string): 'all' | 'logged_in' | 'guest' => {
+    switch (pageAccessLevel) {
+      case 'guest': return 'guest';
+      case 'user': return 'logged_in';
+      case 'all':
+      default:
+        return 'all';
+    }
   };
 
   const getUrlPlaceholder = (type: string) => {
@@ -232,16 +269,51 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  URL
-                </label>
-                <input
-                  type="text"
-                  value={newItem.url || ''}
-                  onChange={(e) => setNewItem(prev => ({ ...prev, url: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder={getUrlPlaceholder(newItem.type || 'custom')}
-                />
+                {newItem.type === 'page' ? (
+                  <>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Select Page
+                    </label>
+                    <select
+                      value={newItem.page_slug || ''}
+                      onChange={(e) => {
+                        const selectedPage = pages.find(p => p.slug === e.target.value);
+                        setNewItem(prev => ({ 
+                          ...prev, 
+                          page_slug: e.target.value,
+                          url: e.target.value,
+                          title: prev.title || (selectedPage?.title || ''),
+                          visibility: selectedPage?.access_level ? mapPageAccessToVisibility(selectedPage.access_level) : 'all'
+                        }));
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={pagesLoading}
+                    >
+                      <option value="">Select a page...</option>
+                      {pages.map((page) => (
+                        <option key={page.id} value={page.slug}>
+                          {page.title} {page.access_level && page.access_level !== 'all' ? `(${page.access_level === 'user' ? 'Users Only' : 'Guests Only'})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                    {pagesLoading && (
+                      <p className="text-sm text-gray-500 mt-1">Loading pages...</p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      URL
+                    </label>
+                    <input
+                      type="text"
+                      value={newItem.url || ''}
+                      onChange={(e) => setNewItem(prev => ({ ...prev, url: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder={getUrlPlaceholder(newItem.type || 'custom')}
+                    />
+                  </>
+                )}
               </div>
 
               <div>
@@ -255,6 +327,21 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
                 >
                   <option value="_self">Same window</option>
                   <option value="_blank">New window</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Visibility
+                </label>
+                <select
+                  value={newItem.visibility || 'all'}
+                  onChange={(e) => setNewItem(prev => ({ ...prev, visibility: e.target.value as any }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">All Users</option>
+                  <option value="logged_in">Logged In Users</option>
+                  <option value="guest">Guest Users</option>
                 </select>
               </div>
             </div>
@@ -338,13 +425,42 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({ menu, onSave, onCancel }) => 
                                   placeholder="Menu title"
                                 />
                                 
-                                <input
-                                  type="text"
-                                  value={item.url}
-                                  onChange={(e) => updateMenuItem(index, 'url', e.target.value)}
-                                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                  placeholder="URL"
-                                />
+{item.type === 'page' ? (
+                                  <select
+                                    value={item.page_slug || ''}
+                                    onChange={(e) => {
+                                      const selectedPage = pages.find(p => p.slug === e.target.value);
+                                      updateMenuItem(index, 'page_slug', e.target.value);
+                                      updateMenuItem(index, 'url', e.target.value);
+                                      if (selectedPage) {
+                                        if (!item.title) {
+                                          updateMenuItem(index, 'title', selectedPage.title);
+                                        }
+                                        // Auto-set visibility based on page access level
+                                        if (selectedPage.access_level) {
+                                          updateMenuItem(index, 'visibility', mapPageAccessToVisibility(selectedPage.access_level));
+                                        }
+                                      }
+                                    }}
+                                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    disabled={pagesLoading}
+                                  >
+                                    <option value="">Select a page...</option>
+                                    {pages.map((page) => (
+                                      <option key={page.id} value={page.slug}>
+                                        {page.title} {page.access_level && page.access_level !== 'all' ? `(${page.access_level === 'user' ? 'Users Only' : 'Guests Only'})` : ''}
+                                      </option>
+                                    ))}
+                                  </select>
+                                ) : (
+                                  <input
+                                    type="text"
+                                    value={item.url}
+                                    onChange={(e) => updateMenuItem(index, 'url', e.target.value)}
+                                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="URL"
+                                  />
+                                )}
                                 
                                 <select
                                   value={item.type}

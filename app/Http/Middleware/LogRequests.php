@@ -21,8 +21,8 @@ class LogRequests
             RequestLog::create([
                 'method' => $request->method(),
                 'url' => $request->fullUrl(),
-                'headers' => json_encode($request->headers->all()),
-                'body' => json_encode($request->all()),
+                'headers' => json_encode($this->sanitizeHeaders($request->headers->all())),
+                'body' => json_encode($this->sanitizeBody($request->all())),
                 'ip' => $request->ip(),
             ]);
         } catch (\Exception $e) {
@@ -31,5 +31,50 @@ class LogRequests
         }
         
         return $next($request);
+    }
+
+    private function sanitizeHeaders(array $headers): array
+    {
+        $sensitiveHeaders = ['authorization', 'cookie', 'x-api-key', 'x-auth-token'];
+        $sanitized = [];
+        
+        foreach ($headers as $key => $value) {
+            if (in_array(strtolower($key), $sensitiveHeaders)) {
+                $sanitized[$key] = ['[REDACTED]'];
+            } else {
+                $sanitized[$key] = $value;
+            }
+        }
+        
+        return $sanitized;
+    }
+
+    private function sanitizeBody(array $body): array
+    {
+        $sensitiveFields = ['password', 'token', 'secret', 'key', 'credit_card', 'ssn'];
+        $sanitized = [];
+        
+        foreach ($body as $key => $value) {
+            if (is_string($key) && $this->containsSensitiveData($key)) {
+                $sanitized[$key] = '[REDACTED]';
+            } else {
+                $sanitized[$key] = $value;
+            }
+        }
+        
+        return $sanitized;
+    }
+
+    private function containsSensitiveData(string $field): bool
+    {
+        $sensitivePatterns = ['password', 'token', 'secret', 'key', 'credit', 'card', 'ssn', 'api_key'];
+        
+        foreach ($sensitivePatterns as $pattern) {
+            if (stripos($field, $pattern) !== false) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

@@ -195,6 +195,7 @@ const WebsiteMenusPage: React.FC = () => {
                 </div>
                 <div className="p-6">
                   <MenuBuilder
+                    websiteId={websiteIdNum}
                     onSave={handleCreateMenu}
                     onCancel={() => setShowCreateForm(false)}
                   />
@@ -210,6 +211,7 @@ const WebsiteMenusPage: React.FC = () => {
                 <div className="p-6">
                   <MenuBuilder
                     menu={selectedMenu}
+                    websiteId={websiteIdNum}
                     onSave={handleUpdateMenu}
                     onCancel={() => setSelectedMenu(null)}
                   />
