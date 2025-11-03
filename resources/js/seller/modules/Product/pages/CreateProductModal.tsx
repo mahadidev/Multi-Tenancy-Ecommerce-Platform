@@ -2,10 +2,10 @@ import useForm from '@seller/_hooks/useForm';
 import useString from '@seller/_hooks/useString';
 import useToast from '@seller/_hooks/useToast';
 import { FileInput, Select, TextInput } from '@seller/components';
+import QuickAddSelect from '@seller/components/Form/QuickAddSelect/QuickAddSelect';
 import { useCategory } from '@seller/modules/Category/hooks';
-import { CategoryType } from '@type/categoryType';
 import { Button, Label, Modal } from 'flowbite-react';
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { HiPlus } from 'react-icons/hi';
 import { useProduct } from '../hooks';
@@ -15,13 +15,37 @@ const CreateProductModal: FC = function () {
 	const [isOpen, setOpen] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 	const { create } = useProduct({});
-	const { productCategories } = useCategory();
+	const { productCategories, create: createCategory } = useCategory();
 	const { toaster } = useToast();
 	const { handleChange, formState, formErrors, setFormState } = useForm({
 		formValidationError: create.error,
 	});
 	const { getSlug } = useString();
 	const [attachments, setAttachments] = useState<string[]>(['']);
+
+	const handleQuickAddCategory = async (categoryName: string) => {
+		return new Promise<{ id: string | number; name: string }>((resolve) => {
+			createCategory.submit({
+				formData: {
+					name: categoryName,
+					type: 'product', // Explicitly set type to 'product' for product categories
+				},
+				onSuccess: (responseData: any) => {
+                    console.log()
+					const newCategory = {
+						id: responseData.data.category.id,
+						name: responseData.data.category.name,
+					};
+
+					resolve(newCategory);
+					setFormState((prev: any) => ({
+						...prev,
+						category_id: newCategory.id,
+					}));
+				},
+			});
+		});
+	};
 
 	const handleClose = () => {
 		setIsClosing(true);
@@ -59,29 +83,34 @@ const CreateProductModal: FC = function () {
 			handleClose();
 		}
 	}, [create.data]);
+
+    useEffect(() => {
+        console.log(formState, "formState")
+    }, [formState])
 	return (
 		<>
-			<Button 
-				color="primary" 
-				className="p-0" 
+			<Button
+				color="primary"
 				onClick={() => {
 					console.log('Opening Create Product Modal');
 					setOpen(true);
 				}}
 				type="button"
 			>
-				<div className="flex items-center gap-x-3">
-					<HiPlus className="text-xl" />
-					Create Product
-				</div>
+				<HiPlus className="mr-2 text-lg" />
+				Create Product
 			</Button>
-			<Modal 
-				onClose={handleClose} 
+			<Modal
+				onClose={handleClose}
 				show={isOpen}
-				className={`transition-all duration-300 ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+				className={`transition-all duration-300 ${
+					isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+				}`}
 				size="4xl"
 			>
-				<Modal.Header className="animate-fadeIn">Create a new Product</Modal.Header>
+				<Modal.Header className="animate-fadeIn">
+					Create a new Product
+				</Modal.Header>
 				<Modal.Body className="animate-slideIn max-h-[70vh] overflow-y-auto">
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 						<TextInput
@@ -161,7 +190,7 @@ const CreateProductModal: FC = function () {
 							formErrors={formErrors}
 							onChange={handleChange}
 							type="number"
-                            defaultValue={0}
+							defaultValue={0}
 						/>
 						<TextInput
 							id="buying_price"
@@ -174,27 +203,21 @@ const CreateProductModal: FC = function () {
 							type="number"
 							min={0}
 						/>
-						<Select
-							id="category_id"
+						<QuickAddSelect
 							name="category_id"
 							label="Category"
-							formState={formState}
-							formErrors={formErrors}
-							onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-								if (event.target.value === '0') {
-									event.target.value = 'null';
-								}
-								handleChange(event);
-							}}
+							value={formState.category_id || ''}
+							onChange={handleChange}
+							options={
+								productCategories?.map((category) => ({
+									value: category.id,
+									label: category.name,
+								})) || []
+							}
+							placeholder="Select a Category"
+							onQuickAdd={handleQuickAddCategory}
 							required
-						>
-							<option value={0}>Select a Category</option>
-							{productCategories?.map((category: CategoryType) => (
-								<option value={category.id} key={category.id}>
-									{category.name}
-								</option>
-							))}
-						</Select>
+						/>
 						<div className="flex flex-col gap-2 col-span-full">
 							<Label htmlFor="thumbnail">Thumbnail</Label>
 							<div>

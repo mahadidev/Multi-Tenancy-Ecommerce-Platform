@@ -248,7 +248,12 @@ const QuickAddSelect: React.FC<QuickAddSelectProps> = ({
 
 	return (
 		<div className="w-full" ref={containerRef}>
-			{label && <Label htmlFor={name} value={label} className="mb-2 block" />}
+			{label && (
+				<Label htmlFor={name} className="mb-2 block">
+					{label}
+					{required && <span className="text-red-500 ml-1">*</span>}
+				</Label>
+			)}
 
 			<div className="relative">
 				{/* Trigger Button */}

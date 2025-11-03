@@ -3,7 +3,6 @@ import { API_URL, PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
 import baseQueryWithReAuth, { createRequest } from "@seller/store/baseQueryWithReAuth";
 import { setAuthStore, setStoreTypes, setAdmins } from "./storeSlice";
-import { setTheme } from "@seller/store/slices/themeSlice";
 import {
   StoresResponse,
   StoreTypesResponse,
@@ -40,7 +39,6 @@ export const storeApi = createApi({
               store: response.data.data.current_store,
             })
           );
-          dispatch(setTheme(response.data.data.current_store.theme));
         });
       },
     }),

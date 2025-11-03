@@ -14,7 +14,7 @@ use App\Modules\UserManagement\Models\User;
 use App\Modules\OrderManagement\Models\Order;
 use App\Modules\ProductManagement\Models\Brand;
 use App\Modules\ProductManagement\Models\Category;
-use App\Modules\ThemeManagement\Models\Theme;
+// use App\Modules\ThemeManagement\Models\Theme; // ThemeManagement removed
 use App\Modules\StoreManagement\Models\StoreMenu;
 use App\Modules\SubscriptionManagement\Models\StoreSubscription;
 use App\Modules\ContentManagement\Models\StorePage;
@@ -33,7 +33,7 @@ class Store extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['store_type_id', 'owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', 'theme_id', 'primary_color', 'secondary_color', 'description'];
+    protected $fillable = ['store_type_id', 'owner_id', 'name', 'slug', 'domain', 'email', 'phone', 'location', 'status', 'currency', 'logo', 'dark_logo', 'settings', /* 'theme_id', // ThemeManagement removed */ 'primary_color', 'secondary_color', 'description'];
     protected $casts = [
         'settings' => 'json',
         // 'settings' => 'array',
@@ -53,7 +53,7 @@ class Store extends Model
             $data->sendWelcomeEmail();
         });
 
-         // Set default trial period for the store and create website
+         // Set default trial period for the store
         static::created(function ($data) {
 
              // $package = Subscription::where('name', 'free-trial')->first();
@@ -68,8 +68,8 @@ class Store extends Model
              //     ]);
              // }
 
-             // Auto-create website for the store
-             $data->createDefaultWebsite();
+             // Auto-create website for the store - DISABLED: WebsiteBuilder module removed
+             // $data->createDefaultWebsite();
 
         });
 
@@ -143,10 +143,11 @@ class Store extends Model
         return $this->hasMany(StoreSession::class);
     }
 
-    public function theme()
-    {
-        return $this->belongsTo(Theme::class);
-    }
+    // Theme relationship removed - ThemeManagement module no longer available
+    // public function theme()
+    // {
+    //     return $this->belongsTo(Theme::class);
+    // }
 
     public function pages()
     {
@@ -295,14 +296,17 @@ class Store extends Model
         return $this->hasOne(StoreApiCredential::class, 'store_id')->where('provider', 'steadfast');
     }
 
-    public function website()
-    {
-        return $this->hasOne(\App\Modules\WebsiteBuilder\Models\StoreWebsite::class, 'store_id');
-    }
+    // Website relationship removed - WebsiteBuilder module no longer available
+    // public function website()
+    // {
+    //     return $this->hasOne(\App\Modules\WebsiteBuilder\Models\StoreWebsite::class, 'store_id');
+    // }
 
     /**
      * Create default website for the store
+     * DISABLED: WebsiteBuilder module removed
      */
+    /*
     public function createDefaultWebsite()
     {
         try {
@@ -438,5 +442,6 @@ class Store extends Model
             Log::error('Error creating default website for store ' . $this->name . ': ' . $e->getMessage());
         }
     }
+    */
 
 }

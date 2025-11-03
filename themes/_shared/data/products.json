@@ -1,0 +1,320 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Wireless Headphones",
+    "slug": "premium-wireless-headphones",
+    "sku": "WH-001",
+    "barcode": "1234567890123",
+    "thumbnail": "https://placehold.co/600x400/1e40af/ffffff?text=Headphones",
+    "attachments": [
+      "https://placehold.co/600x400/1e40af/ffffff?text=Headphones+1",
+      "https://placehold.co/600x400/1e40af/ffffff?text=Headphones+2",
+      "https://placehold.co/600x400/1e40af/ffffff?text=Headphones+3"
+    ],
+    "description": "Experience crystal-clear audio with our premium wireless headphones featuring active noise cancellation and 30-hour battery life.",
+    "short_description": "Premium wireless headphones with ANC",
+    "price": 299.99,
+    "discount_price": 249.99,
+    "discount_amount": 50,
+    "discount_type": "fixed",
+    "cost": 150,
+    "stockQty": 150,
+    "status": "active",
+    "visibility": "visible",
+    "is_featured": true,
+    "is_digital": false,
+    "weight": 250,
+    "dimensions": {
+      "length": 20,
+      "width": 18,
+      "height": 8
+    },
+    "category": {
+      "id": 1,
+      "name": "Electronics",
+      "slug": "electronics",
+      "description": "Electronic devices and accessories"
+    },
+    "brand": {
+      "id": 1,
+      "name": "TechPro",
+      "slug": "techpro",
+      "logo": "https://placehold.co/100x100/1e40af/ffffff?text=TP"
+    },
+    "variants": [
+      {
+        "id": 1,
+        "name": "Color",
+        "options": ["Black", "White", "Blue"],
+        "prices": {
+          "Black": 299.99,
+          "White": 299.99,
+          "Blue": 309.99
+        }
+      }
+    ],
+    "stocks": [
+      {
+        "id": 1,
+        "variant": "Black",
+        "quantity": 50,
+        "sku": "WH-001-BLK"
+      },
+      {
+        "id": 2,
+        "variant": "White",
+        "quantity": 50,
+        "sku": "WH-001-WHT"
+      },
+      {
+        "id": 3,
+        "variant": "Blue",
+        "quantity": 50,
+        "sku": "WH-001-BLU"
+      }
+    ],
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "slug": "modern-shop-demo"
+    },
+    "tags": ["wireless", "headphones", "audio", "premium"],
+    "meta_title": "Premium Wireless Headphones - Best Audio Quality",
+    "meta_description": "Shop premium wireless headphones with active noise cancellation and 30-hour battery life",
+    "meta_keywords": ["wireless headphones", "ANC", "premium audio"],
+    "created_at": "01 Dec, 2024 | 10:00 AM",
+    "updated_at": "15 Dec, 2024 | 02:30 PM"
+  },
+  {
+    "id": 2,
+    "name": "Smart Fitness Watch",
+    "slug": "smart-fitness-watch",
+    "sku": "SFW-002",
+    "barcode": "1234567890124",
+    "thumbnail": "https://placehold.co/600x400/db2777/ffffff?text=SmartWatch",
+    "attachments": [
+      "https://placehold.co/600x400/db2777/ffffff?text=Watch+1",
+      "https://placehold.co/600x400/db2777/ffffff?text=Watch+2"
+    ],
+    "description": "Track your fitness goals with our advanced smartwatch featuring heart rate monitoring, GPS, and 7-day battery life.",
+    "short_description": "Advanced fitness tracking smartwatch",
+    "price": 199.99,
+    "discount_price": 179.99,
+    "discount_amount": 10,
+    "discount_type": "percentage",
+    "cost": 100,
+    "stockQty": 200,
+    "status": "active",
+    "visibility": "visible",
+    "is_featured": true,
+    "is_digital": false,
+    "weight": 50,
+    "category": {
+      "id": 1,
+      "name": "Electronics",
+      "slug": "electronics"
+    },
+    "brand": {
+      "id": 2,
+      "name": "FitTech",
+      "slug": "fittech"
+    },
+    "variants": [
+      {
+        "id": 2,
+        "name": "Size",
+        "options": ["Small", "Large"],
+        "prices": {
+          "Small": 199.99,
+          "Large": 199.99
+        }
+      }
+    ],
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "slug": "modern-shop-demo"
+    },
+    "created_at": "02 Dec, 2024 | 11:00 AM",
+    "updated_at": "15 Dec, 2024 | 03:00 PM"
+  },
+  {
+    "id": 3,
+    "name": "Ergonomic Office Chair",
+    "slug": "ergonomic-office-chair",
+    "sku": "EOC-003",
+    "barcode": "1234567890125",
+    "thumbnail": "https://placehold.co/600x400/059669/ffffff?text=Office+Chair",
+    "attachments": [],
+    "description": "Comfortable ergonomic office chair with lumbar support and adjustable height.",
+    "short_description": "Ergonomic chair with lumbar support",
+    "price": 399.99,
+    "discount_price": 399.99,
+    "discount_amount": 0,
+    "discount_type": null,
+    "cost": 200,
+    "stockQty": 75,
+    "status": "active",
+    "visibility": "visible",
+    "is_featured": false,
+    "is_digital": false,
+    "weight": 15000,
+    "category": {
+      "id": 2,
+      "name": "Furniture",
+      "slug": "furniture"
+    },
+    "brand": {
+      "id": 3,
+      "name": "ComfortPro",
+      "slug": "comfortpro"
+    },
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "slug": "modern-shop-demo"
+    },
+    "created_at": "03 Dec, 2024 | 09:30 AM",
+    "updated_at": "15 Dec, 2024 | 01:00 PM"
+  },
+  {
+    "id": 4,
+    "name": "Portable Bluetooth Speaker",
+    "slug": "portable-bluetooth-speaker",
+    "sku": "PBS-004",
+    "barcode": "1234567890126",
+    "thumbnail": "https://placehold.co/600x400/dc2626/ffffff?text=Speaker",
+    "attachments": [],
+    "description": "Powerful portable Bluetooth speaker with 360-degree sound and waterproof design.",
+    "short_description": "Waterproof Bluetooth speaker",
+    "price": 79.99,
+    "discount_price": 59.99,
+    "discount_amount": 25,
+    "discount_type": "percentage",
+    "cost": 40,
+    "stockQty": 300,
+    "status": "active",
+    "visibility": "visible",
+    "is_featured": true,
+    "is_digital": false,
+    "weight": 500,
+    "category": {
+      "id": 1,
+      "name": "Electronics",
+      "slug": "electronics"
+    },
+    "brand": {
+      "id": 1,
+      "name": "TechPro",
+      "slug": "techpro"
+    },
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "slug": "modern-shop-demo"
+    },
+    "created_at": "04 Dec, 2024 | 10:15 AM",
+    "updated_at": "15 Dec, 2024 | 04:00 PM"
+  },
+  {
+    "id": 5,
+    "name": "Organic Cotton T-Shirt",
+    "slug": "organic-cotton-tshirt",
+    "sku": "OCT-005",
+    "barcode": "1234567890127",
+    "thumbnail": "https://placehold.co/600x400/7c3aed/ffffff?text=T-Shirt",
+    "attachments": [],
+    "description": "Comfortable organic cotton t-shirt available in multiple colors.",
+    "short_description": "100% organic cotton t-shirt",
+    "price": 29.99,
+    "discount_price": 29.99,
+    "discount_amount": 0,
+    "cost": 15,
+    "stockQty": 500,
+    "status": "active",
+    "visibility": "visible",
+    "is_featured": false,
+    "is_digital": false,
+    "weight": 200,
+    "category": {
+      "id": 3,
+      "name": "Clothing",
+      "slug": "clothing"
+    },
+    "brand": {
+      "id": 4,
+      "name": "EcoWear",
+      "slug": "ecowear"
+    },
+    "variants": [
+      {
+        "id": 3,
+        "name": "Size",
+        "options": ["S", "M", "L", "XL"],
+        "prices": {
+          "S": 29.99,
+          "M": 29.99,
+          "L": 29.99,
+          "XL": 32.99
+        }
+      },
+      {
+        "id": 4,
+        "name": "Color",
+        "options": ["White", "Black", "Gray", "Navy"],
+        "prices": {
+          "White": 29.99,
+          "Black": 29.99,
+          "Gray": 29.99,
+          "Navy": 29.99
+        }
+      }
+    ],
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "slug": "modern-shop-demo"
+    },
+    "created_at": "05 Dec, 2024 | 11:30 AM",
+    "updated_at": "15 Dec, 2024 | 02:15 PM"
+  },
+  {
+    "id": 6,
+    "name": "Digital Camera Pro",
+    "slug": "digital-camera-pro",
+    "sku": "DCP-006",
+    "barcode": "1234567890128",
+    "thumbnail": "https://placehold.co/600x400/ea580c/ffffff?text=Camera",
+    "attachments": [],
+    "description": "Professional digital camera with 24MP sensor and 4K video recording.",
+    "short_description": "24MP professional camera",
+    "price": 1299.99,
+    "discount_price": 1099.99,
+    "discount_amount": 200,
+    "discount_type": "fixed",
+    "cost": 800,
+    "stockQty": 25,
+    "status": "active",
+    "visibility": "visible",
+    "is_featured": true,
+    "is_digital": false,
+    "weight": 650,
+    "category": {
+      "id": 1,
+      "name": "Electronics",
+      "slug": "electronics"
+    },
+    "brand": {
+      "id": 5,
+      "name": "PhotoMax",
+      "slug": "photomax"
+    },
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "slug": "modern-shop-demo"
+    },
+    "created_at": "06 Dec, 2024 | 09:00 AM",
+    "updated_at": "15 Dec, 2024 | 05:00 PM"
+  }
+]

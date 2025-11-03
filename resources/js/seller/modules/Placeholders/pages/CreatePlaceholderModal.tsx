@@ -13,11 +13,9 @@ const CreatePlaceholderModal: FC = function () {
 
 	return (
 		<>
-			<Button color="primary" className="p-0" onClick={() => setOpen(true)}>
-				<div className="flex items-center gap-x-3">
-					<HiPlus className="text-xl" />
-					Create Placeholder
-				</div>
+			<Button color="primary" onClick={() => setOpen(true)}>
+				<HiPlus className="mr-2 text-lg" />
+				Create Placeholder
 			</Button>
 			<Modal onClose={() => setOpen(false)} show={isOpen}>
 				<Modal.Header>Create a new Placeholder</Modal.Header>

@@ -4,7 +4,7 @@ import laravel from "laravel-vite-plugin";
 import path from "path";
 import { defineConfig } from "vite";
 import commonjs from "vite-plugin-commonjs";
-import { ThemesSeeder } from "./resources/js/themes/themesSeeder";
+// import { ThemesSeeder } from "./resources/js/themes/themesSeeder"; // Themes removed
 
 export default defineConfig({
     optimizeDeps: {
@@ -15,7 +15,7 @@ export default defineConfig({
             input: [
                 "resources/css/app.css",
                 "resources/js/app.js",
-                "resources/js/themes/index.tsx",
+                // "resources/js/themes/index.tsx", // Themes removed
                 "resources/js/seller/index.tsx",
                 "resources/js/frontend/index.tsx",
                 "resources/js/site/index.tsx",
@@ -28,15 +28,16 @@ export default defineConfig({
         }),
         commonjs(),
 
-        {
-            name: "postbuild-commands",
-            closeBundle: () => {
-                fs.writeFileSync(
-                    "resources/js/themes/themesSeeder.json",
-                    JSON.stringify(ThemesSeeder, null, 2)
-                );
-            },
-        },
+        // Themes postbuild removed
+        // {
+        //     name: "postbuild-commands",
+        //     closeBundle: () => {
+        //         fs.writeFileSync(
+        //             "resources/js/themes/themesSeeder.json",
+        //             JSON.stringify(ThemesSeeder, null, 2)
+        //         );
+        //     },
+        // },
     ],
     resolve: {
         alias: [
@@ -52,10 +53,10 @@ export default defineConfig({
                 find: "@seller",
                 replacement: path.resolve(__dirname, "resources/js/seller"),
             },
-            {
-                find: "@themes",
-                replacement: path.resolve(__dirname, "resources/js/themes"),
-            },
+            // {
+            //     find: "@themes",
+            //     replacement: path.resolve(__dirname, "resources/js/themes"),
+            // }, // Themes removed
             {
                 find: "@type",
                 replacement: path.resolve(__dirname, "resources/js/types"),

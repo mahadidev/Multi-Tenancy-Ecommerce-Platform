@@ -1,9 +1,7 @@
 import { FormErrorType, FormStateType } from "@seller/_hooks/useForm";
 import useStore from "@seller/_hooks/useStore";
-import useTheme from "@seller/_hooks/useTheme";
 import { ErrorMessage } from "@seller/components";
 import { RoutePath } from "@seller/seller_env";
-import { ThemeType } from "@type/themeType";
 import { Button } from "flowbite-react";
 import { ChangeEventHandler, FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -19,7 +17,6 @@ interface PropsType {
 }
 
 const StoreStepThree: FC<PropsType> = function (props) {
-    const { themes } = useTheme();
     const { create } = useStore();
 
     return (
@@ -27,53 +24,15 @@ const StoreStepThree: FC<PropsType> = function (props) {
             className={`space-y-8  ${props.stepNum === 3 ? "block" : "hidden"}`}
         >
             <h2 className="text-2xl font-bold text-gray-900 lg:text-3xl dark:text-white">
-                Choose a theme
+                Complete Setup
             </h2>
 
             <div className="mt-8 space-y-6">
-                <ul className="grid w-full gap-6 md:grid-cols-3">
-                    {themes?.map((item: ThemeType, index: number) => (
-                        <li key={index}>
-                            <input
-                                name="theme_id"
-                                type="radio"
-                                id={item.slug}
-                                value={item.id}
-                                className="hidden peer"
-                                required
-                                defaultChecked={
-                                    (themes[0] && themes[0].id == item.id) ||
-                                    props.formState["theme_id"] === item.id
-                                }
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    props.handleChange(event);
-                                }}
-                            />
-                            <label
-                                htmlFor={item.slug}
-                                className="inline-flex items-center justify-between w-full text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600
-                                        peer-checked:bg-gray-50
-                                        peer-checked:dark:bg-gray-700
-                                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 overflow-hidden"
-                            >
-                                <div className="block w-full">
-                                    <img
-                                        className="w-full block"
-                                        src={item.thumbnail ?? ""}
-                                        alt={item.name}
-                                    />
-                                    <div className="w-full p-2.5">
-                                        <p className="text-center">
-                                            {item.name}
-                                        </p>
-                                    </div>
-                                </div>
-                            </label>
-                        </li>
-                    ))}
-                </ul>
+                <div className="text-center py-12">
+                    <p className="text-gray-500 dark:text-gray-400 mb-6">
+                        Theme system has been removed. You can proceed to complete your store setup.
+                    </p>
+                </div>
 
                 {props.formErrors["message"] && (
                     <ErrorMessage>{props.formErrors["message"]}</ErrorMessage>

@@ -2,6 +2,7 @@ import useBrand from '@seller/_hooks/useBrand';
 import useCategory from '@seller/_hooks/useCategory';
 import useString from '@seller/_hooks/useString';
 import { Select, TextInput } from '@seller/components';
+import QuickAddSelect from '@seller/components/Form/QuickAddSelect/QuickAddSelect';
 import { BrandType } from '@type/brandType';
 import { CategoryType } from '@type/categoryType';
 import { SectionProps } from '../ProductEditPage';
@@ -13,9 +14,28 @@ const BasicInfoSection = ({
 	handleChange,
 	setFormState,
 }: SectionProps) => {
-	const { productCategories } = useCategory();
+	const { productCategories, create: createCategory } = useCategory();
 	const { brands } = useBrand();
 	const { getSlug } = useString();
+
+	const handleQuickAddCategory = async (categoryName: string) => {
+		return new Promise<{ id: string | number; name: string }>((resolve) => {
+			createCategory.submit({
+				formData: { 
+					name: categoryName,
+					type: 'product' // Explicitly set type to 'product' for product categories
+				},
+				onSuccess: (responseData: any) => {
+					const newCategory = {
+						id: responseData.category.id,
+						name: responseData.category.name,
+					};
+					
+					resolve(newCategory);
+				},
+			});
+		});
+	};
 
 	return (
 		<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 w-full">
@@ -53,23 +73,16 @@ const BasicInfoSection = ({
 				readOnly
 				required
 			/>
-			<Select
-				id="category_id"
+			<QuickAddSelect
 				name="category_id"
 				label="Category"
-				formState={formState}
-				formErrors={formErrors}
-				value={formState['category_id']}
+				value={formState.category_id || ''}
 				onChange={handleChange}
+				options={productCategories?.map(category => ({ value: category.id, label: category.name })) || []}
+				placeholder="Select a Category"
+				onQuickAdd={handleQuickAddCategory}
 				required
-			>
-				<option value={0}>Select a Category</option>
-				{productCategories?.map((category: CategoryType) => (
-					<option value={category.id} key={category.id}>
-						{category.name}
-					</option>
-				))}
-			</Select>
+			/>
 			<Select
 				id="brand_id"
 				name="brand_id"

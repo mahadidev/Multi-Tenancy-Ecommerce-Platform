@@ -2,7 +2,6 @@
 import useStore from '@seller/_hooks/useStore';
 import { SidebarProvider } from '@seller/contexts/sidebar-context';
 import { useAppSelector } from '@seller/store/store';
-import useColor from '@themes/_helper/hooks/useColor';
 import { FC, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
@@ -12,17 +11,6 @@ import BaseLayout from '../BaseLayout';
 
 const EditorLayout: FC = function () {
 	const { sidebar } = useAppSelector((state) => state.ui);
-    const {store} = useStore();
-    const {setColorShade} = useColor();
-
-	useEffect(() => {
-		if (store && store.theme) {
-			setColorShade({
-				name: 'primary',
-				color: store.primary_color ?? store.theme.primary_color,
-			});
-		}
-	}, [store]);
 
 	return (
 		<BaseLayout>

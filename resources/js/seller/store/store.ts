@@ -30,8 +30,8 @@ import { socialMediaApi, socialMediaSlice } from '../modules/SocialMedia/store';
 import { stockReportApi, stockReportSlice } from '../modules/StockReport/store';
 import { storeApi, storeSlice } from '../modules/Store/store';
 import { subscriptionApi, subscriptionSlice } from '../modules/Subscription/store';
-import { themeApi, themeSlice } from '../modules/Theme/store';
-import { websiteBuilderApi, websiteBuilderSlice } from '../modules/WebsiteBuilder/store';
+// Theme module removed - import { themeApi, themeSlice } from '../modules/Theme/store';
+// WebsiteBuilder module removed - import { websiteBuilderApi, websiteBuilderSlice } from '../modules/WebsiteBuilder/store';
 
 // UI and utility slices that don't have modules
 import orderPlacerSlice from './slices/orderPlacerSlice';
@@ -74,7 +74,7 @@ const authPersistConfig = {
 		'socialMediaApi',
 		'storeApi',
 		'subscriptionApi',
-		'themeApi',
+		// 'themeApi', // Theme module removed
 		'settingsApi',
 		'profileApi',
 		'onboardApi',
@@ -85,7 +85,7 @@ const authPersistConfig = {
 		'rolePermissionsApi', // Added role permissions API
 		'subscriptionPlansApi', // Added subscription plan API
 		'vendorApi', // Added vendor API
-		'websiteBuilderApi',
+		// 'websiteBuilderApi', // WebsiteBuilder module removed
 	],
 	storage,
 	version: 1, // Incremented version to force state reset
@@ -123,13 +123,13 @@ const persistedReducer = persistReducer(
 		socialMedia: socialMediaSlice,
 		store: storeSlice,
 		subscription: subscriptionSlice,
-		theme: themeSlice,
+		// theme: themeSlice, // Theme module removed
 		settings: settingsSlice,
 		profile: profileSlice,
 		onboard: onboardSlice,
 		placeholders: placeholdersSlice,
 		stockReport: stockReportSlice,
-		websiteBuilder: websiteBuilderSlice,
+		// websiteBuilder: websiteBuilderSlice, // WebsiteBuilder module removed
 
 		// UI and utility slices that don't have modules yet
 		ui: uiSlice,
@@ -162,7 +162,7 @@ const persistedReducer = persistReducer(
 		[socialMediaApi.reducerPath]: socialMediaApi.reducer,
 		[storeApi.reducerPath]: storeApi.reducer,
 		[subscriptionApi.reducerPath]: subscriptionApi.reducer,
-		[themeApi.reducerPath]: themeApi.reducer,
+		// [themeApi.reducerPath]: themeApi.reducer, // Theme module removed
 		[settingsApi.reducerPath]: settingsApi.reducer,
 		[profileApi.reducerPath]: profileApi.reducer,
 		[onboardApi.reducerPath]: onboardApi.reducer,
@@ -173,7 +173,7 @@ const persistedReducer = persistReducer(
 		[rolePermissionApi.reducerPath]: rolePermissionApi.reducer, // Added role permissions API
 		[subscriptionPlanApi.reducerPath]: subscriptionPlanApi.reducer, // Added subscription plan API
 		[vendorApi.reducerPath]: vendorApi.reducer, // Added vendor API
-		[websiteBuilderApi.reducerPath]: websiteBuilderApi.reducer,
+		// [websiteBuilderApi.reducerPath]: websiteBuilderApi.reducer, // WebsiteBuilder module removed
 	})
 );
 
@@ -211,7 +211,7 @@ export const store = configureStore({
 			socialMediaApi.middleware,
 			storeApi.middleware,
 			subscriptionApi.middleware,
-			themeApi.middleware,
+			// themeApi.middleware, // Theme module removed
 			settingsApi.middleware,
 			profileApi.middleware,
 			onboardApi.middleware,
@@ -222,7 +222,7 @@ export const store = configureStore({
 			rolePermissionApi.middleware, // Added role permissions API middleware
 			subscriptionPlanApi.middleware, // Added subscription plan API middleware
 			vendorApi.middleware, // Added vendor API middleware
-			websiteBuilderApi.middleware,
+			// websiteBuilderApi.middleware, // WebsiteBuilder module removed
 		]),
 });
 

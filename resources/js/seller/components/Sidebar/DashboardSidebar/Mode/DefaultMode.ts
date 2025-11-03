@@ -61,12 +61,9 @@ export const defaultModeExternalPages: SidebarItemType[] = [
 		label: 'Pages',
 	},
 	{
+		href: RoutePath.MenusPage.index(),
 		icon: FaPaintBrush,
-		label: 'Appearance',
-		items: [
-			{ href: RoutePath.ThemesPage.index(), label: 'Themes' },
-			{ href: RoutePath.MenusPage.index(), label: 'Menus' },
-		],
+		label: 'Menus',
 	},
 	{
 		icon: HiCog,

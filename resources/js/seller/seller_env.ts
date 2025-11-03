@@ -89,9 +89,6 @@ export const RoutePath = {
 		index: () => '/analytics',
 		productStock: () => '/analytics/product-stock',
 	},
-	ThemesPage: {
-		index: () => '/themes',
-	},
 	MenusPage: {
 		index: () => '/menus',
 	},
@@ -113,11 +110,5 @@ export const RoutePath = {
 	},
 	orderPlacer: {
 		index: () => '/order-placer',
-	},
-	WebsiteBuilder: {
-		index: () => '/websites',
-		create: () => '/websites/create',
-		edit: (websiteId: number) => `/websites/${websiteId}`,
-		pageBuilder: (websiteId: number, pageId: number) => `/websites/${websiteId}/pages/${pageId}/builder`,
 	},
 };

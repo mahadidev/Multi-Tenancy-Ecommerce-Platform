@@ -1,3 +1,4 @@
+import { formatTableDate } from "@seller/_utils/dateUtils";
 import { ServerTable } from "@seller/components";
 import { CategoryType } from "@type/categoryType";
 import { Table } from "flowbite-react";
@@ -5,7 +6,6 @@ import useCategoryTable from "../hooks/useCategoryTable";
 import CreateCategoryModal from "./CreateCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
-import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const CategoriesTable = () => {
     // Get categories with server-side pagination
@@ -50,7 +50,7 @@ const CategoriesTable = () => {
                         key: "created_at",
                         render: (row: CategoryType) => (
                             <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-                                {formatTableDate(row.created_at)}
+                                {(row.created_at)}
                             </Table.Cell>
                         ),
                         sortable: true,

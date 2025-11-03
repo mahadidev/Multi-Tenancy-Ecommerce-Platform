@@ -36,11 +36,6 @@ export const ecommerceModePages: SidebarItemType[] = [
 		],
 	},
 	{
-		href: RoutePath.WebsiteBuilder.index(),
-		label: 'Website Builder',
-		icon: MdWeb,
-	},
-	{
 		icon: MdAttachMoney,
 		label: 'Expenses',
 		items: [

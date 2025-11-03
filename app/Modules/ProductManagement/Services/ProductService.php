@@ -77,7 +77,40 @@ class ProductService
                 throw new \InvalidArgumentException("Invalid date range: $range");
         }
 
-        // Fetch and group data based on stocks' created_at
+        // Fetch all products with their current stocks (not filtered by date)
+        $products = $query->with('stocks')->get();
+
+        // Calculate dashboard metrics
+        $totalProducts = $products->count();
+        
+        $totalBuyingValue = 0;
+        $outOfStock = 0;
+        $totalValue = 0;
+
+        foreach ($products as $product) {
+            $totalStockQty = $product->stocks->sum('qty');
+            
+            // Calculate selling value (discounted price)
+            $productValue = $product->stocks->sum(function ($stock) {
+                // Calculate discounted price: price - discount_amount
+                $discountedPrice = $stock->price - $stock->discount_amount;
+                return $discountedPrice * $stock->qty;
+            });
+            
+            // Calculate buying value
+            $productBuyingValue = $product->stocks->sum(function ($stock) {
+                return $stock->buying_price * $stock->qty;
+            });
+            
+            $totalValue += $productValue;
+            $totalBuyingValue += $productBuyingValue;
+            
+            if ($totalStockQty == 0) {
+                $outOfStock++;
+            }
+        }
+
+        // Fetch and group historical data for charts based on stocks' created_at
         $histories = $query->with([
             'stocks' => function ($query) use ($start, $end) {
                 $query->whereBetween('created_at', [$start, $end]);
@@ -95,15 +128,21 @@ class ProductService
                 'sellingValue' => $group->sum(fn($item) => $item->stocks->sum(fn($stock) => $stock->price * $stock->qty)),
             ]);
 
-        // Total summary
+        // Total historical summary
         $totalQty = $grouped->sum('qty');
-        $totalBuyingValue = $grouped->sum('buyingValue');
+        $totalBuyingValueHistorical = $grouped->sum('buyingValue');
         $totalSellingValue = $grouped->sum('sellingValue');
 
-        // Final structured response
+        // Final structured response with both dashboard metrics and chart data
         return [
+            // Dashboard metrics
+            'totalProducts' => $totalProducts,
+            'totalBuyingValue' => $totalBuyingValue,
+            'outOfStock' => $outOfStock,
+            'totalValue' => $totalValue,
+            // Historical data for charts
             'qty' => $totalQty,
-            'buyingValue' => $totalBuyingValue,
+            'buyingValue' => $totalBuyingValueHistorical,
             'sellingValue' => $totalSellingValue,
             'chartSeries' => $grouped->toArray(),
         ];

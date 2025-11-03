@@ -4,7 +4,6 @@ import { ApiResponseType } from "@type/apiType";
 import { StoreType, StoreTypeData } from "@type/storeType";
 import baseQueryWithReAuth, { createRequest } from "../baseQueryWithReAuth";
 import { setAuthStore, setStoreTypes } from "../slices/storeSlice";
-import { setTheme } from "../slices/themeSlice";
 
 export interface StoresFetchResponseType extends ApiResponseType {
     data: {
@@ -78,7 +77,6 @@ export const storeApi = createApi({
 							store: response.data.data.current_store,
 						})
 					);
-					dispatch(setTheme(response.data.data.current_store.theme));
 				});
 			},
 		}),

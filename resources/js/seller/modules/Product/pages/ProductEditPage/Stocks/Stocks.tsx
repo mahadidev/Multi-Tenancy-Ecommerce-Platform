@@ -64,13 +64,16 @@ const Stocks: FC<Props> = () => {
 						sortable: true,
 						render: (row: ProductStockType) => (
 							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-								{row.price}
+								<span className="line-through opacity-50">
+									{row.price}
+								</span>{' '}
+								<span>{row.price - row.discount_amount}</span> TK
 							</Table.Cell>
 						),
 					},
 					{
 						label: 'Date',
-                        key: 'updated_at',
+						key: 'updated_at',
 						render: (row: ProductStockType) => (
 							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
 								{row.updated_at}

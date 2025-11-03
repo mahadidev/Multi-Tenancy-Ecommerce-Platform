@@ -12,19 +12,17 @@ import { DashboardLayout } from './components';
 
 // Import all route groups
 import {
-    DashboardRoutes,
-    InventoryRoutes,
-    SalesRoutes,
-    FinanceRoutes,
-    ContentRoutes,
-    UsersRoutes,
-    SettingsRoutes,
     AuthRoutes,
-    SubscriptionRoutes,
+    ContentRoutes,
+    DashboardRoutes,
     EditorRoutes,
+    FinanceRoutes,
+    InventoryRoutes,
     OnboardRoutes,
-    WebsiteBuilderRoutes,
-    CGBuilderRoutes,
+    SalesRoutes,
+    SettingsRoutes,
+    SubscriptionRoutes,
+    UsersRoutes,
 } from './Routes';
 
 const App: FC = function () {
@@ -48,31 +46,27 @@ const App: FC = function () {
                     <Route path="/" element={<DashboardLayout />}>
                         {/* Dashboard & Analytics */}
                         {DashboardRoutes}
-                        
+
                         {/* Inventory Management */}
                         {InventoryRoutes}
-                        
+
                         {/* Sales Management */}
                         {SalesRoutes}
-                        
+
                         {/* Finance Management */}
                         {FinanceRoutes}
-                        
+
                         {/* Content Management */}
                         {ContentRoutes}
-                        
-                        {/* Website Builder */}
-                        {WebsiteBuilderRoutes}
-                        
+
+
                         {/* User Management */}
                         {UsersRoutes}
-                        
+
                         {/* Settings & Configuration */}
                         {SettingsRoutes}
                     </Route>
 
-                    {/* CG Builder - Independent Layout */}
-                    {CGBuilderRoutes}
 
                     {/* Editor & Special Layouts */}
                     {EditorRoutes}

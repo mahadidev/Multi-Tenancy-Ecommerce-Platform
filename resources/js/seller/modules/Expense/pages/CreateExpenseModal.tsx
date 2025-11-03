@@ -60,10 +60,12 @@ const CreateExpenseModal: FC = function () {
 			createVendor.submit({
 				formData: { name: vendorName },
 				onSuccess: (responseData: any) => {
-					resolve({
+					const newVendor = {
 						id: responseData.vendor.id,
 						name: responseData.vendor.name,
-					});
+					};
+					
+					resolve(newVendor);
 				},
 			});
 		});
@@ -82,11 +84,9 @@ const CreateExpenseModal: FC = function () {
 
 	return (
 		<>
-			<Button color="primary" className="p-0" onClick={() => setOpen(true)}>
-				<div className="flex items-center gap-x-3">
-					<HiPlus className="text-xl" />
-					Create Expense
-				</div>
+			<Button color="primary" onClick={() => setOpen(true)}>
+				<HiPlus className="mr-2 text-lg" />
+				Create Expense
 			</Button>
 			<Modal onClose={() => setOpen(false)} show={isOpen} size="4xl">
 				<Modal.Header>Create a new Expense</Modal.Header>

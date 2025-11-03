@@ -28,7 +28,6 @@
 		"types": ["vite/client"],
 		"paths": {
 			"@seller/*": ["./resources/js/seller/*"],
-			"@themes/*": ["./resources/js/themes/*"],
 			"@type/*": ["./resources/js/types/*"],
 			"@frontend/*": ["./resources/js/frontend/*"],
 			"@site/*": ["./resources/js/site/*"],

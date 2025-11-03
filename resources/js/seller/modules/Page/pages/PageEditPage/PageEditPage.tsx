@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import useStore from '@seller/_hooks/useStore';
-import useTheme from '@seller/_hooks/useTheme';
 import useWidget from '@seller/_hooks/useWidget';
-import { registeredTheme } from '@themes/registeredTheme';
 import { PageType } from '@type/pageType';
 import { Button } from 'flowbite-react';
 import { useEffect } from 'react';
@@ -16,7 +14,6 @@ import AddWidgetModal from './AddWidgetModal';
 const PageEditPage = () => {
 	const { fetchPage, page } = usePage();
 	const { widgets, onSortWidget, onEditWidget, onDeleteWidget } = useWidget();
-	const { theme } = useTheme();
 	const { store } = useStore();
 	const { id } = useParams();
 
@@ -37,65 +34,17 @@ const PageEditPage = () => {
 
 	return (
 		<div className="space-y-4">
-			<div className="bg-white">
-				{page &&
-					page.layout &&
-					store &&
-					store.theme &&
-					(registeredTheme[store.theme.name] ? (
-						registeredTheme[store.theme.name]?.layout({
-							store: store,
-							layout: page.layout,
-							children: (
-								<>
-									<ReactSortable
-										list={widgets.map((x) => ({ ...x, chosen: true }))}
-										setList={(newState) => onSortWidget(newState)}
-									>
-										{widgets
-											.slice()
-											.sort(function (widgetA, widgetB) {
-												return widgetA.serial - widgetB.serial;
-											})
-											.map((widget) => (
-												<div className="w-full h-max relative" key={widget.id}>
-													{store &&
-														theme &&
-														registeredTheme[theme.name]?.widget({
-															widget: widget,
-															store: store,
-														})}
-
-													<div className="absolute top-0 left-0 right-0 w-full h-full  z-30 opacity-0 hover:opacity-100 transition-all duration-300 cursor-grab flex justify-end">
-														<div className="w-max h-max flex gap-2.5 items-center p-2.5">
-															<Button.Group>
-																<Button color="dark">
-																	<IoMdMove className="text-2xl" />
-																</Button>
-																<Button
-																	color="dark"
-																	onClick={() => onDeleteWidget(widget)}
-																>
-																	<MdDeleteOutline className="text-2xl" />
-																</Button>
-																<Button
-																	color="dark"
-																	onClick={() => onEditWidget(widget)}
-																>
-																	<MdModeEditOutline className="text-2xl" />
-																</Button>
-															</Button.Group>
-														</div>
-													</div>
-												</div>
-											))}
-									</ReactSortable>
-								</>
-							),
-						})
-					) : (
-						<h1>Layout not found.</h1>
-					))}
+			<div className="bg-white p-8">
+				<div className="flex items-center justify-center py-12">
+					<div className="text-center">
+						<h2 className="text-xl font-medium text-gray-800 dark:text-white mb-4">
+							Page Editor
+						</h2>
+						<p className="text-gray-500 dark:text-gray-400">
+							Theme system has been removed. Page editing functionality is no longer available.
+						</p>
+					</div>
+				</div>
 			</div>
 
 			<AddWidgetModal />

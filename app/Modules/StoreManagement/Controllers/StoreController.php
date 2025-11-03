@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Modules\StoreManagement\Resources\StoreResource;
 use App\Modules\StoreManagement\Models\Store;
 use App\Modules\StoreManagement\Models\StorePage;
-use App\Models\Theme;
-use App\Models\ThemePage;
+// use App\Models\Theme; // ThemeManagement removed
+// use App\Models\ThemePage; // ThemeManagement removed
 use App\Models\Widget;
 use App\Models\WidgetInput;
 use Illuminate\Http\Request;
 use App\Modules\StoreManagement\Models\StoreSession;
-use App\Models\StoreSocialMedia;
-use App\Models\StoreType;
+use App\Modules\StoreManagement\Models\StoreSocialMedia;
+use App\Modules\StoreManagement\Models\StoreType;
 use App\Modules\StoreManagement\Services\StoreService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -27,7 +27,7 @@ class StoreController extends Controller
         $sort = $request->input('sort'); // Sort order, default is 'desc'
         $perPage = $request->input('per_page'); // Items per page, default is 10
 
-        $stores = Store::with(['website'])
+        $stores = Store::with([])
             ->where(["owner_id" => $user->id])
             ->when($search, function ($query, $search) {
                 $query
@@ -60,11 +60,11 @@ class StoreController extends Controller
             $request->attributes->set('store_id', $storeSession->store_id);
 
             // find the store
-            $current_store = Store::with(['website'])->find($storeSession->store_id);
+            $current_store = Store::with([])->find($storeSession->store_id);
         }
 
         if (!$storeSession) {
-            $current_store = Store::with(['website'])->where('owner_id', $user->id)->first();
+            $current_store = Store::with([])->where('owner_id', $user->id)->first();
 
             if ($current_store) {
                 StoreSession::updateOrCreate([
@@ -149,7 +149,7 @@ class StoreController extends Controller
             'dark_logo' => 'nullable|string|max:255',
             'settings' => 'nullable|array',
             'type' => 'nullable|string',
-            'theme_id' => 'nullable|exists:themes,id',
+            // 'theme_id' => 'nullable|exists:themes,id', // ThemeManagement removed
             'description' => 'nullable|string',
             'store_type_id' => 'nullable|exists:store_types,id',
             'social_media' => 'nullable|array',
@@ -159,7 +159,7 @@ class StoreController extends Controller
             'social_media.*.label' => 'required_with:social_media|string',
         ]);
 
-        $theme_id = $request->theme_id ?? null;
+        // $theme_id = $request->theme_id ?? null; // ThemeManagement removed
 
         // Create a new store record
         $store = Store::create([
@@ -172,7 +172,7 @@ class StoreController extends Controller
             'location' => $request->location ?? null,
             'currency' => $request->currency ?? 'BDT',
             'logo' => $request->logo ?? null,
-            "theme_id" => $theme_id,
+            // "theme_id" => $theme_id, // ThemeManagement removed
             'dark_logo' => $request->dark_logo ?? null,
             'status' => $request->status ?? 1,
             'settings' => $request->settings ?? null,
@@ -180,6 +180,7 @@ class StoreController extends Controller
             'store_type_id' => $request->store_type_id ? $request->store_type_id : StoreType::first()->id,
         ]);
 
+        /* ThemeManagement removed
         if ($store->theme && $store->theme->widgets) {
             $store->widgets()->delete();
             foreach ($store->theme->widgets as $widget) {
@@ -193,6 +194,7 @@ class StoreController extends Controller
                 ]);
             }
         }
+        */
 
         if ($request->social_media) {
             foreach ($request->social_media as $social_media) {
@@ -263,6 +265,7 @@ class StoreController extends Controller
             'social_media.*.label' => 'required_with:social_media|string',
         ]);
 
+        /* ThemeManagement removed
         $theme_id = $store->theme_id;
         if ($request->theme_id) {
             $theme = Theme::where("id", $request->theme_id)->first();
@@ -273,6 +276,7 @@ class StoreController extends Controller
                 $theme_id = null;
             }
         }
+        */
 
         // Update the store record
         $store->update([
@@ -287,7 +291,7 @@ class StoreController extends Controller
             'dark_logo' => $request->dark_logo ?? $store->dark_logo,
             'primary_color' => $request->primary_color ?? $store->primary_color,
             'secondary_color' => $request->secondary_color ?? $store->secondary_color,
-            'theme_id' => $theme_id,
+            // 'theme_id' => $theme_id, // ThemeManagement removed
             'settings' => $request->settings ? $request->settings : $store->settings,
             'store_type_id' => $request->store_type_id ? $request->store_type_id : $store->store_type_id,
             'description' => $request->description ?? $store->description,
@@ -322,13 +326,14 @@ class StoreController extends Controller
         ], 200);
     }
 
+    /* Theme functionality removed - ThemeManagement module no longer available
     public function switchTheme(Request $request, $id)
     {
         $store = Store::storeOwner()->findOrFail($id);
         $store = Store::where(["id" => $store->id])->with("layouts","partials", "pages", "widgets")->first();
 
         $request->validate([
-            'theme_id' => 'nullable|exists:themes,id',
+            // 'theme_id' => 'nullable|exists:themes,id', // ThemeManagement removed
             "import_demo" => "nullable|boolean"
         ]);
 
@@ -447,6 +452,7 @@ class StoreController extends Controller
             ], 200);
         }
     }
+    */
 
     public function destroy($id)
     {

@@ -131,7 +131,7 @@ const StockTable = ({ className }: { className?: string }) => {
 					{
 						label: 'Product',
 						key: 'product',
-                        sortable: true,
+						sortable: true,
 						render: (row: any) => (
 							<Table.Cell className="p-4 text-sm font-normal whitespace-nowrap text-gray-900 dark:text-white">
 								<div className="flex gap-2.5 items-start">
@@ -200,7 +200,8 @@ const StockTable = ({ className }: { className?: string }) => {
 						key: 'price',
 						render: (row: any) => (
 							<Table.Cell className="p-4 text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-white">
-								{row.price} TK
+								<span className="line-through opacity-50">{row.price}</span>{' '}
+								<span>{row.price - row.discount_amount}</span> TK
 							</Table.Cell>
 						),
 						sortable: true,

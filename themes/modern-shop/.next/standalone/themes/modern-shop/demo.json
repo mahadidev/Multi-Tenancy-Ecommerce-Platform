@@ -1,0 +1,533 @@
+{
+  "theme": {
+    "name": "modern-shop",
+    "version": "1.0.0",
+    "author": "ModernShop Team",
+    "description": "A modern, responsive e-commerce theme with clean design"
+  },
+  "import": {
+    "pages": [
+      {
+        "name": "Home",
+        "slug": "/",
+        "type": "homepage",
+        "title": "Welcome to Modern Shop",
+        "metaTitle": "Modern Shop - Your Premium Online Store",
+        "metaDescription": "Discover amazing products at unbeatable prices. Shop electronics, furniture, clothing and more with fast shipping and secure checkout.",
+        "metaKeywords": ["online shop", "ecommerce", "electronics", "furniture", "clothing", "modern shop"],
+        "sections": [
+          {
+            "type": "HeroSection",
+            "props": {
+              "title": "Summer Collection 2024",
+              "subtitle": "Discover Amazing Deals",
+              "description": "Save up to 50% on selected items. Limited time offer!",
+              "primaryButton": {
+                "text": "Shop Now",
+                "href": "/shop"
+              },
+              "secondaryButton": {
+                "text": "View Offers",
+                "href": "/offers"
+              },
+              "backgroundImage": "https://placehold.co/1920x600/1e40af/ffffff?text=Summer+Sale",
+              "overlay": true,
+              "overlayOpacity": 0.4
+            }
+          },
+          {
+            "type": "FeaturedProducts",
+            "props": {
+              "title": "Featured Products",
+              "subtitle": "Hand-picked items just for you",
+              "productSource": {
+                "type": "dynamic",
+                "query": "featured",
+                "limit": 8,
+                "fallback": "latest"
+              },
+              "layout": "grid",
+              "columns": 4,
+              "showAddToCart": true,
+              "showQuickView": true
+            }
+          },
+          {
+            "type": "CategoryShowcase",
+            "props": {
+              "title": "Shop by Category",
+              "subtitle": "Browse our collections",
+              "categorySource": {
+                "type": "dynamic",
+                "query": "parent",
+                "limit": 6
+              },
+              "layout": "cards",
+              "showProductCount": true
+            }
+          },
+          {
+            "type": "PromoSection",
+            "props": {
+              "items": [
+                {
+                  "icon": "truck",
+                  "title": "Free Shipping",
+                  "description": "On orders over $50"
+                },
+                {
+                  "icon": "shield",
+                  "title": "Secure Payment",
+                  "description": "100% secure transactions"
+                },
+                {
+                  "icon": "refresh",
+                  "title": "Easy Returns",
+                  "description": "30-day return policy"
+                },
+                {
+                  "icon": "headphones",
+                  "title": "24/7 Support",
+                  "description": "Dedicated customer service"
+                }
+              ]
+            }
+          },
+          {
+            "type": "ProductGrid",
+            "props": {
+              "title": "New Arrivals",
+              "subtitle": "Fresh products added daily",
+              "productSource": {
+                "type": "dynamic",
+                "query": "latest",
+                "limit": 12
+              },
+              "layout": "grid",
+              "columns": 4,
+              "showFilters": false,
+              "showPagination": false
+            }
+          },
+          {
+            "type": "Newsletter",
+            "props": {
+              "title": "Stay Updated",
+              "subtitle": "Subscribe to our newsletter",
+              "description": "Get exclusive offers and be the first to know about new products",
+              "placeholder": "Enter your email",
+              "buttonText": "Subscribe",
+              "backgroundColor": "#1e40af",
+              "textColor": "#ffffff"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Shop",
+        "slug": "/shop",
+        "type": "product-listing",
+        "title": "All Products",
+        "metaTitle": "Shop All Products - Modern Shop",
+        "metaDescription": "Browse our complete collection of products. Filter by category, price, and brand to find exactly what you need.",
+        "metaKeywords": ["shop", "products", "buy online", "ecommerce"],
+        "sections": [
+          {
+            "type": "Breadcrumb",
+            "props": {
+              "showHome": true,
+              "separator": "/"
+            }
+          },
+          {
+            "type": "PageHeader",
+            "props": {
+              "title": "Shop",
+              "description": "Explore our complete collection"
+            }
+          },
+          {
+            "type": "ProductGrid",
+            "props": {
+              "productSource": {
+                "type": "dynamic",
+                "query": "all",
+                "limit": 20
+              },
+              "layout": "grid",
+              "columns": 4,
+              "showFilters": true,
+              "filterOptions": ["category", "brand", "price", "rating"],
+              "showSorting": true,
+              "sortOptions": ["latest", "price-low", "price-high", "popular"],
+              "showPagination": true,
+              "itemsPerPage": 20
+            }
+          }
+        ]
+      },
+      {
+        "name": "Product Detail",
+        "slug": "/product/:slug",
+        "type": "product-detail",
+        "title": "Product Details",
+        "dynamic": true,
+        "metaTitle": "{product.name} - Modern Shop",
+        "metaDescription": "{product.description}",
+        "metaKeywords": "{product.tags}",
+        "sections": [
+          {
+            "type": "Breadcrumb",
+            "props": {
+              "showHome": true,
+              "showCategory": true,
+              "separator": "/"
+            }
+          },
+          {
+            "type": "ProductDetail",
+            "props": {
+              "showGallery": true,
+              "showVariants": true,
+              "showStock": true,
+              "showShipping": true,
+              "showReviews": true,
+              "showRelated": true,
+              "relatedProductsLimit": 4
+            }
+          },
+          {
+            "type": "ProductTabs",
+            "props": {
+              "tabs": [
+                {
+                  "id": "description",
+                  "label": "Description",
+                  "content": "product.description"
+                },
+                {
+                  "id": "specifications",
+                  "label": "Specifications",
+                  "content": "product.specifications"
+                },
+                {
+                  "id": "reviews",
+                  "label": "Reviews",
+                  "content": "product.reviews"
+                }
+              ]
+            }
+          },
+          {
+            "type": "RelatedProducts",
+            "props": {
+              "title": "You May Also Like",
+              "productSource": {
+                "type": "related",
+                "limit": 4
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Cart",
+        "slug": "/cart",
+        "type": "cart",
+        "title": "Shopping Cart",
+        "metaTitle": "Shopping Cart - Modern Shop",
+        "metaDescription": "Review your shopping cart and proceed to checkout",
+        "metaKeywords": ["cart", "shopping cart", "checkout"],
+        "sections": [
+          {
+            "type": "Breadcrumb",
+            "props": {
+              "showHome": true
+            }
+          },
+          {
+            "type": "CartSection",
+            "props": {
+              "showItemImages": true,
+              "showVariants": true,
+              "showQuantitySelector": true,
+              "showRemoveButton": true,
+              "showCouponField": true,
+              "showShippingCalculator": true,
+              "showProceedToCheckout": true
+            }
+          },
+          {
+            "type": "SuggestedProducts",
+            "props": {
+              "title": "Complete Your Purchase",
+              "productSource": {
+                "type": "dynamic",
+                "query": "trending",
+                "limit": 4
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Checkout",
+        "slug": "/checkout",
+        "type": "checkout",
+        "title": "Checkout",
+        "metaTitle": "Secure Checkout - Modern Shop",
+        "metaDescription": "Complete your purchase with our secure checkout process",
+        "metaKeywords": ["checkout", "payment", "secure checkout"],
+        "requiresAuth": false,
+        "sections": [
+          {
+            "type": "CheckoutSection",
+            "props": {
+              "steps": ["shipping", "payment", "review"],
+              "allowGuestCheckout": true,
+              "showOrderSummary": true,
+              "paymentMethods": ["credit_card", "paypal", "stripe"],
+              "shippingMethods": ["standard", "express", "overnight"]
+            }
+          }
+        ]
+      },
+      {
+        "name": "About",
+        "slug": "/about",
+        "type": "content",
+        "title": "About Us",
+        "metaTitle": "About Modern Shop - Our Story",
+        "metaDescription": "Learn about Modern Shop's mission to provide quality products and exceptional service",
+        "metaKeywords": ["about us", "company", "modern shop story"],
+        "sections": [
+          {
+            "type": "Breadcrumb",
+            "props": {
+              "showHome": true
+            }
+          },
+          {
+            "type": "ContentSection",
+            "props": {
+              "title": "Our Story",
+              "content": "Modern Shop was founded with a simple mission: to make quality products accessible to everyone. Since our inception, we've served thousands of satisfied customers.",
+              "image": "https://placehold.co/800x400/1e40af/ffffff?text=About+Us",
+              "imagePosition": "right"
+            }
+          },
+          {
+            "type": "TeamSection",
+            "props": {
+              "title": "Meet Our Team",
+              "members": [
+                {
+                  "name": "John Smith",
+                  "role": "CEO & Founder",
+                  "image": "https://placehold.co/300x300/1e40af/ffffff?text=JS"
+                },
+                {
+                  "name": "Jane Doe",
+                  "role": "Head of Operations",
+                  "image": "https://placehold.co/300x300/db2777/ffffff?text=JD"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Contact",
+        "slug": "/contact",
+        "type": "contact",
+        "title": "Contact Us",
+        "metaTitle": "Contact Modern Shop - Get in Touch",
+        "metaDescription": "Have questions? Contact Modern Shop for customer support and inquiries",
+        "metaKeywords": ["contact", "support", "customer service"],
+        "sections": [
+          {
+            "type": "Breadcrumb",
+            "props": {
+              "showHome": true
+            }
+          },
+          {
+            "type": "ContactForm",
+            "props": {
+              "title": "Get in Touch",
+              "subtitle": "We'd love to hear from you",
+              "fields": ["name", "email", "phone", "subject", "message"],
+              "showMap": true,
+              "mapCoordinates": {
+                "lat": 40.7128,
+                "lng": -74.0060
+              }
+            }
+          },
+          {
+            "type": "ContactInfo",
+            "props": {
+              "showAddress": true,
+              "showPhone": true,
+              "showEmail": true,
+              "showSocialMedia": true
+            }
+          }
+        ]
+      }
+    ],
+    "menus": [
+      {
+        "name": "main-menu",
+        "label": "Main Navigation",
+        "visibility": "public",
+        "items": [
+          {
+            "label": "Home",
+            "href": "/",
+            "visibility": "public"
+          },
+          {
+            "label": "Shop",
+            "href": "/shop",
+            "visibility": "public"
+          },
+          {
+            "label": "Categories",
+            "href": "#",
+            "visibility": "public",
+            "dynamic": true,
+            "dynamicSource": "categories"
+          },
+          {
+            "label": "About",
+            "href": "/about",
+            "visibility": "public"
+          },
+          {
+            "label": "Contact",
+            "href": "/contact",
+            "visibility": "public"
+          }
+        ]
+      },
+      {
+        "name": "footer-menu",
+        "label": "Footer Navigation",
+        "visibility": "public",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "/privacy",
+            "visibility": "public"
+          },
+          {
+            "label": "Terms of Service",
+            "href": "/terms",
+            "visibility": "public"
+          },
+          {
+            "label": "Shipping Info",
+            "href": "/shipping",
+            "visibility": "public"
+          },
+          {
+            "label": "Returns",
+            "href": "/returns",
+            "visibility": "public"
+          },
+          {
+            "label": "FAQ",
+            "href": "/faq",
+            "visibility": "public"
+          }
+        ]
+      },
+      {
+        "name": "account-menu",
+        "label": "Account Menu",
+        "visibility": "authenticated",
+        "items": [
+          {
+            "label": "My Orders",
+            "href": "/account/orders",
+            "visibility": "authenticated"
+          },
+          {
+            "label": "Wishlist",
+            "href": "/account/wishlist",
+            "visibility": "authenticated"
+          },
+          {
+            "label": "Profile",
+            "href": "/account/profile",
+            "visibility": "authenticated"
+          },
+          {
+            "label": "Addresses",
+            "href": "/account/addresses",
+            "visibility": "authenticated"
+          }
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "name": "header-widget",
+        "type": "announcement-bar",
+        "position": "header-top",
+        "props": {
+          "message": "Free shipping on orders over $50!",
+          "backgroundColor": "#db2777",
+          "textColor": "#ffffff",
+          "dismissible": true
+        }
+      },
+      {
+        "name": "footer-newsletter",
+        "type": "newsletter-signup",
+        "position": "footer",
+        "props": {
+          "title": "Subscribe to Our Newsletter",
+          "description": "Get the latest updates and exclusive offers"
+        }
+      }
+    ],
+    "settings": {
+      "colors": {
+        "primary": "#1e40af",
+        "secondary": "#db2777",
+        "success": "#059669",
+        "warning": "#ea580c",
+        "error": "#dc2626",
+        "info": "#0891b2"
+      },
+      "typography": {
+        "fontFamily": "Inter, system-ui, sans-serif",
+        "fontSize": {
+          "base": "16px",
+          "heading": "2rem"
+        }
+      },
+      "layout": {
+        "containerWidth": "1280px",
+        "headerHeight": "80px",
+        "footerHeight": "auto"
+      }
+    }
+  },
+  "preview": {
+    "useDummyData": true,
+    "dummyDataFiles": {
+      "products": "/data/products.json",
+      "categories": "/data/categories.json",
+      "store": "/data/store.json",
+      "orders": "/data/orders.json"
+    },
+    "mockUser": {
+      "id": 1,
+      "name": "Demo User",
+      "email": "demo@example.com"
+    }
+  }
+}

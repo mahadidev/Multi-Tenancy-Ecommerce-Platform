@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "order_uuid": "ORD-2024-001",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1234567890",
+    "address": "123 Main St, City, State 12345",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "domain": "modernshop.example.com"
+    },
+    "total": 529.97,
+    "total_product_qty": 3,
+    "status": "processing",
+    "is_approved": true,
+    "is_payed": true,
+    "shipment": null,
+    "payment_status": "paid",
+    "payment_method": "credit_card",
+    "shipping_method": "standard",
+    "shipping_cost": 10.00,
+    "shipping_address": "123 Main St, City, State 12345",
+    "billing_address": "123 Main St, City, State 12345",
+    "created_at": "10 Dec, 2024 | 02:30 PM",
+    "updated_at": "11 Dec, 2024 | 09:15 AM",
+    "items": [
+      {
+        "id": 1,
+        "product_id": 1,
+        "product_name": "Premium Wireless Headphones",
+        "product_sku": "WH-001",
+        "variant": "Black",
+        "price": 249.99,
+        "quantity": 1,
+        "subtotal": 249.99
+      },
+      {
+        "id": 2,
+        "product_id": 2,
+        "product_name": "Smart Fitness Watch",
+        "product_sku": "SFW-002",
+        "variant": "Large",
+        "price": 179.99,
+        "quantity": 1,
+        "subtotal": 179.99
+      },
+      {
+        "id": 3,
+        "product_id": 4,
+        "product_name": "Portable Bluetooth Speaker",
+        "product_sku": "PBS-004",
+        "variant": null,
+        "price": 59.99,
+        "quantity": 2,
+        "subtotal": 119.98
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "order_uuid": "ORD-2024-002",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "phone": "+1234567891",
+    "address": "456 Oak Ave, Town, State 54321",
+    "user": null,
+    "store": {
+      "id": 1,
+      "name": "Modern Shop Demo",
+      "domain": "modernshop.example.com"
+    },
+    "total": 89.98,
+    "total_product_qty": 2,
+    "status": "pending",
+    "is_approved": false,
+    "is_payed": false,
+    "shipment": null,
+    "payment_status": "pending",
+    "payment_method": "paypal",
+    "shipping_method": "express",
+    "shipping_cost": 20.00,
+    "shipping_address": "456 Oak Ave, Town, State 54321",
+    "billing_address": "456 Oak Ave, Town, State 54321",
+    "created_at": "12 Dec, 2024 | 11:00 AM",
+    "updated_at": "12 Dec, 2024 | 11:00 AM",
+    "items": [
+      {
+        "id": 4,
+        "product_id": 5,
+        "product_name": "Organic Cotton T-Shirt",
+        "product_sku": "OCT-005",
+        "variant": "L/Black",
+        "price": 29.99,
+        "quantity": 3,
+        "subtotal": 89.97
+      }
+    ]
+  }
+]

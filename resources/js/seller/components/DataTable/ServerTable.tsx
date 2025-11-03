@@ -254,16 +254,16 @@ const ServerTable: FC<ServerTableProps> = (props) => {
 										Array.from({ length: props.data?.length || props.defaultPerPage || 10 }).map((_, skeletonIdx) => (
 											<Table.Row key={`skeleton-${skeletonIdx}`}>
 												{!props.disableSl && (
-													<td className="p-4 text-center">
+													<Table.Cell className="p-4 text-center">
 														<div className="w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
-													</td>
+													</Table.Cell>
 												)}
 												{props.columns.map((column, colIdx) => (
-													<td key={colIdx} className="p-4">
+													<Table.Cell key={colIdx} className="p-4">
 														<div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" style={{
 															width: `${Math.random() * 40 + 60}%` // Random width between 60-100%
 														}}></div>
-													</td>
+													</Table.Cell>
 												))}
 											</Table.Row>
 										))
@@ -275,27 +275,27 @@ const ServerTable: FC<ServerTableProps> = (props) => {
 													className="hover:bg-gray-100 dark:hover:bg-gray-700"
 												>
 													{!props.disableSl && (
-														<td className="!text-center font-bold dark:text-white">
+														<Table.Cell className="!text-center font-bold dark:text-white">
 															{((props.meta?.current_page || 1) - 1) * (props.meta?.per_page || 10) + idx + 1}
-														</td>
+														</Table.Cell>
 													)}
 													{props.columns.map((column, idx) => (
-														<td key={idx}>
+														<Table.Cell key={idx}>
 															{column.render
 																? column.render(row)
 																: row[column.key ?? 0]}
-														</td>
+														</Table.Cell>
 													))}
 												</Table.Row>
 											))}
 										</>
 									) : (
 										<Table.Row>
-											<td colSpan={props.columns.length + (!props.disableSl ? 1 : 0)} className="p-5 text-center">
+											<Table.Cell colSpan={props.columns.length + (!props.disableSl ? 1 : 0)} className="p-5 text-center">
 												<span className="font-semibold text-gray-700 dark:text-gray-200">
 													No records found
 												</span>
-											</td>
+											</Table.Cell>
 										</Table.Row>
 									)}
 								</Table.Body>

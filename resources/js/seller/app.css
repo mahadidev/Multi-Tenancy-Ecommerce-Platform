@@ -38,6 +38,20 @@
 
 /* Flowbite theme */
 
+/* Force primary buttons to black */
+.bg-primary-600,
+.bg-primary-700,
+.bg-primary-800,
+.bg-primary-900 {
+  background-color: #000000 !important;
+}
+
+.enabled\:hover\:bg-primary-700:enabled:hover,
+.enabled\:hover\:bg-primary-800:enabled:hover,
+.enabled\:hover\:bg-primary-950:enabled:hover {
+  background-color: #333333 !important;
+}
+
 /* chart styles */
 .apexcharts-tooltip {
   @apply !rounded-lg !border-0 !bg-white !text-gray-500 !shadow-lg dark:!bg-gray-700 dark:!text-gray-400;

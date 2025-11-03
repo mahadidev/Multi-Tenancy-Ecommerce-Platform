@@ -87,15 +87,6 @@ function DesktopSidebar() {
                                     pathname={pathname}
                                 />
                             ))}{" "}
-                            {/* <br />{" "}
-                            <SidebarItem
-                                key={"subscription_plan"}
-                                {...{
-                                    href: "select-subscriptions?action=upgrade",
-                                    label: "Upgrade Plan",
-                                }}
-                                pathname={pathname}
-                            /> */}
                         </Sidebar.ItemGroup>
                     </Sidebar.Items>
                 </div>
@@ -252,10 +243,10 @@ function BottomMenu({ isCollapsed }: { isCollapsed: boolean }) {
         console.log('Opening website URL:', url);
         console.log('Store website data:', store?.website);
         console.log('WEBSITE_RENDERER_URL:', WEBSITE_RENDERER_URL);
-        
+
         // Direct window.open without timeout to avoid any interference
         window.open(url, '_blank', 'noopener,noreferrer');
-        
+
         // Return false to ensure no further event handling
         return false;
     };

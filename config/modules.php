@@ -69,12 +69,6 @@ return [
             'priority' => 9,
             'description' => 'Manages blogs, pages, widgets, and content',
         ],
-        'ThemeManagement' => [
-            'enabled' => true,
-            'auto_boot' => true,
-            'priority' => 10,
-            'description' => 'Handles theme management, theme pages, and theme customization',
-        ],
         'SubscriptionManagement' => [
             'enabled' => true,
             'auto_boot' => true,
@@ -122,12 +116,6 @@ return [
             'auto_boot' => true,
             'priority' => 18,
             'description' => 'Handles application and store settings management',
-        ],
-        'WebsiteBuilder' => [
-            'enabled' => true,
-            'auto_boot' => true,
-            'priority' => 19,
-            'description' => 'Multi-tenant website builder with drag-and-drop page editor',
         ],
     ],
 

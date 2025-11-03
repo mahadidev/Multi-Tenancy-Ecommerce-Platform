@@ -1,32 +1,20 @@
 import useHook from '@site/hooks';
 import useStore from '@site/hooks/useStore';
-import { registeredTheme } from '@themes/registeredTheme';
 import { PageType } from '@type/pageType';
 import { FC } from 'react';
 
 const Page: FC<PageType> = function (page) {
-	const { store } = useStore();
-    const hooks = useHook();
-
 	return (
-		<>
-			{page.widgets
-				.slice()
-				.sort(function (widgetA, widgetB) {
-					return widgetA.serial - widgetB.serial;
-				})
-				.map((widget) => (
-					<>
-						{store &&
-							store.theme &&
-							registeredTheme[store.theme.name]?.widget({
-								widget: widget,
-								store: store,
-								hooks: hooks,
-							})}
-					</>
-				))}
-		</>
+		<div className="min-h-screen flex items-center justify-center bg-gray-50">
+			<div className="text-center">
+				<h1 className="text-2xl font-bold text-gray-900 mb-4">
+					Page Unavailable
+				</h1>
+				<p className="text-gray-600">
+					Theme system has been removed. Page rendering is no longer available.
+				</p>
+			</div>
+		</div>
 	);
 };
 export default Page;

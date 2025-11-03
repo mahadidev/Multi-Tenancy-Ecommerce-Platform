@@ -1,5 +1,4 @@
 import useForm from '@seller/_hooks/useForm';
-import useTheme from '@seller/_hooks/useTheme';
 import { ErrorMessage } from '@seller/components';
 import FormInput from '@seller/components/FormInput/FormInput';
 import { PageTypeType } from '@type/pageType';
@@ -13,7 +12,6 @@ import { usePage } from '../hooks';
 const CreatePageModal: FC = function () {
 	const [isOpen, setOpen] = useState(false);
 	const { create, pageTypes } = usePage();
-	const { theme } = useTheme();
 
 	const { handleChange, formState, formErrors, setFormErrors, setFormState } =
 		useForm({
@@ -22,11 +20,9 @@ const CreatePageModal: FC = function () {
 
 	return (
 		<>
-			<Button color="primary" className="p-0" onClick={() => setOpen(true)}>
-				<div className="flex items-center gap-x-3">
-					<HiPlus className="text-xl" />
-					Create Page
-				</div>
+			<Button color="primary" onClick={() => setOpen(true)}>
+				<HiPlus className="mr-2 text-lg" />
+				Create Page
 			</Button>
 			<Modal onClose={() => setOpen(false)} show={isOpen}>
 				<Modal.Header>Create a new Page</Modal.Header>
@@ -99,11 +95,7 @@ const CreatePageModal: FC = function () {
 									required
 								>
 									<option value={0}>Select layout</option>
-									{theme?.layouts.map((layout: WidgetType) => (
-										<option value={layout.id} key={layout.id}>
-											{layout.label}
-										</option>
-									))}
+									<option value={1}>Default Layout</option>
 								</Select>
 							</div>
 						</div>

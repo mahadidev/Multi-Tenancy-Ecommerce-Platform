@@ -1,13 +1,13 @@
-import GenericTable from "@seller/components/DataTable/GenericTable";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 import { PermissionGuard } from "@seller/components";
+import GenericTable from "@seller/components/DataTable/GenericTable";
+import type { ProductType } from "@type/productType";
 import { Button, Table } from "flowbite-react";
 import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import useProductTable from "../hooks/useProductTable";
 import CreateProductModal from "./CreateProductModal";
 import DeleteProductModal from "./DeleteProductModal";
-import { formatTableDate } from "@seller/_utils/dateUtils";
-import type { ProductType } from "@type/productType";
 
 const ProductsTable = () => {
     // Get products using the generic table hook
@@ -24,9 +24,9 @@ const ProductsTable = () => {
                         <Table.Cell className="p-4">
                             <div className="flex items-center space-x-3">
                                 {row.thumbnail ? (
-                                    <img 
-                                        src={row.thumbnail} 
-                                        alt={row.name} 
+                                    <img
+                                        src={row.thumbnail}
+                                        alt={row.name}
                                         className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                                     />
                                 ) : (
@@ -56,15 +56,15 @@ const ProductsTable = () => {
                     render: (row: ProductType) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             <div>
-                                <div className="font-semibold text-lg">${row.price}</div>
+                                <div className="font-semibold text-lg">৳{row.price}</div>
                                 {row.discount_price > 0 && (
                                     <div className="text-sm text-green-600 dark:text-green-400">
-                                        Sale: ${row.discount_price}
+                                        Sale: ৳{row.discount_price}
                                     </div>
                                 )}
                                 {row.buying_price && (
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        Cost: ${row.buying_price}
+                                        Cost: ৳{row.buying_price}
                                     </div>
                                 )}
                             </div>
@@ -93,7 +93,7 @@ const ProductsTable = () => {
                                 </div>
                                 {row.stockValue > 0 && (
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        Value: ${row.stockValue}
+                                        Value: ৳{row.stockValue}
                                     </div>
                                 )}
                             </div>
@@ -108,8 +108,8 @@ const ProductsTable = () => {
                         <Table.Cell className="whitespace-nowrap p-4">
                             <div className="flex flex-col gap-1">
                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                    row.status === 1 
-                                        ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' 
+                                    row.status === 1
+                                        ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
                                         : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
                                 }`}>
                                     {row.status === 1 ? 'Active' : 'Inactive'}
