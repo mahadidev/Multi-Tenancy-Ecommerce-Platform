@@ -4,7 +4,6 @@ import useString from '@seller/_hooks/useString';
 import { Select, TextInput } from '@seller/components';
 import QuickAddSelect from '@seller/components/Form/QuickAddSelect/QuickAddSelect';
 import { BrandType } from '@type/brandType';
-import { CategoryType } from '@type/categoryType';
 import { SectionProps } from '../ProductEditPage';
 
 
@@ -21,16 +20,15 @@ const BasicInfoSection = ({
 	const handleQuickAddCategory = async (categoryName: string) => {
 		return new Promise<{ id: string | number; name: string }>((resolve) => {
 			createCategory.submit({
-				formData: { 
+				formData: {
 					name: categoryName,
-					type: 'product' // Explicitly set type to 'product' for product categories
 				},
 				onSuccess: (responseData: any) => {
 					const newCategory = {
 						id: responseData.category.id,
 						name: responseData.category.name,
 					};
-					
+
 					resolve(newCategory);
 				},
 			});
@@ -93,7 +91,7 @@ const BasicInfoSection = ({
 				onChange={handleChange}
 			>
 				<option value={0}>Select a brand</option>
-				{brands.map((brand: BrandType) => (
+				{brands?.map((brand: BrandType) => (
 					<option value={brand.id} key={brand.id}>
 						{brand.name}
 					</option>

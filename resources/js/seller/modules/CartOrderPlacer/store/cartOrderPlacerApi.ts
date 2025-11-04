@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { ApiResponseType } from "@type/apiType";
+import { ProductType } from "@type/productType";
 import baseQueryWithReAuth, { createRequest } from "@seller/store/baseQueryWithReAuth";
 import { setCartItems } from "./cartOrderPlacerSlice";
 import {
@@ -12,6 +13,27 @@ import {
     CreateOrderPayloadType,
     OrderReceiptType,
 } from "../types";
+
+export interface ProductsFetchResponseType extends ApiResponseType {
+    data: {
+        products: ProductType[];
+        meta?: {
+            current_page: number;
+            last_page: number;
+            per_page: number;
+            total: number;
+        };
+    };
+}
+
+export interface OrderPlacerProductFilters {
+    search?: string;
+    category_id?: string;
+    page?: number;
+    per_page?: number;
+    sort_by?: string;
+    sort_order?: 'asc' | 'desc';
+}
 
 export const cartOrderPlacerApi = createApi({
     reducerPath: "cartOrderPlacerApi",
@@ -100,11 +122,34 @@ export const cartOrderPlacerApi = createApi({
                     Object.entries(params || {}).filter(([_, value]) => value != null)
                 ).toString();
                 return createRequest({
-                    url: `${PREFIX}/products${queryString ? `?${queryString}` : ""}`,
+                    url: `${PREFIX}/product${queryString ? `?${queryString}` : ""}`,
                     method: "get",
                 });
             },
             providesTags: ["OrderPlacerData"],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
+        // fetch products for order placer with table filters (for generic table)
+        fetchOrderPlacerProductsTable: builder.query<ProductsFetchResponseType, OrderPlacerProductFilters>({
+            query: (filters) => {
+                const params = new URLSearchParams();
+                
+                // Add filters to URL params
+                Object.entries(filters).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== '') {
+                        // Skip empty search values to keep URL clean
+                        if (key === 'search' && value === '') return;
+                        params.append(key, String(value));
+                    }
+                });
+                
+                return createRequest({
+                    url: `${PREFIX}/product?${params.toString()}`,
+                    method: 'get',
+                });
+            },
+            providesTags: ['OrderPlacerData'],
             transformErrorResponse: (error: any) => error.data,
         }),
 
@@ -131,5 +176,6 @@ export const {
     useRemoveCartItemMutation,
     useCreateOrderMutation,
     useFetchOrderPlacerProductsQuery,
+    useFetchOrderPlacerProductsTableQuery,
     useSearchCustomersQuery,
 } = cartOrderPlacerApi;

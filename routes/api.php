@@ -25,6 +25,9 @@ Route::group(['prefix' => 'v1'], function () {
     
     // Include financial management routes  
     require app_path('Modules/FinancialManagement/Routes/api.php');
+    
+    // Include product management routes  
+    require app_path('Modules/ProductManagement/Routes/api.php');
 
     // Authentication routes are now handled by Authentication module
     // See: app/Modules/Authentication/Routes/api.php

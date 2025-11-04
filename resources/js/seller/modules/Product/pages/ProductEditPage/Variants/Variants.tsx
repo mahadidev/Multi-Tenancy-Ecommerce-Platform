@@ -46,7 +46,7 @@ const Variants: FC<Props> = () => {
 						label: 'Options',
 						render: (row: ProductVariantType) => (
 							<Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
-								{row.options.map((option) => (
+								{row.options?.map((option) => (
 									<span
 										className="border-r-2 border-primary pr-2 mr-2 last:pr-0 last:mr-0 last:border-r-0"
 										key={option.id}

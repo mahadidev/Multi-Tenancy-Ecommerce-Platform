@@ -134,7 +134,7 @@ const CreateStockModal = () => {
 					</div>
 
 					<div className="grid md:grid-cols-2 gap-x-2.5 gap-y-5  py-5">
-						{variants.map((variant) => (
+						{variants?.map((variant) => (
 							<div key={variant.id} className="flex flex-col gap-1">
 								<label className="text-sm font-medium text-gray-700">
 									{variant.label}
@@ -153,7 +153,7 @@ const CreateStockModal = () => {
 									}
 								>
 									<option value="">Select {variant.label}</option>
-									{variant.options.map((opt) => (
+									{variant.options?.map((opt) => (
 										<option
 											key={opt.id}
 											value={opt.id}
