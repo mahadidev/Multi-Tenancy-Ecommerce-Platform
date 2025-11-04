@@ -1,6 +1,6 @@
 import GenericTable from "@seller/components/DataTable/GenericTable";
 import { useExpenseTable } from "../hooks";
-import { ExpenseType } from "@type/expenseType";
+import type { Expense } from "../types";
 import { Badge, Table } from "flowbite-react";
 import CreateExpenseModal from "./CreateExpenseModal";
 import DeleteExpenseModal from "./DeleteExpenseModal";
@@ -26,7 +26,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Expense Details',
                     key: 'title',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="p-4">
                             <div className="min-w-0 flex-1">
                                 <div className="font-semibold text-gray-900 dark:text-white truncate">
@@ -45,7 +45,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Amount',
                     key: 'amount',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             <span className="font-semibold text-green-600 dark:text-green-400">
                                 {row.formatted_amount}
@@ -57,7 +57,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Category',
                     key: 'category',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             {row.category_label}
                         </Table.Cell>
@@ -67,7 +67,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Payment Method',
                     key: 'payment_method',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             {row.payment_method_label}
                         </Table.Cell>
@@ -77,7 +77,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Date',
                     key: 'expense_date',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             {row.expense_date_formatted}
                         </Table.Cell>
@@ -87,7 +87,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Status',
                     key: 'status',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4">
                             <Badge color={getStatusColor(row.status)} size="sm">
                                 {row.status_label}
@@ -99,7 +99,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Vendor',
                     key: 'vendor',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             <div>
                                 <div className="font-medium">{row.vendor?.name || '-'}</div>
@@ -116,7 +116,7 @@ const ExpensesTable = () => {
                 {
                     label: 'Created At',
                     key: 'created_at',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             {formatTableDate(row.created_at)}
                         </Table.Cell>
@@ -125,7 +125,7 @@ const ExpensesTable = () => {
                 },
                 {
                     label: 'Actions',
-                    render: (row: ExpenseType) => (
+                    render: (row: Expense) => (
                         <Table.Cell>
                             <div className="flex items-center gap-x-3 whitespace-nowrap">
                                 <EditExpenseModal expense={row} />
@@ -140,7 +140,7 @@ const ExpensesTable = () => {
                 columns: ["title", "description", "category", "payment_method", "vendor"],
             }}
             head={{
-                render: (_data: ExpenseType[]) => <CreateExpenseModal />,
+                render: (_data: Expense[]) => <CreateExpenseModal />,
             }}
             exportable={true}
             filename="expenses"

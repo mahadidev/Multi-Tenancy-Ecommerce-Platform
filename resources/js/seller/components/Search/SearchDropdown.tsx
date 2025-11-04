@@ -52,7 +52,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({
             case 'expense': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
             case 'vendor': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
             case 'field': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300';
-            case 'page': return 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300';
+            case 'page': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
             case 'feature': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300';
             default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
         }

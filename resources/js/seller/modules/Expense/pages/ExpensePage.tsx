@@ -20,7 +20,7 @@ const ExpensePage: FC = function () {
                     <Button
                         as={Link}
                         to={RoutePath.VendorsPage.index()}
-                        color="info"
+                        color="primary"
                         size="sm"
                     >
                         <MdBusiness className="mr-2 h-4 w-4" />

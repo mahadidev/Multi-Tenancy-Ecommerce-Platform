@@ -1,6 +1,6 @@
 import GenericTable from "@seller/components/DataTable/GenericTable";
 import { useVendorTable } from "../../hooks";
-import { VendorType } from "@type/vendorType";
+import type { Vendor } from "../../types";
 import { Table } from "flowbite-react";
 import CreateVendorModal from "./CreateVendorModal";
 import DeleteVendorModal from "./DeleteVendorModal";
@@ -17,7 +17,7 @@ const VendorsTable = () => {
                 {
                     label: "Vendor",
                     key: "name",
-                    render: (row: VendorType) => (
+                    render: (row: Vendor) => (
                         <Table.Cell className="p-4">
                             <div className="flex items-center space-x-3">
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
@@ -43,7 +43,7 @@ const VendorsTable = () => {
                 {
                     label: "Contact Info",
                     key: "phone",
-                    render: (row: VendorType) => (
+                    render: (row: Vendor) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             <div>
                                 <div className="font-semibold">{row.phone || '-'}</div>
@@ -58,7 +58,7 @@ const VendorsTable = () => {
                 {
                     label: "Address",
                     key: "address",
-                    render: (row: VendorType) => (
+                    render: (row: Vendor) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             <div className="max-w-xs truncate">
                                 {row.address || '-'}
@@ -70,7 +70,7 @@ const VendorsTable = () => {
                 {
                     label: "Description",
                     key: "description",
-                    render: (row: VendorType) => (
+                    render: (row: Vendor) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             <div className="max-w-xs truncate">
                                 {row.description || '-'}
@@ -82,7 +82,7 @@ const VendorsTable = () => {
                 {
                     label: "Created At",
                     key: "created_at",
-                    render: (row: VendorType) => (
+                    render: (row: Vendor) => (
                         <Table.Cell className="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
                             {row.created_at_human}
                         </Table.Cell>
@@ -91,7 +91,7 @@ const VendorsTable = () => {
                 },
                 {
                     label: "Actions",
-                    render: (row: VendorType) => (
+                    render: (row: Vendor) => (
                         <Table.Cell>
                             <div className="flex items-center gap-x-3 whitespace-nowrap">
                                 <EditVendorModal vendor={row} />
@@ -106,7 +106,7 @@ const VendorsTable = () => {
                 columns: ["name", "email", "phone", "contact_person"],
             }}
             head={{
-                render: (_data: VendorType[]) => <CreateVendorModal />,
+                render: (_data: Vendor[]) => <CreateVendorModal />,
             }}
             exportable={true}
             filename="vendors"

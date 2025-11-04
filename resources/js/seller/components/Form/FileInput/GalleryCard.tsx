@@ -142,7 +142,7 @@ const GalleryCard: FC<PropsType> = function (props) {
                                     <Button
                                         size="sm"
                                         outline
-                                        gradientDuoTone="cyanToBlue"
+                                        color="gray"
                                         onClick={handleCopy}
                                         className="flex items-center gap-2"
                                     >

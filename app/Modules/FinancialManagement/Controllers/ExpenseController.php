@@ -28,7 +28,9 @@ class ExpenseController extends Controller
             ], 400);
         }
 
-        $query = Expense::with(['user', 'store', 'vendor'])
+        $query = Expense::with(['user', 'store', 'vendor' => function($query) use ($storeId) {
+                            $query->where('store_id', $storeId);
+                        }])
                         ->forStore($storeId)
                         ->latest('expense_date');
 
@@ -138,7 +140,9 @@ class ExpenseController extends Controller
             ], 400);
         }
 
-        $expense = Expense::with(['user', 'store', 'vendor'])
+        $expense = Expense::with(['user', 'store', 'vendor' => function($query) use ($storeId) {
+                               $query->where('store_id', $storeId);
+                           }])
                           ->forStore($storeId)
                           ->find($id);
 
@@ -193,13 +197,19 @@ class ExpenseController extends Controller
         }
 
         $expense->update($expenseData);
-        $expense->load(['user', 'store', 'vendor']);
+        
+        // Fetch the updated expense fresh from database with constrained vendor relationship
+        $updatedExpense = Expense::with(['user', 'store', 'vendor' => function($query) use ($storeId) {
+                                    $query->where('store_id', $storeId);
+                                }])
+                                ->forStore($storeId)
+                                ->find($id);
 
         return response()->json([
             'status' => 200,
             'message' => 'Expense updated successfully',
             'data' => [
-                'expense' => new ExpenseResource($expense),
+                'expense' => new ExpenseResource($updatedExpense),
             ],
         ], 200);
     }

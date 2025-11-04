@@ -3,14 +3,14 @@ import useForm from "@seller/_hooks/useForm";
 import useVendor from "@seller/_hooks/useVendor";
 import QuickAddSelect from "@seller/components/Form/QuickAddSelect/QuickAddSelect";
 import TextInput from "@seller/components/Form/TextInput/TextInput";
-import { ExpenseType } from "@type/expenseType";
 import { Button, FileInput, Label, Modal, Select, Textarea } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
+import type { Expense } from "../types";
 
 interface EditExpenseModalProps {
-    expense: ExpenseType;
+    expense: Expense;
 }
 
 const EditExpenseModal: FC<EditExpenseModalProps> = function ({ expense }) {
@@ -70,7 +70,7 @@ const EditExpenseModal: FC<EditExpenseModalProps> = function ({ expense }) {
                 amount: expense.amount,
                 category: expense.category,
                 payment_method: expense.payment_method,
-                vendor_id: expense.vendor_id || '',
+                vendor_id: expense.vendor_id ? expense.vendor_id.toString() : '',
                 receipt_number: expense.receipt_number || '',
                 expense_date: expense.expense_date,
                 status: expense.status,
@@ -81,8 +81,16 @@ const EditExpenseModal: FC<EditExpenseModalProps> = function ({ expense }) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Prepare form data with proper vendor_id conversion
+        const submitData = {
+            ...formState,
+            id: expense.id,
+            vendor_id: formState.vendor_id ? Number(formState.vendor_id) : undefined,
+        };
+        
         update.submit({
-            formData: { ...formState, id: expense.id },
+            formData: submitData,
             onSuccess: () => {
                 setOpen(false);
             },
@@ -92,7 +100,7 @@ const EditExpenseModal: FC<EditExpenseModalProps> = function ({ expense }) {
     return (
         <>
             <Button
-                color="info"
+                color="primary"
                 size="sm"
                 onClick={() => setOpen(true)}
             >

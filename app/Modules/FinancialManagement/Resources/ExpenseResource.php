@@ -24,12 +24,12 @@ class ExpenseResource extends JsonResource
             'payment_method_label' => $this->payment_method_label,
             'vendor_id' => $this->vendor_id,
             'vendor' => $this->whenLoaded('vendor', function () {
-                return [
+                return $this->vendor ? [
                     'id' => $this->vendor->id,
                     'name' => $this->vendor->name,
                     'phone' => $this->vendor->phone,
                     'email' => $this->vendor->email,
-                ];
+                ] : null;
             }),
             'receipt_number' => $this->receipt_number,
             'expense_date' => $this->expense_date?->format('Y-m-d'),
@@ -42,18 +42,18 @@ class ExpenseResource extends JsonResource
             
             // Relationships
             'store' => $this->whenLoaded('store', function () {
-                return [
+                return $this->store ? [
                     'id' => $this->store->id,
                     'name' => $this->store->name,
-                ];
+                ] : null;
             }),
             
             'user' => $this->whenLoaded('user', function () {
-                return [
+                return $this->user ? [
                     'id' => $this->user->id,
                     'name' => $this->user->name,
                     'email' => $this->user->email,
-                ];
+                ] : null;
             }),
             
             // Metadata

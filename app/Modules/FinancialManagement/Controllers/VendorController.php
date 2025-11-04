@@ -83,7 +83,7 @@ class VendorController extends Controller
     /**
      * Display the specified vendor
      */
-    public function show(Request $request, Vendor $vendor): JsonResponse
+    public function show(Request $request, $vendorId): JsonResponse
     {
         $storeId = authStore();
         
@@ -94,8 +94,22 @@ class VendorController extends Controller
             ], 400);
         }
         
-        // Ensure vendor belongs to current store
-        if ($vendor->store_id !== $storeId) {
+        // Find the vendor manually
+        $vendor = Vendor::find($vendorId);
+        
+        if (!$vendor) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Vendor not found',
+            ], 404);
+        }
+        
+        // Check if user is store owner - owners have full access
+        $store = \App\Modules\StoreManagement\Models\Store::find($storeId);
+        $isStoreOwner = $store && $store->owner_id === auth()->id();
+        
+        // Ensure vendor belongs to current store (unless user is store owner)
+        if (!$isStoreOwner && $vendor->store_id !== $storeId) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Access denied to this vendor',
@@ -116,7 +130,7 @@ class VendorController extends Controller
     /**
      * Update the specified vendor
      */
-    public function update(UpdateVendorRequest $request, Vendor $vendor): JsonResponse
+    public function update(UpdateVendorRequest $request, $vendorId): JsonResponse
     {
         $storeId = authStore();
         
@@ -127,8 +141,31 @@ class VendorController extends Controller
             ], 400);
         }
         
-        // Ensure vendor belongs to current store
-        if ($vendor->store_id !== $storeId) {
+        // Find the vendor manually
+        $vendor = Vendor::find($vendorId);
+        
+        if (!$vendor) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Vendor not found',
+            ], 404);
+        }
+        
+        // Debug logging
+        \Log::info('Vendor Update Debug', [
+            'vendor_id' => $vendor->id,
+            'vendor_store_id' => $vendor->store_id,
+            'current_store_id' => $storeId,
+            'vendor_exists' => !!$vendor,
+            'request_data' => $request->validated()
+        ]);
+        
+        // Check if user is store owner - owners have full access
+        $store = \App\Modules\StoreManagement\Models\Store::find($storeId);
+        $isStoreOwner = $store && $store->owner_id === auth()->id();
+        
+        // Ensure vendor belongs to current store (unless user is store owner)
+        if (!$isStoreOwner && $vendor->store_id !== $storeId) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Access denied to this vendor',
@@ -136,7 +173,17 @@ class VendorController extends Controller
         }
 
         $vendor->update($request->validated());
+        
+        // Refresh the vendor and load relationships
+        $vendor->refresh();
         $vendor->load(['store']);
+        
+        \Log::info('Vendor After Update', [
+            'vendor_id' => $vendor->id,
+            'vendor_store_id' => $vendor->store_id,
+            'current_store_id' => $storeId,
+            'store_loaded' => !!$vendor->store
+        ]);
 
         return response()->json([
             'status' => 200,
@@ -150,7 +197,7 @@ class VendorController extends Controller
     /**
      * Remove the specified vendor
      */
-    public function destroy(Request $request, Vendor $vendor): JsonResponse
+    public function destroy(Request $request, $vendorId): JsonResponse
     {
         $storeId = authStore();
         
@@ -161,8 +208,22 @@ class VendorController extends Controller
             ], 400);
         }
         
-        // Ensure vendor belongs to current store
-        if ($vendor->store_id !== $storeId) {
+        // Find the vendor manually
+        $vendor = Vendor::find($vendorId);
+        
+        if (!$vendor) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Vendor not found',
+            ], 404);
+        }
+        
+        // Check if user is store owner - owners have full access
+        $store = \App\Modules\StoreManagement\Models\Store::find($storeId);
+        $isStoreOwner = $store && $store->owner_id === auth()->id();
+        
+        // Ensure vendor belongs to current store (unless user is store owner)
+        if (!$isStoreOwner && $vendor->store_id !== $storeId) {
             return response()->json([
                 'status' => 403,
                 'message' => 'Access denied to this vendor',

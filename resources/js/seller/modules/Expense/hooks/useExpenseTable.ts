@@ -1,14 +1,14 @@
-import { useGenericTable } from '@seller/_hooks/useGenericTable';
-import { useFetchExpensesTableQuery } from '../store/expenseApi';
-import type { ExpenseType } from '@type/expenseType';
-import type { ExpenseFilters } from '../types';
 import type { UseGenericTableReturn } from '@seller/_hooks/types/table';
+import { useGenericTable } from '@seller/_hooks/useGenericTable';
+import type { Expense } from '../types';
+import { useFetchExpensesTableQuery } from '../store/expenseApi';
+import type { ExpenseFilters } from '../types';
 
 // Generic table hook for expenses
-export const useExpenseTable = (): UseGenericTableReturn<ExpenseType, ExpenseFilters> => {
+export const useExpenseTable = (): UseGenericTableReturn<Expense, ExpenseFilters> => {
   return useGenericTable(
     useFetchExpensesTableQuery,
-    'data.expenses', // Data key in API response - nested under data
+    'expenses', // Data key in API response - nested under data
     {
       defaultSortBy: 'created_at',
       defaultSortOrder: 'desc',

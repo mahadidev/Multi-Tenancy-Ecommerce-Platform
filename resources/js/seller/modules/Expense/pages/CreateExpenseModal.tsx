@@ -73,8 +73,15 @@ const CreateExpenseModal: FC = function () {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		
+		// Prepare form data with proper vendor_id conversion
+		const submitData = {
+			...formState,
+			vendor_id: formState.vendor_id ? Number(formState.vendor_id) : undefined,
+		};
+		
 		create.submit({
-			formData: formState,
+			formData: submitData,
 			onSuccess: () => {
 				setOpen(false);
 				setFormState({});

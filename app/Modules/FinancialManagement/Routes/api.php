@@ -49,6 +49,7 @@ Route::prefix('api/v1/seller')->middleware(['auth:sanctum', 'store'])->group(fun
         
         // Manage vendors - only vendor managers
         Route::middleware(['custom.permission:vendors.manage'])->post('/', [VendorController::class, 'store'])->name('vendors.store');
+        Route::middleware(['custom.permission:vendors.manage'])->post('/{vendor}', [VendorController::class, 'update'])->name('vendors.post_update');
         Route::middleware(['custom.permission:vendors.manage'])->put('/{vendor}', [VendorController::class, 'update'])->name('vendors.update');
         Route::middleware(['custom.permission:vendors.manage'])->patch('/{vendor}', [VendorController::class, 'update'])->name('vendors.patch');
         Route::middleware(['custom.permission:vendors.manage'])->delete('/{vendor}', [VendorController::class, 'destroy'])->name('vendors.destroy');

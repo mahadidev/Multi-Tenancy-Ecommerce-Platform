@@ -1,12 +1,12 @@
 import useVendor from "@seller/_hooks/useVendor";
-import { VendorType } from "@type/vendorType";
 import { Button, Modal } from "flowbite-react";
 import { FC, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiOutlineExclamationCircle, HiTrash } from "react-icons/hi";
+import type { Vendor } from "../../types";
 
 interface DeleteVendorModalProps {
-    vendor: VendorType;
+    vendor: Vendor;
 }
 
 const DeleteVendorModal: FC<DeleteVendorModalProps> = function ({ vendor }) {
@@ -25,7 +25,7 @@ const DeleteVendorModal: FC<DeleteVendorModalProps> = function ({ vendor }) {
     return (
         <>
             <Button
-                color="failure"
+                color="gray"
                 size="sm"
                 onClick={() => setOpen(true)}
             >

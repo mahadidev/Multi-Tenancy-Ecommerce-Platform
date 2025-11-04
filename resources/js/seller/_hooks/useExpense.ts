@@ -1,12 +1,14 @@
 import {
-    CreateExpensePayloadType,
-    DeleteExpensePayloadType,
-    UpdateExpensePayloadType,
     useCreateExpenseMutation,
     useDeleteExpenseMutation,
     useFetchExpensesQuery,
     useUpdateExpenseMutation,
-} from "@seller/store/reducers/expenseApi";
+} from "@seller/modules/Expense/store/expenseApi";
+import type {
+    CreateExpensePayload,
+    DeleteExpensePayload,
+    UpdateExpensePayload,
+} from "@seller/modules/Expense/types";
 import { useAppSelector } from "@seller/store/store";
 import useToast from "./useToast";
 
@@ -35,7 +37,7 @@ const useExpense = () => {
         formData,
         onSuccess,
     }: {
-        formData: CreateExpensePayloadType;
+        formData: CreateExpensePayload;
         onSuccess?: CallableFunction;
     }) => {
         handleCreate(formData).then((response) => {
@@ -72,7 +74,7 @@ const useExpense = () => {
         formData,
         onSuccess,
     }: {
-        formData: UpdateExpensePayloadType;
+        formData: UpdateExpensePayload;
         onSuccess?: CallableFunction;
     }) => {
         handleUpdate(formData).then((response) => {
@@ -108,7 +110,7 @@ const useExpense = () => {
         formData,
         onSuccess,
     }: {
-        formData: DeleteExpensePayloadType;
+        formData: DeleteExpensePayload;
         onSuccess?: CallableFunction;
     }) => {
         handleDelete(formData).then((response) => {

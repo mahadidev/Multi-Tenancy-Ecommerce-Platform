@@ -5,11 +5,15 @@ use App\Modules\RoleManagement\Controllers\PermissionController;
 use App\Modules\RoleManagement\Controllers\RoleController;
 use App\Modules\RoleManagement\Controllers\UserRoleController;
 
+// Basic permissions endpoint for role creation - accessible to store owners
+Route::prefix('seller')->middleware(['auth:sanctum', 'store'])->group(function () {
+    Route::get('/permissions', [PermissionController::class, 'index']);
+});
+
 Route::prefix('seller')->middleware(['auth:sanctum', 'store', 'custom.permission:store.manage_users'])->group(function () {
     
     // Permission routes - Only admins can manage permissions
     Route::prefix('permissions')->controller(PermissionController::class)->group(function () {
-        Route::get('/', 'index');
         Route::get('/grouped', 'grouped');
         Route::post('/', 'store');
         Route::get('/group/{group}', 'byGroup');

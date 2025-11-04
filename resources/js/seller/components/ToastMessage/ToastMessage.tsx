@@ -110,9 +110,9 @@ const ToastMessage = () => {
                 case 'info':
                     return {
                         icon: <span className="w-4 h-4 text-center">i</span>,
-                        bgColor: 'bg-cyan-50 dark:bg-cyan-900/20',
-                        borderColor: 'border-cyan-200 dark:border-cyan-800',
-                        iconColor: 'text-cyan-600 dark:text-cyan-400',
+                        bgColor: 'bg-gray-50 dark:bg-gray-900/20',
+                        borderColor: 'border-gray-200 dark:border-gray-700',
+                        iconColor: 'text-gray-600 dark:text-gray-400',
                         textColor: 'text-gray-800 dark:text-gray-200'
                     };
                 default:

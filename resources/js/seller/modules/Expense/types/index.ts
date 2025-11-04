@@ -4,20 +4,62 @@ export interface Vendor {
   email?: string;
   phone?: string;
   address?: string;
+  description?: string;
+  contact_person?: string;
+  store_id: number;
+  store?: {
+    id: number;
+    name: string;
+  };
   created_at: string;
+  created_at_human: string;
   updated_at: string;
+  updated_at_human: string;
 }
 
 export interface Expense {
   id: number;
-  vendor_id: number;
-  vendor?: Vendor;
-  category: string;
-  amount: number;
+  title: string;
   description?: string;
-  date: string;
+  amount: number;
+  formatted_amount: string;
+  category: string;
+  category_label: string;
+  payment_method: string;
+  payment_method_label: string;
+  vendor_id?: number;
+  vendor?: {
+    id: number;
+    name: string;
+    phone?: string;
+    email?: string;
+  };
+  receipt_number?: string;
+  expense_date: string;
+  expense_date_formatted: string;
+  status: 'pending' | 'approved' | 'rejected';
+  status_label: string;
+  status_color: string;
+  notes?: string;
+  attachments: {
+    path: string;
+    url: string;
+    name: string;
+    extension: string;
+  }[];
+  store?: {
+    id: number;
+    name: string;
+  };
+  user?: {
+    id: number;
+    name: string;
+    email: string;
+  };
   created_at: string;
+  created_at_human: string;
   updated_at: string;
+  updated_at_human: string;
 }
 
 import type { ServerTableFilters } from '@seller/_hooks/types/table';
@@ -73,20 +115,30 @@ export interface VendorsResponse {
 
 // Payload Types
 export interface CreateExpensePayload {
-  vendor_id: number;
-  category: string;
-  amount: number;
+  title: string;
   description?: string;
-  date: string;
+  amount: number;
+  category: string;
+  payment_method: string;
+  vendor_id?: number;
+  receipt_number?: string;
+  expense_date: string;
+  status?: 'pending' | 'approved' | 'rejected';
+  notes?: string;
 }
 
 export interface UpdateExpensePayload {
   id: number;
-  vendor_id?: number;
-  category?: string;
-  amount?: number;
+  title?: string;
   description?: string;
-  date?: string;
+  amount?: number;
+  category?: string;
+  payment_method?: string;
+  vendor_id?: number;
+  receipt_number?: string;
+  expense_date?: string;
+  status?: 'pending' | 'approved' | 'rejected';
+  notes?: string;
 }
 
 export interface DeleteExpensePayload {
@@ -98,6 +150,8 @@ export interface CreateVendorPayload {
   email?: string;
   phone?: string;
   address?: string;
+  description?: string;
+  contact_person?: string;
 }
 
 export interface UpdateVendorPayload {
@@ -106,6 +160,8 @@ export interface UpdateVendorPayload {
   email?: string;
   phone?: string;
   address?: string;
+  description?: string;
+  contact_person?: string;
 }
 
 export interface DeleteVendorPayload {

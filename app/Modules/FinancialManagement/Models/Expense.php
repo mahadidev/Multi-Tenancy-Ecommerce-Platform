@@ -110,7 +110,7 @@ class Expense extends Model
     }
 
     /**
-     * Get the vendor for the expense
+     * Get the vendor for the expense (only if vendor belongs to same store)
      */
     public function vendor(): BelongsTo
     {

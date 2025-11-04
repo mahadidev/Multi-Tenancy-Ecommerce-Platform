@@ -1,14 +1,14 @@
 import useForm from "@seller/_hooks/useForm";
 import useVendor from "@seller/_hooks/useVendor";
 import TextInput from "@seller/components/Form/TextInput/TextInput";
-import { VendorType } from "@type/vendorType";
 import { Button, Label, Modal, Textarea } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
+import type { Vendor } from "../../types";
 
 interface EditVendorModalProps {
-    vendor: VendorType;
+    vendor: Vendor;
 }
 
 const EditVendorModal: FC<EditVendorModalProps> = function ({ vendor }) {
@@ -45,7 +45,7 @@ const EditVendorModal: FC<EditVendorModalProps> = function ({ vendor }) {
     return (
         <>
             <Button
-                color="info"
+                color="primary"
                 size="sm"
                 onClick={() => setOpen(true)}
             >
