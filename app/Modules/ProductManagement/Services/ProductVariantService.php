@@ -61,13 +61,24 @@ class ProductVariantService
             'label' => $variant['label'],
         ]);
 
-        // Delete existing options
-        $productVariant->options()->delete();
+        $optionIdsToKeep = collect($variant['options'])
+            ->pluck('id')
+            ->filter(fn($id) => !empty($id))
+            ->all();
+
+        ProductVariantOption::where('variant_id', $productVariant->id)
+            ->whereNotIn('id', $optionIdsToKeep)
+            ->delete();
 
         // Recreate options
         foreach ($variant['options'] as $option) {
-            ProductVariantOption::create([
+            // i need to delete those option which in not included in $variant["options"]
+
+
+            ProductVariantOption::updateOrCreate([
                 'variant_id' => $productVariant->id,
+                'id' => $option['id'] ?? 0,
+            ],[
                 'label' => $option['label'] ?? null,
                 'slug' => $option['slug'] ?? null,
                 'code' => $option['code'] ?? null,

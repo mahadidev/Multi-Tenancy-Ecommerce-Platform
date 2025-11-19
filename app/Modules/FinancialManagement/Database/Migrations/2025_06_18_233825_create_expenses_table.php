@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2); // Expense amount
             $table->string('category')->default('general'); // Expense category
             $table->enum('payment_method', ['cash', 'card', 'bank_transfer', 'check', 'other'])->default('cash');
-            $table->string('vendor')->nullable(); // Vendor/supplier name
+            $table->foreignId('vendor_id')->nullable()->constrained('vendors')->onDelete('set null'); // Changed from 'categories' to 'brands'
             $table->string('receipt_number')->nullable(); // Receipt/invoice number
             $table->date('expense_date'); // When the expense occurred
             $table->string('status', 20)->default('approved'); // pending, approved, rejected

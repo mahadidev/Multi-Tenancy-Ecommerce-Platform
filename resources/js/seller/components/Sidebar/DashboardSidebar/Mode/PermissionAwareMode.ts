@@ -1,6 +1,6 @@
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
-import { FaLayerGroup, FaSteamSymbol, FaUsers, FaChartBar } from 'react-icons/fa';
+import { FaChartBar, FaLayerGroup, FaSteamSymbol, FaUsers } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
 import { MdAttachMoney, MdBusiness, MdWeb } from 'react-icons/md';
 import { TbCoinTakaFilled, TbTruckDelivery } from 'react-icons/tb';
@@ -172,27 +172,27 @@ export const permissionAwareExternalPages: PermissionAwareSidebarItem[] = [
             'pages.view', 'pages.create', 'pages.edit', 'pages.delete'
         ],
         items: [
-            {
-                href: '#',
-                label: 'Blogs',
-                permissions: [
-                    'blogs.view', 'blogs.create', 'blogs.edit', 'blogs.delete'
-                ],
-            },
-            {
-                href: '#',
-                label: 'Menus',
-                permissions: [
-                    'menus.view', 'menus.create', 'menus.edit', 'menus.delete'
-                ],
-            },
-            {
-                href: '#',
-                label: 'Pages',
-                permissions: [
-                    'pages.view', 'pages.create', 'pages.edit', 'pages.delete'
-                ],
-            },
+            // {
+            //     href: '#',
+            //     label: 'Blogs',
+            //     permissions: [
+            //         'blogs.view', 'blogs.create', 'blogs.edit', 'blogs.delete'
+            //     ],
+            // },
+            // {
+            //     href: '#',
+            //     label: 'Menus',
+            //     permissions: [
+            //         'menus.view', 'menus.create', 'menus.edit', 'menus.delete'
+            //     ],
+            // },
+            // {
+            //     href: '#',
+            //     label: 'Pages',
+            //     permissions: [
+            //         'pages.view', 'pages.create', 'pages.edit', 'pages.delete'
+            //     ],
+            // },
         ],
     },
 

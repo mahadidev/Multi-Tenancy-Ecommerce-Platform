@@ -1,12 +1,11 @@
-import useExpense from "@seller/_hooks/useExpense";
 import useForm from "@seller/_hooks/useForm";
-import useVendor from "@seller/_hooks/useVendor";
 import QuickAddSelect from "@seller/components/Form/QuickAddSelect/QuickAddSelect";
 import TextInput from "@seller/components/Form/TextInput/TextInput";
 import { Button, FileInput, Label, Modal, Select, Textarea } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
+import { useExpense } from "../hooks";
 import type { Expense } from "../types";
 
 interface EditExpenseModalProps {
@@ -15,8 +14,9 @@ interface EditExpenseModalProps {
 
 const EditExpenseModal: FC<EditExpenseModalProps> = function ({ expense }) {
     const [isOpen, setOpen] = useState(false);
-    const { update } = useExpense();
-    const { vendors, create: createVendor } = useVendor();
+    const { vendors, vendor, expense: hookExpense } = useExpense();
+    const { update } = hookExpense;
+    const {create:createVendor} = vendor;
 
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: update.error,
@@ -81,14 +81,14 @@ const EditExpenseModal: FC<EditExpenseModalProps> = function ({ expense }) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Prepare form data with proper vendor_id conversion
         const submitData = {
             ...formState,
             id: expense.id,
             vendor_id: formState.vendor_id ? Number(formState.vendor_id) : undefined,
         };
-        
+
         update.submit({
             formData: submitData,
             onSuccess: () => {

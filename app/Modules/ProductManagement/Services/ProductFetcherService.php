@@ -41,8 +41,9 @@ class ProductFetcherService
             $query->where('brand_id', $request->brand_id);
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('sku', 'like', '%' . $request->search . '%');
+                $searchTerm = strtolower($request->search);
+                $q->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
+                    ->orWhereRaw('LOWER(sku) LIKE ?', ['%' . $searchTerm . '%']);
             });
         }
         if ($request->boolean('is_trending'))

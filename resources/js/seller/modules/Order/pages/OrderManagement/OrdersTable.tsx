@@ -1,26 +1,37 @@
 import useToast from "@seller/_hooks/useToast";
-import { DataTable } from "@seller/components";
+import { formatTableDate } from "@seller/_utils/dateUtils";
 import StatusBadge from "@seller/components/Badge/StatusBadge";
+import GenericTable from "@seller/components/DataTable/GenericTable";
 import { OrderType } from "@type/orderType";
 import { Button, Checkbox, Label, Table } from "flowbite-react";
 import { useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { HiPlus } from "react-icons/hi";
-import { Link } from "react-router-dom";
-import { useOrders } from "../../hooks";
+import { useOrders, useOrderTable } from "../../hooks";
+import type { OrderFilters } from "../../hooks/useOrderTable";
 import OrderInfoModal from "../Modals/OrderInfoModal";
 import UpdateOrderStatusModal from "../Modals/UpdateOrderStatusModal";
-import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const OrdersTable = () => {
-    // get the orders
-    const { orders, bulkShipmentOrders } = useOrders();
+    // get the orders and table functionality
+    const { bulkShipmentOrders } = useOrders();
+    const orderTable = useOrderTable();
     const { toaster } = useToast();
     const [orderIds, setOrderIds] = useState<number[]>([]);
 
+    const handleDateFilterChange = (filters: Pick<OrderFilters, 'period' | 'start_date' | 'end_date'>) => {
+        orderTable.updateFilters(filters);
+    };
+
     return (
-			<>
-				<DataTable
+			<div className="space-y-4">
+				<GenericTable
+					filter={{
+						date: {
+							onChange: handleDateFilterChange,
+							value: orderTable.filters,
+						},
+					}}
+					table={orderTable}
 					columns={[
 						{
 							label: (
@@ -167,11 +178,10 @@ const OrdersTable = () => {
 							</>
 						),
 					}}
-					data={orders!}
 					exportable={true}
 					filename="orders"
 				/>
-			</>
+			</div>
 		);
 };
 export default OrdersTable;

@@ -132,17 +132,23 @@ class RolePermissionSeeder extends Seeder
         foreach ($roles as $roleName => $rolePermissions) {
             // Check if the role already exists
             $role = Role::firstOrCreate(
-                ['name' => $roleName, 'guard_name' => ''],
+                ['name' => $roleName, 'guard_name' => 'web'],
                 [
                     'name' => $roleName,
-                    'slug' => Str::slug($roleName) . '-empty',
-                    'guard_name' => '',
+                    'slug' => Str::slug($roleName),
+                    'guard_name' => 'web',
                 ]
             );
 
             // Assign permissions to the role
             foreach ($rolePermissions as $permissionName) {
-                $permission = Permission::firstOrCreate(['name' => $permissionName]);
+                $permission = Permission::firstOrCreate([
+                    'name' => $permissionName
+                ], [
+                    'name' => $permissionName,
+                    'slug' => Str::slug($permissionName),
+                    'guard_name' => 'web'
+                ]);
                 $role->givePermissionTo($permission);
             }
         }

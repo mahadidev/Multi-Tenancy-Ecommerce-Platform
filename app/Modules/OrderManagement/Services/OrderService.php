@@ -158,7 +158,7 @@ class OrderService
 
         $unitPrice = $product->price;
         $price = $unitPrice * $quantity;
-        $discountedPrice = $price - $discount;
+        $discountedPrice = $price - ($discount * $quantity);
         $taxAmount = ($unitPrice * $taxRate / 100) * $quantity;
         $total = $discountedPrice + $taxAmount;
 

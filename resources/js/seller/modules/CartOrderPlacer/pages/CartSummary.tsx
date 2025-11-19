@@ -21,20 +21,11 @@ const CartSummary = () => {
                 </dl>
 
                 <dl className="flex items-center justify-between gap-4">
-                    <dt className="text-gray-500 dark:text-gray-400">Shipping</dt>
-                    <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        ${orderSummary.shipping.toFixed(2)}
+                    <dt className="text-gray-500 dark:text-gray-400">Discount</dt>
+                    <dd className={`text-base font-medium ${orderSummary.discount > 0 ? 'text-green-500' : 'text-gray-900 dark:text-white'}`}>
+                        {orderSummary.discount > 0 ? '-' : ''}${orderSummary.discount.toFixed(2)}
                     </dd>
                 </dl>
-
-                {orderSummary.discount > 0 && (
-                    <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-gray-500 dark:text-gray-400">Discount</dt>
-                        <dd className="text-base font-medium text-green-500">
-                            -${orderSummary.discount.toFixed(2)}
-                        </dd>
-                    </dl>
-                )}
             </div>
 
             <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">

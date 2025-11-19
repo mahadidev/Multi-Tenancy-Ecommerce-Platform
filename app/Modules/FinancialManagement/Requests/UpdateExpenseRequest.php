@@ -30,7 +30,7 @@ class UpdateExpenseRequest extends FormRequest
             'amount' => 'sometimes|required|numeric|min:0|max:999999.99',
             'category' => 'sometimes|required|string|in:' . implode(',', $categories),
             'payment_method' => 'sometimes|required|string|in:' . implode(',', $paymentMethods),
-            'vendor' => 'nullable|string|max:255',
+            'vendor_id' => 'nullable|exists:vendors,id',
             'receipt_number' => 'nullable|string|max:100',
             'expense_date' => 'sometimes|required|date|before_or_equal:today',
             'status' => 'nullable|string|in:' . implode(',', $statuses),

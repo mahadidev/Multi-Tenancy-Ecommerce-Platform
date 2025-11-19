@@ -225,7 +225,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
      */
     public function getDefaultGuardName(): string
     {
-        return '';
+        return 'web';
     }
 
     // === Customer Profile Methods ===

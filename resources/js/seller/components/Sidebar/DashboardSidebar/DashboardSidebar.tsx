@@ -6,7 +6,7 @@ import {
 } from "@seller/store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "@seller/store/store";
 import { SidebarItemType } from "@type/sidebarType";
-import { Button, Sidebar, TextInput } from "flowbite-react";
+import { Sidebar, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiSearch } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";

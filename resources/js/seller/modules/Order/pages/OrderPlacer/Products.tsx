@@ -190,6 +190,7 @@ const Products = () => {
 
 	return (
 		<>
+
 			<Modal show={showVariantModal} onClose={dissmissModal} size="lg">
 				<div className="p-6 relative">
 					<button className="absolute top-4 right-4" onClick={dissmissModal}>

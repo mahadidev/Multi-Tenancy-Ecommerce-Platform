@@ -55,16 +55,23 @@ export interface OrderPlacerCustomer {
     email: string;
     phone: string;
     address?: string;
+    payment_method?: string;
 }
 
 export interface OrderPlacerProduct {
     id: string;
     name: string;
     price: number;
+    discount_price?: number;
     image: string;
     stock_quantity: number;
     selected?: boolean;
     quantity?: number;
+    selectedVariants?: { [variantId: number]: any };
+    stockId?: number;
+    tax?: number;
+    discount_amount?: number;
+    discount_type?: 'flat' | 'percentage';
 }
 
 export interface OrderPlacerState {
@@ -81,32 +88,47 @@ export interface OrderPlacerState {
 }
 
 export interface CreateOrderPayloadType {
-    customer: OrderPlacerCustomer;
-    products: {
+    name: string;
+    email: string;
+    phone: string;
+    address?: string;
+    notes?: string;
+    status?: string;
+    payment_method?: string;
+    is_payed?: boolean;
+    is_approved?: boolean;
+    items: {
         product_id: string;
-        quantity: number;
+        stock_id: number;
+        qty: number;
         price: number;
+        custom_price?: number;
+        discount_amount?: number;
+        tax?: number;
     }[];
-    order_summary: {
-        subtotal: number;
-        tax: number;
-        shipping: number;
-        discount: number;
-        total: number;
-    };
 }
 
 export interface OrderReceiptType {
     id: string;
-    order_number: string;
-    customer: OrderPlacerCustomer;
-    products: OrderPlacerProduct[];
-    order_summary: {
-        subtotal: number;
-        tax: number;
-        shipping: number;
-        discount: number;
+    order_uuid: string;
+    name: string;
+    email: string;
+    phone: string;
+    address?: string;
+    total: number;
+    items: Array<{
+        id: string;
+        item: string;
+        qty: number;
+        price: number;
+        discount_price?: number;
         total: number;
-    };
+        tax: number;
+        product: {
+            id: string;
+            name: string;
+            price: number;
+        };
+    }>;
     created_at: string;
 }

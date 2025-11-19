@@ -1,11 +1,11 @@
-import { useGetProductCategoriesTableQuery } from '../store/categoryApi';
-import { CategoryFilters } from '../types';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useGetProductCategoriesTableQuery } from '../store/categoryApi';
+import { CategoryFilters } from '../types';
 
 const useCategoryTable = () => {
   const [searchParams] = useSearchParams();
-  
+
   // Convert URL params to category API filters
   const categoryFilters: CategoryFilters = useMemo(() => {
     const searchValue = searchParams.get('search');
@@ -32,9 +32,7 @@ const useCategoryTable = () => {
   } = useGetProductCategoriesTableQuery(categoryFilters, {
     refetchOnMountOrArgChange: true
   });
-  
-  // Debug: Log when new requests are made
-  console.log('API Request - isLoading:', isLoading, 'isFetching:', isFetching, 'filters:', categoryFilters);
+
 
   // Extract data and meta from response
   const categories = response?.data?.categories || [];

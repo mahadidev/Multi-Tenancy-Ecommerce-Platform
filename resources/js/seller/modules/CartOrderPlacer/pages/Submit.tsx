@@ -1,4 +1,5 @@
 import { Button, Modal } from 'flowbite-react';
+import { useEffect } from 'react';
 import { useCartOrderPlacer } from '../hooks';
 import { CreateOrderPayloadType } from '../types';
 import OrderReceipt from './OrderReceipt';
@@ -7,7 +8,6 @@ const Submit = () => {
     const {
         customer,
         selectedProducts,
-        orderSummary,
         orderReceipt,
         createOrder,
         resetOrder,
@@ -19,14 +19,30 @@ const Submit = () => {
             return;
         }
 
+        // Validate that all products have stockId
+        const productsWithoutStock = selectedProducts.filter(product => !product.stockId);
+        if (productsWithoutStock.length > 0) {
+            alert('Some products are missing stock information. Please select variants for all products.');
+            return;
+        }
+
         const orderData: CreateOrderPayloadType = {
-            customer,
-            products: selectedProducts.map(product => ({
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+            address: customer.address,
+            status: 'completed',
+            payment_method: customer.address,
+            is_payed: true,
+            is_approved: true,
+            items: selectedProducts.map(product => ({
                 product_id: product.id,
-                quantity: product.quantity || 1,
+                stock_id: product.stockId!, // We've validated this exists above
+                qty: product.quantity || 1,
                 price: product.price,
+                discount_amount: product.discount_amount || 0,
+                tax: product.tax || 0,
             })),
-            order_summary: orderSummary,
         };
 
         createOrder.submit({
@@ -42,6 +58,10 @@ const Submit = () => {
     };
 
     const canSubmit = customer?.name && selectedProducts.length > 0;
+
+    useEffect(() => {
+			console.log(orderReceipt, 'orderReceipt');
+		}, [orderReceipt]);
 
     return (
         <>

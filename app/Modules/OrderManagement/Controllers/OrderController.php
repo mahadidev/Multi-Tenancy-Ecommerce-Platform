@@ -40,6 +40,12 @@ class OrderController extends Controller
         // Start with a query builder instead of getting collection
         $ordersQuery = $store->orders()->latest();
 
+        // Apply date filtering
+        $this->applyDateFilters($ordersQuery, $request);
+
+        // Apply search filtering
+        $this->applySearchFilters($ordersQuery, $request);
+
         // Apply sorting if provided
         if ($sort) {
             $ordersQuery->orderBy('created_at', $sort);
@@ -223,6 +229,73 @@ class OrderController extends Controller
                 'status' => 500,
                 'message' => 'Failed to generate order report',
             ], 500);
+        }
+    }
+
+    /**
+     * Apply date filters to the orders query
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    protected function applyDateFilters($query, Request $request)
+    {
+        $period = $request->input('period');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        if ($period === 'today') {
+            $query->whereBetween('created_at', [
+                now()->startOfDay(),
+                now()->endOfDay()
+            ]);
+        } elseif ($period === 'week') {
+            $query->whereBetween('created_at', [
+                now()->startOfWeek(),
+                now()->endOfWeek()
+            ]);
+        } elseif ($period === 'month') {
+            $query->whereMonth('created_at', now()->month)
+                  ->whereYear('created_at', now()->year);
+        } elseif ($period === 'year') {
+            $query->whereYear('created_at', now()->year);
+        } elseif ($period === 'custom' && $startDate && $endDate) {
+            $query->whereBetween('created_at', [
+                \Carbon\Carbon::parse($startDate)->setTimezone(config('app.timezone'))->startOfDay(),
+                \Carbon\Carbon::parse($endDate)->setTimezone(config('app.timezone'))->endOfDay()
+            ]);
+        }
+    }
+
+    /**
+     * Apply search filters to the orders query
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    protected function applySearchFilters($query, Request $request)
+    {
+        if ($request->filled('search')) {
+            $searchTerm = strtolower($request->search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->whereRaw('LOWER(order_uuid) LIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('LOWER(email) LIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('LOWER(phone) LIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhere('total', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Apply payment method filter
+        if ($request->filled('payment_method')) {
+            $query->where('payment_method', $request->payment_method);
         }
     }
 }

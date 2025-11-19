@@ -197,7 +197,7 @@ const useCartOrderPlacer = () => {
         handleCreateOrder(formData).then((response) => {
             dispatch(setProcessing(false));
             if (response.data?.status === 200) {
-                dispatch(setOrderReceipt(response.data.data));
+                dispatch(setOrderReceipt(response.data.data.order));
                 if (onSuccess) {
                     onSuccess(response.data.data);
                 }

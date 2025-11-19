@@ -1,4 +1,3 @@
-import useExpense from '@seller/_hooks/useExpense';
 import useForm from '@seller/_hooks/useForm';
 import useVendor from '@seller/_hooks/useVendor';
 import QuickAddSelect from '@seller/components/Form/QuickAddSelect/QuickAddSelect';
@@ -14,11 +13,13 @@ import {
 import { FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { HiPlus } from 'react-icons/hi';
+import { useExpense } from '../hooks';
 
 const CreateExpenseModal: FC = function () {
 	const [isOpen, setOpen] = useState(false);
-	const { create } = useExpense();
-	const { vendors, create: createVendor } = useVendor();
+	const { vendors, expense, vendor } = useExpense();
+	const { create: createVendor } = vendor;
+	const { create } = expense;
 
 	const { handleChange, formState, formErrors, setFormState } = useForm({
 		formValidationError: create.error,
@@ -64,7 +65,7 @@ const CreateExpenseModal: FC = function () {
 						id: responseData.vendor.id,
 						name: responseData.vendor.name,
 					};
-					
+
 					resolve(newVendor);
 				},
 			});
@@ -73,13 +74,13 @@ const CreateExpenseModal: FC = function () {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		
+
 		// Prepare form data with proper vendor_id conversion
 		const submitData = {
 			...formState,
 			vendor_id: formState.vendor_id ? Number(formState.vendor_id) : undefined,
 		};
-		
+
 		create.submit({
 			formData: submitData,
 			onSuccess: () => {
@@ -136,9 +137,7 @@ const CreateExpenseModal: FC = function () {
 											key={category.value}
 											value={category.value}
 											selected={
-												category.value === formState['category']
-													? true
-													: false
+												category.value === formState['category'] ? true : false
 											}
 										>
 											{category.label}
@@ -188,7 +187,10 @@ const CreateExpenseModal: FC = function () {
 								label="Vendor"
 								value={formState.vendor_id || ''}
 								onChange={handleChange}
-								options={vendors.map(vendor => ({ value: vendor.id, label: vendor.name }))}
+								options={vendors.map((vendor) => ({
+									value: vendor.id,
+									label: vendor.name,
+								}))}
 								placeholder="Select vendor (optional)"
 								onQuickAdd={handleQuickAddVendor}
 							/>

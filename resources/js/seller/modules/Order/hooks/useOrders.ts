@@ -7,7 +7,6 @@ import {
     PlaceOrderNonUserPayloadType,
     PlaceOrderPayloadType,
     useBulkShipmentOrdersMutation,
-    useFetchOrdersQuery,
     useFetchShipmentOrdersQuery,
     usePlaceOrderMutation,
     usePlaceOrderNonUserMutation,
@@ -17,7 +16,8 @@ import {
 const useOrders = () => {
     const { toaster } = useToast();
 
-    useFetchOrdersQuery();
+    // Remove automatic fetching - let individual components decide when to fetch
+    // useFetchOrdersQuery();
     useFetchShipmentOrdersQuery();
 
     const { orders, order, shipmentOrders } = useAppSelector(

@@ -30,7 +30,7 @@ class StoreExpenseRequest extends FormRequest
             'amount' => 'required|numeric|min:0|max:999999.99',
             'category' => 'required|string|in:' . implode(',', $categories),
             'payment_method' => 'required|string|in:' . implode(',', $paymentMethods),
-            'vendor' => 'nullable|string|max:255',
+            'vendor_id' => 'nullable|exists:vendors,id',
             'receipt_number' => 'nullable|string|max:100',
             'expense_date' => 'required|date|before_or_equal:today',
             'status' => 'nullable|string|in:' . implode(',', $statuses),

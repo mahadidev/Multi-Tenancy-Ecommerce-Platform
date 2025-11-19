@@ -197,7 +197,7 @@ class ExpenseController extends Controller
         }
 
         $expense->update($expenseData);
-        
+
         // Fetch the updated expense fresh from database with constrained vendor relationship
         $updatedExpense = Expense::with(['user', 'store', 'vendor' => function($query) use ($storeId) {
                                     $query->where('store_id', $storeId);

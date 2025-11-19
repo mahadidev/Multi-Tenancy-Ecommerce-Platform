@@ -142,20 +142,41 @@ const cartOrderPlacerSlice = createSlice({
 
 // Helper function to calculate order summary
 const calculateOrderSummary = (products: OrderPlacerProduct[]) => {
-    const subtotal = products.reduce(
-        (sum, product) => sum + (product.price * (product.quantity || 1)),
-        0
-    );
-    const tax = subtotal * 0.1; // 10% tax
-    const shipping = subtotal > 50 ? 0 : 5; // Free shipping over $50
-    const discount = 0; // Could be calculated based on promotions
-    const total = subtotal + tax + shipping - discount;
+    let subtotal = 0;
+    let totalTax = 0;
+    let totalDiscount = 0;
+    
+    // Calculate values for each product
+    products.forEach(product => {
+        const quantity = product.quantity || 1;
+        const productSubtotal = product.price * quantity;
+        
+        // Add to subtotal
+        subtotal += productSubtotal;
+        
+        // Calculate tax if product has tax data
+        if (product.tax && product.tax > 0) {
+            totalTax += (productSubtotal * product.tax) / 100;
+        }
+        
+        // Calculate discount if product has discount
+        if (product.discount_amount && product.discount_amount > 0) {
+            if (product.discount_type === 'percentage') {
+                totalDiscount += (productSubtotal * product.discount_amount) / 100;
+            } else {
+                // Flat discount
+                totalDiscount += product.discount_amount * quantity;
+            }
+        }
+    });
+    
+    const total = subtotal + totalTax - totalDiscount;
 
     return {
         subtotal: Number(subtotal.toFixed(2)),
-        tax: Number(tax.toFixed(2)),
-        shipping: Number(shipping.toFixed(2)),
-        discount: Number(discount.toFixed(2)),
+        tax: Number(totalTax.toFixed(2)),
+        shipping: 0,
+        discount: Number(totalDiscount.toFixed(2)),
         total: Number(total.toFixed(2)),
     };
 };

@@ -44,6 +44,19 @@ export interface BulkShipmentOrderPayloadType {
     orders: number[];
 }
 
+export interface OrderFilters {
+    search?: string;
+    status?: string;
+    payment_method?: string;
+    period?: 'today' | 'week' | 'month' | 'year' | 'custom';
+    start_date?: string;
+    end_date?: string;
+    page?: number;
+    per_page?: number;
+    sort_by?: string;
+    sort_order?: 'asc' | 'desc';
+}
+
 export const orderApi = createApi({
     reducerPath: 'orderApi',
     baseQuery: baseQueryWithReAuth,
@@ -112,6 +125,29 @@ export const orderApi = createApi({
             },
         }),
 
+        // Fetch orders with table filters (for generic table)
+        fetchOrdersTable: builder.query<OrdersApiResponse, OrderFilters>({
+            query: (filters) => {
+                const params = new URLSearchParams();
+                
+                // Add filters to URL params
+                Object.entries(filters).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== '') {
+                        // Skip empty search values to keep URL clean
+                        if (key === 'search' && value === '') return;
+                        params.append(key, String(value));
+                    }
+                });
+                
+                return createRequest({
+                    url: `${PREFIX}/orders?${params.toString()}`,
+                    method: 'get',
+                });
+            },
+            providesTags: ['Orders'],
+            transformErrorResponse: (error: any) => error.data,
+        }),
+
         fetchShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
             query: (formData) =>
                 createRequest({
@@ -157,6 +193,7 @@ export const orderApi = createApi({
 
 export const {
     useFetchOrdersQuery,
+    useFetchOrdersTableQuery,
     useFetchShipmentOrdersQuery,
     useUpdateOrderStatusMutation,
     usePlaceOrderMutation,

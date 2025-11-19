@@ -21,11 +21,11 @@ class UserSeeder extends Seeder
 
         // Check if the 'admin' role already exists, if not, create it
         $admin = Role::firstOrCreate(
-            ['name' => 'super-admin', 'guard_name' => ''],
+            ['name' => 'super-admin', 'guard_name' => 'web'],
             [
                 'name' => 'super-admin',
-                'slug' => 'super-admin-empty',
-                'guard_name' => '',
+                'slug' => 'super-admin',
+                'guard_name' => 'web',
             ]
         );
 
@@ -40,8 +40,12 @@ class UserSeeder extends Seeder
             $user->password = Hash::make('123'); // Use a more secure password in production
             $user->save();
 
-            // Assign the 'admin' role to the user
-            $user->assignRole($admin);
+            // Assign the 'admin' role to the user with explicit guard
+            \DB::table('model_has_roles')->insert([
+                'role_id' => $admin->id,
+                'model_type' => get_class($user),
+                'model_id' => $user->id
+            ]);
         } else {
             // Optionally, update user details if the user exists
             $user->update([

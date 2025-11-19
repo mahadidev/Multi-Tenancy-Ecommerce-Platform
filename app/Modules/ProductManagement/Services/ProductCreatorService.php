@@ -21,6 +21,7 @@ class ProductCreatorService
     {
         $validatedData = $this->validate($request);
         $validatedData['store_id'] = authStore();
+        $validatedData['status'] = $request["status"] ?? 1;
 
         if (isset($validatedData["discount_amount"]) && !isset($validatedData["discount_to"])) {
             $validatedData["discount_to"] = Carbon::now()->addYears(10);

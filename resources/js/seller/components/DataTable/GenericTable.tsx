@@ -1,16 +1,19 @@
+import type { ServerTableMeta, UseGenericTableReturn } from '@seller/_hooks/types/table';
+import DateFilter, { PeriodType } from '@seller/modules/Order/components/DateFilter';
 import { DataTablePropsType } from '@type/tableType';
 import { Button, Card, Label, Table, TextInput } from 'flowbite-react';
 import React, { FC, ReactNode } from 'react';
 import { CSVLink } from 'react-csv';
 import { HiDocumentDownload } from 'react-icons/hi';
 import { MdClear } from 'react-icons/md';
+import type { OrderFilters } from '../../hooks/useOrderTable';
 import DataTablePagination from './DataTablePagination';
-import type { ServerTableMeta, UseGenericTableReturn } from '@seller/_hooks/types/table';
 
-interface GenericTableProps<TData, TFilters> extends Omit<DataTablePropsType, 'data'> {
+interface GenericTableProps<TData, TFilters>
+	extends Omit<DataTablePropsType, 'data'> {
 	// Table data from generic hook
 	table: UseGenericTableReturn<TData, TFilters>;
-	
+
 	// Table configuration
 	exportable?: boolean;
 	search?: {
@@ -24,6 +27,20 @@ interface GenericTableProps<TData, TFilters> extends Omit<DataTablePropsType, 'd
 	};
 	head?: {
 		render: (data: TData[]) => ReactNode;
+	};
+	filter?: {
+		date?: {
+			onChange?: (filters: {
+				period?: PeriodType;
+				start_date?: string;
+				end_date?: string;
+			}) => void;
+			value?: {
+				period?: PeriodType;
+				start_date?: string;
+				end_date?: string;
+			};
+		};
 	};
 	filename?: string;
 	disablePagination?: boolean;
@@ -48,7 +65,8 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 		disableHead,
 		bodyClassName,
 		tableWrapperClassName,
-		columns
+		columns,
+        filter
 	} = props;
 
 	// Loading state
@@ -71,14 +89,14 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 
 	return (
 		<>
-			{(exportable || search || head?.render) && (
+			{(exportable || search || head?.render || filter?.date) && (
 				<div
 					className={`block items-center justify-between ${
 						!disableHead && ' border-b'
 					} border-gray-200 bg-white p-4 sm:flex dark:border-gray-700 dark:bg-gray-800`}
 				>
 					<div className="mb-1 w-full">
-						<div className="sm:flex">
+						<div className="sm:flex gap-2.5">
 							{search && (
 								<div className="mb-3 hidden items-center sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100 dark:divide-gray-700">
 									<form
@@ -101,24 +119,32 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 												id="search-input"
 												name="search-input"
 												placeholder={search.placeholder}
-												onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+												onChange={(
+													event: React.ChangeEvent<HTMLInputElement>
+												) => {
 													table.setSearchQuery(event.target.value);
 													table.onSearch(event.target.value);
 												}}
 												value={table.searchQuery}
 												autoFocus={search.autoFocus ?? false}
 											/>
-											<MdClear 
-												className='absolute right-2 bottom-0 top-0 m-auto cursor-pointer' 
-												size={19} 
+											<MdClear
+												className="absolute right-2 bottom-0 top-0 m-auto cursor-pointer"
+												size={19}
 												onClick={() => {
-													table.setSearchQuery("");
-													table.onSearch("");
-												}} 
+													table.setSearchQuery('');
+													table.onSearch('');
+												}}
 											/>
 										</div>
 									</form>
 								</div>
+							)}
+							{filter?.date?.onChange && filter.date.value && (
+								<DateFilter
+									onFilterChange={filter?.date?.onChange}
+									currentFilters={filter?.date?.value}
+								/>
 							)}
 							<div className="ml-auto flex items-center space-x-2 sm:space-x-3">
 								{head && head.render(table.data)}
@@ -141,7 +167,7 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 					</div>
 				</div>
 			)}
-			<div className={`flex flex-col ${tableWrapperClassName ?? ""}`}>
+			<div className={`flex flex-col ${tableWrapperClassName ?? ''}`}>
 				<div className="overflow-x-auto">
 					<div className="inline-block min-w-full align-middle">
 						<div className="overflow-hidden shadow">
@@ -236,26 +262,31 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 									className={`${
 										!disableHead &&
 										'divide-y divide-gray-200 dark:divide-gray-700'
-									} bg-white  dark:bg-gray-800 ${bodyClassName ?? ""}`}
+									} bg-white  dark:bg-gray-800 ${bodyClassName ?? ''}`}
 								>
 									{table.isLoading || table.isFetching ? (
 										// Skeleton rows - show 1 if no data, otherwise same count as current data
-										Array.from({ length: table.data?.length || 1 }).map((_, skeletonIdx) => (
-											<Table.Row key={`skeleton-${skeletonIdx}`}>
-												{!disableSl && (
-													<Table.Cell className="p-4 text-center">
-														<div className="w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
-													</Table.Cell>
-												)}
-												{columns.map((column, colIdx) => (
-													<Table.Cell key={colIdx} className="p-4">
-														<div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" style={{
-															width: `${Math.random() * 40 + 60}%` // Random width between 60-100%
-														}}></div>
-													</Table.Cell>
-												))}
-											</Table.Row>
-										))
+										Array.from({ length: table.data?.length || 1 }).map(
+											(_, skeletonIdx) => (
+												<Table.Row key={`skeleton-${skeletonIdx}`}>
+													{!disableSl && (
+														<Table.Cell className="p-4 text-center">
+															<div className="w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+														</Table.Cell>
+													)}
+													{columns.map((column, colIdx) => (
+														<Table.Cell key={colIdx} className="p-4">
+															<div
+																className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
+																style={{
+																	width: `${Math.random() * 40 + 60}%`, // Random width between 60-100%
+																}}
+															></div>
+														</Table.Cell>
+													))}
+												</Table.Row>
+											)
+										)
 									) : table.data?.length ? (
 										<>
 											{table.data.map((row: any, idx) => (
@@ -265,20 +296,33 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 												>
 													{!disableSl && (
 														<Table.Cell className="!text-center font-bold dark:text-white">
-															{((table.meta?.current_page || 1) - 1) * (table.meta?.per_page || 10) + idx + 1}
+															{((table.meta?.current_page || 1) - 1) *
+																(table.meta?.per_page || 10) +
+																idx +
+																1}
 														</Table.Cell>
 													)}
-													{columns.map((column, idx) => (
-														column.render
-															? React.cloneElement(column.render(row) as React.ReactElement, { key: idx })
-															: <Table.Cell key={idx}>{row[column.key ?? 0]}</Table.Cell>
-													))}
+													{columns.map((column, idx) =>
+														column.render ? (
+															React.cloneElement(
+																column.render(row) as React.ReactElement,
+																{ key: idx }
+															)
+														) : (
+															<Table.Cell key={idx}>
+																{row[column.key ?? 0]}
+															</Table.Cell>
+														)
+													)}
 												</Table.Row>
 											))}
 										</>
 									) : (
 										<Table.Row>
-											<Table.Cell colSpan={columns.length + (!disableSl ? 1 : 0)} className="p-5 text-center">
+											<Table.Cell
+												colSpan={columns.length + (!disableSl ? 1 : 0)}
+												className="p-5 text-center"
+											>
 												<span className="font-semibold text-gray-700 dark:text-gray-200">
 													No records found
 												</span>
