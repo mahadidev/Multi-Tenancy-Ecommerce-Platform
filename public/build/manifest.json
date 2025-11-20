@@ -1,6 +1,6 @@
 {
-  "_react-apexcharts.min-Cv5J9CiS.js": {
-    "file": "assets/react-apexcharts.min-Cv5J9CiS.js",
+  "_react-apexcharts.min-B6k5Wwce.js": {
+    "file": "assets/react-apexcharts.min-B6k5Wwce.js",
     "name": "react-apexcharts.min",
     "isDynamicEntry": true,
     "imports": [
@@ -13,7 +13,7 @@
     "name": "rtk-query-react.modern"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BaSLAsYy.css",
+    "file": "assets/app-w8120IHP.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -48,7 +48,7 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-BYyHLDmb.js",
+    "file": "assets/index-DvxdmHzV.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
@@ -56,10 +56,10 @@
       "_rtk-query-react.modern-C8AandN_.js"
     ],
     "dynamicImports": [
-      "_react-apexcharts.min-Cv5J9CiS.js"
+      "_react-apexcharts.min-B6k5Wwce.js"
     ],
     "css": [
-      "assets/index-BXlb-70k.css"
+      "assets/index-Dtpec-7t.css"
     ]
   }
 }
