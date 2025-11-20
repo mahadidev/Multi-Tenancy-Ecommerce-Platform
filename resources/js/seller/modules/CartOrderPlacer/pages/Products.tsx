@@ -2,6 +2,7 @@ import GenericTable from '@seller/components/DataTable/GenericTable';
 import { ProductStockType, ProductType, ProductVariantOptionType } from '@type/productType';
 import { Badge, Button, Modal, Table } from 'flowbite-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useCartOrderPlacer, useOrderPlacerProductTable } from '../hooks';
 
 interface SelectedOptions {
@@ -91,9 +92,26 @@ const Products = () => {
 
     return (
 			<div className="space-y-4">
-				<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-					Select Products
-				</h2>
+				<div className="flex items-center justify-between">
+					<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+						Select Products
+					</h2>
+					<Link to="/orders">
+						<Button color="gray" size="xs" className="flex items-center gap-1">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								strokeWidth={1.5}
+								stroke="currentColor"
+								className="w-3 h-3"
+							>
+								<path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+							</svg>
+							Back
+						</Button>
+					</Link>
+				</div>
 
 				<div className="max-h-96 overflow-hidden">
 					<GenericTable

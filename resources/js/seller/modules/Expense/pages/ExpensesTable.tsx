@@ -1,6 +1,6 @@
 import GenericTable from "@seller/components/DataTable/GenericTable";
 import { useExpenseTable } from "../hooks";
-import type { Expense } from "../types";
+import type { Expense, ExpenseFilters } from "../types";
 import { Badge, Table } from "flowbite-react";
 import CreateExpenseModal from "./CreateExpenseModal";
 import DeleteExpenseModal from "./DeleteExpenseModal";
@@ -9,6 +9,10 @@ import { formatTableDate } from "@seller/_utils/dateUtils";
 
 const ExpensesTable = () => {
     const expenseTable = useExpenseTable();
+
+    const handleDateFilterChange = (filters: Pick<ExpenseFilters, 'period' | 'start_date' | 'end_date'>) => {
+        expenseTable.updateFilters(filters);
+    };
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -22,6 +26,12 @@ const ExpensesTable = () => {
     return (
         <GenericTable
             table={expenseTable}
+            filter={{
+                date: {
+                    onChange: handleDateFilterChange,
+                    value: expenseTable.filters,
+                },
+            }}
             columns={[
                 {
                     label: 'Expense Details',

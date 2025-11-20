@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Category } from '../types';
 import { MetaType } from "@type/tableType";
+import { Category } from '../types';
 
 const initialState: {
   categories: Category[];
@@ -35,7 +35,7 @@ const categorySlice = createSlice({
       state,
       action: PayloadAction<{
         categories: Category[];
-        meta: MetaType | null;
+        meta: MetaType | null | any;
       }>
     ) => {
       state.productCategories = action.payload.categories;

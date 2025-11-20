@@ -1,12 +1,8 @@
-import { GLOBAL_APP_URL } from '@helper/global_env';
-import useWidget from '@seller/_hooks/useWidget';
-import { Button, Modal, Select } from 'flowbite-react';
+import { Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
 
 const AddWidgetModal: FC = function () {
 	const [openModal, setOpenModal] = useState(false);
-	const { onAddWidget } = useWidget();
-	const [selectedPageId, setSelectedPageId] = useState<number>(1);
 
 	return (
 		<div className="p-4">

@@ -11,7 +11,7 @@ const AboutUs = () => {
                 {/* Image Section */}
                 <div className="relative w-full">
                     <img
-                        src={AboutUsImage}
+                        src={typeof AboutUsImage === 'string' ? AboutUsImage : (AboutUsImage as any).src || AboutUsImage as string}
                         alt="About Us"
                         className="w-full object-cover rounded-xl shadow-lg"
                     />

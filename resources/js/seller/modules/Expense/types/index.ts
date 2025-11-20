@@ -70,6 +70,9 @@ export interface ExpenseFilters extends ServerTableFilters {
   category?: string;
   date_from?: string;
   date_to?: string;
+  period?: 'today' | 'week' | 'month' | 'year' | 'custom';
+  start_date?: string;
+  end_date?: string;
   sort_by?: 'amount' | 'date' | 'created_at';
 }
 

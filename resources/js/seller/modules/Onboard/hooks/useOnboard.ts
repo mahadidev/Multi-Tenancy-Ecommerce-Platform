@@ -2,12 +2,6 @@ import useToast from "@seller/_hooks/useToast";
 import { useAppDispatch, useAppSelector } from "@seller/store/store";
 import { useNavigate } from "react-router-dom";
 import {
-    CreateStorePayload,
-    onboardApi,
-    OnboardStepPayload,
-    StepOneFormData,
-    StepThreeFormData,
-    StepTwoFormData,
     useCreateStoreMutation,
     useGetOnboardStatusQuery,
     useGetStoreCategoriesQuery,
@@ -21,6 +15,7 @@ import {
     setCurrentStep,
     setStoreData,
 } from "../store/onboardSlice";
+import { CreateStorePayload, OnboardStepPayload, StepOneFormData, StepThreeFormData, StepTwoFormData } from "../types";
 
 const useOnboard = () => {
   const { toaster } = useToast();

@@ -10,8 +10,7 @@ import {
     useFetchPageTypesQuery,
     useUpdatePageMutation,
 } from '@seller/store/reducers/pageApi';
-import { useAppDispatch, useAppSelector } from '@seller/store/store';
-import { setPage } from '../store/slices/pageSlice';
+import { useAppSelector } from '@seller/store/store';
 
 const usePage = () => {
 	// fetch pages
@@ -25,9 +24,6 @@ const usePage = () => {
 
 	// select widgets
 	const { widgets } = useAppSelector((state) => state.widget);
-
-	// dispatch
-	const dispatch = useAppDispatch();
 
 	// create page
 	const [
@@ -135,15 +131,14 @@ const usePage = () => {
 
 	// on change page input
 	const onChangePageInput = (
-		event: React.ChangeEvent<HTMLInputElement | any>
+		// event: React.ChangeEvent<HTMLInputElement | any>
 	) => {
 		if (page) {
-			dispatch(
-				setPage({
-					...page,
-					[event.target.name]: event.target.value,
-				})
-			);
+			// dispatch(
+			// 	setPage({
+			// 		...page
+			// 	})
+			// );
 		}
 	};
 

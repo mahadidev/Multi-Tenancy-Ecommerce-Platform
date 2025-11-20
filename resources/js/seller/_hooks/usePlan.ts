@@ -1,13 +1,13 @@
 import {
     useFetchPlansQuery,
-    useSubscribePlanMutation,
-    SubscribePayload
+    useSubscribePlanMutation
 } from "@seller/modules/Subscription/store";
+import type { SubscribePayload } from "@seller/modules/Subscription/types";
 import { useAppSelector } from "@seller/store/store";
 
 const usePlans = () => {
 	const queryResult = useFetchPlansQuery();
-	const { data, error, isLoading } = queryResult;
+	const { data } = queryResult;
 
 	// select plans from the OLD slice
 	const { plans: legacyPlans } = useAppSelector((state) => state.subscriptionPlan);
@@ -40,8 +40,8 @@ const usePlans = () => {
 				// Handle payment URL (redirect to payment gateway)
 				if (response.data.data.payment_url) {
 					window.location.href = response.data.data.payment_url;
-				} else if (response.data.data.redirect_url) {
-					window.location.href = response.data.data.redirect_url;
+				} else if ((response.data.data as any).redirect_url) {
+					window.location.href = (response.data.data as any).redirect_url;
 				} else {
 					// If no redirect, log success
 					console.log('Subscription successful:', response.data);

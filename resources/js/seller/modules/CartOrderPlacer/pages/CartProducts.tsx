@@ -61,12 +61,12 @@ const CartProducts = () => {
                             </Table.Cell>
                             <Table.Cell>
                                 <span className="text-gray-900 dark:text-white">
-                                    ${product.price.toFixed(2)}
+                                    ৳{product.price.toFixed(2)}
                                 </span>
                             </Table.Cell>
                             <Table.Cell>
                                 <span className="text-gray-900 dark:text-white">
-                                    ${((product.price * (product.quantity || 1))).toFixed(2)}
+                                    ৳{((product.price * (product.quantity || 1))).toFixed(2)}
                                 </span>
                             </Table.Cell>
                             <Table.Cell>

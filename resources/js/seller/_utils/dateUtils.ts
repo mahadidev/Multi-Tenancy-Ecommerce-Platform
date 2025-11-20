@@ -27,10 +27,12 @@ export const formatTableDate = (dateString: string | null | undefined): string =
             ];
             
             for (const format of formats) {
-                const testDate = new Date(format);
-                if (!isNaN(testDate.getTime())) {
-                    date = testDate;
-                    break;
+                if (format) {
+                    const testDate = new Date(format);
+                    if (!isNaN(testDate.getTime())) {
+                        date = testDate;
+                        break;
+                    }
                 }
             }
             
@@ -71,7 +73,8 @@ export const formatDateISO = (dateString: string | null | undefined): string => 
         return '';
     }
     
-    return date.toISOString().split('T')[0];
+    const isoString = date.toISOString();
+    return isoString.split('T')[0] || '';
 };
 
 /**

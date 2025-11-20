@@ -1,22 +1,24 @@
 {
-  "_chunk-K6AXKMTT-cwSP1Ya7.js": {
-    "file": "assets/chunk-K6AXKMTT-cwSP1Ya7.js",
-    "name": "chunk-K6AXKMTT"
-  },
-  "_registeredTheme-DlJg761R.js": {
-    "file": "assets/registeredTheme-DlJg761R.js",
-    "name": "registeredTheme",
+  "_react-apexcharts.min-Cv5J9CiS.js": {
+    "file": "assets/react-apexcharts.min-Cv5J9CiS.js",
+    "name": "react-apexcharts.min",
+    "isDynamicEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-cwSP1Ya7.js"
+      "_rtk-query-react.modern-C8AandN_.js",
+      "resources/js/seller/index.tsx"
     ]
   },
+  "_rtk-query-react.modern-C8AandN_.js": {
+    "file": "assets/rtk-query-react.modern-C8AandN_.js",
+    "name": "rtk-query-react.modern"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-fRJ3GuV5.css",
+    "file": "assets/app-BaSLAsYy.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-Xaw6OIO1.js",
+    "file": "assets/app-C0G0cght.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
@@ -30,12 +32,12 @@
     "src": "resources/js/frontend/assets/images/search-bg.jpg"
   },
   "resources/js/frontend/index.tsx": {
-    "file": "assets/index-D0KqpiBP.js",
+    "file": "assets/index-D12yZdza.js",
     "name": "index",
     "src": "resources/js/frontend/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-cwSP1Ya7.js"
+      "_rtk-query-react.modern-C8AandN_.js"
     ],
     "css": [
       "assets/index-DidxTSZe.css"
@@ -46,42 +48,18 @@
     ]
   },
   "resources/js/seller/index.tsx": {
-    "file": "assets/index-CXLbZIc7.js",
+    "file": "assets/index-BYyHLDmb.js",
     "name": "index",
     "src": "resources/js/seller/index.tsx",
     "isEntry": true,
     "imports": [
-      "_chunk-K6AXKMTT-cwSP1Ya7.js",
-      "_registeredTheme-DlJg761R.js"
+      "_rtk-query-react.modern-C8AandN_.js"
+    ],
+    "dynamicImports": [
+      "_react-apexcharts.min-Cv5J9CiS.js"
     ],
     "css": [
-      "assets/index-128nUUTw.css"
-    ]
-  },
-  "resources/js/site/index.tsx": {
-    "file": "assets/index-DuUM4D_O.js",
-    "name": "index",
-    "src": "resources/js/site/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-cwSP1Ya7.js",
-      "_registeredTheme-DlJg761R.js"
-    ],
-    "css": [
-      "assets/index-B0zrnoKg.css"
-    ]
-  },
-  "resources/js/themes/index.tsx": {
-    "file": "assets/index-GvSCG9hb.js",
-    "name": "index",
-    "src": "resources/js/themes/index.tsx",
-    "isEntry": true,
-    "imports": [
-      "_chunk-K6AXKMTT-cwSP1Ya7.js",
-      "_registeredTheme-DlJg761R.js"
-    ],
-    "css": [
-      "assets/index-B0zrnoKg.css"
+      "assets/index-BXlb-70k.css"
     ]
   }
 }

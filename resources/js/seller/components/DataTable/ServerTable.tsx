@@ -1,6 +1,6 @@
 import useTableServer, { ServerTableFilters, ServerTableMeta } from '@seller/_hooks/useTableServer';
 import { DataTablePropsType } from '@type/tableType';
-import { Button, Card, Label, Table, TextInput } from 'flowbite-react';
+import { Button, Label, Table, TextInput } from 'flowbite-react';
 import { FC } from 'react';
 import { CSVLink } from 'react-csv';
 import { HiDocumentDownload } from 'react-icons/hi';
@@ -41,7 +41,6 @@ interface ServerTableProps extends Omit<DataTablePropsType, 'data'> {
 
 const ServerTable: FC<ServerTableProps> = (props) => {
 	const {
-		filters,
 		searchQuery,
 		currentSort,
 		onPageChange,
@@ -258,7 +257,7 @@ const ServerTable: FC<ServerTableProps> = (props) => {
 														<div className="w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
 													</Table.Cell>
 												)}
-												{props.columns.map((column, colIdx) => (
+												{props.columns.map((_, colIdx) => (
 													<Table.Cell key={colIdx} className="p-4">
 														<div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" style={{
 															width: `${Math.random() * 40 + 60}%` // Random width between 60-100%

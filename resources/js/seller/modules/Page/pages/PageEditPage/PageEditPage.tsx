@@ -1,20 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useStore from '@seller/_hooks/useStore';
 import useWidget from '@seller/_hooks/useWidget';
 import { PageType } from '@type/pageType';
-import { Button } from 'flowbite-react';
 import { useEffect } from 'react';
-import { IoMdMove } from 'react-icons/io';
-import { MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import { ReactSortable } from 'react-sortablejs';
 import { usePage } from '../../hooks';
 import AddWidgetModal from './AddWidgetModal';
 
 const PageEditPage = () => {
-	const { fetchPage, page } = usePage();
-	const { widgets, onSortWidget, onEditWidget, onDeleteWidget } = useWidget();
-	const { store } = useStore();
+	const { fetchPage } = usePage();
+	useWidget();
 	const { id } = useParams();
 
 	useEffect(() => {

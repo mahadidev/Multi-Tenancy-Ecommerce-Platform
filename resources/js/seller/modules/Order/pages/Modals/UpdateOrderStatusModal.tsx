@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import useForm from "@seller/_hooks/useForm";
-import { useOrders } from "../../hooks";
 import useToast from "@seller/_hooks/useToast";
 import {
     orderStatuses,
@@ -11,6 +10,7 @@ import { Button, Label, Modal, Select } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { HiPencilAlt } from "react-icons/hi";
+import { useOrders } from "../../hooks";
 
 interface PropsType {
     order: OrderType;
@@ -18,7 +18,7 @@ interface PropsType {
 
 const UpdateOrderStatusModal: FC<PropsType> = function (props) {
     const [isOpen, setOpen] = useState(false);
-    const { updateOrderStatus } = useOrders({});
+    const { updateOrderStatus } = useOrders();
     const { toaster } = useToast();
     const { handleChange, formState, formErrors, setFormState } = useForm({
         formValidationError: updateOrderStatus.error,

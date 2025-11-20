@@ -15,24 +15,18 @@ import { useParams } from "react-router-dom";
 const BlogEditPage: React.FC = () => {
     const { id } = useParams();
     const { blogCategories } = useCategory();
-    const { update, blog, fetchBlog } = useBlog();
+    const { update, blogs } = useBlog();
+    
+    // Find the specific blog by ID
+    const blog = blogs?.find(b => b.id === parseInt(id || ''));
+    
     const { handleChange, formState, formErrors, setFormState } = useForm({
         default: blog,
     });
     const [, setImageLocation] = useState<string>("");
 
+    // Update form state when blog is found
     useEffect(() => {
-        if (id) {
-            fetchBlog.submit({
-                formData: {
-                    id: id,
-                },
-            });
-        }
-    }, [id]);
-
-    useEffect(() => {
-        setFormState({});
         if (blog) {
             // prefill form with existing data
             setFormState({
@@ -42,8 +36,10 @@ const BlogEditPage: React.FC = () => {
                 image: blog?.image || "",
                 content: blog?.content || "",
             });
+        } else {
+            setFormState({});
         }
-    }, [blog]);
+    }, [blog, setFormState]);
     return (
         <div className="border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
             <PageBreadCrumb title="Edit Blog" items={["Blogs", "Edit"]} />
@@ -197,7 +193,7 @@ const BlogEditPage: React.FC = () => {
                 </div>
 
                 {/* loader */}
-                <LoadingOverlay isLoading={fetchBlog.isLoading} />
+                <LoadingOverlay isLoading={!blog && !blogs} />
                 {formErrors["message"] && (
                     <ErrorMessage>{formErrors["message"]}</ErrorMessage>
                 )}

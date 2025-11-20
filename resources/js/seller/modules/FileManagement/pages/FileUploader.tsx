@@ -19,7 +19,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     if (!files) return;
 
     const fileArray = Array.from(files);
-    
+
     fileArray.forEach((file) => {
       upload.submit({
         formData: {
@@ -27,7 +27,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
           type: file.type.startsWith('image/') ? 'image' : 'document',
           response_type: 'url',
         },
-        onSuccess: (data) => {
+        onSuccess: (data: any) => {
           if (onSuccess) {
             onSuccess(data);
           }
@@ -45,13 +45,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         multiple={multiple}
         className="file-input"
       />
-      
+
       {upload.isLoading && (
         <div className="upload-progress">
           <p>Uploading...</p>
         </div>
       )}
-      
+
       {upload.isError && (
         <div className="upload-error">
           <p>Upload failed. Please try again.</p>

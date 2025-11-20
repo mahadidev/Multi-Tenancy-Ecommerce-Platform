@@ -2,7 +2,6 @@ import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';
 import { FaChartBar, FaLayerGroup, FaSteamSymbol, FaUsers } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
-import { MdAttachMoney, MdBusiness, MdWeb } from 'react-icons/md';
 import { TbCoinTakaFilled, TbTruckDelivery } from 'react-icons/tb';
 
 export interface PermissionAwareSidebarItem extends SidebarItemType {

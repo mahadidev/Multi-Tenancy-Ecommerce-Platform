@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { 
 	ServerTableFilters, 
-	ServerTableMeta, 
 	GenericApiResponse,
 	UseGenericTableProps,
 	UseGenericTableReturn 
@@ -14,25 +13,41 @@ export const useGenericTableFilters = <TFilters extends ServerTableFilters>({
 	defaultSortBy = 'created_at',
 	defaultSortOrder = 'desc',
 	defaultPerPage = 10,
-	searchableColumns
 }: UseGenericTableProps<TFilters>) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	// Get filters from URL or use defaults
 	const getFiltersFromURL = useCallback((): TFilters => {
-		return {
+		const filters: any = {
 			page: parseInt(searchParams.get('page') || '1', 10),
 			per_page: parseInt(searchParams.get('per_page') || defaultPerPage.toString(), 10),
 			search: searchParams.get('search') || '',
 			sort_by: searchParams.get('sort_by') || defaultSortBy,
 			sort_order: (searchParams.get('sort_order') as 'asc' | 'desc') || defaultSortOrder,
 			...initialFilters
-		} as TFilters;
+		};
+		
+		// Extract ALL URL parameters, not just basic ones
+		for (const [key, value] of searchParams.entries()) {
+			if (!['page', 'per_page', 'search', 'sort_by', 'sort_order'].includes(key) && value) {
+				// Handle numeric values
+				if (key === 'page' || key === 'per_page') {
+					filters[key] = parseInt(value, 10);
+				} else {
+					filters[key] = value;
+				}
+			}
+		}
+		
+		return filters as TFilters;
 	}, [searchParams, defaultSortBy, defaultSortOrder, defaultPerPage, initialFilters]);
 
 	// State for current filters
 	const [filters, setFilters] = useState<TFilters>(getFiltersFromURL);
 	const [searchQuery, setSearchQuery] = useState(filters.search || '');
+	const previousFiltersRef = useRef<TFilters>(filters);
+	const urlParamsRef = useRef<string>(searchParams.toString());
+	const isInternalUpdate = useRef(false);
 
 	// Update URL when filters change
 	const updateURL = useCallback((newFilters: TFilters) => {
@@ -50,19 +65,25 @@ export const useGenericTableFilters = <TFilters extends ServerTableFilters>({
 			}
 		});
 
+		// Mark this as an internal update to prevent feedback loop
+		isInternalUpdate.current = true;
+		urlParamsRef.current = params.toString();
 		setSearchParams(params);
 	}, [setSearchParams, defaultPerPage]);
 
 	// Update filters
 	const updateFilters = useCallback((newFilters: Partial<TFilters>) => {
-		const updatedFilters = {
-			...filters,
-			...newFilters
-		} as TFilters;
-		
-		setFilters(updatedFilters);
-		updateURL(updatedFilters);
-	}, [filters, updateURL]);
+		setFilters((prevFilters) => {
+			const updatedFilters = {
+				...prevFilters,
+				...newFilters
+			} as TFilters;
+			
+			previousFiltersRef.current = updatedFilters;
+			updateURL(updatedFilters);
+			return updatedFilters;
+		});
+	}, [updateURL]);
 
 	// Handle page change
 	const onPageChange = useCallback((page: number) => {
@@ -71,28 +92,35 @@ export const useGenericTableFilters = <TFilters extends ServerTableFilters>({
 
 	// Handle sort change
 	const onSort = useCallback((sortBy: string) => {
-		const currentSortBy = filters.sort_by;
-		const currentSortOrder = filters.sort_order;
-		
-		let newSortOrder: 'asc' | 'desc';
-		
-		if (currentSortBy !== sortBy) {
-			// Different column, start with desc
-			newSortOrder = 'desc';
-		} else if (currentSortOrder === 'desc') {
-			// Same column, toggle to asc
-			newSortOrder = 'asc';
-		} else {
-			// Same column asc, toggle to desc
-			newSortOrder = 'desc';
-		}
+		setFilters((prevFilters) => {
+			const currentSortBy = prevFilters.sort_by;
+			const currentSortOrder = prevFilters.sort_order;
+			
+			let newSortOrder: 'asc' | 'desc';
+			
+			if (currentSortBy !== sortBy) {
+				// Different column, start with desc
+				newSortOrder = 'desc';
+			} else if (currentSortOrder === 'desc') {
+				// Same column, toggle to asc
+				newSortOrder = 'asc';
+			} else {
+				// Same column asc, toggle to desc
+				newSortOrder = 'desc';
+			}
 
-		updateFilters({
-			sort_by: sortBy,
-			sort_order: newSortOrder,
-			page: 1 // Reset to first page when sorting
-		} as Partial<TFilters>);
-	}, [filters.sort_by, filters.sort_order, updateFilters]);
+			const updatedFilters = {
+				...prevFilters,
+				sort_by: sortBy,
+				sort_order: newSortOrder,
+				page: 1 // Reset to first page when sorting
+			} as TFilters;
+			
+			previousFiltersRef.current = updatedFilters;
+			updateURL(updatedFilters);
+			return updatedFilters;
+		});
+	}, [updateURL]);
 
 	// Handle search
 	const onSearch = useCallback((searchValue: string) => {
@@ -141,12 +169,50 @@ export const useGenericTableFilters = <TFilters extends ServerTableFilters>({
 		dir: filters.sort_order
 	}), [filters.sort_by, filters.sort_order]);
 
-	// Sync URL changes back to state
+	// Sync URL changes back to state (only if different to prevent feedback loop)
 	useEffect(() => {
-		const urlFilters = getFiltersFromURL();
-		setFilters(urlFilters);
-		setSearchQuery(urlFilters.search || '');
-	}, [searchParams, defaultSortBy, defaultSortOrder, defaultPerPage]);
+		const currentUrlParams = searchParams.toString();
+		
+		// Skip this update if it's from our own internal updateURL call
+		if (isInternalUpdate.current) {
+			isInternalUpdate.current = false;
+			urlParamsRef.current = currentUrlParams;
+			return;
+		}
+		
+		// Only update if URL actually changed externally (not from our own updateURL call)
+		if (urlParamsRef.current !== currentUrlParams) {
+			const urlFilters = getFiltersFromURL();
+			
+			// More robust comparison - normalize filters before comparing
+			const normalizeFilters = (f: TFilters) => {
+				const normalized = { ...f };
+				// Remove undefined/null/empty values for comparison
+				Object.keys(normalized).forEach(key => {
+					if (normalized[key as keyof TFilters] === undefined || 
+						normalized[key as keyof TFilters] === null || 
+						normalized[key as keyof TFilters] === '') {
+						delete normalized[key as keyof TFilters];
+					}
+				});
+				return normalized;
+			};
+			
+			const currentNormalized = normalizeFilters(filters);
+			const urlNormalized = normalizeFilters(urlFilters);
+			
+			// Only update if meaningful filter values are different
+			const currentFiltersString = JSON.stringify(currentNormalized);
+			const urlFiltersString = JSON.stringify(urlNormalized);
+			
+			if (currentFiltersString !== urlFiltersString) {
+				urlParamsRef.current = currentUrlParams;
+				previousFiltersRef.current = urlFilters;
+				setFilters(urlFilters);
+				setSearchQuery(urlFilters.search || '');
+			}
+		}
+	}, [searchParams, getFiltersFromURL, filters]);
 
 	return {
 		// Current state
@@ -190,7 +256,7 @@ export const useGenericTable = <TData, TFilters extends ServerTableFilters>(
 	
 	// Use the API query with current filters
 	const apiResult = useApiQuery(tableState.filters, {
-		refetchOnMountOrArgChange: true
+		// Removed refetchOnMountOrArgChange to prevent double fetches
 	});
 
 	// Extract data and meta from response

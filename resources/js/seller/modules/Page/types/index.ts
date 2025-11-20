@@ -1,12 +1,11 @@
-import { PageType, PageTypeType } from '@type/pageType';
-import { WidgetInputType } from '@type/widgetType';
+import { PageTypeType } from '@type/pageType';
 import { MetaType } from '@type/tableType';
-import { ApiResponseType } from '@type/apiType';
+import { WidgetInputType } from '@type/widgetType';
 
 // Core Types
-export interface Page extends PageType {}
+export type Page = PageType
 
-export interface PageType extends PageTypeType {}
+export type PageType = PageTypeType
 
 export interface PageFilters {
   page?: number;
@@ -35,6 +34,7 @@ export interface PageFormData {
 export interface PagesResponse {
   success: boolean;
   message?: string;
+  status: number;
   data: {
     pages: Page[];
   };
@@ -42,11 +42,12 @@ export interface PagesResponse {
 }
 
 export interface PageResponse {
-  success: boolean;
-  message?: string;
-  data: {
-    page: Page;
-  };
+	success: boolean;
+	message?: string;
+	status: number;
+	data: {
+		page: PageTypeType | any;
+	};
 }
 
 export interface PageTypesResponse {

@@ -1,15 +1,14 @@
-import type { ServerTableMeta, UseGenericTableReturn } from '@seller/_hooks/types/table';
+import type { UseGenericTableReturn, ServerTableFilters } from '@seller/_hooks/types/table';
 import DateFilter, { PeriodType } from '@seller/modules/Order/components/DateFilter';
 import { DataTablePropsType } from '@type/tableType';
-import { Button, Card, Label, Table, TextInput } from 'flowbite-react';
-import React, { FC, ReactNode } from 'react';
+import { Button, Label, Table, TextInput } from 'flowbite-react';
+import React, { ReactNode } from 'react';
 import { CSVLink } from 'react-csv';
 import { HiDocumentDownload } from 'react-icons/hi';
 import { MdClear } from 'react-icons/md';
-import type { OrderFilters } from '../../hooks/useOrderTable';
 import DataTablePagination from './DataTablePagination';
 
-interface GenericTableProps<TData, TFilters>
+interface GenericTableProps<TData, TFilters extends ServerTableFilters>
 	extends Omit<DataTablePropsType, 'data'> {
 	// Table data from generic hook
 	table: UseGenericTableReturn<TData, TFilters>;
@@ -53,7 +52,7 @@ interface GenericTableProps<TData, TFilters>
 	defaultPerPage?: number;
 }
 
-const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>): JSX.Element => {
+const GenericTable = <TData, TFilters extends ServerTableFilters>(props: GenericTableProps<TData, TFilters>): JSX.Element => {
 	const {
 		table,
 		exportable,
@@ -149,7 +148,7 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 							<div className="ml-auto flex items-center space-x-2 sm:space-x-3">
 								{head && head.render(table.data)}
 								{exportable && table.data && (
-									<CSVLink data={table.data ?? []} filename={filename}>
+									<CSVLink data={table.data as any ?? []} filename={filename}>
 										<Button
 											className="p-0"
 											color="gray"
@@ -167,7 +166,12 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 					</div>
 				</div>
 			)}
-			<div className={`flex flex-col ${tableWrapperClassName ?? ''}`}>
+			<div className={`flex flex-col ${tableWrapperClassName ?? ''} relative`}>
+				{table.isFetching && !table.isLoading && (
+					<div className="absolute top-0 left-0 right-0 h-1 z-10 bg-gray-200">
+						<div className="h-full bg-primary animate-pulse w-full"></div>
+					</div>
+				)}
 				<div className="overflow-x-auto">
 					<div className="inline-block min-w-full align-middle">
 						<div className="overflow-hidden shadow">
@@ -262,11 +266,13 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 									className={`${
 										!disableHead &&
 										'divide-y divide-gray-200 dark:divide-gray-700'
-									} bg-white  dark:bg-gray-800 ${bodyClassName ?? ''}`}
+									} bg-white  dark:bg-gray-800 ${bodyClassName ?? ''} ${
+										table.isFetching ? 'opacity-50 transition-opacity duration-200' : ''
+									}`}
 								>
-									{table.isLoading || table.isFetching ? (
-										// Skeleton rows - show 1 if no data, otherwise same count as current data
-										Array.from({ length: table.data?.length || 1 }).map(
+									{table.isLoading ? (
+										// Skeleton rows for initial loading
+										Array.from({ length: table.data?.length || 5 }).map(
 											(_, skeletonIdx) => (
 												<Table.Row key={`skeleton-${skeletonIdx}`}>
 													{!disableSl && (
@@ -274,7 +280,7 @@ const GenericTable = <TData, TFilters>(props: GenericTableProps<TData, TFilters>
 															<div className="w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
 														</Table.Cell>
 													)}
-													{columns.map((column, colIdx) => (
+													{columns.map((_, colIdx) => (
 														<Table.Cell key={colIdx} className="p-4">
 															<div
 																className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"

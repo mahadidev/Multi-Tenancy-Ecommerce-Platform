@@ -124,7 +124,9 @@ export const cartOrderPlacerApi = createApi({
 		>({
 			query: (params) => {
 				const queryString = new URLSearchParams(
-					Object.entries(params || {}).filter(([_, value]) => value != null)
+					Object.entries(params || {})
+						.filter(([_, value]) => value != null)
+						.map(([key, value]) => [key, String(value)])
 				).toString();
 				return createRequest({
 					url: `${PREFIX}/product${queryString ? `?${queryString}` : ''}`,

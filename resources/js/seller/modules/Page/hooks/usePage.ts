@@ -1,17 +1,14 @@
-import {
-  CreatePagePayload,
-  DeletePagePayload,
-  FetchPagePayload,
-  pageApi,
-  UpdatePagePayload,
-  useCreatePageMutation,
-  useDeletePageMutation,
-  useFetchPagesQuery,
-  useFetchPageTypesQuery,
-  useUpdatePageMutation,
-} from '../store/pageApi';
 import { useAppDispatch, useAppSelector } from '@seller/store/store';
+import {
+    pageApi,
+    useCreatePageMutation,
+    useDeletePageMutation,
+    useFetchPagesQuery,
+    useFetchPageTypesQuery,
+    useUpdatePageMutation,
+} from '../store/pageApi';
 import { setPage } from '../store/pageSlice';
+import { CreatePagePayload, DeletePagePayload, FetchPagePayload, UpdatePagePayload } from '../types';
 
 const usePage = () => {
   // fetch pages

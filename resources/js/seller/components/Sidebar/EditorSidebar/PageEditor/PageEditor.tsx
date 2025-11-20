@@ -6,8 +6,8 @@ import { useEffect } from "react";
 import PartialEditor from "./PartialEditor";
 
 const PageEditor = () => {
-    const { page, savePage, onChangePageInput } = usePage();
-    const { formState, formErrors, setFormState } = useForm({
+    const { page, savePage } = usePage();
+    const { formState, formErrors, setFormState, handleChange } = useForm({
         formValidationError: savePage.error,
         default: {
             ...page,
@@ -29,9 +29,7 @@ const PageEditor = () => {
 						value={formState['title']}
 						color={formErrors['title'] ? 'failure' : 'gray'}
 						helperText={formErrors['title'] ? formErrors['title'][0] : false}
-						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-							onChangePageInput(event);
-						}}
+						onChange={handleChange}
 						required
 					/>
 				</div>
@@ -44,9 +42,7 @@ const PageEditor = () => {
 						value={formState['slug']}
 						color={formErrors['slug'] ? 'failure' : 'gray'}
 						helperText={formErrors['slug'] ? formErrors['slug'][0] : false}
-						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-							onChangePageInput(event);
-						}}
+						onChange={handleChange}
 						required
 					/>
 				</div>

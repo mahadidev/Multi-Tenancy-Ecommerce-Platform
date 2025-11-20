@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import useCategory from '@seller/_hooks/useCategory';
 import useProduct from '@seller/_hooks/useProduct';
 import { Button, Spinner } from 'flowbite-react';
@@ -21,6 +22,18 @@ import {
 type TimeRangeType = 'today' | 'week' | 'month' | 'year';
 type ViewModeType = 'table' | 'cards' | 'charts';
 
+interface StockData {
+    originalKey: any;
+	id: number;
+	date: string;
+	buyingValue: number;
+	sellingValue: number;
+	quantity: number;
+	profit: number;
+	profitMargin: string;
+	trend: 'up' | 'down';
+}
+
 interface StockReportPageProps {
 	className?: string;
 }
@@ -41,7 +54,7 @@ const StockReportPage: FC<StockReportPageProps> = ({ className = '' }) => {
 
 	// Data fetching
 	const { summary: productReport } = useProduct({ summaryFilterRange: timeRange });
-	const { productCategories, categoriesMeta } = useCategory();
+	const { productCategories } = useCategory();
 
 	// Helper function to format dates based on time range
 	const formatDateLabel = (dateKey: string, index: number, timeRange: TimeRangeType): string => {
@@ -56,7 +69,7 @@ const StockReportPage: FC<StockReportPageProps> = ({ className = '' }) => {
 		// Try parsing as date
 		const parsedDate = new Date(dateKey);
 		if (!isNaN(parsedDate.getTime())) {
-			return parsedDate.toISOString().split('T')[0];
+			return parsedDate.toISOString().split('T')[0] || "";
 		}
 
 		// Generate meaningful labels based on time range
@@ -73,7 +86,7 @@ const StockReportPage: FC<StockReportPageProps> = ({ className = '' }) => {
 			case 'month':
 				// For month, use dates
 				const monthDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (29 - index));
-				return monthDate.toISOString().split('T')[0];
+				return monthDate.toISOString().split('T')[0] || "";
 			case 'year':
 				// For year, use months
 				const yearDate = new Date(now.getFullYear(), now.getMonth() - (11 - index), 1);
@@ -91,18 +104,19 @@ const StockReportPage: FC<StockReportPageProps> = ({ className = '' }) => {
 		return entries.map(([dateKey, data]: [string, any], index) => {
 			const formattedDate = formatDateLabel(dateKey, index, timeRange);
 
-			return {
-				id: index + 1,
-				date: formattedDate,
-				originalKey: dateKey, // Keep original for debugging
-				buyingValue: data?.buyingValue || 0,
-				sellingValue: data?.sellingValue || 0,
-				quantity: data?.qty || 0,
-				profit: (data?.sellingValue || 0) - (data?.buyingValue || 0),
-				profitMargin: data?.sellingValue ?
-					(((data?.sellingValue - data?.buyingValue) / data?.sellingValue) * 100).toFixed(2) : 0,
-				trend: Math.random() > 0.5 ? 'up' : 'down' // Simulated trend
-			};
+			const stockItem: StockData = {
+                id: index + 1,
+                date: formattedDate,
+                buyingValue: data?.buyingValue || 0,
+                sellingValue: data?.sellingValue || 0,
+                quantity: data?.qty || 0,
+                profit: (data?.sellingValue || 0) - (data?.buyingValue || 0),
+                profitMargin: data?.sellingValue ?
+                    (((data?.sellingValue - data?.buyingValue) / data?.sellingValue) * 100).toFixed(2) : '0',
+                trend: (Math.random() > 0.5 ? 'up' : 'down'),
+                originalKey: undefined
+            };
+			return stockItem;
 		});
 	}, [productReport, timeRange]);
 
@@ -121,7 +135,7 @@ const StockReportPage: FC<StockReportPageProps> = ({ className = '' }) => {
 		// Category filter (simulated - in real implementation, this would filter based on product categories)
 		if (selectedCategories.length > 0) {
 			// For demonstration, we'll simulate filtering by randomly assigning categories to data
-			filtered = filtered.filter((item, index) => {
+			filtered = filtered.filter((_, index) => {
 				// Simulate category assignment based on index
 				const simulatedCategoryId = (index % (productCategories?.length || 1)) + 1;
 				return selectedCategories.includes(simulatedCategoryId.toString());

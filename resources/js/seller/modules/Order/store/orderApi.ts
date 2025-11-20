@@ -1,10 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
+import baseQueryWithReAuth, { createRequest } from "@seller/store/baseQueryWithReAuth";
+import { clearCartItems } from "@seller/store/slices/cartSlice";
 import { ApiResponseType } from "@type/apiType";
 import { OrdersApiResponse } from "@type/orderType";
 import { ShipmentOrdersApiResponse } from "@type/shipmentOrdersType";
-import baseQueryWithReAuth, { createRequest } from "@seller/store/baseQueryWithReAuth";
-import { clearCartItems } from "@seller/store/slices/cartSlice";
 import { setOrders, setShipmentOrders } from "./orderSlice";
 
 export interface PlaceOrderPayloadType {
@@ -58,137 +58,144 @@ export interface OrderFilters {
 }
 
 export const orderApi = createApi({
-    reducerPath: 'orderApi',
-    baseQuery: baseQueryWithReAuth,
-    tagTypes: ['Orders', 'Shipments'],
-    endpoints: (builder) => ({
-        updateOrderStatus: builder.mutation<any, any>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/orders/update/status/${formData?.id}`,
-                    method: 'post',
-                    apiMethod: 'PUT',
-                    body: formData,
-                }),
-            invalidatesTags: ['Orders'],
-            transformErrorResponse: (error: any) => error.data,
-        }),
+	reducerPath: 'orderApi',
+	baseQuery: baseQueryWithReAuth,
+	tagTypes: ['Orders', 'Shipments'],
+	endpoints: (builder) => ({
+		updateOrderStatus: builder.mutation<any, any>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/orders/update/status/${formData?.id}`,
+					method: 'post',
+					apiMethod: 'PUT',
+					body: formData,
+				}),
+			invalidatesTags: ['Orders'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
 
-        placeOrder: builder.mutation<ApiResponseType, PlaceOrderPayloadType>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/place-order`,
-                    method: 'post',
-                    body: formData,
-                }),
-            invalidatesTags: ['Orders'],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then(() => {
-                    dispatch(clearCartItems());
-                });
-            },
-        }),
+		placeOrder: builder.mutation<ApiResponseType, PlaceOrderPayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/place-order`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Orders'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then(() => {
+					dispatch(clearCartItems());
+				});
+			},
+		}),
 
-        placeOrderNonUser: builder.mutation<
-            ApiResponseType,
-            PlaceOrderNonUserPayloadType
-        >({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/place-order-non-user`,
-                    method: 'post',
-                    body: formData,
-                }),
-            invalidatesTags: ['Orders'],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { queryFulfilled }) {
-                await queryFulfilled.then(() => {
-                    // dispatch(clearCartItems());
-                });
-            },
-        }),
+		placeOrderNonUser: builder.mutation<
+			ApiResponseType,
+			PlaceOrderNonUserPayloadType
+		>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/place-order-non-user`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Orders'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { queryFulfilled }) {
+				await queryFulfilled.then(() => {
+					// dispatch(clearCartItems());
+				});
+			},
+		}),
 
-        fetchOrders: builder.query<OrdersApiResponse, void>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/orders`,
-                    method: 'get',
-                    body: formData,
-                }),
-            providesTags: ['Orders'],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(setOrders({ orders: response?.data?.data?.orders }));
-                });
-            },
-        }),
+		fetchOrders: builder.query<OrdersApiResponse, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/orders`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Orders'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(setOrders({ orders: response?.data?.data?.orders }));
+				});
+			},
+		}),
 
-        // Fetch orders with table filters (for generic table)
-        fetchOrdersTable: builder.query<OrdersApiResponse, OrderFilters>({
-            query: (filters) => {
-                const params = new URLSearchParams();
-                
-                // Add filters to URL params
-                Object.entries(filters).forEach(([key, value]) => {
-                    if (value !== undefined && value !== null && value !== '') {
-                        // Skip empty search values to keep URL clean
-                        if (key === 'search' && value === '') return;
-                        params.append(key, String(value));
-                    }
-                });
-                
-                return createRequest({
-                    url: `${PREFIX}/orders?${params.toString()}`,
-                    method: 'get',
-                });
-            },
-            providesTags: ['Orders'],
-            transformErrorResponse: (error: any) => error.data,
-        }),
+		// Fetch orders with table filters (for generic table)
+		fetchOrdersTable: builder.query<OrdersApiResponse, OrderFilters>({
+			query: (filters) => {
+				const params = new URLSearchParams();
 
-        fetchShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/shipments`,
-                    method: 'get',
-                    body: formData,
-                }),
-            providesTags: ['Shipments'],
-            transformErrorResponse: (error: any) => error.data,
-            async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
-                await queryFulfilled.then((response) => {
-                    dispatch(
-                        setShipmentOrders({
-                            shipmentOrders: response?.data?.data?.shipments,
-                        })
-                    );
-                });
-            },
-        }),
+				// Add filters to URL params
+				Object.entries(filters).forEach(([key, value]) => {
+					if (value !== undefined && value !== null && value !== '') {
+						// Skip empty search values to keep URL clean
+						if (key === 'search' && value === '') return;
 
-        bulkShipmentOrders: builder.mutation<any, BulkShipmentOrderPayloadType>({
-            query: (formData) =>
-                createRequest({
-                    url: `${PREFIX}/steadfast-courier/place-order`,
-                    method: 'post',
-                    body: formData,
-                }),
-            invalidatesTags: ['Orders'],
-            transformErrorResponse: (error: any) => error.data,
-        }),
+						// For date filtering, prioritize period-based filtering over legacy date_from/date_to
+						if (key === 'date_from' || key === 'date_to') {
+							// Skip legacy date parameters if period is being used
+							if (filters.period) return;
+						}
 
-        syncShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
-            query: () =>
-                createRequest({
-                    url: `${PREFIX}/steadfast-courier/shipments/sync`,
-                    method: 'get',
-                }),
-            providesTags: ['Shipments'],
-            transformErrorResponse: (error: any) => error.data,
-        }),
-    }),
+						params.append(key, String(value));
+					}
+				});
+
+				return createRequest({
+					url: `${PREFIX}/orders?${params.toString()}`,
+					method: 'get',
+				});
+			},
+			providesTags: ['Orders'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+
+		fetchShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/shipments`,
+					method: 'get',
+					body: formData,
+				}),
+			providesTags: ['Shipments'],
+			transformErrorResponse: (error: any) => error.data,
+			async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
+				await queryFulfilled.then((response) => {
+					dispatch(
+						setShipmentOrders({
+							shipmentOrders: response?.data?.data?.shipments,
+						})
+					);
+				});
+			},
+		}),
+
+		bulkShipmentOrders: builder.mutation<any, BulkShipmentOrderPayloadType>({
+			query: (formData) =>
+				createRequest({
+					url: `${PREFIX}/steadfast-courier/place-order`,
+					method: 'post',
+					body: formData,
+				}),
+			invalidatesTags: ['Orders'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+
+		syncShipmentOrders: builder.query<ShipmentOrdersApiResponse, void>({
+			query: () =>
+				createRequest({
+					url: `${PREFIX}/steadfast-courier/shipments/sync`,
+					method: 'get',
+				}),
+			providesTags: ['Shipments'],
+			transformErrorResponse: (error: any) => error.data,
+		}),
+	}),
 });
 
 export const {

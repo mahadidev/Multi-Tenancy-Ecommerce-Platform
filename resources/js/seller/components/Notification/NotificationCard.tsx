@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import useNotification from "@seller/_hooks/useNotification";
 import { RoutePath } from "@seller/seller_env";
 import { NotificationType, RedirectUrlType } from "@type/notification";
@@ -10,7 +11,7 @@ interface NotificationCardProps {
     styleType?: string;
 }
 
-const NotificationCard: React.FC<NotificationCardProps> = ({
+const NotificationCard: React.FC<NotificationCardProps | any> = ({
     notification,
     styleType,
 }) => {

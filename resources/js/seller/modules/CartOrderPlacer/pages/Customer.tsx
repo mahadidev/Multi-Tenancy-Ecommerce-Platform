@@ -1,6 +1,6 @@
 import useForm from '@seller/_hooks/useForm';
 import { Select, TextInput } from '@seller/components';
-import { ChangeEvent, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useCartOrderPlacer } from '../hooks';
 import { OrderPlacerCustomer } from '../types';
 

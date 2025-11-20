@@ -10,7 +10,7 @@ import StoreStepThree from "./StoreStepThree";
 import StoreStepTwo from "./StoreStepTwo";
 
 const StoreOnboardPage: FC = function () {
-    const { currentStep, goToStep, storeData, updateStoreData } = useOnboard();
+    const { currentStep, goToStep, storeData } = useOnboard();
     const { setFormState, formState, formErrors, handleChange } = useForm({
         default: storeData,
     });

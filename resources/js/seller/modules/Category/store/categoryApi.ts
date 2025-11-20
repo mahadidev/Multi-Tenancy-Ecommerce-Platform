@@ -13,7 +13,7 @@ import {
     DeleteCategoryPayload,
     UpdateCategoryPayload,
 } from '../types';
-import { setCategories, setTableProductCategories } from './categorySlice';
+import { setTableProductCategories } from './categorySlice';
 
 export const categoryApi = createApi({
 	reducerPath: 'categoryApi',
@@ -80,7 +80,7 @@ export const categoryApi = createApi({
 					method: 'get',
 				});
 			},
-			providesTags: (result, error, filters) => [
+			providesTags: (_result, _error, filters) => [
 				{ type: 'Categories', id: `PRODUCT_TABLE_${JSON.stringify(filters)}` }
 			],
 			transformErrorResponse: (error: any) => error.data,

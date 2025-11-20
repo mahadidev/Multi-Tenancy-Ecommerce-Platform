@@ -4,7 +4,7 @@ import StatusBadge from "@seller/components/Badge/StatusBadge";
 import GenericTable from "@seller/components/DataTable/GenericTable";
 import { OrderType } from "@type/orderType";
 import { Button, Checkbox, Label, Table } from "flowbite-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useOrders, useOrderTable } from "../../hooks";
 import type { OrderFilters } from "../../hooks/useOrderTable";
@@ -18,9 +18,9 @@ const OrdersTable = () => {
     const { toaster } = useToast();
     const [orderIds, setOrderIds] = useState<number[]>([]);
 
-    const handleDateFilterChange = (filters: Pick<OrderFilters, 'period' | 'start_date' | 'end_date'>) => {
+    const handleDateFilterChange = useCallback((filters: Pick<OrderFilters, 'period' | 'start_date' | 'end_date'>) => {
         orderTable.updateFilters(filters);
-    };
+    }, [orderTable]);
 
     return (
 			<div className="space-y-4">

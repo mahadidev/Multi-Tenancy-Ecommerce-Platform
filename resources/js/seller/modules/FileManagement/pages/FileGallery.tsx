@@ -2,14 +2,14 @@ import React from 'react';
 import { useFileManagement } from '../hooks';
 
 const FileGallery: React.FC = () => {
-  const { files, upload, delete: deleteFile } = useFileManagement();
+  const { files, delete: deleteFile } = useFileManagement();
 
   return (
     <div className="file-gallery">
       <div className="file-gallery-header">
         <h2>File Gallery</h2>
       </div>
-      
+
       <div className="file-gallery-grid">
         {files.map((file) => (
           <div key={file.id} className="file-item">

@@ -1,6 +1,6 @@
 import { FaBlogger, FaLayerGroup, FaSteamSymbol, FaUsers, FaChartBar } from 'react-icons/fa';
 import { HiChartPie, HiCog, HiShoppingBag } from 'react-icons/hi';
-import { MdAttachMoney, MdWeb } from 'react-icons/md';
+import { MdAttachMoney } from 'react-icons/md';
 
 import { RoutePath } from '@seller/seller_env';
 import { SidebarItemType } from '@type/sidebarType';

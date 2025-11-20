@@ -40,7 +40,6 @@ const useTableServer = ({
 	defaultSortBy = 'created_at',
 	defaultSortOrder = 'desc',
 	defaultPerPage = 10,
-	searchableColumns,
 	onFiltersChange
 }: UseTableServerProps) => {
 	const [searchParams, setSearchParams] = useSearchParams();

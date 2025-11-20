@@ -1,7 +1,7 @@
-import { useGenericTableFilters } from '@seller/_hooks/useGenericTable';
-import { useFetchOrdersTableQuery } from '../store/orderApi';
-import type { OrderType } from '@type/orderType';
 import type { UseGenericTableReturn } from '@seller/_hooks/types/table';
+import { useGenericTableFilters } from '@seller/_hooks/useGenericTable';
+import type { OrderType } from '@type/orderType';
+import { useFetchOrdersTableQuery } from '../store/orderApi';
 
 export interface OrderFilters {
   search?: string;
@@ -25,7 +25,7 @@ export const useOrderTable = (): UseGenericTableReturn<OrderType, OrderFilters> 
     searchableColumns: ['order_uuid', 'user_name', 'user_email', 'total', 'created_at'],
   });
 
-  // Use RTK Query hook with current filters
+  // Use RTK Query hook with current filters - keep refetchOnMountOrArgChange but ensure filter consistency
   const apiResult = useFetchOrdersTableQuery(tableState.filters, {
     refetchOnMountOrArgChange: true
   });

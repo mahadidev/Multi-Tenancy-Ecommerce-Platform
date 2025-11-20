@@ -1,12 +1,12 @@
 import usePlans from "@seller/_hooks/usePlan";
 import useStore from "@seller/_hooks/useStore";
-import type { SubscriptionPlan as SubscriptionPlanType } from "../types";
 import { Button } from "flowbite-react";
 import { FC } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaCheckCircle } from "react-icons/fa";
+import type { SubscriptionPlan as SubscriptionPlanType } from "../types";
 
-const SubscriptionPlan: FC<{ plan: SubscriptionPlanType }> = ({ plan }) => {
+const SubscriptionPlan: FC<{ plan: SubscriptionPlanType | any }> = ({ plan }) => {
     const { subscribePlan } = usePlans();
     const { store } = useStore();
 
@@ -27,7 +27,7 @@ const SubscriptionPlan: FC<{ plan: SubscriptionPlanType }> = ({ plan }) => {
             </div>
             <p className="text-md dark:text-gray-300 my-2">{plan?.description}</p>
             <div className="list-disc leading-8">
-                {plan?.features?.map((featureName, idx: number) => (
+                {plan?.features?.map((featureName: any, idx: number) => (
                     <p
                         key={idx}
                         className="flex items-center gap-3 dark:text-gray-300"

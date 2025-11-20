@@ -1,4 +1,3 @@
-import { formatTableDate } from "@seller/_utils/dateUtils";
 import { ServerTable } from "@seller/components";
 import { CategoryType } from "@type/categoryType";
 import { Table } from "flowbite-react";

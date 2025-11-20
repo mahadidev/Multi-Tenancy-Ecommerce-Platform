@@ -4,11 +4,6 @@ import { useAppSelector } from "@seller/store/store";
 import { useNavigate } from "react-router-dom";
 import {
     authApi,
-    EmailVerificationPayload,
-    LoginPayload,
-    PasswordForgotRequestPayload,
-    RegisterPayload,
-    ResetPasswordPayload,
     useEmailVerificationMutation,
     useFetchUserQuery,
     useForgotPasswordRequestMutation,
@@ -16,12 +11,19 @@ import {
     useLogOutMutation,
     useRegisterMutation,
     useResetPasswordMutation,
-    UserUpdatePasswordPayload,
     useUpdateUserMutation,
     useUpdateUserPasswordMutation,
     useVerifySocialMediaAuthenticationMutation,
-    VerifySocialMediaAuthenticationPayload,
 } from "../store/authApi";
+import type {
+    EmailVerificationPayload,
+    LoginPayload,
+    PasswordForgotRequestPayload,
+    RegisterPayload,
+    ResetPasswordPayload,
+    UserUpdatePasswordPayload,
+    VerifySocialMediaAuthenticationPayload
+} from "../types";
 import { UserProfile } from "../types";
 
 const useAuth = () => {

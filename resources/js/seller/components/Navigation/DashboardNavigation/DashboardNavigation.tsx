@@ -11,7 +11,6 @@ import {
     toggleSidebar,
 } from "@seller/store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "@seller/store/store";
-import { NotificationType } from "@type/notification";
 import { StoreType } from "@type/storeType";
 import {
     Avatar,
@@ -51,7 +50,6 @@ export function DashboardNavigation() {
     const { store } = useStore();
     const {
         query,
-        results,
         isLoading,
         isOpen,
         handleSearch,
@@ -235,10 +233,10 @@ export function NotificationBellDropdown() {
                     {/* Added max-height and overflow-y */}
                     {notifications
                         ?.slice(0, 10)
-                        ?.map((notification: NotificationType, idx: number) => (
+                        ?.map((notification, idx: number) => (
                             <NotificationCard
                                 key={idx}
-                                notification={notification}
+                                notification={notification as any}
                             />
                         ))}
                 </div>

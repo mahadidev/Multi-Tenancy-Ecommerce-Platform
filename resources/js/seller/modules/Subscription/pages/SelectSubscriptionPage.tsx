@@ -1,5 +1,4 @@
 import usePlans from "@seller/_hooks/usePlan";
-import type { SubscriptionPlan as SubscriptionPlanType } from "../types";
 import { FC } from "react";
 import { useSearchParams } from "react-router-dom";
 import SubscriptionPlan from "./SubscriptionPlan";
@@ -28,7 +27,7 @@ const SelectSubscriptionPage: FC = () => {
                     <div className="overflow-hidden">
                         <div className="grid lg:grid-cols-3 gap-5 p-4">
                             {plans && Array.isArray(plans) && plans.length > 0 ? (
-                                plans.map((plan: SubscriptionPlanType, idx: number) => (
+                                plans.map((plan, idx: number) => (
                                     <SubscriptionPlan key={idx} plan={plan} />
                                 ))
                             ) : (

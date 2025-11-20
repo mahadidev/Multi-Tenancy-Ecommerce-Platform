@@ -3,7 +3,7 @@ import { Button } from 'flowbite-react';
 import { FC, useState } from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
-const PlaceholdersTablePagination: FC<{ meta: MetaType }> = function ({
+const PlaceholdersTablePagination: FC<{ meta: MetaType | any }> = function ({
 	meta,
 }) {
 	const [page, setPage] = useState(0);

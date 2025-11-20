@@ -1,5 +1,5 @@
 import useBrand from '@seller/_hooks/useBrand';
-import { Brand } from '@type/brandType';
+import { BrandType as Brand } from '@type/brandType';
 import { Button, Modal } from 'flowbite-react';
 import { FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';

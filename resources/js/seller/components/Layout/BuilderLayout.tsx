@@ -1,6 +1,4 @@
-import React, { ReactNode, useState } from 'react';
-import { Sidebar } from '../Sidebar';
-import { Header } from '../Header';
+import { ReactNode, useState } from 'react';
 
 interface BuilderLayoutProps {
   children: ReactNode;
@@ -10,12 +8,12 @@ interface BuilderLayoutProps {
   showComponentSelector?: boolean;
 }
 
-export function BuilderLayout({ 
-  children, 
-  title, 
-  settingsPanel, 
-  componentSelector, 
-  showComponentSelector = false 
+export function BuilderLayout({
+  children,
+  title,
+  settingsPanel,
+  componentSelector,
+  showComponentSelector = false
 }: BuilderLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -23,8 +21,8 @@ export function BuilderLayout({
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div 
-          className="fixed inset-0 z-40 lg:hidden" 
+        <div
+          className="fixed inset-0 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         >
           <div className="absolute inset-0 bg-gray-600 opacity-75"></div>
@@ -82,7 +80,7 @@ export function BuilderLayout({
                 </button>
                 <h1 className="ml-2 lg:ml-0 text-2xl font-bold text-gray-900">{title}</h1>
               </div>
-              
+
               <div className="flex items-center space-x-4">
                 {/* Action buttons can go here */}
                 <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">

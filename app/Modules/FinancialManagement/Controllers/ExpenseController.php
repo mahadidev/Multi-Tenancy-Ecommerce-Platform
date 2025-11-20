@@ -43,7 +43,40 @@ class ExpenseController extends Controller
             $query->byStatus($request->status);
         }
 
-        if ($request->filled('start_date') && $request->filled('end_date')) {
+        // Handle date filtering with both period and custom date range
+        if ($request->filled('period')) {
+            $period = $request->period;
+            $now = Carbon::now(config('app.timezone'));
+            
+            switch ($period) {
+                case 'today':
+                    $query->whereDate('expense_date', $now->toDateString());
+                    break;
+                case 'week':
+                    $startOfWeek = $now->copy()->startOfWeek();
+                    $endOfWeek = $now->copy()->endOfWeek();
+                    $query->whereBetween('expense_date', [$startOfWeek->toDateString(), $endOfWeek->toDateString()]);
+                    break;
+                case 'month':
+                    $startOfMonth = $now->copy()->startOfMonth();
+                    $endOfMonth = $now->copy()->endOfMonth();
+                    $query->whereBetween('expense_date', [$startOfMonth->toDateString(), $endOfMonth->toDateString()]);
+                    break;
+                case 'year':
+                    $startOfYear = $now->copy()->startOfYear();
+                    $endOfYear = $now->copy()->endOfYear();
+                    $query->whereBetween('expense_date', [$startOfYear->toDateString(), $endOfYear->toDateString()]);
+                    break;
+                case 'custom':
+                    if ($request->filled('start_date') && $request->filled('end_date')) {
+                        $startDate = Carbon::parse($request->start_date)->toDateString();
+                        $endDate = Carbon::parse($request->end_date)->toDateString();
+                        $query->whereBetween('expense_date', [$startDate, $endDate]);
+                    }
+                    break;
+            }
+        } elseif ($request->filled('start_date') && $request->filled('end_date')) {
+            // Fallback to original date range filtering for backward compatibility
             $startDate = Carbon::parse($request->start_date);
             $endDate = Carbon::parse($request->end_date);
             $query->byDateRange($startDate, $endDate);

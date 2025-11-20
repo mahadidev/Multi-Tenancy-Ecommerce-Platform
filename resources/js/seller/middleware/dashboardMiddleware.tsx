@@ -7,7 +7,8 @@ const DashboardMiddleware = () => {
 	const { user, accessToken } = useAppSelector((state) => state.auth);
 	const { store } = useAppSelector((state) => state.store);
 	const isRehydrated = useAppSelector((state) => state._persist?.rehydrated);
-	const { permissions, hasPermission } = usePermissions();
+	const { hasPermission } = usePermissions();
+	const permissions = (usePermissions() as any).permissions || [];
 
 	// Debug logging (remove in production)
 	console.log('DashboardMiddleware Debug:', {
@@ -17,11 +18,11 @@ const DashboardMiddleware = () => {
 		hasStore: !!store,
 		storeStatus: store?.store_subscription_status,
 		userProfileData: user,
-		storeOwnerId: store?.owner_id,
-		currentUserId: user?.id,
-		isOwnerMatch: store?.owner_id === user?.id,
-		isStoreOwnerFromProfile: user?.is_store_owner,
-		isStoreOwnerFromSession: user?.store_session?.is_owner,
+		storeOwnerId: (store as any)?.owner_id,
+		currentUserId: (user as any)?.id,
+		isOwnerMatch: (store as any)?.owner_id === (user as any)?.id,
+		isStoreOwnerFromProfile: (user as any)?.is_store_owner,
+		isStoreOwnerFromSession: (user as any)?.store_session?.is_owner,
 		permissions: permissions,
 		hasExpenseView: hasPermission('expenses.view'),
 		hasExpenseCreate: hasPermission('expenses.create'),

@@ -77,7 +77,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 };
 
 const AnalyticsOverview: React.FC = () => {
-	const [timeRange, setTimeRange] = useState<'today' | 'week' | 'month' | 'year'>('week');
+	const [timeRange, setTimeRange] = useState<'today' | 'last7days' | 'last30days' | 'last1year' | 'custom'>('last7days');
 	const { report: salesReport } = useDashboard({ reportFilterRange: timeRange });
 
 	// Mock data - replace with real data from your API
@@ -118,9 +118,9 @@ const AnalyticsOverview: React.FC = () => {
 
 	const timeRanges = [
 		{ label: 'Today', value: 'today' },
-		{ label: 'This Week', value: 'week' },
-		{ label: 'This Month', value: 'month' },
-		{ label: 'This Year', value: 'year' }
+		{ label: 'Last 7 Days', value: 'last7days' },
+		{ label: 'Last 30 Days', value: 'last30days' },
+		{ label: 'This Year', value: 'last1year' }
 	];
 
 	return (
@@ -136,7 +136,7 @@ const AnalyticsOverview: React.FC = () => {
 					</p>
 				</div>
 				<div className="flex items-center space-x-4">
-					<Tabs.Group>
+					<Tabs>
 						{timeRanges.map((range) => (
 							<Tabs.Item
 								key={range.value}
@@ -145,7 +145,7 @@ const AnalyticsOverview: React.FC = () => {
 								onClick={() => setTimeRange(range.value as any)}
 							/>
 						))}
-					</Tabs.Group>
+					</Tabs>
 					<button 
 						className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
 						onClick={() => window.location.reload()}

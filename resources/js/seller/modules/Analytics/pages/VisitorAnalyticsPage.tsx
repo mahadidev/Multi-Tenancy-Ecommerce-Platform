@@ -1,27 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Button, Badge, Spinner, Tabs } from 'flowbite-react';
-import { 
-	HiUsers, 
-	HiEye, 
-	HiGlobeAlt, 
-	HiDeviceMobile, 
-	HiDesktopComputer, 
-	HiRefresh,
-	HiClock,
-	HiTrendingUp,
-	HiChartBar,
-	HiLocationMarker
-} from 'react-icons/hi';
-import ApexCharts from 'react-apexcharts';
-import { ApexOptions } from 'apexcharts';
 import CustomDateRangeSelector from '@seller/components/DatePicker/CustomDateRangeSelector';
-import { VisitorAnalytics, VisitorRealTime, VisitorListItem } from '@/types/analytics';
+import { ApexOptions } from 'apexcharts';
+import { Badge, Button, Card, Spinner, Tabs } from 'flowbite-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import ApexCharts from 'react-apexcharts';
+import {
+    HiChartBar,
+    HiClock,
+    HiDesktopComputer,
+    HiDeviceMobile,
+    HiEye,
+    HiGlobeAlt,
+    HiLocationMarker,
+    HiRefresh,
+    HiTrendingUp,
+    HiUsers
+} from 'react-icons/hi';
 
 interface VisitorAnalyticsPageProps {
 	className?: string;
 }
 
 type FilterType = 'today' | 'week' | 'month' | 'year' | 'custom';
+
+interface VisitorAnalytics {
+	totalVisitors: number;
+	uniqueVisitors: number;
+	pageViews: number;
+	sessions: number;
+	bounceRate: number;
+	avgSessionDuration: number;
+	visitorsData: any[];
+	topPages: any[];
+	deviceStats: any[];
+	locationStats: any[];
+	daily_trend: Array<{
+		date: string;
+		visits: number;
+		unique_visits: number;
+	}>;
+	device_analytics: Array<{
+		device_type: string;
+		count: number;
+	}>;
+	overview: {
+		total_visitors: number;
+		unique_visitors: number;
+		bounce_rate: number;
+		avg_session_duration: number;
+	};
+	page_views: Array<{
+		page_url: string;
+		views: number;
+		unique_views: number;
+	}>;
+	traffic_sources: Array<{
+		source: string;
+		count: number;
+		unique_count: number;
+	}>;
+	geographic_analytics: {
+		countries: Array<{
+			country: string;
+			count: number;
+			unique_count: number;
+		}>;
+	};
+}
+
+interface VisitorRealTime {
+	currentVisitors: number;
+	visitorsSources: any[];
+	recentActions: any[];
+	active_visitors: number;
+	recent_visitors: Array<{
+		id: string;
+		device_type: string;
+		page_url: string;
+		city: string;
+		country: string;
+		browser: string;
+		time_ago: string;
+	}>;
+}
 
 const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className = '' }) => {
 	const [analytics, setAnalytics] = useState<VisitorAnalytics | null>(null);
@@ -31,17 +91,17 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 	const [customDateRange, setCustomDateRange] = useState<{ start: string; end: string } | null>(null);
 
 	// Fetch analytics data
-	const fetchAnalytics = async () => {
+	const fetchAnalytics = useCallback(async () => {
 		setLoading(true);
 		try {
 			const params = new URLSearchParams({
 				filter,
 				...(customDateRange && filter === 'custom' ? customDateRange : {})
 			});
-			
+
 			const response = await fetch(`/api/v1/seller/analytics/visitors?${params}`);
 			const data = await response.json();
-			
+
 			if (data.status === 200) {
 				setAnalytics(data.data);
 			}
@@ -50,21 +110,21 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [filter, customDateRange]);
 
 	// Fetch real-time data
-	const fetchRealTime = async () => {
+	const fetchRealTime = useCallback(async () => {
 		try {
 			const response = await fetch('/api/v1/seller/analytics/visitors/realtime');
 			const data = await response.json();
-			
+
 			if (data.status === 200) {
 				setRealTimeData(data.data);
 			}
 		} catch (error) {
 			console.error('Error fetching real-time data:', error);
 		}
-	};
+	}, []);
 
 
 	useEffect(() => {
@@ -77,25 +137,14 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 		}, 30000); // Update every 30 seconds
 
 		return () => clearInterval(interval);
-	}, [filter, customDateRange]);
+	}, [filter, customDateRange, fetchAnalytics, fetchRealTime]);
 
-	const handleFilterChange = (newFilter: FilterType) => {
-		setFilter(newFilter);
-		if (newFilter !== 'custom') {
-			setCustomDateRange(null);
-		}
-	};
-
-	const handleCustomDateChange = (start: string, end: string) => {
-		setCustomDateRange({ start, end });
-		setFilter('custom');
-	};
 
 	// Chart configurations
 	const getVisitorTrendChart = (): { options: ApexOptions; series: any[] } => {
 		if (!analytics?.daily_trend) return { options: {}, series: [] };
 
-		const categories = analytics.daily_trend.map((item: any) => 
+		const categories = analytics.daily_trend.map((item) =>
 			new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 		);
 
@@ -122,11 +171,11 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 			series: [
 				{
 					name: 'Total Visits',
-					data: analytics.daily_trend.map((item: any) => item.visits)
+					data: analytics.daily_trend.map((item) => item.visits)
 				},
 				{
 					name: 'Unique Visits',
-					data: analytics.daily_trend.map((item: any) => item.unique_visits)
+					data: analytics.daily_trend.map((item) => item.unique_visits)
 				}
 			]
 		};
@@ -138,20 +187,20 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 		return {
 			options: {
 				chart: { type: 'donut' },
-				labels: analytics.device_analytics.map((item: any) => 
+				labels: analytics.device_analytics.map((item) =>
 					item.device_type.charAt(0).toUpperCase() + item.device_type.slice(1)
 				),
 				colors: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
 				legend: { position: 'bottom' }
 			},
-			series: analytics.device_analytics.map((item: any) => item.count)
+			series: analytics.device_analytics.map((item) => item.count)
 		};
 	};
 
 	const formatDuration = (seconds: number): string => {
 		const minutes = Math.floor(seconds / 60);
 		const hours = Math.floor(minutes / 60);
-		
+
 		if (hours > 0) {
 			return `${hours}h ${minutes % 60}m`;
 		}
@@ -197,9 +246,16 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 				</div>
 				<div className="flex items-center space-x-4">
 					<CustomDateRangeSelector
-						currentFilter={filter}
-						onFilterChange={handleFilterChange}
-						onCustomDateChange={handleCustomDateChange}
+						currentRange={filter}
+						onRangeChange={(range, customRange) => {
+							setFilter(range);
+							if (customRange) {
+								setCustomDateRange({ start: customRange.startDate, end: customRange.endDate });
+							} else {
+								setCustomDateRange(null);
+							}
+						}}
+						customRange={customDateRange ? { startDate: customDateRange.start, endDate: customDateRange.end } : undefined}
 					/>
 					<Button
 						size="sm"
@@ -346,7 +402,7 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 
 			{/* Detailed Analytics Tabs */}
 			<Card>
-				<Tabs.Group aria-label="Analytics tabs" style="underline">
+				<Tabs aria-label="Analytics tabs" variant="underline">
 					<Tabs.Item active title="Top Pages" icon={HiChartBar}>
 						<div className="space-y-4">
 							{analytics?.page_views.map((page, index) => (
@@ -415,7 +471,7 @@ const VisitorAnalyticsPage: React.FC<VisitorAnalyticsPageProps> = ({ className =
 							))}
 						</div>
 					</Tabs.Item>
-				</Tabs.Group>
+				</Tabs>
 			</Card>
 		</div>
 	);

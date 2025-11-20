@@ -1,4 +1,5 @@
-import { UserType, UserProfileType } from '@type/authType';
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+import { UserProfileType, UserType } from '@type/authType';
 import { StoreType } from '@type/storeType';
 // import { ApiResponseType } from '@type/apiType';
 

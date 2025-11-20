@@ -129,8 +129,8 @@ const CustomDateModal: FC<CustomDateModalProps> = ({
 										const start = new Date();
 										start.setDate(start.getDate() - option.days);
 										
-										setEndDate(end.toISOString().split('T')[0]);
-										setStartDate(start.toISOString().split('T')[0]);
+										setEndDate(end.toISOString().split('T')[0] || '');
+										setStartDate(start.toISOString().split('T')[0] || '');
 									}}
 									className="px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
 								>

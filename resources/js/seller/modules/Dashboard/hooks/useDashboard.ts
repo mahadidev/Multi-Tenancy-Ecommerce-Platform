@@ -286,7 +286,7 @@ const useDashboard = (params: UseDashboardParams = {}): UseDashboardReturn => {
         isTrendingProductsError: enableTrendingProducts ? isTrendingProductsError : false,
         trendingProductsError: enableTrendingProducts ?
             (trendingProductsError ? JSON.stringify(trendingProductsError) : null) : null,
-        hasNextPage,
+        hasNextPage: hasNextPage || false,
         isTrendingProductsLoadingMore: enableTrendingProducts ?
             (isTrendingProductsLoading && trendingProductsPage > 1) : false,
 

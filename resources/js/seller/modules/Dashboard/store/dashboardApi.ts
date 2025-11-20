@@ -1,24 +1,24 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PREFIX } from "@seller/seller_env";
 import { baseQuery, createRequest } from "@seller/store/baseQueryWithReAuth";
-import { 
-    setDashboardAnalytics, 
-    setSalesChartData, 
-    setSalesSummary, 
-    setSalesTrends,
-    setTrendingProducts 
-} from "./dashboardSlice";
 import {
     DashboardAnalyticsResponse,
-    SalesChartApiResponse,
-    SalesTrendsApiResponse,
-    SalesMetricsApiResponse,
-    TrendingProductsApiResponse,
     FetchDashboardAnalyticsPayload,
     FetchSalesChartPayload,
     FetchSalesTrendsPayload,
-    FetchTrendingProductsPayload
+    FetchTrendingProductsPayload,
+    SalesChartApiResponse,
+    SalesMetricsApiResponse,
+    SalesTrendsApiResponse,
+    TrendingProductsApiResponse
 } from "../types";
+import {
+    setDashboardAnalytics,
+    setSalesChartData,
+    setSalesSummary,
+    setSalesTrends,
+    setTrendingProducts
+} from "./dashboardSlice";
 
 export const dashboardApi = createApi({
     reducerPath: "dashboardApi",
@@ -29,11 +29,11 @@ export const dashboardApi = createApi({
         // Dashboard Analytics Endpoints
         // ======================================
         fetchDashboardAnalytics: builder.query<DashboardAnalyticsResponse, FetchDashboardAnalyticsPayload | void>({
-            query: (formData = {}) => {
+            query: (formData: any = {}) => {
                 const filter = formData.filter || 'month';
                 const start_date = formData.start_date || '2024-01-01';
                 const end_date = formData.end_date || '2025-02-02';
-                
+
                 return createRequest({
                     url: `${PREFIX}/analytics?filter=${filter}&start_date=${start_date}&end_date=${end_date}`,
                     method: "get",
@@ -70,7 +70,7 @@ export const dashboardApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    dispatch(setSalesChartData({ 
+                    dispatch(setSalesChartData({
                         salesChart: response?.data?.data?.chart
                     }));
                 });
@@ -92,7 +92,7 @@ export const dashboardApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    dispatch(setSalesSummary({ 
+                    dispatch(setSalesSummary({
                         salesSummary: response?.data?.data?.metrics
                     }));
                 });
@@ -114,7 +114,7 @@ export const dashboardApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    dispatch(setSalesTrends({ 
+                    dispatch(setSalesTrends({
                         salesTrends: response?.data?.data?.trends
                     }));
                 });
@@ -150,7 +150,7 @@ export const dashboardApi = createApi({
             transformErrorResponse: (error: any) => error.data,
             async onQueryStarted(_queryArgument, { dispatch, queryFulfilled }) {
                 await queryFulfilled.then((response) => {
-                    dispatch(setTrendingProducts({ 
+                    dispatch(setTrendingProducts({
                         trendingProducts: response?.data?.data
                     }));
                 });
@@ -162,13 +162,13 @@ export const dashboardApi = createApi({
 export const {
     // Analytics
     useFetchDashboardAnalyticsQuery,
-    
+
     // Sales Chart
     useFetchSalesChartQuery,
     useFetchSalesSummaryQuery,
     useFetchSalesTrendsQuery,
     useFetchSalesAnalyticsQuery,
-    
+
     // Trending Products
     useFetchTrendingProductsQuery,
 } = dashboardApi;

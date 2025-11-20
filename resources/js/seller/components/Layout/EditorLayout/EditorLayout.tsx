@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import useStore from '@seller/_hooks/useStore';
+
 import { SidebarProvider } from '@seller/contexts/sidebar-context';
 import { useAppSelector } from '@seller/store/store';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { EditorNavigation } from '../../Navigation/EditorNavigation/EditorNavigation';

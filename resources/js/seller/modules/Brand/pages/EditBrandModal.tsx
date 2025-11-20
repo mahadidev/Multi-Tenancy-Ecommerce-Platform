@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import useForm from "@seller/_hooks/useForm";
 import useString from "@seller/_hooks/useString";
-import { Brand } from "@type/brandType";
+import { BrandType as Brand } from "@type/brandType";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { FC, useEffect, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";

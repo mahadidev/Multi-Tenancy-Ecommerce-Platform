@@ -1,5 +1,4 @@
 import useForm from '@seller/_hooks/useForm';
-import useVendor from '@seller/_hooks/useVendor';
 import QuickAddSelect from '@seller/components/Form/QuickAddSelect/QuickAddSelect';
 import TextInput from '@seller/components/Form/TextInput/TextInput';
 import {

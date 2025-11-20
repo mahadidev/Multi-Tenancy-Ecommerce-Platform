@@ -1,8 +1,8 @@
-import { useAuth } from "../hooks";
 import { Button, Card } from "flowbite-react";
 import React, { useCallback } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../hooks";
 
 const EmailVerificationPage: React.FC = () => {
     const { emailVerification } = useAuth();
@@ -14,7 +14,10 @@ const EmailVerificationPage: React.FC = () => {
     // handle verify email
     const handleVerification = useCallback(() => {
         if (token) {
-            submit({ formData: { token } });
+            submit({ formData: {
+                token,
+                user_id: ""
+            } });
         }
     }, [token]);
 

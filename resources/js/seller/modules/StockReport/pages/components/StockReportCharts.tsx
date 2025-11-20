@@ -1,6 +1,6 @@
-import { FC } from 'react';
 import { ApexChart } from '@seller/components';
 import { useThemeMode } from 'flowbite-react';
+import { FC } from 'react';
 
 interface StockData {
 	date: string;
@@ -15,7 +15,7 @@ interface StockReportChartsProps {
 	timeRange: 'today' | 'week' | 'month' | 'year';
 }
 
-const StockReportCharts: FC<StockReportChartsProps> = ({ data, timeRange }) => {
+const StockReportCharts: FC<StockReportChartsProps> = ({ data }) => {
 	const { mode } = useThemeMode();
 	const isDarkTheme = mode === 'dark';
 
@@ -27,7 +27,6 @@ const StockReportCharts: FC<StockReportChartsProps> = ({ data, timeRange }) => {
 		profit: isDarkTheme ? '#FBBF24' : '#F59E0B', // Amber
 	};
 
-	const borderColor = isDarkTheme ? '#374151' : '#E5E7EB';
 	const labelColor = isDarkTheme ? '#D1D5DB' : '#6B7280';
 	const gridColor = isDarkTheme ? '#374151' : '#F3F4F6';
 	const backgroundColor = isDarkTheme ? '#1F2937' : '#FFFFFF';

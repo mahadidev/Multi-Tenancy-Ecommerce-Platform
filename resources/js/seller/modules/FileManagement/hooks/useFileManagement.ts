@@ -1,11 +1,11 @@
-import { 
-  useUploadFileMutation,
-  useUpdateFileMutation,
-  useDeleteFileMutation,
-  useFetchFilesQuery
-} from '../store/fileManagementApi';
 import { useAppSelector } from '../../../store/store';
-import { UploadFilePayload, UpdateFilePayload, DeleteFilePayload, FetchFilesPayload } from '../types';
+import {
+    useDeleteFileMutation,
+    useFetchFilesQuery,
+    useUpdateFileMutation,
+    useUploadFileMutation
+} from '../store/fileManagementApi';
+import { DeleteFilePayload, UpdateFilePayload, UploadFilePayload } from '../types';
 
 const useFileManagement = () => {
   // Fetch files

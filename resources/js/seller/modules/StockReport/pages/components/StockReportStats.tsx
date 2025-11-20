@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { HiShoppingBag, HiCurrencyDollar, HiCube, HiTrendingUp, HiTrendingDown } from 'react-icons/hi';
+import { HiCube, HiCurrencyDollar, HiShoppingBag, HiTrendingDown, HiTrendingUp } from 'react-icons/hi';
 
 interface StockData {
 	buyingValue: number;
@@ -13,7 +13,7 @@ interface StockReportStatsProps {
 	timeRange: 'today' | 'week' | 'month' | 'year';
 }
 
-const StockReportStats: FC<StockReportStatsProps> = ({ data, timeRange }) => {
+const StockReportStats: FC<StockReportStatsProps> = ({ data }) => {
 	const stats = useMemo(() => {
 		if (!data.length) {
 			return {
@@ -38,10 +38,10 @@ const StockReportStats: FC<StockReportStatsProps> = ({ data, timeRange }) => {
 		const midPoint = Math.floor(data.length / 2);
 		const firstHalf = data.slice(0, midPoint);
 		const secondHalf = data.slice(midPoint);
-		
+
 		const firstHalfProfit = firstHalf.reduce((sum, item) => sum + item.profit, 0);
 		const secondHalfProfit = secondHalf.reduce((sum, item) => sum + item.profit, 0);
-		
+
 		const growth = firstHalfProfit ? ((secondHalfProfit - firstHalfProfit) / firstHalfProfit) * 100 : 0;
 
 		return {

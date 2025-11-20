@@ -18,7 +18,7 @@ export default defineConfig({
                 // "resources/js/themes/index.tsx", // Themes removed
                 "resources/js/seller/index.tsx",
                 "resources/js/frontend/index.tsx",
-                "resources/js/site/index.tsx",
+                // "resources/js/site/index.tsx",
             ],
             refresh: true,
         }),

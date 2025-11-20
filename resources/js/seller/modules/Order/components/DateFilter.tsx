@@ -45,6 +45,11 @@ const DateFilter = ({ onFilterChange, currentFilters }: DateFilterProps) => {
     const [showCustomModal, setShowCustomModal] = useState(false);
 
     const handleTimeRangeChange = (newTimeRange: PeriodType | '') => {
+        // Prevent calling onFilterChange if the value hasn't actually changed
+        if (newTimeRange === currentTimeRange) {
+            return;
+        }
+        
         if (newTimeRange === 'custom') {
             setShowCustomModal(true);
         } else {
@@ -59,6 +64,14 @@ const DateFilter = ({ onFilterChange, currentFilters }: DateFilterProps) => {
     };
 
     const handleCustomDateApply = (customDateRange: CustomDateRange) => {
+        // Prevent calling onFilterChange if the custom range hasn't actually changed
+        if (customRange && 
+            customRange.startDate === customDateRange.startDate && 
+            customRange.endDate === customDateRange.endDate) {
+            setShowCustomModal(false);
+            return;
+        }
+        
         setCustomRange(customDateRange);
         setCurrentTimeRange('custom');
         setShowCustomModal(false);
@@ -69,7 +82,8 @@ const DateFilter = ({ onFilterChange, currentFilters }: DateFilterProps) => {
         });
     };
 
-    const currentTimeRangeOption = useMemo(() => {
+    // Generate dynamic options list based on whether custom date is selected
+    const displayOptions = useMemo(() => {
         if (currentTimeRange === 'custom' && customRange) {
             const start = new Date(customRange.startDate);
             const end = new Date(customRange.endDate);
@@ -79,9 +93,17 @@ const DateFilter = ({ onFilterChange, currentFilters }: DateFilterProps) => {
                 day: 'numeric',
                 year: start.getFullYear() !== end.getFullYear() ? 'numeric' : undefined
             });
-            return { label: `${startLabel} - ${endLabel}`, value: 'custom' as PeriodType | '' };
+            
+            // When custom date is selected, show the custom date option + all other options + additional "Custom range"
+            const customDateOption = { label: `${startLabel} - ${endLabel}`, value: 'custom-selected' };
+            const otherOptions = timeRangeOptions.filter(option => option.value !== 'custom');
+            const customRangeOption = { label: 'Custom range', value: 'custom' };
+            
+            return [customDateOption, ...otherOptions, customRangeOption];
         }
-        return timeRangeOptions.find((item) => item.value === currentTimeRange) || timeRangeOptions[0];
+        
+        // Default options when no custom date is selected
+        return timeRangeOptions;
     }, [currentTimeRange, customRange, timeRangeOptions]);
 
     return (
@@ -112,19 +134,25 @@ const DateFilter = ({ onFilterChange, currentFilters }: DateFilterProps) => {
 						</svg>
 					</div>
 					<select
-						value={currentTimeRange}
-						onChange={(e) =>
-							handleTimeRangeChange(e.target.value as PeriodType | '')
-						}
+						value={currentTimeRange === 'custom' && customRange ? 'custom-selected' : currentTimeRange}
+						onChange={(e) => {
+							const value = e.target.value;
+							// Handle the special case where user is already on custom date and selects it again
+							if (value === 'custom-selected') {
+								return; // Do nothing, stay on current custom date
+							}
+							// Handle selecting "Custom range" when already having a custom date
+							if (value === 'custom') {
+								setShowCustomModal(true);
+								return;
+							}
+							handleTimeRangeChange(value as PeriodType | '');
+						}}
 						className="outline-none border-none focus:ring-0 ml-2"
 					>
-						{timeRangeOptions.map((option) => (
+						{displayOptions.map((option) => (
 							<option key={option.value} value={option.value}>
-								{currentTimeRange === 'custom' &&
-								customRange &&
-								option.value === 'custom'
-									? currentTimeRangeOption?.label
-									: option.label}
+								{option.label}
 							</option>
 						))}
 					</select>

@@ -2,7 +2,6 @@ import useForm from '@seller/_hooks/useForm';
 import { ErrorMessage } from '@seller/components';
 import FormInput from '@seller/components/FormInput/FormInput';
 import { PageTypeType } from '@type/pageType';
-import { WidgetType } from '@type/widgetType';
 import { Button, Label, Modal, Select } from 'flowbite-react';
 import { FC, useState } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';

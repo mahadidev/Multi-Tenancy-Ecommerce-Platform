@@ -1,7 +1,7 @@
 import { useGenericTable } from '@seller/_hooks/useGenericTable';
 import { useFetchOrderPlacerProductsTableQuery } from '../store/cartOrderPlacerApi';
 import type { ProductType } from '@type/productType';
-import type { UseGenericTableReturn } from '@seller/_hooks/types/table';
+import type { UseGenericTableReturn, GenericApiResponse } from '@seller/_hooks/types/table';
 
 export interface OrderPlacerProductFilters {
   search?: string;
@@ -12,10 +12,24 @@ export interface OrderPlacerProductFilters {
   sort_order?: 'asc' | 'desc';
 }
 
+// Adapter function to match the expected interface
+const useOrderPlacerProductsTableQueryAdapter = (filters: OrderPlacerProductFilters, options?: any) => {
+  const result = useFetchOrderPlacerProductsTableQuery(filters, options);
+  
+  return {
+    data: result.data as GenericApiResponse<ProductType> | undefined,
+    isLoading: result.isLoading,
+    isFetching: result.isFetching,
+    isError: result.isError,
+    error: result.error || null,
+    refetch: result.refetch
+  };
+};
+
 // Generic table hook for order placer products
 export const useOrderPlacerProductTable = (): UseGenericTableReturn<ProductType, OrderPlacerProductFilters> => {
   return useGenericTable(
-    useFetchOrderPlacerProductsTableQuery,
+    useOrderPlacerProductsTableQueryAdapter,
     'products', // Data key in API response
     {
       defaultSortBy: 'created_at',

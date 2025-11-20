@@ -68,6 +68,13 @@ export const expenseApi = createApi({
           if (value !== undefined && value !== null && value !== '') {
             // Skip empty search values to keep URL clean
             if (key === 'search' && value === '') return;
+            
+            // For date filtering, prioritize period-based filtering over legacy date_from/date_to
+            if (key === 'date_from' || key === 'date_to') {
+              // Skip legacy date parameters if period is being used
+              if (filters.period) return;
+            }
+            
             params.append(key, String(value));
           }
         });
