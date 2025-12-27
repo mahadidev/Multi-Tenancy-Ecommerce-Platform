@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('type', 255)->default('added')->change();
         });
         
-        // Add CHECK constraint for PostgreSQL compatibility
-        \DB::statement("ALTER TABLE product_stock_histories ADD CONSTRAINT check_type_values CHECK (type IN ('added', 'deleted', 'adjusted'))");
+        // Add CHECK constraint for SQLite compatibility
+        \DB::statement("CREATE TRIGGER check_product_stock_histories_type BEFORE INSERT ON product_stock_histories FOR EACH ROW BEGIN SELECT CASE WHEN NEW.type NOT IN ('added', 'deleted', 'adjusted') THEN RAISE(ABORT, 'Invalid type value') END; END;");
+        \DB::statement("CREATE TRIGGER check_product_stock_histories_type_update BEFORE UPDATE ON product_stock_histories FOR EACH ROW BEGIN SELECT CASE WHEN NEW.type NOT IN ('added', 'deleted', 'adjusted') THEN RAISE(ABORT, 'Invalid type value') END; END;");
     }
 
     /**
@@ -35,15 +36,17 @@ return new class extends Migration
             ->where('type', 'adjusted')
             ->update(['type' => 'edited']);
             
-        // Drop the CHECK constraint
-        \DB::statement("ALTER TABLE product_stock_histories DROP CONSTRAINT IF EXISTS check_type_values");
+        // Drop the triggers
+        \DB::statement("DROP TRIGGER IF EXISTS check_product_stock_histories_type");
+        \DB::statement("DROP TRIGGER IF EXISTS check_product_stock_histories_type_update");
         
-        // Revert back to original values with PostgreSQL-compatible syntax
+        // Revert back to original values with SQLite-compatible syntax
         Schema::table('product_stock_histories', function (Blueprint $table) {
             $table->string('type', 255)->default('added')->change();
         });
         
-        // Add CHECK constraint for original values
-        \DB::statement("ALTER TABLE product_stock_histories ADD CONSTRAINT check_type_values CHECK (type IN ('added', 'deleted', 'edited'))");
+        // Add triggers for original values
+        \DB::statement("CREATE TRIGGER check_product_stock_histories_type_orig BEFORE INSERT ON product_stock_histories FOR EACH ROW BEGIN SELECT CASE WHEN NEW.type NOT IN ('added', 'deleted', 'edited') THEN RAISE(ABORT, 'Invalid type value') END; END;");
+        \DB::statement("CREATE TRIGGER check_product_stock_histories_type_update_orig BEFORE UPDATE ON product_stock_histories FOR EACH ROW BEGIN SELECT CASE WHEN NEW.type NOT IN ('added', 'deleted', 'edited') THEN RAISE(ABORT, 'Invalid type value') END; END;");
     }
 };

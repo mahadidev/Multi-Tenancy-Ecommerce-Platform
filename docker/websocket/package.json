@@ -1,0 +1,30 @@
+{
+  "name": "cholo-gori-websocket-server",
+  "version": "1.0.0",
+  "description": "WebSocket server for Cholo Gori real-time features",
+  "main": "dist/server.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["websocket", "socket.io", "real-time", "cholo-gori", "typescript"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^4.7.4",
+    "redis": "^4.6.12",
+    "dotenv": "^16.3.1",
+    "jsonwebtoken": "^9.0.2",
+    "@types/node": "^20.10.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "ts-node-dev": "^2.0.0",
+    "@types/jsonwebtoken": "^9.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

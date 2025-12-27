@@ -1,0 +1,207 @@
+services:
+  # Nginx Reverse Proxy with SSL Termination
+  nginx:
+    image: nginx:alpine
+    container_name: cholo-gori-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/sites:/etc/nginx/sites-available:ro
+      - ./storage/app/public:/var/www/storage/app/public:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - php-app
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+
+  # PHP Application with Laravel Octane
+  php-app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: production
+    container_name: cholo-gori-php
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_URL=${APP_URL:-https://localhost}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE:-cholo_gori}
+      - DB_USERNAME=${DB_USERNAME:-cholo_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - BROADCAST_DRIVER=redis
+      - WEBSOCKET_PORT=6001
+      - LOG_CHANNEL=daily
+      - LOG_LEVEL=error
+      - SESSION_LIFETIME=120
+      - QUEUE_CONNECTION=redis
+      - CACHE_STORE=redis
+    volumes:
+      - .:/var/www/html
+      - ./storage/app/public:/var/www/html/storage/app/public
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '1.5'
+
+  # PostgreSQL Database (Optimized for 2GB RAM)
+  postgres:
+    image: postgres:15-alpine
+    container_name: cholo-gori-db
+    environment:
+      - POSTGRES_DB=${DB_DATABASE:-cholo_gori}
+      - POSTGRES_USER=${DB_USERNAME:-cholo_user}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '0.8'
+
+  # Redis (Cache, Sessions, Queues, Pub/Sub)
+  redis:
+    image: redis:7-alpine
+    container_name: cholo-gori-redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - redis_data:/data
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
+
+  # WebSocket Server (Node.js with Socket.IO)
+  websocket-server:
+    build:
+      context: ./docker/websocket
+    container_name: cholo-gori-websocket
+    environment:
+      - NODE_ENV=production
+      - PORT=6001
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - "6001:6001"
+    depends_on:
+      - redis
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+
+  # Queue Workers (Laravel Horizon)
+  queue-worker:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: production
+    container_name: cholo-gori-queue
+    command: php artisan horizon
+    environment:
+      - APP_ENV=production
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_DATABASE=${DB_DATABASE:-cholo_gori}
+      - DB_USERNAME=${DB_USERNAME:-cholo_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - CACHE_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - LOG_CHANNEL=daily
+      - LOG_LEVEL=error
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+
+  # Laravel Scheduler
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: production
+    container_name: cholo-gori-scheduler
+    command: sh -c "while true; do php artisan schedule:run; sleep 60; done"
+    environment:
+      - APP_ENV=production
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_DATABASE=${DB_DATABASE:-cholo_gori}
+      - DB_USERNAME=${DB_USERNAME:-cholo_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - CACHE_DRIVER=redis
+      - LOG_CHANNEL=daily
+      - LOG_LEVEL=error
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cholo-gori-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  cholo-gori-network:
+    driver: bridge

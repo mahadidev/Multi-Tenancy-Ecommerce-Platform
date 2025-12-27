@@ -1,0 +1,14 @@
+services:
+  nginx:
+    ports:
+      - "80:80"
+  php-app:
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://cholo.localhost
+    volumes:
+      - .:/var/www/html
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD=local_password

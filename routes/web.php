@@ -6,7 +6,84 @@ use App\Modules\ThemeManagement\Controllers\ThemeController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Queue;
 // SubscriptionController is now handled by SubscriptionManagement module
+
+// Health check routes
+Route::prefix('health')->group(function () {
+    Route::get('/', function () {
+        try {
+            // Check database connection
+            $dbStatus = 'connected';
+            try {
+                DB::connection()->getPdo();
+            } catch (\Exception $e) {
+                $dbStatus = 'disconnected: ' . $e->getMessage();
+            }
+
+            // Check Redis connection
+            $redisStatus = 'connected';
+            try {
+                Redis::ping();
+            } catch (\Exception $e) {
+                $redisStatus = 'disconnected: ' . $e->getMessage();
+            }
+
+            // Check queue status
+            $queueSize = 'unknown';
+            try {
+                $queueSize = Queue::size();
+            } catch (\Exception $e) {
+                $queueSize = 'error: ' . $e->getMessage();
+            }
+
+            // Check cache status
+            $cacheStatus = 'connected';
+            try {
+                cache()->put('health_check', 'ok', 10);
+                cache()->get('health_check');
+            } catch (\Exception $e) {
+                $cacheStatus = 'disconnected: ' . $e->getMessage();
+            }
+
+            $status = $dbStatus === 'connected' && $redisStatus === 'connected' ? 'ok' : 'error';
+
+            return response()->json([
+                'status' => $status,
+                'timestamp' => now()->toISOString(),
+                'version' => config('app.version', '1.0.0'),
+                'environment' => config('app.env'),
+                'services' => [
+                    'database' => $dbStatus,
+                    'redis' => $redisStatus,
+                    'cache' => $cacheStatus,
+                    'queue_size' => $queueSize,
+                ],
+                'system' => [
+                    'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . ' MB',
+                    'peak_memory' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . ' MB',
+                    'php_version' => PHP_VERSION,
+                    'laravel_version' => app()->version(),
+                ]
+            ], $status === 'ok' ? 200 : 503);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'timestamp' => now()->toISOString(),
+                'error' => $e->getMessage(),
+            ], 503);
+        }
+    });
+
+    Route::get('/simple', function () {
+        return response()->json([
+            'status' => 'ok',
+            'timestamp' => now()->toISOString(),
+        ]);
+    });
+});
 
 Route::get('/', function () {
     return view("welcome");
